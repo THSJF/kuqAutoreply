@@ -19,9 +19,10 @@ public class RecoderManager {
 	}
 
 	public boolean check(long group, String msg, CQCode CC) {
+		boolean b=false;
 		for (int i = 0; i < mapFlag; i++) {
-			recoderMap.get(i).check(group, msg, CC);
+			b=b|recoderMap.get(i).check(group, msg, CC);
 		}
-		return false;
+		return b;
 	}
 }

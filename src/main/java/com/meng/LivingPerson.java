@@ -6,7 +6,7 @@ public class LivingPerson {
 	private boolean isLiving=false;
 	private boolean needStartTip = true;
 	private int flag=0;
-	//0 初始状态 1正在直播需要提示 2正在直播不需要提示 3未直播需要提示 4未直播不需要提示
+	//0直到状态改变前都不需要提示 1正在直播需要提示 2正在直播不需要提示 3未直播需要提示 4未直播不需要提示
 
 	public LivingPerson(String name, String url) {
 		this.name = name;

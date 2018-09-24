@@ -43,31 +43,22 @@ public class LivingManager extends Thread {
 					 * { if (lPerson.isNeedTip()) { lPerson.setFlag(3); } else {
 					 * lPerson.setFlag(4); } }
 					 */
-					if (living && lPerson.isNeedStartTip()) {
-						lPerson.setFlag(1);
+					lPerson.setLiving(living);
+					if (lPerson.getFlag() != 0) {
+						if (living && lPerson.isNeedStartTip()) {
+							lPerson.setFlag(1);
+						}
+						if (living && !lPerson.isNeedStartTip()) {
+							lPerson.setFlag(2);
+						}
+						if (!living && !lPerson.isNeedStartTip()) {
+							lPerson.setFlag(3);
+						}
+						if (!living && lPerson.isNeedStartTip()) {
+							lPerson.setFlag(4);
+						}
 					}
-					if (living && !lPerson.isNeedStartTip()) {
-						lPerson.setFlag(2);
-					}
-					if (!living && !lPerson.isNeedStartTip()) {
-						lPerson.setFlag(3);
-					}
-					if (!living && lPerson.isNeedStartTip()) {
-						lPerson.setFlag(4);
-					}
-
 					sendMsg(lPerson);
-					/*
-					 * if (lPerson.isLiving()) { lPerson.setLiving(true);
-					 * sendMsg(lPerson); System.out.println(lPerson.getName() +
-					 * "living:" + lPerson.isLiving() + " milked:" +
-					 * lPerson.isNeedTip()); } else { lPerson.setLiving(false);
-					 * sendMsg(lPerson); System.out.println(lPerson.getName() +
-					 * "living:" + lPerson.isLiving() + " milked:" +
-					 * lPerson.isNeedTip());
-					 * 
-					 * }
-					 */
 					sleep(1000);
 				}
 				sleep(35000);
@@ -94,15 +85,25 @@ public class LivingManager extends Thread {
 
 	private void sendMsg(LivingPerson p) {
 		switch (p.getFlag()) {
-
+		case 0:
+			if (p.isLiving()) {
+				p.setNeedStartTip(false);
+				p.setFlag(2);
+			} else {
+				p.setNeedStartTip(true);
+				p.setFlag(4);
+			}
+			break;
 		case 1:
 			String tmp = p.getName() + "直播开始啦大家快去奶" + p.getLiveUrl();
 			System.out.println(tmp);
-			Autoreply.sendGroupMessage(312342896L, tmp);
-	//		Autoreply.sendGroupMessage(210341365L, tmp);
-	//		Autoreply.sendGroupMessage(859561731L, tmp);
-	//		Autoreply.sendGroupMessage(826536230L, tmp);
-	//		Autoreply.sendGroupMessage(348595763L, tmp);
+		//	Autoreply.sendGroupMessage(312342896L, tmp);// 学习
+			Autoreply.sendGroupMessage(210341365L, tmp);// 水紫
+			Autoreply.sendGroupMessage(859561731L, tmp);// 东芳直播间
+			Autoreply.sendGroupMessage(826536230L, tmp);// stg闲聊群
+			Autoreply.sendGroupMessage(348595763L, tmp);// 沙苗のSTG群
+			Autoreply.sendGroupMessage(857548607L, tmp);// 恋萌萌粉丝群
+		//	Autoreply.sendGroupMessage(594237002L, tmp);// 桜舞い散る天空
 			p.setNeedStartTip(false);
 		case 2:
 			p.setLiving(true);
@@ -110,34 +111,18 @@ public class LivingManager extends Thread {
 		case 3:
 			String tmp2 = p.getName() + "直播被奶死莉";
 			System.out.println(tmp2);
-			Autoreply.sendGroupMessage(312342896L, tmp2);
-	//		Autoreply.sendGroupMessage(210341365L, tmp2);
-	//		Autoreply.sendGroupMessage(859561731L, tmp2);
-	//		Autoreply.sendGroupMessage(826536230L, tmp2);
-	//		Autoreply.sendGroupMessage(348595763L, tmp2);
+		//	Autoreply.sendGroupMessage(312342896L, tmp2);// 学习
+			Autoreply.sendGroupMessage(210341365L, tmp2);// 水紫
+			Autoreply.sendGroupMessage(859561731L, tmp2);// 东芳直播间
+			Autoreply.sendGroupMessage(826536230L, tmp2);// stg闲聊群
+			Autoreply.sendGroupMessage(348595763L, tmp2);// 沙苗のSTG群
+			Autoreply.sendGroupMessage(857548607L, tmp2);// 恋萌萌粉丝群
+		//	Autoreply.sendGroupMessage(594237002L, tmp2);// 桜舞い散る天空
 			p.setNeedStartTip(true);
 		case 4:
 			p.setLiving(false);
 			break;
 		}
-
-		/*
-		 * if (p.isLiving() && (!p.isNeedTip())) { String tmp = p.getName() +
-		 * "直播开始啦大家快去奶" + p.getLiveUrl(); //
-		 * Autoreply.sendGroupMessage(210341365L, tmp); //
-		 * Autoreply.sendGroupMessage(859561731L, tmp); //
-		 * Autoreply.sendGroupMessage(826536230L, tmp); //
-		 * Autoreply.sendGroupMessage(348595763L, tmp);
-		 * Autoreply.sendGroupMessage(312342896L, tmp); System.out.println(tmp);
-		 * p.setNeedTip(true); } if (!p.isLiving() && p.isNeedTip()) { String
-		 * tmp = p.getName() + "直播被奶死莉"; //
-		 * Autoreply.sendGroupMessage(210341365L, tmp); //
-		 * Autoreply.sendGroupMessage(859561731L, tmp); //
-		 * Autoreply.sendGroupMessage(826536230L, tmp); //
-		 * Autoreply.sendGroupMessage(348595763L, tmp);
-		 * Autoreply.sendGroupMessage(312342896L, tmp); System.out.println(tmp);
-		 * p.setNeedTip(false); }
-		 */
 	}
 
 	private class TrustAnyHostnameVerifier implements HostnameVerifier {

@@ -1,7 +1,10 @@
 package com.meng;
 
+import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Random;
@@ -39,6 +42,8 @@ public class Autoreply extends JcqAppAbstract implements ICQVer, IMsg, IRequest 
 	private RecoderManager recoderManager = new RecoderManager();
 	private DicReplyManager dicReplyManager = new DicReplyManager();
 	private LivingManager lCheckV2 = new LivingManager();
+	private fanpohai fph;
+	
 
 	/**
 	 * 用main方法调试可以最大化的加快开发效率，检测和定位错误位置<br/>
@@ -103,6 +108,7 @@ public class Autoreply extends JcqAppAbstract implements ICQVer, IMsg, IRequest 
 		// 获取应用数据目录(无需储存数据时，请将此行注释)
 		appDirectory = CQ.getAppDirectory();
 		addGroupDic(appDirectory);
+		fph=new fanpohai(appDirectory);
 		addRecorder();
 		livingCheck();
 
@@ -235,6 +241,11 @@ public class Autoreply extends JcqAppAbstract implements ICQVer, IMsg, IRequest 
 		// JsonArray array = obj.getAsJsonArray(msg);
 
 		System.out.println(msg);
+		
+		if (MainSwitch.checkSwitch(fromGroup, msg)==MSG_IGNORE) {
+			return MSG_IGNORE;
+		}
+		
 		if (CC.getAt(msg) == 1620628713L) {
 			if (fromQQ == 2856986197L) {
 				sendGroupMessage(fromGroup, CC.at(fromQQ) + "找姐姐什么事？");
@@ -251,30 +262,36 @@ public class Autoreply extends JcqAppAbstract implements ICQVer, IMsg, IRequest 
 					break;
 				}
 			}
-		}
-		if (msg.equals(".stop")) {
-			sendGroupMessage(fromGroup, "disabled");
-			enable = false;
-		}
-		if (msg.equals(".start")) {
-			enable = true;
-			sendGroupMessage(fromGroup, "enabled");
+			return MSG_IGNORE;
 		}
 		
-		if (fromGroup == 348595763L 
-				|| fromGroup == 210341365L //小可爱的乐园计划
+	//	if (fromGroup == 312342896L) {
+			if (fph.check(fromQQ, fromGroup, msg, appDirectory)==MSG_IGNORE) {
+			return MSG_IGNORE;
+			}
+	//	}
+		
+		
+		
+		if (//fromGroup == 594237002L //桜舞い散る天空
+			//	|| 
+				fromGroup == 210341365L //小可爱的乐园计划
 				|| fromGroup == 312342896L //学习
 				|| fromGroup == 859561731L //东芳直播间
 				|| fromGroup == 826536230L //stg闲聊群
-				|| fromGroup == 348595763L) { //沙苗のSTG群
+				|| fromGroup == 348595763L
+				||fromGroup==857548607L) { //沙苗のSTG群
 			if (msg.replace(" ", "").replace("\n", "").trim().equals("迫害图")) {
 			sendGroupMessage(fromGroup, 
 					"现在有 丢人迫害图 hop迫害图 伞挂迫害图 台长迫害图 圣师傅迫害图 大鸽迫害图 水紫迫害图"
 					+ " 烧饼迫害图 空格迫害图 紫苑迫害图 觉恋迫害图 雷锋迫害图 麻薯迫害图 记者迫害图 铃神迫害图"
 					+ " 苑神迫害图 毛玉迫害图 yhx迫害图 4guo1迫害图 mdzz迫害图 ti迫害图"
-					+ " 星小渚迫害图 丑二桨迫害图 懒瘦迫害图 天星厨迫害图 其他迫害图 图若有错联系2856986197");
+					+ " 星小渚迫害图 丑二桨迫害图 懒瘦迫害图 天星厨迫害图 逸诺迫害图 com迫害图 "
+					+ "岁月迫害图 其他迫害图 图若有错联系2856986197");
+			return MSG_IGNORE;
 		}
 			String folder="";
+			
 			switch (msg.replace(" ", "").replace("\n", "").trim()) {
 			case "丢人迫害图":folder=appDirectory+"pohai/丢人/";break;
 			case "hop迫害图":folder=appDirectory+"pohai/hop/";break;
@@ -301,12 +318,15 @@ public class Autoreply extends JcqAppAbstract implements ICQVer, IMsg, IRequest 
 			case "丑二桨迫害图":folder=appDirectory+"pohai/丑二桨/";break;
 			case "懒瘦迫害图":folder=appDirectory+"pohai/懒瘦/";break;
 			case "天星厨迫害图":folder=appDirectory+"pohai/天星厨/";break;
+			case "逸诺迫害图":folder=appDirectory+"pohai/逸诺/";break;
+			case "com迫害图":folder=appDirectory+"pohai/com/";break;
+			case "鸽鸽迫害图":folder=appDirectory+"pohai/鸽鸽/";break;
+			case "岁月迫害图":folder=appDirectory+"pohai/岁月/";break;
 			case "其他迫害图":folder=appDirectory+"pohai/其他/";break;
 			}
 
 			if (!folder.equals("")) {
 				File fo=new File(folder);
-				System.out.println(folder);
 				File[] files=fo.listFiles();
 
 				try {
@@ -315,6 +335,7 @@ public class Autoreply extends JcqAppAbstract implements ICQVer, IMsg, IRequest 
 					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
+				return MSG_IGNORE;
 			}
 		}
 
@@ -329,9 +350,10 @@ public class Autoreply extends JcqAppAbstract implements ICQVer, IMsg, IRequest 
 			} else {
 				sendGroupMessage(fromGroup, "惊了 居然没有飞机佬直播");
 			}
+			return MSG_IGNORE;
 		}
 
-		if (Pattern.matches(".*[蓝|藍][椰|叶|葉][椰|叶|葉].*", msg.replace(" ", "").trim())) {
+		if (Pattern.matches(".{0,1}(([蓝藍]|裂隙妖怪的式神).*[椰叶葉].*[椰叶葉].*(t.*c.*l|t.*q.*l|太.*[触觸].*了)|.{0,1}([蓝藍]|裂隙妖怪的式神).*[椰叶葉].*[椰叶葉].{0,3})", msg.replace(" ", "").trim())) {
 			sendGroupMessage(fromGroup, "打不过地灵殿Normal");
 			try {
 				sendGroupMessage(fromGroup, CC.image(new File(appDirectory + "a.jpg")));
@@ -395,6 +417,7 @@ public class Autoreply extends JcqAppAbstract implements ICQVer, IMsg, IRequest 
 					sendGroupMessage(fromGroup, CC.at(fromQQ) + "你已经是群萌新了，快当个RBQ群友们用用吧");
 				}
 			}
+			return MSG_IGNORE;
 		}
 		lastKey = msg;
 		return MSG_IGNORE;
@@ -635,7 +658,7 @@ public class Autoreply extends JcqAppAbstract implements ICQVer, IMsg, IRequest 
 			if (msg.startsWith("image:")) {
 				String[] stri = msg.split("\\:");
 				try {
-					CQ.sendGroupMsg(group, CC.image(new File(appDirectory + "pohai/" + stri[1])));
+					CQ.sendGroupMsg(group, CC.image(new File(appDirectory + stri[1])));
 				} catch (IOException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
@@ -651,7 +674,6 @@ public class Autoreply extends JcqAppAbstract implements ICQVer, IMsg, IRequest 
 		if (p.isLiving()) {
 			String tmp = p.getName() + "直播开始啦大家快去奶" + p.getLiveUrl();
 			Autoreply.sendGroupMessage(group, tmp);
-			p.setNeedStartTip(true);
 		}
 	}
 
@@ -660,10 +682,12 @@ public class Autoreply extends JcqAppAbstract implements ICQVer, IMsg, IRequest 
 		dicReplyManager.addData(new DicReplyGroup(859561731L, appDirectory + "dic859561731.json"));
 		dicReplyManager.addData(new DicReplyGroup(210341365L, appDirectory + "dic210341365.json"));
 		dicReplyManager.addData(new DicReplyGroup(348595763L, appDirectory + "dic348595763.json"));
+		dicReplyManager.addData(new DicReplyGroup(857548607L, appDirectory + "dic857548607.json"));
+	//	dicReplyManager.addData(new DicReplyGroup(594237002L, appDirectory + "dic594237002.json"));
 	}
 
 	private void livingCheck() {
-		lCheckV2.addData(new LivingPerson("台长", "https://live.bilibili.com/2409909"));
+		lCheckV2.addData(new LivingPerson("芳香直播间", "https://live.bilibili.com/2409909"));
 		lCheckV2.addData(new LivingPerson("水紫", "https://live.bilibili.com/2803104"));
 		lCheckV2.addData(new LivingPerson("古明地决", "https://live.bilibili.com/952890"));
 		lCheckV2.addData(new LivingPerson("岁晋芳", "https://live.bilibili.com/4773795"));
@@ -672,7 +696,7 @@ public class Autoreply extends JcqAppAbstract implements ICQVer, IMsg, IRequest 
 		lCheckV2.addData(new LivingPerson("砂粑粑", "https://live.bilibili.com/11928"));
 		lCheckV2.addData(new LivingPerson("威光椰叶", "https://live.bilibili.com/1318639"));
 		lCheckV2.addData(new LivingPerson("空格椰叶", "https://live.bilibili.com/75404"));
-		lCheckV2.addData(new LivingPerson("jo仙人", "https://live.bilibili.com/2299954"));
+	//	lCheckV2.addData(new LivingPerson("jo仙人", "https://live.bilibili.com/2299954"));
 		lCheckV2.addData(new LivingPerson("八雲的妖怪闲者", "https://live.bilibili.com/1954885"));
 		lCheckV2.addData(new LivingPerson("星海天下", "https://live.bilibili.com/359844"));
 		lCheckV2.addData(new LivingPerson("ZRT师傅", "https://live.bilibili.com/8501850"));
@@ -687,22 +711,21 @@ public class Autoreply extends JcqAppAbstract implements ICQVer, IMsg, IRequest 
 		lCheckV2.addData(new LivingPerson("雾雨沙苗", "https://live.bilibili.com/5136443"));
 		lCheckV2.addData(new LivingPerson("假装看风景的露娜厨", "https://live.bilibili.com/1122971"));
 		lCheckV2.addData(new LivingPerson("TouhouのDean", "https://live.bilibili.com/1187187"));
+		lCheckV2.addData(new LivingPerson("夜桜鎮魂歌", "https://live.bilibili.com/475904"));
+		lCheckV2.addData(new LivingPerson("沙苗", "https://live.bilibili.com/14238508"));
+		lCheckV2.addData(new LivingPerson("绿绿可柚", "https://live.bilibili.com/10101916"));
+		lCheckV2.addData(new LivingPerson("kyoukai_00", "https://live.bilibili.com/8692789"));
 		lCheckV2.start();
 	}
 
 	private void addRecorder() {
-		List<Group> gs = CQ.getGroupList();
-		for (Iterator i = gs.iterator(); i.hasNext();) {
-			long gn = ((Group) i.next()).getId();
-			recoderManager.addData(new Recoder(gn));
-		}
-		/*
-		 * recoderManager.addData(new Recoder(826536230L));
-		 * recoderManager.addData(new Recoder(859561731L));
-		 * recoderManager.addData(new Recoder(210341365L));
-		 * recoderManager.addData(new Recoder(312342896L));
-		 * recoderManager.addData(new Recoder(348595763L));
-		 */
+		recoderManager.addData(new Recoder(210341365L));//水紫
+		recoderManager.addData(new Recoder(312342896L));//学习
+		recoderManager.addData(new Recoder(826536230L));//stg闲聊群
+		recoderManager.addData(new Recoder(859561731L));//东芳直播间
+		recoderManager.addData(new Recoder(348595763L));//沙苗のSTG群
+		recoderManager.addData(new Recoder(857548607L));//恋萌萌粉丝群
+	//	recoderManager.addData(new Recoder(594237002L));//桜舞い散る天空
 	}
 
 }
