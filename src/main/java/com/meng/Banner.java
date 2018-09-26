@@ -10,7 +10,6 @@ public class Banner {
 	}
 
 	public boolean checkBan(long manager, long group, String msg) {
-		try {
 			if (manager == 2856986197L || manager == 943486447L || manager == 183889179L || manager == 350795616L) {
 				if (msg.equalsIgnoreCase("wholeban")) {
 					CQ.setGroupWholeBan(group, true);
@@ -49,9 +48,6 @@ public class Banner {
 				CQ.setGroupBan(group, manager,sleepTime );
 				System.out.println("群" + group + "的用户" + manager + "获得了" + sleepTime + "秒睡眠套餐");
 			}
-		} catch (Exception e) {
-			// TODO: handle exception
-		}
 		return false;
 	}
 
