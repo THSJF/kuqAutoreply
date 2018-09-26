@@ -17,6 +17,7 @@ public class fanpohai {
 	File[] pohaitu;
 	FingerPrint[] fts;
 	private int pohaicishu = 0;
+	private int alpohai = Autoreply.random.nextInt(5)+2;
 	private String lastMsg = "";
 	String appdirectory = "";
 	private final String[][] ss = new String[][] { { "丢人", "1581137837" }, { "hop", "2695029036" },
@@ -25,7 +26,8 @@ public class fanpohai {
 			{ "雷锋", "3206109525" }, { "麻薯", "1272394657" }, { "记者", "1012539034" }, { "毛玉", "421440146" },
 			{ "yhx", "1148729387" }, { "4guo1", "1106176045" }, { "mdzz", "1833661569" }, { "ti", "1244172541" },
 			{ "星小渚", "2835449913" }, { "丑二桨", "289580425" }, { "懒瘦", "496276037" }, { "天星厨", "1282443047" },
-			{ "逸诺", "942465781" }, { "com", "736461434" },{"岁月","183889179"} };
+			{ "逸诺", "942465781" }, { "com", "736461434" }, { "岁月", "183889179" }, { "鸽鸽", "1437560361" },
+			{ "大酱", "3427665460" },{ "灵风", "2756253478" },{ "斑点伞", "1254138109" },{ "苍老师", "1391857313" } };
 
 	public fanpohai(String appdirectory) {
 		this.appdirectory = appdirectory;
@@ -55,9 +57,10 @@ public class fanpohai {
 		boolean bpohai = false;
 		if (msg.indexOf("迫害") != -1) {
 			pohaicishu++;
-			if (pohaicishu == 5) {
+			if (pohaicishu == alpohai) {
 				bpohai = true;
 				pohaicishu = 0;
+				alpohai = Autoreply.random.nextInt(5)+2;
 			}
 		}
 		try {
@@ -119,7 +122,14 @@ public class fanpohai {
 			}
 			if (folder.equals("")) {
 				System.out.println(folder);
-				Autoreply.sendGroupMessage(fromGroup, "鬼鬼");
+				int ir=Autoreply.random.nextInt(3);
+				if (ir == 0) {
+					Autoreply.sendGroupMessage(fromGroup, "鬼鬼");
+				} else if (ir==1) {
+					Autoreply.sendGroupMessage(fromGroup, "除了迫害你还知道什么");
+				}else {
+					Autoreply.sendGroupMessage(fromGroup, "草绳");
+				}
 				return Autoreply.MSG_IGNORE;
 			} else {
 				File fo = new File(folder);

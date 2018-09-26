@@ -29,7 +29,7 @@ public class DicReplyGroup {
 		this.filePath = filePath;
 	}
 
-	public void checkMsg(long group, String msg) {
+	public boolean checkMsg(long group,long qq, String msg) throws IOException {
 
 		if (group == groupNum) {
 			obj = parser.parse(readToString(filePath)).getAsJsonObject();
@@ -45,16 +45,16 @@ public class DicReplyGroup {
 							String string = removeCharAt(array.get(k).toString(), 0);
 							replyPool.put(k, removeCharAt(string, string.length() - 1));
 						}
-						Autoreply.sendGroupMessage(group, replyPool.get(Autoreply.random.nextInt(k)));
+						Autoreply.sendGroupMessage(group,qq, replyPool.get(Autoreply.random.nextInt(k)));
 						replyPool.clear();
-						break;
+						return true;
 					}
 				}
 
 			}
 
 		}
-
+		return false;
 	}
 
 	public String readToString(String fileName) {
