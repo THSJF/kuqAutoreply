@@ -1,5 +1,6 @@
 package com.meng;
 
+import java.io.IOException;
 import java.util.HashMap;
 
 import com.sobte.cqp.jcq.message.CQCode;
@@ -18,10 +19,10 @@ public class RecoderManager {
 		mapFlag++;
 	}
 
-	public boolean check(long group, String msg, CQCode CC) {
+	public boolean check(long group, String msg, CQCode CC,String appdirectory) throws IOException {
 		boolean b=false;
 		for (int i = 0; i < mapFlag; i++) {
-			b=b|recoderMap.get(i).check(group, msg, CC);
+			b=b|recoderMap.get(i).check(group, msg, CC,appdirectory);
 		}
 		return b;
 	}

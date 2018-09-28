@@ -59,9 +59,9 @@ public class LivingManager extends Thread {
 						}
 					}
 					sendMsg(lPerson);
-					sleep(1000);
+					sleep(3000);
 				}
-				sleep(35000);
+				sleep(15000);
 			} catch (Exception e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
@@ -101,9 +101,8 @@ public class LivingManager extends Thread {
 			Autoreply.sendGroupMessage(210341365L, tmp);// 水紫
 			Autoreply.sendGroupMessage(859561731L, tmp);// 东芳直播间
 			Autoreply.sendGroupMessage(826536230L, tmp);// stg闲聊群
-			Autoreply.sendGroupMessage(348595763L, tmp);// 沙苗のSTG群
-			Autoreply.sendGroupMessage(857548607L, tmp);// 恋萌萌粉丝群
-		//	Autoreply.sendGroupMessage(594237002L, tmp);// 桜舞い散る天空
+		//	Autoreply.sendGroupMessage(348595763L, tmp);// 沙苗のSTG群
+		//	Autoreply.sendGroupMessage(857548607L, tmp);// 恋萌萌粉丝群
 			p.setNeedStartTip(false);
 		case 2:
 			p.setLiving(true);
@@ -115,9 +114,8 @@ public class LivingManager extends Thread {
 			Autoreply.sendGroupMessage(210341365L, tmp2);// 水紫
 			Autoreply.sendGroupMessage(859561731L, tmp2);// 东芳直播间
 			Autoreply.sendGroupMessage(826536230L, tmp2);// stg闲聊群
-			Autoreply.sendGroupMessage(348595763L, tmp2);// 沙苗のSTG群
-			Autoreply.sendGroupMessage(857548607L, tmp2);// 恋萌萌粉丝群
-		//	Autoreply.sendGroupMessage(594237002L, tmp2);// 桜舞い散る天空
+		//	Autoreply.sendGroupMessage(348595763L, tmp2);// 沙苗のSTG群
+		//	Autoreply.sendGroupMessage(857548607L, tmp2);// 恋萌萌粉丝群
 			p.setNeedStartTip(true);
 		case 4:
 			p.setLiving(false);

@@ -2,6 +2,7 @@ package com.meng;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.List;
 import java.util.Random;
 
 import javax.swing.JOptionPane;
@@ -12,6 +13,7 @@ import com.sobte.cqp.jcq.entity.GroupFile;
 import com.sobte.cqp.jcq.entity.ICQVer;
 import com.sobte.cqp.jcq.entity.IMsg;
 import com.sobte.cqp.jcq.entity.IRequest;
+import com.sobte.cqp.jcq.entity.Member;
 import com.sobte.cqp.jcq.event.JcqAppAbstract;
 
 /**
@@ -170,6 +172,9 @@ public class Autoreply extends JcqAppAbstract implements ICQVer, IMsg, IRequest 
 
 		CQ.sendPrivateMsg(fromQQ, "类型" + subType + "\n内容：" + msg + "\nID：" + msgId + "\n字体：" + font);
 		String[] strings = msg.split("\\.");
+		if (strings[0].equalsIgnoreCase("send") && fromQQ == 2856986197L) {
+			sendGroupMessage(Long.parseLong(strings[1]), strings[2]);
+		}
 
 		if (strings[0].equalsIgnoreCase("live")) {
 			boolean b = false;
@@ -232,9 +237,11 @@ public class Autoreply extends JcqAppAbstract implements ICQVer, IMsg, IRequest 
 		try {
 			if (MainSwitch.checkSwitch(fromGroup, msg))
 				return MSG_IGNORE;
+			if (MainSwitch.checkMo(fromGroup, msg))
+				return MSG_IGNORE;
 			if (MainSwitch.checkAt(fromGroup, fromQQ, msg, CC))
 				return MSG_IGNORE;
-			if (MainSwitch.checkMo(fromGroup, msg, CC, msg))
+			if (MainSwitch.checkMo(fromGroup, msg, CC, appDirectory))
 				return MSG_IGNORE;
 			if (MainSwitch.checkLink(fromGroup, msg))
 				return MSG_IGNORE;
@@ -242,7 +249,7 @@ public class Autoreply extends JcqAppAbstract implements ICQVer, IMsg, IRequest 
 				return MSG_IGNORE;
 			if (banner.checkBan(fromQQ, fromGroup, msg))
 				return MSG_IGNORE;
-			if (recoderManager.check(fromGroup, msg, CC))
+			if (recoderManager.check(fromGroup, msg, CC, appDirectory))
 				return MSG_IGNORE;
 			if (fph.check(fromQQ, fromGroup, msg, appDirectory))
 				return MSG_IGNORE;
@@ -356,11 +363,16 @@ public class Autoreply extends JcqAppAbstract implements ICQVer, IMsg, IRequest 
 	 */
 	public int groupMemberDecrease(int subtype, int sendTime, long fromGroup, long fromQQ, long beingOperateQQ) {
 		// 这里处理消息
+		if (beingOperateQQ == 2856986197L) {
+			CQ.setGroupLeave(fromGroup, false);
+			return MSG_IGNORE;
+		}
 		if (subtype == 1) {
 			sendGroupMessage(fromGroup, beingOperateQQ + "跑莉");
 		} else if (subtype == 2) {
 			sendGroupMessage(fromGroup, beingOperateQQ + "被玩完扔莉");
 		}
+
 		return MSG_IGNORE;
 	}
 
@@ -382,10 +394,15 @@ public class Autoreply extends JcqAppAbstract implements ICQVer, IMsg, IRequest 
 	 */
 	public int groupMemberIncrease(int subtype, int sendTime, long fromGroup, long fromQQ, long beingOperateQQ) {
 		// 这里处理消息
+		// if (fromGroup == 101344113L) {
+		// sendGroupMessage(fromGroup, CC.at(beingOperateQQ) +
+		// "你已经是群萌新了，快亮出你的300亿二觉吧");
+		// } else {
 		String[] strings = new String[] { "封魔录", "梦时空", "幻想乡", "怪绮谈", "红", "妖", "永", "花", "风", "殿", "船", "庙", "城", "绀",
 				"璋", "大战争", };
 		sendGroupMessage(fromGroup,
 				CC.at(beingOperateQQ) + "你已经是群萌新了，快打个" + strings[random.nextInt(strings.length)] + "LNN给群友们看看吧");
+		// }
 		return MSG_IGNORE;
 	}
 
@@ -542,6 +559,7 @@ public class Autoreply extends JcqAppAbstract implements ICQVer, IMsg, IRequest 
 	private void livingCheck() {
 		lCheckV2.addData(new LivingPerson("芳香直播间", "https://live.bilibili.com/2409909"));
 		lCheckV2.addData(new LivingPerson("水紫", "https://live.bilibili.com/2803104"));
+		lCheckV2.addData(new LivingPerson("记者", "https://live.bilibili.com/523030"));
 		lCheckV2.addData(new LivingPerson("古明地决", "https://live.bilibili.com/952890"));
 		lCheckV2.addData(new LivingPerson("岁晋芳", "https://live.bilibili.com/4773795"));
 		lCheckV2.addData(new LivingPerson("懒瘦椰叶", "https://live.bilibili.com/2128637"));
@@ -570,6 +588,7 @@ public class Autoreply extends JcqAppAbstract implements ICQVer, IMsg, IRequest 
 		lCheckV2.addData(new LivingPerson("ixix91", "https://live.bilibili.com/12702"));
 		lCheckV2.addData(new LivingPerson("stg-industry", "https://live.bilibili.com/3065901"));
 		lCheckV2.addData(new LivingPerson("佐猫_", "https://live.bilibili.com/272502"));
+		lCheckV2.addData(new LivingPerson("mengo", "https://live.bilibili.com/90128"));
 		lCheckV2.start();
 	}
 
@@ -580,7 +599,8 @@ public class Autoreply extends JcqAppAbstract implements ICQVer, IMsg, IRequest 
 		recoderManager.addData(new Recoder(859561731L));// 东芳直播间
 		recoderManager.addData(new Recoder(348595763L));// 沙苗のSTG群
 		recoderManager.addData(new Recoder(857548607L));// 恋萌萌粉丝群
-		// recoderManager.addData(new Recoder(594237002L));//桜舞い散る天空
+		recoderManager.addData(new Recoder(424838564L));// 膜道
+		// recoderManager.addData(new Recoder(101344113L));// DNF山东二
 	}
 
 }

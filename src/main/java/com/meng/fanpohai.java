@@ -20,7 +20,7 @@ public class fanpohai {
 	private File fanpohafile;
 	private CQImage cmCqImage;
 	private String appdirectory = "";
-	
+
 	private final String[][] ss = new String[][] { { "丢人", "1581137837" }, { "hop", "2695029036" },
 			{ "伞挂", "203569312" }, { "台长", "943486447" }, { "圣师傅", "1211053685" }, { "大鸽", "869750266" },
 			{ "水紫", "2994752341" }, { "烧饼", "3035936740" }, { "空格", "839126279" }, { "紫苑", "839126279" },
@@ -32,7 +32,7 @@ public class fanpohai {
 
 	public fanpohai(String appdirectory) throws IOException {
 		this.appdirectory = appdirectory;
-		fanpohafile= new File(appdirectory + "fanpohai.txt");
+		fanpohafile = new File(appdirectory + "fanpohai.txt");
 		loadph();
 	}
 
@@ -40,7 +40,7 @@ public class fanpohai {
 		pohaitu = new File(appdirectory + "fan\\").listFiles();
 		fts = new FingerPrint[pohaitu.length];
 		for (int i = 0; i < fts.length; i++) {
-				fts[i] = new FingerPrint(ImageIO.read(pohaitu[i]));
+			fts[i] = new FingerPrint(ImageIO.read(pohaitu[i]));
 		}
 	}
 
