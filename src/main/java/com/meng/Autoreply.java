@@ -239,6 +239,8 @@ public class Autoreply extends JcqAppAbstract implements ICQVer, IMsg, IRequest 
 				return MSG_IGNORE;
 			if (MainSwitch.checkMo(fromGroup, msg))
 				return MSG_IGNORE;
+			if (fph.check(fromQQ, fromGroup, msg, appDirectory))
+				return MSG_IGNORE;
 			if (MainSwitch.checkAt(fromGroup, fromQQ, msg, CC))
 				return MSG_IGNORE;
 			if (MainSwitch.checkMo(fromGroup, msg, CC, appDirectory))
@@ -250,8 +252,6 @@ public class Autoreply extends JcqAppAbstract implements ICQVer, IMsg, IRequest 
 			if (banner.checkBan(fromQQ, fromGroup, msg))
 				return MSG_IGNORE;
 			if (recoderManager.check(fromGroup, msg, CC, appDirectory))
-				return MSG_IGNORE;
-			if (fph.check(fromQQ, fromGroup, msg, appDirectory))
 				return MSG_IGNORE;
 			if (dicReplyManager.check(fromGroup, fromQQ, msg))
 				return MSG_IGNORE;
@@ -600,6 +600,7 @@ public class Autoreply extends JcqAppAbstract implements ICQVer, IMsg, IRequest 
 		recoderManager.addData(new Recoder(348595763L));// 沙苗のSTG群
 		recoderManager.addData(new Recoder(857548607L));// 恋萌萌粉丝群
 		recoderManager.addData(new Recoder(424838564L));// 膜道
+		recoderManager.addData(new Recoder(439664871L));// 妖妖梦
 		// recoderManager.addData(new Recoder(101344113L));// DNF山东二
 	}
 

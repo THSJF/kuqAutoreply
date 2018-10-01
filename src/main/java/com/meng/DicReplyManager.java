@@ -32,10 +32,10 @@ public class DicReplyManager {
 
 	public boolean check(long group, long qq, String msg) throws IOException {
 		boolean b = false;
-			b = b | checkPublicDic(group, qq, msg);
-			if (b) {
-				return true;
-			}
+		b = b | checkPublicDic(group, qq, msg);
+		if (b) {
+			return true;
+		}
 		for (int i = 0; i < mapFlag; i++) {
 			b = b | groupMap.get(i).checkMsg(group, qq, msg);
 		}
@@ -65,7 +65,5 @@ public class DicReplyManager {
 		}
 		return false;
 	}
-
-
 
 }

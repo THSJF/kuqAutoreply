@@ -126,7 +126,7 @@ public class MainSwitch {
 			motmp = "之";
 			Autoreply.sendGroupMessage(fromGroup, "之");
 			return true;
-		} else if (msg.equals("苟利国家生死以") && motmp.equals("利")) {
+		} else if (msg.equals("苟利国家生死以")) {
 			Autoreply.sendGroupMessage(fromGroup, "岂因祸福避趋之");
 			return true;
 		}
