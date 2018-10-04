@@ -8,6 +8,7 @@ import java.util.Map.Entry;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
+import com.sobte.cqp.jcq.message.CQCode;
 
 public class DicReplyManager {
 
@@ -30,7 +31,11 @@ public class DicReplyManager {
 		mapFlag++;
 	}
 
-	public boolean check(long group, long qq, String msg) throws IOException {
+	public boolean check(long group, long qq, String msg,CQCode CC) throws IOException {
+		if (group == 210341365L && msg.indexOf("迫害") != -1) {
+			Autoreply.sendGroupMessage(group,CC.at(qq)+"你迫害你"+CC.emoji(128052)+"呢");
+			return false;
+		}
 		boolean b = false;
 		b = b | checkPublicDic(group, qq, msg);
 		if (b) {

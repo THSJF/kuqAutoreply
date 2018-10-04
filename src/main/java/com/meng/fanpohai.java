@@ -45,6 +45,9 @@ public class fanpohai {
 	}
 
 	public boolean check(long fromQQ, long fromGroup, String msg, String appdirectory) throws IOException {
+		if (fromGroup == 210341365L) {
+			return false;
+		}
 		if (msg.equalsIgnoreCase("loadph")) {
 			loadph();
 			Autoreply.sendGroupMessage(fromGroup, "反迫害样本图更新");
@@ -68,7 +71,7 @@ public class fanpohai {
 					simi = tf;
 				}
 			}
-			if (simi > 0.8f) {
+			if (simi > 0.87f) {
 				System.out.printf("\nsim=%f", simi);
 				bpohai = true;
 			}
@@ -106,6 +109,9 @@ public class fanpohai {
 			} else {
 				File fo = new File(folder);
 				File[] files = fo.listFiles();
+				if (folder.equals(appdirectory + "pohai/丢人/")) {
+					Autoreply.sendGroupMessage(fromGroup, cqCode.image(files[Autoreply.random.nextInt(files.length)]));
+				}
 				Autoreply.sendGroupMessage(fromGroup, cqCode.image(files[Autoreply.random.nextInt(files.length)]));
 				return true;
 			}

@@ -37,6 +37,7 @@ public class Autoreply extends JcqAppAbstract implements ICQVer, IMsg, IRequest 
 	private RollPlane rollPlane = new RollPlane();
 	private DicReplyManager dicReplyManager;
 	private LivingManager lCheckV2 = new LivingManager();
+	private ZuiSuJinTianGengLeMa zuiSuJinTianGengLeMa = new ZuiSuJinTianGengLeMa();
 	private fanpohai fph;
 
 	/**
@@ -95,6 +96,7 @@ public class Autoreply extends JcqAppAbstract implements ICQVer, IMsg, IRequest 
 		appDirectory = CQ.getAppDirectory();
 		dicReplyManager = new DicReplyManager(appDirectory + "dic.json");
 		addGroupDic(appDirectory);
+		zuiSuJinTianGengLeMa.start();
 		try {
 			fph = new fanpohai(appDirectory);
 		} catch (IOException e) {
@@ -234,12 +236,17 @@ public class Autoreply extends JcqAppAbstract implements ICQVer, IMsg, IRequest 
 		// JsonArray array = obj.getAsJsonArray(msg);
 
 		System.out.println(msg);
+
+		if (msg.startsWith("[CQ:sign")) {
+			sendGroupMessage(fromGroup, "image:pic/qiandao.jpg");
+			return MSG_IGNORE;
+		}
 		try {
 			if (MainSwitch.checkSwitch(fromGroup, msg))
 				return MSG_IGNORE;
-			if (MainSwitch.checkMo(fromGroup, msg))
+			if (banner.checkBan(fromQQ, fromGroup, msg))
 				return MSG_IGNORE;
-			if (fph.check(fromQQ, fromGroup, msg, appDirectory))
+			if (MainSwitch.checkMo(fromGroup, msg))
 				return MSG_IGNORE;
 			if (MainSwitch.checkAt(fromGroup, fromQQ, msg, CC))
 				return MSG_IGNORE;
@@ -249,11 +256,11 @@ public class Autoreply extends JcqAppAbstract implements ICQVer, IMsg, IRequest 
 				return MSG_IGNORE;
 			if (rollPlane.check(fromGroup, msg))
 				return MSG_IGNORE;
-			if (banner.checkBan(fromQQ, fromGroup, msg))
+			if (dicReplyManager.check(fromGroup, fromQQ, msg, CC))
+				return MSG_IGNORE;
+			if (fph.check(fromQQ, fromGroup, msg, appDirectory))
 				return MSG_IGNORE;
 			if (recoderManager.check(fromGroup, msg, CC, appDirectory))
-				return MSG_IGNORE;
-			if (dicReplyManager.check(fromGroup, fromQQ, msg))
 				return MSG_IGNORE;
 		} catch (IOException e) {
 			e.printStackTrace();
@@ -267,6 +274,7 @@ public class Autoreply extends JcqAppAbstract implements ICQVer, IMsg, IRequest 
 			sendGroupMessage(fromGroup, b ? "消息发送完毕" : "惊了 居然没有飞机佬直播");
 			return MSG_IGNORE;
 		}
+		zuiSuJinTianGengLeMa.check(fromGroup, fromQQ, CC);
 		return MSG_IGNORE;
 
 	}
@@ -399,7 +407,7 @@ public class Autoreply extends JcqAppAbstract implements ICQVer, IMsg, IRequest 
 		// "你已经是群萌新了，快亮出你的300亿二觉吧");
 		// } else {
 		String[] strings = new String[] { "封魔录", "梦时空", "幻想乡", "怪绮谈", "红", "妖", "永", "花", "风", "殿", "船", "庙", "城", "绀",
-				"璋", "大战争", };
+				"璋", "大战争" };
 		sendGroupMessage(fromGroup,
 				CC.at(beingOperateQQ) + "你已经是群萌新了，快打个" + strings[random.nextInt(strings.length)] + "LNN给群友们看看吧");
 		// }
@@ -547,11 +555,14 @@ public class Autoreply extends JcqAppAbstract implements ICQVer, IMsg, IRequest 
 	}
 
 	private void addGroupDic(String appDirectory) {
-		dicReplyManager.addData(new DicReplyGroup(826536230L, appDirectory + "dic826536230.json"));
-		dicReplyManager.addData(new DicReplyGroup(859561731L, appDirectory + "dic859561731.json"));
-		dicReplyManager.addData(new DicReplyGroup(210341365L, appDirectory + "dic210341365.json"));
-		dicReplyManager.addData(new DicReplyGroup(348595763L, appDirectory + "dic348595763.json"));
-		dicReplyManager.addData(new DicReplyGroup(857548607L, appDirectory + "dic857548607.json"));
+		dicReplyManager.addData(new DicReplyGroup(826536230L, appDirectory + "dic826536230.json"));// 闲聊
+		dicReplyManager.addData(new DicReplyGroup(859561731L, appDirectory + "dic859561731.json"));// 台长
+		dicReplyManager.addData(new DicReplyGroup(210341365L, appDirectory + "dic210341365.json"));// 水紫
+		dicReplyManager.addData(new DicReplyGroup(348595763L, appDirectory + "dic348595763.json"));// 沙苗
+		dicReplyManager.addData(new DicReplyGroup(857548607L, appDirectory + "dic857548607.json"));// 紫苑
+		dicReplyManager.addData(new DicReplyGroup(855927922L, appDirectory + "dic855927922.json"));// 最速
+		dicReplyManager.addData(new DicReplyGroup(439664871L, appDirectory + "dic439664871.json"));// 妖妖梦
+		dicReplyManager.addData(new DicReplyGroup(424838564L, appDirectory + "dic424838564.json"));// 魔道
 		// dicReplyManager.addData(new DicReplyGroup(594237002L, appDirectory +
 		// "dic594237002.json"));
 	}
@@ -560,6 +571,7 @@ public class Autoreply extends JcqAppAbstract implements ICQVer, IMsg, IRequest 
 		lCheckV2.addData(new LivingPerson("芳香直播间", "https://live.bilibili.com/2409909"));
 		lCheckV2.addData(new LivingPerson("水紫", "https://live.bilibili.com/2803104"));
 		lCheckV2.addData(new LivingPerson("记者", "https://live.bilibili.com/523030"));
+		lCheckV2.addData(new LivingPerson("T丶Reality", "https://live.bilibili.com/141896"));
 		lCheckV2.addData(new LivingPerson("古明地决", "https://live.bilibili.com/952890"));
 		lCheckV2.addData(new LivingPerson("岁晋芳", "https://live.bilibili.com/4773795"));
 		lCheckV2.addData(new LivingPerson("懒瘦椰叶", "https://live.bilibili.com/2128637"));
@@ -601,6 +613,7 @@ public class Autoreply extends JcqAppAbstract implements ICQVer, IMsg, IRequest 
 		recoderManager.addData(new Recoder(857548607L));// 恋萌萌粉丝群
 		recoderManager.addData(new Recoder(424838564L));// 膜道
 		recoderManager.addData(new Recoder(439664871L));// 妖妖梦
+		recoderManager.addData(new Recoder(855927922L));// 最速
 		// recoderManager.addData(new Recoder(101344113L));// DNF山东二
 	}
 

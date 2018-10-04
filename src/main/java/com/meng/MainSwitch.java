@@ -31,23 +31,7 @@ public class MainSwitch {
 
 	public static boolean checkAt(long fromGroup, long fromQQ, String msg, CQCode CC) {
 		if (CC.getAt(msg) == 1620628713L) {
-			if (fromQQ == 2856986197L) {
-				Autoreply.sendGroupMessage(fromGroup, CC.at(fromQQ) + "找姐姐什么事？");
-			} else {
-				switch (Autoreply.random.nextInt(4)) {
-				case 0:
-					Autoreply.sendGroupMessage(fromGroup, CC.at(fromQQ) + "找姐姐什么事？");
-					break;
-				case 1:
-					break;
-				case 2:
-					Autoreply.sendGroupMessage(fromGroup, "干啥");
-					break;
-				case 3:
-					Autoreply.sendGroupMessage(fromGroup, "?");
-					break;
-				}
-			}
+			Autoreply.sendGroupMessage(fromGroup, CC.at(fromQQ) + msg.substring(msg.indexOf(" ") + 1));
 			return true;
 		}
 		return false;

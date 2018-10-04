@@ -99,6 +99,7 @@ public class LivingManager extends Thread {
 			System.out.println(tmp);
 		//	Autoreply.sendGroupMessage(312342896L, tmp);// 学习
 			Autoreply.sendGroupMessage(210341365L, tmp);// 水紫
+			Autoreply.sendGroupMessage(855927922L, tmp);// 最速
 			Autoreply.sendGroupMessage(859561731L, tmp);// 东芳直播间
 			Autoreply.sendGroupMessage(826536230L, tmp);// stg闲聊群
 		//	Autoreply.sendGroupMessage(348595763L, tmp);// 沙苗のSTG群
@@ -112,6 +113,7 @@ public class LivingManager extends Thread {
 			System.out.println(tmp2);
 		//	Autoreply.sendGroupMessage(312342896L, tmp2);// 学习
 			Autoreply.sendGroupMessage(210341365L, tmp2);// 水紫
+			Autoreply.sendGroupMessage(855927922L, tmp2);// 最速
 			Autoreply.sendGroupMessage(859561731L, tmp2);// 东芳直播间
 			Autoreply.sendGroupMessage(826536230L, tmp2);// stg闲聊群
 		//	Autoreply.sendGroupMessage(348595763L, tmp2);// 沙苗のSTG群
