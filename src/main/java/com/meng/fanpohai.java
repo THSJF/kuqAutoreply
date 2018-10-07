@@ -28,7 +28,8 @@ public class fanpohai {
 			{ "yhx", "1148729387" }, { "4guo1", "1106176045" }, { "mdzz", "1833661569" }, { "ti", "1244172541" },
 			{ "星小渚", "2835449913" }, { "丑二桨", "289580425" }, { "懒瘦", "496276037" }, { "天星厨", "1282443047" },
 			{ "逸诺", "942465781" }, { "com", "736461434" }, { "岁月", "183889179" }, { "鸽鸽", "1437560361" },
-			{ "大酱", "3427665460" }, { "灵风", "2756253478" }, { "斑点伞", "1254138109" }, { "苍老师", "1391857313" } };
+			{ "大酱", "3427665460" }, { "灵风", "2756253478" }, { "斑点伞", "1254138109" }, { "苍老师", "1391857313" },
+			{ "尻尻", "2448122241" } };
 
 	public fanpohai(String appdirectory) throws IOException {
 		this.appdirectory = appdirectory;
@@ -71,7 +72,7 @@ public class fanpohai {
 					simi = tf;
 				}
 			}
-			if (simi > 0.87f) {
+			if (simi > 0.92f) {
 				System.out.printf("\nsim=%f", simi);
 				bpohai = true;
 			}
@@ -101,7 +102,7 @@ public class fanpohai {
 				if (ir == 0) {
 					Autoreply.sendGroupMessage(fromGroup, "鬼鬼");
 				} else if (ir == 1) {
-					Autoreply.sendGroupMessage(fromGroup, "除了迫害你还知道什么");
+					Autoreply.sendGroupMessage(fromGroup, "除了迫害和膜你还知道什么");
 				} else {
 					Autoreply.sendGroupMessage(fromGroup, "草绳");
 				}

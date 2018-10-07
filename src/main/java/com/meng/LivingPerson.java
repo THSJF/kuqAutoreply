@@ -2,6 +2,7 @@ package com.meng;
 
 public class LivingPerson {
 	private String name = "";
+	private int number = 0;
 	private String liveUrl = "";
 	private boolean isLiving=false;
 	private boolean needStartTip = true;
@@ -10,9 +11,12 @@ public class LivingPerson {
 
 	public LivingPerson(String name, String url) {
 		this.name = name;
+		number=Integer.parseInt(url.substring(url.indexOf("com")+4));
 		liveUrl = url;
 	}
-	
+	public int getNumber() {
+		return number;
+	}
 	public void setFlag(int flag) {
 		this.flag=flag
 				;

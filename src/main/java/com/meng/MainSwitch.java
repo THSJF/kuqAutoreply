@@ -1,10 +1,32 @@
 package com.meng;
 
+import java.io.DataInputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.io.PrintWriter;
 import java.io.UnsupportedEncodingException;
+import java.net.ConnectException;
+import java.net.HttpURLConnection;
+import java.net.URL;
+import java.net.URLConnection;
+import java.net.URLEncoder;
+import java.security.KeyManagementException;
+import java.security.NoSuchAlgorithmException;
+import java.security.cert.CertificateException;
+import java.security.cert.X509Certificate;
+import java.util.Map;
+import java.util.Scanner;
 import java.util.regex.Pattern;
+
+import javax.net.ssl.HostnameVerifier;
+import javax.net.ssl.HttpsURLConnection;
+import javax.net.ssl.SSLContext;
+import javax.net.ssl.SSLSession;
+import javax.net.ssl.TrustManager;
+import javax.net.ssl.X509TrustManager;
 
 import com.sobte.cqp.jcq.message.CQCode;
 
@@ -31,6 +53,9 @@ public class MainSwitch {
 
 	public static boolean checkAt(long fromGroup, long fromQQ, String msg, CQCode CC) {
 		if (CC.getAt(msg) == 1620628713L) {
+			if (msg.indexOf("蓝") != -1 || msg.indexOf("藍") != -1) {
+				return true;
+			}
 			Autoreply.sendGroupMessage(fromGroup, CC.at(fromQQ) + msg.substring(msg.indexOf(" ") + 1));
 			return true;
 		}
@@ -117,4 +142,64 @@ public class MainSwitch {
 		return false;
 	}
 
+	public static class TrustAnyHostnameVerifier implements HostnameVerifier {
+		public boolean verify(String hostname, SSLSession session) {
+			return true;
+		}
+	}
+
+	public static class TrustAnyTrustManager implements X509TrustManager {
+		public void checkClientTrusted(X509Certificate[] chain, String authType) throws CertificateException {
+		}
+
+		public void checkServerTrusted(X509Certificate[] chain, String authType) throws CertificateException {
+		}
+
+		public X509Certificate[] getAcceptedIssuers() {
+			return new X509Certificate[] {};
+		}
+	}
+
+	public static String open(String url) throws NoSuchAlgorithmException, KeyManagementException {
+		InputStream in = null;
+		OutputStream out = null;
+		String str_return = "";
+		try {
+			SSLContext sc = SSLContext.getInstance("SSL");
+			sc.init(null, new TrustManager[] { new TrustAnyTrustManager() }, new java.security.SecureRandom());
+			URL console = new URL(null, url, new sun.net.www.protocol.https.Handler());
+			HttpsURLConnection conn = (HttpsURLConnection) console.openConnection();
+			conn.setSSLSocketFactory(sc.getSocketFactory());
+			conn.setHostnameVerifier(new TrustAnyHostnameVerifier());
+			conn.connect();
+			InputStream is = conn.getInputStream();
+			DataInputStream indata = new DataInputStream(is);
+			String ret = "";
+			while (ret != null) {
+				ret = indata.readLine();
+				if (ret != null && !ret.trim().equals("")) {
+					str_return = str_return + ret;
+				}
+			}
+			conn.disconnect();
+		} catch (ConnectException e) {
+			System.out.println("ConnectException");
+			System.out.println(e);
+		} catch (IOException e) {
+			System.out.println("IOException");
+			System.out.println(e);
+		} finally {
+			try {
+				in.close();
+			} catch (Exception e) {
+			}
+			try {
+				out.close();
+			} catch (Exception e) {
+			}
+
+		}
+		return str_return;
+	}
+	
 }

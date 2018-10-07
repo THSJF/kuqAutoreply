@@ -2,6 +2,8 @@ package com.meng;
 
 import java.io.File;
 import java.io.IOException;
+import java.security.KeyManagementException;
+import java.security.NoSuchAlgorithmException;
 import java.util.List;
 import java.util.Random;
 
@@ -36,8 +38,10 @@ public class Autoreply extends JcqAppAbstract implements ICQVer, IMsg, IRequest 
 	private RecoderManager recoderManager = new RecoderManager();
 	private RollPlane rollPlane = new RollPlane();
 	private DicReplyManager dicReplyManager;
-	private LivingManager lCheckV2 = new LivingManager();
-	private ZuiSuJinTianGengLeMa zuiSuJinTianGengLeMa = new ZuiSuJinTianGengLeMa();
+	private LivingManager livingCheck = new LivingManager();
+	private LivingManager livingCheck2 = new LivingManager();
+	private ZuiSuJinTianGengLeMa zuiSuJinTianGengLeMa;
+	private BilibiliTest bilibiliTest = new BilibiliTest();
 	private fanpohai fph;
 
 	/**
@@ -95,6 +99,7 @@ public class Autoreply extends JcqAppAbstract implements ICQVer, IMsg, IRequest 
 		// 获取应用数据目录(无需储存数据时，请将此行注释)
 		appDirectory = CQ.getAppDirectory();
 		dicReplyManager = new DicReplyManager(appDirectory + "dic.json");
+		zuiSuJinTianGengLeMa = new ZuiSuJinTianGengLeMa(CC);
 		addGroupDic(appDirectory);
 		zuiSuJinTianGengLeMa.start();
 		try {
@@ -171,18 +176,50 @@ public class Autoreply extends JcqAppAbstract implements ICQVer, IMsg, IRequest 
 	 */
 	public int privateMsg(int subType, int msgId, long fromQQ, String msg, int font) {
 		// 这里处理消息
-
-		CQ.sendPrivateMsg(fromQQ, "类型" + subType + "\n内容：" + msg + "\nID：" + msgId + "\n字体：" + font);
-		String[] strings = msg.split("\\.");
-		if (strings[0].equalsIgnoreCase("send") && fromQQ == 2856986197L) {
-			sendGroupMessage(Long.parseLong(strings[1]), strings[2]);
+		if (msg.startsWith("抽奖获得物品：")) {
+			sendPrivateMessage(fromQQ, zuiSuJinTianGengLeMa.getThing(msg));
+			return MSG_IGNORE;
 		}
+		String[] strings = msg.split("\\.");
+		if (fromQQ == 2856986197L) {
+			if (strings[0].equalsIgnoreCase("send")) {
+				sendGroupMessage(Long.parseLong(strings[1]), strings[2]);
+			}
+			if (strings[0].equalsIgnoreCase("nai")) {
+				Nai nai = new Nai();
+				try {
+					nai.readContentFromPost(Integer.parseInt(strings[1]));
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			}
+			if (msg.equals(".nai")) {
+				for (int i = 0; i < livingCheck.getMapFlag(); i++) {
+					if (livingCheck.getPerson(i).isLiving()) {
+						Nai nai = new Nai();
+						try {
+							nai.readContentFromPost(livingCheck.getPerson(i).getNumber());
+						} catch (IOException e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						}
+					}
+				}
+				return MSG_IGNORE;
+			}
+		}
+		CQ.sendPrivateMsg(fromQQ, "类型" + subType + "\n内容：" + msg + "\nID：" + msgId + "\n字体：" + font);
 
 		if (strings[0].equalsIgnoreCase("live")) {
 			boolean b = false;
-			for (int i = 0; i < lCheckV2.getMapFlag(); i++) {
-				sendMsg(lCheckV2.getPerson(i), Long.parseLong(strings[1]));
-				b = b || lCheckV2.getPerson(i).isLiving();
+			for (int i = 0; i < livingCheck.getMapFlag(); i++) {
+				sendMsg(livingCheck.getPerson(i), Long.parseLong(strings[1]));
+				b = b || livingCheck.getPerson(i).isLiving();
+			}
+			for (int i = 0; i < livingCheck2.getMapFlag(); i++) {
+				sendMsg(livingCheck2.getPerson(i), Long.parseLong(strings[1]));
+				b = b || livingCheck2.getPerson(i).isLiving();
 			}
 			if (!b) {
 				sendGroupMessage(Long.parseLong(strings[1]), "惊了 居然没有飞机佬直播");
@@ -234,9 +271,24 @@ public class Autoreply extends JcqAppAbstract implements ICQVer, IMsg, IRequest 
 		// 这里处理消息
 
 		// JsonArray array = obj.getAsJsonArray(msg);
-
+		if (fromQQ == 2856986197L) {
+			String[] strings = msg.split("\\.");
+			if (strings[0].equalsIgnoreCase("send")) {
+				sendGroupMessage(Long.parseLong(strings[1]), strings[2]);
+			}
+			if (strings[0].equalsIgnoreCase("nai")) {
+				Nai nai = new Nai();
+				try {
+					nai.readContentFromPost(Integer.parseInt(strings[1]));
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+			}
+		}
+		if (fromGroup == 210341365L) {
+			return MSG_INTERCEPT;
+		}
 		System.out.println(msg);
-
 		if (msg.startsWith("[CQ:sign")) {
 			sendGroupMessage(fromGroup, "image:pic/qiandao.jpg");
 			return MSG_IGNORE;
@@ -252,6 +304,8 @@ public class Autoreply extends JcqAppAbstract implements ICQVer, IMsg, IRequest 
 				return MSG_IGNORE;
 			if (MainSwitch.checkMo(fromGroup, msg, CC, appDirectory))
 				return MSG_IGNORE;
+			if (bilibiliTest.check(fromGroup, msg))
+				return MSG_IGNORE;
 			if (MainSwitch.checkLink(fromGroup, msg))
 				return MSG_IGNORE;
 			if (rollPlane.check(fromGroup, msg))
@@ -264,17 +318,26 @@ public class Autoreply extends JcqAppAbstract implements ICQVer, IMsg, IRequest 
 				return MSG_IGNORE;
 		} catch (IOException e) {
 			e.printStackTrace();
+		} catch (KeyManagementException e) {
+			e.printStackTrace();
+		} catch (NoSuchAlgorithmException e) {
+			e.printStackTrace();
 		}
 		if (msg.equals(".live")) {
 			boolean b = false;
-			for (int i = 0; i < lCheckV2.getMapFlag(); i++) {
-				sendMsg(lCheckV2.getPerson(i), fromGroup);
-				b = b || lCheckV2.getPerson(i).isLiving();
+			for (int i = 0; i < livingCheck.getMapFlag(); i++) {
+				sendMsg(livingCheck.getPerson(i), fromGroup);
+				b = b || livingCheck.getPerson(i).isLiving();
+			}
+			for (int i = 0; i < livingCheck2.getMapFlag(); i++) {
+				sendMsg(livingCheck2.getPerson(i), fromGroup);
+				b = b || livingCheck2.getPerson(i).isLiving();
 			}
 			sendGroupMessage(fromGroup, b ? "消息发送完毕" : "惊了 居然没有飞机佬直播");
 			return MSG_IGNORE;
 		}
 		zuiSuJinTianGengLeMa.check(fromGroup, fromQQ, CC);
+
 		return MSG_IGNORE;
 
 	}
@@ -325,6 +388,9 @@ public class Autoreply extends JcqAppAbstract implements ICQVer, IMsg, IRequest 
 			return MSG_IGNORE;
 		}
 		// 这里处理消息
+		if (fromGroup == 807242547L) {
+			return MSG_IGNORE;
+		}
 		sendGroupMessage(fromGroup, "发点小电影啊");
 		return MSG_IGNORE;
 	}
@@ -455,7 +521,7 @@ public class Autoreply extends JcqAppAbstract implements ICQVer, IMsg, IRequest 
 		 * REQUEST_ADOPT 通过 REQUEST_REFUSE 拒绝
 		 */
 
-		// CQ.setFriendAddRequest(responseFlag, REQUEST_ADOPT, null); //
+		CQ.setFriendAddRequest(responseFlag, REQUEST_ADOPT, null); //
 		// 同意好友添加请求
 		return MSG_IGNORE;
 	}
@@ -542,15 +608,17 @@ public class Autoreply extends JcqAppAbstract implements ICQVer, IMsg, IRequest 
 		try {
 			sendGroupMessage(fromGroup, 0L, msg);
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}
 
+	public static void sendPrivateMessage(long fromQQ, String msg) {
+		CQ.sendPrivateMsg(fromQQ, msg);
+	}
+
 	private void sendMsg(LivingPerson p, long group) {
 		if (p.isLiving()) {
-			String tmp = p.getName() + "直播开始啦大家快去奶" + p.getLiveUrl();
-			Autoreply.sendGroupMessage(group, tmp);
+			Autoreply.sendGroupMessage(group, p.getName() + "直播开始啦大家快去奶" + p.getLiveUrl());
 		}
 	}
 
@@ -568,40 +636,43 @@ public class Autoreply extends JcqAppAbstract implements ICQVer, IMsg, IRequest 
 	}
 
 	private void livingCheck() {
-		lCheckV2.addData(new LivingPerson("芳香直播间", "https://live.bilibili.com/2409909"));
-		lCheckV2.addData(new LivingPerson("水紫", "https://live.bilibili.com/2803104"));
-		lCheckV2.addData(new LivingPerson("记者", "https://live.bilibili.com/523030"));
-		lCheckV2.addData(new LivingPerson("T丶Reality", "https://live.bilibili.com/141896"));
-		lCheckV2.addData(new LivingPerson("古明地决", "https://live.bilibili.com/952890"));
-		lCheckV2.addData(new LivingPerson("岁晋芳", "https://live.bilibili.com/4773795"));
-		lCheckV2.addData(new LivingPerson("懒瘦椰叶", "https://live.bilibili.com/2128637"));
-		lCheckV2.addData(new LivingPerson("天狐Kitsune", "https://live.bilibili.com/936600"));
-		lCheckV2.addData(new LivingPerson("砂粑粑", "https://live.bilibili.com/11928"));
-		lCheckV2.addData(new LivingPerson("威光椰叶", "https://live.bilibili.com/1318639"));
-		lCheckV2.addData(new LivingPerson("空格椰叶", "https://live.bilibili.com/75404"));
-		lCheckV2.addData(new LivingPerson("八雲的妖怪闲者", "https://live.bilibili.com/1954885"));
-		lCheckV2.addData(new LivingPerson("星海天下", "https://live.bilibili.com/359844"));
-		lCheckV2.addData(new LivingPerson("ZRT师傅", "https://live.bilibili.com/8501850"));
-		lCheckV2.addData(new LivingPerson("绵羊师傅", "https://live.bilibili.com/6683623"));
-		lCheckV2.addData(new LivingPerson("我真的好羡慕你们啊", "https://live.bilibili.com/5404413"));
-		lCheckV2.addData(new LivingPerson("Yuriko丶酱", "https://live.bilibili.com/280476"));
-		lCheckV2.addData(new LivingPerson("王师傅", "https://live.bilibili.com/8356088"));
-		lCheckV2.addData(new LivingPerson("黑白の斑點", "https://live.bilibili.com/1168338"));
-		lCheckV2.addData(new LivingPerson("一团毛玉", "https://live.bilibili.com/569678"));
-		lCheckV2.addData(new LivingPerson("莉莉厨一号", "https://live.bilibili.com/3749309"));
-		lCheckV2.addData(new LivingPerson("幻想星墨", "https://live.bilibili.com/5198157"));
-		lCheckV2.addData(new LivingPerson("雾雨沙苗", "https://live.bilibili.com/5136443"));
-		lCheckV2.addData(new LivingPerson("假装看风景的露娜厨", "https://live.bilibili.com/1122971"));
-		lCheckV2.addData(new LivingPerson("TouhouのDean", "https://live.bilibili.com/1187187"));
-		lCheckV2.addData(new LivingPerson("夜桜鎮魂歌", "https://live.bilibili.com/475904"));
-		lCheckV2.addData(new LivingPerson("沙苗", "https://live.bilibili.com/14238508"));
-		lCheckV2.addData(new LivingPerson("绿绿可柚", "https://live.bilibili.com/10101916"));
-		lCheckV2.addData(new LivingPerson("kyoukai_00", "https://live.bilibili.com/8692789"));
-		lCheckV2.addData(new LivingPerson("ixix91", "https://live.bilibili.com/12702"));
-		lCheckV2.addData(new LivingPerson("stg-industry", "https://live.bilibili.com/3065901"));
-		lCheckV2.addData(new LivingPerson("佐猫_", "https://live.bilibili.com/272502"));
-		lCheckV2.addData(new LivingPerson("mengo", "https://live.bilibili.com/90128"));
-		lCheckV2.start();
+		livingCheck.addData(new LivingPerson("芳香直播间", "https://live.bilibili.com/2409909"));
+		livingCheck.addData(new LivingPerson("水紫", "https://live.bilibili.com/2803104"));
+		livingCheck.addData(new LivingPerson("记者", "https://live.bilibili.com/523030"));
+		livingCheck.addData(new LivingPerson("T丶Reality", "https://live.bilibili.com/141896"));
+		livingCheck.addData(new LivingPerson("古明地决", "https://live.bilibili.com/952890"));
+		livingCheck.addData(new LivingPerson("岁晋芳", "https://live.bilibili.com/4773795"));
+		livingCheck.addData(new LivingPerson("懒瘦椰叶", "https://live.bilibili.com/2128637"));
+		livingCheck.addData(new LivingPerson("天狐Kitsune", "https://live.bilibili.com/936600"));
+		livingCheck.addData(new LivingPerson("砂粑粑", "https://live.bilibili.com/11928"));
+		livingCheck.addData(new LivingPerson("威光椰叶", "https://live.bilibili.com/1318639"));
+		livingCheck.addData(new LivingPerson("空格椰叶", "https://live.bilibili.com/75404"));
+		livingCheck.addData(new LivingPerson("八雲的妖怪闲者", "https://live.bilibili.com/1954885"));
+		livingCheck.addData(new LivingPerson("星海天下", "https://live.bilibili.com/359844"));
+		livingCheck.addData(new LivingPerson("ZRT师傅", "https://live.bilibili.com/8501850"));
+		livingCheck.addData(new LivingPerson("绵羊师傅", "https://live.bilibili.com/6683623"));
+		livingCheck.addData(new LivingPerson("我真的好羡慕你们啊", "https://live.bilibili.com/5404413"));
+
+		livingCheck2.addData(new LivingPerson("Yuriko丶酱", "https://live.bilibili.com/280476"));
+		livingCheck2.addData(new LivingPerson("王师傅", "https://live.bilibili.com/8356088"));
+		livingCheck2.addData(new LivingPerson("黑白の斑點", "https://live.bilibili.com/1168338"));
+		livingCheck2.addData(new LivingPerson("一团毛玉", "https://live.bilibili.com/569678"));
+		livingCheck2.addData(new LivingPerson("莉莉厨一号", "https://live.bilibili.com/3749309"));
+		livingCheck2.addData(new LivingPerson("幻想星墨", "https://live.bilibili.com/5198157"));
+		livingCheck2.addData(new LivingPerson("雾雨沙苗", "https://live.bilibili.com/5136443"));
+		livingCheck2.addData(new LivingPerson("假装看风景的露娜厨", "https://live.bilibili.com/1122971"));
+		livingCheck2.addData(new LivingPerson("TouhouのDean", "https://live.bilibili.com/1187187"));
+		livingCheck2.addData(new LivingPerson("夜桜鎮魂歌", "https://live.bilibili.com/475904"));
+		livingCheck2.addData(new LivingPerson("沙苗", "https://live.bilibili.com/14238508"));
+		livingCheck2.addData(new LivingPerson("绿绿可柚", "https://live.bilibili.com/10101916"));
+		livingCheck2.addData(new LivingPerson("kyoukai_00", "https://live.bilibili.com/8692789"));
+		livingCheck2.addData(new LivingPerson("ixix91", "https://live.bilibili.com/12702"));
+		livingCheck2.addData(new LivingPerson("stg-industry", "https://live.bilibili.com/3065901"));
+		livingCheck2.addData(new LivingPerson("佐猫_", "https://live.bilibili.com/272502"));
+		livingCheck2.addData(new LivingPerson("mengo", "https://live.bilibili.com/90128"));
+		livingCheck2.addData(new LivingPerson("西行妖下两世分", "https://live.bilibili.com/528326"));
+		livingCheck.start();
+		livingCheck2.start();
 	}
 
 	private void addRecorder() {
