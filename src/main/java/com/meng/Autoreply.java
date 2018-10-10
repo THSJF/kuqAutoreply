@@ -1,5 +1,6 @@
 package com.meng;
 
+import java.awt.geom.Ellipse2D;
 import java.io.File;
 import java.io.IOException;
 import java.security.KeyManagementException;
@@ -176,10 +177,6 @@ public class Autoreply extends JcqAppAbstract implements ICQVer, IMsg, IRequest 
 	 */
 	public int privateMsg(int subType, int msgId, long fromQQ, String msg, int font) {
 		// 这里处理消息
-		if (msg.startsWith("抽奖获得物品：")) {
-			sendPrivateMessage(fromQQ, zuiSuJinTianGengLeMa.getThing(msg));
-			return MSG_IGNORE;
-		}
 		String[] strings = msg.split("\\.");
 		if (fromQQ == 2856986197L) {
 			if (strings[0].equalsIgnoreCase("send")) {
@@ -188,18 +185,34 @@ public class Autoreply extends JcqAppAbstract implements ICQVer, IMsg, IRequest 
 			if (strings[0].equalsIgnoreCase("nai")) {
 				Nai nai = new Nai();
 				try {
-					nai.readContentFromPost(Integer.parseInt(strings[1]));
-				} catch (IOException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
+					nai.readContentFromPost(-1, Integer.parseInt(strings[1]), fromQQ, strings[2]);
+					return MSG_IGNORE;
+				} catch (Exception e) {
+					try {
+						nai.readContentFromPost(-1, Integer.parseInt(strings[1]), fromQQ, "发发发");
+						return MSG_IGNORE;
+					} catch (Exception e1) {
+						// TODO Auto-generated catch block
+						e1.printStackTrace();
+					}
 				}
 			}
 			if (msg.equals(".nai")) {
+				Nai nai = new Nai();
 				for (int i = 0; i < livingCheck.getMapFlag(); i++) {
 					if (livingCheck.getPerson(i).isLiving()) {
-						Nai nai = new Nai();
 						try {
-							nai.readContentFromPost(livingCheck.getPerson(i).getNumber());
+							nai.readContentFromPost(-1, livingCheck.getPerson(i).getNumber(), fromQQ, "发发发");
+						} catch (IOException e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						}
+					}
+				}
+				for (int i = 0; i < livingCheck2.getMapFlag(); i++) {
+					if (livingCheck2.getPerson(i).isLiving()) {
+						try {
+							nai.readContentFromPost(-1, livingCheck2.getPerson(i).getNumber(), fromQQ, "发发发");
 						} catch (IOException e) {
 							// TODO Auto-generated catch block
 							e.printStackTrace();
@@ -209,8 +222,6 @@ public class Autoreply extends JcqAppAbstract implements ICQVer, IMsg, IRequest 
 				return MSG_IGNORE;
 			}
 		}
-		CQ.sendPrivateMsg(fromQQ, "类型" + subType + "\n内容：" + msg + "\nID：" + msgId + "\n字体：" + font);
-
 		if (strings[0].equalsIgnoreCase("live")) {
 			boolean b = false;
 			for (int i = 0; i < livingCheck.getMapFlag(); i++) {
@@ -271,17 +282,50 @@ public class Autoreply extends JcqAppAbstract implements ICQVer, IMsg, IRequest 
 		// 这里处理消息
 
 		// JsonArray array = obj.getAsJsonArray(msg);
-		if (fromQQ == 2856986197L) {
+		if (fromQQ == 2856986197L ) {
+			
+			if (msg.equals(".nai")) {
+				Nai nai = new Nai();
+				for (int i = 0; i < livingCheck.getMapFlag(); i++) {
+					if (livingCheck.getPerson(i).isLiving()) {
+						try {
+							nai.readContentFromPost(fromGroup, livingCheck.getPerson(i).getNumber(), fromQQ, "发发发");
+						} catch (IOException e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						}
+					}
+				}
+				for (int i = 0; i < livingCheck2.getMapFlag(); i++) {
+					if (livingCheck2.getPerson(i).isLiving()) {
+						try {
+							nai.readContentFromPost(fromGroup, livingCheck2.getPerson(i).getNumber(), fromQQ, "发发发");
+						} catch (IOException e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						}
+					}
+				}
+				return MSG_IGNORE;
+			}
 			String[] strings = msg.split("\\.");
 			if (strings[0].equalsIgnoreCase("send")) {
 				sendGroupMessage(Long.parseLong(strings[1]), strings[2]);
+				return MSG_IGNORE;
 			}
 			if (strings[0].equalsIgnoreCase("nai")) {
 				Nai nai = new Nai();
 				try {
-					nai.readContentFromPost(Integer.parseInt(strings[1]));
-				} catch (IOException e) {
-					e.printStackTrace();
+					nai.readContentFromPost(fromGroup, Integer.parseInt(strings[1]), fromQQ, strings[2]);
+					return MSG_IGNORE;
+				} catch (Exception e) {
+					try {
+						nai.readContentFromPost(fromGroup, Integer.parseInt(strings[1]), fromQQ, "发发发");
+					} catch (Exception e1) {
+						// TODO Auto-generated catch block
+						e1.printStackTrace();
+					}
+					return MSG_IGNORE;
 				}
 			}
 		}
@@ -472,10 +516,10 @@ public class Autoreply extends JcqAppAbstract implements ICQVer, IMsg, IRequest 
 		// sendGroupMessage(fromGroup, CC.at(beingOperateQQ) +
 		// "你已经是群萌新了，快亮出你的300亿二觉吧");
 		// } else {
-		String[] strings = new String[] { "封魔录", "梦时空", "幻想乡", "怪绮谈", "红", "妖", "永", "花", "风", "殿", "船", "庙", "城", "绀",
-				"璋", "大战争" };
+		String[] strings = new String[] { "封魔录LNN", "梦时空LNN", "幻想乡LNN", "怪绮谈LNN", "红LNN", "妖LNNN", "永0033", "永0037",
+				"花LNN", "风LNN", "殿LNN", "船LNNN", "庙LNNN", "城LNN", "绀LNN", "璋LNNN", "大战争LNN" };
 		sendGroupMessage(fromGroup,
-				CC.at(beingOperateQQ) + "你已经是群萌新了，快打个" + strings[random.nextInt(strings.length)] + "LNN给群友们看看吧");
+				CC.at(beingOperateQQ) + "你已经是群萌新了，快打个" + strings[random.nextInt(strings.length)] + "给群友们看看吧");
 		// }
 		return MSG_IGNORE;
 	}
@@ -652,6 +696,7 @@ public class Autoreply extends JcqAppAbstract implements ICQVer, IMsg, IRequest 
 		livingCheck.addData(new LivingPerson("ZRT师傅", "https://live.bilibili.com/8501850"));
 		livingCheck.addData(new LivingPerson("绵羊师傅", "https://live.bilibili.com/6683623"));
 		livingCheck.addData(new LivingPerson("我真的好羡慕你们啊", "https://live.bilibili.com/5404413"));
+		livingCheck.addData(new LivingPerson("我叫猫饭", "https://live.bilibili.com/1601397"));
 
 		livingCheck2.addData(new LivingPerson("Yuriko丶酱", "https://live.bilibili.com/280476"));
 		livingCheck2.addData(new LivingPerson("王师傅", "https://live.bilibili.com/8356088"));
@@ -671,6 +716,8 @@ public class Autoreply extends JcqAppAbstract implements ICQVer, IMsg, IRequest 
 		livingCheck2.addData(new LivingPerson("佐猫_", "https://live.bilibili.com/272502"));
 		livingCheck2.addData(new LivingPerson("mengo", "https://live.bilibili.com/90128"));
 		livingCheck2.addData(new LivingPerson("西行妖下两世分", "https://live.bilibili.com/528326"));
+		livingCheck2.addData(new LivingPerson("c5椰叶", "https://live.bilibili.com/7834477"));
+		livingCheck2.addData(new LivingPerson("鱼神", "https://live.bilibili.com/14341"));
 		livingCheck.start();
 		livingCheck2.start();
 	}

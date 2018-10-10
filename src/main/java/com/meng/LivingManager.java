@@ -82,14 +82,15 @@ public class LivingManager extends Thread {
 			String tmp = p.getName() + "直播开始啦大家快去奶" + p.getLiveUrl();
 			Nai nai = new Nai();
 			try {
-				nai.readContentFromPost(p.getNumber());
+				nai.readContentFromPost(-1, p.getNumber(), 2856986197L, "发发发");
+				nai.readContentFromPost(-1, p.getNumber(), 943486447L, "发发发");
 			} catch (IOException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 			// Autoreply.sendGroupMessage(312342896L, tmp);// 学习
 			Autoreply.sendGroupMessage(210341365L, tmp);// 水紫
-			//Autoreply.sendGroupMessage(855927922L, tmp);// 最速
+			// Autoreply.sendGroupMessage(855927922L, tmp);// 最速
 			Autoreply.sendGroupMessage(859561731L, tmp);// 东芳直播间
 			Autoreply.sendGroupMessage(807242547L, tmp);// c5
 			Autoreply.sendGroupMessage(826536230L, tmp);// stg闲聊群
@@ -103,7 +104,7 @@ public class LivingManager extends Thread {
 			String tmp2 = p.getName() + "直播被奶死莉";
 			// Autoreply.sendGroupMessage(312342896L, tmp2);// 学习
 			Autoreply.sendGroupMessage(210341365L, tmp2);// 水紫
-			//Autoreply.sendGroupMessage(855927922L, tmp2);// 最速
+			// Autoreply.sendGroupMessage(855927922L, tmp2);// 最速
 			Autoreply.sendGroupMessage(859561731L, tmp2);// 东芳直播间
 			Autoreply.sendGroupMessage(807242547L, tmp2);// 东芳直播间
 			Autoreply.sendGroupMessage(826536230L, tmp2);// stg闲聊群

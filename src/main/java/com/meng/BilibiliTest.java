@@ -11,7 +11,7 @@ public class BilibiliTest {
 	}
 
 	public boolean check(long fromGroup, String msg) throws KeyManagementException, NoSuchAlgorithmException {
-		if (msg.indexOf("bilibili.com/video/av") != -1 && msg.indexOf("[CQ:share,url=") == -1) {
+		if (msg.indexOf("bilibili.com/video/av") != -1) {
 			String avString = getAv(msg);
 			if (avString.equals("")) {
 				return false;
@@ -21,7 +21,9 @@ public class BilibiliTest {
 					MainSwitch.open("http://api.bilibili.com/archive_stat/stat?aid=" + avString + "&type=jsonp"),
 					BilibiliJson.class);
 			Autoreply.sendGroupMessage(fromGroup, bilibiliJson.toString());
-			return true;
+			if (msg.indexOf("[CQ:share,url=") == -1) {
+				return true;
+			}
 		}
 		return false;
 	}
