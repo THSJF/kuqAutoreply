@@ -282,8 +282,8 @@ public class Autoreply extends JcqAppAbstract implements ICQVer, IMsg, IRequest 
 		// 这里处理消息
 
 		// JsonArray array = obj.getAsJsonArray(msg);
-		if (fromQQ == 2856986197L ) {
-			
+		if (fromQQ == 2856986197L) {
+
 			if (msg.equals(".nai")) {
 				Nai nai = new Nai();
 				for (int i = 0; i < livingCheck.getMapFlag(); i++) {
@@ -358,7 +358,7 @@ public class Autoreply extends JcqAppAbstract implements ICQVer, IMsg, IRequest 
 				return MSG_IGNORE;
 			if (fph.check(fromQQ, fromGroup, msg, appDirectory))
 				return MSG_IGNORE;
-			if (recoderManager.check(fromGroup, msg, CC, appDirectory))
+			if (recoderManager.check(fromGroup, msg, CC, appDirectory, fromQQ))
 				return MSG_IGNORE;
 		} catch (IOException e) {
 			e.printStackTrace();
@@ -596,11 +596,15 @@ public class Autoreply extends JcqAppAbstract implements ICQVer, IMsg, IRequest 
 		 * REQUEST_ADOPT 通过 REQUEST_REFUSE 拒绝 REQUEST_GROUP_ADD 群添加
 		 * REQUEST_GROUP_INVITE 群邀请
 		 */
-		/*
-		 * if(subtype == 1){ // 本号为群管理，判断是否为他人申请入群
-		 * CQ.setGroupAddRequest(responseFlag, REQUEST_GROUP_ADD, REQUEST_ADOPT,
-		 * null);// 同意入群 }
-		 */
+		if (fromGroup == 859561731L) {
+			return MSG_IGNORE;
+		}
+
+		if (subtype == 1) { // 本号为群管理，判断是否为他人申请入群
+			CQ.setGroupAddRequest(responseFlag, REQUEST_GROUP_ADD, REQUEST_ADOPT, null);// 同意入群
+			sendGroupMessage(fromGroup, "新人的验证信息------" + msg);
+		}
+
 		if (subtype == 2) {
 			CQ.setGroupAddRequest(responseFlag, REQUEST_GROUP_INVITE, REQUEST_ADOPT, null);// 同意进受邀群
 		}
@@ -723,15 +727,15 @@ public class Autoreply extends JcqAppAbstract implements ICQVer, IMsg, IRequest 
 	}
 
 	private void addRecorder() {
-		recoderManager.addData(new Recoder(210341365L));// 水紫
-		recoderManager.addData(new Recoder(312342896L));// 学习
-		recoderManager.addData(new Recoder(826536230L));// stg闲聊群
-		recoderManager.addData(new Recoder(859561731L));// 东芳直播间
-		recoderManager.addData(new Recoder(348595763L));// 沙苗のSTG群
-		recoderManager.addData(new Recoder(857548607L));// 恋萌萌粉丝群
-		recoderManager.addData(new Recoder(424838564L));// 膜道
-		recoderManager.addData(new Recoder(439664871L));// 妖妖梦
-		recoderManager.addData(new Recoder(855927922L));// 最速
+		recoderManager.addData(new RecordBanner(312342896L,CQ));// 学习
+		recoderManager.addData(new RecordBanner(826536230L,CQ));// stg闲聊群
+		recoderManager.addData(new RecordBanner(859561731L,CQ));// 东芳直播间
+		recoderManager.addData(new RecordBanner(348595763L,CQ));// 沙苗のSTG群
+		recoderManager.addData(new RecordBanner(857548607L,CQ));// 恋萌萌粉丝群
+		recoderManager.addData(new RecordBanner(424838564L,CQ));// 膜道
+		recoderManager.addData(new RecordBanner(439664871L,CQ));// 妖妖梦
+		recoderManager.addData(new RecordBanner(855927922L,CQ));// 最速
+		recoderManager.addData(new RecordBanner(807242547L,CQ));// c5
 		// recoderManager.addData(new Recoder(101344113L));// DNF山东二
 	}
 

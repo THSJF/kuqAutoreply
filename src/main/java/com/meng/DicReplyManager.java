@@ -31,11 +31,7 @@ public class DicReplyManager {
 		mapFlag++;
 	}
 
-	public boolean check(long group, long qq, String msg,CQCode CC) throws IOException {
-		if (group == 210341365L && msg.indexOf("迫害") != -1) {
-			Autoreply.sendGroupMessage(group,CC.at(qq)+"你迫害你"+CC.emoji(128052)+"呢");
-			return false;
-		}
+	public boolean check(long group, long qq, String msg, CQCode CC) throws IOException {
 		boolean b = false;
 		b = b | checkPublicDic(group, qq, msg);
 		if (b) {
