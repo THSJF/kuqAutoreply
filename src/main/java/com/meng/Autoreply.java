@@ -531,16 +531,16 @@ public class Autoreply extends JcqAppAbstract implements ICQVer, IMsg, IRequest 
 		if (enable) {
 			String[] stri = msg.split("\\:");
 			switch (stri[0]) {
-			case "image:":
+			case "image":
 				CQ.sendGroupMsg(fromGroup, CC.image(new File(appDirectory + stri[1])));
 				break;
-			case "atFromQQ:":
+			case "atFromQQ":
 				CQ.sendGroupMsg(fromGroup, CC.at(fromQQ) + stri[1]);
 				break;
-			case "atQQ:":
+			case "atQQ":
 				CQ.sendGroupMsg(fromGroup, CC.at(Long.parseLong(stri[1])) + stri[2]);
 				break;
-			case "imageFolder:":
+			case "imageFolder":
 				File[] files = (new File(appDirectory + stri[1])).listFiles();
 				CQ.sendGroupMsg(fromGroup, CC.image(files[random.nextInt(files.length)]));
 				break;
