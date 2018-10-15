@@ -34,7 +34,7 @@ public class FileTipManager extends Thread {
 				FileTipUploader tftu = dataMap.get(i);
 				if (System.currentTimeMillis() - tftu.getFileLastUpload() > 86400000
 						&& System.currentTimeMillis() - tftu.getfileLastTipTime() > 3600000) {
-					if (tftu.getGroupNumber() == 807242547L && tftu.getQQNumber() == 1592608126) {
+					if (tftu.getGroupNumber() == 807242547L && tftu.getQQNumber() == 1592608126L) {
 						Autoreply.sendGroupMessage(tftu.getGroupNumber(),
 								Autoreply.CC.at(tftu.getQQNumber()) + Methods.rfa(stringsC5));
 						tftu.setfileLastTipTime(System.currentTimeMillis());

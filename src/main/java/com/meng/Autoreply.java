@@ -42,7 +42,7 @@ public class Autoreply extends JcqAppAbstract implements ICQVer, IMsg, IRequest 
 	private ZuiSuJinTianGengLeMa zuiSuJinTianGengLeMa = new ZuiSuJinTianGengLeMa();
 	private BilibiliVideoInfo bilibiliTest = new BilibiliVideoInfo();
 	private FileTipManager fileTipManager = new FileTipManager();
-	private fanpohai fph = new fanpohai();
+	private fanpohai fph;
 	private DicReplyManager dicReplyManager;
 
 	/**
@@ -86,6 +86,7 @@ public class Autoreply extends JcqAppAbstract implements ICQVer, IMsg, IRequest 
 		// 获取应用数据目录(无需储存数据时，请将此行注释)
 		appDirectory = CQ.getAppDirectory();
 		dicReplyManager = new DicReplyManager(appDirectory + "dic.json");
+		fph = new fanpohai();
 		addGroupDic();
 		addFileTip();
 		addRecorder();
