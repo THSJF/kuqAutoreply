@@ -1,6 +1,5 @@
 package com.meng;
 
-import java.io.IOException;
 import java.util.HashMap;
 
 public class LivingManager extends Thread {
@@ -19,26 +18,17 @@ public class LivingManager extends Thread {
 			try {
 				for (int i = 0; i < mapFlag; i++) {
 					LivingPerson lPerson = liveData.get(i);
-					String htmlData = MainSwitch.open(lPerson.getLiveUrl());
-					boolean living = htmlData.indexOf(liveString) == -1;
-					/*
-					 * if (living) { if (lPerson.isNeedTip()) {
-					 * lPerson.setFlag(1); } else { lPerson.setFlag(2); } } else
-					 * { if (lPerson.isNeedTip()) { lPerson.setFlag(3); } else {
-					 * lPerson.setFlag(4); } }
-					 */
+					String htmlData = Methods.open(lPerson.getLiveUrl());
+					boolean living = !htmlData.contains(liveString);
 					lPerson.setLiving(living);
 					if (lPerson.getFlag() != 0) {
 						if (living && lPerson.isNeedStartTip()) {
 							lPerson.setFlag(1);
-						}
-						if (living && !lPerson.isNeedStartTip()) {
+						} else if (living && !lPerson.isNeedStartTip()) {
 							lPerson.setFlag(2);
-						}
-						if (!living && !lPerson.isNeedStartTip()) {
+						} else if (!living && !lPerson.isNeedStartTip()) {
 							lPerson.setFlag(3);
-						}
-						if (!living && lPerson.isNeedStartTip()) {
+						} else if (!living && lPerson.isNeedStartTip()) {
 							lPerson.setFlag(4);
 						}
 					}
@@ -47,8 +37,6 @@ public class LivingManager extends Thread {
 				}
 				sleep(20000);
 			} catch (Exception e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
 			}
 		}
 
@@ -79,21 +67,12 @@ public class LivingManager extends Thread {
 			}
 			break;
 		case 1:
-			String tmp = p.getName() + "直播开始啦大家快去奶" + p.getLiveUrl();
-			Nai nai = new Nai();
-			try {
-				nai.readContentFromPost(-1, p.getNumber(), 2856986197L, "发发发");
-				nai.readContentFromPost(-1, p.getNumber(), 943486447L, "发发发");
-			} catch (IOException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
+			// String tmp = p.getName() + "直播开始啦大家快去奶" + p.getLiveUrl();
 			// Autoreply.sendGroupMessage(312342896L, tmp);// 学习
-			Autoreply.sendGroupMessage(210341365L, tmp);// 水紫
 			// Autoreply.sendGroupMessage(855927922L, tmp);// 最速
-			Autoreply.sendGroupMessage(859561731L, tmp);// 东芳直播间
-			Autoreply.sendGroupMessage(807242547L, tmp);// c5
-			Autoreply.sendGroupMessage(826536230L, tmp);// stg闲聊群
+			// Autoreply.sendGroupMessage(859561731L, tmp);// 东芳直播间
+			// Autoreply.sendGroupMessage(807242547L, tmp);// c5
+			// Autoreply.sendGroupMessage(826536230L, tmp);// stg闲聊群
 			// Autoreply.sendGroupMessage(348595763L, tmp);// 沙苗のSTG群
 			// Autoreply.sendGroupMessage(857548607L, tmp);// 恋萌萌粉丝群
 			p.setNeedStartTip(false);
@@ -101,13 +80,12 @@ public class LivingManager extends Thread {
 			p.setLiving(true);
 			break;
 		case 3:
-			String tmp2 = p.getName() + "直播被奶死莉";
+			// String tmp2 = p.getName() + "直播被奶死莉";
 			// Autoreply.sendGroupMessage(312342896L, tmp2);// 学习
-			Autoreply.sendGroupMessage(210341365L, tmp2);// 水紫
 			// Autoreply.sendGroupMessage(855927922L, tmp2);// 最速
-			Autoreply.sendGroupMessage(859561731L, tmp2);// 东芳直播间
-			Autoreply.sendGroupMessage(807242547L, tmp2);// 东芳直播间
-			Autoreply.sendGroupMessage(826536230L, tmp2);// stg闲聊群
+			// Autoreply.sendGroupMessage(859561731L, tmp2);// 东芳直播间
+			// Autoreply.sendGroupMessage(807242547L, tmp2);// 东芳直播间
+			// Autoreply.sendGroupMessage(826536230L, tmp2);// stg闲聊群
 			// Autoreply.sendGroupMessage(348595763L, tmp2);// 沙苗のSTG群
 			// Autoreply.sendGroupMessage(857548607L, tmp2);// 恋萌萌粉丝群
 			p.setNeedStartTip(true);

@@ -1,21 +1,15 @@
 package com.meng;
 
-import java.util.Calendar;
-
-import com.sobte.cqp.jcq.message.CQCode;
-
-public class ZuiSuJinTianGengLeMa extends Thread {
-	Calendar c;
+public class ZuiSuJinTianGengLeMa {
+	//Calendar c;
 	long group = 855927922L;
 	long jizhe = 1012539034L;
 	boolean tiped = false;
-	CQCode CC;
 
-	public ZuiSuJinTianGengLeMa(CQCode CC) {
-		this.CC = CC;
+	public ZuiSuJinTianGengLeMa() {
 	}
 
-	@Override
+	/*@Override
 	public void run() {
 		while (true) {
 			c = Calendar.getInstance();
@@ -28,11 +22,11 @@ public class ZuiSuJinTianGengLeMa extends Thread {
 				}
 			}
 		}
-	}
+	}*/
 
-	public boolean check(long fromGroup, long fromQQ, CQCode CC) {
+	public boolean check(long fromGroup, long fromQQ) {
 		if (!tiped && fromGroup == group && fromQQ == jizhe) {
-			Autoreply.sendGroupMessage(group, CC.at(jizhe) + "今天更新了吗");
+			Autoreply.sendGroupMessage(group, Autoreply.CC.at(jizhe) + "今天更新了吗");
 			tiped = true;
 			return true;
 		}

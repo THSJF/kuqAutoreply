@@ -11,15 +11,12 @@ import javax.imageio.ImageIO;
 import com.sobte.cqp.jcq.entity.CQImage;
 
 public class fanpohai {
-	private cccccc cqCode = new cccccc();
 	private File[] pohaitu;
 	private FingerPrint[] fts;
 	private int pohaicishu = 0;
-	private String encoding = "utf-8";
 	private int alpohai = Autoreply.random.nextInt(5) + 2;
 	private File fanpohafile;
 	private CQImage cmCqImage;
-	private String appdirectory = "";
 
 	private final String[][] ss = new String[][] { { "丢人", "1581137837" }, { "hop", "2695029036" },
 			{ "伞挂", "203569312" }, { "台长", "943486447" }, { "圣师傅", "1211053685" }, { "大鸽", "869750266" },
@@ -31,24 +28,24 @@ public class fanpohai {
 			{ "大酱", "3427665460" }, { "灵风", "2756253478" }, { "斑点伞", "1254138109" }, { "苍老师", "1391857313" },
 			{ "尻尻", "2448122241" } };
 
-	public fanpohai(String appdirectory) throws IOException {
-		this.appdirectory = appdirectory;
-		fanpohafile = new File(appdirectory + "fanpohai.txt");
-		loadph();
+	public fanpohai() {
+		fanpohafile = new File(Autoreply.appDirectory + "fanpohai.txt");
+		try {
+			loadph();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 	}
 
 	private void loadph() throws IOException {
-		pohaitu = new File(appdirectory + "fan\\").listFiles();
+		pohaitu = new File(Autoreply.appDirectory + "fan\\").listFiles();
 		fts = new FingerPrint[pohaitu.length];
 		for (int i = 0; i < fts.length; i++) {
 			fts[i] = new FingerPrint(ImageIO.read(pohaitu[i]));
 		}
 	}
 
-	public boolean check(long fromQQ, long fromGroup, String msg, String appdirectory) throws IOException {
-		if (fromGroup == 210341365L) {
-			return false;
-		}
+	public boolean check(long fromQQ, long fromGroup, String msg) throws IOException {
 		if (msg.equalsIgnoreCase("loadph")) {
 			loadph();
 			Autoreply.sendGroupMessage(fromGroup, "反迫害样本图更新");
@@ -62,10 +59,10 @@ public class fanpohai {
 				alpohai = Autoreply.random.nextInt(5) + 2;
 			}
 		}
-		cmCqImage = cqCode.getCQImage(msg);
+		Autoreply.CC.getCQImage(msg);
 		if (cmCqImage != null) {
 			float simi = 0.0f;
-			FingerPrint fp1 = new FingerPrint(ImageIO.read(cmCqImage.download(appdirectory + "phtmp.jpg")));
+			FingerPrint fp1 = new FingerPrint(ImageIO.read(cmCqImage.download(Autoreply.appDirectory + "phtmp.jpg")));
 			for (int i = 0; i < fts.length; i++) {
 				float tf = fts[i].compare(fp1);
 				if (tf > simi) {
@@ -77,8 +74,8 @@ public class fanpohai {
 				bpohai = true;
 			}
 		}
-		if (fanpohafile.isFile() && fanpohafile.exists()) { // 判断文件是否存在
-			InputStreamReader read = new InputStreamReader(new FileInputStream(fanpohafile), encoding);// 考虑到编码格式
+		if (fanpohafile.isFile() && fanpohafile.exists()) {
+			InputStreamReader read = new InputStreamReader(new FileInputStream(fanpohafile));
 			BufferedReader bufferedReader = new BufferedReader(read);
 			String lineTxt = null;
 			while ((lineTxt = bufferedReader.readLine()) != null) {
@@ -93,7 +90,7 @@ public class fanpohai {
 			String folder = "";
 			for (int i = 0; i < ss.length; i++) {
 				if (fromQQ == Long.parseLong(ss[i][1])) {
-					folder = appdirectory + "pohai/" + ss[i][0] + "/";
+					folder = Autoreply.appDirectory + "pohai/" + ss[i][0] + "/";
 					break;
 				}
 			}
@@ -108,12 +105,11 @@ public class fanpohai {
 				}
 				return true;
 			} else {
-				File fo = new File(folder);
-				File[] files = fo.listFiles();
-				if (folder.equals(appdirectory + "pohai/丢人/")) {
-					Autoreply.sendGroupMessage(fromGroup, cqCode.image(files[Autoreply.random.nextInt(files.length)]));
+				File[] files = (new File(folder)).listFiles();
+				if (folder.equals(Autoreply.appDirectory + "pohai/丢人/")) {
+					Autoreply.sendGroupMessage(fromGroup, Autoreply.CC.image((File) Methods.rfa(files)));
 				}
-				Autoreply.sendGroupMessage(fromGroup, cqCode.image(files[Autoreply.random.nextInt(files.length)]));
+				Autoreply.sendGroupMessage(fromGroup, Autoreply.CC.image((File) Methods.rfa(files)));
 				return true;
 			}
 		}

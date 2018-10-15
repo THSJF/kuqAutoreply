@@ -1,7 +1,6 @@
 package com.meng;
 
 import java.util.HashMap;
-import java.util.Set;
 
 public class RollPlane {
 	private String[] pl01 = new String[] { "打砖块野蛮，打飞机文明" };
@@ -50,7 +49,7 @@ public class RollPlane {
 				case "diff":
 				case "difficult":
 				case "难度":
-					send(fromGroup, MainSwitch.rfa(plDiff));
+					send(fromGroup, (String) Methods.rfa(plDiff));
 					break;
 				case "stage":
 				case "关卡":
@@ -79,75 +78,75 @@ public class RollPlane {
 		case "东方灵异传":
 		case "th1":
 		case "th01":
-			send(fromGroup, MainSwitch.rfa(pl01));
+			send(fromGroup, (String) Methods.rfa(pl01));
 			break;
 		case "东方封魔录":
 		case "th2":
 		case "th02":
-			send(fromGroup, MainSwitch.rfa(pl02));
+			send(fromGroup, (String) Methods.rfa(pl02));
 			break;
 		case "东方梦时空":
 		case "th3":
 		case "th03":
-			send(fromGroup, MainSwitch.rfa(pl03));
+			send(fromGroup, (String) Methods.rfa(pl03));
 			break;
 		case "东方幻想乡":
 		case "th4":
 		case "th04":
-			send(fromGroup, MainSwitch.rfa(pl04));
+			send(fromGroup, (String) Methods.rfa(pl04));
 			break;
 		case "东方怪绮谈":
 		case "th5":
 		case "th05":
-			send(fromGroup, MainSwitch.rfa(pl05));
+			send(fromGroup, (String) Methods.rfa(pl05));
 			break;
 		case "东方红魔乡":
 		case "th6":
 		case "th06":
-			send(fromGroup, MainSwitch.rfa(pl06));
+			send(fromGroup, (String) Methods.rfa(pl06));
 			break;
 		case "东方妖妖梦":
 		case "th7":
 		case "th07":
-			send(fromGroup, MainSwitch.rfa(pl07));
+			send(fromGroup, (String) Methods.rfa(pl07));
 			break;
 		case "东方永夜抄":
 		case "th8":
 		case "th08":
-			send(fromGroup, MainSwitch.rfa(pl08));
+			send(fromGroup, (String) Methods.rfa(pl08));
 			break;
 		case "东方花映冢":
 		case "th9":
 		case "th09":
-			send(fromGroup, MainSwitch.rfa(pl09));
+			send(fromGroup, (String) Methods.rfa(pl09));
 			break;
 		case "东方风神录":
 		case "th10":
-			send(fromGroup, MainSwitch.rfa(pl10));
+			send(fromGroup, (String) Methods.rfa(pl10));
 			break;
 		case "东方地灵殿":
 		case "th11":
-			send(fromGroup, MainSwitch.rfa(pl11));
+			send(fromGroup, (String) Methods.rfa(pl11));
 			break;
 		case "东方星莲船":
 		case "th12":
-			send(fromGroup, MainSwitch.rfa(pl12));
+			send(fromGroup, (String) Methods.rfa(pl12));
 			break;
 		case "东方神灵庙":
 		case "th13":
-			send(fromGroup, MainSwitch.rfa(pl13));
+			send(fromGroup, (String) Methods.rfa(pl13));
 			break;
 		case "东方辉针城":
 		case "th14":
-			send(fromGroup, MainSwitch.rfa(pl14) + " " + MainSwitch.rfa(pl14s));
+			send(fromGroup, Methods.rfa(pl14) + " " + Methods.rfa(pl14s));
 			break;
 		case "东方绀珠传":
 		case "th15":
-			send(fromGroup, MainSwitch.rfa(pl15));
+			send(fromGroup, (String) Methods.rfa(pl15));
 			break;
 		case "东方天空璋":
 		case "th16":
-			send(fromGroup, MainSwitch.rfa(pl16) + " " + MainSwitch.rfa(pl16s));
+			send(fromGroup, Methods.rfa(pl16) + " " + Methods.rfa(pl16s));
 			break;
 		}
 	}

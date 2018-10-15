@@ -13,20 +13,33 @@ import com.sobte.cqp.jcq.message.CQCode;
 
 public class RecordBanner {
 	private int repeatCount = 0;
+	private int banCount = 6;
 	private String lastMessageRecieved = "";
-	private String lastMessageReply = "";
 	private long groupNum = 0;
 	private CoolQ CQ;
 	private boolean working = false;
 	private int reverseFlag = 0;
-	private int banRecorder = 1;
+	private int banRecorder = 0;
+	private boolean lastStatus = false;
+	private CQCode CC;
+	private FingerPrint thisFp;
+	private FingerPrint lastFp;
+	private File imgFile;
 
-	public RecordBanner(long group, CoolQ CQ) {
+	public RecordBanner(long group, CoolQ CQ, CQCode CC, int status) {
 		this.CQ = CQ;
+		this.CC = CC;
+		groupNum = group;
+		banRecorder = status;
+	}
+
+	public RecordBanner(long group, CoolQ CQ, CQCode CC) {
+		this.CQ = CQ;
+		this.CC = CC;
 		groupNum = group;
 	}
 
-	public boolean check(long group, String msg, CQCode CC, String appdirectory, long QQ) throws IOException {
+	public boolean check(long group, String msg, CQCode CC, String appdirectory, long QQ) throws Exception {
 		boolean b = false;
 		if (group == groupNum && (CC.getAt(msg) != 1620628713L) && (!msg.contains("禁言"))) {
 			if (msg.equalsIgnoreCase("banRecorder0")) {
@@ -40,32 +53,34 @@ public class RecordBanner {
 				Autoreply.sendGroupMessage(group, "禁言所有复读机");
 			}
 
+			float simi = getPicSimilar(msg, appdirectory);
 			switch (banRecorder) {
 			case 0:
-				
+
 				break;
 			case 1:
-				if (lastMessageRecieved.equals(msg)) {
-					if (Autoreply.random.nextInt(6) == 1) {
-						CQ.setGroupBan(group, QQ, 60);
-						Autoreply.sendPrivateMessage(QQ, "你从“群复读轮盘”中获得了禁言套餐");
+				if (lastMessageRecieved.equals(msg) || simi > 0.97f) {
+					if (Autoreply.random.nextInt() % banCount == 0) {
+						int time = Autoreply.random.nextInt(121);
+						CQ.setGroupBan(group, QQ, time);
+						banCount = 6;
+						Autoreply.sendPrivateMessage(QQ, "你从“群复读轮盘”中获得了" + time + "秒禁言套餐");
 					}
 				}
 				break;
 			case 2:
-				if (lastMessageRecieved.equals(msg)) {
-					CQ.setGroupBan(group, QQ, 60);
-					Autoreply.sendPrivateMessage(QQ, "你因复读获得了禁言套餐");
+				if (lastMessageRecieved.equals(msg) || simi > 0.97f) {
+					int time = Autoreply.random.nextInt(121);
+					CQ.setGroupBan(group, QQ, time);
+					Autoreply.sendPrivateMessage(QQ, "你因复读获得了" + time + "秒禁言套餐");
 				}
 				lastMessageRecieved = msg;
 				return true;
 			}
+
 			if (!working) {
 				working = true;
-				b = reply(group, msg, CC, appdirectory, QQ);
-				if (!(lastMessageRecieved.equals(msg))) {
-					System.out.println("复读结束");
-				}
+				b = checkRepeatStatu(group, msg, CC, appdirectory, simi);
 				working = false;
 			}
 			lastMessageRecieved = msg;
@@ -73,9 +88,36 @@ public class RecordBanner {
 		return b;
 	}
 
-	private void replyPic(long group, String msg, CQCode CC, String appdirectory, long QQ) throws IOException {
-		CQImage cm = CC.getCQImage(msg);
-		File imgFile = cm.download(appdirectory + "reverse\\" + groupNum + "recr.jpg");
+	private boolean checkRepeatStatu(long group, String msg, CQCode CC, String appdirectory, float simi)
+			throws IOException {
+		boolean b = false;
+		if (!lastStatus && (lastMessageRecieved.equals(msg) || simi > 0.97f)) {
+			System.out.println("复读开始");
+			b = true;
+			reply(group, msg, CC, appdirectory, simi);
+		}
+		if (lastStatus && (lastMessageRecieved.equals(msg) || simi > 0.97f)) {
+			System.out.println("复读持续中");
+			b = true;
+			if (banCount < 1) {
+				banCount = 6;
+			}
+			banCount--;
+		}
+		if (lastStatus && (!lastMessageRecieved.equals(msg) && simi < 0.97f)) {
+			System.out.println("复读结束");
+			b = false;
+			banCount = 6;
+		}
+		if (lastMessageRecieved.equals(msg) || simi > 0.97f) {
+			lastStatus = true;
+		} else {
+			lastStatus = false;
+		}
+		return b;
+	}
+
+	private void replyPic(long group, String msg, CQCode CC, String appdirectory) throws IOException {
 		if (!msg.contains(".gif")) {
 			String imgCode = CC.image(rePic(appdirectory, imgFile));
 			String ms = new StringBuilder(msg.replaceAll("\\[CQ.*\\]", "")).reverse().toString();
@@ -116,17 +158,13 @@ public class RecordBanner {
 		}
 	}
 
-	private boolean reply(long group, String msg, CQCode CC, String appdirectory, long QQ) throws IOException {
-		if (lastMessageRecieved.equals(msg) && (!lastMessageReply.equals(msg))) {
-			if (msg.contains("[CQ:image,file=")) {
-				replyPic(group, msg, CC, appdirectory, QQ);
-			} else {
-				replyText(group, msg);
-			}
-			lastMessageReply = msg;
-			return true;
+	private boolean reply(long group, String msg, CQCode CC, String appdirectory, float simi) throws IOException {
+		if (msg.contains("[CQ:image,file=")) {
+			replyPic(group, msg, CC, appdirectory);
+		} else {
+			replyText(group, msg);
 		}
-		return false;
+		return true;
 	}
 
 	private File rePic(String appdirectory, File file) throws IOException {
@@ -155,6 +193,25 @@ public class RecordBanner {
 		// "recr.jpg");
 		ImageIO.write(b2, "jpg", file);
 		return file;
+	}
+
+	private float getPicSimilar(String msg, String appdirectory) throws Exception {
+		CQImage cm = CC.getCQImage(msg);
+		if (cm != null) {
+			imgFile = cm.download(appdirectory + "reverse\\" + groupNum + "recr.jpg");
+			if (thisFp != null) {
+				lastFp = thisFp;
+			}
+			thisFp = new FingerPrint(ImageIO.read(new File(appdirectory + "reverse\\" + groupNum + "recr.jpg")));
+			if (lastFp != null) {
+				return thisFp.compare(lastFp);
+			}
+		} else {
+			thisFp = null;
+			lastFp = null;
+			(new File(appdirectory + "reverse\\" + groupNum + "recr.jpg")).delete();
+		}
+		return 0;
 	}
 
 }

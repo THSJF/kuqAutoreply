@@ -1,10 +1,6 @@
 package com.meng;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.io.UnsupportedEncodingException;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map.Entry;
@@ -18,6 +14,7 @@ public class DicReplyGroup {
 
 	private JsonParser parser;
 	private JsonObject obj;
+	@SuppressWarnings("rawtypes")
 	private Iterator it;
 	private long groupNum;
 	private String filePath;
@@ -29,9 +26,10 @@ public class DicReplyGroup {
 		this.filePath = filePath;
 	}
 
+	@SuppressWarnings("rawtypes")
 	public boolean checkMsg(long group,long qq, String msg) throws IOException {
 		if (group == groupNum) {
-			obj = parser.parse(MainSwitch.readToString(filePath)).getAsJsonObject();
+			obj = parser.parse(Methods.readToString(filePath)).getAsJsonObject();
 			it = obj.entrySet().iterator();
 			while (it.hasNext()) {
 				Entry entry = (Entry) it.next();
@@ -41,8 +39,8 @@ public class DicReplyGroup {
 					if (arraySize != 0) {
 						int k = 0;
 						for (; k < arraySize; k++) {
-							String string = MainSwitch.removeCharAt(array.get(k).toString(), 0);
-							replyPool.put(k, MainSwitch.removeCharAt(string, string.length() - 1));
+							String string = Methods.removeCharAt(array.get(k).toString(), 0);
+							replyPool.put(k, Methods.removeCharAt(string, string.length() - 1));
 						}
 						Autoreply.sendGroupMessage(group,qq, replyPool.get(Autoreply.random.nextInt(k)));
 						replyPool.clear();

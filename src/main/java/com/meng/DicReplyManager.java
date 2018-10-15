@@ -8,16 +8,15 @@ import java.util.Map.Entry;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
-import com.sobte.cqp.jcq.message.CQCode;
 
 public class DicReplyManager {
 
 	private HashMap<Integer, DicReplyGroup> groupMap = new HashMap<Integer, DicReplyGroup>();
 	private HashMap<Integer, String> replyPool = new HashMap<Integer, String>();
 	private int mapFlag = 0;
-
 	private JsonParser parser;
 	private JsonObject obj;
+	@SuppressWarnings("rawtypes")
 	private Iterator it;
 	private String filePath;
 
@@ -31,31 +30,34 @@ public class DicReplyManager {
 		mapFlag++;
 	}
 
-	public boolean check(long group, long qq, String msg, CQCode CC) throws IOException {
+	public boolean check(long group, long qq, String msg) throws IOException {
 		boolean b = false;
+		//查找公用词库（完全相同才会触发）
 		b = b | checkPublicDic(group, qq, msg);
 		if (b) {
 			return true;
 		}
+		//查找群专用词库（触发条件为匹配正则表达式）
 		for (int i = 0; i < mapFlag; i++) {
 			b = b | groupMap.get(i).checkMsg(group, qq, msg);
 		}
 		return b;
 	}
 
+	@SuppressWarnings("rawtypes")
 	private boolean checkPublicDic(long group, long qq, String msg) throws IOException {
-		obj = parser.parse(MainSwitch.readToString(filePath)).getAsJsonObject();
+		obj = parser.parse(Methods.readToString(filePath)).getAsJsonObject();
 		it = obj.entrySet().iterator();
 		while (it.hasNext()) {
 			Entry entry = (Entry) it.next();
-			if (((String) entry.getKey()).equalsIgnoreCase(msg.replace(" ", "").replace("\n", "").trim())) {
+			if (((String) entry.getKey()).equalsIgnoreCase(msg.replace(" ", "").trim())) {
 				JsonArray array = (JsonArray) entry.getValue();
 				int arraySize = array.size();
 				if (arraySize != 0) {
 					int k = 0;
 					for (; k < arraySize; k++) {
-						String string = MainSwitch.removeCharAt(array.get(k).toString(), 0);
-						replyPool.put(k, MainSwitch.removeCharAt(string, string.length() - 1));
+						String string = Methods.removeCharAt(array.get(k).toString(), 0);
+						replyPool.put(k, Methods.removeCharAt(string, string.length() - 1));
 					}
 					Autoreply.sendGroupMessage(group, qq, replyPool.get(Autoreply.random.nextInt(k)));
 					replyPool.clear();
