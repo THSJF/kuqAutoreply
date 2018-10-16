@@ -18,11 +18,9 @@ public class DicReplyManager {
 	private JsonObject obj;
 	@SuppressWarnings("rawtypes")
 	private Iterator it;
-	private String filePath;
 
-	public DicReplyManager(String filePath) {
+	public DicReplyManager() {
 		parser = new JsonParser();
-		this.filePath = filePath;
 	}
 
 	public void addData(DicReplyGroup drp) {
@@ -46,7 +44,7 @@ public class DicReplyManager {
 
 	@SuppressWarnings("rawtypes")
 	private boolean checkPublicDic(long group, long qq, String msg) throws IOException {
-		obj = parser.parse(Methods.readToString(filePath)).getAsJsonObject(); // 谷歌的GSON对象
+		obj = parser.parse(Methods.readToString(Autoreply.appDirectory + "dic.json")).getAsJsonObject(); // 谷歌的GSON对象
 		it = obj.entrySet().iterator();
 		while (it.hasNext()) {// 遍历集合查找符合要求的key
 			Entry entry = (Entry) it.next();
@@ -58,8 +56,7 @@ public class DicReplyManager {
 					for (; k < arraySize; k++) {
 						// 读取出来的数据是带有引号的
 						// 将引号去掉并将对象放入Hashmap中
-						String string = Methods.removeCharAt(array.get(k).toString(), 0);
-						replyPool.put(k, Methods.removeCharAt(string, string.length() - 1));
+						replyPool.put(k, Methods.removeCharAtStartAndEnd(array.get(k).toString()));
 					}
 					// 从所有的回答中随机选择一个
 					Autoreply.sendGroupMessage(group, qq, replyPool.get(Autoreply.random.nextInt(k)));

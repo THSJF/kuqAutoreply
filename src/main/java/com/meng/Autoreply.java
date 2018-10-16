@@ -2,6 +2,7 @@ package com.meng;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.HashMap;
 import java.util.Random;
 
 import javax.swing.JOptionPane;
@@ -35,7 +36,7 @@ public class Autoreply extends JcqAppAbstract implements ICQVer, IMsg, IRequest 
 	public static boolean enable = true;
 	public static Random random = new Random();
 	private Banner banner = new Banner();
-	private RecoderManager recoderManager = new RecoderManager();
+	private RecoderManager recoderManager;
 	private RollPlane rollPlane = new RollPlane();
 	// private LivingManager livingCheck = new LivingManager();
 	// private LivingManager livingCheck2 = new LivingManager();
@@ -44,6 +45,11 @@ public class Autoreply extends JcqAppAbstract implements ICQVer, IMsg, IRequest 
 	private FileTipManager fileTipManager = new FileTipManager();
 	private fanpohai fph;
 	private DicReplyManager dicReplyManager;
+	private MengAutoReplyConfig mengAutoReplyConfig;
+
+	private HashMap<Integer, Long> nrg;
+	private HashMap<Integer, Long> nrq;
+	private HashMap<Integer, String> nrw;
 
 	/**
 	 * 用main方法调试可以最大化的加快开发效率，检测和定位错误位置<br/>
@@ -85,13 +91,12 @@ public class Autoreply extends JcqAppAbstract implements ICQVer, IMsg, IRequest 
 	public int startup() {
 		// 获取应用数据目录(无需储存数据时，请将此行注释)
 		appDirectory = CQ.getAppDirectory();
-		dicReplyManager = new DicReplyManager(appDirectory + "dic.json");
+		dicReplyManager = new DicReplyManager();
 		fph = new fanpohai();
-		addGroupDic();
 		addFileTip();
-		addRecorder();
+		loadConfig();
 		zuiSuJinTianGengLeMa.start();
-		fileTipManager.start();
+		// fileTipManager.start();
 		// livingCheck();
 		// 返回如：D:\CoolQ\app\com.sobte.cqp.jcq\app\com.example.demo\
 		return 0;
@@ -224,12 +229,20 @@ public class Autoreply extends JcqAppAbstract implements ICQVer, IMsg, IRequest 
 		System.out.println(msg);
 
 		if (fromQQ == 2856986197L) {
+			if (msg.equalsIgnoreCase("loadConfig")) {
+				loadConfig();
+				sendGroupMessage(fromGroup, "reload");
+				return MSG_IGNORE;
+			}
 			String[] strings = msg.split("\\.");
 			if (strings[0].equalsIgnoreCase("send")) {
 				sendGroupMessage(Long.parseLong(strings[1]), strings[2]);
 				return MSG_IGNORE;
 			}
 		}
+		// 指定的不回复项目
+	//	if (checkNotReply(fromGroup, fromQQ, msg))
+	//		return MSG_IGNORE;
 
 		try {
 			// 控制
@@ -568,15 +581,34 @@ public class Autoreply extends JcqAppAbstract implements ICQVer, IMsg, IRequest 
 		fileTipManager.addData(new FileTipUploader(807242547L, 1592608126L));
 	}
 
+	private void loadConfig() {
+		mengAutoReplyConfig = new MengAutoReplyConfig();
+		nrg = mengAutoReplyConfig.getMapGroupNotReply();
+		nrq = mengAutoReplyConfig.getMapQQNotReply();
+		nrw = mengAutoReplyConfig.getMapWordNotReply();
+		addGroupDic();
+		addRecorder();
+	}
+
 	private void addGroupDic() {
-		dicReplyManager.addData(new DicReplyGroup(826536230L, appDirectory + "dic826536230.json"));// 闲聊
-		dicReplyManager.addData(new DicReplyGroup(859561731L, appDirectory + "dic859561731.json"));// 台长
-		dicReplyManager.addData(new DicReplyGroup(210341365L, appDirectory + "dic210341365.json"));// 水紫
-		dicReplyManager.addData(new DicReplyGroup(348595763L, appDirectory + "dic348595763.json"));// 沙苗
-		dicReplyManager.addData(new DicReplyGroup(857548607L, appDirectory + "dic857548607.json"));// 紫苑
-		dicReplyManager.addData(new DicReplyGroup(855927922L, appDirectory + "dic855927922.json"));// 最速
-		dicReplyManager.addData(new DicReplyGroup(439664871L, appDirectory + "dic439664871.json"));// 妖妖梦
-		dicReplyManager.addData(new DicReplyGroup(424838564L, appDirectory + "dic424838564.json"));// 魔道
+		HashMap<Integer, Long> gdr = mengAutoReplyConfig.getMapGroupDicReply();
+		dicReplyManager = new DicReplyManager();
+		for (int key : gdr.keySet()) {// 遍历
+			long groupNum = gdr.get(key);
+			dicReplyManager.addData(new DicReplyGroup(groupNum, appDirectory + "dic" + groupNum + ".json"));
+			System.out.println("添加回答" + groupNum);
+		}
+		/*
+		 * dicReplyManager.addData(new DicReplyGroup(859561731L, appDirectory +
+		 * "dic859561731.json"));// 台长 dicReplyManager.addData(new
+		 * DicReplyGroup(348595763L, appDirectory + "dic348595763.json"));// 沙苗
+		 * dicReplyManager.addData(new DicReplyGroup(857548607L, appDirectory +
+		 * "dic857548607.json"));// 紫苑 dicReplyManager.addData(new
+		 * DicReplyGroup(855927922L, appDirectory + "dic855927922.json"));// 最速
+		 * dicReplyManager.addData(new DicReplyGroup(439664871L, appDirectory +
+		 * "dic439664871.json"));// 妖妖梦 dicReplyManager.addData(new
+		 * DicReplyGroup(424838564L, appDirectory + "dic424838564.json"));// 魔道
+		 */
 	}
 
 	/*
@@ -642,16 +674,43 @@ public class Autoreply extends JcqAppAbstract implements ICQVer, IMsg, IRequest 
 	 * livingCheck.start(); livingCheck2.start(); }
 	 */
 	private void addRecorder() {
-		recoderManager.addData(new RecordBanner(312342896L, 1));// 学习
-		recoderManager.addData(new RecordBanner(826536230L));// stg闲聊群
-		recoderManager.addData(new RecordBanner(859561731L, 1));// 台长
-		recoderManager.addData(new RecordBanner(348595763L));// 沙苗
-		recoderManager.addData(new RecordBanner(857548607L));// 紫苑
-		recoderManager.addData(new RecordBanner(424838564L));// 膜道
-		recoderManager.addData(new RecordBanner(439664871L));// 妖妖梦
-		recoderManager.addData(new RecordBanner(855927922L, 1));// 最速
-		recoderManager.addData(new RecordBanner(807242547L, 1));// c5
-		// recoderManager.addData(new Recoder(101344113L));// DNF山东二
+		HashMap<Integer, Long> gr = mengAutoReplyConfig.getMapGroupRecorder();
+		recoderManager = new RecoderManager();
+		for (int key : gr.keySet()) {// 遍历
+			long groupNum = gr.get(key);
+			recoderManager.addData(new RecordBanner(groupNum));
+			System.out.println("添加复读机" + groupNum);
+		}
+		/*
+		 * recoderManager.addData(new RecordBanner(312342896L, 1));// 学习
+		 * recoderManager.addData(new RecordBanner(859561731L, 1));// 台长
+		 * recoderManager.addData(new RecordBanner(348595763L));// 沙苗
+		 * recoderManager.addData(new RecordBanner(857548607L));// 紫苑
+		 * recoderManager.addData(new RecordBanner(424838564L));// 膜道
+		 * recoderManager.addData(new RecordBanner(439664871L));// 妖妖梦
+		 * recoderManager.addData(new RecordBanner(855927922L, 1));// 最速
+		 * recoderManager.addData(new RecordBanner(807242547L, 1));// c5 //
+		 * recoderManager.addData(new Recoder(101344113L));// DNF山东二
+		 * 
+		 */
 	}
 
+	private boolean checkNotReply(long fromGroup, long fromQQ, String msg) {
+		for (int key : nrg.keySet()) {// 遍历
+			if (fromGroup == nrg.get(key)) {
+				return true;
+			}
+		}
+		for (int key : nrq.keySet()) {
+			if (fromQQ == nrq.get(key)) {
+				return true;
+			}
+		}
+		for (int key : nrw.keySet()) {
+			if (msg.contains(nrw.get(key))) {
+				return true;
+			}
+		}
+		return false;
+	}
 }

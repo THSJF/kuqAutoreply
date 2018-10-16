@@ -108,6 +108,17 @@ public class Methods {
 		return s.substring(0, pos) + s.substring(pos + 1);
 	}
 
+	// 删除字符串两端
+	public static String removeCharAtStartAndEnd(String s) {
+		String tmp = removeCharAt(s, 0);
+		return removeCharAt(tmp, tmp.length() - 1);
+	}
+
+	// 字符串转换long
+	public static long parseLong(String s) throws NumberFormatException{
+		return Long.parseLong(s.replace("\"", ""));
+	}
+
 	// 暴力行为
 	public static boolean checkGou(long fromGroup, String msg) {
 

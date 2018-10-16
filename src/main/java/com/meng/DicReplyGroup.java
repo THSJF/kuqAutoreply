@@ -41,8 +41,7 @@ public class DicReplyGroup {
 						for (; k < arraySize; k++) {
 							// 读取出来的数据是带有引号的
 							// 将引号去掉并将对象放入Hashmap中
-							String string = Methods.removeCharAt(array.get(k).toString(), 0);
-							replyPool.put(k, Methods.removeCharAt(string, string.length() - 1));
+							replyPool.put(k, Methods.removeCharAtStartAndEnd(array.get(k).toString()));
 						}
 						// 从所有的回答中随机选择一个
 						Autoreply.sendGroupMessage(group, qq, replyPool.get(Autoreply.random.nextInt(k)));
