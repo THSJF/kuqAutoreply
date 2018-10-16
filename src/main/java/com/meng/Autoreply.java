@@ -213,7 +213,7 @@ public class Autoreply extends JcqAppAbstract implements ICQVer, IMsg, IRequest 
 
 		// 这里处理消息
 
-		// System.out.println(msg);
+		 System.out.println(msg);
 
 		if (fromQQ == 2856986197L) {
 			//手动更新设置，不再需要重启
@@ -598,9 +598,7 @@ public class Autoreply extends JcqAppAbstract implements ICQVer, IMsg, IRequest 
 				return true;
 			}
 		}
-		System.out.println("--------------");
 		for (int key : nrw.keySet()) {
-			System.err.println(nrw.get(key));
 			if (msg.contains(Methods.removeCharAtStartAndEnd(nrw.get(key)))) {
 				return true;
 			}
