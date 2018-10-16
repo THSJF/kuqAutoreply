@@ -94,7 +94,7 @@ public class Autoreply extends JcqAppAbstract implements ICQVer, IMsg, IRequest 
 		addFileTip();
 		loadConfig();
 		zuiSuJinTianGengLeMa.start();
-		// fileTipManager.start();
+		fileTipManager.start();
 		// 返回如：D:\CoolQ\app\com.sobte.cqp.jcq\app\com.example.demo\
 		return 0;
 	}
@@ -213,9 +213,10 @@ public class Autoreply extends JcqAppAbstract implements ICQVer, IMsg, IRequest 
 
 		// 这里处理消息
 
-		System.out.println(msg);
+		// System.out.println(msg);
 
 		if (fromQQ == 2856986197L) {
+			//手动更新设置，不再需要重启
 			if (msg.equalsIgnoreCase("loadConfig")) {
 				loadConfig();
 				sendGroupMessage(fromGroup, "reload");
@@ -227,9 +228,9 @@ public class Autoreply extends JcqAppAbstract implements ICQVer, IMsg, IRequest 
 				return MSG_IGNORE;
 			}
 		}
-		// 指定的不回复项目
-	//	if (checkNotReply(fromGroup, fromQQ, msg))
-	//		return MSG_IGNORE;
+		// 指定不回复的项目
+		if (checkNotReply(fromGroup, fromQQ, msg))
+			return MSG_IGNORE;
 
 		try {
 			// 控制
@@ -275,16 +276,6 @@ public class Autoreply extends JcqAppAbstract implements ICQVer, IMsg, IRequest 
 				return MSG_IGNORE;
 		} catch (Exception e) {
 		}
-		/*
-		 * if (msg.equals(".live")) { boolean b = false; for (int i = 0; i <
-		 * livingCheck.getMapFlag(); i++) { sendMsg(livingCheck.getPerson(i),
-		 * fromGroup); b = b || livingCheck.getPerson(i).isLiving(); } for (int
-		 * i = 0; i < livingCheck2.getMapFlag(); i++) {
-		 * sendMsg(livingCheck2.getPerson(i), fromGroup); b = b ||
-		 * livingCheck2.getPerson(i).isLiving(); } sendGroupMessage(fromGroup, b
-		 * ? "消息发送完毕" : "惊了 居然没有飞机佬直播"); return MSG_IGNORE; }
-		 */
-
 		return MSG_IGNORE;
 
 	}
@@ -530,6 +521,7 @@ public class Autoreply extends JcqAppAbstract implements ICQVer, IMsg, IRequest 
 
 	public static void sendGroupMessage(long fromGroup, long fromQQ, String msg) throws IOException {
 		if (enable) {
+			//处理词库中为特殊消息做的标记
 			String[] stri = msg.split("\\:");
 			switch (stri[0]) {
 			case "image":
@@ -583,34 +575,33 @@ public class Autoreply extends JcqAppAbstract implements ICQVer, IMsg, IRequest 
 		for (int key : gdr.keySet()) {// 遍历
 			long groupNum = gdr.get(key);
 			dicReplyManager.addData(new DicReplyGroup(groupNum, appDirectory + "dic" + groupNum + ".json"));
-			System.out.println("添加回答" + groupNum);
 		}
-		
+
 	}
-	
+
 	private void addRecorder() {
 		HashMap<Integer, Long> gr = mengAutoReplyConfig.getMapGroupRecorder();
 		recoderManager = new RecoderManager();
 		for (int key : gr.keySet()) {// 遍历
 			long groupNum = gr.get(key);
 			recoderManager.addData(new RecordBanner(groupNum));
-			System.out.println("添加复读机" + groupNum);
 		}
 	}
 
 	private boolean checkNotReply(long fromGroup, long fromQQ, String msg) {
 		for (int key : nrg.keySet()) {// 遍历
-			if (fromGroup == nrg.get(key)) 
+			if (fromGroup == nrg.get(key))
 				return true;
-			
 		}
 		for (int key : nrq.keySet()) {
 			if (fromQQ == nrq.get(key)) {
 				return true;
 			}
 		}
+		System.out.println("--------------");
 		for (int key : nrw.keySet()) {
-			if (msg.contains(nrw.get(key))) {
+			System.err.println(nrw.get(key));
+			if (msg.contains(Methods.removeCharAtStartAndEnd(nrw.get(key)))) {
 				return true;
 			}
 		}

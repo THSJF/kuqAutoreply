@@ -82,7 +82,7 @@ public class Methods {
 				".*(([蓝藍]|裂隙妖怪的式神).*[椰叶葉].*[椰叶葉].*(t.*c.*l|t.*q.*l|太.*[触觸].*了)|.*([蓝藍]|裂隙妖怪的式神).*[椰叶葉].*[椰叶葉].{0,3})",
 				msg.replace(" ", "").trim())) {
 			Autoreply.sendGroupMessage(fromGroup, "打不过地灵殿Normal");
-			Autoreply.sendGroupMessage(fromGroup, Autoreply.CC.image(new File(Autoreply.appDirectory + "a.jpg")));
+			Autoreply.sendGroupMessage(fromGroup, Autoreply.CC.image(new File(Autoreply.appDirectory + "pic\\fanmo.jpg")));
 			return true;
 		}
 		return false;
