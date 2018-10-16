@@ -38,6 +38,8 @@ public class Autoreply extends JcqAppAbstract implements ICQVer, IMsg, IRequest 
 	private Banner banner = new Banner();
 	private RecoderManager recoderManager;
 	private RollPlane rollPlane = new RollPlane();
+	// private LivingManager livingCheck = new LivingManager();
+	// private LivingManager livingCheck2 = new LivingManager();
 	private ZuiSuJinTianGengLeMa zuiSuJinTianGengLeMa = new ZuiSuJinTianGengLeMa();
 	private BilibiliVideoInfo bilibiliTest = new BilibiliVideoInfo();
 	private FileTipManager fileTipManager = new FileTipManager();
@@ -95,6 +97,7 @@ public class Autoreply extends JcqAppAbstract implements ICQVer, IMsg, IRequest 
 		loadConfig();
 		zuiSuJinTianGengLeMa.start();
 		// fileTipManager.start();
+		// livingCheck();
 		// 返回如：D:\CoolQ\app\com.sobte.cqp.jcq\app\com.example.demo\
 		return 0;
 	}
@@ -167,6 +170,16 @@ public class Autoreply extends JcqAppAbstract implements ICQVer, IMsg, IRequest 
 				sendGroupMessage(Long.parseLong(strings[1]), strings[2]);
 			}
 		}
+		/*
+		 * if (strings[0].equalsIgnoreCase("live")) { boolean b = false; for
+		 * (int i = 0; i < livingCheck.getMapFlag(); i++) {
+		 * sendMsg(livingCheck.getPerson(i), Long.parseLong(strings[1])); b = b
+		 * || livingCheck.getPerson(i).isLiving(); } for (int i = 0; i <
+		 * livingCheck2.getMapFlag(); i++) { sendMsg(livingCheck2.getPerson(i),
+		 * Long.parseLong(strings[1])); b = b ||
+		 * livingCheck2.getPerson(i).isLiving(); } if (!b) {
+		 * sendGroupMessage(Long.parseLong(strings[1]), "惊了 居然没有飞机佬直播"); } }
+		 */
 		return MSG_IGNORE;
 	}
 
@@ -585,9 +598,81 @@ public class Autoreply extends JcqAppAbstract implements ICQVer, IMsg, IRequest 
 			dicReplyManager.addData(new DicReplyGroup(groupNum, appDirectory + "dic" + groupNum + ".json"));
 			System.out.println("添加回答" + groupNum);
 		}
-		
+		/*
+		 * dicReplyManager.addData(new DicReplyGroup(859561731L, appDirectory +
+		 * "dic859561731.json"));// 台长 dicReplyManager.addData(new
+		 * DicReplyGroup(348595763L, appDirectory + "dic348595763.json"));// 沙苗
+		 * dicReplyManager.addData(new DicReplyGroup(857548607L, appDirectory +
+		 * "dic857548607.json"));// 紫苑 dicReplyManager.addData(new
+		 * DicReplyGroup(855927922L, appDirectory + "dic855927922.json"));// 最速
+		 * dicReplyManager.addData(new DicReplyGroup(439664871L, appDirectory +
+		 * "dic439664871.json"));// 妖妖梦 dicReplyManager.addData(new
+		 * DicReplyGroup(424838564L, appDirectory + "dic424838564.json"));// 魔道
+		 */
 	}
-	
+
+	/*
+	 * private void sendMsg(LivingPerson p, long group) { if (p.isLiving()) {
+	 * Autoreply.sendGroupMessage(group, p.getName() + "直播开始啦大家快去奶" +
+	 * p.getLiveUrl()); } } private void livingCheck() { livingCheck.addData(new
+	 * LivingPerson("芳香直播间", "https://live.bilibili.com/2409909"));
+	 * livingCheck.addData(new LivingPerson("水紫",
+	 * "https://live.bilibili.com/2803104")); livingCheck.addData(new
+	 * LivingPerson("记者", "https://live.bilibili.com/523030"));
+	 * livingCheck.addData(new LivingPerson("T丶Reality",
+	 * "https://live.bilibili.com/141896")); livingCheck.addData(new
+	 * LivingPerson("古明地决", "https://live.bilibili.com/952890"));
+	 * livingCheck.addData(new LivingPerson("岁晋芳",
+	 * "https://live.bilibili.com/4773795")); livingCheck.addData(new
+	 * LivingPerson("懒瘦椰叶", "https://live.bilibili.com/2128637"));
+	 * livingCheck.addData(new LivingPerson("天狐Kitsune",
+	 * "https://live.bilibili.com/936600")); livingCheck.addData(new
+	 * LivingPerson("砂粑粑", "https://live.bilibili.com/11928"));
+	 * livingCheck.addData(new LivingPerson("威光椰叶",
+	 * "https://live.bilibili.com/1318639")); livingCheck.addData(new
+	 * LivingPerson("空格椰叶", "https://live.bilibili.com/75404"));
+	 * livingCheck.addData(new LivingPerson("八雲的妖怪闲者",
+	 * "https://live.bilibili.com/1954885")); livingCheck.addData(new
+	 * LivingPerson("星海天下", "https://live.bilibili.com/359844"));
+	 * livingCheck.addData(new LivingPerson("ZRT师傅",
+	 * "https://live.bilibili.com/8501850")); livingCheck.addData(new
+	 * LivingPerson("绵羊师傅", "https://live.bilibili.com/6683623"));
+	 * livingCheck.addData(new LivingPerson("我真的好羡慕你们啊",
+	 * "https://live.bilibili.com/5404413")); livingCheck.addData(new
+	 * LivingPerson("我叫猫饭", "https://live.bilibili.com/1601397"));
+	 * 
+	 * livingCheck2.addData(new LivingPerson("Yuriko丶酱",
+	 * "https://live.bilibili.com/280476")); livingCheck2.addData(new
+	 * LivingPerson("王师傅", "https://live.bilibili.com/8356088"));
+	 * livingCheck2.addData(new LivingPerson("黑白の斑點",
+	 * "https://live.bilibili.com/1168338")); livingCheck2.addData(new
+	 * LivingPerson("一团毛玉", "https://live.bilibili.com/569678"));
+	 * livingCheck2.addData(new LivingPerson("莉莉厨一号",
+	 * "https://live.bilibili.com/3749309")); livingCheck2.addData(new
+	 * LivingPerson("幻想星墨", "https://live.bilibili.com/5198157"));
+	 * livingCheck2.addData(new LivingPerson("雾雨沙苗",
+	 * "https://live.bilibili.com/5136443")); livingCheck2.addData(new
+	 * LivingPerson("假装看风景的露娜厨", "https://live.bilibili.com/1122971"));
+	 * livingCheck2.addData(new LivingPerson("TouhouのDean",
+	 * "https://live.bilibili.com/1187187")); livingCheck2.addData(new
+	 * LivingPerson("夜桜鎮魂歌", "https://live.bilibili.com/475904"));
+	 * livingCheck2.addData(new LivingPerson("沙苗",
+	 * "https://live.bilibili.com/14238508")); livingCheck2.addData(new
+	 * LivingPerson("绿绿可柚", "https://live.bilibili.com/10101916"));
+	 * livingCheck2.addData(new LivingPerson("kyoukai_00",
+	 * "https://live.bilibili.com/8692789")); livingCheck2.addData(new
+	 * LivingPerson("ixix91", "https://live.bilibili.com/12702"));
+	 * livingCheck2.addData(new LivingPerson("stg-industry",
+	 * "https://live.bilibili.com/3065901")); livingCheck2.addData(new
+	 * LivingPerson("佐猫_", "https://live.bilibili.com/272502"));
+	 * livingCheck2.addData(new LivingPerson("mengo",
+	 * "https://live.bilibili.com/90128")); livingCheck2.addData(new
+	 * LivingPerson("西行妖下两世分", "https://live.bilibili.com/528326"));
+	 * livingCheck2.addData(new LivingPerson("c5椰叶",
+	 * "https://live.bilibili.com/7834477")); livingCheck2.addData(new
+	 * LivingPerson("鱼神", "https://live.bilibili.com/14341"));
+	 * livingCheck.start(); livingCheck2.start(); }
+	 */
 	private void addRecorder() {
 		HashMap<Integer, Long> gr = mengAutoReplyConfig.getMapGroupRecorder();
 		recoderManager = new RecoderManager();
@@ -596,13 +681,25 @@ public class Autoreply extends JcqAppAbstract implements ICQVer, IMsg, IRequest 
 			recoderManager.addData(new RecordBanner(groupNum));
 			System.out.println("添加复读机" + groupNum);
 		}
+		/*
+		 * recoderManager.addData(new RecordBanner(312342896L, 1));// 学习
+		 * recoderManager.addData(new RecordBanner(859561731L, 1));// 台长
+		 * recoderManager.addData(new RecordBanner(348595763L));// 沙苗
+		 * recoderManager.addData(new RecordBanner(857548607L));// 紫苑
+		 * recoderManager.addData(new RecordBanner(424838564L));// 膜道
+		 * recoderManager.addData(new RecordBanner(439664871L));// 妖妖梦
+		 * recoderManager.addData(new RecordBanner(855927922L, 1));// 最速
+		 * recoderManager.addData(new RecordBanner(807242547L, 1));// c5 //
+		 * recoderManager.addData(new Recoder(101344113L));// DNF山东二
+		 * 
+		 */
 	}
 
 	private boolean checkNotReply(long fromGroup, long fromQQ, String msg) {
 		for (int key : nrg.keySet()) {// 遍历
-			if (fromGroup == nrg.get(key)) 
+			if (fromGroup == nrg.get(key)) {
 				return true;
-			
+			}
 		}
 		for (int key : nrq.keySet()) {
 			if (fromQQ == nrq.get(key)) {
