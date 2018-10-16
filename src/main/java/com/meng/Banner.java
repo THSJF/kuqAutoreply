@@ -4,9 +4,10 @@ public class Banner {
 
 	public Banner() {
 	}
-
+	//manager发出指令的qq号 group收到消息的群 msg收到的消息
 	public boolean checkBan(long manager, long group, String msg) {
 		if (manager == 2856986197L) {
+			
 			try {
 				if (msg.equalsIgnoreCase("wholeban")) {
 					Autoreply.CQ.setGroupWholeBan(group, true);

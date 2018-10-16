@@ -1,1 +1,14 @@
 # kuqAutoreply
+com/meng/Autoreply.java为主类
+功能基本是在其它的类里写好然后在Autoreply里调用
+Banner.java禁言指令
+BilibiliVideoInfo.java BilibiliVideoInfoJavaBean.java和哔哩哔哩的视频有关
+DicReplyGroup.java DicReplyManager.java是群内按词库内容回复
+fanpohai.java反迫害
+FileTipManager.java FileTipUploader.java群文件上传提醒
+LivingManager.java LivingPerson.java哔哩哔哩直播检测
+Methods.java 一些没必要开新类的功能
+Nai.java 哔哩哔哩直播奶人
+RecoderManager.java RecordBanner.java复读和复读小游戏
+RollPlane.java 随机选择游戏,机体,难度
+ZuiSuJinTianGengLeMa.java 最速今天更了吗
