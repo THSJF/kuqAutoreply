@@ -1,6 +1,7 @@
 package com.meng;
 
 public class BilibiliVideoInfoJavaBean {
+	// 读取到的数据为json格式，根据这个json出的javabean
 	private String code;
 	private String message;
 	private String ttl;
@@ -38,10 +39,10 @@ public class BilibiliVideoInfoJavaBean {
 		this.data = data;
 	}
 
+	// 重写toString()方法
 	@Override
 	public String toString() {
-		// TODO Auto-generated method stub
-		return "" + data;
+		return "" + data;// 和return data.toString();效果相同
 	}
 
 	public class Data { // 内部类要定义成public的
@@ -163,9 +164,9 @@ public class BilibiliVideoInfoJavaBean {
 			this.copyright = copyright;
 		}
 
+		// 重写toString()方法
 		@Override
 		public String toString() {
-			// TODO Auto-generated method stub
 			return view + "次播放," + danmaku + "条弹幕," + reply + "条回复," + coin + "个硬币," + share + "次分享," + favorite
 					+ "人收藏," + like + "人赞," + dislike + "人踩";
 		}

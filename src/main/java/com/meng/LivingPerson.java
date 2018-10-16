@@ -11,7 +11,7 @@ public class LivingPerson {
 
 	public LivingPerson(String name, String url) {
 		this.name = name;
-		number = Integer.parseInt(url.substring(url.indexOf("com") + 4));
+		number = Integer.parseInt(url.substring(url.indexOf("com") + 4));//截取房间号
 		liveUrl = url;
 	}
 

@@ -152,13 +152,13 @@ public class RollPlane {
 	}
 
 	private void rollStage(String[] ss, long fromGroup) {
-		HashMap<Integer, String> hMap = new HashMap<>();
+		HashMap<Integer, String> hMap = new HashMap<>();// 存放数据
 		for (int i = 2; i < ss.length; i++) {
-			hMap.put(Autoreply.random.nextInt(), ss[i]);
+			hMap.put(Autoreply.random.nextInt(), ss[i]);// 随机key
 		}
 		int flag = 1;
 		StringBuilder sBuilder = new StringBuilder();
-		for (Integer key : hMap.keySet()) {
+		for (Integer key : hMap.keySet()) {// 遍历
 			sBuilder.append("stage").append(flag).append(":").append(hMap.get(key)).append("\n");
 			// System.out.println("Key: " + key + " Value: " + hMap.get(key));
 			flag++;

@@ -25,6 +25,7 @@ import javax.net.ssl.X509TrustManager;
 public class Methods {
 	private static String motmp = "";
 
+	// 主开关
 	public static boolean checkSwitch(long fromGroup, String msg) {
 		if (msg.equals(".stop")) {
 			Autoreply.sendGroupMessage(fromGroup, "disabled");
@@ -39,27 +40,34 @@ public class Methods {
 		return false;
 	}
 
-	public static Object rfa(Object[] array) { // randomFromArray
+	// randomFromArray 随机返回数组中的一项
+	public static Object rfa(Object[] array) {
 		return array[Autoreply.random.nextInt(2147483647) % array.length];
 	}
 
+	// 有@的时候
 	public static boolean checkAt(long fromGroup, long fromQQ, String msg) {
 		if (Autoreply.CC.getAt(msg) == 1620628713L) {
+			// 过滤特定的文字
 			if (msg.indexOf("蓝") != -1 || msg.indexOf("藍") != -1) {
 				return true;
 			}
+			// @消息发送者并复读内容
 			Autoreply.sendGroupMessage(fromGroup, Autoreply.CC.at(fromQQ) + msg.substring(msg.indexOf(" ") + 1));
 			return true;
 		}
 		return false;
 	}
 
+	// 有人发送分享链接时
 	public static boolean checkLink(long fromGroup, String msg) {
-		if (msg.startsWith("[CQ:share,url=")) {
+		if (msg.startsWith("[CQ:share,url=")) {// 分享链接的特征
+			// 截取相关字符串
 			String link = msg.substring(msg.indexOf("http"), msg.indexOf(",title="));
 			String title = msg.substring(msg.indexOf("title=") + 6, msg.indexOf(",content"));
 			String describe = msg.substring(msg.indexOf("content=") + 8, msg.indexOf(",image"));
 			String picture = msg.substring(msg.lastIndexOf("http"), msg.lastIndexOf("]"));
+			// 发送消息
 			Autoreply.sendGroupMessage(fromGroup,
 					"标题:" + title + "\n链接:" + link + "\n封面图:" + picture + "\n描述:" + describe);
 			return true;
@@ -67,8 +75,9 @@ public class Methods {
 		return false;
 	}
 
+	// 膜人回复
 	public static boolean checkMo(long fromGroup, String msg) throws IOException {
-
+		// 使用了正则表达式
 		if (Pattern.matches(
 				".*(([蓝藍]|裂隙妖怪的式神).*[椰叶葉].*[椰叶葉].*(t.*c.*l|t.*q.*l|太.*[触觸].*了)|.*([蓝藍]|裂隙妖怪的式神).*[椰叶葉].*[椰叶葉].{0,3})",
 				msg.replace(" ", "").trim())) {
@@ -79,6 +88,7 @@ public class Methods {
 		return false;
 	}
 
+	// 读取文本文件
 	public static String readToString(String fileName) throws IOException, UnsupportedEncodingException {
 		String encoding = "UTF-8";
 		File file = new File(fileName);
@@ -93,10 +103,12 @@ public class Methods {
 		return new String(filecontent, encoding);
 	}
 
+	// 删除字符串中指定位置的文字
 	public static String removeCharAt(String s, int pos) {
 		return s.substring(0, pos) + s.substring(pos + 1);
 	}
 
+	// 暴力行为
 	public static boolean checkGou(long fromGroup, String msg) {
 
 		if (msg.equals("苟") || msg.equals("苟？") || msg.equals("苟?")) {
@@ -134,6 +146,9 @@ public class Methods {
 		return false;
 	}
 
+	/*
+	 * 下面都是连接网络需要的 直接从百度复制粘贴
+	 */
 	public static class TrustAnyHostnameVerifier implements HostnameVerifier {
 		public boolean verify(String hostname, SSLSession session) {
 			return true;
@@ -152,6 +167,7 @@ public class Methods {
 		}
 	}
 
+	// 输入网址返回网页源码
 	@SuppressWarnings({ "deprecation", "null", "restriction" })
 	public static String open(String url) throws NoSuchAlgorithmException, KeyManagementException {
 		InputStream in = null;

@@ -90,6 +90,7 @@ public class Autoreply extends JcqAppAbstract implements ICQVer, IMsg, IRequest 
 		addGroupDic();
 		addFileTip();
 		addRecorder();
+		zuiSuJinTianGengLeMa.start();
 		fileTipManager.start();
 		// livingCheck();
 		// 返回如：D:\CoolQ\app\com.sobte.cqp.jcq\app\com.example.demo\
@@ -641,15 +642,15 @@ public class Autoreply extends JcqAppAbstract implements ICQVer, IMsg, IRequest 
 	 * livingCheck.start(); livingCheck2.start(); }
 	 */
 	private void addRecorder() {
-		recoderManager.addData(new RecordBanner(312342896L, CQ, CC, 1));// 学习
-		recoderManager.addData(new RecordBanner(826536230L, CQ, CC));// stg闲聊群
-		recoderManager.addData(new RecordBanner(859561731L, CQ, CC, 1));// 台长
-		recoderManager.addData(new RecordBanner(348595763L, CQ, CC));// 沙苗
-		recoderManager.addData(new RecordBanner(857548607L, CQ, CC));// 紫苑
-		recoderManager.addData(new RecordBanner(424838564L, CQ, CC));// 膜道
-		recoderManager.addData(new RecordBanner(439664871L, CQ, CC));// 妖妖梦
-		recoderManager.addData(new RecordBanner(855927922L, CQ, CC, 1));// 最速
-		recoderManager.addData(new RecordBanner(807242547L, CQ, CC, 1));// c5
+		recoderManager.addData(new RecordBanner(312342896L, 1));// 学习
+		recoderManager.addData(new RecordBanner(826536230L));// stg闲聊群
+		recoderManager.addData(new RecordBanner(859561731L, 1));// 台长
+		recoderManager.addData(new RecordBanner(348595763L));// 沙苗
+		recoderManager.addData(new RecordBanner(857548607L));// 紫苑
+		recoderManager.addData(new RecordBanner(424838564L));// 膜道
+		recoderManager.addData(new RecordBanner(439664871L));// 妖妖梦
+		recoderManager.addData(new RecordBanner(855927922L, 1));// 最速
+		recoderManager.addData(new RecordBanner(807242547L, 1));// c5
 		// recoderManager.addData(new Recoder(101344113L));// DNF山东二
 	}
 

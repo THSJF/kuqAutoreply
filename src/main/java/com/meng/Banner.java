@@ -7,7 +7,7 @@ public class Banner {
 	//manager发出指令的qq号 group收到消息的群 msg收到的消息
 	public boolean checkBan(long manager, long group, String msg) {
 		if (manager == 2856986197L) {
-			
+			//字符串无法转换为数字会NumberFormatException
 			try {
 				if (msg.equalsIgnoreCase("wholeban")) {
 					Autoreply.CQ.setGroupWholeBan(group, true);

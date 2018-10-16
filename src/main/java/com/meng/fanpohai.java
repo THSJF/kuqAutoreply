@@ -11,11 +11,10 @@ import javax.imageio.ImageIO;
 import com.sobte.cqp.jcq.entity.CQImage;
 
 public class fanpohai {
-	private File[] pohaitu;
-	private FingerPrint[] fts;
-	private int pohaicishu = 0;
-	private int alpohai = Autoreply.random.nextInt(5) + 2;
-	private File fanpohafile;
+	private FingerPrint[] fts;// 存放图片指纹的数组 用于对比新收到的图片和样本相似度
+	private int pohaicishu = 0;// 收到的消息包含迫害二字的次数
+	private int alpohai = Autoreply.random.nextInt(5) + 2;// 收到的消息包含迫害二字的次数到达此值也会触发反迫害
+	private File fanpohafile;// 存放触发反迫害的消息
 	private CQImage cmCqImage;
 
 	private final String[][] ss = new String[][] { { "丢人", "1581137837" }, { "hop", "2695029036" },
@@ -32,13 +31,12 @@ public class fanpohai {
 		fanpohafile = new File(Autoreply.appDirectory + "fanpohai.txt");
 		try {
 			loadph();
-		} catch (IOException e) {
-			e.printStackTrace();
+		} catch (IOException e) {// 文件或文件夹不存在会IOException
 		}
 	}
 
 	private void loadph() throws IOException {
-		pohaitu = new File(Autoreply.appDirectory + "fan\\").listFiles();
+		File[] pohaitu = new File(Autoreply.appDirectory + "fan\\").listFiles();
 		fts = new FingerPrint[pohaitu.length];
 		for (int i = 0; i < fts.length; i++) {
 			fts[i] = new FingerPrint(ImageIO.read(pohaitu[i]));
@@ -46,11 +44,13 @@ public class fanpohai {
 	}
 
 	public boolean check(long fromQQ, long fromGroup, String msg) throws IOException {
+		// 每次收到消息时都读取样本太耗资源，所以手动更新
 		if (msg.equalsIgnoreCase("loadph")) {
 			loadph();
 			Autoreply.sendGroupMessage(fromGroup, "反迫害样本图更新");
 		}
 		boolean bpohai = false;
+		// 处理带有迫害二字的消息
 		if (msg.indexOf("迫害") != -1) {
 			pohaicishu++;
 			if (pohaicishu == alpohai) {
@@ -59,10 +59,12 @@ public class fanpohai {
 				alpohai = Autoreply.random.nextInt(5) + 2;
 			}
 		}
+		// 判定图片相似度
 		Autoreply.CC.getCQImage(msg);
 		if (cmCqImage != null) {
 			float simi = 0.0f;
 			FingerPrint fp1 = new FingerPrint(ImageIO.read(cmCqImage.download(Autoreply.appDirectory + "phtmp.jpg")));
+			// 取值为所有样本中最高的相似度
 			for (int i = 0; i < fts.length; i++) {
 				float tf = fts[i].compare(fp1);
 				if (tf > simi) {
@@ -70,10 +72,10 @@ public class fanpohai {
 				}
 			}
 			if (simi > 0.92f) {
-				System.out.printf("\nsim=%f", simi);
 				bpohai = true;
 			}
 		}
+		// 从反迫害文本文件中读取
 		if (fanpohafile.isFile() && fanpohafile.exists()) {
 			InputStreamReader read = new InputStreamReader(new FileInputStream(fanpohafile));
 			BufferedReader bufferedReader = new BufferedReader(read);
@@ -86,6 +88,7 @@ public class fanpohai {
 			}
 			read.close();
 		}
+		// 如果满足反迫害条件 根据上面的数组从QQ号得到用户迫害图文件夹
 		if (bpohai) {
 			String folder = "";
 			for (int i = 0; i < ss.length; i++) {
@@ -106,6 +109,7 @@ public class fanpohai {
 				return true;
 			} else {
 				File[] files = (new File(folder)).listFiles();
+				// 丢人专属双倍快乐
 				if (folder.equals(Autoreply.appDirectory + "pohai/丢人/")) {
 					Autoreply.sendGroupMessage(fromGroup, Autoreply.CC.image((File) Methods.rfa(files)));
 				}

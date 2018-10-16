@@ -32,12 +32,12 @@ public class DicReplyManager {
 
 	public boolean check(long group, long qq, String msg) throws IOException {
 		boolean b = false;
-		//查找公用词库（完全相同才会触发）
+		// 查找公用词库（完全相同才会触发）
 		b = b | checkPublicDic(group, qq, msg);
 		if (b) {
 			return true;
 		}
-		//查找群专用词库（触发条件为匹配正则表达式）
+		// 查找群专用词库（触发条件为匹配正则表达式）
 		for (int i = 0; i < mapFlag; i++) {
 			b = b | groupMap.get(i).checkMsg(group, qq, msg);
 		}
@@ -46,9 +46,9 @@ public class DicReplyManager {
 
 	@SuppressWarnings("rawtypes")
 	private boolean checkPublicDic(long group, long qq, String msg) throws IOException {
-		obj = parser.parse(Methods.readToString(filePath)).getAsJsonObject();
+		obj = parser.parse(Methods.readToString(filePath)).getAsJsonObject(); // 谷歌的GSON对象
 		it = obj.entrySet().iterator();
-		while (it.hasNext()) {
+		while (it.hasNext()) {// 遍历集合查找符合要求的key
 			Entry entry = (Entry) it.next();
 			if (((String) entry.getKey()).equalsIgnoreCase(msg.replace(" ", "").trim())) {
 				JsonArray array = (JsonArray) entry.getValue();
@@ -56,9 +56,12 @@ public class DicReplyManager {
 				if (arraySize != 0) {
 					int k = 0;
 					for (; k < arraySize; k++) {
+						// 读取出来的数据是带有引号的
+						// 将引号去掉并将对象放入Hashmap中
 						String string = Methods.removeCharAt(array.get(k).toString(), 0);
 						replyPool.put(k, Methods.removeCharAt(string, string.length() - 1));
 					}
+					// 从所有的回答中随机选择一个
 					Autoreply.sendGroupMessage(group, qq, replyPool.get(Autoreply.random.nextInt(k)));
 					replyPool.clear();
 					return true;

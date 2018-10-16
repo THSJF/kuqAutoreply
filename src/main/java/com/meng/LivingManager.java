@@ -6,16 +6,18 @@ public class LivingManager extends Thread {
 
 	private HashMap<Integer, LivingPerson> liveData = new HashMap<Integer, LivingPerson>();
 	private int mapFlag = 0;
-	private final String liveString = "\"live_time\":\"0000-00-00 00:00:00\"";
+	private final String liveString = "\"live_time\":\"0000-00-00 00:00:00\"";// 如果网页代码中包含这个字符串
+																				// 则一定没有开播
 
 	public LivingManager() {
+
 	}
 
 	@Override
 	public void run() {
-		// TODO Auto-generated method stub
 		while (true) {
 			try {
+				// 遍历hashmap检测是否直播
 				for (int i = 0; i < mapFlag; i++) {
 					LivingPerson lPerson = liveData.get(i);
 					String htmlData = Methods.open(lPerson.getLiveUrl());
@@ -76,6 +78,7 @@ public class LivingManager extends Thread {
 			// Autoreply.sendGroupMessage(348595763L, tmp);// 沙苗のSTG群
 			// Autoreply.sendGroupMessage(857548607L, tmp);// 恋萌萌粉丝群
 			p.setNeedStartTip(false);
+			// 勿添加break;
 		case 2:
 			p.setLiving(true);
 			break;
@@ -89,6 +92,7 @@ public class LivingManager extends Thread {
 			// Autoreply.sendGroupMessage(348595763L, tmp2);// 沙苗のSTG群
 			// Autoreply.sendGroupMessage(857548607L, tmp2);// 恋萌萌粉丝群
 			p.setNeedStartTip(true);
+			// 勿添加break;
 		case 4:
 			p.setLiving(false);
 			break;
