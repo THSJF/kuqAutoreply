@@ -172,23 +172,13 @@ public class Autoreply extends JcqAppAbstract implements ICQVer, IMsg, IRequest 
 				sendGroupMessage(Long.parseLong(strings[1]), strings[2]);
 			}
 		}
-		try {
-			if (msg.equals("pop")) {
-				for (int i = 0; i < 5; i++) {
-					System.out.println(Autoreply.CQ.getCookies());
-					String skey = Methods.getStringBetween(Autoreply.CQ.getCookies(), "skey=", ";", 0);
-					String g_tk = Methods.getG_tk(skey);
-					String url = "http://logic.content.qq.com/bubble/setup?callback=&id=" + Methods.rfa(pop) + "&g_tk="
-							+ g_tk;
-					System.out.println(Methods.open(url, CQ.getCookies()));
-					Thread.sleep(2000);
-					CQ.sendPrivateMsg(fromQQ, "num" + i);
-					Thread.sleep(2000);
-				}
+		if (msg.equalsIgnoreCase("nao")) {
+			try {
+				NAO.check();
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
 			}
-		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
 		}
 		return MSG_IGNORE;
 
@@ -567,6 +557,7 @@ public class Autoreply extends JcqAppAbstract implements ICQVer, IMsg, IRequest 
 	}
 
 	public static void sendPrivateMessage(long fromQQ, String msg) {
+		setRandomPop();
 		CQ.sendPrivateMsg(fromQQ, msg);
 	}
 

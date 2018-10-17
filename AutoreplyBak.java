@@ -671,7 +671,8 @@ public class Autoreply extends JcqAppAbstract implements ICQVer, IMsg, IRequest 
 	 * livingCheck2.addData(new LivingPerson("c5椰叶",
 	 * "https://live.bilibili.com/7834477")); livingCheck2.addData(new
 	 * LivingPerson("鱼神", "https://live.bilibili.com/14341"));
-	 * livingCheck.start(); livingCheck2.start(); }
+	 * livingCheck.start(); livingCheck2.start(); livingCheck2.addData(new LivingPerson("cs15559655",
+	 * "https://live.bilibili.com/3107644")); }
 	 */
 	private void addRecorder() {
 		HashMap<Integer, Long> gr = mengAutoReplyConfig.getMapGroupRecorder();
