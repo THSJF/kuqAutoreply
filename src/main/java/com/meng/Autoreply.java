@@ -2,6 +2,8 @@ package com.meng;
 
 import java.io.File;
 import java.io.IOException;
+import java.security.KeyManagementException;
+import java.security.NoSuchAlgorithmException;
 import java.util.HashMap;
 import java.util.Random;
 
@@ -48,6 +50,9 @@ public class Autoreply extends JcqAppAbstract implements ICQVer, IMsg, IRequest 
 	private HashMap<Integer, Long> nrg;
 	private HashMap<Integer, Long> nrq;
 	private HashMap<Integer, String> nrw;
+
+	private static String[] pop = "11|12|60|63|96|107|110|114|117|128|129|151|159|123|268|208|248|5|20|28|37|45|212|178|62|44|90|107|119|114|125|142|168|185|1|2|3|4|5|6|7|8|9"
+			.split("\\|");
 
 	/**
 	 * 用main方法调试可以最大化的加快开发效率，检测和定位错误位置<br/>
@@ -167,7 +172,26 @@ public class Autoreply extends JcqAppAbstract implements ICQVer, IMsg, IRequest 
 				sendGroupMessage(Long.parseLong(strings[1]), strings[2]);
 			}
 		}
+		try {
+			if (msg.equals("pop")) {
+				for (int i = 0; i < 5; i++) {
+					System.out.println(Autoreply.CQ.getCookies());
+					String skey = Methods.getStringBetween(Autoreply.CQ.getCookies(), "skey=", ";", 0);
+					String g_tk = Methods.getG_tk(skey);
+					String url = "http://logic.content.qq.com/bubble/setup?callback=&id=" + Methods.rfa(pop) + "&g_tk="
+							+ g_tk;
+					System.out.println(Methods.open(url, CQ.getCookies()));
+					Thread.sleep(2000);
+					CQ.sendPrivateMsg(fromQQ, "num" + i);
+					Thread.sleep(2000);
+				}
+			}
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		return MSG_IGNORE;
+
 	}
 
 	/**
@@ -213,10 +237,10 @@ public class Autoreply extends JcqAppAbstract implements ICQVer, IMsg, IRequest 
 
 		// 这里处理消息
 
-		 System.out.println(msg);
+		System.out.println(msg);
 
 		if (fromQQ == 2856986197L) {
-			//手动更新设置，不再需要重启
+			// 手动更新设置，不再需要重启
 			if (msg.equalsIgnoreCase("loadConfig")) {
 				loadConfig();
 				sendGroupMessage(fromGroup, "reload");
@@ -241,38 +265,27 @@ public class Autoreply extends JcqAppAbstract implements ICQVer, IMsg, IRequest 
 				sendGroupMessage(fromGroup, "image:pic/qiandao.jpg");
 				return MSG_IGNORE;
 			}
-			// 禁言
-			if (banner.checkBan(fromQQ, fromGroup, msg))
+			if (banner.checkBan(fromQQ, fromGroup, msg))// 禁言
 				return MSG_IGNORE;
-			// 苟
-			if (Methods.checkGou(fromGroup, msg))
+			if (Methods.checkGou(fromGroup, msg))// 苟
 				return MSG_IGNORE;
-			// @
-			if (Methods.checkAt(fromGroup, fromQQ, msg))
+			if (Methods.checkAt(fromGroup, fromQQ, msg))// @
 				return MSG_IGNORE;
-			// 膜
-			if (Methods.checkMo(fromGroup, msg))
+			if (Methods.checkMo(fromGroup, msg))// 膜
 				return MSG_IGNORE;
-			// 催更
-			if (zuiSuJinTianGengLeMa.check(fromGroup, fromQQ))
+			if (zuiSuJinTianGengLeMa.check(fromGroup, fromQQ))// 催更
 				return MSG_IGNORE;
-			// 比利比利视频详情
-			if (bilibiliTest.check(fromGroup, msg))
+			if (bilibiliTest.check(fromGroup, msg))// 比利比利视频详情
 				return MSG_IGNORE;
-			// 收到的消息有链接
-			if (Methods.checkLink(fromGroup, msg))
+			if (Methods.checkLink(fromGroup, msg))// 收到的消息有链接
 				return MSG_IGNORE;
-			// roll
-			if (rollPlane.check(fromGroup, msg))
+			if (rollPlane.check(fromGroup, msg))// roll
 				return MSG_IGNORE;
-			// 根据词库触发回答
-			if (dicReplyManager.check(fromGroup, fromQQ, msg))
+			if (fph.check(fromQQ, fromGroup, msg))// 反迫害
 				return MSG_IGNORE;
-			// 反迫害
-			if (fph.check(fromQQ, fromGroup, msg))
+			if (recoderManager.check(fromGroup, fromQQ, msg))// 复读
 				return MSG_IGNORE;
-			// 复读
-			if (recoderManager.check(fromGroup, fromQQ, msg))
+			if (dicReplyManager.check(fromGroup, fromQQ, msg))// 根据词库触发回答
 				return MSG_IGNORE;
 		} catch (Exception e) {
 		}
@@ -521,7 +534,8 @@ public class Autoreply extends JcqAppAbstract implements ICQVer, IMsg, IRequest 
 
 	public static void sendGroupMessage(long fromGroup, long fromQQ, String msg) throws IOException {
 		if (enable) {
-			//处理词库中为特殊消息做的标记
+			// 处理词库中为特殊消息做的标记
+			setRandomPop();
 			String[] stri = msg.split("\\:");
 			switch (stri[0]) {
 			case "image":
@@ -535,7 +549,7 @@ public class Autoreply extends JcqAppAbstract implements ICQVer, IMsg, IRequest 
 				break;
 			case "imageFolder":
 				File[] files = (new File(appDirectory + stri[1])).listFiles();
-				CQ.sendGroupMsg(fromGroup, CC.image(files[random.nextInt(files.length)]));
+				CQ.sendGroupMsg(fromGroup, CC.image((File) Methods.rfa(files)));
 				break;
 			default:
 				CQ.sendGroupMsg(fromGroup, msg);
@@ -605,4 +619,18 @@ public class Autoreply extends JcqAppAbstract implements ICQVer, IMsg, IRequest 
 		}
 		return false;
 	}
+
+	private static void setRandomPop() {
+		String returnStr = "";
+		String skey = Methods.getStringBetween(Autoreply.CQ.getCookies(), "skey=", ";", 0);
+		String g_tk = Methods.getG_tk(skey);
+		String url = "http://logic.content.qq.com/bubble/setup?callback=&id=" + (String) Methods.rfa(pop) + "&g_tk="
+				+ g_tk;
+		try {
+			returnStr = Methods.open(url, Autoreply.CQ.getCookies());
+		} catch (KeyManagementException | NoSuchAlgorithmException e) {
+
+		}
+	}
+
 }

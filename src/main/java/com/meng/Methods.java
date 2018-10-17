@@ -82,7 +82,8 @@ public class Methods {
 				".*(([蓝藍]|裂隙妖怪的式神).*[椰叶葉].*[椰叶葉].*(t.*c.*l|t.*q.*l|太.*[触觸].*了)|.*([蓝藍]|裂隙妖怪的式神).*[椰叶葉].*[椰叶葉].{0,3})",
 				msg.replace(" ", "").trim())) {
 			Autoreply.sendGroupMessage(fromGroup, "打不过地灵殿Normal");
-			Autoreply.sendGroupMessage(fromGroup, Autoreply.CC.image(new File(Autoreply.appDirectory + "pic\\fanmo.jpg")));
+			Autoreply.sendGroupMessage(fromGroup,
+					Autoreply.CC.image(new File(Autoreply.appDirectory + "pic\\fanmo.jpg")));
 			return true;
 		}
 		return false;
@@ -115,7 +116,7 @@ public class Methods {
 	}
 
 	// 字符串转换long
-	public static long parseLong(String s) throws NumberFormatException{
+	public static long parseLong(String s) throws NumberFormatException {
 		return Long.parseLong(s.replace("\"", ""));
 	}
 
@@ -178,9 +179,13 @@ public class Methods {
 		}
 	}
 
+	public static String open(String url) throws NoSuchAlgorithmException, KeyManagementException {
+		return open(url, null);
+	}
+
 	// 输入网址返回网页源码
 	@SuppressWarnings({ "deprecation", "null", "restriction" })
-	public static String open(String url) throws NoSuchAlgorithmException, KeyManagementException {
+	public static String open(String url, String cookie) throws NoSuchAlgorithmException, KeyManagementException {
 		InputStream in = null;
 		OutputStream out = null;
 		String str_return = "";
@@ -191,6 +196,9 @@ public class Methods {
 			HttpsURLConnection conn = (HttpsURLConnection) console.openConnection();
 			conn.setSSLSocketFactory(sc.getSocketFactory());
 			conn.setHostnameVerifier(new TrustAnyHostnameVerifier());
+			if (cookie != null) {
+				conn.setRequestProperty("cookie", cookie);
+			}
 			conn.connect();
 			InputStream is = conn.getInputStream();
 			DataInputStream indata = new DataInputStream(is);
@@ -202,11 +210,8 @@ public class Methods {
 				}
 			}
 			conn.disconnect();
-		} catch (ConnectException e) {
+		} catch (Exception e) {
 			System.out.println("ConnectException");
-			System.out.println(e);
-		} catch (IOException e) {
-			System.out.println("IOException");
 			System.out.println(e);
 		} finally {
 			try {
@@ -220,6 +225,31 @@ public class Methods {
 
 		}
 		return str_return;
+	}
+
+	public static String getStringBetween(String str, String start, String end, int index) {
+
+		int flagA = str.indexOf(start, index);
+		int flagB = str.indexOf(end, flagA + 1);
+		if (flagA < 0 || flagB < 0) {
+			return null;
+		} else {
+			flagA = flagA + start.length();
+			if (flagA < 0 || flagB < 0) {
+				return null;
+			}
+			return str.substring(flagA, flagB);
+		}
+	}
+
+	
+	public static String getG_tk(String skey) {
+		int hash = 5381;
+		int flag = skey.length();
+		for (int i = 0; i < flag; i++) {
+			hash = hash + hash * 32 + skey.charAt(i);
+		}
+		return String.valueOf(hash&0x7fffffff);
 	}
 
 }

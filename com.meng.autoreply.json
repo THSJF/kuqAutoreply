@@ -125,8 +125,8 @@
 
   ],
   "auth": [ // 应用权限（发布前请删除无用权限）
-    //20,  //[敏感]取Cookies	getCookies / getCsrfToken
-    //30,  //接收语音			getRecord
+    20,  //[敏感]取Cookies	getCookies / getCsrfToken
+    30,  //接收语音			getRecord
     101, //发送群消息			sendGroupMsg
     103, //发送讨论组消息		sendDiscussMsg
     106, //发送私聊消息		sendPrivateMsg
