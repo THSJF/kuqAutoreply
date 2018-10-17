@@ -7,7 +7,7 @@ public class ZuiSuJinTianGengLeMa extends Thread {
 	Calendar c;
 	long group = 855927922L;
 	long jizhe = 1012539034L;
-	boolean tiped = false;
+	boolean tiped = true;
 
 	public ZuiSuJinTianGengLeMa() {
 	}
