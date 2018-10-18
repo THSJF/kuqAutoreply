@@ -10,11 +10,12 @@ import java.util.Random;
 import javax.swing.JOptionPane;
 
 import com.sobte.cqp.jcq.entity.Anonymous;
-import com.sobte.cqp.jcq.entity.CQDebug;
+import com.sobte.cqp.jcq.entity.CoolQ;
 import com.sobte.cqp.jcq.entity.GroupFile;
 import com.sobte.cqp.jcq.entity.ICQVer;
 import com.sobte.cqp.jcq.entity.IMsg;
 import com.sobte.cqp.jcq.entity.IRequest;
+import com.sobte.cqp.jcq.entity.QQInfo;
 import com.sobte.cqp.jcq.event.JcqAppAbstract;
 
 /**
@@ -41,7 +42,7 @@ public class Autoreply extends JcqAppAbstract implements ICQVer, IMsg, IRequest 
 	private RecoderManager recoderManager;
 	private RollPlane rollPlane = new RollPlane();
 	private ZuiSuJinTianGengLeMa zuiSuJinTianGengLeMa = new ZuiSuJinTianGengLeMa();
-	private BilibiliVideoInfo bilibiliTest = new BilibiliVideoInfo();
+	private BiliVideoInfo biliVideoInfo = new BiliVideoInfo();
 	private FileTipManager fileTipManager = new FileTipManager();
 	private fanpohai fph;
 	private DicReplyManager dicReplyManager;
@@ -54,6 +55,9 @@ public class Autoreply extends JcqAppAbstract implements ICQVer, IMsg, IRequest 
 	private static String[] pop = "11|12|60|63|96|107|110|114|117|128|129|151|159|123|268|208|248|5|20|28|37|45|212|178|62|44|90|107|119|114|125|142|168|185|1|2|3|4|5|6|7|8|9"
 			.split("\\|");
 
+	public static CQCodeCC CC = new CQCodeCC();
+	private NaoWait naoWait=new NaoWait();
+
 	/**
 	 * 用main方法调试可以最大化的加快开发效率，检测和定位错误位置<br/>
 	 * 以下就是使用Main方法进行测试的一个简易案例
@@ -63,7 +67,7 @@ public class Autoreply extends JcqAppAbstract implements ICQVer, IMsg, IRequest 
 	 */
 	public static void main(String[] args) {
 		// CQ此变量为特殊变量，在JCQ启动时实例化赋值给每个插件，而在测试中可以用CQDebug类来代替他
-		CQ = new CQDebug();// new CQDebug("应用目录","应用名称") 可以用此构造器初始化应用的目录
+		CQ = new CoolQ(1000);// new CQDebug("应用目录","应用名称") 可以用此构造器初始化应用的目录
 		CQ.logInfo("[JCQ] TEST Demo", "测试启动");// 现在就可以用CQ变量来执行任何想要的操作了
 		// 要测试主类就先实例化一个主类对象
 		Autoreply demo = new Autoreply();
@@ -99,7 +103,7 @@ public class Autoreply extends JcqAppAbstract implements ICQVer, IMsg, IRequest 
 		addFileTip();
 		loadConfig();
 		zuiSuJinTianGengLeMa.start();
-		fileTipManager.start();
+		 fileTipManager.start();
 		// 返回如：D:\CoolQ\app\com.sobte.cqp.jcq\app\com.example.demo\
 		return 0;
 	}
@@ -172,16 +176,8 @@ public class Autoreply extends JcqAppAbstract implements ICQVer, IMsg, IRequest 
 				sendGroupMessage(Long.parseLong(strings[1]), strings[2]);
 			}
 		}
-		if (msg.equalsIgnoreCase("nao")) {
-			try {
-				NAO.check();
-			} catch (IOException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-		}
+		naoWait.check(fromQQ, msg);
 		return MSG_IGNORE;
-
 	}
 
 	/**
@@ -246,39 +242,36 @@ public class Autoreply extends JcqAppAbstract implements ICQVer, IMsg, IRequest 
 		if (checkNotReply(fromGroup, fromQQ, msg))
 			return MSG_IGNORE;
 
-		try {
-			// 控制
-			if (Methods.checkSwitch(fromGroup, msg))
-				return MSG_IGNORE;
-			// 签到消息
-			if (msg.startsWith("[CQ:sign")) {
-				sendGroupMessage(fromGroup, "image:pic/qiandao.jpg");
-				return MSG_IGNORE;
-			}
-			if (banner.checkBan(fromQQ, fromGroup, msg))// 禁言
-				return MSG_IGNORE;
-			if (Methods.checkGou(fromGroup, msg))// 苟
-				return MSG_IGNORE;
-			if (Methods.checkAt(fromGroup, fromQQ, msg))// @
-				return MSG_IGNORE;
-			if (Methods.checkMo(fromGroup, msg))// 膜
-				return MSG_IGNORE;
-			if (zuiSuJinTianGengLeMa.check(fromGroup, fromQQ))// 催更
-				return MSG_IGNORE;
-			if (bilibiliTest.check(fromGroup, msg))// 比利比利视频详情
-				return MSG_IGNORE;
-			if (Methods.checkLink(fromGroup, msg))// 收到的消息有链接
-				return MSG_IGNORE;
-			if (rollPlane.check(fromGroup, msg))// roll
-				return MSG_IGNORE;
-			if (fph.check(fromQQ, fromGroup, msg))// 反迫害
-				return MSG_IGNORE;
-			if (recoderManager.check(fromGroup, fromQQ, msg))// 复读
-				return MSG_IGNORE;
-			if (dicReplyManager.check(fromGroup, fromQQ, msg))// 根据词库触发回答
-				return MSG_IGNORE;
-		} catch (Exception e) {
+		// 控制
+		if (Methods.checkSwitch(fromGroup, msg))
+			return MSG_IGNORE;
+		// 签到消息
+		if (msg.startsWith("[CQ:sign")) {
+			sendGroupMessage(fromGroup, "image:pic/qiandao.jpg");
+			return MSG_IGNORE;
 		}
+		if (banner.checkBan(fromQQ, fromGroup, msg))// 禁言
+			return MSG_IGNORE;
+		if (Methods.checkGou(fromGroup, msg))// 苟
+			return MSG_IGNORE;
+		if (Methods.checkAt(fromGroup, fromQQ, msg))// @
+			return MSG_IGNORE;
+		if (Methods.checkMo(fromGroup, msg))// 膜
+			return MSG_IGNORE;
+		if (zuiSuJinTianGengLeMa.check(fromGroup, fromQQ))// 催更
+			return MSG_IGNORE;
+		if (biliVideoInfo.check(fromGroup, msg))// 比利比利视频详情
+			return MSG_IGNORE;
+		if (Methods.checkLink(fromGroup, msg))// 收到的消息有链接
+			return MSG_IGNORE;
+		if (rollPlane.check(fromGroup, msg))// roll
+			return MSG_IGNORE;
+		if (fph.check(fromQQ, fromGroup, msg))// 反迫害
+			return MSG_IGNORE;
+		if (recoderManager.check(fromGroup, fromQQ, msg))// 复读
+			return MSG_IGNORE;
+		if (dicReplyManager.check(fromGroup, fromQQ, msg))// 根据词库触发回答
+			return MSG_IGNORE;
 		return MSG_IGNORE;
 
 	}
@@ -383,12 +376,17 @@ public class Autoreply extends JcqAppAbstract implements ICQVer, IMsg, IRequest 
 			CQ.setGroupLeave(fromGroup, false);
 			return MSG_IGNORE;
 		}
-		if (subtype == 1) {
-			sendGroupMessage(fromGroup, beingOperateQQ + "跑莉");
-		} else if (subtype == 2) {
-			sendGroupMessage(fromGroup, beingOperateQQ + "被玩完扔莉");
+		try {
+			QQInfo qInfo = CQ.getStrangerInfo(beingOperateQQ);
+			if (subtype == 1) {
+				sendGroupMessage(fromGroup, qInfo.getNick() + "(" + qInfo.getQqId() + ")" + "跑莉");
+			} else if (subtype == 2) {
+				QQInfo qInfo2 = CQ.getStrangerInfo(fromQQ);
+				sendGroupMessage(fromGroup, qInfo.getNick() + "(" + qInfo.getQqId() + ")" + "被绿帽" + qInfo2.getNick()
+						+ "(" + qInfo2.getQqId() + ")" + "玩完扔莉");
+			}
+		} catch (Exception e) {
 		}
-
 		return MSG_IGNORE;
 	}
 
@@ -412,7 +410,15 @@ public class Autoreply extends JcqAppAbstract implements ICQVer, IMsg, IRequest 
 		// 这里处理消息
 		String[] strings = new String[] { "封魔录LNN", "梦时空LNN", "幻想乡LNN", "怪绮谈LNN", "红LNN", "妖LNNN", "永0033", "永0037",
 				"花LNN", "风LNN", "殿LNN", "船LNNN", "庙LNNN", "城LNN", "绀LNN", "璋LNNN", "大战争LNN" };
-		sendGroupMessage(fromGroup, CC.at(beingOperateQQ) + "你已经是群萌新了，快打个" + Methods.rfa(strings) + "给群友们看看吧");
+		try {
+			QQInfo qInfo = CQ.getStrangerInfo(beingOperateQQ);
+			if (qInfo.getGender() == 0) {
+				sendGroupMessage(fromGroup, CC.at(beingOperateQQ) + "你已经是群萌新了，快打个" + Methods.rfa(strings) + "给群友们看看吧");
+			} else if (qInfo.getGender() == 1) {
+				sendGroupMessage(fromGroup, "新来的小姐姐打个" + Methods.rfa(strings) + "给这群飞机佬看看吧");
+			}
+		} catch (Exception e) {
+		}
 		return MSG_IGNORE;
 	}
 
@@ -612,13 +618,12 @@ public class Autoreply extends JcqAppAbstract implements ICQVer, IMsg, IRequest 
 	}
 
 	private static void setRandomPop() {
-		String returnStr = "";
 		String skey = Methods.getStringBetween(Autoreply.CQ.getCookies(), "skey=", ";", 0);
 		String g_tk = Methods.getG_tk(skey);
 		String url = "http://logic.content.qq.com/bubble/setup?callback=&id=" + (String) Methods.rfa(pop) + "&g_tk="
 				+ g_tk;
 		try {
-			returnStr = Methods.open(url, Autoreply.CQ.getCookies());
+			Methods.openUrlWithHttps(url, Autoreply.CQ.getCookies());
 		} catch (KeyManagementException | NoSuchAlgorithmException e) {
 
 		}
