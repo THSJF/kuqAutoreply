@@ -22,30 +22,30 @@ public class RecordBanner {
 	private FingerPrint lastFp;
 	private File imgFile;
 
-	public RecordBanner(long group, int status) {
+	public RecordBanner(long group, int mode) {
 		groupNum = group;
-		banRecorderMode = status;
+		banRecorderMode = mode;
+	}
+
+	public RecordBanner(long group) {
+		groupNum = group;
 		if (group == 312342896L || group == 859561731L || group == 855927922L || group == 807242547L) {
 			banRecorderMode = 1;
 		}
 	}
 
-	public RecordBanner(long group) {
-		groupNum = group;
-	}
-
 	public boolean check(long group, String msg, long QQ) throws Exception {
 		boolean b = false;
 		if (group == groupNum && (Autoreply.CC.getAt(msg) != 1620628713L) && (!msg.contains("禁言"))) {
-			if (msg.equalsIgnoreCase("banRecorder0")) {
+			if (msg.equalsIgnoreCase("ban0")) {
 				banRecorderMode = 0;
-				System.out.println("取消禁言复读机");
-			} else if (msg.equalsIgnoreCase("banRecorder1")) {
+				Autoreply.sendGroupMessage(group, "取消禁言复读机");
+			} else if (msg.equalsIgnoreCase("ban1")) {
 				banRecorderMode = 1;
-				System.out.println("复读轮盘");
-			} else if (msg.equalsIgnoreCase("banRecorder2")) {
+				Autoreply.sendGroupMessage(group, "复读轮盘");
+			} else if (msg.equalsIgnoreCase("ban2")) {
 				banRecorderMode = 2;
-				System.out.println("禁言所有复读机");
+				Autoreply.sendGroupMessage(group, "禁言所有复读机");
 			}
 			float simi = getPicSimilar(msg);// 当前消息中图片和上一条消息中图片相似度
 			switch (banRecorderMode) {
@@ -192,15 +192,25 @@ public class RecordBanner {
 	}
 
 	// 图片相似度判断
-	private float getPicSimilar(String msg) throws Exception {
-		CQImage cm = Autoreply.CC.getCQImage(msg);
+	private float getPicSimilar(String msg) {
+		CQImage cm = null;
+		try {
+			cm = Autoreply.CC.getCQImage(msg);
+		} catch (NumberFormatException e) {
+		}
 		if (cm != null) {// 如果当前消息有图片则开始处理
-			imgFile = cm.download(Autoreply.appDirectory + "reverse\\" + groupNum + "recr.jpg");
+			try {
+				imgFile = cm.download(Autoreply.appDirectory + "reverse\\" + groupNum + "recr.jpg");
+			} catch (IOException e) {
+			}
 			if (thisFp != null) {
 				lastFp = thisFp;
 			}
-			thisFp = new FingerPrint(
-					ImageIO.read(new File(Autoreply.appDirectory + "reverse\\" + groupNum + "recr.jpg")));
+			try {
+				thisFp = new FingerPrint(
+						ImageIO.read(new File(Autoreply.appDirectory + "reverse\\" + groupNum + "recr.jpg")));
+			} catch (IOException e) {
+			}
 			if (lastFp != null) {
 				return thisFp.compare(lastFp);
 			}
