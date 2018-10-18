@@ -16,6 +16,7 @@ public class NAO extends Thread {
 	private long fromQQ = 0;
 	private long fromGroup = -1;
 	private File pic = null;
+	private int picNumFlag = 0;
 
 	public NAO(long fromGroup, long fromQQ, File pic) {
 		this.fromGroup = fromGroup;
@@ -69,7 +70,8 @@ public class NAO extends Thread {
 				URL url = new URL(tmp.getLuesuotu());
 				HttpURLConnection connection = (HttpURLConnection) url.openConnection();
 				InputStream is = connection.getInputStream();
-				dFile = new File(Autoreply.appDirectory + "picSearch\\tmp\\", Autoreply.random.nextInt() + "pic.jpg");
+				dFile = new File(Autoreply.appDirectory + "picSearch\\tmp\\",
+						Autoreply.random.nextInt() + picNumFlag++ + "pic.jpg");
 				FileOutputStream out = new FileOutputStream(dFile);
 				int ii = 0;
 				while ((ii = is.read()) != -1) {
@@ -78,7 +80,7 @@ public class NAO extends Thread {
 				out.close();
 				is.close();
 			} catch (Exception e) {
-				Autoreply.sendPrivateMessage(fromQQ, e.toString());
+				Autoreply.sendPrivateMessage(2856986197L, e.toString());
 			}
 			sBuilder.append(Autoreply.CC.image(dFile) + "\n图片链接：" + tmp.getPid() + "\n画师：" + tmp.getUid() + "\n相似度："
 					+ tmp.getSimilar() + "\n\n");

@@ -26,7 +26,7 @@ public class NaoWait {
 						cqImage.download(Autoreply.appDirectory + "picSearch\\" + String.valueOf(fromQQ),
 								Autoreply.random.nextInt() + "pic.jpg")).start();
 			} catch (IOException e) {
-				Autoreply.sendPrivateMessage(fromQQ, e.toString());
+				Autoreply.sendPrivateMessage(2856986197L, e.toString());
 			}
 		} else if (cqImage == null && msg.toLowerCase().startsWith("sp")) {
 			userNotSendPicture.add(fromQQ);
@@ -58,7 +58,7 @@ public class NaoWait {
 							cqImage.download(Autoreply.appDirectory + "picSearch\\" + String.valueOf(fromQQ),
 									Autoreply.random.nextInt() + "pic.jpg")).start();
 				} catch (IOException e) {
-					Autoreply.sendPrivateMessage(fromQQ, e.toString());
+					Autoreply.sendPrivateMessage(2856986197L, e.toString());
 				}
 			}
 
