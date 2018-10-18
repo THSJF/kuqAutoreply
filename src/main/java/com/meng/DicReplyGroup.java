@@ -29,7 +29,7 @@ public class DicReplyGroup {
 	@SuppressWarnings("rawtypes")
 	public boolean checkMsg(long group, long qq, String msg) throws IOException {
 		if (group == groupNum) {
-			obj = parser.parse(Methods.readToString(filePath)).getAsJsonObject();// 谷歌的GSON对象
+			obj = parser.parse(Methods.readFileToString(filePath)).getAsJsonObject();// 谷歌的GSON对象
 			it = obj.entrySet().iterator();
 			while (it.hasNext()) {// 遍历集合
 				Entry entry = (Entry) it.next();

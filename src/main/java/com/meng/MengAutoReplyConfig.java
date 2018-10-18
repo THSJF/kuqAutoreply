@@ -28,7 +28,7 @@ public class MengAutoReplyConfig {
 	}
 
 	private boolean load() throws Exception {
-		JsonObject obj = parser.parse(Methods.readToString(Autoreply.appDirectory + "config.json")).getAsJsonObject(); // 谷歌的GSON对象
+		JsonObject obj = parser.parse(Methods.readFileToString(Autoreply.appDirectory + "config.json")).getAsJsonObject(); // 谷歌的GSON对象
 		Iterator it = obj.entrySet().iterator();
 		while (it.hasNext()) {// 遍历
 			Entry entry = (Entry) it.next();

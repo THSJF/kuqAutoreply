@@ -1,14 +1,16 @@
 package com.meng;
 
+import java.io.BufferedReader;
 import java.io.DataInputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.io.UnsupportedEncodingException;
-import java.net.ConnectException;
 import java.net.URL;
+import java.net.URLConnection;
 import java.security.KeyManagementException;
 import java.security.NoSuchAlgorithmException;
 import java.security.cert.CertificateException;
@@ -72,25 +74,41 @@ public class Methods {
 					"标题:" + title + "\n链接:" + link + "\n封面图:" + picture + "\n描述:" + describe);
 			return true;
 		}
+		if (msg.startsWith("[CQ:rich,url=")) {// 某些分享链接是rich
+			// 截取相关字符串
+			try {
+				String link = msg.substring(msg.indexOf("http"), msg.indexOf(",text="));
+				String text = msg.substring(msg.indexOf("text=") + 5, msg.indexOf("]"));
+				// 发送消息
+				Autoreply.sendGroupMessage(fromGroup, "链接:" + link + "\n文字:" + text.trim());
+			} catch (Exception e) {
+				return true;
+			}
+			return true;
+		}
 		return false;
 	}
 
 	// 膜人回复
-	public static boolean checkMo(long fromGroup, String msg) throws IOException {
+	public static boolean checkMo(long fromGroup, String msg) {
 		// 使用了正则表达式
 		if (Pattern.matches(
 				".*(([蓝藍]|裂隙妖怪的式神).*[椰叶葉].*[椰叶葉].*(t.*c.*l|t.*q.*l|太.*[触觸].*了)|.*([蓝藍]|裂隙妖怪的式神).*[椰叶葉].*[椰叶葉].{0,3})",
 				msg.replace(" ", "").trim())) {
 			Autoreply.sendGroupMessage(fromGroup, "打不过地灵殿Normal");
-			Autoreply.sendGroupMessage(fromGroup,
-					Autoreply.CC.image(new File(Autoreply.appDirectory + "pic\\fanmo.jpg")));
+			try {
+				Autoreply.sendGroupMessage(fromGroup,
+						Autoreply.CC.image(new File(Autoreply.appDirectory + "pic\\fanmo.jpg")));
+			} catch (IOException e) {
+				return false;
+			}
 			return true;
 		}
 		return false;
 	}
 
 	// 读取文本文件
-	public static String readToString(String fileName) throws IOException, UnsupportedEncodingException {
+	public static String readFileToString(String fileName) throws IOException, UnsupportedEncodingException {
 		String encoding = "UTF-8";
 		File file = new File(fileName);
 		if (!file.exists()) {
@@ -179,13 +197,14 @@ public class Methods {
 		}
 	}
 
-	public static String open(String url) throws NoSuchAlgorithmException, KeyManagementException {
-		return open(url, null);
+	public static String openUrlWithHttps(String url) throws NoSuchAlgorithmException, KeyManagementException {
+		return openUrlWithHttps(url, null);
 	}
 
 	// 输入网址返回网页源码
 	@SuppressWarnings({ "deprecation", "null", "restriction" })
-	public static String open(String url, String cookie) throws NoSuchAlgorithmException, KeyManagementException {
+	public static String openUrlWithHttps(String url, String cookie)
+			throws NoSuchAlgorithmException, KeyManagementException {
 		InputStream in = null;
 		OutputStream out = null;
 		String str_return = "";
@@ -227,6 +246,61 @@ public class Methods {
 		return str_return;
 	}
 
+	public static String getRealUrl(String surl) {
+		String realUrl = "";
+		String line;
+		StringBuffer sb = new StringBuffer();
+		BufferedReader in = null;
+		try {
+			URL url = new URL(surl);
+			URLConnection conn = url.openConnection();
+			conn.connect();
+			in = new BufferedReader(new InputStreamReader(conn.getInputStream(), "utf-8"));
+			while ((line = in.readLine()) != null) {
+				sb.append(line);
+			}
+			String nurl = conn.getURL().toString();
+			realUrl = nurl;
+		} catch (Exception e) {
+		} finally {
+			try {
+				if (in != null) {
+					in.close();
+				}
+			} catch (Exception e2) {
+			}
+		}
+		return realUrl;
+	}
+
+	public static String openUrlWithHttp(String url) {
+		String result = "";
+		String line;
+		StringBuffer sb = new StringBuffer();
+		BufferedReader in = null;
+		try {
+			URL realUrl = new URL(url);
+			URLConnection conn = realUrl.openConnection();
+			conn.setRequestProperty("contentType", "utf-8");
+			conn.setRequestProperty("content-type", "application/x-www-form-urlencoded");
+			conn.connect();
+			in = new BufferedReader(new InputStreamReader(conn.getInputStream(), "utf-8"));
+			while ((line = in.readLine()) != null) {
+				sb.append(line);
+			}
+			result = sb.toString();
+		} catch (Exception e) {
+		} finally {
+			try {
+				if (in != null) {
+					in.close();
+				}
+			} catch (Exception e2) {
+			}
+		}
+		return result;
+	}
+
 	public static String getStringBetween(String str, String start, String end, int index) {
 
 		int flagA = str.indexOf(start, index);
@@ -242,14 +316,13 @@ public class Methods {
 		}
 	}
 
-	
 	public static String getG_tk(String skey) {
 		int hash = 5381;
 		int flag = skey.length();
 		for (int i = 0; i < flag; i++) {
 			hash = hash + hash * 32 + skey.charAt(i);
 		}
-		return String.valueOf(hash&0x7fffffff);
+		return String.valueOf(hash & 0x7fffffff);
 	}
 
 }

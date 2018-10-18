@@ -43,81 +43,87 @@ public class fanpohai {
 		}
 	}
 
-	public boolean check(long fromQQ, long fromGroup, String msg) throws IOException {
+	public boolean check(long fromQQ, long fromGroup, String msg) {
 		// 每次收到消息时都读取样本太耗资源，所以手动更新
-		if (msg.equalsIgnoreCase("loadph")) {
-			loadph();
-			Autoreply.sendGroupMessage(fromGroup, "反迫害样本图更新");
-		}
-		boolean bpohai = false;
-		// 处理带有迫害二字的消息
-		if (msg.indexOf("迫害") != -1) {
-			pohaicishu++;
-			if (pohaicishu == alpohai) {
-				bpohai = true;
-				pohaicishu = 0;
-				alpohai = Autoreply.random.nextInt(5) + 2;
+		try {
+			if (msg.equalsIgnoreCase("loadph")) {
+				loadph();
+				Autoreply.sendGroupMessage(fromGroup, "反迫害样本图更新");
 			}
-		}
-		// 判定图片相似度
-		Autoreply.CC.getCQImage(msg);
-		if (cmCqImage != null) {
-			float simi = 0.0f;
-			FingerPrint fp1 = new FingerPrint(ImageIO.read(cmCqImage.download(Autoreply.appDirectory + "phtmp.jpg")));
-			// 取值为所有样本中最高的相似度
-			for (int i = 0; i < fts.length; i++) {
-				float tf = fts[i].compare(fp1);
-				if (tf > simi) {
-					simi = tf;
-				}
-			}
-			if (simi > 0.92f) {
-				bpohai = true;
-			}
-		}
-		// 从反迫害文本文件中读取
-		if (fanpohafile.isFile() && fanpohafile.exists()) {
-			InputStreamReader read = new InputStreamReader(new FileInputStream(fanpohafile));
-			BufferedReader bufferedReader = new BufferedReader(read);
-			String lineTxt = null;
-			while ((lineTxt = bufferedReader.readLine()) != null) {
-				if (msg.equals(lineTxt)) {
+			boolean bpohai = false;
+			// 处理带有迫害二字的消息
+			if (msg.indexOf("迫害") != -1) {
+				pohaicishu++;
+				if (pohaicishu == alpohai) {
 					bpohai = true;
-					break;
+					pohaicishu = 0;
+					alpohai = Autoreply.random.nextInt(5) + 2;
 				}
 			}
-			read.close();
-		}
-		// 如果满足反迫害条件 根据上面的数组从QQ号得到用户迫害图文件夹
-		if (bpohai) {
-			String folder = "";
-			for (int i = 0; i < ss.length; i++) {
-				if (fromQQ == Long.parseLong(ss[i][1])) {
-					folder = Autoreply.appDirectory + "pohai/" + ss[i][0] + "/";
-					break;
+			// 判定图片相似度
+			Autoreply.CC.getCQImage(msg);
+			if (cmCqImage != null) {
+				float simi = 0.0f;
+				FingerPrint fp1 = null;
+				fp1 = new FingerPrint(ImageIO.read(cmCqImage.download(Autoreply.appDirectory + "phtmp.jpg")));
+				// 取值为所有样本中最高的相似度
+				for (int i = 0; i < fts.length; i++) {
+					float tf = fts[i].compare(fp1);
+					if (tf > simi) {
+						simi = tf;
+					}
+				}
+				if (simi > 0.92f) {
+					bpohai = true;
 				}
 			}
-			if (folder.equals("")) {
-				int ir = Autoreply.random.nextInt(3);
-				if (ir == 0) {
-					Autoreply.sendGroupMessage(fromGroup, "鬼鬼");
-				} else if (ir == 1) {
-					Autoreply.sendGroupMessage(fromGroup, "除了迫害和膜你还知道什么");
+			// 从反迫害文本文件中读取
+			if (fanpohafile.isFile() && fanpohafile.exists()) {
+				InputStreamReader read;
+				read = new InputStreamReader(new FileInputStream(fanpohafile));
+				BufferedReader bufferedReader = new BufferedReader(read);
+				String lineTxt = null;
+				while ((lineTxt = bufferedReader.readLine()) != null) {
+					if (msg.equals(lineTxt)) {
+						bpohai = true;
+						break;
+					}
+				}
+				read.close();
+			}
+			// 如果满足反迫害条件 根据上面的数组从QQ号得到用户迫害图文件夹
+			if (bpohai) {
+				String folder = "";
+				for (int i = 0; i < ss.length; i++) {
+					if (fromQQ == Long.parseLong(ss[i][1])) {
+						folder = Autoreply.appDirectory + "pohai/" + ss[i][0] + "/";
+						break;
+					}
+				}
+				if (folder.equals("")) {
+					int ir = Autoreply.random.nextInt(3);
+					if (ir == 0) {
+						Autoreply.sendGroupMessage(fromGroup, "鬼鬼");
+					} else if (ir == 1) {
+						Autoreply.sendGroupMessage(fromGroup, "除了迫害和膜你还知道什么");
+					} else {
+						Autoreply.sendGroupMessage(fromGroup, "草绳");
+					}
+					return true;
 				} else {
-					Autoreply.sendGroupMessage(fromGroup, "草绳");
-				}
-				return true;
-			} else {
-				File[] files = (new File(folder)).listFiles();
-				// 丢人专属双倍快乐
-				if (folder.equals(Autoreply.appDirectory + "pohai/丢人/")) {
+					File[] files = (new File(folder)).listFiles();
+					// 丢人专属双倍快乐
+					if (folder.equals(Autoreply.appDirectory + "pohai/丢人/")) {
+						Autoreply.sendGroupMessage(fromGroup, Autoreply.CC.image((File) Methods.rfa(files)));
+					}
 					Autoreply.sendGroupMessage(fromGroup, Autoreply.CC.image((File) Methods.rfa(files)));
+					return true;
 				}
-				Autoreply.sendGroupMessage(fromGroup, Autoreply.CC.image((File) Methods.rfa(files)));
-				return true;
 			}
+			return false;
+		} catch (IOException e) {
+			return false;
 		}
-		return false;
 	}
 
 }
