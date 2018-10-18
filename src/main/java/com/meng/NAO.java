@@ -14,9 +14,11 @@ import org.jsoup.Jsoup;
 public class NAO extends Thread {
 
 	private long fromQQ = 0;
+	private long fromGroup = -1;
 	private File pic = null;
 
-	public NAO(long fromQQ, File pic) {
+	public NAO(long fromGroup, long fromQQ, File pic) {
+		this.fromGroup = fromGroup;
 		this.fromQQ = fromQQ;
 		this.pic = pic;
 	}
@@ -26,7 +28,11 @@ public class NAO extends Thread {
 		try {
 			check(fromQQ, pic);
 		} catch (IOException e) {
-			Autoreply.sendPrivateMessage(fromQQ, e.toString());
+			if (fromGroup == -1) {
+				Autoreply.sendPrivateMessage(fromQQ, "少女折寿中……");
+			} else {
+				Autoreply.sendGroupMessage(fromGroup, Autoreply.CC.at(fromQQ) + "少女折寿中……");
+			}
 		}
 	}
 
@@ -42,7 +48,11 @@ public class NAO extends Thread {
 		}
 		ArrayList<String> items = getTable(response.body());
 		if (items == null) {
-			Autoreply.sendPrivateMessage(fromQQ, "没有相似度较高的图片");
+			if (fromGroup == -1) {
+				Autoreply.sendPrivateMessage(fromQQ, "没有相似度较高的图片");
+			} else {
+				Autoreply.sendGroupMessage(fromGroup, Autoreply.CC.at(fromQQ) + "没有相似度较高的图片");
+			}
 			return;
 		}
 		ArrayList<NaoJavabean> its = getEles(items);
@@ -73,7 +83,11 @@ public class NAO extends Thread {
 			sBuilder.append(Autoreply.CC.image(dFile) + "\n图片链接：" + tmp.getPid() + "\n画师：" + tmp.getUid() + "\n相似度："
 					+ tmp.getSimilar() + "\n\n");
 		}
-		Autoreply.sendPrivateMessage(fromQQ, sBuilder.toString());
+		if (fromGroup == -1) {
+			Autoreply.sendPrivateMessage(fromQQ, sBuilder.toString());
+		} else {
+			Autoreply.sendGroupMessage(fromGroup, Autoreply.CC.at(fromQQ) + sBuilder.toString());
+		}
 	}
 
 	private ArrayList<String> getTable(String html) {

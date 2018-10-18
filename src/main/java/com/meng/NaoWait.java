@@ -13,19 +13,28 @@ public class NaoWait {
 	public NaoWait() {
 	}
 
-	public void check(long fromQQ, String msg) {
+	public void check(long fromGroup, long fromQQ, String msg) {
 		CQImage cqImage = Autoreply.CC.getCQImage(msg);
-		if (cqImage != null && msg.toLowerCase().startsWith("snao")) {
+		if (cqImage != null && msg.toLowerCase().startsWith("sp")) {
 			try {
-				Autoreply.sendPrivateMessage(fromQQ, "少女折寿中……");
-				new NAO(fromQQ, cqImage.download(Autoreply.appDirectory + "picSearch\\" + String.valueOf(fromQQ),
-						Autoreply.random.nextInt() + "pic.jpg")).start();
+				if (fromGroup == -1) {
+					Autoreply.sendPrivateMessage(fromQQ, "少女折寿中……");
+				} else {
+					Autoreply.sendGroupMessage(fromGroup, Autoreply.CC.at(fromQQ) + "少女折寿中……");
+				}
+				new NAO(fromGroup, fromQQ,
+						cqImage.download(Autoreply.appDirectory + "picSearch\\" + String.valueOf(fromQQ),
+								Autoreply.random.nextInt() + "pic.jpg")).start();
 			} catch (IOException e) {
 				Autoreply.sendPrivateMessage(fromQQ, e.toString());
 			}
-		} else if (cqImage == null && msg.toLowerCase().startsWith("snao")) {
+		} else if (cqImage == null && msg.toLowerCase().startsWith("sp")) {
 			userNotSendPicture.add(fromQQ);
-			Autoreply.sendPrivateMessage(fromQQ, "need a picture");
+			if (fromGroup == -1) {
+				Autoreply.sendPrivateMessage(fromQQ, "需要一张图片");
+			} else {
+				Autoreply.sendGroupMessage(fromGroup, Autoreply.CC.at(fromQQ) + "需要一张图片");
+			}
 		} else if (cqImage != null) {
 			boolean isIn = false;
 			long tmpl = 0;
@@ -40,10 +49,14 @@ public class NaoWait {
 			}
 			if (isIn) {
 				try {
-					Autoreply.sendPrivateMessage(fromQQ, "少女折寿中……");
-					new NAO(fromQQ, cqImage.download(Autoreply.appDirectory + "picSearch\\" + String.valueOf(fromQQ),
-							Autoreply.random.nextInt() + "pic.jpg")).start();
-					System.out.println("snao start");
+					if (fromGroup == -1) {
+						Autoreply.sendPrivateMessage(fromQQ, "少女折寿中……");
+					} else {
+						Autoreply.sendGroupMessage(fromGroup, Autoreply.CC.at(fromQQ) + "少女折寿中……");
+					}
+					new NAO(fromGroup, fromQQ,
+							cqImage.download(Autoreply.appDirectory + "picSearch\\" + String.valueOf(fromQQ),
+									Autoreply.random.nextInt() + "pic.jpg")).start();
 				} catch (IOException e) {
 					Autoreply.sendPrivateMessage(fromQQ, e.toString());
 				}

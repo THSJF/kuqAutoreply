@@ -56,7 +56,7 @@ public class Autoreply extends JcqAppAbstract implements ICQVer, IMsg, IRequest 
 			.split("\\|");
 
 	public static CQCodeCC CC = new CQCodeCC();
-	private NaoWait naoWait=new NaoWait();
+	private NaoWait naoWait = new NaoWait();
 
 	/**
 	 * 用main方法调试可以最大化的加快开发效率，检测和定位错误位置<br/>
@@ -103,7 +103,7 @@ public class Autoreply extends JcqAppAbstract implements ICQVer, IMsg, IRequest 
 		addFileTip();
 		loadConfig();
 		zuiSuJinTianGengLeMa.start();
-		 fileTipManager.start();
+		fileTipManager.start();
 		// 返回如：D:\CoolQ\app\com.sobte.cqp.jcq\app\com.example.demo\
 		return 0;
 	}
@@ -176,7 +176,7 @@ public class Autoreply extends JcqAppAbstract implements ICQVer, IMsg, IRequest 
 				sendGroupMessage(Long.parseLong(strings[1]), strings[2]);
 			}
 		}
-		naoWait.check(fromQQ, msg);
+		naoWait.check(-1, fromQQ, msg);
 		return MSG_IGNORE;
 	}
 
@@ -272,6 +272,8 @@ public class Autoreply extends JcqAppAbstract implements ICQVer, IMsg, IRequest 
 			return MSG_IGNORE;
 		if (dicReplyManager.check(fromGroup, fromQQ, msg))// 根据词库触发回答
 			return MSG_IGNORE;
+
+		naoWait.check(fromGroup, fromQQ, msg);
 		return MSG_IGNORE;
 
 	}
