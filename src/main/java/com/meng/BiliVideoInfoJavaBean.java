@@ -1,6 +1,6 @@
 package com.meng;
 
-public class BilibiliVideoInfoJavaBean {
+public class BiliVideoInfoJavaBean {
 	// 读取到的数据为json格式，根据这个json出的javabean
 	private String code;
 	private String message;
