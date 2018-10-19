@@ -1,4 +1,4 @@
-package com.meng;
+package com.meng.groupChat;
 
 import java.io.IOException;
 import java.util.HashMap;
@@ -9,6 +9,8 @@ import java.util.regex.Pattern;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
+import com.meng.Autoreply;
+import com.meng.Methods;
 
 public class DicReplyGroup {
 

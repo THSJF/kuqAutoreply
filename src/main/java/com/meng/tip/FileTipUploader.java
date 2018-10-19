@@ -1,4 +1,4 @@
-package com.meng;
+package com.meng.tip;
 
 public class FileTipUploader {
 

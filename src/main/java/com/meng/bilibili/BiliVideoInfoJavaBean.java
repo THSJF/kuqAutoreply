@@ -1,4 +1,4 @@
-package com.meng;
+package com.meng.bilibili;
 
 public class BiliVideoInfoJavaBean {
 	// 读取到的数据为json格式，根据这个json出的javabean

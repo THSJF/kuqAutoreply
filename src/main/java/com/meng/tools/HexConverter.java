@@ -1,4 +1,4 @@
-package com.meng;
+package com.meng.tools;
 
 import java.util.Locale;
 

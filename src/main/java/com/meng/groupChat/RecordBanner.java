@@ -1,4 +1,4 @@
-package com.meng;
+package com.meng.groupChat;
 
 import java.awt.Image;
 import java.awt.image.BufferedImage;
@@ -7,6 +7,8 @@ import java.io.IOException;
 
 import javax.imageio.ImageIO;
 
+import com.meng.Autoreply;
+import com.meng.tools.FingerPrint;
 import com.sobte.cqp.jcq.entity.CQImage;
 
 public class RecordBanner {

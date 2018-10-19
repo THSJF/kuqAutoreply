@@ -1,4 +1,4 @@
-package com.meng;
+package com.meng.groupChat;
 
 import java.util.HashMap;
 

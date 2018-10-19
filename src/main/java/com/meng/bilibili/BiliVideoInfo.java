@@ -1,6 +1,8 @@
-package com.meng;
+package com.meng.bilibili;
 
 import com.google.gson.Gson;
+import com.meng.Autoreply;
+import com.meng.Methods;
 
 public class BiliVideoInfo {
 	public BiliVideoInfo() {

@@ -1,7 +1,7 @@
-package com.meng;
+package com.meng.bilibili;
 
 public class LivingPerson {
-	private String name = "";
+	/*private String name = "";
 	private int number = 0;
 	private String liveUrl = "";
 	private boolean isLiving = false;
@@ -50,5 +50,5 @@ public class LivingPerson {
 	public void setLiving(boolean b) {
 		isLiving = b;
 	}
-
+*/
 }

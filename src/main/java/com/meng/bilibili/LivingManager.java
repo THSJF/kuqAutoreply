@@ -1,10 +1,8 @@
-package com.meng;
-
-import java.util.HashMap;
+package com.meng.bilibili;
 
 public class LivingManager extends Thread {
 
-	private HashMap<Integer, LivingPerson> liveData = new HashMap<Integer, LivingPerson>();
+	/*private HashMap<Integer, LivingPerson> liveData = new HashMap<Integer, LivingPerson>();
 	private int mapFlag = 0;
 	private final String liveString = "\"live_time\":\"0000-00-00 00:00:00\"";// 如果网页代码中包含这个字符串
 																				// 则一定没有开播
@@ -98,5 +96,6 @@ public class LivingManager extends Thread {
 			break;
 		}
 	}
+	*/
 
 }

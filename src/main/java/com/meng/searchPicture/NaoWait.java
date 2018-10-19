@@ -1,9 +1,10 @@
-package com.meng;
+package com.meng.searchPicture;
 
 import java.io.IOException;
 import java.util.HashSet;
 import java.util.Iterator;
 
+import com.meng.Autoreply;
 import com.sobte.cqp.jcq.entity.CQImage;
 
 public class NaoWait {
@@ -26,7 +27,7 @@ public class NaoWait {
 						cqImage.download(Autoreply.appDirectory + "picSearch\\" + String.valueOf(fromQQ),
 								Autoreply.random.nextInt() + "pic.jpg")).start();
 			} catch (IOException e) {
-				Autoreply.sendPrivateMessage(2856986197L, e.toString());
+				System.out.println(e);
 			}
 		} else if (cqImage == null && msg.toLowerCase().startsWith("sp")) {
 			userNotSendPicture.add(fromQQ);

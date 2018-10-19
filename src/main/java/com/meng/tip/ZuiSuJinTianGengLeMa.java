@@ -1,6 +1,8 @@
-package com.meng;
+package com.meng.tip;
 
 import java.util.Calendar;
+
+import com.meng.Autoreply;
 
 public class ZuiSuJinTianGengLeMa extends Thread {
 	// 每两个小时内最速说第一句话时催更

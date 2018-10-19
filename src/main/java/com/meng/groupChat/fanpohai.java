@@ -1,4 +1,4 @@
-package com.meng;
+package com.meng.groupChat;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -8,6 +8,9 @@ import java.io.InputStreamReader;
 
 import javax.imageio.ImageIO;
 
+import com.meng.Autoreply;
+import com.meng.Methods;
+import com.meng.tools.FingerPrint;
 import com.sobte.cqp.jcq.entity.CQImage;
 
 public class fanpohai {
