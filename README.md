@@ -2,7 +2,8 @@
 com/meng/Autoreply.java为主类
 功能基本是在其它的类里写好然后在Autoreply里调用
 Banner.java禁言指令
-BilibiliVideoInfo.java BilibiliVideoInfoJavaBean.java和哔哩哔哩的视频有关
+BiliVideoInfo.java BilibiliVideoInfoJavaBean.java 哔哩哔哩视频详情
+LiveManager.java LivePerson.java 哔哩哔哩直播检测
 DicReplyGroup.java DicReplyManager.java是群内按词库内容回复
 fanpohai.java反迫害
 FileTipManager.java FileTipUploader.java群文件上传提醒
@@ -30,8 +31,9 @@ config.json也是多个json数组组成，示例：
 "mapGroupNotReply":["826536230"],
 "mapQQNotReply":["2756253478"],
 "mapWordNotReply":[],
-"mapGroupRecorder":["807242547","855927922"],
-"mapGroupDicReply":["807242547","859561731"]
+"mapGroupRecorder":["807242547","855927922","439664871","424838564","857548607","348595763","859561731","312342896"],
+"mapGroupDicReply":["807242547","859561731","348595763","857548607","855927922","439664871","424838564"],
+"mapLiveTip":["记者","523030","沙苗","5136443"]
 }
 
 key说明：
@@ -40,5 +42,6 @@ mapQQNotReply----指定的账号不回复
 mapWordNotReply----包含指定的字符串不回复
 mapGroupRecorder----开启复读的群
 mapGroupDicReply----开启词库回答的群
+mapLiveTip----哔哩哔哩直播提示，顺序为 称呼，直播间号，称呼，直播间号，称呼，直播间号……
 勿修改key的值，否则会导致功能不正常
 如果不需要某个功能，像mapWordNotReply一项那样即可

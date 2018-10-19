@@ -15,6 +15,7 @@ public class MengAutoReplyConfig {
 	public HashMap<Integer, String> mapWordNotReply = new HashMap<Integer, String>();
 	public HashMap<Integer, Long> mapGroupRecorder = new HashMap<Integer, Long>();
 	public HashMap<Integer, Long> mapGroupDicReply = new HashMap<Integer, Long>();
+	public HashMap<String, String> mapLiveTip = new HashMap<String, String>();
 	private JsonParser parser;
 
 	public MengAutoReplyConfig() {
@@ -28,7 +29,8 @@ public class MengAutoReplyConfig {
 	}
 
 	private boolean load() throws Exception {
-		JsonObject obj = parser.parse(Methods.readFileToString(Autoreply.appDirectory + "config.json")).getAsJsonObject(); // 谷歌的GSON对象
+		JsonObject obj = parser.parse(Methods.readFileToString(Autoreply.appDirectory + "config.json"))
+				.getAsJsonObject(); // 谷歌的GSON对象
 		Iterator it = obj.entrySet().iterator();
 		while (it.hasNext()) {// 遍历
 			Entry entry = (Entry) it.next();
@@ -50,7 +52,11 @@ public class MengAutoReplyConfig {
 					mapGroupDicReply.put(k, Methods.parseLong(array.get(k).toString()));
 					break;
 				case "mapWordNotReply":
-					mapWordNotReply.put(k, (String) array.get(k).toString());
+					mapWordNotReply.put(k, Methods.removeCharAtStartAndEnd(array.get(k).toString()));
+					break;
+				case "mapLiveTip":
+					mapLiveTip.put(Methods.removeCharAtStartAndEnd(array.get(2 * k).toString()),
+							Methods.removeCharAtStartAndEnd(array.get(2 * k + 1).toString()));
 					break;
 				}
 			}
@@ -77,6 +83,10 @@ public class MengAutoReplyConfig {
 
 	public HashMap<Integer, Long> getMapGroupDicReply() {
 		return mapGroupDicReply;
+	}
+
+	public HashMap<String, String> getMapLiveTip() {
+		return mapLiveTip;
 	}
 
 }

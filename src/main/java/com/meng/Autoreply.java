@@ -10,6 +10,8 @@ import java.util.Random;
 import javax.swing.JOptionPane;
 
 import com.meng.bilibili.BiliVideoInfo;
+import com.meng.bilibili.LiveManager;
+import com.meng.bilibili.LivePerson;
 import com.meng.groupChat.DicReplyGroup;
 import com.meng.groupChat.DicReplyManager;
 import com.meng.groupChat.RecoderManager;
@@ -57,6 +59,7 @@ public class Autoreply extends JcqAppAbstract implements ICQVer, IMsg, IRequest 
 	private fanpohai fph;
 	private DicReplyManager dicReplyManager;
 	private MengAutoReplyConfig mengAutoReplyConfig;
+	private LiveManager livingManager = new LiveManager();
 
 	private HashMap<Integer, Long> nrg;
 	private HashMap<Integer, Long> nrq;
@@ -248,10 +251,25 @@ public class Autoreply extends JcqAppAbstract implements ICQVer, IMsg, IRequest 
 				return MSG_IGNORE;
 			}
 		}
+
 		// 指定不回复的项目
 		if (checkNotReply(fromGroup, fromQQ, msg))
 			return MSG_IGNORE;
 
+		if (msg.equalsIgnoreCase(".live")) {
+			boolean b = false;
+			for (int i = 0; i < livingManager.getMapFlag(); i++) {
+				LivePerson lp = livingManager.getPerson(i);
+				if (lp.isLiving()) {
+					Autoreply.sendGroupMessage(fromGroup, lp.getName() + "直播开始啦大家快去奶" + lp.getLiveUrl());
+				}
+				b = b || livingManager.getPerson(i).isLiving();
+			}
+			if (!b) {
+				sendGroupMessage(fromGroup, "惊了 居然没有飞机佬直播");
+			}
+			return MSG_IGNORE;
+		}
 		// 控制
 		if (Methods.checkSwitch(fromGroup, msg))
 			return MSG_IGNORE;
@@ -590,6 +608,7 @@ public class Autoreply extends JcqAppAbstract implements ICQVer, IMsg, IRequest 
 		nrw = mengAutoReplyConfig.getMapWordNotReply();
 		addGroupDic();
 		addRecorder();
+		addLive();
 	}
 
 	private void addGroupDic() {
@@ -599,7 +618,6 @@ public class Autoreply extends JcqAppAbstract implements ICQVer, IMsg, IRequest 
 			long groupNum = gdr.get(key);
 			dicReplyManager.addData(new DicReplyGroup(groupNum, appDirectory + "dic" + groupNum + ".json"));
 		}
-
 	}
 
 	private void addRecorder() {
@@ -609,6 +627,15 @@ public class Autoreply extends JcqAppAbstract implements ICQVer, IMsg, IRequest 
 			long groupNum = gr.get(key);
 			recoderManager.addData(new RecordBanner(groupNum));
 		}
+	}
+
+	private void addLive() {
+		HashMap<String, String> mlt = mengAutoReplyConfig.getMapLiveTip();
+		livingManager = new LiveManager();
+		for (String key : mlt.keySet()) {// 遍历
+			livingManager.addData(new LivePerson(key, "https://live.bilibili.com/" + mlt.get(key)));
+		}
+		livingManager.start();
 	}
 
 	private boolean checkNotReply(long fromGroup, long fromQQ, String msg) {
@@ -622,7 +649,7 @@ public class Autoreply extends JcqAppAbstract implements ICQVer, IMsg, IRequest 
 			}
 		}
 		for (int key : nrw.keySet()) {
-			if (msg.contains(Methods.removeCharAtStartAndEnd(nrw.get(key)))) {
+			if (msg.contains(nrw.get(key))) {
 				return true;
 			}
 		}
