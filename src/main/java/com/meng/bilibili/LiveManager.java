@@ -40,6 +40,7 @@ public class LiveManager extends Thread {
 					sendMsg(lPerson);
 					sleep(2000);
 				}
+				sleep(16000);
 			} catch (Exception e) {
 			}
 		}
