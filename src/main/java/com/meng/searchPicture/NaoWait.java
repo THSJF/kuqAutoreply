@@ -1,9 +1,6 @@
 package com.meng.searchPicture;
 
-import java.io.IOException;
 import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Iterator;
 
 import com.meng.Autoreply;
 import com.sobte.cqp.jcq.entity.CQImage;
@@ -24,19 +21,20 @@ public class NaoWait {
 				} else {
 					Autoreply.sendGroupMessage(fromGroup, Autoreply.CC.at(fromQQ) + "少女折寿中……");
 				}
+				int needPic = 1;
+				if (msg.startsWith("sp.") || msg.startsWith("asp.")) {
+					String[] ss = msg.split("[.\\[]");
+					needPic = Integer.parseInt(ss[1]);
+				}
 				new NAO(fromGroup, fromQQ,
 						cqImage.download(Autoreply.appDirectory + "picSearch\\" + String.valueOf(fromQQ),
 								Autoreply.random.nextInt() + "pic.jpg"),
-						msg.toLowerCase().startsWith("asp")).start();
-			} catch (IOException e) {
+						msg.toLowerCase().startsWith("asp"), needPic).start();
+			} catch (Exception e) {
 				System.out.println(e);
 			}
-		} else if (cqImage == null && (msg.equals("sp") || msg.equals("asp"))) {
-			if (msg.toLowerCase().startsWith("sp")) {
-				userNotSendPicture.put(fromQQ, "sp");
-			} else {
-				userNotSendPicture.put(fromQQ, "asp");
-			}
+		} else if (cqImage == null && (msg.equalsIgnoreCase("sp") || msg.equalsIgnoreCase("asp"))) {
+			userNotSendPicture.put(fromQQ, msg);
 			if (fromGroup == -1) {
 				Autoreply.sendPrivateMessage(fromQQ, "需要一张图片");
 			} else {
@@ -50,13 +48,20 @@ public class NaoWait {
 					} else {
 						Autoreply.sendGroupMessage(fromGroup, Autoreply.CC.at(fromQQ) + "少女折寿中……");
 					}
+					int needPic = 1;
+					if (userNotSendPicture.get(fromQQ).startsWith("sp.")
+							|| userNotSendPicture.get(fromQQ).startsWith("asp.")) {
+						String[] ss = userNotSendPicture.get(fromQQ).split("\\.");
+						needPic = Integer.parseInt(ss[1]);
+					}
 					new NAO(fromGroup, fromQQ,
 							cqImage.download(Autoreply.appDirectory + "picSearch\\" + String.valueOf(fromQQ),
 									Autoreply.random.nextInt() + "pic.jpg"),
-							userNotSendPicture.get(fromQQ).equals("asp")).start();
-				} catch (IOException e) {
+							userNotSendPicture.get(fromQQ).startsWith("asp"), needPic).start();
+				} catch (Exception e) {
 					Autoreply.sendPrivateMessage(2856986197L, e.toString());
 				}
+				userNotSendPicture.remove(fromQQ);
 			}
 
 		}

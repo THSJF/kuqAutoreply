@@ -20,18 +20,20 @@ public class NAO extends Thread {
 	private int picNumFlag = 0;
 	private NAOResults mResults;
 	private boolean showAll = false;
+	private int resultCount = 1;
 
-	public NAO(long fromGroup, long fromQQ, File pic, boolean showAll) {
+	public NAO(long fromGroup, long fromQQ, File pic, boolean showAll, int resultCount) {
 		this.fromGroup = fromGroup;
 		this.fromQQ = fromQQ;
 		this.pic = pic;
 		this.showAll = showAll;
+		this.resultCount = resultCount;
 	}
 
 	@Override
 	public void run() {
 		try {
-			check(fromQQ, pic);
+			check(pic);
 		} catch (IOException e) {
 			if (fromGroup == -1) {
 				Autoreply.sendPrivateMessage(fromQQ, "少女折寿中……");
@@ -41,10 +43,8 @@ public class NAO extends Thread {
 		}
 	}
 
-	private void check(long fromQQ, File picF) throws IOException {
-
+	private void check(File picF) throws IOException {
 		FileInputStream fInputStream = new FileInputStream(picF);
-		StringBuilder sBuilder = new StringBuilder("");
 		Connection.Response response = Jsoup.connect("https://saucenao.com/search.php?db=" + 999)
 				.data("file", "image.jpg", fInputStream).method(Connection.Method.POST).execute();
 		if (response.statusCode() != 200) {
@@ -78,14 +78,14 @@ public class NAO extends Thread {
 		 */
 		int size = mResults.getResults().size();
 		if (size == 0) {
-			if (fromGroup == -1) {
-				Autoreply.sendPrivateMessage(fromQQ, "没有相似度较高的图片");
-			} else {
-				Autoreply.sendGroupMessage(fromGroup, Autoreply.CC.at(fromQQ) + "没有相似度较高的图片");
-			}
+			sendMsg(fromGroup, fromQQ, "没有相似度较高的图片");
 		}
-		size = size > 3 ? 3 : size;
+		if (fromGroup != -1) {
+			resultCount = resultCount > 3 ? 3 : resultCount;
+		}
+		size = size > resultCount ? resultCount : size;
 		for (int i = 0; i < size; i++) {
+			StringBuilder sBuilder = new StringBuilder("");
 			NAOResults.Result tmpr = mResults.getResults().get(i);
 			int simi = Integer.parseInt(tmpr.mSimilarity.substring(0, 2));
 			if (simi < 60 && !showAll) {
@@ -113,16 +113,16 @@ public class NAO extends Thread {
 				System.out.println(e);
 			}
 
-			// String[] titleAndMetadata = tmpr.mTitle.split("\n", 2);
-			// if (titleAndMetadata.length > 0) {
-			// sBuilder.append("title:").append(titleAndMetadata[0]).append("\n").append("meta");
-			// if (titleAndMetadata.length == 2) {
-			// tmpr.mColumns.add(0, titleAndMetadata[1]);
-			// }
-			// for (String string : tmpr.mColumns) {
-			// sBuilder.append(string).append("\n");
-			// }
-			// }
+			String[] titleAndMetadata = tmpr.mTitle.split("\n", 2);
+			if (titleAndMetadata.length > 0) {
+				sBuilder.append("\n").append(titleAndMetadata[0]).append("\n");
+				if (titleAndMetadata.length == 2) {
+					tmpr.mColumns.add(0, titleAndMetadata[1]);
+				}
+				for (String string : tmpr.mColumns) {
+					sBuilder.append(string).append("\n");
+				}
+			}
 			sBuilder.append(Autoreply.CC.image(dFile)).append("\n");
 			if (tmpr.mExtUrls.size() == 2) {
 				sBuilder.append("图片:").append(tmpr.mExtUrls.get(1)).append("\n");
@@ -132,15 +132,17 @@ public class NAO extends Thread {
 			}
 
 			if (!tmpr.mSimilarity.isEmpty()) {
-				sBuilder.append("相似度:").append(tmpr.mSimilarity).append("\n");
+				sBuilder.append("相似度:").append(tmpr.mSimilarity);
 			}
+			sendMsg(fromGroup, fromQQ, sBuilder.toString().isEmpty() ? "没有相似度较高的图片" : sBuilder.toString());
 		}
+	}
 
+	private void sendMsg(long fromGroup, long fromQQ, String msg) {
 		if (fromGroup == -1) {
-			Autoreply.sendPrivateMessage(fromQQ, sBuilder.toString().isEmpty() ? "没有相似度较高的图片" : sBuilder.toString());
+			Autoreply.sendPrivateMessage(fromQQ, msg);
 		} else {
-			Autoreply.sendGroupMessage(fromGroup,
-					Autoreply.CC.at(fromQQ) + (sBuilder.toString().isEmpty() ? "没有相似度较高的图片" : sBuilder.toString()));
+			Autoreply.sendGroupMessage(fromGroup, Autoreply.CC.at(fromQQ) + msg);
 		}
 	}
 
