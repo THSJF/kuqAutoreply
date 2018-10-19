@@ -19,11 +19,13 @@ public class NAO extends Thread {
 	private File pic = null;
 	private int picNumFlag = 0;
 	private NAOResults mResults;
+	private boolean showAll = false;
 
-	public NAO(long fromGroup, long fromQQ, File pic) {
+	public NAO(long fromGroup, long fromQQ, File pic, boolean showAll) {
 		this.fromGroup = fromGroup;
 		this.fromQQ = fromQQ;
 		this.pic = pic;
+		this.showAll = showAll;
 	}
 
 	@Override
@@ -40,6 +42,7 @@ public class NAO extends Thread {
 	}
 
 	private void check(long fromQQ, File picF) throws IOException {
+
 		FileInputStream fInputStream = new FileInputStream(picF);
 		StringBuilder sBuilder = new StringBuilder("");
 		Connection.Response response = Jsoup.connect("https://saucenao.com/search.php?db=" + 999)
@@ -85,7 +88,7 @@ public class NAO extends Thread {
 		for (int i = 0; i < size; i++) {
 			NAOResults.Result tmpr = mResults.getResults().get(i);
 			int simi = Integer.parseInt(tmpr.mSimilarity.substring(0, 2));
-			if (simi < 60) {
+			if (simi < 60 && !showAll) {
 				continue;
 			}
 			File dFile = null;
