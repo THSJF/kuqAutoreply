@@ -77,15 +77,13 @@ public class LiveManager extends Thread {
 				Autoreply.sendGroupMessage(855927922L, Autoreply.CC.at(1012539034) + "快更新");
 				break;
 			case "沙苗":
-					Autoreply.sendGroupMessage(348595763L, "image:pic/sjf.jpg");
+				Autoreply.sendGroupMessage(348595763L, "image:pic/sjf.jpg");
+				break;
+			case "台长":
+				Autoreply.sendGroupMessage(859561731L,
+						(String) Methods.rfa(new String[] { "image:pic/sjf.jpg", "发发发" }));
 				break;
 			}
-			// Autoreply.sendGroupMessage(312342896L, tmp);// 学习
-			// Autoreply.sendGroupMessage(855927922L, tmp);// 最速
-			// Autoreply.sendGroupMessage(859561731L, tmp);// 东芳直播间
-			// Autoreply.sendGroupMessage(826536230L, tmp);// stg闲聊群
-			// Autoreply.sendGroupMessage(348595763L, tmp);// 沙苗のSTG群
-			// Autoreply.sendGroupMessage(857548607L, tmp);// 恋萌萌粉丝群
 			p.setNeedStartTip(false);
 			// 勿添加break;
 		case 2:
@@ -97,14 +95,6 @@ public class LiveManager extends Thread {
 				Autoreply.sendGroupMessage(855927922L, Autoreply.CC.at(1012539034) + "该更新了吧");
 				break;
 			}
-			String tmp2 = p.getName() + "直播被奶死莉";
-			// Autoreply.sendGroupMessage(312342896L, tmp2);// 学习
-			// Autoreply.sendGroupMessage(855927922L, tmp2);// 最速
-			// Autoreply.sendGroupMessage(859561731L, tmp2);// 东芳直播间
-			Autoreply.sendGroupMessage(807242547L, tmp2);// c5
-			// Autoreply.sendGroupMessage(826536230L, tmp2);// stg闲聊群
-			// Autoreply.sendGroupMessage(348595763L, tmp2);// 沙苗のSTG群
-			// Autoreply.sendGroupMessage(857548607L, tmp2);// 恋萌萌粉丝群
 			p.setNeedStartTip(true);
 			// 勿添加break;
 		case 4:
