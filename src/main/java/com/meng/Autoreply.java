@@ -6,6 +6,8 @@ import java.security.KeyManagementException;
 import java.security.NoSuchAlgorithmException;
 import java.util.HashMap;
 import java.util.Random;
+import java.util.Timer;
+import java.util.TimerTask;
 
 import javax.swing.JOptionPane;
 
@@ -116,7 +118,7 @@ public class Autoreply extends JcqAppAbstract implements ICQVer, IMsg, IRequest 
 		addFileTip();
 		loadConfig();
 		zuiSuJinTianGengLeMa.start();
-		fileTipManager.start();
+		// fileTipManager.start();
 		// 返回如：D:\CoolQ\app\com.sobte.cqp.jcq\app\com.example.demo\
 		return 0;
 	}
@@ -250,6 +252,22 @@ public class Autoreply extends JcqAppAbstract implements ICQVer, IMsg, IRequest 
 				sendGroupMessage(Long.parseLong(strings[1]), strings[2]);
 				return MSG_IGNORE;
 			}
+
+		}
+
+		if (msg.equals("有人吗")) {
+			int port = random.nextInt(5000);
+			sendGroupMessage(fromGroup, CC.share("http://119.27.186.107:" + (port + 4000), "窥屏检测", "滴滴滴",
+					"http://119.27.186.107:" + (port + 4000) + "/111.jpg"));
+			final IPGetter ipGetter = new IPGetter(fromGroup, port);
+			ipGetter.start();
+			Timer timer = new Timer();
+			timer.schedule(new TimerTask() {
+				public void run() {
+					Autoreply.sendGroupMessage(ipGetter.fromGroup, "当前有" + ipGetter.hSet.size() + "个小伙伴看了群聊");
+					ipGetter.running = false;
+				}
+			}, 20000);
 		}
 
 		// 指定不回复的项目
