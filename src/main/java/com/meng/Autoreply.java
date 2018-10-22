@@ -300,7 +300,6 @@ public class Autoreply extends JcqAppAbstract implements ICQVer, IMsg, IRequest 
 			return MSG_IGNORE;
 		if (dicReplyManager.check(fromGroup, fromQQ, msg))// 根据词库触发回答
 			return MSG_IGNORE;
-
 		naoWait.check(fromGroup, fromQQ, msg);
 		return MSG_IGNORE;
 
@@ -621,11 +620,11 @@ public class Autoreply extends JcqAppAbstract implements ICQVer, IMsg, IRequest 
 	}
 
 	private void addRecorder() {
-		HashMap<Integer, Long> gr = mengAutoReplyConfig.getMapGroupRecorder();
+		HashMap<Integer, String> gr = mengAutoReplyConfig.getMapGroupRecorder();
 		recoderManager = new RecoderManager();
 		for (int key : gr.keySet()) {// 遍历
-			long groupNum = gr.get(key);
-			recoderManager.addData(new RecordBanner(groupNum));
+			String[] groupCfg = gr.get(key).split("\\.");
+			recoderManager.addData(new RecordBanner(Long.parseLong(groupCfg[0]), Integer.parseInt(groupCfg[1])));
 		}
 	}
 

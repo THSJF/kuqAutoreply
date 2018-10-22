@@ -12,12 +12,12 @@ import com.google.gson.JsonSyntaxException;
 
 public class MengAutoReplyConfig {
 
-	public HashMap<Integer, Long> mapGroupNotReply = new HashMap<Integer, Long>();
-	public HashMap<Integer, Long> mapQQNotReply = new HashMap<Integer, Long>();
-	public HashMap<Integer, String> mapWordNotReply = new HashMap<Integer, String>();
-	public HashMap<Integer, Long> mapGroupRecorder = new HashMap<Integer, Long>();
-	public HashMap<Integer, Long> mapGroupDicReply = new HashMap<Integer, Long>();
-	public HashMap<String, String> mapLiveTip = new HashMap<String, String>();
+	private HashMap<Integer, Long> mapGroupNotReply = new HashMap<Integer, Long>();
+	private HashMap<Integer, Long> mapQQNotReply = new HashMap<Integer, Long>();
+	private HashMap<Integer, String> mapWordNotReply = new HashMap<Integer, String>();
+	private HashMap<Integer, String> mapGroupRecorder = new HashMap<Integer, String>();
+	private HashMap<Integer, Long> mapGroupDicReply = new HashMap<Integer, Long>();
+	private HashMap<String, String> mapLiveTip = new HashMap<String, String>();
 	private JsonParser parser;
 
 	public MengAutoReplyConfig() {
@@ -43,32 +43,43 @@ public class MengAutoReplyConfig {
 			JsonArray array = (JsonArray) entry.getValue();
 			int arraySize = array.size();
 			int k = 0;
-			for (; k < arraySize; k++) {
-				switch ((String) entry.getKey()) {
-				case "mapGroupNotReply":
+			switch ((String) entry.getKey()) {
+			case "mapGroupNotReply":
+				for (; k < arraySize; k++) {
 					mapGroupNotReply.put(k, Methods.parseLong(array.get(k).toString()));
-					break;
-				case "mapQQNotReply":
+				}
+				break;
+			case "mapQQNotReply":
+
+				for (; k < arraySize; k++) {
 					mapQQNotReply.put(k, Methods.parseLong(array.get(k).toString()));
-					break;
-				case "mapGroupRecorder":
-					mapGroupRecorder.put(k, Methods.parseLong(array.get(k).toString()));
-					break;
-				case "mapGroupDicReply":
+				}
+				break;
+			case "mapGroupRecorder":
+				for (; k < arraySize; k++) {
+					mapGroupRecorder.put(k, Methods.removeCharAtStartAndEnd(array.get(k).toString()));
+				}
+				break;
+			case "mapGroupDicReply":
+				for (; k < arraySize; k++) {
 					mapGroupDicReply.put(k, Methods.parseLong(array.get(k).toString()));
-					break;
-				case "mapWordNotReply":
+				}
+				break;
+			case "mapWordNotReply":
+				for (; k < arraySize; k++) {
 					mapWordNotReply.put(k, Methods.removeCharAtStartAndEnd(array.get(k).toString()));
-					break;
-				case "mapLiveTip":
+				}
+				break;
+			case "mapLiveTip":
+				for (; k < arraySize / 2; k++) {
 					try {
 						mapLiveTip.put(Methods.removeCharAtStartAndEnd(array.get(2 * k).toString()),
 								Methods.removeCharAtStartAndEnd(array.get(2 * k + 1).toString()));
 					} catch (Exception e) {
 						Autoreply.sendPrivateMessage(2856986197L, e.toString());
 					}
-					break;
 				}
+				break;
 			}
 
 		}
@@ -87,7 +98,7 @@ public class MengAutoReplyConfig {
 		return mapWordNotReply;
 	}
 
-	public HashMap<Integer, Long> getMapGroupRecorder() {
+	public HashMap<Integer, String> getMapGroupRecorder() {
 		return mapGroupRecorder;
 	}
 
