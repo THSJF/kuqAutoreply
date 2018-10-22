@@ -115,10 +115,6 @@ public class fanpohai {
 					return true;
 				} else {
 					File[] files = (new File(folder)).listFiles();
-					// 丢人专属双倍快乐
-					if (folder.equals(Autoreply.appDirectory + "pohai/丢人/")) {
-						Autoreply.sendGroupMessage(fromGroup, Autoreply.CC.image((File) Methods.rfa(files)));
-					}
 					Autoreply.sendGroupMessage(fromGroup, Autoreply.CC.image((File) Methods.rfa(files)));
 					return true;
 				}

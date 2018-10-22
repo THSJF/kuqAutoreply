@@ -32,28 +32,25 @@ public class NAO extends Thread {
 
 	@Override
 	public void run() {
-		try {
-			check(pic);
-		} catch (IOException e) {
-			if (fromGroup == -1) {
-				Autoreply.sendPrivateMessage(fromQQ, "少女折寿中……");
-			} else {
-				Autoreply.sendGroupMessage(fromGroup, Autoreply.CC.at(fromQQ) + "少女折寿中……");
-			}
-		}
+		check(pic);
 	}
 
-	private void check(File picF) throws IOException {
-		FileInputStream fInputStream = new FileInputStream(picF);
-		Connection.Response response = Jsoup.connect("https://saucenao.com/search.php?db=" + 999)
-				.data("file", "image.jpg", fInputStream).method(Connection.Method.POST).execute();
-		if (response.statusCode() != 200) {
-			switch (response.statusCode()) {
-			case 429:
-				return;
+	private void check(File picF) {
+		FileInputStream fInputStream;
+		try {
+			fInputStream = new FileInputStream(picF);
+			Connection.Response response = Jsoup.connect("https://saucenao.com/search.php?db=" + 999).timeout(60000)
+					.data("file", "image.jpg", fInputStream).method(Connection.Method.POST).execute();
+			if (response.statusCode() != 200) {
+				switch (response.statusCode()) {
+				case 429:
+					return;
+				}
 			}
+			mResults = new NAOResults(Jsoup.parse(response.body()));
+		} catch (Exception e1) {
+			sendMsg(fromGroup, fromQQ, e1.toString());
 		}
-		mResults = new NAOResults(Jsoup.parse(response.body()));
 		/*
 		 * ArrayList<String> items = getTable(response.body()); if (items ==
 		 * null) { if (fromGroup == -1) { Autoreply.sendPrivateMessage(fromQQ,
@@ -77,7 +74,7 @@ public class NAO extends Thread {
 		 * + "\n画师：" + tmp.getUid() + "\n相似度：" + tmp.getSimilar() + "\n\n"); }
 		 */
 		int size = mResults.getResults().size();
-		if (size == 0) {
+		if (size < 1) {
 			sendMsg(fromGroup, fromQQ, "没有相似度较高的图片");
 		}
 		if (fromGroup != -1) {
@@ -99,6 +96,7 @@ public class NAO extends Thread {
 				}
 				URL url = new URL(tmpr.mThumbnail);
 				HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+				connection.setConnectTimeout(60000);
 				InputStream is = connection.getInputStream();
 				dFile = new File(Autoreply.appDirectory + "picSearch\\tmp\\",
 						Autoreply.random.nextInt() + picNumFlag++ + "pic.jpg");
@@ -110,9 +108,8 @@ public class NAO extends Thread {
 				out.close();
 				is.close();
 			} catch (Exception e) {
-				System.out.println(e);
+				sendMsg(fromGroup, fromQQ, e.toString());
 			}
-
 			String[] titleAndMetadata = tmpr.mTitle.split("\n", 2);
 			if (titleAndMetadata.length > 0) {
 				sBuilder.append("\n").append(titleAndMetadata[0]).append("\n");
@@ -123,18 +120,22 @@ public class NAO extends Thread {
 					sBuilder.append(string).append("\n");
 				}
 			}
-			sBuilder.append(Autoreply.CC.image(dFile)).append("\n");
-			if (tmpr.mExtUrls.size() == 2) {
-				sBuilder.append("图片:").append(tmpr.mExtUrls.get(1)).append("\n");
-				sBuilder.append("画师:").append(tmpr.mExtUrls.get(0)).append("\n");
-			} else if (tmpr.mExtUrls.size() == 1) {
-				sBuilder.append("图片:").append(tmpr.mExtUrls.get(0)).append("\n");
+			try {
+				sBuilder.append(Autoreply.CC.image(dFile)).append("\n");
+			} catch (IOException e) {
+				sendMsg(fromGroup, fromQQ, e.toString());
 			}
-
+			if (tmpr.mExtUrls.size() == 2) {
+				sBuilder.append("图片&画师:").append(tmpr.mExtUrls.get(1)).append("\n");
+				sBuilder.append(tmpr.mExtUrls.get(0)).append("\n");
+			} else if (tmpr.mExtUrls.size() == 1) {
+				sBuilder.append("链接:").append(tmpr.mExtUrls.get(0)).append("\n");
+			}
 			if (!tmpr.mSimilarity.isEmpty()) {
 				sBuilder.append("相似度:").append(tmpr.mSimilarity);
 			}
-			sendMsg(fromGroup, fromQQ, sBuilder.toString().isEmpty() ? "没有相似度较高的图片" : sBuilder.toString());
+			String tmp = sBuilder.toString().isEmpty() ? "没有相似度较高的图片" : sBuilder.toString();
+			sendMsg(fromGroup, fromQQ, tmp.contains("sankakucomplex") ? tmp + "\n小哥哥注意身体哦" : tmp);
 		}
 	}
 

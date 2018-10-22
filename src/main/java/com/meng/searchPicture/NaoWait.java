@@ -31,9 +31,14 @@ public class NaoWait {
 								Autoreply.random.nextInt() + "pic.jpg"),
 						msg.toLowerCase().startsWith("asp"), needPic).start();
 			} catch (Exception e) {
-				System.out.println(e);
+				if (fromGroup == -1) {
+					Autoreply.sendPrivateMessage(fromQQ, e.toString());
+				} else {
+					Autoreply.sendGroupMessage(fromGroup, Autoreply.CC.at(fromQQ) + e.toString());
+				}
 			}
-		} else if (cqImage == null && (msg.equalsIgnoreCase("sp") || msg.equalsIgnoreCase("asp"))) {
+		} else if (cqImage == null && (msg.toLowerCase().startsWith("sp.") || msg.toLowerCase().startsWith("asp.")
+				|| (msg.equalsIgnoreCase("sp") || msg.equalsIgnoreCase("asp")))) {
 			userNotSendPicture.put(fromQQ, msg);
 			if (fromGroup == -1) {
 				Autoreply.sendPrivateMessage(fromQQ, "需要一张图片");
@@ -59,7 +64,11 @@ public class NaoWait {
 									Autoreply.random.nextInt() + "pic.jpg"),
 							userNotSendPicture.get(fromQQ).startsWith("asp"), needPic).start();
 				} catch (Exception e) {
-					Autoreply.sendPrivateMessage(2856986197L, e.toString());
+					if (fromGroup == -1) {
+						Autoreply.sendPrivateMessage(fromQQ, e.toString());
+					} else {
+						Autoreply.sendGroupMessage(fromGroup, Autoreply.CC.at(fromQQ) + e.toString());
+					}
 				}
 				userNotSendPicture.remove(fromQQ);
 			}

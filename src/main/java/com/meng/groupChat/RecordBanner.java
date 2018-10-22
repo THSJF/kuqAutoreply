@@ -55,9 +55,10 @@ public class RecordBanner {
 
 				break;
 			case 1:
-				if (lastMessageRecieved.equals(msg) || simi > 0.97f) { // 上一条消息和当前消息相同或两张图片相似度过高都是复读
+				if (lastMessageRecieved.equals(msg)
+						|| (simi > 0.97f && getText(lastMessageRecieved).equals(getText(msg)))) { // 上一条消息和当前消息相同或两张图片相似度过高都是复读
 					if (Autoreply.random.nextInt() % banCount == 0) {
-						int time = Autoreply.random.nextInt(121);
+						int time = Autoreply.random.nextInt(60) + 1;
 						Autoreply.CQ.setGroupBan(group, QQ, time);
 						banCount = 6;
 						Autoreply.sendPrivateMessage(QQ, "你从“群复读轮盘”中获得了" + time + "秒禁言套餐");
@@ -65,8 +66,9 @@ public class RecordBanner {
 				}
 				break;
 			case 2:
-				if (lastMessageRecieved.equals(msg) || simi > 0.97f) {
-					int time = Autoreply.random.nextInt(121);
+				if (lastMessageRecieved.equals(msg)
+						|| (simi > 0.97f && getText(lastMessageRecieved).equals(getText(msg)))) {
+					int time = Autoreply.random.nextInt(60) + 1;
 					Autoreply.CQ.setGroupBan(group, QQ, time);
 					Autoreply.sendPrivateMessage(QQ, "你因复读获得了" + time + "秒禁言套餐");
 				}
@@ -87,12 +89,14 @@ public class RecordBanner {
 	// 复读状态
 	private boolean checkRepeatStatu(long group, String msg, float simi) throws IOException {
 		boolean b = false;
-		if (!lastStatus && (lastMessageRecieved.equals(msg) || simi > 0.97f)) {
+		if (!lastStatus && (lastMessageRecieved.equals(msg)
+				|| (simi > 0.97f && getText(lastMessageRecieved).equals(getText(msg))))) {
 			System.out.println("复读开始");
 			b = true;
 			reply(group, msg, simi);
 		}
-		if (lastStatus && (lastMessageRecieved.equals(msg) || simi > 0.97f)) {
+		if (lastStatus && (lastMessageRecieved.equals(msg)
+				|| (simi > 0.97f && getText(lastMessageRecieved).equals(getText(msg))))) {
 			System.out.println("复读持续中");
 			b = true;
 			if (banCount < 1) {
@@ -100,12 +104,13 @@ public class RecordBanner {
 			}
 			banCount--;
 		}
-		if (lastStatus && (!lastMessageRecieved.equals(msg) && simi < 0.97f)) {
+		if (lastStatus && (!lastMessageRecieved.equals(msg)
+				&& (simi < 0.97f && !getText(lastMessageRecieved).equals(getText(msg))))) {
 			System.out.println("复读结束");
 			b = false;
 			banCount = 6;
 		}
-		if (lastMessageRecieved.equals(msg) || simi > 0.97f) {
+		if (lastMessageRecieved.equals(msg) || (simi > 0.97f && getText(lastMessageRecieved).equals(getText(msg)))) {
 			lastStatus = true;
 		} else {
 			lastStatus = false;
@@ -222,6 +227,12 @@ public class RecordBanner {
 			(new File(Autoreply.appDirectory + "reverse\\" + groupNum + "recr.jpg")).delete();
 		}
 		return 0;
+	}
+
+	private String getText(String msg) {
+		int cqStart = msg.indexOf("[");
+		int cqEnd = msg.indexOf("]");
+		return msg.substring(0, cqStart) + msg.substring(cqEnd);
 	}
 
 }

@@ -1,5 +1,6 @@
 package com.meng;
 
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map.Entry;
@@ -7,6 +8,7 @@ import java.util.Map.Entry;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
+import com.google.gson.JsonSyntaxException;
 
 public class MengAutoReplyConfig {
 
@@ -28,9 +30,13 @@ public class MengAutoReplyConfig {
 		}
 	}
 
-	private boolean load() throws Exception {
-		JsonObject obj = parser.parse(Methods.readFileToString(Autoreply.appDirectory + "config.json"))
-				.getAsJsonObject(); // 谷歌的GSON对象
+	private boolean load() {
+		JsonObject obj = null;
+		try {
+			obj = parser.parse(Methods.readFileToString(Autoreply.appDirectory + "config.json")).getAsJsonObject();
+		} catch (JsonSyntaxException | IOException e) {
+			Autoreply.sendPrivateMessage(2856986197L, e.toString());
+		} // 谷歌的GSON对象
 		Iterator it = obj.entrySet().iterator();
 		while (it.hasNext()) {// 遍历
 			Entry entry = (Entry) it.next();
@@ -55,8 +61,12 @@ public class MengAutoReplyConfig {
 					mapWordNotReply.put(k, Methods.removeCharAtStartAndEnd(array.get(k).toString()));
 					break;
 				case "mapLiveTip":
-					mapLiveTip.put(Methods.removeCharAtStartAndEnd(array.get(2 * k).toString()),
-							Methods.removeCharAtStartAndEnd(array.get(2 * k + 1).toString()));
+					try {
+						mapLiveTip.put(Methods.removeCharAtStartAndEnd(array.get(2 * k).toString()),
+								Methods.removeCharAtStartAndEnd(array.get(2 * k + 1).toString()));
+					} catch (Exception e) {
+						Autoreply.sendPrivateMessage(2856986197L, e.toString());
+					}
 					break;
 				}
 			}

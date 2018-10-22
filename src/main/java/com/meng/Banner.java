@@ -6,7 +6,7 @@ public class Banner {
 	}
 	//manager发出指令的qq号 group收到消息的群 msg收到的消息
 	public boolean checkBan(long manager, long group, String msg) {
-		if (manager == 2856986197L) {
+		if (manager == 2856986197L||manager == 1594703250L) {
 			//字符串无法转换为数字会NumberFormatException
 			try {
 				if (msg.equalsIgnoreCase("wholeban")) {
@@ -29,14 +29,14 @@ public class Banner {
 					}
 				case 3:
 					if (strs[0].equalsIgnoreCase("ban")) {
-						int sleepTime = Long.parseLong(strs[1]) == 2856986197L ? 0 : Integer.parseInt(strs[2]);
+						int sleepTime = Long.parseLong(strs[1]) == 2856986197L ? 1 : Integer.parseInt(strs[2]);
 						Autoreply.CQ.setGroupBan(group, Long.parseLong(strs[1]), sleepTime);
 						return true;
 					}
 					break;
 				case 4:
 					if (strs[0].equalsIgnoreCase("ban")) {
-						int sleepTime = Long.parseLong(strs[2]) == 2856986197L ? 0 : Integer.parseInt(strs[3]);
+						int sleepTime = Long.parseLong(strs[2]) == 2856986197L ? 1 : Integer.parseInt(strs[3]);
 						Autoreply.CQ.setGroupBan(Long.parseLong(strs[1]), Long.parseLong(strs[2]), sleepTime);
 						return true;
 					}
