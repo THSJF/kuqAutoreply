@@ -12,7 +12,7 @@ import org.jsoup.Jsoup;
 
 import com.meng.Autoreply;
 
-public class NAO extends Thread {
+public class NAO extends NaoWait {
 
 	private long fromQQ = 0;
 	private long fromGroup = -1;
@@ -21,13 +21,15 @@ public class NAO extends Thread {
 	private NAOResults mResults;
 	private boolean showAll = false;
 	private int resultCount = 1;
+	private int database = 999;
 
-	public NAO(long fromGroup, long fromQQ, File pic, boolean showAll, int resultCount) {
+	public NAO(long fromGroup, long fromQQ, File pic, boolean showAll, int resultCount, int database) {
 		this.fromGroup = fromGroup;
 		this.fromQQ = fromQQ;
 		this.pic = pic;
 		this.showAll = showAll;
 		this.resultCount = resultCount;
+		this.database = database;
 	}
 
 	@Override
@@ -39,7 +41,7 @@ public class NAO extends Thread {
 		FileInputStream fInputStream;
 		try {
 			fInputStream = new FileInputStream(picF);
-			Connection.Response response = Jsoup.connect("https://saucenao.com/search.php?db=" + 999).timeout(60000)
+			Connection.Response response = Jsoup.connect("https://saucenao.com/search.php?db=" + database).timeout(60000)
 					.data("file", "image.jpg", fInputStream).method(Connection.Method.POST).execute();
 			if (response.statusCode() != 200) {
 				switch (response.statusCode()) {
@@ -136,14 +138,6 @@ public class NAO extends Thread {
 			}
 			String tmp = sBuilder.toString().isEmpty() ? "没有相似度较高的图片" : sBuilder.toString();
 			sendMsg(fromGroup, fromQQ, tmp.contains("sankakucomplex") ? tmp + "\n小哥哥注意身体哦" : tmp);
-		}
-	}
-
-	private void sendMsg(long fromGroup, long fromQQ, String msg) {
-		if (fromGroup == -1) {
-			Autoreply.sendPrivateMessage(fromQQ, msg);
-		} else {
-			Autoreply.sendGroupMessage(fromGroup, Autoreply.CC.at(fromQQ) + msg);
 		}
 	}
 
