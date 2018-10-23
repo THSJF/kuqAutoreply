@@ -15,6 +15,8 @@ import java.security.KeyManagementException;
 import java.security.NoSuchAlgorithmException;
 import java.security.cert.CertificateException;
 import java.security.cert.X509Certificate;
+import java.util.Timer;
+import java.util.TimerTask;
 import java.util.regex.Pattern;
 
 import javax.net.ssl.HostnameVerifier;
@@ -23,6 +25,8 @@ import javax.net.ssl.SSLContext;
 import javax.net.ssl.SSLSession;
 import javax.net.ssl.TrustManager;
 import javax.net.ssl.X509TrustManager;
+
+import com.meng.bilibili.LivePerson;
 
 public class Methods {
 	private static String motmp = "";
@@ -176,6 +180,65 @@ public class Methods {
 		return false;
 	}
 
+	// 窥屏检测
+	public static boolean checkLook(long fromGroup, String msg) {
+		if (msg.equals("有人吗") || msg.equalsIgnoreCase("testip")) {
+			int port = Autoreply.random.nextInt(5000);
+			Autoreply.sendGroupMessage(fromGroup, Autoreply.CC.share("http://119.27.186.107:" + (port + 4000), "窥屏检测",
+					"滴滴滴", "http://119.27.186.107:" + (port + 4000) + "/111.jpg"));
+			final IPGetter ipGetter = new IPGetter(fromGroup, port);
+			ipGetter.start();
+			Timer timer = new Timer();
+			timer.schedule(new TimerTask() {
+				public void run() {
+					Autoreply.sendGroupMessage(ipGetter.fromGroup, "当前有" + ipGetter.hSet.size() + "个小伙伴看了群聊");
+					ipGetter.running = false;
+				}
+			}, 20000);
+			return true;
+		}
+		return false;
+	}
+
+	// 签到
+	public static boolean checkSign(long fromGroup, String msg) {
+		if (msg.startsWith("[CQ:sign")) {
+			if (fromGroup == 424838564L) {
+				try {
+					Autoreply.sendGroupMessage(fromGroup, "签到成功 这是你的签到奖励"
+							+ Autoreply.CC.image(new File(Autoreply.appDirectory + "pic/qiaodaodnf.png")));
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			} else {
+				Autoreply.sendGroupMessage(fromGroup, "image:pic/qiandao.jpg");
+			}
+			return true;
+		}
+		return false;
+	}
+
+	// 分享音乐
+	public static boolean checkMusic(long fromGroup, String msg) {
+		if (msg.startsWith("[CQ:music")) {
+			int i = Autoreply.random.nextInt(2147483647) % 3;
+			switch (i) {
+			case 0:
+				Autoreply.sendGroupMessage(fromGroup, Autoreply.CC.music(22636603, "163", false));
+				break;
+			case 1:
+				Autoreply.sendGroupMessage(fromGroup, Autoreply.CC.music(103744845, "qq", false));
+				break;
+			case 2:
+				Autoreply.sendGroupMessage(fromGroup, Autoreply.CC.music(103744852, "qq", false));
+				break;
+			}
+			return true;
+		}
+		return false;
+	}
+
 	// 萌二
 	public static boolean checkMeng2(long fromGroup, String msg) {
 
@@ -212,6 +275,15 @@ public class Methods {
 			return true;
 		}
 		return false;
+	}
+
+	// 图片搜索和二维码生成功能专用的消息发送
+	public static void sendMsg(long fromGroup, long fromQQ, String msg) {
+		if (fromGroup == -1) {
+			Autoreply.sendPrivateMessage(fromQQ, msg);
+		} else {
+			Autoreply.sendGroupMessage(fromGroup, Autoreply.CC.at(fromQQ) + msg);
+		}
 	}
 
 	/*

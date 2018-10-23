@@ -29,5 +29,6 @@
 	</classpathentry>
 	<classpathentry kind="lib" path="gson-2.8.5.jar"/>
 	<classpathentry kind="lib" path="jsoup-1.11.3.jar"/>
+	<classpathentry kind="lib" path="core-3.2.1.jar"/>
 	<classpathentry kind="output" path="target/classes"/>
 </classpath>

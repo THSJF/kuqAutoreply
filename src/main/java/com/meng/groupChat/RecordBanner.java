@@ -199,6 +199,10 @@ public class RecordBanner {
 		}
 		if (cm != null) {// 如果当前消息有图片则开始处理
 			try {
+				File files = new File(Autoreply.appDirectory + "reverse\\");
+				if (!files.exists()) {
+					files.mkdirs();
+				}
 				imgFile = cm.download(Autoreply.appDirectory + "reverse\\" + groupNum + "recr.jpg");
 			} catch (IOException e) {
 			}

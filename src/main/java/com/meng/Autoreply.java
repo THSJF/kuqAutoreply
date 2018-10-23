@@ -184,6 +184,12 @@ public class Autoreply extends JcqAppAbstract implements ICQVer, IMsg, IRequest 
 	 */
 	public int privateMsg(int subType, int msgId, long fromQQ, String msg, int font) {
 		// 这里处理消息
+
+		if (msg.startsWith("生成QR ")) {
+			BarcodeCreator barcodeCreator = new BarcodeCreator(-1L, fromQQ, msg);
+			barcodeCreator.start();
+			return MSG_IGNORE;
+		}
 		String[] strings = msg.split("\\.");
 		// 转发到指定群
 		if (fromQQ == 2856986197L) {
@@ -254,32 +260,17 @@ public class Autoreply extends JcqAppAbstract implements ICQVer, IMsg, IRequest 
 			}
 
 		}
-
-		if (msg.equals("有人吗") || msg.equalsIgnoreCase("testip")) {
-			int port = random.nextInt(5000);
-			sendGroupMessage(fromGroup, CC.share("http://119.27.186.107:" + (port + 4000), "窥屏检测", "滴滴滴",
-					"http://119.27.186.107:" + (port + 4000) + "/111.jpg"));
-			final IPGetter ipGetter = new IPGetter(fromGroup, port);
-			ipGetter.start();
-			Timer timer = new Timer();
-			timer.schedule(new TimerTask() {
-				public void run() {
-					Autoreply.sendGroupMessage(ipGetter.fromGroup, "当前有" + ipGetter.hSet.size() + "个小伙伴看了群聊");
-					ipGetter.running = false;
-				}
-			}, 20000);
-		}
-
-		// 指定不回复的项目
-		if (checkNotReply(fromGroup, fromQQ, msg))
+		if (msg.startsWith("生成QR ")) {
+			BarcodeCreator barcodeCreator = new BarcodeCreator(fromGroup, fromQQ, msg);
+			barcodeCreator.start();
 			return MSG_IGNORE;
-
+		}
 		if (msg.equalsIgnoreCase(".live")) {
 			boolean b = false;
 			for (int i = 0; i < livingManager.getMapFlag(); i++) {
 				LivePerson lp = livingManager.getPerson(i);
 				if (lp.isLiving()) {
-					Autoreply.sendGroupMessage(fromGroup, lp.getName() + "直播开始啦大家快去奶" + lp.getLiveUrl());
+					sendGroupMessage(fromGroup, lp.getName() + "直播开始啦大家快去奶" + lp.getLiveUrl());
 				}
 				b = b || livingManager.getPerson(i).isLiving();
 			}
@@ -288,38 +279,17 @@ public class Autoreply extends JcqAppAbstract implements ICQVer, IMsg, IRequest 
 			}
 			return MSG_IGNORE;
 		}
-		// 控制
-		if (Methods.checkSwitch(fromGroup, msg))
+
+		if (Methods.checkSwitch(fromGroup, msg))// 控制
 			return MSG_IGNORE;
-		// 签到消息
-		if (msg.startsWith("[CQ:sign")) {
-			if (fromGroup == 424838564L) {
-				try {
-					sendGroupMessage(fromGroup, "签到成功 这是你的签到奖励" + CC.image(new File(appDirectory + "pic/qiaodaodnf.png")));
-				} catch (IOException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
-			} else {
-				sendGroupMessage(fromGroup, "image:pic/qiandao.jpg");
-			}
+		if (checkNotReply(fromGroup, fromQQ, msg))// 指定不回复的项目
 			return MSG_IGNORE;
-		}
-		if (msg.startsWith("[CQ:music")) {
-			int i = random.nextInt(2147483647) % 3;
-			switch (i) {
-			case 0:
-				sendGroupMessage(fromGroup, CC.music(22636603, "163", false));
-				break;
-			case 1:
-				sendGroupMessage(fromGroup, CC.music(103744845, "qq", false));
-				break;
-			case 2:
-				sendGroupMessage(fromGroup, CC.music(103744852, "qq", false));
-				break;
-			}
+		if (Methods.checkLook(fromGroup, msg))// 窥屏检测
 			return MSG_IGNORE;
-		}
+		if (Methods.checkSign(fromGroup, msg))// 签到消息
+			return MSG_IGNORE;
+		if (Methods.checkMusic(fromGroup, msg))// 分享音乐
+			return MSG_IGNORE;
 		if (banner.checkBan(fromQQ, fromGroup, msg))// 禁言
 			return MSG_IGNORE;
 		if (Methods.checkGou(fromGroup, msg))// 苟
@@ -345,6 +315,7 @@ public class Autoreply extends JcqAppAbstract implements ICQVer, IMsg, IRequest 
 		if (dicReplyManager.check(fromGroup, fromQQ, msg))// 根据词库触发回答
 			return MSG_IGNORE;
 		naoWait.check(fromGroup, fromQQ, msg);
+
 		return MSG_IGNORE;
 
 	}

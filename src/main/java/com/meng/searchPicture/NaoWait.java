@@ -3,9 +3,10 @@ package com.meng.searchPicture;
 import java.util.HashMap;
 
 import com.meng.Autoreply;
+import com.meng.Methods;
 import com.sobte.cqp.jcq.entity.CQImage;
 
-public class NaoWait extends Thread {
+public class NaoWait{
 
 	private HashMap<Long, String> userNotSendPicture = new HashMap<>();
 
@@ -15,7 +16,7 @@ public class NaoWait extends Thread {
 	public void check(long fromGroup, long fromQQ, String msg) {
 		if (msg.equalsIgnoreCase("sp.help")) {
 			if (fromGroup != -1) {
-				sendMsg(fromGroup, fromQQ, "使用方式已私聊发送");
+				Methods.sendMsg(fromGroup, fromQQ, "使用方式已私聊发送");
 			}
 			Autoreply.sendPrivateMessage(fromQQ,
 					"图片搜索功能群聊及私聊有效。使用sp.图片数量.目标网站或asp.图片数量.目标网站搜索图片。其中.图片数量和目标网站都可以省略但如果要选择目标网站必须加上图片数量。使用sp搜索时会自动隐藏相似度过低的图片，而asp搜索会显示全部结果");
@@ -27,7 +28,7 @@ public class NaoWait extends Thread {
 		CQImage cqImage = Autoreply.CC.getCQImage(msg);
 		if (cqImage != null && (msg.toLowerCase().startsWith("sp") || msg.toLowerCase().startsWith("asp"))) {
 			try {
-				sendMsg(fromGroup, fromQQ, "土豆折寿中……");
+				Methods.sendMsg(fromGroup, fromQQ, "土豆折寿中……");
 				int needPic = 1;
 				int database = 999;
 				if (msg.startsWith("sp.") || msg.startsWith("asp.")) {
@@ -40,16 +41,16 @@ public class NaoWait extends Thread {
 								Autoreply.random.nextInt() + "pic.jpg"),
 						msg.toLowerCase().startsWith("asp"), needPic, database).start();
 			} catch (Exception e) {
-				sendMsg(fromGroup, fromQQ, e.toString());
+				Methods.sendMsg(fromGroup, fromQQ, e.toString());
 			}
 		} else if (cqImage == null && (msg.toLowerCase().startsWith("sp.") || msg.toLowerCase().startsWith("asp.")
 				|| (msg.equalsIgnoreCase("sp") || msg.equalsIgnoreCase("asp")))) {
 			userNotSendPicture.put(fromQQ, msg);
-			sendMsg(fromGroup, fromQQ, "需要一张图片");
+			Methods.sendMsg(fromGroup, fromQQ, "需要一张图片");
 		} else if (cqImage != null) {
 			if (userNotSendPicture.get(fromQQ) != null) {
 				try {
-					sendMsg(fromGroup, fromQQ, "土豆折寿中……");
+					Methods.sendMsg(fromGroup, fromQQ, "土豆折寿中……");
 					int needPic = 1;
 					int database = 999;
 					if (userNotSendPicture.get(fromQQ).startsWith("sp.")
@@ -63,19 +64,11 @@ public class NaoWait extends Thread {
 									Autoreply.random.nextInt() + "pic.jpg"),
 							userNotSendPicture.get(fromQQ).startsWith("asp"), needPic, database).start();
 				} catch (Exception e) {
-					sendMsg(fromGroup, fromQQ, e.toString());
+					Methods.sendMsg(fromGroup, fromQQ, e.toString());
 				}
 				userNotSendPicture.remove(fromQQ);
 			}
 
-		}
-	}
-
-	protected void sendMsg(long fromGroup, long fromQQ, String msg) {
-		if (fromGroup == -1) {
-			Autoreply.sendPrivateMessage(fromQQ, msg);
-		} else {
-			Autoreply.sendGroupMessage(fromGroup, Autoreply.CC.at(fromQQ) + msg);
 		}
 	}
 }

@@ -11,8 +11,9 @@ import org.jsoup.Connection;
 import org.jsoup.Jsoup;
 
 import com.meng.Autoreply;
+import com.meng.Methods;
 
-public class NAO extends NaoWait {
+public class NAO extends Thread {
 
 	private long fromQQ = 0;
 	private long fromGroup = -1;
@@ -41,8 +42,8 @@ public class NAO extends NaoWait {
 		FileInputStream fInputStream;
 		try {
 			fInputStream = new FileInputStream(picF);
-			Connection.Response response = Jsoup.connect("https://saucenao.com/search.php?db=" + database).timeout(60000)
-					.data("file", "image.jpg", fInputStream).method(Connection.Method.POST).execute();
+			Connection.Response response = Jsoup.connect("https://saucenao.com/search.php?db=" + database)
+					.timeout(60000).data("file", "image.jpg", fInputStream).method(Connection.Method.POST).execute();
 			if (response.statusCode() != 200) {
 				switch (response.statusCode()) {
 				case 429:
@@ -51,7 +52,7 @@ public class NAO extends NaoWait {
 			}
 			mResults = new NAOResults(Jsoup.parse(response.body()));
 		} catch (Exception e1) {
-			sendMsg(fromGroup, fromQQ, e1.toString());
+			Methods.sendMsg(fromGroup, fromQQ, e1.toString());
 		}
 		/*
 		 * ArrayList<String> items = getTable(response.body()); if (items ==
@@ -77,7 +78,7 @@ public class NAO extends NaoWait {
 		 */
 		int size = mResults.getResults().size();
 		if (size < 1) {
-			sendMsg(fromGroup, fromQQ, "没有相似度较高的图片");
+			Methods.sendMsg(fromGroup, fromQQ, "没有相似度较高的图片");
 		}
 		if (fromGroup != -1) {
 			resultCount = resultCount > 3 ? 3 : resultCount;
@@ -110,7 +111,7 @@ public class NAO extends NaoWait {
 				out.close();
 				is.close();
 			} catch (Exception e) {
-				sendMsg(fromGroup, fromQQ, e.toString());
+				Methods.sendMsg(fromGroup, fromQQ, e.toString());
 			}
 			String[] titleAndMetadata = tmpr.mTitle.split("\n", 2);
 			if (titleAndMetadata.length > 0) {
@@ -125,7 +126,7 @@ public class NAO extends NaoWait {
 			try {
 				sBuilder.append(Autoreply.CC.image(dFile)).append("\n");
 			} catch (IOException e) {
-				sendMsg(fromGroup, fromQQ, e.toString());
+				Methods.sendMsg(fromGroup, fromQQ, e.toString());
 			}
 			if (tmpr.mExtUrls.size() == 2) {
 				sBuilder.append("图片&画师:").append(tmpr.mExtUrls.get(1)).append("\n");
@@ -137,7 +138,7 @@ public class NAO extends NaoWait {
 				sBuilder.append("相似度:").append(tmpr.mSimilarity);
 			}
 			String tmp = sBuilder.toString().isEmpty() ? "没有相似度较高的图片" : sBuilder.toString();
-			sendMsg(fromGroup, fromQQ, tmp.contains("sankakucomplex") ? tmp + "\n小哥哥注意身体哦" : tmp);
+			Methods.sendMsg(fromGroup, fromQQ, tmp.contains("sankakucomplex") ? tmp + "\n小哥哥注意身体哦" : tmp);
 		}
 	}
 
