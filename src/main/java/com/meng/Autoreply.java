@@ -118,7 +118,7 @@ public class Autoreply extends JcqAppAbstract implements ICQVer, IMsg, IRequest 
 		addFileTip();
 		loadConfig();
 		zuiSuJinTianGengLeMa.start();
-		// fileTipManager.start();
+		fileTipManager.start();
 		// 返回如：D:\CoolQ\app\com.sobte.cqp.jcq\app\com.example.demo\
 		return 0;
 	}
@@ -255,7 +255,7 @@ public class Autoreply extends JcqAppAbstract implements ICQVer, IMsg, IRequest 
 
 		}
 
-		if (msg.equals("有人吗")) {
+		if (msg.equals("有人吗") || msg.equalsIgnoreCase("testip")) {
 			int port = random.nextInt(5000);
 			sendGroupMessage(fromGroup, CC.share("http://119.27.186.107:" + (port + 4000), "窥屏检测", "滴滴滴",
 					"http://119.27.186.107:" + (port + 4000) + "/111.jpg"));
@@ -293,12 +293,38 @@ public class Autoreply extends JcqAppAbstract implements ICQVer, IMsg, IRequest 
 			return MSG_IGNORE;
 		// 签到消息
 		if (msg.startsWith("[CQ:sign")) {
-			sendGroupMessage(fromGroup, "image:pic/qiandao.jpg");
+			if (fromGroup == 424838564L) {
+				try {
+					sendGroupMessage(fromGroup, "签到成功 这是你的签到奖励" + CC.image(new File(appDirectory + "pic/qiaodaodnf.png")));
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			} else {
+				sendGroupMessage(fromGroup, "image:pic/qiandao.jpg");
+			}
+			return MSG_IGNORE;
+		}
+		if (msg.startsWith("[CQ:music")) {
+			int i = random.nextInt(2147483647) % 3;
+			switch (i) {
+			case 0:
+				sendGroupMessage(fromGroup, CC.music(22636603, "163", false));
+				break;
+			case 1:
+				sendGroupMessage(fromGroup, CC.music(103744845, "qq", false));
+				break;
+			case 2:
+				sendGroupMessage(fromGroup, CC.music(103744852, "qq", false));
+				break;
+			}
 			return MSG_IGNORE;
 		}
 		if (banner.checkBan(fromQQ, fromGroup, msg))// 禁言
 			return MSG_IGNORE;
 		if (Methods.checkGou(fromGroup, msg))// 苟
+			return MSG_IGNORE;
+		if (Methods.checkMeng2(fromGroup, msg))// 萌2
 			return MSG_IGNORE;
 		if (Methods.checkAt(fromGroup, fromQQ, msg))// @
 			return MSG_IGNORE;
