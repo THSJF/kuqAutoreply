@@ -176,6 +176,44 @@ public class Methods {
 		return false;
 	}
 
+	// 萌二
+	public static boolean checkMeng2(long fromGroup, String msg) {
+
+		if (msg.equals("此")) {
+			motmp = "生";
+			Autoreply.sendGroupMessage(fromGroup, "生");
+			return true;
+		} else if (msg.equals("无") && motmp.equals("生")) {
+			motmp = "悔";
+			Autoreply.sendGroupMessage(fromGroup, "悔");
+			return true;
+		} else if (msg.equals("入") && motmp.equals("悔")) {
+			motmp = "东";
+			Autoreply.sendGroupMessage(fromGroup, "东");
+			return true;
+		} else if (msg.equals("方") && motmp.equals("东")) {
+			motmp = "来";
+			Autoreply.sendGroupMessage(fromGroup, "来");
+			return true;
+		} else if (msg.equals("世") && motmp.equals("来")) {
+			motmp = "愿";
+			Autoreply.sendGroupMessage(fromGroup, "愿");
+			return true;
+		} else if (msg.equals("生") && motmp.equals("愿")) {
+			motmp = "幻";
+			Autoreply.sendGroupMessage(fromGroup, "幻");
+			return true;
+		} else if (msg.equals("想") && motmp.equals("幻")) {
+			motmp = "乡";
+			Autoreply.sendGroupMessage(fromGroup, "乡");
+			return true;
+		} else if (msg.equals("此生无悔入东方")) {
+			Autoreply.sendGroupMessage(fromGroup, "来世愿生幻想乡");
+			return true;
+		}
+		return false;
+	}
+
 	/*
 	 * 下面都是连接网络需要的 直接从百度复制粘贴
 	 */
