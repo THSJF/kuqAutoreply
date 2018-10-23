@@ -1,6 +1,10 @@
 package com.meng.bilibili;
 
+import java.security.KeyManagementException;
+import java.security.NoSuchAlgorithmException;
+
 import com.google.gson.Gson;
+import com.google.gson.JsonSyntaxException;
 import com.meng.Autoreply;
 import com.meng.Methods;
 
@@ -10,28 +14,38 @@ public class BiliVideoInfo {
 	}
 
 	public boolean check(long fromGroup, String msg) {
+		String res = "";
 		try {
-			String res = Methods.getRealUrl(msg.substring(msg.indexOf("http"), msg.indexOf(",text=")));
-			if (msg.contains("www.bilibili.com/video/") || res.contains("www.bilibili.com/video/")) {// 判断是否为哔哩哔哩视频链接
-				String avString = getAv(res);
+			res = Methods.getRealUrl(msg.substring(msg.indexOf("http"), msg.indexOf(",text=")));
+		} catch (Exception e) {
+		}
+		if (msg.toLowerCase().contains("www.bilibili.com/video/")
+				|| res.toLowerCase().contains("www.bilibili.com/video/")) {// 判断是否为哔哩哔哩视频链接
+			String avString = "";
+			try {
+				avString = getAv(msg).equals("") ? getAv(res) : getAv(msg);
 				if (avString.equals("")) {
 					return false;
 				}
-				Gson gson = new Gson();
-				// 读取视频信息的json并生成javabean对象
-				BiliVideoInfoJavaBean bilibiliJson = gson.fromJson(
+			} catch (Exception e) {
+			}
+			Gson gson = new Gson();
+			// 读取视频信息的json并生成javabean对象
+			BiliVideoInfoJavaBean bilibiliJson;
+			try {
+				bilibiliJson = gson.fromJson(
 						Methods.openUrlWithHttps(
 								"http://api.bilibili.com/archive_stat/stat?aid=" + avString + "&type=jsonp"),
 						BiliVideoInfoJavaBean.class);
 				Autoreply.sendGroupMessage(fromGroup, bilibiliJson.toString());
-				if (!msg.contains("[CQ:share,url=") && !msg.contains("[CQ:rich,url=")) {// 如果不是分享链接就拦截消息
-					return true;
-				}
+			} catch (JsonSyntaxException | KeyManagementException | NoSuchAlgorithmException e) {
+				e.printStackTrace();
 			}
-			return false;
-		} catch (Exception e) {
-			return false;
+			if (!msg.contains("[CQ:share,url=") && !msg.contains("[CQ:rich,url=")) {// 如果不是分享链接就拦截消息
+				return true;
+			}
 		}
+		return false;
 	}
 
 	// 截取av号
