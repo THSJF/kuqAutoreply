@@ -6,11 +6,9 @@ import java.security.KeyManagementException;
 import java.security.NoSuchAlgorithmException;
 import java.util.HashMap;
 import java.util.Random;
-import java.util.Timer;
-import java.util.TimerTask;
-
 import javax.swing.JOptionPane;
 
+import com.meng.barcode.BarcodeCreator;
 import com.meng.bilibili.BiliVideoInfo;
 import com.meng.bilibili.LiveManager;
 import com.meng.bilibili.LivePerson;
@@ -19,7 +17,7 @@ import com.meng.groupChat.DicReplyManager;
 import com.meng.groupChat.RecoderManager;
 import com.meng.groupChat.RecordBanner;
 import com.meng.groupChat.fanpohai;
-import com.meng.searchPicture.NaoWait;
+import com.meng.searchPicture.PicSearchManager;
 import com.meng.tip.FileTipManager;
 import com.meng.tip.FileTipUploader;
 import com.meng.tip.ZuiSuJinTianGengLeMa;
@@ -57,7 +55,7 @@ public class Autoreply extends JcqAppAbstract implements ICQVer, IMsg, IRequest 
 	private RollPlane rollPlane = new RollPlane();
 	private ZuiSuJinTianGengLeMa zuiSuJinTianGengLeMa = new ZuiSuJinTianGengLeMa();
 	private BiliVideoInfo biliVideoInfo = new BiliVideoInfo();
-	private FileTipManager fileTipManager = new FileTipManager();
+	private FileTipManager fileTipManager;
 	private fanpohai fph;
 	private DicReplyManager dicReplyManager;
 	private MengAutoReplyConfig mengAutoReplyConfig;
@@ -71,7 +69,7 @@ public class Autoreply extends JcqAppAbstract implements ICQVer, IMsg, IRequest 
 			.split("\\|");
 
 	public static CQCodeCC CC = new CQCodeCC();
-	private NaoWait naoWait = new NaoWait();
+	private PicSearchManager picSearchManager = new PicSearchManager();
 
 	/**
 	 * 用main方法调试可以最大化的加快开发效率，检测和定位错误位置<br/>
@@ -115,10 +113,8 @@ public class Autoreply extends JcqAppAbstract implements ICQVer, IMsg, IRequest 
 		appDirectory = CQ.getAppDirectory();
 		dicReplyManager = new DicReplyManager();
 		fph = new fanpohai();
-		addFileTip();
 		loadConfig();
 		zuiSuJinTianGengLeMa.start();
-		fileTipManager.start();
 		// 返回如：D:\CoolQ\app\com.sobte.cqp.jcq\app\com.example.demo\
 		return 0;
 	}
@@ -197,7 +193,7 @@ public class Autoreply extends JcqAppAbstract implements ICQVer, IMsg, IRequest 
 				sendGroupMessage(Long.parseLong(strings[1]), strings[2]);
 			}
 		}
-		naoWait.check(-1, fromQQ, msg);
+		picSearchManager.check(-1, fromQQ, msg);
 		return MSG_IGNORE;
 	}
 
@@ -314,7 +310,7 @@ public class Autoreply extends JcqAppAbstract implements ICQVer, IMsg, IRequest 
 			return MSG_IGNORE;
 		if (dicReplyManager.check(fromGroup, fromQQ, msg))// 根据词库触发回答
 			return MSG_IGNORE;
-		naoWait.check(fromGroup, fromQQ, msg);
+		picSearchManager.check(fromGroup, fromQQ, msg);
 
 		return MSG_IGNORE;
 
@@ -612,7 +608,9 @@ public class Autoreply extends JcqAppAbstract implements ICQVer, IMsg, IRequest 
 	}
 
 	private void addFileTip() {
+		fileTipManager = new FileTipManager();
 		fileTipManager.addData(new FileTipUploader(807242547L, 1592608126L));
+		fileTipManager.start();
 	}
 
 	private void loadConfig() {
@@ -620,6 +618,7 @@ public class Autoreply extends JcqAppAbstract implements ICQVer, IMsg, IRequest 
 		nrg = mengAutoReplyConfig.getMapGroupNotReply();
 		nrq = mengAutoReplyConfig.getMapQQNotReply();
 		nrw = mengAutoReplyConfig.getMapWordNotReply();
+		addFileTip();
 		addGroupDic();
 		addRecorder();
 		addLive();

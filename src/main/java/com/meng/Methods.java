@@ -26,10 +26,11 @@ import javax.net.ssl.SSLSession;
 import javax.net.ssl.TrustManager;
 import javax.net.ssl.X509TrustManager;
 
-import com.meng.bilibili.LivePerson;
+import com.meng.lookGroup.IPGetter;
 
 public class Methods {
 	private static String motmp = "";
+	private static String meng2tmp = "";
 
 	// 主开关
 	public static boolean checkSwitch(long fromGroup, String msg) {
@@ -69,25 +70,18 @@ public class Methods {
 	public static boolean checkLink(long fromGroup, String msg) {
 		if (msg.startsWith("[CQ:share,url=")) {// 分享链接的特征
 			// 截取相关字符串
-			String link = msg.substring(msg.indexOf("http"), msg.indexOf(",title="));
-			String title = msg.substring(msg.indexOf("title=") + 6, msg.indexOf(",content"));
-			String describe = msg.substring(msg.indexOf("content=") + 8, msg.indexOf(",image"));
+			// String link = msg.substring(msg.indexOf("http"),
+			// msg.indexOf(",title="));
+			// String title = msg.substring(msg.indexOf("title=") + 6,
+			// msg.indexOf(",content"));
+			// String describe = msg.substring(msg.indexOf("content=") + 8,
+			// msg.indexOf(",image"));
 			String picture = msg.substring(msg.lastIndexOf("http"), msg.lastIndexOf("]"));
 			// 发送消息
-			Autoreply.sendGroupMessage(fromGroup,
-					"标题:" + title + "\n链接:" + link + "\n封面图:" + picture + "\n描述:" + describe);
-			return true;
-		}
-		if (msg.startsWith("[CQ:rich,url=")) {// 某些分享链接是rich
-			// 截取相关字符串
-			try {
-				String link = msg.substring(msg.indexOf("http"), msg.indexOf(",text="));
-				String text = msg.substring(msg.indexOf("text=") + 5, msg.indexOf("]"));
-				// 发送消息
-				Autoreply.sendGroupMessage(fromGroup, "链接:" + link + "\n文字:" + text.trim());
-			} catch (Exception e) {
-				return true;
-			}
+			// Autoreply.sendGroupMessage(fromGroup,
+			// "标题:" + title + "\n链接:" + link + "\n封面图:" + picture + "\n描述:" +
+			// describe);
+			Autoreply.sendGroupMessage(fromGroup, "封面图:" + picture);
 			return true;
 		}
 		return false;
@@ -113,7 +107,6 @@ public class Methods {
 
 	// 读取文本文件
 	public static String readFileToString(String fileName) throws IOException, UnsupportedEncodingException {
-		String encoding = "UTF-8";
 		File file = new File(fileName);
 		if (!file.exists()) {
 			file.createNewFile();
@@ -123,7 +116,7 @@ public class Methods {
 		FileInputStream in = new FileInputStream(file);
 		in.read(filecontent);
 		in.close();
-		return new String(filecontent, encoding);
+		return new String(filecontent, "UTF-8");
 	}
 
 	// 删除字符串中指定位置的文字
@@ -208,7 +201,6 @@ public class Methods {
 					Autoreply.sendGroupMessage(fromGroup, "签到成功 这是你的签到奖励"
 							+ Autoreply.CC.image(new File(Autoreply.appDirectory + "pic/qiaodaodnf.png")));
 				} catch (IOException e) {
-					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
 			} else {
@@ -243,31 +235,31 @@ public class Methods {
 	public static boolean checkMeng2(long fromGroup, String msg) {
 
 		if (msg.equals("此")) {
-			motmp = "生";
+			meng2tmp = "生";
 			Autoreply.sendGroupMessage(fromGroup, "生");
 			return true;
-		} else if (msg.equals("无") && motmp.equals("生")) {
-			motmp = "悔";
+		} else if (msg.equals("无") && meng2tmp.equals("生")) {
+			meng2tmp = "悔";
 			Autoreply.sendGroupMessage(fromGroup, "悔");
 			return true;
-		} else if (msg.equals("入") && motmp.equals("悔")) {
-			motmp = "东";
+		} else if (msg.equals("入") && meng2tmp.equals("悔")) {
+			meng2tmp = "东";
 			Autoreply.sendGroupMessage(fromGroup, "东");
 			return true;
-		} else if (msg.equals("方") && motmp.equals("东")) {
-			motmp = "来";
+		} else if (msg.equals("方") && meng2tmp.equals("东")) {
+			meng2tmp = "来";
 			Autoreply.sendGroupMessage(fromGroup, "来");
 			return true;
-		} else if (msg.equals("世") && motmp.equals("来")) {
-			motmp = "愿";
+		} else if (msg.equals("世") && meng2tmp.equals("来")) {
+			meng2tmp = "愿";
 			Autoreply.sendGroupMessage(fromGroup, "愿");
 			return true;
-		} else if (msg.equals("生") && motmp.equals("愿")) {
-			motmp = "幻";
+		} else if (msg.equals("生") && meng2tmp.equals("愿")) {
+			meng2tmp = "幻";
 			Autoreply.sendGroupMessage(fromGroup, "幻");
 			return true;
-		} else if (msg.equals("想") && motmp.equals("幻")) {
-			motmp = "乡";
+		} else if (msg.equals("想") && meng2tmp.equals("幻")) {
+			meng2tmp = "乡";
 			Autoreply.sendGroupMessage(fromGroup, "乡");
 			return true;
 		} else if (msg.equals("此生无悔入东方")) {

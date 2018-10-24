@@ -1,11 +1,12 @@
-package com.meng;
+package com.meng.barcode;
 
 import java.io.File;
 import java.io.IOException;
 
 import javax.imageio.ImageIO;
 
-import com.meng.tools.QrUtils;
+import com.meng.Autoreply;
+import com.meng.Methods;
 
 public class BarcodeCreator extends Thread {
 	private Long fromGroup = -1L;
@@ -27,7 +28,7 @@ public class BarcodeCreator extends Thread {
 		File barcode = new File(
 				Autoreply.appDirectory + "barcode/" + fromQQ + "/barcode" + Autoreply.random.nextInt() + ".png");
 		try {
-			ImageIO.write(QrUtils.createQRCode(text.replace("生成QR ", "")), "png", barcode);
+			ImageIO.write(BarcodeUtils.createQRCode(text.replace("生成QR ", "")), "png", barcode);
 			Methods.sendMsg(fromGroup, fromQQ, Autoreply.CC.image(barcode));
 		} catch (IOException e) {
 			// TODO Auto-generated catch block

@@ -6,11 +6,11 @@ import com.meng.Autoreply;
 import com.meng.Methods;
 import com.sobte.cqp.jcq.entity.CQImage;
 
-public class NaoWait{
+public class PicSearchManager{
 
 	private HashMap<Long, String> userNotSendPicture = new HashMap<>();
 
-	public NaoWait() {
+	public PicSearchManager() {
 	}
 
 	public void check(long fromGroup, long fromQQ, String msg) {

@@ -1,4 +1,4 @@
-package com.meng.tools;
+package com.meng.barcode;
 
 import com.google.zxing.BarcodeFormat;
 import com.google.zxing.EncodeHintType;
@@ -19,7 +19,7 @@ import java.util.Hashtable;
  * https://github.com/iluhcm/QrCodeScanner/blob/master/app/src/main/java/com/
  * kaola/qrcodescanner/qrcode/utils/QrUtils.java 二维码相关功能类
  */
-public class QrUtils {
+public class BarcodeUtils {
 
 	public static BufferedImage createQRCode(String text) {
 		return createBarcode(text, BarcodeFormat.QR_CODE, 0xff000000, 0xffffffff, 500);

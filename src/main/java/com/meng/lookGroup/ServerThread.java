@@ -1,4 +1,4 @@
-package com.meng;
+package com.meng.lookGroup;
 
 import java.io.*;
 import java.net.Socket;

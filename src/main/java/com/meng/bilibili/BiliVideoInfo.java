@@ -15,17 +15,30 @@ public class BiliVideoInfo {
 
 	public boolean check(long fromGroup, String msg) {
 		String res = "";
+		String res2 = "";
 		try {
 			res = Methods.getRealUrl(msg.substring(msg.indexOf("http"), msg.indexOf(",text=")));
+			System.out.println(res);
 		} catch (Exception e) {
+			System.out.println(e.toString());
+		}
+		try {
+			res2 = Methods.getRealUrl(msg.substring(msg.indexOf("http"), msg.indexOf(",title=")));
+			System.out.println(res);
+		} catch (Exception e) {
+			System.out.println(e.toString());
 		}
 		if (msg.toLowerCase().contains("www.bilibili.com/video/")
-				|| res.toLowerCase().contains("www.bilibili.com/video/")) {// 判断是否为哔哩哔哩视频链接
+				|| res.toLowerCase().contains("www.bilibili.com/video/")
+				|| res2.toLowerCase().contains("www.bilibili.com/video/")) {// 判断是否为哔哩哔哩视频链接
 			String avString = "";
 			try {
 				avString = getAv(msg).equals("") ? getAv(res) : getAv(msg);
 				if (avString.equals("")) {
-					return false;
+					avString = getAv(res2);
+					if (avString.equals("")) {
+						return false;
+					}
 				}
 			} catch (Exception e) {
 			}
@@ -41,7 +54,7 @@ public class BiliVideoInfo {
 			} catch (JsonSyntaxException | KeyManagementException | NoSuchAlgorithmException e) {
 				e.printStackTrace();
 			}
-			if (!msg.contains("[CQ:share,url=") && !msg.contains("[CQ:rich,url=")) {// 如果不是分享链接就拦截消息
+			if (!msg.contains("[CQ:share,url=")) {// 如果不是分享链接就拦截消息
 				return true;
 			}
 		}
@@ -76,7 +89,12 @@ public class BiliVideoInfo {
 
 	// msg消息 i视频aid位数
 	private String getAv(String msg, int i) {
-		return msg.substring(msg.indexOf("av") + 2, msg.indexOf("av") + 2 + i);
+		String tmp = "";
+		try {
+			tmp = msg.substring(msg.indexOf("av") + 2, msg.indexOf("av") + 2 + i);
+		} catch (Exception e) {
+		}
+		return tmp;
 	}
 
 }
