@@ -13,18 +13,18 @@ import org.jsoup.Jsoup;
 import com.meng.Autoreply;
 import com.meng.Methods;
 
-public class NAO extends Thread {
+public class SearchThread extends Thread {
 
 	private long fromQQ = 0;
 	private long fromGroup = -1;
 	private File pic = null;
 	private int picNumFlag = 0;
-	private NAOResults mResults;
+	private PicResults mResults;
 	private boolean showAll = false;
 	private int resultCount = 1;
 	private int database = 999;
 
-	public NAO(long fromGroup, long fromQQ, File pic, boolean showAll, int resultCount, int database) {
+	public SearchThread(long fromGroup, long fromQQ, File pic, boolean showAll, int resultCount, int database) {
 		this.fromGroup = fromGroup;
 		this.fromQQ = fromQQ;
 		this.pic = pic;
@@ -50,7 +50,7 @@ public class NAO extends Thread {
 					return;
 				}
 			}
-			mResults = new NAOResults(Jsoup.parse(response.body()));
+			mResults = new PicResults(Jsoup.parse(response.body()));
 		} catch (Exception e1) {
 			Methods.sendMsg(fromGroup, fromQQ, e1.toString());
 		}
@@ -86,7 +86,7 @@ public class NAO extends Thread {
 		size = size > resultCount ? resultCount : size;
 		for (int i = 0; i < size; i++) {
 			StringBuilder sBuilder = new StringBuilder("");
-			NAOResults.Result tmpr = mResults.getResults().get(i);
+			PicResults.Result tmpr = mResults.getResults().get(i);
 			int simi = Integer.parseInt(tmpr.mSimilarity.substring(0, 2));
 			if (simi < 60 && !showAll) {
 				continue;

@@ -26,6 +26,7 @@ import javax.net.ssl.SSLSession;
 import javax.net.ssl.TrustManager;
 import javax.net.ssl.X509TrustManager;
 
+import com.meng.barcode.BarcodeEncoder;
 import com.meng.lookGroup.IPGetter;
 
 public class Methods {
@@ -427,4 +428,12 @@ public class Methods {
 		return String.valueOf(hash & 0x7fffffff);
 	}
 
+	public static boolean checkBarcodeEncode(long fromGroup, long fromQQ, String msg) {
+		if (msg.startsWith("生成QR ") || msg.startsWith("生成PDF417 ")) {
+			BarcodeEncoder barcodeEncoder = new BarcodeEncoder(fromGroup, fromQQ, msg);
+			barcodeEncoder.start();
+			return true;
+		}
+		return false;
+	}
 }

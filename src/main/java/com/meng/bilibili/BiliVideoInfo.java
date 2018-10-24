@@ -18,15 +18,11 @@ public class BiliVideoInfo {
 		String res2 = "";
 		try {
 			res = Methods.getRealUrl(msg.substring(msg.indexOf("http"), msg.indexOf(",text=")));
-			System.out.println(res);
 		} catch (Exception e) {
-			System.out.println(e.toString());
 		}
 		try {
 			res2 = Methods.getRealUrl(msg.substring(msg.indexOf("http"), msg.indexOf(",title=")));
-			System.out.println(res);
 		} catch (Exception e) {
-			System.out.println(e.toString());
 		}
 		if (msg.toLowerCase().contains("www.bilibili.com/video/")
 				|| res.toLowerCase().contains("www.bilibili.com/video/")

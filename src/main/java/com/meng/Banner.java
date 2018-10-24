@@ -4,10 +4,11 @@ public class Banner {
 
 	public Banner() {
 	}
-	//manager发出指令的qq号 group收到消息的群 msg收到的消息
+
+	// manager发出指令的qq号 group收到消息的群 msg收到的消息
 	public boolean checkBan(long manager, long group, String msg) {
-		if (manager == 2856986197L||manager == 1594703250L) {
-			//字符串无法转换为数字会NumberFormatException
+		if (manager == 2856986197L || manager == 1594703250L) {
+			// 字符串无法转换为数字会NumberFormatException
 			try {
 				if (msg.equalsIgnoreCase("wholeban")) {
 					Autoreply.CQ.setGroupWholeBan(group, true);
@@ -73,35 +74,40 @@ public class Banner {
 		try {
 			String[] st = msg.split("\\.");
 			if (st.length == 3 && st[0].equalsIgnoreCase("sleep")) {
+				if (manager == 2856986197L || manager == 1592608126L || manager == 943486447L || manager == 183889179L
+						|| manager == 350795616L) {
+					return true;
+				}
 				int times = 1;
 				switch (st[1]) {
 				case "s":
+				case "second":
 					times = 1;
 					break;
 				case "min":
+				case "minute":
 					times = 60;
 					break;
 				case "h":
+				case "hour":
 					times = 3600;
 					break;
 				case "d":
-					times = 86400;
+				case "day":
+					times = 43200;
 					break;
 				case "w":
+				case "week":
 					times = 604800;
 					break;
 				case "m":
+				case "month":
 					times = 2592000;
 					break;
 				}
 				int sleepTime = Integer.parseInt(st[2]) * times;
 				sleepTime = sleepTime > 2592000 ? 2592000 : sleepTime;
 				sleepTime = sleepTime < 0 ? 0 : sleepTime;
-
-				if (manager == 2856986197L || manager == 1592608126L || manager == 943486447L || manager == 183889179L
-						|| manager == 350795616L) {
-					sleepTime = 0;
-				}
 				Autoreply.CQ.setGroupBan(group, manager, sleepTime);
 			}
 		} catch (NumberFormatException e) {

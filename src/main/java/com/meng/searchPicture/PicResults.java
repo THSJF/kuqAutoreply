@@ -9,7 +9,7 @@ import org.jsoup.select.Elements;
 
 import com.meng.tools.HtmlToPlainText;
 
-public class NAOResults {
+public class PicResults {
 
 	private final String CLASS_RESULT_CONTENT_COLUMN = "resultcontentcolumn";
 	private final String CLASS_RESULT_IMAGE = "resultimage";
@@ -22,7 +22,7 @@ public class NAOResults {
 
 	private ArrayList<Result> mResults = new ArrayList<>();
 
-	public NAOResults(Document document) {
+	public PicResults(Document document) {
 		for (Element result : document.getElementsByClass(CLASS_RESULT_TABLE)) {
 			Element resultImage = result.getElementsByClass(CLASS_RESULT_IMAGE).first();
 			Element resultMatchInfo = result.getElementsByClass(CLASS_RESULT_MATCH_INFO).first();

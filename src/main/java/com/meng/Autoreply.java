@@ -8,7 +8,7 @@ import java.util.HashMap;
 import java.util.Random;
 import javax.swing.JOptionPane;
 
-import com.meng.barcode.BarcodeCreator;
+import com.meng.barcode.BarcodeDecodeManager;
 import com.meng.bilibili.BiliVideoInfo;
 import com.meng.bilibili.LiveManager;
 import com.meng.bilibili.LivePerson;
@@ -50,6 +50,7 @@ public class Autoreply extends JcqAppAbstract implements ICQVer, IMsg, IRequest 
 
 	public static boolean enable = true;
 	public static Random random = new Random();
+	public static CQCodeCC CC = new CQCodeCC();
 	private Banner banner = new Banner();
 	private RecoderManager recoderManager;
 	private RollPlane rollPlane = new RollPlane();
@@ -60,6 +61,8 @@ public class Autoreply extends JcqAppAbstract implements ICQVer, IMsg, IRequest 
 	private DicReplyManager dicReplyManager;
 	private MengAutoReplyConfig mengAutoReplyConfig;
 	private LiveManager livingManager = new LiveManager();
+	private PicSearchManager picSearchManager = new PicSearchManager();
+	private BarcodeDecodeManager barcodeDecodeManager = new BarcodeDecodeManager();
 
 	private HashMap<Integer, Long> nrg;
 	private HashMap<Integer, Long> nrq;
@@ -67,9 +70,6 @@ public class Autoreply extends JcqAppAbstract implements ICQVer, IMsg, IRequest 
 
 	private static String[] pop = "11|12|60|63|96|107|110|114|117|128|129|151|159|123|268|208|248|5|20|28|37|45|212|178|62|44|90|107|119|114|125|142|168|185|1|2|3|4|5|6|7|8|9"
 			.split("\\|");
-
-	public static CQCodeCC CC = new CQCodeCC();
-	private PicSearchManager picSearchManager = new PicSearchManager();
 
 	/**
 	 * 用main方法调试可以最大化的加快开发效率，检测和定位错误位置<br/>
@@ -180,12 +180,10 @@ public class Autoreply extends JcqAppAbstract implements ICQVer, IMsg, IRequest 
 	 */
 	public int privateMsg(int subType, int msgId, long fromQQ, String msg, int font) {
 		// 这里处理消息
-
-		if (msg.startsWith("生成QR ")) {
-			BarcodeCreator barcodeCreator = new BarcodeCreator(-1L, fromQQ, msg);
-			barcodeCreator.start();
+		if (Methods.checkBarcodeEncode(-1, fromQQ, msg)) // 二维码编码
 			return MSG_IGNORE;
-		}
+		if (barcodeDecodeManager.check(-1, fromQQ, msg)) // 二维码解码
+			return MSG_IGNORE;
 		String[] strings = msg.split("\\.");
 		// 转发到指定群
 		if (fromQQ == 2856986197L) {
@@ -193,7 +191,8 @@ public class Autoreply extends JcqAppAbstract implements ICQVer, IMsg, IRequest 
 				sendGroupMessage(Long.parseLong(strings[1]), strings[2]);
 			}
 		}
-		picSearchManager.check(-1, fromQQ, msg);
+		if (picSearchManager.check(-1, fromQQ, msg))// 搜索图片
+			return MSG_IGNORE;
 		return MSG_IGNORE;
 	}
 
@@ -256,11 +255,7 @@ public class Autoreply extends JcqAppAbstract implements ICQVer, IMsg, IRequest 
 			}
 
 		}
-		if (msg.startsWith("生成QR ")) {
-			BarcodeCreator barcodeCreator = new BarcodeCreator(fromGroup, fromQQ, msg);
-			barcodeCreator.start();
-			return MSG_IGNORE;
-		}
+
 		if (msg.equalsIgnoreCase(".live")) {
 			boolean b = false;
 			for (int i = 0; i < livingManager.getMapFlag(); i++) {
@@ -279,6 +274,12 @@ public class Autoreply extends JcqAppAbstract implements ICQVer, IMsg, IRequest 
 		if (Methods.checkSwitch(fromGroup, msg))// 控制
 			return MSG_IGNORE;
 		if (checkNotReply(fromGroup, fromQQ, msg))// 指定不回复的项目
+			return MSG_IGNORE;
+		if (Methods.checkBarcodeEncode(fromGroup, fromQQ, msg)) // 二维码编码
+			return MSG_IGNORE;
+		if (barcodeDecodeManager.check(fromGroup, fromQQ, msg)) // 二维码解码
+			return MSG_IGNORE;
+		if (picSearchManager.check(fromGroup, fromQQ, msg))// 搜索图片
 			return MSG_IGNORE;
 		if (Methods.checkLook(fromGroup, msg))// 窥屏检测
 			return MSG_IGNORE;
@@ -310,7 +311,6 @@ public class Autoreply extends JcqAppAbstract implements ICQVer, IMsg, IRequest 
 			return MSG_IGNORE;
 		if (dicReplyManager.check(fromGroup, fromQQ, msg))// 根据词库触发回答
 			return MSG_IGNORE;
-		picSearchManager.check(fromGroup, fromQQ, msg);
 
 		return MSG_IGNORE;
 
