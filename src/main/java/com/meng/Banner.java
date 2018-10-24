@@ -111,6 +111,7 @@ public class Banner {
 				Autoreply.CQ.setGroupBan(group, manager, sleepTime);
 			}
 		} catch (NumberFormatException e) {
+			Autoreply.CQ.setGroupBan(group, manager, 60);
 			return true;
 		}
 		return false;

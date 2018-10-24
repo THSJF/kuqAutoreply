@@ -451,6 +451,9 @@ public class Autoreply extends JcqAppAbstract implements ICQVer, IMsg, IRequest 
 		String[] strings = new String[] { "封魔录LNN", "梦时空LNN", "幻想乡LNN", "怪绮谈LNN", "红LNN", "妖LNNN", "永0033", "永0037",
 				"花LNN", "风LNN", "殿LNN", "船LNNN", "庙LNNN", "城LNN", "绀LNN", "璋LNNN", "大战争LNN" };
 		try {
+			if (beingOperateQQ == CQ.getLoginQQ()) {
+				return MSG_IGNORE;
+			}
 			QQInfo qInfo = CQ.getStrangerInfo(beingOperateQQ);
 			if (qInfo.getGender() == 0) {
 				sendGroupMessage(fromGroup, CC.at(beingOperateQQ) + "你已经是群萌新了，快打个" + Methods.rfa(strings) + "给群友们看看吧");
