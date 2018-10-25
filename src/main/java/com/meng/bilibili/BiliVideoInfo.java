@@ -28,16 +28,17 @@ public class BiliVideoInfo {
 				if (avString.equals("")) {
 					avString = getAv(res2);
 					if (avString.equals("")) {
+						System.out.println("empty result");
 						return false;
 					}
 				}
 			} catch (Exception e) {
+				e.printStackTrace();
 			}
 			Gson gson = new Gson();
 			// 读取视频信息的json并生成javabean对象
-			BiliVideoInfoJavaBean bilibiliJson;
 			try {
-				bilibiliJson = gson.fromJson(
+				BiliVideoInfoJavaBean bilibiliJson = gson.fromJson(
 						Methods.getSourceCode(
 								"http://api.bilibili.com/archive_stat/stat?aid=" + avString + "&type=jsonp"),
 						BiliVideoInfoJavaBean.class);
