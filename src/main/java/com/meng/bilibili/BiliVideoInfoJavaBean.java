@@ -7,6 +7,12 @@ public class BiliVideoInfoJavaBean {
 	private String ttl;
 	private Data data;
 
+	// 重写toString()方法
+	@Override
+	public String toString() {
+		return data.toString();
+	}
+
 	public class Data { // 内部类要定义成public的
 		private String aid;
 		private String view;
@@ -22,7 +28,6 @@ public class BiliVideoInfoJavaBean {
 		private String no_reprint;
 		private String copyright;
 
-		// 重写toString()方法
 		@Override
 		public String toString() {
 			return view + "次播放," + danmaku + "条弹幕," + reply + "条回复," + coin + "个硬币," + share + "次分享," + favorite

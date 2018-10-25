@@ -38,11 +38,11 @@ public class BiliVideoInfo {
 			Gson gson = new Gson();
 			// 读取视频信息的json并生成javabean对象
 			try {
-				BiliVideoInfoJavaBean bilibiliJson = gson.fromJson(
+				BiliVideoInfoJavaBean biliJson = gson.fromJson(
 						Methods.getSourceCode(
 								"http://api.bilibili.com/archive_stat/stat?aid=" + avString + "&type=jsonp"),
 						BiliVideoInfoJavaBean.class);
-				Autoreply.sendGroupMessage(fromGroup, bilibiliJson.toString());
+				Autoreply.sendGroupMessage(fromGroup, biliJson.toString());
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
