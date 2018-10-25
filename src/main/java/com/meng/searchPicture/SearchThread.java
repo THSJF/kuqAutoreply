@@ -45,10 +45,7 @@ public class SearchThread extends Thread {
 			Connection.Response response = Jsoup.connect("https://saucenao.com/search.php?db=" + database)
 					.timeout(60000).data("file", "image.jpg", fInputStream).method(Connection.Method.POST).execute();
 			if (response.statusCode() != 200) {
-				switch (response.statusCode()) {
-				case 429:
-					return;
-				}
+				Methods.sendMsg(fromGroup, fromQQ, "statusCode" + response.statusCode());
 			}
 			mResults = new PicResults(Jsoup.parse(response.body()));
 		} catch (Exception e1) {
