@@ -23,7 +23,8 @@ public class LiveManager extends Thread {
 				// 遍历hashmap检测是否直播
 				for (int i = 0; i < mapFlag; i++) {
 					LivePerson lPerson = liveData.get(i);
-					String htmlData = Methods.openUrlWithHttps(lPerson.getLiveUrl());
+					String htmlData = Methods.getSourceCode(lPerson.getLiveUrl());// Methods.openUrlWithHttps(lPerson.getLiveUrl(),
+					// null);
 					boolean living = !htmlData.contains(liveString);
 					lPerson.setLiving(living);
 					if (lPerson.getFlag() != 0) {

@@ -1,16 +1,11 @@
 package com.meng.bilibili;
 
-import java.security.KeyManagementException;
-import java.security.NoSuchAlgorithmException;
-
 import com.google.gson.Gson;
-import com.google.gson.JsonSyntaxException;
 import com.meng.Autoreply;
 import com.meng.Methods;
 
 public class BiliVideoInfo {
 	public BiliVideoInfo() {
-		// TODO Auto-generated constructor stub
 	}
 
 	public boolean check(long fromGroup, String msg) {
@@ -43,11 +38,11 @@ public class BiliVideoInfo {
 			BiliVideoInfoJavaBean bilibiliJson;
 			try {
 				bilibiliJson = gson.fromJson(
-						Methods.openUrlWithHttps(
+						Methods.getSourceCode(
 								"http://api.bilibili.com/archive_stat/stat?aid=" + avString + "&type=jsonp"),
 						BiliVideoInfoJavaBean.class);
 				Autoreply.sendGroupMessage(fromGroup, bilibiliJson.toString());
-			} catch (JsonSyntaxException | KeyManagementException | NoSuchAlgorithmException e) {
+			} catch (Exception e) {
 				e.printStackTrace();
 			}
 			if (!msg.contains("[CQ:share,url=")) {// 如果不是分享链接就拦截消息

@@ -46,13 +46,12 @@ public class MengAutoReplyConfig {
 			switch ((String) entry.getKey()) {
 			case "mapGroupNotReply":
 				for (; k < arraySize; k++) {
-					mapGroupNotReply.put(k, Methods.parseLong(array.get(k).toString()));
+					mapGroupNotReply.put(k, Long.parseLong(Methods.removeCharAtStartAndEnd(array.get(k).toString())));
 				}
 				break;
 			case "mapQQNotReply":
-
 				for (; k < arraySize; k++) {
-					mapQQNotReply.put(k, Methods.parseLong(array.get(k).toString()));
+					mapQQNotReply.put(k, Long.parseLong(Methods.removeCharAtStartAndEnd(array.get(k).toString())));
 				}
 				break;
 			case "mapGroupRecorder":
@@ -62,12 +61,12 @@ public class MengAutoReplyConfig {
 				break;
 			case "mapGroupDicReply":
 				for (; k < arraySize; k++) {
-					mapGroupDicReply.put(k, Methods.parseLong(array.get(k).toString()));
+					mapGroupDicReply.put(k, Long.parseLong(Methods.removeCharAtStartAndEnd(array.get(k).toString())));
 				}
 				break;
 			case "mapWordNotReply":
 				for (; k < arraySize; k++) {
-					mapWordNotReply.put(k, Methods.removeCharAtStartAndEnd(array.get(k).toString()));
+					mapWordNotReply.put(k, Methods.removeCharAtStartAndEnd(array.get(k).toString().replace("\"", "")));
 				}
 				break;
 			case "mapLiveTip":
@@ -76,7 +75,7 @@ public class MengAutoReplyConfig {
 						mapLiveTip.put(Methods.removeCharAtStartAndEnd(array.get(2 * k).toString()),
 								Methods.removeCharAtStartAndEnd(array.get(2 * k + 1).toString()));
 					} catch (Exception e) {
-						Autoreply.sendPrivateMessage(2856986197L, e.toString());
+						e.printStackTrace();
 					}
 				}
 				break;

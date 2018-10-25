@@ -2,8 +2,6 @@ package com.meng;
 
 import java.io.File;
 import java.io.IOException;
-import java.security.KeyManagementException;
-import java.security.NoSuchAlgorithmException;
 import java.util.HashMap;
 import java.util.Random;
 import javax.swing.JOptionPane;
@@ -114,6 +112,7 @@ public class Autoreply extends JcqAppAbstract implements ICQVer, IMsg, IRequest 
 		dicReplyManager = new DicReplyManager();
 		fph = new fanpohai();
 		loadConfig();
+		addFileTip();
 		zuiSuJinTianGengLeMa.start();
 		// 返回如：D:\CoolQ\app\com.sobte.cqp.jcq\app\com.example.demo\
 		return 0;
@@ -307,9 +306,9 @@ public class Autoreply extends JcqAppAbstract implements ICQVer, IMsg, IRequest 
 			return MSG_IGNORE;
 		if (fph.check(fromQQ, fromGroup, msg))// 反迫害
 			return MSG_IGNORE;
-		if (recoderManager.check(fromGroup, fromQQ, msg))// 复读
-			return MSG_IGNORE;
 		if (dicReplyManager.check(fromGroup, fromQQ, msg))// 根据词库触发回答
+			return MSG_IGNORE;
+		if (recoderManager.check(fromGroup, fromQQ, msg))// 复读
 			return MSG_IGNORE;
 
 		return MSG_IGNORE;
@@ -426,6 +425,7 @@ public class Autoreply extends JcqAppAbstract implements ICQVer, IMsg, IRequest 
 						+ "(" + qInfo2.getQqId() + ")" + "玩完扔莉");
 			}
 		} catch (Exception e) {
+			e.printStackTrace();
 		}
 		return MSG_IGNORE;
 	}
@@ -461,6 +461,7 @@ public class Autoreply extends JcqAppAbstract implements ICQVer, IMsg, IRequest 
 				sendGroupMessage(fromGroup, "新来的小姐姐打个" + Methods.rfa(strings) + "给这群飞机佬看看吧");
 			}
 		} catch (Exception e) {
+			e.printStackTrace();
 		}
 		return MSG_IGNORE;
 	}
@@ -621,10 +622,9 @@ public class Autoreply extends JcqAppAbstract implements ICQVer, IMsg, IRequest 
 		nrg = mengAutoReplyConfig.getMapGroupNotReply();
 		nrq = mengAutoReplyConfig.getMapQQNotReply();
 		nrw = mengAutoReplyConfig.getMapWordNotReply();
-		addFileTip();
 		addGroupDic();
 		addRecorder();
-		addLive();
+		// addLive();
 	}
 
 	private void addGroupDic() {
@@ -673,15 +673,8 @@ public class Autoreply extends JcqAppAbstract implements ICQVer, IMsg, IRequest 
 	}
 
 	private static void setRandomPop() {
-		String skey = Methods.getStringBetween(Autoreply.CQ.getCookies(), "skey=", ";", 0);
-		String g_tk = Methods.getG_tk(skey);
-		String url = "http://logic.content.qq.com/bubble/setup?callback=&id=" + (String) Methods.rfa(pop) + "&g_tk="
-				+ g_tk;
-		try {
-			Methods.openUrlWithHttps(url, Autoreply.CQ.getCookies());
-		} catch (KeyManagementException | NoSuchAlgorithmException e) {
-
-		}
+		Methods.getSourceCode("http://logic.content.qq.com/bubble/setup?callback=&id=" + (String) Methods.rfa(pop)
+				+ "&g_tk=" + CQ.getCsrfToken(), CQ.getCookies());
 	}
 
 }

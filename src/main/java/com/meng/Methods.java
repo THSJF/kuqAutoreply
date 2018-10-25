@@ -1,30 +1,21 @@
 package com.meng;
 
 import java.io.BufferedReader;
-import java.io.DataInputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
-import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.io.OutputStream;
 import java.io.UnsupportedEncodingException;
 import java.net.URL;
 import java.net.URLConnection;
-import java.security.KeyManagementException;
-import java.security.NoSuchAlgorithmException;
-import java.security.cert.CertificateException;
-import java.security.cert.X509Certificate;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Timer;
 import java.util.TimerTask;
 import java.util.regex.Pattern;
 
-import javax.net.ssl.HostnameVerifier;
-import javax.net.ssl.HttpsURLConnection;
-import javax.net.ssl.SSLContext;
-import javax.net.ssl.SSLSession;
-import javax.net.ssl.TrustManager;
-import javax.net.ssl.X509TrustManager;
+import org.jsoup.Connection;
+import org.jsoup.Jsoup;
 
 import com.meng.barcode.BarcodeEncoder;
 import com.meng.lookGroup.IPGetter;
@@ -57,7 +48,7 @@ public class Methods {
 	public static boolean checkAt(long fromGroup, long fromQQ, String msg) {
 		if (Autoreply.CC.getAt(msg) == 1620628713L) {
 			// 过滤特定的文字
-			if (msg.indexOf("蓝") != -1 || msg.indexOf("藍") != -1) {
+			if (msg.indexOf("蓝") != -1 || msg.indexOf("藍") != -1 || msg.indexOf("赠送") != -1) {
 				return true;
 			}
 			// @消息发送者并复读内容
@@ -98,7 +89,8 @@ public class Methods {
 			try {
 				Autoreply.sendGroupMessage(fromGroup,
 						Autoreply.CC.image(new File(Autoreply.appDirectory + "pic\\fanmo.jpg")));
-			} catch (IOException e) {
+			} catch (Exception e) {
+				e.printStackTrace();
 				return false;
 			}
 			return true;
@@ -125,20 +117,30 @@ public class Methods {
 		return s.substring(0, pos) + s.substring(pos + 1);
 	}
 
+	// 获取字符串中指定位置的文字
+	public static String getStringBetween(String str, String start, String end, int index) {
+
+		int flagA = str.indexOf(start, index);
+		int flagB = str.indexOf(end, flagA + 1);
+		if (flagA < 0 || flagB < 0) {
+			return null;
+		} else {
+			flagA = flagA + start.length();
+			if (flagA < 0 || flagB < 0) {
+				return null;
+			}
+			return str.substring(flagA, flagB);
+		}
+	}
+
 	// 删除字符串两端
 	public static String removeCharAtStartAndEnd(String s) {
 		String tmp = removeCharAt(s, 0);
 		return removeCharAt(tmp, tmp.length() - 1);
 	}
 
-	// 字符串转换long
-	public static long parseLong(String s) throws NumberFormatException {
-		return Long.parseLong(s.replace("\"", ""));
-	}
-
 	// 暴力行为
 	public static boolean checkGou(long fromGroup, String msg) {
-
 		if (msg.equals("苟") || msg.equals("苟？") || msg.equals("苟?")) {
 			motmp = "利";
 			Autoreply.sendGroupMessage(fromGroup, "利");
@@ -279,74 +281,18 @@ public class Methods {
 		}
 	}
 
-	/*
-	 * 下面都是连接网络需要的 直接从百度复制粘贴
-	 */
-	public static class TrustAnyHostnameVerifier implements HostnameVerifier {
-		public boolean verify(String hostname, SSLSession session) {
-			return true;
-		}
-	}
-
-	public static class TrustAnyTrustManager implements X509TrustManager {
-		public void checkClientTrusted(X509Certificate[] chain, String authType) throws CertificateException {
-		}
-
-		public void checkServerTrusted(X509Certificate[] chain, String authType) throws CertificateException {
-		}
-
-		public X509Certificate[] getAcceptedIssuers() {
-			return new X509Certificate[] {};
-		}
-	}
-
-	public static String openUrlWithHttps(String url) throws NoSuchAlgorithmException, KeyManagementException {
-		return openUrlWithHttps(url, null);
-	}
-
-	// 输入网址返回网页源码
-	@SuppressWarnings({ "deprecation", "null", "restriction" })
-	public static String openUrlWithHttps(String url, String cookie)
-			throws NoSuchAlgorithmException, KeyManagementException {
-		InputStream in = null;
-		OutputStream out = null;
-		String str_return = "";
-		try {
-			SSLContext sc = SSLContext.getInstance("SSL");
-			sc.init(null, new TrustManager[] { new TrustAnyTrustManager() }, new java.security.SecureRandom());
-			URL console = new URL(null, url, new sun.net.www.protocol.https.Handler());
-			HttpsURLConnection conn = (HttpsURLConnection) console.openConnection();
-			conn.setSSLSocketFactory(sc.getSocketFactory());
-			conn.setHostnameVerifier(new TrustAnyHostnameVerifier());
-			if (cookie != null) {
-				conn.setRequestProperty("cookie", cookie);
+	public static Map<String, String> cookieToMap(String value) {
+		Map<String, String> map = new HashMap<String, String>();
+		String values[] = value.split("; ");
+		for (String val : values) {
+			String vals[] = val.split("=");
+			if (vals.length == 2) {
+				map.put(vals[0], vals[1]);
+			} else if (vals.length == 1) {
+				map.put(vals[0], "");
 			}
-			conn.connect();
-			InputStream is = conn.getInputStream();
-			DataInputStream indata = new DataInputStream(is);
-			String ret = "";
-			while (ret != null) {
-				ret = indata.readLine();
-				if (ret != null && !ret.trim().equals("")) {
-					str_return = str_return + ret;
-				}
-			}
-			conn.disconnect();
-		} catch (Exception e) {
-			System.out.println("ConnectException");
-			System.out.println(e);
-		} finally {
-			try {
-				in.close();
-			} catch (Exception e) {
-			}
-			try {
-				out.close();
-			} catch (Exception e) {
-			}
-
 		}
-		return str_return;
+		return map;
 	}
 
 	public static String getRealUrl(String surl) {
@@ -365,68 +311,51 @@ public class Methods {
 			String nurl = conn.getURL().toString();
 			realUrl = nurl;
 		} catch (Exception e) {
+			e.printStackTrace();
 		} finally {
 			try {
 				if (in != null) {
 					in.close();
 				}
 			} catch (Exception e2) {
+				e2.printStackTrace();
 			}
 		}
 		return realUrl;
 	}
 
-	public static String openUrlWithHttp(String url) {
-		String result = "";
-		String line;
-		StringBuffer sb = new StringBuffer();
-		BufferedReader in = null;
+	public static String getSourceCode(String url) {
+		return getSourceCode(url, null);
+	}
+
+	public static String getSourceCode(String url, String cookie) {
+		Connection.Response response = null;
+		Connection connection = null;
 		try {
-			URL realUrl = new URL(url);
-			URLConnection conn = realUrl.openConnection();
-			conn.setRequestProperty("contentType", "utf-8");
-			conn.setRequestProperty("content-type", "application/x-www-form-urlencoded");
-			conn.connect();
-			in = new BufferedReader(new InputStreamReader(conn.getInputStream(), "utf-8"));
-			while ((line = in.readLine()) != null) {
-				sb.append(line);
+			connection = Jsoup.connect(url);
+			if (cookie != null) {
+				connection.cookies(cookieToMap(cookie));
 			}
-			result = sb.toString();
-		} catch (Exception e) {
-		} finally {
-			try {
-				if (in != null) {
-					in.close();
-				}
-			} catch (Exception e2) {
+			connection.ignoreContentType(true).method(Connection.Method.GET);
+			response = connection.execute();
+			if (response.statusCode() != 200) {
+				System.out.println("response.statusCode()" + response.statusCode());
 			}
+		} catch (IOException e) {
+			e.printStackTrace();
 		}
-		return result;
+		return response.body();
 	}
 
-	public static String getStringBetween(String str, String start, String end, int index) {
-
-		int flagA = str.indexOf(start, index);
-		int flagB = str.indexOf(end, flagA + 1);
-		if (flagA < 0 || flagB < 0) {
-			return null;
-		} else {
-			flagA = flagA + start.length();
-			if (flagA < 0 || flagB < 0) {
-				return null;
-			}
-			return str.substring(flagA, flagB);
-		}
-	}
-
-	public static String getG_tk(String skey) {
-		int hash = 5381;
-		int flag = skey.length();
-		for (int i = 0; i < flag; i++) {
-			hash = hash + hash * 32 + skey.charAt(i);
-		}
-		return String.valueOf(hash & 0x7fffffff);
-	}
+	//
+	// public static String getG_tk(String skey) {
+	// int hash = 5381;
+	// int flag = skey.length();
+	// for (int i = 0; i < flag; i++) {
+	// hash = hash + hash * 32 + skey.charAt(i);
+	// }
+	// return String.valueOf(hash & 0x7fffffff);
+	// }
 
 	public static boolean checkBarcodeEncode(long fromGroup, long fromQQ, String msg) {
 		if (msg.startsWith("生成QR ") || msg.startsWith("生成PDF417 ")) {
