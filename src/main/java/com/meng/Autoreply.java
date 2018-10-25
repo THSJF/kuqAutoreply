@@ -7,6 +7,7 @@ import java.util.Random;
 import javax.swing.JOptionPane;
 
 import com.meng.barcode.BarcodeDecodeManager;
+import com.meng.bilibili.BiliArticleInfo;
 import com.meng.bilibili.BiliVideoInfo;
 import com.meng.bilibili.LiveManager;
 import com.meng.bilibili.LivePerson;
@@ -18,7 +19,7 @@ import com.meng.groupChat.fanpohai;
 import com.meng.searchPicture.PicSearchManager;
 import com.meng.tip.FileTipManager;
 import com.meng.tip.FileTipUploader;
-import com.meng.tip.ZuiSuJinTianGengLeMa;
+import com.meng.tip.TimeTip;
 import com.sobte.cqp.jcq.entity.Anonymous;
 import com.sobte.cqp.jcq.entity.CoolQ;
 import com.sobte.cqp.jcq.entity.GroupFile;
@@ -52,8 +53,9 @@ public class Autoreply extends JcqAppAbstract implements ICQVer, IMsg, IRequest 
 	private Banner banner = new Banner();
 	private RecoderManager recoderManager;
 	private RollPlane rollPlane = new RollPlane();
-	private ZuiSuJinTianGengLeMa zuiSuJinTianGengLeMa = new ZuiSuJinTianGengLeMa();
+	private TimeTip timeTip = new TimeTip();
 	private BiliVideoInfo biliVideoInfo = new BiliVideoInfo();
+	private BiliArticleInfo biliArticleInfo = new BiliArticleInfo();
 	private FileTipManager fileTipManager;
 	private fanpohai fph;
 	private DicReplyManager dicReplyManager;
@@ -113,7 +115,7 @@ public class Autoreply extends JcqAppAbstract implements ICQVer, IMsg, IRequest 
 		fph = new fanpohai();
 		loadConfig();
 		addFileTip();
-		zuiSuJinTianGengLeMa.start();
+		timeTip.start();
 		// 返回如：D:\CoolQ\app\com.sobte.cqp.jcq\app\com.example.demo\
 		return 0;
 	}
@@ -296,9 +298,11 @@ public class Autoreply extends JcqAppAbstract implements ICQVer, IMsg, IRequest 
 			return MSG_IGNORE;
 		if (Methods.checkMo(fromGroup, msg))// 膜
 			return MSG_IGNORE;
-		if (zuiSuJinTianGengLeMa.check(fromGroup, fromQQ))// 催更
+		if (timeTip.check(fromGroup, fromQQ))// 根据时间提醒
 			return MSG_IGNORE;
 		if (biliVideoInfo.check(fromGroup, msg))// 比利比利视频详情
+			return MSG_IGNORE;
+		if (biliArticleInfo.check(fromGroup, msg))// 比利比利文章详情
 			return MSG_IGNORE;
 		if (Methods.checkLink(fromGroup, msg))// 收到的消息有链接
 			return MSG_IGNORE;
