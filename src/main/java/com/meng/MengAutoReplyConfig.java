@@ -9,6 +9,7 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import com.google.gson.JsonSyntaxException;
+import com.meng.bilibili.BiliUp;
 
 public class MengAutoReplyConfig {
 
@@ -18,6 +19,8 @@ public class MengAutoReplyConfig {
 	private HashMap<Integer, String> mapGroupRecorder = new HashMap<Integer, String>();
 	private HashMap<Integer, Long> mapGroupDicReply = new HashMap<Integer, Long>();
 	private HashMap<String, String> mapLiveTip = new HashMap<String, String>();
+	private HashMap<Integer, BiliUp> mapBiliUp = new HashMap<Integer, BiliUp>();
+
 	private JsonParser parser;
 
 	public MengAutoReplyConfig() {
@@ -42,41 +45,48 @@ public class MengAutoReplyConfig {
 			Entry entry = (Entry) it.next();
 			JsonArray array = (JsonArray) entry.getValue();
 			int arraySize = array.size();
-			int k = 0;
 			switch ((String) entry.getKey()) {
 			case "mapGroupNotReply":
-				for (; k < arraySize; k++) {
+				for (int k = 0; k < arraySize; k++) {
 					mapGroupNotReply.put(k, Long.parseLong(Methods.removeCharAtStartAndEnd(array.get(k).toString())));
 				}
 				break;
 			case "mapQQNotReply":
-				for (; k < arraySize; k++) {
+				for (int k = 0; k < arraySize; k++) {
 					mapQQNotReply.put(k, Long.parseLong(Methods.removeCharAtStartAndEnd(array.get(k).toString())));
 				}
 				break;
 			case "mapGroupRecorder":
-				for (; k < arraySize; k++) {
+				for (int k = 0; k < arraySize; k++) {
 					mapGroupRecorder.put(k, Methods.removeCharAtStartAndEnd(array.get(k).toString()));
 				}
 				break;
 			case "mapGroupDicReply":
-				for (; k < arraySize; k++) {
+				for (int k = 0; k < arraySize; k++) {
 					mapGroupDicReply.put(k, Long.parseLong(Methods.removeCharAtStartAndEnd(array.get(k).toString())));
 				}
 				break;
 			case "mapWordNotReply":
-				for (; k < arraySize; k++) {
+				for (int k = 0; k < arraySize; k++) {
 					mapWordNotReply.put(k, Methods.removeCharAtStartAndEnd(array.get(k).toString().replace("\"", "")));
 				}
 				break;
 			case "mapLiveTip":
-				for (; k < arraySize / 2; k++) {
+				for (int k = 0; k < arraySize; k += 2) {
 					try {
-						mapLiveTip.put(Methods.removeCharAtStartAndEnd(array.get(2 * k).toString()),
-								Methods.removeCharAtStartAndEnd(array.get(2 * k + 1).toString()));
+						mapLiveTip.put(Methods.removeCharAtStartAndEnd(array.get(k).toString()),
+								Methods.removeCharAtStartAndEnd(array.get(k + 1).toString()));
 					} catch (Exception e) {
 						e.printStackTrace();
 					}
+				}
+				break;
+			case "mapBiliUp":
+				for (int k = 0; k < arraySize; k += 3) {
+					mapBiliUp.put(k,
+							new BiliUp(Methods.removeCharAtStartAndEnd(array.get(k).toString()),
+									Long.parseLong(Methods.removeCharAtStartAndEnd(array.get(k + 1).toString())),
+									Long.parseLong(Methods.removeCharAtStartAndEnd(array.get(k + 2).toString()))));
 				}
 				break;
 			}
@@ -109,4 +119,7 @@ public class MengAutoReplyConfig {
 		return mapLiveTip;
 	}
 
+	public HashMap<Integer, BiliUp> getMapBiliUp() {
+		return mapBiliUp;
+	}
 }

@@ -13,7 +13,7 @@ public class TimeTip extends Thread {
 	long ziyuan = 2198634315L;
 	long jizhe = 1012539034L;
 	boolean tipedZuisu = true;
-	boolean tipedZiyuan = true;
+	boolean tipedZiyuan = false;
 	boolean tipedModao = true;
 
 	public TimeTip() {

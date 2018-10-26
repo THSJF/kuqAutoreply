@@ -8,9 +8,12 @@ import javax.swing.JOptionPane;
 
 import com.meng.barcode.BarcodeDecodeManager;
 import com.meng.bilibili.BiliArticleInfo;
+import com.meng.bilibili.BiliUp;
 import com.meng.bilibili.BiliVideoInfo;
 import com.meng.bilibili.LiveManager;
 import com.meng.bilibili.LivePerson;
+import com.meng.bilibili.NewUpdate;
+import com.meng.bilibili.NewUpdateJavaBean;
 import com.meng.groupChat.DicReplyGroup;
 import com.meng.groupChat.DicReplyManager;
 import com.meng.groupChat.RecoderManager;
@@ -60,6 +63,7 @@ public class Autoreply extends JcqAppAbstract implements ICQVer, IMsg, IRequest 
 	private fanpohai fph;
 	private DicReplyManager dicReplyManager;
 	private MengAutoReplyConfig mengAutoReplyConfig;
+	private NewUpdate newUpdate;
 	private LiveManager livingManager = new LiveManager();
 	private PicSearchManager picSearchManager = new PicSearchManager();
 	private BarcodeDecodeManager barcodeDecodeManager = new BarcodeDecodeManager();
@@ -111,7 +115,6 @@ public class Autoreply extends JcqAppAbstract implements ICQVer, IMsg, IRequest 
 	public int startup() {
 		// 获取应用数据目录(无需储存数据时，请将此行注释)
 		appDirectory = CQ.getAppDirectory();
-		dicReplyManager = new DicReplyManager();
 		fph = new fanpohai();
 		loadConfig();
 		addFileTip();
@@ -309,6 +312,8 @@ public class Autoreply extends JcqAppAbstract implements ICQVer, IMsg, IRequest 
 		if (rollPlane.check(fromGroup, msg))// roll
 			return MSG_IGNORE;
 		if (fph.check(fromQQ, fromGroup, msg))// 反迫害
+			return MSG_IGNORE;
+		if (newUpdate.check(fromGroup, msg))
 			return MSG_IGNORE;
 		if (dicReplyManager.check(fromGroup, fromQQ, msg))// 根据词库触发回答
 			return MSG_IGNORE;
@@ -627,6 +632,7 @@ public class Autoreply extends JcqAppAbstract implements ICQVer, IMsg, IRequest 
 		nrq = mengAutoReplyConfig.getMapQQNotReply();
 		nrw = mengAutoReplyConfig.getMapWordNotReply();
 		addGroupDic();
+		addUp();
 		addRecorder();
 		// addLive();
 	}
@@ -646,6 +652,14 @@ public class Autoreply extends JcqAppAbstract implements ICQVer, IMsg, IRequest 
 		for (int key : gr.keySet()) {// 遍历
 			String[] groupCfg = gr.get(key).split("\\.");
 			recoderManager.addData(new RecordBanner(Long.parseLong(groupCfg[0]), Integer.parseInt(groupCfg[1])));
+		}
+	}
+
+	private void addUp() {
+		HashMap<Integer, BiliUp> bu = mengAutoReplyConfig.getMapBiliUp();
+		newUpdate = new NewUpdate();
+		for (int key : bu.keySet()) {// 遍历
+			newUpdate.addData(bu.get(key));
 		}
 	}
 
