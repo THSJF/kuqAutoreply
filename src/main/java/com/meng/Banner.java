@@ -94,7 +94,7 @@ public class Banner {
 					break;
 				case "d":
 				case "day":
-					times = 43200;
+					times = 86400;
 					break;
 				case "w":
 				case "week":

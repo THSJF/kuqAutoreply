@@ -60,7 +60,7 @@ public class fanpohai {
 				if (pohaicishu == alpohai) {
 					bpohai = true;
 					pohaicishu = 0;
-					alpohai = Autoreply.random.nextInt(5) + 2;
+					alpohai = Autoreply.random.getNextInt(5) + 2;
 				}
 			}
 			// 判定图片相似度
@@ -104,7 +104,7 @@ public class fanpohai {
 					}
 				}
 				if (folder.equals("")) {
-					int ir = Autoreply.random.nextInt(3);
+					int ir = Autoreply.random.getNextInt(3);
 					if (ir == 0) {
 						Autoreply.sendGroupMessage(fromGroup, "鬼鬼");
 					} else if (ir == 1) {

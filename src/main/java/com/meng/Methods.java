@@ -23,6 +23,7 @@ import com.meng.lookGroup.IPGetter;
 public class Methods {
 	private static String motmp = "";
 	private static String meng2tmp = "";
+	static int arrayFlag = new java.util.Random().nextInt(5000);
 
 	// 主开关
 	public static boolean checkSwitch(long fromGroup, String msg) {
@@ -41,7 +42,7 @@ public class Methods {
 
 	// randomFromArray 随机返回数组中的一项
 	public static Object rfa(Object[] array) {
-		return array[Autoreply.random.nextInt(2147483647) % array.length];
+		return array[Autoreply.random.getNextInt(array.length)];
 	}
 
 	// 有@的时候
@@ -217,7 +218,7 @@ public class Methods {
 	// 分享音乐
 	public static boolean checkMusic(long fromGroup, String msg) {
 		if (msg.startsWith("[CQ:music")) {
-			int i = Autoreply.random.nextInt(2147483647) % 3;
+			int i = Autoreply.random.nextInt(3);
 			switch (i) {
 			case 0:
 				Autoreply.sendGroupMessage(fromGroup, Autoreply.CC.music(22636603, "163", false));

@@ -7,6 +7,7 @@ import java.util.HashMap;
 import com.google.gson.Gson;
 import com.meng.Autoreply;
 import com.meng.Methods;
+import com.meng.bilibili.NewUpdateJavaBean.Data.Vlist;
 
 public class NewUpdate {
 
@@ -30,17 +31,18 @@ public class NewUpdate {
 					.replace("\"3\":", "\"n3\":").replace("\"4\":", "\"n4\":");
 			Gson gson = new Gson();
 			NewUpdateJavaBean njb = gson.fromJson(jsonStr, NewUpdateJavaBean.class);
-			Date date = stampToDate(Long.parseLong(njb.data.vlist.get(0).getCreated()));
-			Calendar c = Calendar.getInstance();
-			if (c.get(Calendar.YEAR) == (1900 + date.getYear()) && c.get(Calendar.MONTH) == date.getMonth()
-					&& c.get(Calendar.DAY_OF_MONTH) == date.getDate()) {
-				Autoreply.sendGroupMessage(fromGroup,
-						"更新莉，，，https://www.bilibili.com/video/av" + njb.data.vlist.get(0).getAid());
+			Vlist vlist = njb.data.vlist.get(0);
+			boolean updated = System.currentTimeMillis() - Long.parseLong(vlist.created) * 1000 < 86400000;
+			Date date = stampToDate(Long.parseLong(vlist.created));
+			if (updated) {
+				Autoreply.sendGroupMessage(fromGroup, "更新莉，，，https://www.bilibili.com/video/av" + vlist.aid);
 			} else {
+				Autoreply.sendGroupMessage(fromGroup,
+						"最后更新为" + (1900 + date.getYear()) + "年" + (date.getMonth() + 1) + "月" + date.getDate() + "日"
+								+ date.getHours() + "时" + date.getMinutes() + "分" + date.getSeconds() + "秒");
 				Autoreply.sendGroupMessage(fromGroup, Autoreply.CC.at(getUpQQ(msg)) + Methods.rfa(words));
 			}
-			Autoreply.sendGroupMessage(fromGroup, "最后更新为" + (1900 + date.getYear()) + "年" + (date.getMonth() + 1) + "月"
-					+ date.getDate() + "日" + date.getHours() + "时" + date.getMinutes() + "分" + date.getSeconds() + "秒");
+
 			return true;
 		}
 		return false;

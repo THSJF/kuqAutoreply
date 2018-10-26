@@ -3,7 +3,6 @@ package com.meng;
 import java.io.File;
 import java.io.IOException;
 import java.util.HashMap;
-import java.util.Random;
 import javax.swing.JOptionPane;
 
 import com.meng.barcode.BarcodeDecodeManager;
@@ -13,7 +12,6 @@ import com.meng.bilibili.BiliVideoInfo;
 import com.meng.bilibili.LiveManager;
 import com.meng.bilibili.LivePerson;
 import com.meng.bilibili.NewUpdate;
-import com.meng.bilibili.NewUpdateJavaBean;
 import com.meng.groupChat.DicReplyGroup;
 import com.meng.groupChat.DicReplyManager;
 import com.meng.groupChat.RecoderManager;
@@ -313,7 +311,7 @@ public class Autoreply extends JcqAppAbstract implements ICQVer, IMsg, IRequest 
 			return MSG_IGNORE;
 		if (fph.check(fromQQ, fromGroup, msg))// 反迫害
 			return MSG_IGNORE;
-		if (newUpdate.check(fromGroup, msg))
+		if (newUpdate.check(fromGroup, msg))// 催更
 			return MSG_IGNORE;
 		if (dicReplyManager.check(fromGroup, fromQQ, msg))// 根据词库触发回答
 			return MSG_IGNORE;

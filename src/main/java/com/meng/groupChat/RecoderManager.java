@@ -17,12 +17,13 @@ public class RecoderManager {
 	}
 
 	// 遍历集合查看是否需要复读
-	public boolean check(long group, long QQ, String msg){
+	public boolean check(long group, long QQ, String msg) {
 		boolean b = false;
 		for (int i = 0; i < mapFlag; i++) {
 			try {
 				b = b | recoderMap.get(i).check(group, msg, QQ);
-			} catch (Exception e) {return false;
+			} catch (Exception e) {
+				return false;
 			}
 		}
 		return b;
