@@ -1,6 +1,7 @@
 package com.meng.bilibili;
 
 public class LivePerson {
+	/*
 	private String name = "";
 	private int number = 0;
 	private String liveUrl = "";
@@ -50,4 +51,5 @@ public class LivePerson {
 	public void setLiving(boolean b) {
 		isLiving = b;
 	}
+	*/
 }

@@ -9,7 +9,7 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import com.google.gson.JsonSyntaxException;
-import com.meng.bilibili.BiliUp;
+import com.meng.bilibili.BiliUpJavaBean;
 
 public class MengAutoReplyConfig {
 
@@ -18,8 +18,9 @@ public class MengAutoReplyConfig {
 	private HashMap<Integer, String> mapWordNotReply = new HashMap<Integer, String>();
 	private HashMap<Integer, String> mapGroupRecorder = new HashMap<Integer, String>();
 	private HashMap<Integer, Long> mapGroupDicReply = new HashMap<Integer, Long>();
-	private HashMap<String, String> mapLiveTip = new HashMap<String, String>();
-	private HashMap<Integer, BiliUp> mapBiliUp = new HashMap<Integer, BiliUp>();
+	// private HashMap<String, String> mapLiveTip = new HashMap<String,
+	// String>();
+	private HashMap<Integer, BiliUpJavaBean> mapBiliUp = new HashMap<Integer, BiliUpJavaBean>();
 
 	private JsonParser parser;
 
@@ -71,20 +72,17 @@ public class MengAutoReplyConfig {
 					mapWordNotReply.put(k, Methods.removeCharAtStartAndEnd(array.get(k).toString().replace("\"", "")));
 				}
 				break;
-			case "mapLiveTip":
-				for (int k = 0; k < arraySize; k += 2) {
-					try {
-						mapLiveTip.put(Methods.removeCharAtStartAndEnd(array.get(k).toString()),
-								Methods.removeCharAtStartAndEnd(array.get(k + 1).toString()));
-					} catch (Exception e) {
-						e.printStackTrace();
-					}
-				}
-				break;
+			/*
+			 * case "mapLiveTip": for (int k = 0; k < arraySize; k += 2) { try {
+			 * mapLiveTip.put(Methods.removeCharAtStartAndEnd(array.get(k).
+			 * toString()), Methods.removeCharAtStartAndEnd(array.get(k +
+			 * 1).toString())); } catch (Exception e) { e.printStackTrace(); } }
+			 * break;
+			 */
 			case "mapBiliUp":
 				for (int k = 0; k < arraySize; k += 3) {
 					mapBiliUp.put(k,
-							new BiliUp(Methods.removeCharAtStartAndEnd(array.get(k).toString()),
+							new BiliUpJavaBean(Methods.removeCharAtStartAndEnd(array.get(k).toString()),
 									Long.parseLong(Methods.removeCharAtStartAndEnd(array.get(k + 1).toString())),
 									Long.parseLong(Methods.removeCharAtStartAndEnd(array.get(k + 2).toString()))));
 				}
@@ -115,11 +113,11 @@ public class MengAutoReplyConfig {
 		return mapGroupDicReply;
 	}
 
-	public HashMap<String, String> getMapLiveTip() {
-		return mapLiveTip;
-	}
+	/*
+	 * public HashMap<String, String> getMapLiveTip() { return mapLiveTip; }
+	 */
 
-	public HashMap<Integer, BiliUp> getMapBiliUp() {
+	public HashMap<Integer, BiliUpJavaBean> getMapBiliUp() {
 		return mapBiliUp;
 	}
 }

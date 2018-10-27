@@ -1,16 +1,5 @@
 package com.meng.bilibili;
 
-import java.io.BufferedReader;
-import java.io.DataOutputStream;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.UnsupportedEncodingException;
-import java.net.HttpURLConnection;
-import java.net.URL;
-import java.net.URLEncoder;
-
-import com.meng.Autoreply;
-
 public class Nai {
 
 //	public final String POST_URL = "http://api.live.bilibili.com/msg/send";

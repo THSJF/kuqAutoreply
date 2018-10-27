@@ -57,7 +57,7 @@ public class BiliArticleInfoJavaBean {
 			@Override
 			public String toString() {
 				// TODO Auto-generated method stub
-				return view + "次阅读," + reply + "条回复," + coin + "个硬币," + share + "次分享," + favorite + "人收藏," + like
+				return view + "次阅读," + reply + "条评论," + coin + "个硬币," + share + "次分享," + favorite + "人收藏," + like
 						+ "人赞," + dislike + "人踩";
 			}
 		}

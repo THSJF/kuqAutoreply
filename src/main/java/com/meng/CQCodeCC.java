@@ -1,9 +1,6 @@
 package com.meng;
 
 import java.io.File;
-import java.util.ArrayList;
-import java.util.List;
-
 import com.sobte.cqp.jcq.entity.CQImage;
 import com.sobte.cqp.jcq.entity.IniFile;
 import com.sobte.cqp.jcq.message.CQCode;
@@ -21,23 +18,5 @@ public class CQCodeCC extends CQCode {
 		} catch (Exception e) {
 			return null;
 		}
-	}
-
-	public List<CQImage> getCQImages(String code) {
-		List<CQImage> list = new ArrayList<CQImage>();
-		List<String> imgs = new CoolQCode(code).gets("image", "file");
-		try {
-			for (String file : imgs) {
-				if (file != null) {
-					String path = StringHelper.stringConcat("data", File.separator, "image", File.separator, file,
-							".cqimg");
-					File iniFile = new File(path);
-					if (iniFile.exists() && iniFile.canRead())
-						list.add(new CQImage(new IniFile(iniFile)));
-				}
-			}
-		} catch (Exception e) {
-		}
-		return list;
 	}
 }

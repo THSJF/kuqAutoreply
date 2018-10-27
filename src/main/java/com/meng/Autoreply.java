@@ -6,11 +6,8 @@ import java.util.HashMap;
 import javax.swing.JOptionPane;
 
 import com.meng.barcode.BarcodeDecodeManager;
-import com.meng.bilibili.BiliArticleInfo;
-import com.meng.bilibili.BiliUp;
-import com.meng.bilibili.BiliVideoInfo;
-import com.meng.bilibili.LiveManager;
-import com.meng.bilibili.LivePerson;
+import com.meng.bilibili.BiliUpJavaBean;
+import com.meng.bilibili.BiliLinkInfo;
 import com.meng.bilibili.NewUpdate;
 import com.meng.groupChat.DicReplyGroup;
 import com.meng.groupChat.DicReplyManager;
@@ -55,14 +52,13 @@ public class Autoreply extends JcqAppAbstract implements ICQVer, IMsg, IRequest 
 	private RecoderManager recoderManager;
 	private RollPlane rollPlane = new RollPlane();
 	private TimeTip timeTip = new TimeTip();
-	private BiliVideoInfo biliVideoInfo = new BiliVideoInfo();
-	private BiliArticleInfo biliArticleInfo = new BiliArticleInfo();
+	private BiliLinkInfo biliVideoInfo = new BiliLinkInfo();
 	private FileTipManager fileTipManager;
 	private fanpohai fph;
 	private DicReplyManager dicReplyManager;
 	private MengAutoReplyConfig mengAutoReplyConfig;
 	private NewUpdate newUpdate;
-	private LiveManager livingManager = new LiveManager();
+	// private LiveManager livingManager = new LiveManager();
 	private PicSearchManager picSearchManager = new PicSearchManager();
 	private BarcodeDecodeManager barcodeDecodeManager = new BarcodeDecodeManager();
 
@@ -258,21 +254,15 @@ public class Autoreply extends JcqAppAbstract implements ICQVer, IMsg, IRequest 
 
 		}
 
-		if (msg.equalsIgnoreCase(".live")) {
-			boolean b = false;
-			for (int i = 0; i < livingManager.getMapFlag(); i++) {
-				LivePerson lp = livingManager.getPerson(i);
-				if (lp.isLiving()) {
-					sendGroupMessage(fromGroup, lp.getName() + "直播开始啦大家快去奶" + lp.getLiveUrl());
-				}
-				b = b || livingManager.getPerson(i).isLiving();
-			}
-			if (!b) {
-				sendGroupMessage(fromGroup, "惊了 居然没有飞机佬直播");
-			}
-			return MSG_IGNORE;
-		}
-
+		/*
+		 * if (msg.equalsIgnoreCase(".live")) { boolean b = false; for (int i =
+		 * 0; i < livingManager.getMapFlag(); i++) { LivePerson lp =
+		 * livingManager.getPerson(i); if (lp.isLiving()) {
+		 * sendGroupMessage(fromGroup, lp.getName() + "直播开始啦大家快去奶" +
+		 * lp.getLiveUrl()); } b = b || livingManager.getPerson(i).isLiving(); }
+		 * if (!b) { sendGroupMessage(fromGroup, "惊了 居然没有飞机佬直播"); } return
+		 * MSG_IGNORE; }
+		 */
 		if (Methods.checkSwitch(fromGroup, msg))// 控制
 			return MSG_IGNORE;
 		if (checkNotReply(fromGroup, fromQQ, msg))// 指定不回复的项目
@@ -301,9 +291,7 @@ public class Autoreply extends JcqAppAbstract implements ICQVer, IMsg, IRequest 
 			return MSG_IGNORE;
 		if (timeTip.check(fromGroup, fromQQ))// 根据时间提醒
 			return MSG_IGNORE;
-		if (biliVideoInfo.check(fromGroup, msg))// 比利比利视频详情
-			return MSG_IGNORE;
-		if (biliArticleInfo.check(fromGroup, msg))// 比利比利文章详情
+		if (biliVideoInfo.check(fromGroup, msg))// 比利比利链接详情
 			return MSG_IGNORE;
 		if (Methods.checkLink(fromGroup, msg))// 收到的消息有链接
 			return MSG_IGNORE;
@@ -462,10 +450,10 @@ public class Autoreply extends JcqAppAbstract implements ICQVer, IMsg, IRequest 
 				return MSG_IGNORE;
 			}
 			QQInfo qInfo = CQ.getStrangerInfo(beingOperateQQ);
-			if (qInfo.getGender() == 0) {
-				sendGroupMessage(fromGroup, CC.at(beingOperateQQ) + "你已经是群萌新了，快打个" + Methods.rfa(strings) + "给群友们看看吧");
-			} else if (qInfo.getGender() == 1) {
+			if (qInfo.getGender() == 1) {
 				sendGroupMessage(fromGroup, "新来的小姐姐打个" + Methods.rfa(strings) + "给这群飞机佬看看吧");
+			} else {
+				sendGroupMessage(fromGroup, CC.at(beingOperateQQ) + "你已经是群萌新了，快打个" + Methods.rfa(strings) + "给群友们看看吧");
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -654,22 +642,20 @@ public class Autoreply extends JcqAppAbstract implements ICQVer, IMsg, IRequest 
 	}
 
 	private void addUp() {
-		HashMap<Integer, BiliUp> bu = mengAutoReplyConfig.getMapBiliUp();
+		HashMap<Integer, BiliUpJavaBean> bu = mengAutoReplyConfig.getMapBiliUp();
 		newUpdate = new NewUpdate();
 		for (int key : bu.keySet()) {// 遍历
 			newUpdate.addData(bu.get(key));
 		}
 	}
 
-	private void addLive() {
-		HashMap<String, String> mlt = mengAutoReplyConfig.getMapLiveTip();
-		livingManager = new LiveManager();
-		for (String key : mlt.keySet()) {// 遍历
-			livingManager.addData(new LivePerson(key, "https://live.bilibili.com/" + mlt.get(key)));
-		}
-		livingManager.start();
-	}
-
+	/*
+	 * private void addLive() { HashMap<String, String> mlt =
+	 * mengAutoReplyConfig.getMapLiveTip(); livingManager = new LiveManager();
+	 * for (String key : mlt.keySet()) {// 遍历 livingManager.addData(new
+	 * LivePerson(key, "https://live.bilibili.com/" + mlt.get(key))); }
+	 * livingManager.start(); }
+	 */
 	private boolean checkNotReply(long fromGroup, long fromQQ, String msg) {
 		for (int key : nrg.keySet()) {// 遍历
 			if (fromGroup == nrg.get(key))

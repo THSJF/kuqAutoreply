@@ -1,12 +1,7 @@
 package com.meng.bilibili;
 
-import java.util.HashMap;
-
-import com.meng.Autoreply;
-import com.meng.Methods;
-
 public class LiveManager extends Thread {
-
+/*
 	private HashMap<Integer, LivePerson> liveData = new HashMap<Integer, LivePerson>();
 	private int mapFlag = 0;
 	private final String liveString = "\"live_time\":\"0000-00-00 00:00:00\"";// 如果网页代码中包含这个字符串
@@ -103,5 +98,5 @@ public class LiveManager extends Thread {
 			break;
 		}
 	}
-
+*/
 }
