@@ -35,7 +35,7 @@ public class NewUpdate {
 			} else {
 				Autoreply.sendGroupMessage(fromGroup, Autoreply.CC.at(getUpQQ(msg)) + Methods.rfa(words));
 				Autoreply.sendGroupMessage(fromGroup, "你都"
-						+ ((System.currentTimeMillis() - Long.parseLong(vlist.created) * 1000) / 864000) + "天没更新了");
+						+ ((System.currentTimeMillis() - Long.parseLong(vlist.created) * 1000) / 86400000) + "天没更新了");
 			}
 			return true;
 		}
