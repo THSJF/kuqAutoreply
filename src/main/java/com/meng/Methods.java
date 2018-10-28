@@ -42,7 +42,7 @@ public class Methods {
 
 	// randomFromArray 随机返回数组中的一项
 	public static Object rfa(Object[] array) {
-		return array[Autoreply.random.getNextInt(array.length)];
+		return array[Autoreply.random.nextInt(2147483647) % array.length];
 	}
 
 	// 有@的时候
@@ -54,27 +54,6 @@ public class Methods {
 			}
 			// @消息发送者并复读内容
 			Autoreply.sendGroupMessage(fromGroup, Autoreply.CC.at(fromQQ) + msg.substring(msg.indexOf(" ") + 1));
-			return true;
-		}
-		return false;
-	}
-
-	// 有人发送分享链接时
-	public static boolean checkLink(long fromGroup, String msg) {
-		if (msg.startsWith("[CQ:share,url=")) {// 分享链接的特征
-			// 截取相关字符串
-			// String link = msg.substring(msg.indexOf("http"),
-			// msg.indexOf(",title="));
-			// String title = msg.substring(msg.indexOf("title=") + 6,
-			// msg.indexOf(",content"));
-			// String describe = msg.substring(msg.indexOf("content=") + 8,
-			// msg.indexOf(",image"));
-			String picture = msg.substring(msg.lastIndexOf("http"), msg.lastIndexOf("]"));
-			// 发送消息
-			// Autoreply.sendGroupMessage(fromGroup,
-			// "标题:" + title + "\n链接:" + link + "\n封面图:" + picture + "\n描述:" +
-			// describe);
-			Autoreply.sendGroupMessage(fromGroup, "封面图:" + picture);
 			return true;
 		}
 		return false;
@@ -197,44 +176,6 @@ public class Methods {
 		return false;
 	}
 
-	// 签到
-	public static boolean checkSign(long fromGroup, String msg) {
-		if (msg.startsWith("[CQ:sign")) {
-			if (fromGroup == 424838564L) {
-				try {
-					Autoreply.sendGroupMessage(fromGroup, "签到成功 这是你的签到奖励"
-							+ Autoreply.CC.image(new File(Autoreply.appDirectory + "pic/qiaodaodnf.png")));
-				} catch (IOException e) {
-					e.printStackTrace();
-				}
-			} else {
-				Autoreply.sendGroupMessage(fromGroup, "image:pic/qiandao.jpg");
-			}
-			return true;
-		}
-		return false;
-	}
-
-	// 分享音乐
-	public static boolean checkMusic(long fromGroup, String msg) {
-		if (msg.startsWith("[CQ:music")) {
-			int i = Autoreply.random.nextInt(3);
-			switch (i) {
-			case 0:
-				Autoreply.sendGroupMessage(fromGroup, Autoreply.CC.music(22636603, "163", false));
-				break;
-			case 1:
-				Autoreply.sendGroupMessage(fromGroup, Autoreply.CC.music(103744845, "qq", false));
-				break;
-			case 2:
-				Autoreply.sendGroupMessage(fromGroup, Autoreply.CC.music(103744852, "qq", false));
-				break;
-			}
-			return true;
-		}
-		return false;
-	}
-
 	// 萌二
 	public static boolean checkMeng2(long fromGroup, String msg) {
 
@@ -296,31 +237,24 @@ public class Methods {
 		return map;
 	}
 
-	public static String getRealUrl(String surl) {
+	public static String getRealUrl(String surl) throws Exception {
 		String realUrl = "";
 		String line;
 		StringBuffer sb = new StringBuffer();
 		BufferedReader in = null;
-		try {
-			URL url = new URL(surl);
-			URLConnection conn = url.openConnection();
-			conn.connect();
-			in = new BufferedReader(new InputStreamReader(conn.getInputStream(), "utf-8"));
-			while ((line = in.readLine()) != null) {
-				sb.append(line);
-			}
-			String nurl = conn.getURL().toString();
-			realUrl = nurl;
-		} catch (Exception e) {
-			e.printStackTrace();
-		} finally {
-			try {
-				if (in != null) {
-					in.close();
-				}
-			} catch (Exception e2) {
-				e2.printStackTrace();
-			}
+		URL url = new URL(surl);
+		URLConnection conn = url.openConnection();
+		conn.connect();
+		in = new BufferedReader(new InputStreamReader(conn.getInputStream(), "utf-8"));
+		while ((line = in.readLine()) != null) {
+			sb.append(line);
+			System.out.println(line);
+		}
+		String nurl = conn.getURL().toString();
+		System.out.println("realUrl" + nurl);
+		realUrl = nurl;
+		if (in != null) {
+			in.close();
 		}
 		return realUrl;
 	}
@@ -347,8 +281,6 @@ public class Methods {
 		}
 		return response.body();
 	}
-
-	//
 	// public static String getG_tk(String skey) {
 	// int hash = 5381;
 	// int flag = skey.length();
@@ -357,13 +289,4 @@ public class Methods {
 	// }
 	// return String.valueOf(hash & 0x7fffffff);
 	// }
-
-	public static boolean checkBarcodeEncode(long fromGroup, long fromQQ, String msg) {
-		if (msg.startsWith("生成QR ") || msg.startsWith("生成PDF417 ")) {
-			BarcodeEncoder barcodeEncoder = new BarcodeEncoder(fromGroup, fromQQ, msg);
-			barcodeEncoder.start();
-			return true;
-		}
-		return false;
-	}
 }

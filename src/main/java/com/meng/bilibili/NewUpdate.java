@@ -10,7 +10,7 @@ import com.meng.bilibili.NewUpdateJavaBean.Data.Vlist;
 public class NewUpdate {
 
 	private HashMap<Integer, BiliUpJavaBean> hm = new HashMap<>();
-	private String[] words = new String[] { "更了吗", "出来更新", "什么时候更新啊", "在？看看更新", "怎么还不更新" };
+	private String[] words = new String[] { "更了吗", "出来更新", "什么时候更新啊", "在？看看更新", "怎么还不更新", "更新啊草绳" };
 	private int mapFlag = 0;
 
 	public NewUpdate() {

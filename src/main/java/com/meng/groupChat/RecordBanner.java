@@ -91,7 +91,7 @@ public class RecordBanner {
 		}
 		if (lastStatus && (lastMessageRecieved.equals(msg) || (isPicMsgRepeat(lastMessageRecieved, msg, simi)))) {
 			System.out.println("复读持续中");
-			b = true;
+			b = false;
 			if (banCount < 1) {
 				banCount = 6;
 			}

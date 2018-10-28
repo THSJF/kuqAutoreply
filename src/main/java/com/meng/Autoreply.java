@@ -3,9 +3,11 @@ package com.meng;
 import java.io.File;
 import java.io.IOException;
 import java.util.HashMap;
+import java.util.Random;
+
 import javax.swing.JOptionPane;
 
-import com.meng.barcode.BarcodeDecodeManager;
+import com.meng.barcode.BarcodeManager;
 import com.meng.bilibili.BiliUpJavaBean;
 import com.meng.bilibili.BiliLinkInfo;
 import com.meng.bilibili.NewUpdate;
@@ -57,10 +59,11 @@ public class Autoreply extends JcqAppAbstract implements ICQVer, IMsg, IRequest 
 	private fanpohai fph;
 	private DicReplyManager dicReplyManager;
 	private MengAutoReplyConfig mengAutoReplyConfig;
+	private CQcodeManager cQcodeManager = new CQcodeManager();
 	private NewUpdate newUpdate;
 	// private LiveManager livingManager = new LiveManager();
 	private PicSearchManager picSearchManager = new PicSearchManager();
-	private BarcodeDecodeManager barcodeDecodeManager = new BarcodeDecodeManager();
+	private BarcodeManager barcodeManager = new BarcodeManager();
 
 	private HashMap<Integer, Long> nrg;
 	private HashMap<Integer, Long> nrq;
@@ -178,9 +181,7 @@ public class Autoreply extends JcqAppAbstract implements ICQVer, IMsg, IRequest 
 	 */
 	public int privateMsg(int subType, int msgId, long fromQQ, String msg, int font) {
 		// 这里处理消息
-		if (Methods.checkBarcodeEncode(-1, fromQQ, msg)) // 二维码编码
-			return MSG_IGNORE;
-		if (barcodeDecodeManager.check(-1, fromQQ, msg)) // 二维码解码
+		if (barcodeManager.check(-1, fromQQ, msg)) // 二维码解码
 			return MSG_IGNORE;
 		String[] strings = msg.split("\\.");
 		// 转发到指定群
@@ -267,17 +268,15 @@ public class Autoreply extends JcqAppAbstract implements ICQVer, IMsg, IRequest 
 			return MSG_IGNORE;
 		if (checkNotReply(fromGroup, fromQQ, msg))// 指定不回复的项目
 			return MSG_IGNORE;
-		if (Methods.checkBarcodeEncode(fromGroup, fromQQ, msg)) // 二维码编码
-			return MSG_IGNORE;
-		if (barcodeDecodeManager.check(fromGroup, fromQQ, msg)) // 二维码解码
+		if (barcodeManager.check(fromGroup, fromQQ, msg)) // 二维码
 			return MSG_IGNORE;
 		if (picSearchManager.check(fromGroup, fromQQ, msg))// 搜索图片
 			return MSG_IGNORE;
 		if (Methods.checkLook(fromGroup, msg))// 窥屏检测
 			return MSG_IGNORE;
-		if (Methods.checkSign(fromGroup, msg))// 签到消息
+		if (biliVideoInfo.check(fromGroup, msg))// 比利比利链接详情
 			return MSG_IGNORE;
-		if (Methods.checkMusic(fromGroup, msg))// 分享音乐
+		if (cQcodeManager.check(fromGroup, msg))// 特殊信息(签到 分享等)
 			return MSG_IGNORE;
 		if (banner.checkBan(fromQQ, fromGroup, msg))// 禁言
 			return MSG_IGNORE;
@@ -291,19 +290,15 @@ public class Autoreply extends JcqAppAbstract implements ICQVer, IMsg, IRequest 
 			return MSG_IGNORE;
 		if (timeTip.check(fromGroup, fromQQ))// 根据时间提醒
 			return MSG_IGNORE;
-		if (biliVideoInfo.check(fromGroup, msg))// 比利比利链接详情
-			return MSG_IGNORE;
-		if (Methods.checkLink(fromGroup, msg))// 收到的消息有链接
-			return MSG_IGNORE;
 		if (rollPlane.check(fromGroup, msg))// roll
 			return MSG_IGNORE;
 		if (fph.check(fromQQ, fromGroup, msg))// 反迫害
 			return MSG_IGNORE;
 		if (newUpdate.check(fromGroup, msg))// 催更
 			return MSG_IGNORE;
-		if (dicReplyManager.check(fromGroup, fromQQ, msg))// 根据词库触发回答
-			return MSG_IGNORE;
 		if (recoderManager.check(fromGroup, fromQQ, msg))// 复读
+			return MSG_IGNORE;
+		if (dicReplyManager.check(fromGroup, fromQQ, msg))// 根据词库触发回答
 			return MSG_IGNORE;
 
 		return MSG_IGNORE;

@@ -6,13 +6,31 @@ import com.meng.Autoreply;
 import com.meng.Methods;
 import com.sobte.cqp.jcq.entity.CQImage;
 
-public class BarcodeDecodeManager {
+public class BarcodeManager {
 	private HashMap<Long, String> userNotSendPicture = new HashMap<>();
 
-	public BarcodeDecodeManager() {
+	public BarcodeManager() {
 	}
 
 	public boolean check(long fromGroup, long fromQQ, String msg) {
+		if (enc(fromGroup, fromQQ, msg)) {
+			return true;
+		} else if (dec(fromGroup, fromQQ, msg)) {
+			return true;
+		}
+		return false;
+	}
+
+	private boolean enc(long fromGroup, long fromQQ, String msg) {
+		if (msg.startsWith("生成QR ") || msg.startsWith("生成PDF417 ")) {
+			BarcodeEncoder barcodeEncoder = new BarcodeEncoder(fromGroup, fromQQ, msg);
+			barcodeEncoder.start();
+			return true;
+		}
+		return false;
+	}
+
+	private boolean dec(long fromGroup, long fromQQ, String msg) {
 		CQImage cqImage = Autoreply.CC.getCQImage(msg);
 		if (cqImage != null && msg.startsWith("读取二维码")) {
 			try {
@@ -38,4 +56,5 @@ public class BarcodeDecodeManager {
 		}
 		return false;
 	}
+
 }
