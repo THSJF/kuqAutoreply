@@ -13,8 +13,8 @@ import com.meng.bilibili.BiliLinkInfo;
 import com.meng.bilibili.NewUpdate;
 import com.meng.groupChat.DicReplyGroup;
 import com.meng.groupChat.DicReplyManager;
-import com.meng.groupChat.RecoderManager;
-import com.meng.groupChat.RecordBanner;
+import com.meng.groupChat.RepeaterManager;
+import com.meng.groupChat.RepeaterBanner;
 import com.meng.groupChat.fanpohai;
 import com.meng.searchPicture.PicSearchManager;
 import com.meng.tip.FileTipManager;
@@ -51,7 +51,7 @@ public class Autoreply extends JcqAppAbstract implements ICQVer, IMsg, IRequest 
 	public static Random random = new Random();
 	public static CQCodeCC CC = new CQCodeCC();
 	private Banner banner = new Banner();
-	private RecoderManager recoderManager;
+	private RepeaterManager recoderManager;
 	private RollPlane rollPlane = new RollPlane();
 	private TimeTip timeTip = new TimeTip();
 	private BiliLinkInfo biliVideoInfo = new BiliLinkInfo();
@@ -71,6 +71,7 @@ public class Autoreply extends JcqAppAbstract implements ICQVer, IMsg, IRequest 
 
 	private static String[] pop = "11|12|60|63|96|107|110|114|117|128|129|151|159|123|268|208|248|5|20|28|37|45|212|178|62|44|90|107|119|114|125|142|168|185|1|2|3|4|5|6|7|8|9"
 			.split("\\|");
+	private int threadCount = 0;
 
 	/**
 	 * 用main方法调试可以最大化的加快开发效率，检测和定位错误位置<br/>
@@ -247,6 +248,9 @@ public class Autoreply extends JcqAppAbstract implements ICQVer, IMsg, IRequest 
 				sendGroupMessage(fromGroup, "reload");
 				return MSG_IGNORE;
 			}
+			if (msg.equals("大膜法 膜神复诵")) {
+				new MoShenFuSong(fromGroup).start();
+			}
 			String[] strings = msg.split("\\.");
 			if (strings[0].equalsIgnoreCase("send")) {
 				sendGroupMessage(Long.parseLong(strings[1]), strings[2]);
@@ -263,43 +267,11 @@ public class Autoreply extends JcqAppAbstract implements ICQVer, IMsg, IRequest 
 		 * lp.getLiveUrl()); } b = b || livingManager.getPerson(i).isLiving(); }
 		 * if (!b) { sendGroupMessage(fromGroup, "惊了 居然没有飞机佬直播"); } return
 		 * MSG_IGNORE; }
-		 */
-		if (Methods.checkSwitch(fromGroup, msg))// 控制
-			return MSG_IGNORE;
-		if (checkNotReply(fromGroup, fromQQ, msg))// 指定不回复的项目
-			return MSG_IGNORE;
-		if (barcodeManager.check(fromGroup, fromQQ, msg)) // 二维码
-			return MSG_IGNORE;
-		if (picSearchManager.check(fromGroup, fromQQ, msg))// 搜索图片
-			return MSG_IGNORE;
-		if (Methods.checkLook(fromGroup, msg))// 窥屏检测
-			return MSG_IGNORE;
-		if (biliVideoInfo.check(fromGroup, msg))// 比利比利链接详情
-			return MSG_IGNORE;
-		if (cQcodeManager.check(fromGroup, msg))// 特殊信息(签到 分享等)
-			return MSG_IGNORE;
-		if (banner.checkBan(fromQQ, fromGroup, msg))// 禁言
-			return MSG_IGNORE;
-		if (Methods.checkGou(fromGroup, msg))// 苟
-			return MSG_IGNORE;
-		if (Methods.checkMeng2(fromGroup, msg))// 萌2
-			return MSG_IGNORE;
-		if (Methods.checkAt(fromGroup, fromQQ, msg))// @
-			return MSG_IGNORE;
-		if (Methods.checkMo(fromGroup, msg))// 膜
-			return MSG_IGNORE;
-		if (timeTip.check(fromGroup, fromQQ))// 根据时间提醒
-			return MSG_IGNORE;
-		if (rollPlane.check(fromGroup, msg))// roll
-			return MSG_IGNORE;
-		if (fph.check(fromQQ, fromGroup, msg))// 反迫害
-			return MSG_IGNORE;
-		if (newUpdate.check(fromGroup, msg))// 催更
-			return MSG_IGNORE;
-		if (recoderManager.check(fromGroup, fromQQ, msg))// 复读
-			return MSG_IGNORE;
-		if (dicReplyManager.check(fromGroup, fromQQ, msg))// 根据词库触发回答
-			return MSG_IGNORE;
+		 */if (threadCount < 11) {
+			threadCount++;
+			System.out.println("threadCount" + threadCount);
+			new msgThread(subType, msgId, fromGroup, fromQQ, fromAnonymous, msg, font).start();
+		}
 
 		return MSG_IGNORE;
 
@@ -351,6 +323,10 @@ public class Autoreply extends JcqAppAbstract implements ICQVer, IMsg, IRequest 
 			return MSG_IGNORE;
 		}
 		// 这里处理消息
+		GroupFile file2 = CQ.getGroupFile(file);
+		System.out.println(file2.toString());
+		if (checkNotReply(fromGroup, fromQQ, file))// 指定不回复的项目
+			return MSG_IGNORE;
 		fileTipManager.onUploadFile(fromGroup, fromQQ);
 		if (fromGroup != 807242547L) {// c5
 			sendGroupMessage(fromGroup, "发点小电影啊");
@@ -375,6 +351,8 @@ public class Autoreply extends JcqAppAbstract implements ICQVer, IMsg, IRequest 
 	 */
 	public int groupAdmin(int subtype, int sendTime, long fromGroup, long beingOperateQQ) {
 		// 这里处理消息
+		if (checkNotReply(fromGroup, -1, ""))// 指定不回复的项目
+			return MSG_IGNORE;
 		if (subtype == 1) {
 			sendGroupMessage(fromGroup, CC.at(beingOperateQQ) + "你绿帽子没莉");
 		} else if (subtype == 2) {
@@ -401,6 +379,8 @@ public class Autoreply extends JcqAppAbstract implements ICQVer, IMsg, IRequest 
 	 */
 	public int groupMemberDecrease(int subtype, int sendTime, long fromGroup, long fromQQ, long beingOperateQQ) {
 		// 这里处理消息
+		if (checkNotReply(fromGroup, -1, ""))// 指定不回复的项目
+			return MSG_IGNORE;
 		if (beingOperateQQ == 2856986197L) {
 			CQ.setGroupLeave(fromGroup, false);
 			return MSG_IGNORE;
@@ -438,6 +418,8 @@ public class Autoreply extends JcqAppAbstract implements ICQVer, IMsg, IRequest 
 	 */
 	public int groupMemberIncrease(int subtype, int sendTime, long fromGroup, long fromQQ, long beingOperateQQ) {
 		// 这里处理消息
+		if (checkNotReply(fromGroup, -1, ""))// 指定不回复的项目
+			return MSG_IGNORE;
 		String[] strings = new String[] { "封魔录LNN", "梦时空LNN", "幻想乡LNN", "怪绮谈LNN", "红LNN", "妖LNNN", "永0033", "永0037",
 				"花LNN", "风LNN", "殿LNN", "船LNNN", "庙LNNN", "城LNN", "绀LNN", "璋LNNN", "大战争LNN" };
 		try {
@@ -528,6 +510,8 @@ public class Autoreply extends JcqAppAbstract implements ICQVer, IMsg, IRequest 
 		 * REQUEST_ADOPT 通过 REQUEST_REFUSE 拒绝 REQUEST_GROUP_ADD 群添加
 		 * REQUEST_GROUP_INVITE 群邀请
 		 */
+		if (checkNotReply(fromGroup, -1, ""))// 指定不回复的项目
+			return MSG_IGNORE;
 		if (fromGroup == 859561731L) { // 台长群
 			return MSG_IGNORE;
 		}
@@ -629,10 +613,10 @@ public class Autoreply extends JcqAppAbstract implements ICQVer, IMsg, IRequest 
 
 	private void addRecorder() {
 		HashMap<Integer, String> gr = mengAutoReplyConfig.getMapGroupRecorder();
-		recoderManager = new RecoderManager();
+		recoderManager = new RepeaterManager();
 		for (int key : gr.keySet()) {// 遍历
 			String[] groupCfg = gr.get(key).split("\\.");
-			recoderManager.addData(new RecordBanner(Long.parseLong(groupCfg[0]), Integer.parseInt(groupCfg[1])));
+			recoderManager.addData(new RepeaterBanner(Long.parseLong(groupCfg[0]), Integer.parseInt(groupCfg[1])));
 		}
 	}
 
@@ -672,6 +656,73 @@ public class Autoreply extends JcqAppAbstract implements ICQVer, IMsg, IRequest 
 	private static void setRandomPop() {
 		Methods.getSourceCode("http://logic.content.qq.com/bubble/setup?callback=&id=" + (String) Methods.rfa(pop)
 				+ "&g_tk=" + CQ.getCsrfToken(), CQ.getCookies());
+	}
+
+	public class msgThread extends Thread {
+		int subType = 0;
+		int msgId = 0;
+		long fromGroup = 0;
+		long fromQQ = 0;
+		String fromAnonymous = "";
+		String msg = "";
+		int font = 0;
+
+		public msgThread(int subType, int msgId, long fromGroup, long fromQQ, String fromAnonymous, String msg,
+				int font) {
+			this.font = font;
+			this.fromAnonymous = fromAnonymous;
+			this.fromGroup = fromGroup;
+			this.fromQQ = fromQQ;
+			this.msg = msg;
+			this.msgId = msgId;
+			this.subType = subType;
+		}
+
+		@Override
+		public void run() {
+			check();
+			threadCount--;
+		}
+
+		private boolean check() {
+			if (Methods.checkSwitch(fromGroup, msg))// 控制
+				return true;
+			if (checkNotReply(fromGroup, fromQQ, msg))// 指定不回复的项目
+				return true;
+			if (barcodeManager.check(fromGroup, fromQQ, msg)) // 二维码
+				return true;
+			if (picSearchManager.check(fromGroup, fromQQ, msg))// 搜索图片
+				return true;
+			if (Methods.checkLook(fromGroup, msg))// 窥屏检测
+				return true;
+			if (biliVideoInfo.check(fromGroup, msg))// 比利比利链接详情
+				return true;
+			if (cQcodeManager.check(fromGroup, msg))// 特殊信息(签到 分享等)
+				return true;
+			if (banner.checkBan(fromQQ, fromGroup, msg))// 禁言
+				return true;
+			if (Methods.checkGou(fromGroup, msg))// 苟
+				return true;
+			if (Methods.checkMeng2(fromGroup, msg))// 萌2
+				return true;
+			if (Methods.checkAt(fromGroup, fromQQ, msg))// @
+				return true;
+			if (Methods.checkMo(fromGroup, msg))// 膜
+				return true;
+			if (timeTip.check(fromGroup, fromQQ))// 根据时间提醒
+				return true;
+			if (rollPlane.check(fromGroup, msg))// roll
+				return true;
+			if (fph.check(fromQQ, fromGroup, msg))// 反迫害
+				return true;
+			if (newUpdate.check(fromGroup, msg))// 催更
+				return true;
+			if (recoderManager.check(fromGroup, fromQQ, msg))// 复读
+				return true;
+			if (dicReplyManager.check(fromGroup, fromQQ, msg))// 根据词库触发回答
+				return true;
+			return false;
+		}
 	}
 
 }
