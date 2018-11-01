@@ -2,16 +2,16 @@ package com.meng.groupChat;
 
 import java.util.HashMap;
 
-public class RecoderManager {
+public class RepeaterManager {
 
-	private HashMap<Integer, RecordBanner> recoderMap = new HashMap<Integer, RecordBanner>();
+	private HashMap<Integer, RepeaterBanner> recoderMap = new HashMap<Integer, RepeaterBanner>();
 	private int mapFlag = 0;
 
-	public RecoderManager() {
+	public RepeaterManager() {
 
 	}
 
-	public void addData(RecordBanner r) {
+	public void addData(RepeaterBanner r) {
 		recoderMap.put(mapFlag, r);
 		mapFlag++;
 	}

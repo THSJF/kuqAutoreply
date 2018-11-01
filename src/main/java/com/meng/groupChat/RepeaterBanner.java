@@ -11,12 +11,11 @@ import com.meng.Autoreply;
 import com.meng.tools.FingerPrint;
 import com.sobte.cqp.jcq.entity.CQImage;
 
-public class RecordBanner {
+public class RepeaterBanner {
 	private int repeatCount = 0;
 	private int banCount = 6;
 	private String lastMessageRecieved = "";
 	private long groupNum = 0;
-	private boolean working = false;
 	private int reverseFlag = 0;
 	private int banRecorderMode = 0;
 	private boolean lastStatus = false;
@@ -24,12 +23,12 @@ public class RecordBanner {
 	private FingerPrint lastFp;
 	private File imgFile;
 
-	public RecordBanner(long group, int mode) {
+	public RepeaterBanner(long group, int mode) {
 		groupNum = group;
 		banRecorderMode = mode;
 	}
 
-	public RecordBanner(long group) {
+	public RepeaterBanner(long group) {
 		groupNum = group;
 	}
 
@@ -45,6 +44,8 @@ public class RecordBanner {
 			} else if (msg.equalsIgnoreCase("ban2")) {
 				banRecorderMode = 2;
 				Autoreply.sendGroupMessage(group, "禁言所有复读机");
+			} else if (msg.equalsIgnoreCase("getban")) {
+				Autoreply.sendGroupMessage(group, "ban" + banRecorderMode);
 			}
 			float simi = getPicSimilar(msg);// 当前消息中图片和上一条消息中图片相似度
 			switch (banRecorderMode) {
@@ -70,12 +71,7 @@ public class RecordBanner {
 				lastMessageRecieved = msg;
 				return true;
 			}
-			// 直到处理完当前消息之前会忽略其他消息 防止消息过多爆炸
-			if (!working) {
-				working = true;
-				b = checkRepeatStatu(group, msg, simi);
-				working = false;
-			}
+			b = checkRepeatStatu(group, msg, simi);
 			lastMessageRecieved = msg;
 		}
 		return b;

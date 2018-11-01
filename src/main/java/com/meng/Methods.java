@@ -17,7 +17,6 @@ import java.util.regex.Pattern;
 import org.jsoup.Connection;
 import org.jsoup.Jsoup;
 
-import com.meng.barcode.BarcodeEncoder;
 import com.meng.lookGroup.IPGetter;
 
 public class Methods {
@@ -49,11 +48,15 @@ public class Methods {
 	public static boolean checkAt(long fromGroup, long fromQQ, String msg) {
 		if (Autoreply.CC.getAt(msg) == 1620628713L) {
 			// 过滤特定的文字
-			if (msg.indexOf("蓝") != -1 || msg.indexOf("藍") != -1 || msg.indexOf("赠送") != -1) {
+			// @消息发送者并复读内容
+			if (!msg.contains("蓝") && !msg.contains("藍") && !msg.contains("赠送")) {
+				Autoreply.sendGroupMessage(fromGroup, Autoreply.CC.at(fromQQ) + msg.substring(msg.indexOf(" ") + 1));
 				return true;
 			}
-			// @消息发送者并复读内容
-			Autoreply.sendGroupMessage(fromGroup, Autoreply.CC.at(fromQQ) + msg.substring(msg.indexOf(" ") + 1));
+			if (msg.contains("野兽先辈") || msg.contains("鬼杀酒") || msg.contains("羊杂碎布丁") || msg.contains("昏睡红茶")) {
+				Autoreply.sendGroupMessage(fromGroup, Autoreply.CC.at(fromQQ) + msg.substring(msg.indexOf(" ") + 1));
+				return true;
+			}
 			return true;
 		}
 		return false;
@@ -214,7 +217,7 @@ public class Methods {
 		return false;
 	}
 
-	// 图片搜索和二维码生成功能专用的消息发送
+	// 图片搜索专用的消息发送
 	public static void sendMsg(long fromGroup, long fromQQ, String msg) {
 		if (fromGroup == -1) {
 			Autoreply.sendPrivateMessage(fromQQ, msg);

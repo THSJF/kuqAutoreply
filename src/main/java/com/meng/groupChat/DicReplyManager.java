@@ -58,7 +58,7 @@ public class DicReplyManager {
 		it = obj.entrySet().iterator();
 		while (it.hasNext()) {// 遍历集合查找符合要求的key
 			Entry entry = (Entry) it.next();
-			if (((String) entry.getKey()).equalsIgnoreCase(msg.replace(" ", "").trim())) {
+			if (((String) entry.getKey()).equalsIgnoreCase(msg)) {
 				JsonArray array = (JsonArray) entry.getValue();
 				int arraySize = array.size();
 				if (arraySize != 0) {
