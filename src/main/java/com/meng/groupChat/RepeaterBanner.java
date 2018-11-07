@@ -199,15 +199,14 @@ public class RepeaterBanner {
 				if (!files.exists()) {
 					files.mkdirs();
 				}
-				imgFile = cm.download(Autoreply.appDirectory + "reverse\\" + groupNum + "recr.jpg");
+				imgFile = cm.download(Autoreply.appDirectory + "reverse\\" + System.currentTimeMillis() + "recr.jpg");
 			} catch (IOException e) {
 			}
 			if (thisFp != null) {
 				lastFp = thisFp;
 			}
 			try {
-				thisFp = new FingerPrint(
-						ImageIO.read(new File(Autoreply.appDirectory + "reverse\\" + groupNum + "recr.jpg")));
+				thisFp = new FingerPrint(ImageIO.read(imgFile));
 			} catch (IOException e) {
 			}
 			if (lastFp != null) {
@@ -216,7 +215,7 @@ public class RepeaterBanner {
 		} else {// 如果当前消息没有图片则删除临时的图片文件防止跨消息图片复读
 			thisFp = null;
 			lastFp = null;
-			(new File(Autoreply.appDirectory + "reverse\\" + groupNum + "recr.jpg")).delete();
+			imgFile.delete();
 		}
 		return 0;
 	}

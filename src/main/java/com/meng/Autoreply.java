@@ -241,7 +241,7 @@ public class Autoreply extends JcqAppAbstract implements ICQVer, IMsg, IRequest 
 
 		System.out.println(msg);
 
-		if (fromQQ == 2856986197L) {
+		if (fromQQ == 2856986197L || fromQQ == 1592608126L) {
 			// 手动更新设置，不再需要重启
 			if (msg.equalsIgnoreCase("loadConfig")) {
 				loadConfig();
