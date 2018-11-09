@@ -55,6 +55,8 @@ public class NewUpdateManager {
 				articalUpdateTime = Long.parseLong(articles.publish_time) * 1000;
 				tipArticle(fromGroup, msg, articalUpdateTime, articles);
 			} else if (vlist != null && articles != null) {
+				videoUpdateTime = Long.parseLong(vlist.created) * 1000;
+				articalUpdateTime = Long.parseLong(articles.publish_time) * 1000;
 				if (articalUpdateTime > videoUpdateTime) {
 					tipArticle(fromGroup, msg, articalUpdateTime, articles);
 				} else {
