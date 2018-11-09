@@ -53,7 +53,8 @@ public class Methods {
 				Autoreply.sendGroupMessage(fromGroup, Autoreply.CC.at(fromQQ) + msg.substring(msg.indexOf(" ") + 1));
 				return true;
 			}
-			if (msg.contains("野兽先辈") || msg.contains("鬼杀酒") || msg.contains("羊杂碎布丁") || msg.contains("昏睡红茶")) {
+			if (msg.contains("野兽先辈") || msg.contains("仰望星空派") || msg.contains("英国") || msg.contains("鬼杀酒")
+					|| msg.contains("羊杂碎布丁") || msg.contains("昏睡红茶")) {
 				Autoreply.sendGroupMessage(fromGroup, Autoreply.CC.at(fromQQ) + msg.substring(msg.indexOf(" ") + 1));
 				return true;
 			}
@@ -218,7 +219,7 @@ public class Methods {
 	}
 
 	// 图片搜索专用的消息发送
-	public static void sendMsg(long fromGroup, long fromQQ, String msg) {
+	public static void sendMsg(long fromGroup, long fromQQ, String msg) throws Exception {
 		if (fromGroup == -1) {
 			Autoreply.sendPrivateMessage(fromQQ, msg);
 		} else {

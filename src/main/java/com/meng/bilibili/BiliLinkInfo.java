@@ -34,14 +34,14 @@ public class BiliLinkInfo {
 					} else {
 						Autoreply.sendGroupMessage(fromGroup,
 								gson.fromJson(Methods.getSourceCode("https://api.bilibili.com/x/article/viewinfo?id="
-										+ cvString + "&mobi_app=pc&jsonp=jsonp"), BiliArticleInfoJavaBean.class)
+										+ cvString + "&mobi_app=pc&jsonp=jsonp"), ArticleInfoBean.class)
 										.toString());
 					}
 				} else {
 					Autoreply.sendGroupMessage(fromGroup,
 							gson.fromJson(Methods.getSourceCode(
 									"http://api.bilibili.com/archive_stat/stat?aid=" + avString + "&type=jsonp"),
-									BiliVideoInfoJavaBean.class).toString());
+									VideoInfoBean.class).toString());
 				}
 			} catch (Exception e) {
 				e.printStackTrace();

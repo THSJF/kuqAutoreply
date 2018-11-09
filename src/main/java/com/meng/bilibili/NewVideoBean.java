@@ -2,7 +2,7 @@ package com.meng.bilibili;
 
 import java.util.List;
 
-public class NewUpdateJavaBean {
+public class NewVideoBean {
 	public String status;
 	public Data data;
 

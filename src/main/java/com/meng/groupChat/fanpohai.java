@@ -57,42 +57,46 @@ public class fanpohai {
 			// 处理带有迫害二字的消息
 			if (msg.indexOf("迫害") != -1) {
 				pohaicishu++;
-				if (pohaicishu == alpohai) {
+				if (pohaicishu == alpohai || fromGroup == 348595763L) {
 					bpohai = true;
 					pohaicishu = 0;
 					alpohai = Autoreply.random.nextInt(2147483647) % 5 + 2;
 				}
 			}
 			// 判定图片相似度
-			Autoreply.CC.getCQImage(msg);
-			if (cmCqImage != null) {
-				float simi = 0.0f;
-				FingerPrint fp1 = null;
-				fp1 = new FingerPrint(ImageIO.read(cmCqImage.download(Autoreply.appDirectory + "phtmp.jpg")));
-				// 取值为所有样本中最高的相似度
-				for (int i = 0; i < fts.length; i++) {
-					float tf = fts[i].compare(fp1);
-					if (tf > simi) {
-						simi = tf;
+			if (!bpohai) {
+				Autoreply.CC.getCQImage(msg);
+				if (cmCqImage != null) {
+					float simi = 0.0f;
+					FingerPrint fp1 = null;
+					fp1 = new FingerPrint(ImageIO.read(cmCqImage.download(Autoreply.appDirectory + "phtmp.jpg")));
+					// 取值为所有样本中最高的相似度
+					for (int i = 0; i < fts.length; i++) {
+						float tf = fts[i].compare(fp1);
+						if (tf > simi) {
+							simi = tf;
+						}
 					}
-				}
-				if (simi > 0.92f) {
-					bpohai = true;
+					if (simi > 0.92f) {
+						bpohai = true;
+					}
 				}
 			}
-			// 从反迫害文本文件中读取
-			if (fanpohafile.isFile() && fanpohafile.exists()) {
-				InputStreamReader read;
-				read = new InputStreamReader(new FileInputStream(fanpohafile));
-				BufferedReader bufferedReader = new BufferedReader(read);
-				String lineTxt = null;
-				while ((lineTxt = bufferedReader.readLine()) != null) {
-					if (msg.equals(lineTxt)) {
-						bpohai = true;
-						break;
+			if (!bpohai) {
+				// 从反迫害文本文件中读取
+				if (fanpohafile.isFile() && fanpohafile.exists()) {
+					InputStreamReader read;
+					read = new InputStreamReader(new FileInputStream(fanpohafile));
+					BufferedReader bufferedReader = new BufferedReader(read);
+					String lineTxt = null;
+					while ((lineTxt = bufferedReader.readLine()) != null) {
+						if (msg.equals(lineTxt)) {
+							bpohai = true;
+							break;
+						}
 					}
+					read.close();
 				}
-				read.close();
 			}
 			// 如果满足反迫害条件 根据上面的数组从QQ号得到用户迫害图文件夹
 			if (bpohai) {

@@ -9,7 +9,7 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import com.google.gson.JsonSyntaxException;
-import com.meng.bilibili.BiliUpJavaBean;
+import com.meng.bilibili.UpperBean;
 
 public class MengAutoReplyConfig {
 
@@ -20,7 +20,7 @@ public class MengAutoReplyConfig {
 	private HashMap<Integer, Long> mapGroupDicReply = new HashMap<Integer, Long>();
 	// private HashMap<String, String> mapLiveTip = new HashMap<String,
 	// String>();
-	private HashMap<Integer, BiliUpJavaBean> mapBiliUp = new HashMap<Integer, BiliUpJavaBean>();
+	private HashMap<Integer, UpperBean> mapBiliUp = new HashMap<Integer, UpperBean>();
 
 	private JsonParser parser;
 
@@ -34,7 +34,7 @@ public class MengAutoReplyConfig {
 		}
 	}
 
-	private boolean load() {
+	private boolean load() throws Exception {
 		JsonObject obj = null;
 		try {
 			obj = parser.parse(Methods.readFileToString(Autoreply.appDirectory + "config.json")).getAsJsonObject();
@@ -82,7 +82,7 @@ public class MengAutoReplyConfig {
 			case "mapBiliUp":
 				for (int k = 0; k < arraySize; k += 3) {
 					mapBiliUp.put(k,
-							new BiliUpJavaBean(Methods.removeCharAtStartAndEnd(array.get(k).toString()),
+							new UpperBean(Methods.removeCharAtStartAndEnd(array.get(k).toString()),
 									Long.parseLong(Methods.removeCharAtStartAndEnd(array.get(k + 1).toString())),
 									Long.parseLong(Methods.removeCharAtStartAndEnd(array.get(k + 2).toString()))));
 				}
@@ -117,7 +117,7 @@ public class MengAutoReplyConfig {
 	 * public HashMap<String, String> getMapLiveTip() { return mapLiveTip; }
 	 */
 
-	public HashMap<Integer, BiliUpJavaBean> getMapBiliUp() {
+	public HashMap<Integer, UpperBean> getMapBiliUp() {
 		return mapBiliUp;
 	}
 }

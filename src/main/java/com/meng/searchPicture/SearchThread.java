@@ -35,10 +35,14 @@ public class SearchThread extends Thread {
 
 	@Override
 	public void run() {
-		check(pic);
+		try {
+			check(pic);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 	}
 
-	private void check(File picF) {
+	private void check(File picF) throws Exception {
 		FileInputStream fInputStream;
 		try {
 			fInputStream = new FileInputStream(picF);

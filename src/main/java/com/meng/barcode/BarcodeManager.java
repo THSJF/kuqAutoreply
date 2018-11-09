@@ -1,8 +1,6 @@
 package com.meng.barcode;
 
 import java.io.File;
-import java.io.IOException;
-
 import javax.imageio.ImageIO;
 
 import com.google.zxing.Result;

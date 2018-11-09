@@ -13,7 +13,7 @@ public class PicSearchManager {
 	public PicSearchManager() {
 	}
 
-	public boolean check(long fromGroup, long fromQQ, String msg) {
+	public boolean check(long fromGroup, long fromQQ, String msg) throws Exception {
 		if (msg.equalsIgnoreCase("sp.help")) {
 			if (fromGroup != -1) {
 				Methods.sendMsg(fromGroup, fromQQ, "使用方式已私聊发送");

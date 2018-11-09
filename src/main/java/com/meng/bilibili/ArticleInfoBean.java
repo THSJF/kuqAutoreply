@@ -2,7 +2,7 @@ package com.meng.bilibili;
 
 import java.util.List;
 
-public class BiliArticleInfoJavaBean {
+public class ArticleInfoBean {
 	// 读取到的数据为json格式，根据这个json写出的javabean
 	public String code;
 	public String message;
@@ -40,7 +40,6 @@ public class BiliArticleInfoJavaBean {
 
 		@Override
 		public String toString() {
-			// TODO Auto-generated method stub
 			return "标题：" + title + "\n作者：" + author_name + "\n" + stats.toString();
 		}
 
@@ -56,7 +55,6 @@ public class BiliArticleInfoJavaBean {
 
 			@Override
 			public String toString() {
-				// TODO Auto-generated method stub
 				return view + "次阅读," + reply + "条评论," + coin + "个硬币," + share + "次分享," + favorite + "人收藏," + like
 						+ "人赞," + dislike + "人踩";
 			}

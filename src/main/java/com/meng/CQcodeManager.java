@@ -1,34 +1,11 @@
 package com.meng;
 
-import java.io.File;
-import java.io.IOException;
-
 public class CQcodeManager {
 
 	public boolean check(long fromGroup, String msg) {
-		if (checkSign(fromGroup, msg)) {
-			return true;
-		} else if (checkMusic(fromGroup, msg)) {
+		if (checkMusic(fromGroup, msg)) {
 			return true;
 		} else if (checkLink(fromGroup, msg)) {
-			return true;
-		}
-		return false;
-	}
-
-	// 签到
-	private boolean checkSign(long fromGroup, String msg) {
-		if (msg.startsWith("[CQ:sign")) {
-			if (fromGroup == 424838564L || fromGroup == 312342896L) {
-				try {
-					Autoreply.sendGroupMessage(fromGroup, "签到成功 这是你的签到奖励"
-							+ Autoreply.CC.image(new File(Autoreply.appDirectory + "pic/qiaodaodnf.png")));
-				} catch (IOException e) {
-					e.printStackTrace();
-				}
-			} else {
-				Autoreply.sendGroupMessage(fromGroup, "image:pic/qiandao.jpg");
-			}
 			return true;
 		}
 		return false;

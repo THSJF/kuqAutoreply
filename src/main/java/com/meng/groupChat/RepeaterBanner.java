@@ -16,7 +16,7 @@ public class RepeaterBanner {
 	private int banCount = 6;
 	private String lastMessageRecieved = "";
 	private long groupNum = 0;
-	private int reverseFlag = 0;
+	private int reverseFlag = Autoreply.random.nextInt(3);
 	private int banRecorderMode = 0;
 	private boolean lastStatus = false;
 	private FingerPrint thisFp;
