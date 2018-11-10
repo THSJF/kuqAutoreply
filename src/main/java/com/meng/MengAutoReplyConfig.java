@@ -13,7 +13,7 @@ import com.meng.bilibili.UpperBean;
 
 public class MengAutoReplyConfig {
 
-	private HashMap<Integer, Long> mapGroupNotReply = new HashMap<Integer, Long>();
+	private HashMap<Integer, Long> mapGroupReply = new HashMap<Integer, Long>();
 	private HashMap<Integer, Long> mapQQNotReply = new HashMap<Integer, Long>();
 	private HashMap<Integer, String> mapWordNotReply = new HashMap<Integer, String>();
 	private HashMap<Integer, String> mapGroupRecorder = new HashMap<Integer, String>();
@@ -47,9 +47,9 @@ public class MengAutoReplyConfig {
 			JsonArray array = (JsonArray) entry.getValue();
 			int arraySize = array.size();
 			switch ((String) entry.getKey()) {
-			case "mapGroupNotReply":
+			case "mapGroupReply":
 				for (int k = 0; k < arraySize; k++) {
-					mapGroupNotReply.put(k, Long.parseLong(Methods.removeCharAtStartAndEnd(array.get(k).toString())));
+					mapGroupReply.put(k, Long.parseLong(Methods.removeCharAtStartAndEnd(array.get(k).toString())));
 				}
 				break;
 			case "mapQQNotReply":
@@ -93,8 +93,8 @@ public class MengAutoReplyConfig {
 		return false;
 	}
 
-	public HashMap<Integer, Long> getMapGroupNotReply() {
-		return mapGroupNotReply;
+	public HashMap<Integer, Long> getMapGroupReply() {
+		return mapGroupReply;
 	}
 
 	public HashMap<Integer, Long> getMapQQNotReply() {
