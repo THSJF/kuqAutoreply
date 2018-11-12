@@ -13,6 +13,10 @@ public class VideoInfoBean {
 		return data.toString();
 	}
 
+	public int getViews() {
+		return data.getViews();
+	}
+
 	public class Data { // 内部类要定义成public的
 		private String aid;
 		private String view;
@@ -28,10 +32,14 @@ public class VideoInfoBean {
 		private String no_reprint;
 		private String copyright;
 
+		public int getViews() {
+			return Integer.parseInt(view);
+		}
+
 		@Override
 		public String toString() {
 			return view + "次播放," + danmaku + "条弹幕," + reply + "条评论," + coin + "个硬币," + share + "次分享," + favorite
-					+ "人收藏," + like + "人赞," + dislike + "人踩";
+					+ "人收藏," + like + "人赞," + dislike + "人踩。";
 		}
 
 	}

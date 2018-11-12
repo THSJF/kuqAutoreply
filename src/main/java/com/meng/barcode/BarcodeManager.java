@@ -14,6 +14,11 @@ public class BarcodeManager {
 	}
 
 	public boolean check(long fromGroup, long fromQQ, String msg) {
+		if(msg.equals("二维码帮助")){
+			Autoreply.sendGroupMessage(fromGroup, "发送“生成QR ”或“生成PDF417 ”加想要生成二维码的内容即可生成二维码，注意命令中的空格和大小写");
+			Autoreply.sendGroupMessage(fromGroup, "发送二维码图片则会自动触发读取二维码内容");
+			Autoreply.sendGroupMessage(fromGroup, "可读取QRCode PDF417 DataMatrix AZTEC和各种条形码");
+				}
 		try {
 			if (enc(fromGroup, fromQQ, msg)) {
 				return true;

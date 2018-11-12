@@ -29,7 +29,6 @@ public class MengAutoReplyConfig {
 		try {
 			load();
 		} catch (Exception e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}

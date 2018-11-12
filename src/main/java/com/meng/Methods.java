@@ -22,6 +22,10 @@ import com.meng.lookGroup.IPGetter;
 public class Methods {
 	private static String motmp = "";
 	private static String meng2tmp = "";
+	public static final String helpMenu = "当前有二维码生成与识别，发送“二维码帮助”可获得使用方法."
+			+ "图片搜索，发送“sp.help”可获得使用方法.窥屏检测,群内发送“窥屏检测”然后稍等片刻. 哔哩哔哩链接详情，群内发送一个哔哩哔哩视频链接或专栏链接即可触发."
+			+ "苟利……(不解释，，，)。此生无悔……（，，）.roll，发送“roll.help”可获得使用方法."
+			+ "催更，发送“xx今天更了吗”即可触发，需要在配置文件中有这位up的信息. 复读和根据词库相应消息（不解释，，，）";
 	static int arrayFlag = new java.util.Random().nextInt(5000);
 
 	// 主开关
@@ -66,9 +70,7 @@ public class Methods {
 	// 膜人回复
 	public static boolean checkMo(long fromGroup, String msg) {
 		// 使用了正则表达式
-		if (Pattern.matches(
-				".*(([蓝藍]|裂隙妖怪的式神).*[椰叶葉].*[椰叶葉].*(t.*c.*l|t.*q.*l|太.*[触觸].*了)|.*([蓝藍]|裂隙妖怪的式神).*[椰叶葉].*[椰叶葉].{0,3})",
-				msg.replace(" ", "").trim())) {
+		if (Pattern.matches(".*([蓝藍]|裂隙妖怪的式神).*[椰叶葉].*[椰叶葉].{0,3}", msg.replace(" ", "").trim())) {
 			Autoreply.sendGroupMessage(fromGroup, "打不过地灵殿Normal");
 			try {
 				Autoreply.sendGroupMessage(fromGroup,
@@ -162,7 +164,7 @@ public class Methods {
 
 	// 窥屏检测
 	public static boolean checkLook(long fromGroup, String msg) {
-		if (msg.equals("有人吗") || msg.equalsIgnoreCase("testip")) {
+		if (msg.equals("有人吗") || msg.equalsIgnoreCase("testip") || msg.equalsIgnoreCase("窥屏检测")) {
 			int port = Autoreply.random.nextInt(5000);
 			Autoreply.sendGroupMessage(fromGroup, Autoreply.CC.share("http://119.27.186.107:" + (port + 4000), "窥屏检测",
 					"滴滴滴", "http://119.27.186.107:" + (port + 4000) + "/111.jpg"));

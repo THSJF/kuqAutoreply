@@ -32,16 +32,45 @@ public class BiliLinkInfo {
 						System.out.println("empty result");
 						return false;
 					} else {
-						Autoreply.sendGroupMessage(fromGroup,
-								gson.fromJson(Methods.getSourceCode("https://api.bilibili.com/x/article/viewinfo?id="
-										+ cvString + "&mobi_app=pc&jsonp=jsonp"), ArticleInfoBean.class)
+						Autoreply
+								.sendGroupMessage(fromGroup, gson
+										.fromJson(
+												Methods.getSourceCode("https://api.bilibili.com/x/article/viewinfo?id="
+														+ cvString + "&mobi_app=pc&jsonp=jsonp"),
+												ArticleInfoBean.class)
 										.toString());
 					}
 				} else {
-					Autoreply.sendGroupMessage(fromGroup,
-							gson.fromJson(Methods.getSourceCode(
+					VideoInfoBean videoInfoBean = gson.fromJson(
+							Methods.getSourceCode(
 									"http://api.bilibili.com/archive_stat/stat?aid=" + avString + "&type=jsonp"),
-									VideoInfoBean.class).toString());
+							VideoInfoBean.class);
+					String vidInf = videoInfoBean.toString();
+					String html = Methods.getSourceCode("https://www.bilibili.com/video/av" + avString);
+					int index = html.indexOf("\"pubdate\":") + "\"pubdate\":".length();
+					int end = html.indexOf(",\"ctime\"", index);
+					long stamp = Long.parseLong(html.substring(index, end));
+					int days = (int) ((System.currentTimeMillis() - stamp * 1000) / 86400000);
+					if (days == 0) {
+						vidInf += "24小时内发布。";
+					} else {
+						vidInf += days + "天前发布，平均每天" + ((float) videoInfoBean.getViews() / days) + "次播放。";
+					}
+			/*		if (!msg.startsWith("[CQ:share,url=")) {
+						String json1 = "";
+						String json2 = "";
+						int index1 = html.indexOf("<script>") + "<script>".length();
+						int end1 = html.indexOf("</script><script>", index1);
+						json1 = html.substring(index1, end1);
+
+						int index2 = html.indexOf("<script>", end1) + "<script>".length();
+						int end2 = html.indexOf("</script>", index2);
+						json2 = html.substring(index2, end2);
+
+					}
+					*/
+					Autoreply.sendGroupMessage(fromGroup, vidInf);
+
 				}
 			} catch (Exception e) {
 				e.printStackTrace();

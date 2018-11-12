@@ -733,6 +733,10 @@ public class Autoreply extends JcqAppAbstract implements ICQVer, IMsg, IRequest 
 		}
 
 		private boolean check() {
+			if (msg.equals("-help")) {
+				sendGroupMessage(fromGroup, Methods.helpMenu);
+				return true;
+			}
 			if (checkNotReply(fromQQ, msg))// 指定不回复的项目
 				return true;
 			if (barcodeManager.check(fromGroup, fromQQ, msg)) // 二维码
@@ -796,6 +800,14 @@ public class Autoreply extends JcqAppAbstract implements ICQVer, IMsg, IRequest 
 		}
 
 		private boolean check() {
+			if (msg.equals("-help")) {
+				try {
+					sendPrivateMessage(fromQQ, Methods.helpMenu);
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+				return true;
+			}
 			if (barcodeManager.check(-1, fromQQ, msg)) // 二维码解码
 				return true;
 			if (msg.equals("色图")) {
