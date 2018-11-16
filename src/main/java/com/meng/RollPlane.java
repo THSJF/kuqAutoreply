@@ -27,6 +27,11 @@ public class RollPlane {
 	private String[] pl16 = new String[] { "博丽灵梦", "琪露诺", "射命丸文", "雾雨魔理沙" };
 	private String[] pl16s = new String[] { "春", "夏", "秋", "冬" };
 	private String[] plDiff = new String[] { "easy", "normal", "hard", "lunatic" };
+	private String[] cham = new String[] { "开局按↓去正下版底贴一下", "开局原地小转3圈顺时针", "开局原地小转3圈逆时针", 
+											"开局按↓去正下版底贴一下", "开局原地小转3圈顺时针", "开局原地小转3圈逆时针", 
+											"开局按↓去正下版底贴一下", "开局原地小转3圈顺时针", "开局原地小转3圈逆时针",
+											 "开局按↓去正下版底贴一下", "开局原地小转3圈顺时针", "开局原地小转3圈逆时针"};
+	
 
 	public RollPlane() {
 
@@ -51,6 +56,10 @@ public class RollPlane {
 				case "难度":
 					send(fromGroup, (String) Methods.rfa(plDiff));
 					break;
+				case "act":
+				case "动作":
+					send(fromGroup, (String) Methods.rfa(cham));
+					break;
 				case "stage":
 				case "关卡":
 				case "面数":
@@ -60,6 +69,7 @@ public class RollPlane {
 				case "帮助":
 					StringBuilder sb = new StringBuilder();
 					sb.append("roll.help roll.帮助 不解释（\n");
+					sb.append("roll.act roll.动作 孙晋芳杯规定动作随机选择（\n");
 					sb.append("roll.game roll.游戏 可以随机选择游戏\n");
 					sb.append("roll.difficult roll.diff roll.难度 可以随机选择难度\n");
 					sb.append("roll.player roll.pl roll.plane接作品名或编号可随机选择机体（仅官方整数作）\n");

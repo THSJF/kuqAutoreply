@@ -344,6 +344,7 @@ public class Autoreply extends JcqAppAbstract implements ICQVer, IMsg, IRequest 
 			return MSG_IGNORE;
 		}
 		// 这里处理消息
+		System.out.println(file);
 		System.out.println(groupFile.toString());
 		if (checkReplyTheGroup(fromGroup)) {
 			fileTipManager.onUploadFile(fromGroup, fromQQ);

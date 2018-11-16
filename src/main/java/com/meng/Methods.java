@@ -280,7 +280,6 @@ public class Methods {
 			connection.ignoreContentType(true).method(Connection.Method.GET);
 			response = connection.execute();
 			if (response.statusCode() != 200) {
-				System.out.println("response.statusCode()" + response.statusCode());
 			}
 		} catch (IOException e) {
 			e.printStackTrace();
