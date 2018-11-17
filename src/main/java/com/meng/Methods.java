@@ -17,6 +17,7 @@ import java.util.regex.Pattern;
 import org.jsoup.Connection;
 import org.jsoup.Jsoup;
 
+import com.meng.bilibili.LiveManager;
 import com.meng.lookGroup.IPGetter;
 
 public class Methods {
@@ -35,9 +36,19 @@ public class Methods {
 			Autoreply.enable = false;
 			return true;
 		}
+		if (msg.equals(".livestop")) {
+			Autoreply.sendGroupMessage(fromGroup, "livedisabled");
+			LiveManager.liveStart = false;
+			return true;
+		}
 		if (msg.equals(".start")) {
 			Autoreply.enable = true;
 			Autoreply.sendGroupMessage(fromGroup, "enabled");
+			return true;
+		}
+		if (msg.equals(".livestart")) {
+			LiveManager.liveStart = true;
+			Autoreply.sendGroupMessage(fromGroup, "liveenabled");
 			return true;
 		}
 		return false;
