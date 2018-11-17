@@ -11,6 +11,8 @@ import javax.swing.JOptionPane;
 import com.meng.barcode.BarcodeManager;
 import com.meng.bilibili.UpperBean;
 import com.meng.bilibili.BiliLinkInfo;
+import com.meng.bilibili.LiveManager;
+import com.meng.bilibili.LivePerson;
 import com.meng.bilibili.NewUpdateManager;
 import com.meng.groupChat.DicReplyGroup;
 import com.meng.groupChat.DicReplyManager;
@@ -59,11 +61,11 @@ public class Autoreply extends JcqAppAbstract implements ICQVer, IMsg, IRequest 
 	private BiliLinkInfo biliVideoInfo = new BiliLinkInfo();
 	private FileTipManager fileTipManager;
 	private fanpohai fph;
-	private DicReplyManager dicReplyManager;
+	private static DicReplyManager dicReplyManager;
 	private MengAutoReplyConfig mengAutoReplyConfig;
 	private CQcodeManager cQcodeManager = new CQcodeManager();
 	private NewUpdateManager newUpdate;
-	// private LiveManager livingManager = new LiveManager();
+	private LiveManager livingManager = new LiveManager();
 	private PicSearchManager picSearchManager = new PicSearchManager();
 	private BarcodeManager barcodeManager = new BarcodeManager();
 
@@ -572,6 +574,10 @@ public class Autoreply extends JcqAppAbstract implements ICQVer, IMsg, IRequest 
 		if (enable) {
 			// 处理词库中为特殊消息做的标记
 			setRandomPop();
+			if (msg.startsWith("red:")) {
+				if (dicReplyManager.check(fromGroup, fromQQ, msg.replace("red:", "")))// 根据词库触发回答
+					return;
+			}
 			String[] stri = msg.split("\\:");
 			switch (stri[0]) {
 			case "image":
@@ -606,17 +612,10 @@ public class Autoreply extends JcqAppAbstract implements ICQVer, IMsg, IRequest 
 		setRandomPop();
 		if (enable) {
 			// 处理词库中为特殊消息做的标记
-			setRandomPop();
 			String[] stri = msg.split("\\:");
 			switch (stri[0]) {
 			case "image":
 				CQ.sendPrivateMsg(fromQQ, stri[2].replace("--image--", CC.image(new File(appDirectory + stri[1]))));
-				break;
-			case "atFromQQ":
-				CQ.sendPrivateMsg(fromQQ, CC.at(fromQQ) + stri[1]);
-				break;
-			case "atQQ":
-				CQ.sendPrivateMsg(fromQQ, CC.at(Long.parseLong(stri[1])) + stri[2]);
 				break;
 			case "imageFolder":
 				File[] files = (new File(appDirectory + stri[1])).listFiles();
@@ -641,9 +640,13 @@ public class Autoreply extends JcqAppAbstract implements ICQVer, IMsg, IRequest 
 		nrq = mengAutoReplyConfig.getMapQQNotReply();
 		nrw = mengAutoReplyConfig.getMapWordNotReply();
 		addGroupDic();
+		System.out.println("词库回复添加完成");
 		addUp();
+		System.out.println("催更添加完成");
 		addRecorder();
-		// addLive();
+		System.out.println("复读机添加完成");
+		addLive();
+		System.out.println("直播提醒添加完成");
 	}
 
 	private void addGroupDic() {
@@ -672,18 +675,20 @@ public class Autoreply extends JcqAppAbstract implements ICQVer, IMsg, IRequest 
 		}
 	}
 
-	/*
-	 * private void addLive() { HashMap<String, String> mlt =
-	 * mengAutoReplyConfig.getMapLiveTip(); livingManager = new LiveManager();
-	 * for (String key : mlt.keySet()) {// 遍历 livingManager.addData(new
-	 * LivePerson(key, "https://live.bilibili.com/" + mlt.get(key))); }
-	 * livingManager.start(); }
-	 */
+	private void addLive() {
+		HashMap<String, String> mlt = mengAutoReplyConfig.getMapLiveTip();
+		livingManager = new LiveManager();
+		for (String key : mlt.keySet()) {// 遍历
+			livingManager.addData(new LivePerson(key, "https://live.bilibili.com/" + mlt.get(key)));
+		}
+		livingManager.start();
+	}
 
 	private boolean checkReplyTheGroup(long fromGroup) {
 		for (int key : grg.keySet()) {// 遍历
-			if (fromGroup == grg.get(key))
+			if (fromGroup == grg.get(key)) {
 				return true;
+			}
 		}
 		return false;
 	}
@@ -746,6 +751,7 @@ public class Autoreply extends JcqAppAbstract implements ICQVer, IMsg, IRequest 
 				if (picSearchManager.check(fromGroup, fromQQ, msg))// 搜索图片
 					return true;
 			} catch (Exception e) {
+				sendGroupMessage(fromGroup, CC.at(fromQQ) + e.toString());
 			}
 			if (Methods.checkLook(fromGroup, msg))// 窥屏检测
 				return true;
@@ -810,7 +816,9 @@ public class Autoreply extends JcqAppAbstract implements ICQVer, IMsg, IRequest 
 				return true;
 			}
 			if (barcodeManager.check(-1, fromQQ, msg)) // 二维码解码
+			{
 				return true;
+			}
 			if (msg.equals("色图")) {
 				try {
 					sendPrivateMessage(fromQQ, "imageFolder:r15/:--image--");
