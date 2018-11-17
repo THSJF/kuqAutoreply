@@ -1,7 +1,7 @@
 package com.meng.bilibili;
 
 public class LivePerson {
-	/*
+
 	private String name = "";
 	private int number = 0;
 	private String liveUrl = "";
@@ -12,7 +12,7 @@ public class LivePerson {
 
 	public LivePerson(String name, String url) {
 		this.name = name;
-		number = Integer.parseInt(url.substring(url.indexOf("com") + 4));//截取房间号
+		number = Integer.parseInt(url.substring(url.indexOf("com") + 4));// 截取房间号
 		liveUrl = url;
 	}
 
@@ -51,5 +51,5 @@ public class LivePerson {
 	public void setLiving(boolean b) {
 		isLiving = b;
 	}
-	*/
+
 }

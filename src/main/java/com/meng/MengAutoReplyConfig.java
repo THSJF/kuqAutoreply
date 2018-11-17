@@ -18,8 +18,7 @@ public class MengAutoReplyConfig {
 	private HashMap<Integer, String> mapWordNotReply = new HashMap<Integer, String>();
 	private HashMap<Integer, String> mapGroupRecorder = new HashMap<Integer, String>();
 	private HashMap<Integer, Long> mapGroupDicReply = new HashMap<Integer, Long>();
-	// private HashMap<String, String> mapLiveTip = new HashMap<String,
-	// String>();
+	private HashMap<String, String> mapLiveTip = new HashMap<String, String>();
 	private HashMap<Integer, UpperBean> mapBiliUp = new HashMap<Integer, UpperBean>();
 
 	private JsonParser parser;
@@ -71,13 +70,16 @@ public class MengAutoReplyConfig {
 					mapWordNotReply.put(k, Methods.removeCharAtStartAndEnd(array.get(k).toString().replace("\"", "")));
 				}
 				break;
-			/*
-			 * case "mapLiveTip": for (int k = 0; k < arraySize; k += 2) { try {
-			 * mapLiveTip.put(Methods.removeCharAtStartAndEnd(array.get(k).
-			 * toString()), Methods.removeCharAtStartAndEnd(array.get(k +
-			 * 1).toString())); } catch (Exception e) { e.printStackTrace(); } }
-			 * break;
-			 */
+			case "mapLiveTip":
+				for (int k = 0; k < arraySize; k += 2) {
+					try {
+						mapLiveTip.put(Methods.removeCharAtStartAndEnd(array.get(k).toString()),
+								Methods.removeCharAtStartAndEnd(array.get(k + 1).toString()));
+					} catch (Exception e) {
+						e.printStackTrace();
+					}
+				}
+				break;
 			case "mapBiliUp":
 				for (int k = 0; k < arraySize; k += 3) {
 					mapBiliUp.put(k,
@@ -112,9 +114,9 @@ public class MengAutoReplyConfig {
 		return mapGroupDicReply;
 	}
 
-	/*
-	 * public HashMap<String, String> getMapLiveTip() { return mapLiveTip; }
-	 */
+	public HashMap<String, String> getMapLiveTip() {
+		return mapLiveTip;
+	}
 
 	public HashMap<Integer, UpperBean> getMapBiliUp() {
 		return mapBiliUp;
