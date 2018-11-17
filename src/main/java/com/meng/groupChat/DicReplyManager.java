@@ -18,11 +18,17 @@ public class DicReplyManager {
 	private int mapFlag = 0;
 	private JsonParser parser;
 	private JsonObject obj;
+	private String jsonString;
 	@SuppressWarnings("rawtypes")
 	private Iterator it;
 
 	public DicReplyManager() {
 		parser = new JsonParser();
+		try {
+			jsonString = Methods.readFileToString(Autoreply.appDirectory + "dic.json");
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 	}
 
 	public void addData(DicReplyGroup drp) {
@@ -54,7 +60,7 @@ public class DicReplyManager {
 
 	@SuppressWarnings("rawtypes")
 	private boolean checkPublicDic(long group, long qq, String msg) throws IOException {
-		obj = parser.parse(Methods.readFileToString(Autoreply.appDirectory + "dic.json")).getAsJsonObject(); // 谷歌的GSON对象
+		obj = parser.parse(jsonString).getAsJsonObject(); // 谷歌的GSON对象
 		it = obj.entrySet().iterator();
 		while (it.hasNext()) {// 遍历集合查找符合要求的key
 			Entry entry = (Entry) it.next();

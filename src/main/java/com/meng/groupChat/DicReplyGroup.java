@@ -19,19 +19,23 @@ public class DicReplyGroup {
 	@SuppressWarnings("rawtypes")
 	private Iterator it;
 	private long groupNum;
-	private String filePath;
+	private String jsonString;
 	private HashMap<Integer, String> replyPool = new HashMap<Integer, String>();// 存放所有可能出现的回答
 
 	public DicReplyGroup(long group, String filePath) {
 		groupNum = group;
 		parser = new JsonParser();
-		this.filePath = filePath;
+		try {
+			jsonString = Methods.readFileToString(filePath);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 	}
 
 	@SuppressWarnings("rawtypes")
 	public boolean checkMsg(long group, long qq, String msg) throws IOException {
 		if (group == groupNum) {
-			obj = parser.parse(Methods.readFileToString(filePath)).getAsJsonObject();// 谷歌的GSON对象
+			obj = parser.parse(jsonString).getAsJsonObject();// 谷歌的GSON对象
 			it = obj.entrySet().iterator();
 			while (it.hasNext()) {// 遍历集合
 				Entry entry = (Entry) it.next();
