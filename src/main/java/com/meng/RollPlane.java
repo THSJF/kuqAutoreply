@@ -27,11 +27,9 @@ public class RollPlane {
 	private String[] pl16 = new String[] { "博丽灵梦", "琪露诺", "射命丸文", "雾雨魔理沙" };
 	private String[] pl16s = new String[] { "春", "夏", "秋", "冬" };
 	private String[] plDiff = new String[] { "easy", "normal", "hard", "lunatic" };
-	private String[] cham = new String[] { 
-			"开局按↓去正下版底贴一下", "开局原地小转3圈顺时针", "开局原地小转3圈逆时针","开局↑↓↑↓","开局←→←→",
-			"开局按↓去正下版底贴一下", "开局原地小转3圈顺时针", "开局原地小转3圈逆时针","开局↑↓↑↓","开局←→←→",
-			"开局按↓去正下版底贴一下", "开局原地小转3圈顺时针", "开局原地小转3圈逆时针","开局↑↓↑↓","开局←→←→",
-			"开局按↓去正下版底贴一下", "开局原地小转3圈顺时针", "开局原地小转3圈逆时针","开局↑↓↑↓","开局←→←→" };
+	private String[] cham = new String[] { "开局按↓去正下版底贴一下", "开局原地小转3圈顺时针", "开局原地小转3圈逆时针", "开局↑↓↑↓", "开局←→←→",
+			"开局按↓去正下版底贴一下", "开局原地小转3圈顺时针", "开局原地小转3圈逆时针", "开局↑↓↑↓", "开局←→←→", "开局按↓去正下版底贴一下", "开局原地小转3圈顺时针",
+			"开局原地小转3圈逆时针", "开局↑↓↑↓", "开局←→←→", "开局按↓去正下版底贴一下", "开局原地小转3圈顺时针", "开局原地小转3圈逆时针", "开局↑↓↑↓", "开局←→←→" };
 
 	public RollPlane() {
 
@@ -49,16 +47,16 @@ public class RollPlane {
 					break;
 				case "游戏":
 				case "game":
-					send(fromGroup, "th" + (Autoreply.random.nextInt(16) + 1));
+					Autoreply.sendMessage(fromGroup, 0, "th" + (Autoreply.random.nextInt(16) + 1));
 					break;
 				case "diff":
 				case "difficult":
 				case "难度":
-					send(fromGroup, (String) Methods.rfa(plDiff));
+					Autoreply.sendMessage(fromGroup, 0, (String) Methods.rfa(plDiff));
 					break;
 				case "act":
 				case "动作":
-					send(fromGroup, (String) Methods.rfa(cham));
+					Autoreply.sendMessage(fromGroup, 0, (String) Methods.rfa(cham));
 					break;
 				case "stage":
 				case "关卡":
@@ -74,7 +72,7 @@ public class RollPlane {
 					sb.append("roll.difficult roll.diff roll.难度 可以随机选择难度\n");
 					sb.append("roll.player roll.pl roll.plane接作品名或编号可随机选择机体（仅官方整数作）\n");
 					sb.append("roll.stage roll.关卡 roll.面数 加玩家名可用来接力时随机选择面数，多个玩家名之间用.隔开\n");
-					send(fromGroup, sb.toString());
+					Autoreply.sendMessage(fromGroup, 0, sb.toString());
 					break;
 				}
 				return true;
@@ -88,75 +86,75 @@ public class RollPlane {
 		case "东方灵异传":
 		case "th1":
 		case "th01":
-			send(fromGroup, (String) Methods.rfa(pl01));
+			Autoreply.sendMessage(fromGroup, 0, (String) Methods.rfa(pl01));
 			break;
 		case "东方封魔录":
 		case "th2":
 		case "th02":
-			send(fromGroup, (String) Methods.rfa(pl02));
+			Autoreply.sendMessage(fromGroup, 0, (String) Methods.rfa(pl02));
 			break;
 		case "东方梦时空":
 		case "th3":
 		case "th03":
-			send(fromGroup, (String) Methods.rfa(pl03));
+			Autoreply.sendMessage(fromGroup, 0, (String) Methods.rfa(pl03));
 			break;
 		case "东方幻想乡":
 		case "th4":
 		case "th04":
-			send(fromGroup, (String) Methods.rfa(pl04));
+			Autoreply.sendMessage(fromGroup, 0, (String) Methods.rfa(pl04));
 			break;
 		case "东方怪绮谈":
 		case "th5":
 		case "th05":
-			send(fromGroup, (String) Methods.rfa(pl05));
+			Autoreply.sendMessage(fromGroup, 0, (String) Methods.rfa(pl05));
 			break;
 		case "东方红魔乡":
 		case "th6":
 		case "th06":
-			send(fromGroup, (String) Methods.rfa(pl06));
+			Autoreply.sendMessage(fromGroup, 0, (String) Methods.rfa(pl06));
 			break;
 		case "东方妖妖梦":
 		case "th7":
 		case "th07":
-			send(fromGroup, (String) Methods.rfa(pl07));
+			Autoreply.sendMessage(fromGroup, 0, (String) Methods.rfa(pl07));
 			break;
 		case "东方永夜抄":
 		case "th8":
 		case "th08":
-			send(fromGroup, (String) Methods.rfa(pl08));
+			Autoreply.sendMessage(fromGroup, 0, (String) Methods.rfa(pl08));
 			break;
 		case "东方花映冢":
 		case "th9":
 		case "th09":
-			send(fromGroup, (String) Methods.rfa(pl09));
+			Autoreply.sendMessage(fromGroup, 0, (String) Methods.rfa(pl09));
 			break;
 		case "东方风神录":
 		case "th10":
-			send(fromGroup, (String) Methods.rfa(pl10));
+			Autoreply.sendMessage(fromGroup, 0, (String) Methods.rfa(pl10));
 			break;
 		case "东方地灵殿":
 		case "th11":
-			send(fromGroup, (String) Methods.rfa(pl11));
+			Autoreply.sendMessage(fromGroup, 0, (String) Methods.rfa(pl11));
 			break;
 		case "东方星莲船":
 		case "th12":
-			send(fromGroup, (String) Methods.rfa(pl12));
+			Autoreply.sendMessage(fromGroup, 0, (String) Methods.rfa(pl12));
 			break;
 		case "东方神灵庙":
 		case "th13":
-			send(fromGroup, (String) Methods.rfa(pl13));
+			Autoreply.sendMessage(fromGroup, 0, (String) Methods.rfa(pl13));
 			break;
 		case "东方辉针城":
 		case "th14":
-			send(fromGroup, Methods.rfa(pl14) + " " + Methods.rfa(pl14s));
+			Autoreply.sendMessage(fromGroup, 0, Methods.rfa(pl14) + " " + Methods.rfa(pl14s));
 			break;
 		case "东方绀珠传":
 		case "th15":
-			send(fromGroup, (String) Methods.rfa(pl15));
+			Autoreply.sendMessage(fromGroup, 0, (String) Methods.rfa(pl15));
 			break;
 		case "东方天空璋":
 		case "th16":
-			send(fromGroup, Methods.rfa(pl16) + " " + Methods.rfa(pl16s));
+			Autoreply.sendMessage(fromGroup, 0, Methods.rfa(pl16) + " " + Methods.rfa(pl16s));
 			break;
 		}
 	}
@@ -173,11 +171,6 @@ public class RollPlane {
 			// System.out.println("Key: " + key + " Value: " + hMap.get(key));
 			flag++;
 		}
-		send(fromGroup, sBuilder.append("完成").toString());
+		Autoreply.sendMessage(fromGroup, 0, sBuilder.append("完成").toString());
 	}
-
-	private void send(long fromGroup, String s) {
-		Autoreply.sendGroupMessage(fromGroup, s);
-	}
-
 }

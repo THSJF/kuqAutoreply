@@ -36,13 +36,13 @@ public class TimeTip extends Thread {
 				if (c.getActualMaximum(Calendar.DAY_OF_MONTH) == c.get(Calendar.DATE)
 						&& (c.get(Calendar.HOUR_OF_DAY) == 12 || c.get(Calendar.HOUR_OF_DAY) == 16
 								|| c.get(Calendar.HOUR_OF_DAY) == 22)) {
-					Autoreply.sendGroupMessage(groupDNFmoDao, "最后一天莉，，，看看冒险团商店");
-					Autoreply.sendGroupMessage(groupXueXi, "最后一天莉，，，看看冒险团商店");
+					Autoreply.sendMessage(groupDNFmoDao, 0, "最后一天莉，，，看看冒险团商店");
+					Autoreply.sendMessage(groupXueXi, 0, "最后一天莉，，，看看冒险团商店");
 				}
 				if (c.get(Calendar.DAY_OF_WEEK) == 4 && (c.get(Calendar.HOUR_OF_DAY) == 12
 						|| c.get(Calendar.HOUR_OF_DAY) == 16 || c.get(Calendar.HOUR_OF_DAY) == 22)) {
-					Autoreply.sendGroupMessage(groupDNFmoDao, "星期三莉，，，看看成长胶囊");
-					Autoreply.sendGroupMessage(groupXueXi, "星期三莉，，，看看成长胶囊");
+					Autoreply.sendMessage(groupDNFmoDao, 0, "星期三莉，，，看看成长胶囊");
+					Autoreply.sendMessage(groupXueXi, 0, "星期三莉，，，看看成长胶囊");
 				}
 			}
 			try {
@@ -55,17 +55,17 @@ public class TimeTip extends Thread {
 
 	public boolean check(long fromGroup, long fromQQ) {
 		if (!tipedZuisu && fromGroup == groupZuisu && fromQQ == jizhe) {
-			Autoreply.sendGroupMessage(groupZuisu, Autoreply.CC.at(jizhe) + "今天更新了吗？");
+			Autoreply.sendMessage(groupZuisu, 0, Autoreply.CC.at(jizhe) + "今天更新了吗？");
 			tipedZuisu = true;
 			return true;
 		}
 		if (!tipedDiuRen && fromQQ == diuren) {
-			Autoreply.sendGroupMessage(fromGroup, Autoreply.CC.at(diuren) + "把你的女装给我交了");
+			Autoreply.sendMessage(fromGroup, 0, Autoreply.CC.at(diuren) + "把你的女装给我交了");
 			tipedDiuRen = true;
 			return true;
 		}
 		if (!tipedZiyuan && fromGroup == groupZiyuan && fromQQ == ziyuan) {
-			Autoreply.sendGroupMessage(groupZiyuan, Autoreply.CC.at(ziyuan) + "昨天援交赚了多少？");
+			Autoreply.sendMessage(groupZiyuan, 0, Autoreply.CC.at(ziyuan) + "昨天援交赚了多少？");
 			tipedZiyuan = true;
 			return true;
 		}

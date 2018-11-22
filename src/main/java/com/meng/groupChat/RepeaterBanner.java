@@ -37,15 +37,15 @@ public class RepeaterBanner {
 		if (group == groupNum && (Autoreply.CC.getAt(msg) != 1620628713L) && (!msg.contains("禁言"))) {
 			if (msg.equalsIgnoreCase("ban0")) {
 				banRecorderMode = 0;
-				Autoreply.sendGroupMessage(group, "取消禁言复读机");
+				Autoreply.sendMessage(group, 0, "取消禁言复读机");
 			} else if (msg.equalsIgnoreCase("ban1")) {
 				banRecorderMode = 1;
-				Autoreply.sendGroupMessage(group, "复读轮盘");
+				Autoreply.sendMessage(group, 0, "复读轮盘");
 			} else if (msg.equalsIgnoreCase("ban2")) {
 				banRecorderMode = 2;
-				Autoreply.sendGroupMessage(group, "禁言所有复读机");
+				Autoreply.sendMessage(group, 0, "禁言所有复读机");
 			} else if (msg.equalsIgnoreCase("getban")) {
-				Autoreply.sendGroupMessage(group, "ban" + banRecorderMode);
+				Autoreply.sendMessage(group, 0, "ban" + banRecorderMode);
 			}
 			float simi = getPicSimilar(msg);// 当前消息中图片和上一条消息中图片相似度
 			switch (banRecorderMode) {
@@ -58,7 +58,7 @@ public class RepeaterBanner {
 						int time = Autoreply.random.nextInt(60) + 1;
 						Autoreply.CQ.setGroupBan(group, QQ, time);
 						banCount = 6;
-						Autoreply.sendPrivateMessage(QQ, "你从“群复读轮盘”中获得了" + time + "秒禁言套餐");
+						Autoreply.sendMessage(0, QQ, "你从“群复读轮盘”中获得了" + time + "秒禁言套餐");
 					}
 				}
 				break;
@@ -66,7 +66,7 @@ public class RepeaterBanner {
 				if (lastMessageRecieved.equals(msg) || (isPicMsgRepeat(lastMessageRecieved, msg, simi))) {
 					int time = Autoreply.random.nextInt(60) + 1;
 					Autoreply.CQ.setGroupBan(group, QQ, time);
-					Autoreply.sendPrivateMessage(QQ, "你因复读获得了" + time + "秒禁言套餐");
+					Autoreply.sendMessage(0, QQ, "你因复读获得了" + time + "秒禁言套餐");
 				}
 				lastMessageRecieved = msg;
 				return true;
@@ -125,26 +125,26 @@ public class RepeaterBanner {
 				return;
 			}
 			if (msg.indexOf("[") == 0) {
-				Autoreply.sendGroupMessage(group, ms + imgCode);
+				Autoreply.sendMessage(group, 0, ms + imgCode);
 			} else {
-				Autoreply.sendGroupMessage(group, imgCode + ms);
+				Autoreply.sendMessage(group, 0, imgCode + ms);
 			}
 			repeatCount++;
 			if (repeatCount > 3) {
 				repeatCount = 0;
 			}
 		} else {
-			Autoreply.sendGroupMessage(group, msg);
+			Autoreply.sendMessage(group, 0, msg);
 		}
 	}
 
 	// 如果是文本复读
 	private void replyText(Long group, String msg) {
 		if (repeatCount < 3) {
-			Autoreply.sendGroupMessage(group, msg);
+			Autoreply.sendMessage(group, 0, msg);
 			repeatCount++;
 		} else if (repeatCount == 3) {
-			Autoreply.sendGroupMessage(group, "你群天天复读");
+			Autoreply.sendMessage(group, 0, "你群天天复读");
 			repeatCount++;
 		} else {
 			String newmsg = new StringBuilder(msg).reverse().toString();
@@ -154,7 +154,7 @@ public class RepeaterBanner {
 			if (newmsg.equals(msg)) {
 				newmsg += " ";
 			}
-			Autoreply.sendGroupMessage(group, newmsg);
+			Autoreply.sendMessage(group, 0, newmsg);
 			repeatCount = 0;
 		}
 	}

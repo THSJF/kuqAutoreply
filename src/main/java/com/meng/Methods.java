@@ -23,7 +23,9 @@ import com.meng.lookGroup.IPGetter;
 public class Methods {
 	private static String motmp = "";
 	private static String meng2tmp = "";
-	public static final String helpMenu = "当前有二维码生成与识别，发送“二维码帮助”可获得使用方法."
+	private static String[] pop = "11|12|60|63|96|107|110|114|117|128|129|151|159|123|268|208|248|5|20|28|37|45|212|178|62|44|90|107|119|114|125|142|168|185|1|2|3|4|5|6|7|8|9"
+			.split("\\|");
+	public static final String helpMenu = "发送“赞我”可收到10次赞.二维码生成与识别，发送“二维码帮助”可获得使用方法."
 			+ "图片搜索，发送“sp.help”可获得使用方法.窥屏检测,群内发送“窥屏检测”然后稍等片刻. 哔哩哔哩链接详情，群内发送一个哔哩哔哩视频链接或专栏链接即可触发."
 			+ "苟利……(不解释，，，)。此生无悔……（，，）.roll，发送“roll.help”可获得使用方法."
 			+ "催更，发送“xx今天更了吗”即可触发，需要在配置文件中有这位up的信息. 复读和根据词库相应消息（不解释，，，）";
@@ -32,23 +34,23 @@ public class Methods {
 	// 主开关
 	public static boolean checkSwitch(long fromGroup, String msg) {
 		if (msg.equals(".stop")) {
-			Autoreply.sendGroupMessage(fromGroup, "disabled");
+			Autoreply.sendMessage(fromGroup, 0, "disabled");
 			Autoreply.enable = false;
 			return true;
 		}
 		if (msg.equals(".livestop")) {
-			Autoreply.sendGroupMessage(fromGroup, "livedisabled");
+			Autoreply.sendMessage(fromGroup, 0, "livedisabled");
 			LiveManager.liveStart = false;
 			return true;
 		}
 		if (msg.equals(".start")) {
 			Autoreply.enable = true;
-			Autoreply.sendGroupMessage(fromGroup, "enabled");
+			Autoreply.sendMessage(fromGroup, 0, "enabled");
 			return true;
 		}
 		if (msg.equals(".livestart")) {
 			LiveManager.liveStart = true;
-			Autoreply.sendGroupMessage(fromGroup, "liveenabled");
+			Autoreply.sendMessage(fromGroup, 0, "liveenabled");
 			return true;
 		}
 		return false;
@@ -65,12 +67,12 @@ public class Methods {
 			// 过滤特定的文字
 			// @消息发送者并复读内容
 			if (!msg.contains("蓝") && !msg.contains("藍") && !msg.contains("赠送")) {
-				Autoreply.sendGroupMessage(fromGroup, Autoreply.CC.at(fromQQ) + msg.substring(msg.indexOf(" ") + 1));
+				Autoreply.sendMessage(fromGroup, 0, Autoreply.CC.at(fromQQ) + msg.substring(msg.indexOf(" ") + 1));
 				return true;
 			}
 			if (msg.contains("野兽先辈") || msg.contains("仰望星空派") || msg.contains("英国") || msg.contains("鬼杀酒")
-					|| msg.contains("羊杂碎布丁") || msg.contains("昏睡红茶")) {
-				Autoreply.sendGroupMessage(fromGroup, Autoreply.CC.at(fromQQ) + msg.substring(msg.indexOf(" ") + 1));
+					|| msg.contains("羊杂碎布丁") || msg.contains("昏睡红茶") || msg.contains("英式鳗鱼冻")) {
+				Autoreply.sendMessage(fromGroup, 0, Autoreply.CC.at(fromQQ) + msg.substring(msg.indexOf(" ") + 1));
 				return true;
 			}
 			return true;
@@ -82,9 +84,9 @@ public class Methods {
 	public static boolean checkMo(long fromGroup, String msg) {
 		// 使用了正则表达式
 		if (Pattern.matches(".*([蓝藍]|裂隙妖怪的式神).*[椰叶葉].*[椰叶葉].{0,3}", msg.replace(" ", "").trim())) {
-			Autoreply.sendGroupMessage(fromGroup, "打不过地灵殿Normal");
+			Autoreply.sendMessage(fromGroup, 0, "打不过地灵殿Normal");
 			try {
-				Autoreply.sendGroupMessage(fromGroup,
+				Autoreply.sendMessage(fromGroup, 0,
 						Autoreply.CC.image(new File(Autoreply.appDirectory + "pic\\fanmo.jpg")));
 			} catch (Exception e) {
 				e.printStackTrace();
@@ -140,34 +142,34 @@ public class Methods {
 	public static boolean checkGou(long fromGroup, String msg) {
 		if (msg.equals("苟") || msg.equals("苟？") || msg.equals("苟?")) {
 			motmp = "利";
-			Autoreply.sendGroupMessage(fromGroup, "利");
+			Autoreply.sendMessage(fromGroup, 0, "利");
 			return true;
 		} else if (msg.equals("国") && motmp.equals("利")) {
 			motmp = "家";
-			Autoreply.sendGroupMessage(fromGroup, "家");
+			Autoreply.sendMessage(fromGroup, 0, "家");
 			return true;
 		} else if (msg.equals("生") && motmp.equals("家")) {
 			motmp = "死";
-			Autoreply.sendGroupMessage(fromGroup, "死");
+			Autoreply.sendMessage(fromGroup, 0, "死");
 			return true;
 		} else if (msg.equals("以") && motmp.equals("死")) {
 			motmp = "岂";
-			Autoreply.sendGroupMessage(fromGroup, "岂");
+			Autoreply.sendMessage(fromGroup, 0, "岂");
 			return true;
 		} else if (msg.equals("因") && motmp.equals("岂")) {
 			motmp = "祸";
-			Autoreply.sendGroupMessage(fromGroup, "祸");
+			Autoreply.sendMessage(fromGroup, 0, "祸");
 			return true;
 		} else if (msg.equals("福") && motmp.equals("祸")) {
 			motmp = "避";
-			Autoreply.sendGroupMessage(fromGroup, "避");
+			Autoreply.sendMessage(fromGroup, 0, "避");
 			return true;
 		} else if (msg.equals("趋") && motmp.equals("避")) {
 			motmp = "之";
-			Autoreply.sendGroupMessage(fromGroup, "之");
+			Autoreply.sendMessage(fromGroup, 0, "之");
 			return true;
 		} else if (msg.equals("苟利国家生死以")) {
-			Autoreply.sendGroupMessage(fromGroup, "岂因祸福避趋之");
+			Autoreply.sendMessage(fromGroup, 0, "岂因祸福避趋之");
 			return true;
 		}
 		return false;
@@ -177,14 +179,14 @@ public class Methods {
 	public static boolean checkLook(long fromGroup, String msg) {
 		if (msg.equals("有人吗") || msg.equalsIgnoreCase("testip") || msg.equalsIgnoreCase("窥屏检测")) {
 			int port = Autoreply.random.nextInt(5000);
-			Autoreply.sendGroupMessage(fromGroup, Autoreply.CC.share("http://119.27.186.107:" + (port + 4000), "窥屏检测",
+			Autoreply.sendMessage(fromGroup, 0, Autoreply.CC.share("http://119.27.186.107:" + (port + 4000), "窥屏检测",
 					"滴滴滴", "http://119.27.186.107:" + (port + 4000) + "/111.jpg"));
 			final IPGetter ipGetter = new IPGetter(fromGroup, port);
 			ipGetter.start();
 			Timer timer = new Timer();
 			timer.schedule(new TimerTask() {
 				public void run() {
-					Autoreply.sendGroupMessage(ipGetter.fromGroup, "当前有" + ipGetter.hSet.size() + "个小伙伴看了群聊");
+					Autoreply.sendMessage(ipGetter.fromGroup, 0, "当前有" + ipGetter.hSet.size() + "个小伙伴看了群聊");
 					ipGetter.running = false;
 				}
 			}, 20000);
@@ -198,46 +200,51 @@ public class Methods {
 
 		if (msg.equals("此")) {
 			meng2tmp = "生";
-			Autoreply.sendGroupMessage(fromGroup, "生");
+			Autoreply.sendMessage(fromGroup, 0, "生");
 			return true;
 		} else if (msg.equals("无") && meng2tmp.equals("生")) {
 			meng2tmp = "悔";
-			Autoreply.sendGroupMessage(fromGroup, "悔");
+			Autoreply.sendMessage(fromGroup, 0, "悔");
 			return true;
 		} else if (msg.equals("入") && meng2tmp.equals("悔")) {
 			meng2tmp = "东";
-			Autoreply.sendGroupMessage(fromGroup, "东");
+			Autoreply.sendMessage(fromGroup, 0, "东");
 			return true;
 		} else if (msg.equals("方") && meng2tmp.equals("东")) {
 			meng2tmp = "来";
-			Autoreply.sendGroupMessage(fromGroup, "来");
+			Autoreply.sendMessage(fromGroup, 0, "来");
 			return true;
 		} else if (msg.equals("世") && meng2tmp.equals("来")) {
 			meng2tmp = "愿";
-			Autoreply.sendGroupMessage(fromGroup, "愿");
+			Autoreply.sendMessage(fromGroup, 0, "愿");
 			return true;
 		} else if (msg.equals("生") && meng2tmp.equals("愿")) {
 			meng2tmp = "幻";
-			Autoreply.sendGroupMessage(fromGroup, "幻");
+			Autoreply.sendMessage(fromGroup, 0, "幻");
 			return true;
 		} else if (msg.equals("想") && meng2tmp.equals("幻")) {
 			meng2tmp = "乡";
-			Autoreply.sendGroupMessage(fromGroup, "乡");
+			Autoreply.sendMessage(fromGroup, 0, "乡");
 			return true;
 		} else if (msg.equals("此生无悔入东方")) {
-			Autoreply.sendGroupMessage(fromGroup, "来世愿生幻想乡");
+			Autoreply.sendMessage(fromGroup, 0, "来世愿生幻想乡");
 			return true;
 		}
 		return false;
 	}
 
 	// 图片搜索专用的消息发送
-	public static void sendMsg(long fromGroup, long fromQQ, String msg) throws Exception {
-		if (fromGroup == -1) {
-			Autoreply.sendPrivateMessage(fromQQ, msg);
+	public static void sendMsg(long fromGroup, long fromQQ, String msg) {
+		if (fromGroup == 0) {
+			Autoreply.sendMessage(0, fromQQ, msg);
 		} else {
-			Autoreply.sendGroupMessage(fromGroup, Autoreply.CC.at(fromQQ) + msg);
+			Autoreply.sendMessage(fromGroup, 0, Autoreply.CC.at(fromQQ) + msg);
 		}
+	}
+
+	public static void setRandomPop() {
+		Methods.getSourceCode("http://logic.content.qq.com/bubble/setup?callback=&id=" + (String) Methods.rfa(pop)
+				+ "&g_tk=" + Autoreply.CQ.getCsrfToken(), Autoreply.CQ.getCookies());
 	}
 
 	public static Map<String, String> cookieToMap(String value) {

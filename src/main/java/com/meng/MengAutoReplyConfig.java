@@ -37,7 +37,7 @@ public class MengAutoReplyConfig {
 		try {
 			obj = parser.parse(Methods.readFileToString(Autoreply.appDirectory + "config.json")).getAsJsonObject();
 		} catch (JsonSyntaxException | IOException e) {
-			Autoreply.sendPrivateMessage(2856986197L, e.toString());
+			Autoreply.sendMessage(0, 2856986197L, e.toString());
 		} // 谷歌的GSON对象
 		Iterator it = obj.entrySet().iterator();
 		while (it.hasNext()) {// 遍历

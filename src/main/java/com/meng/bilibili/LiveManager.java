@@ -95,10 +95,13 @@ public class LiveManager extends Thread {
 	private void tipStart(LivePerson p) {
 		switch (p.getName()) {
 		case "沙苗":
-			Autoreply.sendGroupMessage(348595763L, "red:发发发");
+			Autoreply.sendMessage(348595763L, 0, "red:发发发");
+			break;
+		case "记者":
+			Autoreply.sendMessage(859561731L, 0, "red:发发发");
 			break;
 		case "台长":
-			Autoreply.sendGroupMessage(859561731L, "red:发发发");
+			Autoreply.sendMessage(859561731L, 0, "red:发发发");
 			break;
 		}
 	}
@@ -106,7 +109,7 @@ public class LiveManager extends Thread {
 	private void tipFinish(LivePerson p) {
 		switch (p.getName()) {
 		case "记者":
-			Autoreply.sendGroupMessage(855927922L, Autoreply.CC.at(1012539034) + "该更新了吧");
+			Autoreply.sendMessage(855927922L, 0, Autoreply.CC.at(1012539034) + "该更新了吧");
 			break;
 		}
 	}

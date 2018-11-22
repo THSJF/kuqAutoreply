@@ -33,12 +33,14 @@ public class BiliLinkInfo {
 						return false;
 					} else {
 						Autoreply
-								.sendGroupMessage(fromGroup, gson
-										.fromJson(
-												Methods.getSourceCode("https://api.bilibili.com/x/article/viewinfo?id="
-														+ cvString + "&mobi_app=pc&jsonp=jsonp"),
-												ArticleInfoBean.class)
-										.toString());
+								.sendMessage(
+										fromGroup, 0, gson
+												.fromJson(
+														Methods.getSourceCode(
+																"https://api.bilibili.com/x/article/viewinfo?id="
+																		+ cvString + "&mobi_app=pc&jsonp=jsonp"),
+														ArticleInfoBean.class)
+												.toString());
 					}
 				} else {
 					VideoInfoBean videoInfoBean = gson.fromJson(
@@ -56,20 +58,20 @@ public class BiliLinkInfo {
 					} else {
 						vidInf += days + "天前发布，平均每天" + ((float) videoInfoBean.getViews() / days) + "次播放。";
 					}
-			/*		if (!msg.startsWith("[CQ:share,url=")) {
-						String json1 = "";
-						String json2 = "";
-						int index1 = html.indexOf("<script>") + "<script>".length();
-						int end1 = html.indexOf("</script><script>", index1);
-						json1 = html.substring(index1, end1);
-
-						int index2 = html.indexOf("<script>", end1) + "<script>".length();
-						int end2 = html.indexOf("</script>", index2);
-						json2 = html.substring(index2, end2);
-
-					}
-					*/
-					Autoreply.sendGroupMessage(fromGroup, vidInf);
+					/*
+					 * if (!msg.startsWith("[CQ:share,url=")) { String json1 =
+					 * ""; String json2 = ""; int index1 =
+					 * html.indexOf("<script>") + "<script>".length(); int end1
+					 * = html.indexOf("</script><script>", index1); json1 =
+					 * html.substring(index1, end1);
+					 * 
+					 * int index2 = html.indexOf("<script>", end1) +
+					 * "<script>".length(); int end2 = html.indexOf("</script>",
+					 * index2); json2 = html.substring(index2, end2);
+					 * 
+					 * }
+					 */
+					Autoreply.sendMessage(fromGroup, 0, vidInf);
 
 				}
 			} catch (Exception e) {

@@ -51,13 +51,13 @@ public class fanpohai {
 		try {
 			if (msg.equalsIgnoreCase("loadph")) {
 				loadph();
-				Autoreply.sendGroupMessage(fromGroup, "反迫害样本图更新");
+				Autoreply.sendMessage(fromGroup,0, "反迫害样本图更新");
 			}
 			boolean bpohai = false;
 			// 处理带有迫害二字的消息
 			if (msg.indexOf("迫害") != -1) {
 				pohaicishu++;
-				if (pohaicishu == alpohai || fromGroup == 348595763L) {
+				if (pohaicishu == alpohai || fromGroup == 348595763L || fromQQ == 2756253478L) {
 					bpohai = true;
 					pohaicishu = 0;
 					alpohai = Autoreply.random.nextInt(2147483647) % 5 + 2;
@@ -110,16 +110,16 @@ public class fanpohai {
 				if (folder.equals("")) {
 					int ir = Autoreply.random.nextInt(2147483647) % 3;
 					if (ir == 0) {
-						Autoreply.sendGroupMessage(fromGroup, "鬼鬼");
+						Autoreply.sendMessage(fromGroup,0, "鬼鬼");
 					} else if (ir == 1) {
-						Autoreply.sendGroupMessage(fromGroup, "除了迫害和膜你还知道什么");
+						Autoreply.sendMessage(fromGroup,0, "除了迫害和膜你还知道什么");
 					} else {
-						Autoreply.sendGroupMessage(fromGroup, "草绳");
+						Autoreply.sendMessage(fromGroup,0, "草绳");
 					}
 					return true;
 				} else {
 					File[] files = (new File(folder)).listFiles();
-					Autoreply.sendGroupMessage(fromGroup, Autoreply.CC.image((File) Methods.rfa(files)));
+					Autoreply.sendMessage(fromGroup,0, Autoreply.CC.image((File) Methods.rfa(files)));
 					return true;
 				}
 			}

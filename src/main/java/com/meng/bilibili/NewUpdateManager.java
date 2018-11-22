@@ -71,20 +71,20 @@ public class NewUpdateManager {
 
 	private void tipVideo(long fromGroup, String msg, long videoUpdateTime, NewVideoBean.Data.Vlist vlist) {
 		if (System.currentTimeMillis() - videoUpdateTime < 86400000) {
-			Autoreply.sendGroupMessage(fromGroup, "更新莉，，，https://www.bilibili.com/video/av" + vlist.aid);
+			Autoreply.sendMessage(fromGroup, 0, "更新莉，，，https://www.bilibili.com/video/av" + vlist.aid);
 		} else {
-			Autoreply.sendGroupMessage(fromGroup, Autoreply.CC.at(getUpQQ(msg)) + Methods.rfa(words));
-			Autoreply.sendGroupMessage(fromGroup,
+			Autoreply.sendMessage(fromGroup, 0, Autoreply.CC.at(getUpQQ(msg)) + Methods.rfa(words));
+			Autoreply.sendMessage(fromGroup, 0,
 					"你都" + ((System.currentTimeMillis() - videoUpdateTime) / 86400000) + "天没更新了");
 		}
 	}
 
 	private void tipArticle(long fromGroup, String msg, long articalUpdateTime, NewArticleBean.Data.Articles articles) {
 		if (System.currentTimeMillis() - articalUpdateTime < 86400000) {
-			Autoreply.sendGroupMessage(fromGroup, "更新莉，，，https://www.bilibili.com/read/cv" + articles.id);
+			Autoreply.sendMessage(fromGroup, 0, "更新莉，，，https://www.bilibili.com/read/cv" + articles.id);
 		} else {
-			Autoreply.sendGroupMessage(fromGroup, Autoreply.CC.at(getUpQQ(msg)) + Methods.rfa(words));
-			Autoreply.sendGroupMessage(fromGroup,
+			Autoreply.sendMessage(fromGroup, 0, Autoreply.CC.at(getUpQQ(msg)) + Methods.rfa(words));
+			Autoreply.sendMessage(fromGroup, 0,
 					"你都" + ((System.currentTimeMillis() - articalUpdateTime) / 86400000) + "天没更新了");
 		}
 	}

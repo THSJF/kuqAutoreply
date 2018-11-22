@@ -25,6 +25,7 @@ import com.meng.tip.FileTipUploader;
 import com.meng.tip.TimeTip;
 import com.sobte.cqp.jcq.entity.Anonymous;
 import com.sobte.cqp.jcq.entity.CoolQ;
+import com.sobte.cqp.jcq.entity.Group;
 import com.sobte.cqp.jcq.entity.GroupFile;
 import com.sobte.cqp.jcq.entity.ICQVer;
 import com.sobte.cqp.jcq.entity.IMsg;
@@ -73,8 +74,6 @@ public class Autoreply extends JcqAppAbstract implements ICQVer, IMsg, IRequest 
 	private HashMap<Integer, Long> nrq;
 	private HashMap<Integer, String> nrw;
 
-	private static String[] pop = "11|12|60|63|96|107|110|114|117|128|129|151|159|123|268|208|248|5|20|28|37|45|212|178|62|44|90|107|119|114|125|142|168|185|1|2|3|4|5|6|7|8|9"
-			.split("\\|");
 	private int threadCountG = 0;
 	private int threadCountP = 0;
 
@@ -190,7 +189,7 @@ public class Autoreply extends JcqAppAbstract implements ICQVer, IMsg, IRequest 
 		if (fromQQ == 2856986197L) {
 			String[] strings = msg.split("\\.");
 			if (strings[0].equalsIgnoreCase("send")) {
-				sendGroupMessage(Long.parseLong(strings[1]), strings[2]);
+				sendMessage(Long.parseLong(strings[1]), 0, strings[2]);
 			}
 		}
 		if (threadCountP < 11) {
@@ -198,11 +197,7 @@ public class Autoreply extends JcqAppAbstract implements ICQVer, IMsg, IRequest 
 			System.out.println("threadCountP" + threadCountP);
 			new PrivateMsgThread(subType, msgId, fromQQ, msg, font).start();
 		} else {
-			try {
-				sendPrivateMessage(2856976197L, "私聊消息过多");
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
+			sendMessage(0, 2856976197L, "私聊消息过多");
 		}
 
 		return MSG_IGNORE;
@@ -259,7 +254,7 @@ public class Autoreply extends JcqAppAbstract implements ICQVer, IMsg, IRequest 
 			// 手动更新设置，不再需要重启
 			if (msg.equalsIgnoreCase("loadConfig")) {
 				loadConfig();
-				sendGroupMessage(fromGroup, "reload");
+				sendMessage(fromGroup, 0, "reload");
 				return MSG_IGNORE;
 			}
 			if (msg.equals("大膜法 膜神复诵")) {
@@ -267,7 +262,7 @@ public class Autoreply extends JcqAppAbstract implements ICQVer, IMsg, IRequest 
 			}
 			String[] strings = msg.split("\\.");
 			if (strings[0].equalsIgnoreCase("send")) {
-				sendGroupMessage(Long.parseLong(strings[1]), strings[2]);
+				sendMessage(Long.parseLong(strings[1]), 0, strings[2]);
 				return MSG_IGNORE;
 			}
 
@@ -288,11 +283,7 @@ public class Autoreply extends JcqAppAbstract implements ICQVer, IMsg, IRequest 
 				System.out.println("threadCount" + threadCountG);
 				new GroupMsgThread(subType, msgId, fromGroup, fromQQ, fromAnonymous, msg, font).start();
 			} else {
-				try {
-					sendPrivateMessage(2856976197L, "群消息过多");
-				} catch (IOException e) {
-					e.printStackTrace();
-				}
+				sendMessage(0, 2856976197L, "群消息过多");
 			}
 		}
 
@@ -351,7 +342,7 @@ public class Autoreply extends JcqAppAbstract implements ICQVer, IMsg, IRequest 
 		if (checkReplyTheGroup(fromGroup)) {
 			fileTipManager.onUploadFile(fromGroup, fromQQ);
 			if (fromGroup != 807242547L) {// c5
-				sendGroupMessage(fromGroup, "发点小电影啊");
+				sendMessage(fromGroup, 0, "发点小电影啊");
 			}
 
 		}
@@ -376,9 +367,9 @@ public class Autoreply extends JcqAppAbstract implements ICQVer, IMsg, IRequest 
 		// 这里处理消息
 		if (checkReplyTheGroup(fromGroup)) {
 			if (subtype == 1) {
-				sendGroupMessage(fromGroup, CC.at(beingOperateQQ) + "你绿帽子没莉");
+				sendMessage(fromGroup, 0, CC.at(beingOperateQQ) + "你绿帽子没莉");
 			} else if (subtype == 2) {
-				sendGroupMessage(fromGroup, CC.at(beingOperateQQ) + "群主给了你个绿帽子");
+				sendMessage(fromGroup, 0, CC.at(beingOperateQQ) + "群主给了你个绿帽子");
 			}
 		}
 		return MSG_IGNORE;
@@ -410,10 +401,10 @@ public class Autoreply extends JcqAppAbstract implements ICQVer, IMsg, IRequest 
 			try {
 				QQInfo qInfo = CQ.getStrangerInfo(beingOperateQQ);
 				if (subtype == 1) {
-					sendGroupMessage(fromGroup, qInfo.getNick() + "(" + qInfo.getQqId() + ")" + "跑莉");
+					sendMessage(fromGroup, 0, qInfo.getNick() + "(" + qInfo.getQqId() + ")" + "跑莉");
 				} else if (subtype == 2) {
 					QQInfo qInfo2 = CQ.getStrangerInfo(fromQQ);
-					sendGroupMessage(fromGroup, qInfo.getNick() + "(" + qInfo.getQqId() + ")" + "被绿帽" + qInfo2.getNick()
+					sendMessage(fromGroup, 0, qInfo.getNick() + "(" + qInfo.getQqId() + ")" + "被绿帽" + qInfo2.getNick()
 							+ "(" + qInfo2.getQqId() + ")" + "玩完扔莉");
 				}
 			} catch (Exception e) {
@@ -444,7 +435,7 @@ public class Autoreply extends JcqAppAbstract implements ICQVer, IMsg, IRequest 
 		if (fromQQ == CQ.getLoginQQ()) {
 			return MSG_IGNORE;
 		}
-		sendGroupMessage(fromGroup, "欢迎新大佬");
+		sendMessage(fromGroup, 0, "欢迎新大佬");
 		/*
 		 * String[] strings = new String[] { "封魔录LNN", "梦时空LNN", "幻想乡LNN",
 		 * "怪绮谈LNN", "红LNN", "妖LNNN", "永0033", "永0037", "花LNN", "风LNN", "殿LNN",
@@ -501,11 +492,8 @@ public class Autoreply extends JcqAppAbstract implements ICQVer, IMsg, IRequest 
 		 */
 
 		CQ.setFriendAddRequest(responseFlag, REQUEST_ADOPT, null); //
-		try {
-			sendPrivateMessage(fromQQ, "本体2856986197");
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
+		sendMessage(0, fromQQ, "本体2856986197");
+		sendMessage(0, 2856986197L, fromQQ + "把我加为好友");
 		// 同意好友添加请求
 		return MSG_IGNORE;
 	}
@@ -542,9 +530,10 @@ public class Autoreply extends JcqAppAbstract implements ICQVer, IMsg, IRequest 
 
 		if (subtype == 1) { // 本号为群管理，判断是否为他人申请入群
 			CQ.setGroupAddRequest(responseFlag, REQUEST_GROUP_ADD, REQUEST_ADOPT, null);// 同意入群
-			sendGroupMessage(fromGroup, "新人的验证信息------\n" + msg);
+			sendMessage(fromGroup, 0, "新人的验证信息------\n" + msg);
 		} else if (subtype == 2) {
 			CQ.setGroupAddRequest(responseFlag, REQUEST_GROUP_INVITE, REQUEST_ADOPT, null);// 同意进受邀群
+			sendMessage(0, 2856986197L, fromQQ + "邀请我加入群" + fromGroup);
 		}
 
 		return MSG_IGNORE;
@@ -573,7 +562,7 @@ public class Autoreply extends JcqAppAbstract implements ICQVer, IMsg, IRequest 
 	public static void sendGroupMessage(long fromGroup, long fromQQ, String msg) throws IOException {
 		if (enable) {
 			// 处理词库中为特殊消息做的标记
-			setRandomPop();
+			Methods.setRandomPop();
 			if (msg.startsWith("red:")) {
 				if (dicReplyManager.check(fromGroup, fromQQ, msg.replace("red:", "")))// 根据词库触发回答
 					return;
@@ -600,16 +589,8 @@ public class Autoreply extends JcqAppAbstract implements ICQVer, IMsg, IRequest 
 		}
 	}
 
-	public static void sendGroupMessage(long fromGroup, String msg) {
-		try {
-			sendGroupMessage(fromGroup, 0L, msg);
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-	}
-
 	public static void sendPrivateMessage(long fromQQ, String msg) throws IOException {
-		setRandomPop();
+		Methods.setRandomPop();
 		if (enable) {
 			// 处理词库中为特殊消息做的标记
 			String[] stri = msg.split("\\:");
@@ -707,11 +688,6 @@ public class Autoreply extends JcqAppAbstract implements ICQVer, IMsg, IRequest 
 		return false;
 	}
 
-	private static void setRandomPop() {
-		Methods.getSourceCode("http://logic.content.qq.com/bubble/setup?callback=&id=" + (String) Methods.rfa(pop)
-				+ "&g_tk=" + CQ.getCsrfToken(), CQ.getCookies());
-	}
-
 	public class GroupMsgThread extends Thread {
 		int subType = 0;
 		int msgId = 0;
@@ -740,19 +716,22 @@ public class Autoreply extends JcqAppAbstract implements ICQVer, IMsg, IRequest 
 
 		private boolean check() {
 			if (msg.equals("-help")) {
-				sendGroupMessage(fromGroup, Methods.helpMenu);
+				sendMessage(fromGroup, 0, Methods.helpMenu);
 				return true;
 			}
 			if (checkNotReply(fromQQ, msg))// 指定不回复的项目
 				return true;
+			if (msg.equals("赞我")) {
+				for (int i = 0; i < 10; i++) {
+					CQ.sendLike(fromQQ);
+				}
+				sendMessage(fromGroup, 0, "完成");
+				return true;
+			}
 			if (barcodeManager.check(fromGroup, fromQQ, msg)) // 二维码
 				return true;
-			try {
-				if (picSearchManager.check(fromGroup, fromQQ, msg))// 搜索图片
-					return true;
-			} catch (Exception e) {
-				sendGroupMessage(fromGroup, CC.at(fromQQ) + e.toString());
-			}
+			if (picSearchManager.check(fromGroup, fromQQ, msg))// 搜索图片
+				return true;
 			if (Methods.checkLook(fromGroup, msg))// 窥屏检测
 				return true;
 			if (biliVideoInfo.check(fromGroup, msg))// 比利比利链接详情
@@ -808,32 +787,41 @@ public class Autoreply extends JcqAppAbstract implements ICQVer, IMsg, IRequest 
 
 		private boolean check() {
 			if (msg.equals("-help")) {
-				try {
-					sendPrivateMessage(fromQQ, Methods.helpMenu);
-				} catch (IOException e) {
-					e.printStackTrace();
+				sendMessage(0, fromQQ, Methods.helpMenu);
+				return true;
+			}
+			if (msg.equals("赞我")) {
+				for (int i = 0; i < 10; i++) {
+					CQ.sendLike(fromQQ);
 				}
+				sendMessage(0, fromQQ, "完成");
 				return true;
 			}
-			if (barcodeManager.check(-1, fromQQ, msg)) // 二维码解码
-			{
+			if (barcodeManager.check(0, fromQQ, msg)) // 二维码解码
 				return true;
-			}
 			if (msg.equals("色图")) {
-				try {
-					sendPrivateMessage(fromQQ, "imageFolder:r15/:--image--");
-				} catch (IOException e) {
-					e.printStackTrace();
-				}
+				sendMessage(0, fromQQ, "imageFolder:r15/:--image--");
 				return true;
 			}
+			if (picSearchManager.check(0, fromQQ, msg))// 搜索图片
+				return true;
+			return false;
+		}
+	}
+
+	public static void sendMessage(long fromGroup, long fromQQ, String msg) {
+		if (fromGroup == 0) {
 			try {
-				if (picSearchManager.check(-1, fromQQ, msg))// 搜索图片
-					return true;
-			} catch (Exception e) {
+				sendPrivateMessage(fromQQ, msg);
+			} catch (IOException e) {
 				e.printStackTrace();
 			}
-			return false;
+		} else {
+			try {
+				sendGroupMessage(fromGroup, fromQQ, msg);
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
 		}
 	}
 }

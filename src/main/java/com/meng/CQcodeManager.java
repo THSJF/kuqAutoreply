@@ -17,13 +17,13 @@ public class CQcodeManager {
 			int i = Autoreply.random.nextInt(3);
 			switch (i) {
 			case 0:
-				Autoreply.sendGroupMessage(fromGroup, Autoreply.CC.music(22636603, "163", false));
+				Autoreply.sendMessage(fromGroup,0, Autoreply.CC.music(22636603, "163", false));
 				break;
 			case 1:
-				Autoreply.sendGroupMessage(fromGroup, Autoreply.CC.music(103744845, "qq", false));
+				Autoreply.sendMessage(fromGroup,0, Autoreply.CC.music(103744845, "qq", false));
 				break;
 			case 2:
-				Autoreply.sendGroupMessage(fromGroup, Autoreply.CC.music(103744852, "qq", false));
+				Autoreply.sendMessage(fromGroup,0, Autoreply.CC.music(103744852, "qq", false));
 				break;
 			}
 			return true;
@@ -43,10 +43,10 @@ public class CQcodeManager {
 			// msg.indexOf(",image"));
 			String picture = msg.substring(msg.lastIndexOf("http"), msg.lastIndexOf("]"));
 			// 发送消息
-			// Autoreply.sendGroupMessage(fromGroup,
+			// Autoreply.sendMessage(fromGroup,0,
 			// "标题:" + title + "\n链接:" + link + "\n封面图:" + picture + "\n描述:" +
 			// describe);
-			Autoreply.sendGroupMessage(fromGroup, "封面图:" + picture);
+			Autoreply.sendMessage(fromGroup,0, "封面图:" + picture);
 			return true;
 		}
 		return false;

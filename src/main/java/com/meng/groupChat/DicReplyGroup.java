@@ -50,7 +50,7 @@ public class DicReplyGroup {
 							replyPool.put(k, Methods.removeCharAtStartAndEnd(array.get(k).toString()));
 						}
 						// 从所有的回答中随机选择一个
-						Autoreply.sendGroupMessage(group, qq, replyPool.get(Autoreply.random.nextInt(2147483647) % k));
+						Autoreply.sendMessage(group, qq, replyPool.get(Autoreply.random.nextInt(2147483647) % k));
 						replyPool.clear();
 						return true;
 					}

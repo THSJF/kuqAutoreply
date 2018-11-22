@@ -13,15 +13,15 @@ public class PicSearchManager {
 	public PicSearchManager() {
 	}
 
-	public boolean check(long fromGroup, long fromQQ, String msg) throws Exception {
+	public boolean check(long fromGroup, long fromQQ, String msg) {
 		if (msg.equalsIgnoreCase("sp.help")) {
-			if (fromGroup != -1) {
+			if (fromGroup != 0) {
 				Methods.sendMsg(fromGroup, fromQQ, "使用方式已私聊发送");
 			}
-			Autoreply.sendPrivateMessage(fromQQ,
+			Autoreply.sendMessage(0, fromQQ,
 					"图片搜索功能群聊及私聊有效。使用sp.图片数量.目标网站或asp.图片数量.目标网站搜索图片。其中.图片数量和目标网站都可以省略但如果要选择目标网站必须加上图片数量。使用sp搜索时会自动隐藏相似度过低的图片，而asp搜索会显示全部结果");
-			Autoreply.sendPrivateMessage(fromQQ, "例--\n在所有网站中搜索一个结果:sp\n在所有网站中搜索3个结果:sp.3\n在Pixiv中搜索1个结果sp.1.5");
-			Autoreply.sendPrivateMessage(fromQQ,
+			Autoreply.sendMessage(0, fromQQ, "例--\n在所有网站中搜索一个结果:sp\n在所有网站中搜索3个结果:sp.3\n在Pixiv中搜索1个结果sp.1.5");
+			Autoreply.sendMessage(0, fromQQ,
 					"网站代号：\n0 H-Magazines\n2 H-Game CG\n3 DoujinshiDB\n5 pixiv Images\n8 Nico Nico Seiga\n9 Danbooru\n10 drawr Images\n11 Nijie Images\n12 Yande.re\n13 Openings.moe\n15 Shutterstock\n16 FAKKU\n18 H-Misc\n19 2D-Market\n20 MediBang\n21 Anime\n22 H-Anime\n23 Movies\n24 Shows\n25 Gelbooru\n26 Konachan\n27 Sankaku Channel\n28 Anime-Pictures.net\n29 e621.net\n30 Idol Complex\n31 bcy.net Illust\n32 bcy.net Cosplay\n33 PortalGraphics.net (Hist)\n34 deviantArt\n35 Pawoo.net\n36 Manga");
 			return true;
 		}
