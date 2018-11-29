@@ -20,15 +20,15 @@ public class SearchThread extends Thread {
 	private File pic = null;
 	private int picNumFlag = 0;
 	private PicResults mResults;
-	private boolean showAll = false;
+	// private boolean showAll = false;
 	private int resultCount = 1;
 	private int database = 999;
 
-	public SearchThread(long fromGroup, long fromQQ, File pic, boolean showAll, int resultCount, int database) {
+	public SearchThread(long fromGroup, long fromQQ, File pic, int resultCount, int database) {
 		this.fromGroup = fromGroup;
 		this.fromQQ = fromQQ;
 		this.pic = pic;
-		this.showAll = showAll;
+		// this.showAll = showAll;
 		this.resultCount = resultCount;
 		this.database = database;
 	}
@@ -88,10 +88,10 @@ public class SearchThread extends Thread {
 		for (int i = 0; i < size; i++) {
 			StringBuilder sBuilder = new StringBuilder("");
 			PicResults.Result tmpr = mResults.getResults().get(i);
-			int simi = Integer.parseInt(tmpr.mSimilarity.substring(0, 2));
-			if (simi < 60 && !showAll) {
-				continue;
-			}
+			//int simi = Integer.parseInt(tmpr.mSimilarity.substring(0, 2));
+			// if (simi < 60 && !showAll) {
+			// continue;
+			// }
 			File dFile = null;
 			try {
 				File files = new File(Autoreply.appDirectory + "picSearch\\tmp\\");

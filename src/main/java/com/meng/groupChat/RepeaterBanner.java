@@ -16,7 +16,7 @@ public class RepeaterBanner {
 	private int banCount = 6;
 	private String lastMessageRecieved = "";
 	private long groupNum = 0;
-	private int reverseFlag = Autoreply.random.nextInt(3);
+	private int reverseFlag = Autoreply.random.nextInt(4);
 	private int banRecorderMode = 0;
 	private boolean lastStatus = false;
 	private FingerPrint thisFp;
@@ -81,22 +81,13 @@ public class RepeaterBanner {
 	private boolean checkRepeatStatu(long group, String msg, float simi) throws IOException {
 		boolean b = false;
 		if (!lastStatus && (lastMessageRecieved.equals(msg) || (isPicMsgRepeat(lastMessageRecieved, msg, simi)))) {
-			System.out.println("复读开始");
-			b = true;
-			reply(group, msg, simi);
+			b = repeatStart(group, msg);
 		}
 		if (lastStatus && (lastMessageRecieved.equals(msg) || (isPicMsgRepeat(lastMessageRecieved, msg, simi)))) {
-			System.out.println("复读持续中");
-			b = false;
-			if (banCount < 1) {
-				banCount = 6;
-			}
-			banCount--;
+			b = repeatRunning();
 		}
 		if (lastStatus && !lastMessageRecieved.equals(msg) && !(isPicMsgRepeat(lastMessageRecieved, msg, simi))) {
-			System.out.println("复读结束");
-			b = false;
-			banCount = 6;
+			b = repeatEnd();
 		}
 		if (lastMessageRecieved.equals(msg) || (isPicMsgRepeat(lastMessageRecieved, msg, simi))) {
 			lastStatus = true;
@@ -106,8 +97,33 @@ public class RepeaterBanner {
 		return b;
 	}
 
+	private boolean repeatEnd() {
+		boolean b;
+		System.out.println("复读结束");
+		b = false;
+		return b;
+	}
+
+	private boolean repeatRunning() {
+		boolean b;
+		System.out.println("复读持续中");
+		b = false;
+		banCount--;
+		return b;
+	}
+
+	private boolean repeatStart(long group, String msg) throws IOException {
+		boolean b;
+		System.out.println("复读开始");
+		banCount = 6;
+		Autoreply.sendMessage(0, 2856986197L, msg);
+		b = true;
+		reply(group, msg);
+		return b;
+	}
+
 	// 回复
-	private boolean reply(long group, String msg, float simi) throws IOException {
+	private boolean reply(long group, String msg) throws IOException {
 		if (msg.contains("[CQ:image,file=")) {
 			replyPic(group, msg);
 		} else {
@@ -124,15 +140,8 @@ public class RepeaterBanner {
 			if (ms.indexOf("蓝") != -1 || ms.indexOf("藍") != -1) {
 				return;
 			}
-			if (msg.indexOf("[") == 0) {
-				Autoreply.sendMessage(group, 0, ms + imgCode);
-			} else {
-				Autoreply.sendMessage(group, 0, imgCode + ms);
-			}
-			repeatCount++;
-			if (repeatCount > 3) {
-				repeatCount = 0;
-			}
+			Autoreply.sendMessage(group, 0, msg.startsWith("[") ? ms + imgCode : imgCode + ms);
+			repeatCount = repeatCount > 2 ? 0 : repeatCount + 1;
 		} else {
 			Autoreply.sendMessage(group, 0, msg);
 		}
@@ -148,20 +157,22 @@ public class RepeaterBanner {
 			repeatCount++;
 		} else {
 			String newmsg = new StringBuilder(msg).reverse().toString();
-			if (newmsg.indexOf("蓝") != -1 || newmsg.indexOf("藍") != -1) {
+			if (newmsg.contains("蓝") || newmsg.contains("藍")) {
 				return;
 			}
-			if (newmsg.equals(msg)) {
-				newmsg += " ";
-			}
-			Autoreply.sendMessage(group, 0, newmsg);
+			Autoreply.sendMessage(group, 0, newmsg.equals(msg) ? newmsg + " " : newmsg);
 			repeatCount = 0;
 		}
 	}
 
 	// 反转图片
 	private File rePic(File file) throws IOException {
+		if (reverseFlag == 0) {
+			reverseFlag++;
+			return file;
+		}
 		Image im = ImageIO.read(file);
+		System.out.println("开始旋转图片");
 		int w = im.getWidth(null);
 		int h = im.getHeight(null);
 		BufferedImage b = new BufferedImage(im.getWidth(null), im.getHeight(null), BufferedImage.TYPE_INT_RGB);
@@ -172,16 +183,24 @@ public class RepeaterBanner {
 		for (int y = 0; y < h; y++) {
 			for (int x = 0; x < w; x++) {
 				int rgb = b.getRGB(x, y);
-				if (reverseFlag % 3 == 0) {
+				switch (reverseFlag % 4) {
+				case 0:
+
+					break;
+				case 1:
 					b2.setRGB(w - 1 - x, y, rgb);// 左右
-				} else if (reverseFlag % 3 == 1) {
+					break;
+				case 2:
 					b2.setRGB(x, h - 1 - y, rgb);// 上下
-				} else if (reverseFlag % 3 == 2) {
+					break;
+				case 3:
 					b2.setRGB(w - 1 - x, h - 1 - y, rgb);// 上下和左右（旋转）
+					break;
 				}
 			}
 		}
 		reverseFlag++;
+		System.out.println("完成");
 		ImageIO.write(b2, "jpg", file);// 也可以使用png但体积太大
 		return file;
 	}

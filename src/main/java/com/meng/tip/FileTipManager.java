@@ -33,6 +33,11 @@ public class FileTipManager extends Thread {
 
 	@Override
 	public void run() {
+		try {
+			sleep(600000);// 线程休眠60000毫秒
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}
 		while (true) {
 			for (int i = 0; i < mapFlag; i++) {
 				FileTipUploader tftu = dataMap.get(i);
@@ -53,7 +58,6 @@ public class FileTipManager extends Thread {
 			try {
 				sleep(60000);// 线程休眠60000毫秒
 			} catch (InterruptedException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 		}

@@ -39,7 +39,7 @@ public class PicSearchManager {
 				new SearchThread(fromGroup, fromQQ,
 						cqImage.download(Autoreply.appDirectory + "picSearch\\" + String.valueOf(fromQQ),
 								Autoreply.random.nextInt() + "pic.jpg"),
-						msg.toLowerCase().startsWith("asp"), needPic, database).start();
+						needPic, database).start();
 			} catch (Exception e) {
 				Methods.sendMsg(fromGroup, fromQQ, e.toString());
 			}
@@ -63,7 +63,7 @@ public class PicSearchManager {
 				new SearchThread(fromGroup, fromQQ,
 						cqImage.download(Autoreply.appDirectory + "picSearch\\" + String.valueOf(fromQQ),
 								Autoreply.random.nextInt() + "pic.jpg"),
-						userNotSendPicture.get(fromQQ).startsWith("asp"), needPic, database).start();
+						needPic, database).start();
 			} catch (Exception e) {
 				Methods.sendMsg(fromGroup, fromQQ, e.toString());
 			}

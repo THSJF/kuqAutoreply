@@ -80,23 +80,6 @@ public class Methods {
 		return false;
 	}
 
-	// 膜人回复
-	public static boolean checkMo(long fromGroup, String msg) {
-		// 使用了正则表达式
-		if (Pattern.matches(".*([蓝藍]|裂隙妖怪的式神).*[椰叶葉].*[椰叶葉].{0,3}", msg.replace(" ", "").trim())) {
-			Autoreply.sendMessage(fromGroup, 0, "打不过地灵殿Normal");
-			try {
-				Autoreply.sendMessage(fromGroup, 0,
-						Autoreply.CC.image(new File(Autoreply.appDirectory + "pic\\fanmo.jpg")));
-			} catch (Exception e) {
-				e.printStackTrace();
-				return false;
-			}
-			return true;
-		}
-		return false;
-	}
-
 	// 读取文本文件
 	public static String readFileToString(String fileName) throws IOException, UnsupportedEncodingException {
 		File file = new File(fileName);

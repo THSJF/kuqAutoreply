@@ -746,8 +746,6 @@ public class Autoreply extends JcqAppAbstract implements ICQVer, IMsg, IRequest 
 				return true;
 			if (Methods.checkAt(fromGroup, fromQQ, msg))// @
 				return true;
-			if (Methods.checkMo(fromGroup, msg))// 膜
-				return true;
 			if (timeTip.check(fromGroup, fromQQ))// 根据时间提醒
 				return true;
 			if (rollPlane.check(fromGroup, msg))// roll
