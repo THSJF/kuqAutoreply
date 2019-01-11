@@ -12,7 +12,7 @@ public class BiliLinkInfo {
 	public BiliLinkInfo() {
 	}
 
-	public boolean check(long fromGroup, String msg) {
+	public boolean check(long fromGroup, long fromQQ, String msg) {
 		String res = "";
 		try {
 			res = Methods.getRealUrl(msg.substring(msg.indexOf("http"),
@@ -21,6 +21,7 @@ public class BiliLinkInfo {
 		}
 		if (msg.toLowerCase().contains(videoUrl) || res.toLowerCase().contains(videoUrl)
 				|| msg.toLowerCase().contains(articleUrl) || res.toLowerCase().contains(articleUrl)) {// 判断是否为哔哩哔哩链接
+			Autoreply.useCount.incBilibiliLink(fromQQ);
 			String avString = "";
 			String cvString = "";
 			Gson gson = new Gson();

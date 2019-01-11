@@ -28,6 +28,7 @@ public class PicSearchManager {
 		CQImage cqImage = Autoreply.CC.getCQImage(msg);
 		if (cqImage != null && (msg.toLowerCase().startsWith("sp") || msg.toLowerCase().startsWith("asp"))) {
 			try {
+				Autoreply.useCount.incSearchPicture(fromQQ);
 				Methods.sendMsg(fromGroup, fromQQ, "土豆折寿中……");
 				int needPic = 1;
 				int database = 999;
@@ -46,6 +47,7 @@ public class PicSearchManager {
 			return true;
 		} else if (cqImage == null && (msg.toLowerCase().startsWith("sp.") || msg.toLowerCase().startsWith("asp.")
 				|| (msg.equalsIgnoreCase("sp") || msg.equalsIgnoreCase("asp")))) {
+			Autoreply.useCount.incSearchPicture(fromQQ);
 			userNotSendPicture.put(fromQQ, msg);
 			Methods.sendMsg(fromGroup, fromQQ, "需要一张图片");
 			return true;

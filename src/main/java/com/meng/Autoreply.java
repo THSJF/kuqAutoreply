@@ -58,11 +58,12 @@ public class Autoreply extends JcqAppAbstract implements ICQVer, IMsg, IRequest 
 	public static boolean enable = true;
 	public static Random random = new Random();
 	public static CQCodeCC CC = new CQCodeCC();
+	public static UseCount useCount;
 	private Banner banner = new Banner();
 	private RepeaterManager recoderManager;
 	private RollPlane rollPlane = new RollPlane();
 	private TimeTip timeTip = new TimeTip();
-	private BiliLinkInfo biliVideoInfo = new BiliLinkInfo();
+	private BiliLinkInfo biliLinkInfo = new BiliLinkInfo();
 	private FileTipManager fileTipManager;
 	private fanpohai fph;
 	private static DicReplyManager dicReplyManager;
@@ -120,6 +121,7 @@ public class Autoreply extends JcqAppAbstract implements ICQVer, IMsg, IRequest 
 	public int startup() {
 		// 获取应用数据目录(无需储存数据时，请将此行注释)
 		appDirectory = CQ.getAppDirectory();
+		useCount = new UseCount();
 		fph = new fanpohai();
 		loadConfig();
 		addFileTip();
@@ -746,7 +748,7 @@ public class Autoreply extends JcqAppAbstract implements ICQVer, IMsg, IRequest 
 				return true;
 			if (Methods.checkLook(fromGroup, msg))// 窥屏检测
 				return true;
-			if (biliVideoInfo.check(fromGroup, msg))// 比利比利链接详情
+			if (biliLinkInfo.check(fromGroup, fromQQ, msg))// 比利比利链接详情
 				return true;
 			if (cQcodeManager.check(fromGroup, msg))// 特殊信息(签到 分享等)
 				return true;
@@ -770,6 +772,10 @@ public class Autoreply extends JcqAppAbstract implements ICQVer, IMsg, IRequest 
 				return true;
 			if (dicReplyManager.check(fromGroup, fromQQ, msg))// 根据词库触发回答
 				return true;
+			if (msg.equals("查看统计")) {
+				sendMessage(fromGroup, fromQQ, useCount.getMyCount(fromQQ));
+				return true;
+			}
 			return false;
 		}
 	}
@@ -809,6 +815,10 @@ public class Autoreply extends JcqAppAbstract implements ICQVer, IMsg, IRequest 
 			}
 			if (barcodeManager.check(0, fromQQ, msg)) // 二维码解码
 				return true;
+			if (msg.equals("查看统计")) {
+				sendMessage(0, fromQQ, useCount.getMyCount(fromQQ));
+				return true;
+			}
 			if (msg.equals("色图")) {
 				try {
 					// 读取属性文件a.properties

@@ -71,23 +71,23 @@ public class RepeaterBanner {
 				lastMessageRecieved = msg;
 				return true;
 			}
-			b = checkRepeatStatu(group, msg, simi);
+			b = checkRepeatStatu(group, QQ, msg, simi);
 			lastMessageRecieved = msg;
 		}
 		return b;
 	}
 
 	// 复读状态
-	private boolean checkRepeatStatu(long group, String msg, float simi) throws IOException {
+	private boolean checkRepeatStatu(long group, long qq, String msg, float simi) throws IOException {
 		boolean b = false;
 		if (!lastStatus && (lastMessageRecieved.equals(msg) || (isPicMsgRepeat(lastMessageRecieved, msg, simi)))) {
-			b = repeatStart(group, msg);
+			b = repeatStart(group, qq, msg);
 		}
 		if (lastStatus && (lastMessageRecieved.equals(msg) || (isPicMsgRepeat(lastMessageRecieved, msg, simi)))) {
-			b = repeatRunning();
+			b = repeatRunning(qq, msg);
 		}
 		if (lastStatus && !lastMessageRecieved.equals(msg) && !(isPicMsgRepeat(lastMessageRecieved, msg, simi))) {
-			b = repeatEnd();
+			b = repeatEnd(qq, msg);
 		}
 		if (lastMessageRecieved.equals(msg) || (isPicMsgRepeat(lastMessageRecieved, msg, simi))) {
 			lastStatus = true;
@@ -97,40 +97,43 @@ public class RepeaterBanner {
 		return b;
 	}
 
-	private boolean repeatEnd() {
+	private boolean repeatEnd(long qq, String msg) {
 		boolean b;
 		b = false;
+		Autoreply.useCount.incRepeatBreaker(qq); 
 		return b;
 	}
 
-	private boolean repeatRunning() {
+	private boolean repeatRunning(long qq, String msg) {
 		boolean b;
 		b = false;
+		Autoreply.useCount.incFudu(qq);
 		banCount--;
 		return b;
 	}
 
-	private boolean repeatStart(long group, String msg) throws IOException {
+	private boolean repeatStart(long group, long qq, String msg) throws IOException {
 		boolean b;
 		banCount = 6;
 		Autoreply.sendMessage(0, 2856986197L, msg);
+		Autoreply.useCount.incFudujiguanjia(qq);
 		b = true;
-		reply(group, msg);
+		reply(group, qq, msg);
 		return b;
 	}
 
 	// 回复
-	private boolean reply(long group, String msg) throws IOException {
+	private boolean reply(long group, long qq, String msg) throws IOException {
 		if (msg.contains("[CQ:image,file=")) {
-			replyPic(group, msg);
+			replyPic(group, qq, msg);
 		} else {
-			replyText(group, msg);
+			replyText(group, qq, msg);
 		}
 		return true;
 	}
 
 	// 如果是图片复读
-	private void replyPic(long group, String msg) throws IOException {
+	private void replyPic(long group, long qq, String msg) throws IOException {
 		if (!msg.contains(".gif")) {
 			String imgCode = Autoreply.CC.image(rePic(imgFile));
 			String ms = new StringBuilder(msg.replaceAll("\\[CQ.*\\]", "")).reverse().toString();
@@ -145,7 +148,7 @@ public class RepeaterBanner {
 	}
 
 	// 如果是文本复读
-	private void replyText(Long group, String msg) {
+	private void replyText(Long group, long qq, String msg) {
 		if (repeatCount < 3) {
 			Autoreply.sendMessage(group, 0, msg);
 			repeatCount++;

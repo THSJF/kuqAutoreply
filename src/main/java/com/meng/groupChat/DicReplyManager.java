@@ -49,26 +49,7 @@ public class DicReplyManager {
 	public boolean check(long group, long qq, String msg) {
 		boolean b = false;
 		if (msg.contains("色图")) {
-			try {
-				// 读取属性文件a.properties
-				Properties prop = new Properties();
-				InputStream in = new BufferedInputStream(
-						new FileInputStream(Autoreply.appDirectory + "setu.properties"));
-				prop.load(in); /// 加载属性列表
-				Iterator<String> it = prop.stringPropertyNames().iterator();
-				in.close();
-				/// 保存属性到b.properties文件
-				FileOutputStream oFile = new FileOutputStream(Autoreply.appDirectory + "setu.properties", false);// false覆盖原本数据，true追加数据
-				if (prop.get("qq" + qq) != null) {
-					prop.setProperty("qq" + qq, (Integer.parseInt((String) prop.get("qq" + qq)) + 1) + "");
-				} else {
-					prop.setProperty("qq" + qq, 1 + "");
-				}
-				prop.store(oFile, "setu times");
-				oFile.close();
-			} catch (Exception e) {
-				e.printStackTrace();
-			}
+			Autoreply.useCount.incSetu(qq);
 		}
 		// 查找公用词库（完全相同才会触发）
 		try {
