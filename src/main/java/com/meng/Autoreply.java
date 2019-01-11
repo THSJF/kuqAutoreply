@@ -1,15 +1,8 @@
 package com.meng;
 
-import java.io.BufferedInputStream;
 import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.InputStream;
 import java.util.HashMap;
-import java.util.Iterator;
-import java.util.Properties;
-
 import javax.swing.JOptionPane;
 
 import com.meng.barcode.BarcodeManager;
@@ -723,7 +716,7 @@ public class Autoreply extends JcqAppAbstract implements ICQVer, IMsg, IRequest 
 		}
 
 		@Override
-		public void run() {
+		public synchronized void run() {
 			check();
 			threadCountG--;
 		}
@@ -776,6 +769,10 @@ public class Autoreply extends JcqAppAbstract implements ICQVer, IMsg, IRequest 
 				sendMessage(fromGroup, fromQQ, useCount.getMyCount(fromQQ));
 				return true;
 			}
+			if (msg.equals("查看排行")) {
+				sendMessage(fromGroup, fromQQ, useCount.getTheFirst(fromQQ));
+				return true;
+			}
 			return false;
 		}
 	}
@@ -796,7 +793,7 @@ public class Autoreply extends JcqAppAbstract implements ICQVer, IMsg, IRequest 
 		}
 
 		@Override
-		public void run() {
+		public synchronized void run() {
 			check();
 			threadCountP--;
 		}
@@ -819,28 +816,13 @@ public class Autoreply extends JcqAppAbstract implements ICQVer, IMsg, IRequest 
 				sendMessage(0, fromQQ, useCount.getMyCount(fromQQ));
 				return true;
 			}
+			if (msg.equals("查看排行")) {
+				sendMessage(0, fromQQ, useCount.getTheFirst(fromQQ));
+				return true;
+			}
 			if (msg.equals("色图")) {
-				try {
-					// 读取属性文件a.properties
-					Properties prop = new Properties();
-					InputStream in = new BufferedInputStream(
-							new FileInputStream(Autoreply.appDirectory + "setu.properties"));
-					prop.load(in); /// 加载属性列表
-					Iterator<String> it = prop.stringPropertyNames().iterator();
-					in.close();
-					/// 保存属性到b.properties文件
-					FileOutputStream oFile = new FileOutputStream(Autoreply.appDirectory + "setu.properties", false);// false覆盖原本数据，true追加数据
-					if (prop.get("qq" + fromQQ) != null) {
-						prop.setProperty("qq" + fromQQ, (Integer.parseInt((String) prop.get("qq" + fromQQ)) + 1) + "");
-					} else {
-						prop.setProperty("qq" + fromQQ, 1 + "");
-					}
-					prop.store(oFile, "setu times");
-					oFile.close();
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
 				sendMessage(0, fromQQ, "imageFolder:r15/:--image--");
+				useCount.incSetu(fromQQ);
 				return true;
 			}
 			if (picSearchManager.check(0, fromQQ, msg))// 搜索图片

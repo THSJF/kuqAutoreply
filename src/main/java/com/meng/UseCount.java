@@ -3,10 +3,10 @@ package com.meng;
 import java.io.BufferedInputStream;
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.Iterator;
 import java.util.Properties;
 
 import com.meng.Autoreply;
@@ -252,4 +252,130 @@ public class UseCount {
 
 	}
 
+	public String getTheFirst(long qq) {
+		int setu = 0;
+		int fudujiguanjia = 0;
+		int fudu = 0;
+		int repeatBreaker = 0;
+		int bilibili = 0;
+		int searchPic = 0;
+
+		Properties prop;
+		InputStream in;
+		StringBuilder sb = new StringBuilder();
+		String tmpPeople = "";
+		int tmpi = 0;
+		String key = "";
+
+		try {
+			prop = new Properties();
+			in = new BufferedInputStream(new FileInputStream(setuPropName));
+			prop.load(in);
+			in.close();
+			Iterator<String> it = prop.stringPropertyNames().iterator();
+			while (it.hasNext()) {
+				key = it.next();
+				tmpi = Integer.parseInt((String) prop.getProperty(key));
+				if (tmpi > setu) {
+					setu = tmpi;
+					tmpPeople = key;
+				}
+			}
+			sb.append(tmpPeople + "共要色图" + setu + "次\n");
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		try {
+			prop = new Properties();
+			in = new BufferedInputStream(new FileInputStream(fudujiguanjiaPropName));
+			prop.load(in);
+			in.close();
+			Iterator<String> it = prop.stringPropertyNames().iterator();
+			while (it.hasNext()) {
+				key = it.next();
+				tmpi = Integer.parseInt((String) prop.getProperty(key));
+				if (tmpi > fudujiguanjia) {
+					fudujiguanjia = tmpi;
+					tmpPeople = key;
+				}
+			}
+			sb.append(tmpPeople + "共带领复读" + fudujiguanjia + "次\n");
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		try {
+			prop = new Properties();
+			in = new BufferedInputStream(new FileInputStream(fuduPropName));
+			prop.load(in);
+			in.close();
+			Iterator<String> it = prop.stringPropertyNames().iterator();
+			while (it.hasNext()) {
+				key = it.next();
+				tmpi = Integer.parseInt((String) prop.getProperty(key));
+				if (tmpi > fudu) {
+					fudu = tmpi;
+					tmpPeople = key;
+				}
+			}
+			sb.append(tmpPeople + "共复读" + fudu + "次\n");
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		try {
+			prop = new Properties();
+			in = new BufferedInputStream(new FileInputStream(repeatBreakerPropName));
+			prop.load(in);
+			in.close();
+			Iterator<String> it = prop.stringPropertyNames().iterator();
+			while (it.hasNext()) {
+				key = it.next();
+				tmpi = Integer.parseInt((String) prop.getProperty(key));
+				if (tmpi > repeatBreaker) {
+					repeatBreaker = tmpi;
+					tmpPeople = key;
+				}
+			}
+			sb.append(tmpPeople + "共打断复读" + repeatBreaker + "次\n");
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		try {
+			prop = new Properties();
+			in = new BufferedInputStream(new FileInputStream(bilibililinkPropName));
+			prop.load(in);
+			in.close();
+			Iterator<String> it = prop.stringPropertyNames().iterator();
+			while (it.hasNext()) {
+				key = it.next();
+				tmpi = Integer.parseInt((String) prop.getProperty(key));
+				if (tmpi > bilibili) {
+					bilibili = tmpi;
+					tmpPeople = key;
+				}
+			}
+			sb.append(tmpPeople + "共发送哔哩哔哩链接" + bilibili + "次\n");
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		try {
+			prop = new Properties();
+			in = new BufferedInputStream(new FileInputStream(searchPicturePropName));
+			prop.load(in);
+			in.close();
+			Iterator<String> it = prop.stringPropertyNames().iterator();
+			while (it.hasNext()) {
+				key = it.next();
+				tmpi = Integer.parseInt((String) prop.getProperty(key));
+				if (tmpi > searchPic) {
+					searchPic = tmpi;
+					tmpPeople = key;
+				}
+			}
+			sb.append(tmpPeople + "共搜图" + searchPic + "次");
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		return sb.toString();
+
+	}
 }
