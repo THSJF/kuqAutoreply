@@ -162,8 +162,8 @@ public class Methods {
 	public static boolean checkLook(long fromGroup, String msg) {
 		if (msg.equals("有人吗") || msg.equalsIgnoreCase("testip") || msg.equalsIgnoreCase("窥屏检测")) {
 			int port = Autoreply.random.nextInt(5000);
-			Autoreply.sendMessage(fromGroup, 0, Autoreply.CC.share("http://119.27.186.107:" + (port + 4000), "窥屏检测",
-					"滴滴滴", "http://119.27.186.107:" + (port + 4000) + "/111.jpg"));
+			Autoreply.sendMessage(fromGroup, 0, Autoreply.CC.share("http://123.207.65.93:" + (port + 4000), "窥屏检测",
+					"滴滴滴", "http://123.207.65.93:" + (port + 4000) + "/111.jpg"));
 			final IPGetter ipGetter = new IPGetter(fromGroup, port);
 			ipGetter.start();
 			Timer timer = new Timer();

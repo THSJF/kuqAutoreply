@@ -99,14 +99,12 @@ public class RepeaterBanner {
 
 	private boolean repeatEnd() {
 		boolean b;
-		System.out.println("复读结束");
 		b = false;
 		return b;
 	}
 
 	private boolean repeatRunning() {
 		boolean b;
-		System.out.println("复读持续中");
 		b = false;
 		banCount--;
 		return b;
@@ -114,7 +112,6 @@ public class RepeaterBanner {
 
 	private boolean repeatStart(long group, String msg) throws IOException {
 		boolean b;
-		System.out.println("复读开始");
 		banCount = 6;
 		Autoreply.sendMessage(0, 2856986197L, msg);
 		b = true;
@@ -172,7 +169,6 @@ public class RepeaterBanner {
 			return file;
 		}
 		Image im = ImageIO.read(file);
-		System.out.println("开始旋转图片");
 		int w = im.getWidth(null);
 		int h = im.getHeight(null);
 		BufferedImage b = new BufferedImage(im.getWidth(null), im.getHeight(null), BufferedImage.TYPE_INT_RGB);
@@ -194,13 +190,12 @@ public class RepeaterBanner {
 					b2.setRGB(x, h - 1 - y, rgb);// 上下
 					break;
 				case 3:
-					b2.setRGB(w - 1 - x, h - 1 - y, rgb);// 上下和左右（旋转）
+					b2.setRGB(w - 1 - x, h - 1 - y, rgb);// 旋转
 					break;
 				}
 			}
 		}
 		reverseFlag++;
-		System.out.println("完成");
 		ImageIO.write(b2, "jpg", file);// 也可以使用png但体积太大
 		return file;
 	}

@@ -1,10 +1,14 @@
 package com.meng;
 
+import java.io.BufferedInputStream;
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.HashMap;
-import java.util.List;
-import java.util.Random;
+import java.util.Iterator;
+import java.util.Properties;
 
 import javax.swing.JOptionPane;
 
@@ -23,14 +27,13 @@ import com.meng.searchPicture.PicSearchManager;
 import com.meng.tip.FileTipManager;
 import com.meng.tip.FileTipUploader;
 import com.meng.tip.TimeTip;
+import com.meng.tools.Random;
 import com.sobte.cqp.jcq.entity.Anonymous;
 import com.sobte.cqp.jcq.entity.CoolQ;
-import com.sobte.cqp.jcq.entity.Group;
 import com.sobte.cqp.jcq.entity.GroupFile;
 import com.sobte.cqp.jcq.entity.ICQVer;
 import com.sobte.cqp.jcq.entity.IMsg;
 import com.sobte.cqp.jcq.entity.IRequest;
-import com.sobte.cqp.jcq.entity.Member;
 import com.sobte.cqp.jcq.entity.QQInfo;
 import com.sobte.cqp.jcq.event.JcqAppAbstract;
 
@@ -197,7 +200,7 @@ public class Autoreply extends JcqAppAbstract implements ICQVer, IMsg, IRequest 
 			System.out.println("threadCountP" + threadCountP);
 			new PrivateMsgThread(subType, msgId, fromQQ, msg, font).start();
 		} else {
-			sendMessage(0, 2856976197L, "私聊消息过多");
+			sendMessage(0, 2856986197L, "私聊消息过多");
 		}
 
 		return MSG_IGNORE;
@@ -283,7 +286,7 @@ public class Autoreply extends JcqAppAbstract implements ICQVer, IMsg, IRequest 
 				System.out.println("threadCount" + threadCountG);
 				new GroupMsgThread(subType, msgId, fromGroup, fromQQ, fromAnonymous, msg, font).start();
 			} else {
-				sendMessage(0, 2856976197L, "群消息过多");
+				sendMessage(0, 2856986197L, "群消息过多");
 			}
 		}
 
@@ -436,6 +439,15 @@ public class Autoreply extends JcqAppAbstract implements ICQVer, IMsg, IRequest 
 			return MSG_IGNORE;
 		}
 		sendMessage(fromGroup, 0, "欢迎新大佬");
+
+		if (fromGroup == 859561731L) { // 台长群
+			sendMessage(859561731L, 0, "芳赛sjf9961.github.io或扫描二维码");
+			try {
+				sendMessage(859561731L, 0, CC.image(new File(appDirectory + "pic/sjf9961.jpg")));
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+		}
 		/*
 		 * String[] strings = new String[] { "封魔录LNN", "梦时空LNN", "幻想乡LNN",
 		 * "怪绮谈LNN", "红LNN", "妖LNNN", "永0033", "永0037", "花LNN", "风LNN", "殿LNN",
@@ -798,6 +810,26 @@ public class Autoreply extends JcqAppAbstract implements ICQVer, IMsg, IRequest 
 			if (barcodeManager.check(0, fromQQ, msg)) // 二维码解码
 				return true;
 			if (msg.equals("色图")) {
+				try {
+					// 读取属性文件a.properties
+					Properties prop = new Properties();
+					InputStream in = new BufferedInputStream(
+							new FileInputStream(Autoreply.appDirectory + "setu.properties"));
+					prop.load(in); /// 加载属性列表
+					Iterator<String> it = prop.stringPropertyNames().iterator();
+					in.close();
+					/// 保存属性到b.properties文件
+					FileOutputStream oFile = new FileOutputStream(Autoreply.appDirectory + "setu.properties", false);// false覆盖原本数据，true追加数据
+					if (prop.get("qq" + fromQQ) != null) {
+						prop.setProperty("qq" + fromQQ, (Integer.parseInt((String) prop.get("qq" + fromQQ)) + 1) + "");
+					} else {
+						prop.setProperty("qq" + fromQQ, 1 + "");
+					}
+					prop.store(oFile, "setu times");
+					oFile.close();
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
 				sendMessage(0, fromQQ, "imageFolder:r15/:--image--");
 				return true;
 			}
