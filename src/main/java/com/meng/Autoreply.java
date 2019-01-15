@@ -248,6 +248,8 @@ public class Autoreply extends JcqAppAbstract implements ICQVer, IMsg, IRequest 
 
 		if (Methods.checkSwitch(fromGroup, msg))// 控制
 			return MSG_IGNORE;
+		if (msg.contains("迫害") && fromQQ == 1134808676L)
+			return MSG_IGNORE;
 		if (fromQQ == 2856986197L || fromQQ == 1592608126L) {
 			// 手动更新设置，不再需要重启
 			if (msg.equalsIgnoreCase("loadConfig")) {
