@@ -3,25 +3,25 @@ package com.meng;
 import java.io.File;
 import java.io.IOException;
 import java.util.HashMap;
+
 import javax.swing.JOptionPane;
 
 import com.meng.barcode.BarcodeManager;
-import com.meng.bilibili.UpperBean;
 import com.meng.bilibili.BiliLinkInfo;
 import com.meng.bilibili.LiveManager;
 import com.meng.bilibili.LivePerson;
 import com.meng.bilibili.NewUpdateManager;
+import com.meng.bilibili.UpperBean;
 import com.meng.groupChat.DicReplyGroup;
 import com.meng.groupChat.DicReplyManager;
-import com.meng.groupChat.RepeaterManager;
 import com.meng.groupChat.RepeaterBanner;
+import com.meng.groupChat.RepeaterManager;
 import com.meng.groupChat.fanpohai;
 import com.meng.searchPicture.PicSearchManager;
 import com.meng.tip.FileTipManager;
 import com.meng.tip.FileTipUploader;
 import com.meng.tip.TimeTip;
 import com.meng.tools.Random;
-import com.sobte.cqp.jcq.entity.Anonymous;
 import com.sobte.cqp.jcq.entity.CoolQ;
 import com.sobte.cqp.jcq.entity.GroupFile;
 import com.sobte.cqp.jcq.entity.ICQVer;
@@ -71,13 +71,9 @@ public class Autoreply extends JcqAppAbstract implements ICQVer, IMsg, IRequest 
 	private HashMap<Integer, Long> nrq;
 	private HashMap<Integer, String> nrw;
 
-	private int threadCountG = 0;
-	private int threadCountP = 0;
+	private HashMap<Long, MessageSender> messageMap = new HashMap<>();
 
 	/**
-	 * 用main方法调试可以最大化的加快开发效率，检测和定位错误位置<br/>
-	 * 以下就是使用Main方法进行测试的一个简易案例
-	 *
 	 * @param args
 	 *            系统参数
 	 */
@@ -90,7 +86,6 @@ public class Autoreply extends JcqAppAbstract implements ICQVer, IMsg, IRequest 
 		// 下面对主类进行各方法测试,按照JCQ运行过程，模拟实际情况
 		demo.startup();// 程序运行开始 调用应用初始化方法
 		demo.enable();// 程序初始化完成后，启用应用，让应用正常工作
-
 		/*
 		 * 以下是收尾触发函数 // demo.disable();// 实际过程中程序结束不会触发disable，只有用户关闭了此插件才会触发
 		 * demo.exit();// 最后程序运行结束，调用exit方法
@@ -119,6 +114,9 @@ public class Autoreply extends JcqAppAbstract implements ICQVer, IMsg, IRequest 
 		loadConfig();
 		addFileTip();
 		timeTip.start();
+		messageMap.clear();
+		Thread messageWatcher = new checkGroupThread();
+		messageWatcher.start();
 		// 返回如：D:\CoolQ\app\com.sobte.cqp.jcq\app\com.example.demo\
 		return 0;
 	}
@@ -190,14 +188,7 @@ public class Autoreply extends JcqAppAbstract implements ICQVer, IMsg, IRequest 
 				sendMessage(Long.parseLong(strings[1]), 0, strings[2]);
 			}
 		}
-		if (threadCountP < 11) {
-			threadCountP++;
-			System.out.println("threadCountP" + threadCountP);
-			new PrivateMsgThread(subType, msgId, fromQQ, msg, font).start();
-		} else {
-			sendMessage(0, 2856986197L, "私聊消息过多");
-		}
-
+		messageMap.put(fromQQ, new MessageSender(0, fromQQ, msg, subType, msgId, font));
 		return MSG_IGNORE;
 	}
 
@@ -226,8 +217,8 @@ public class Autoreply extends JcqAppAbstract implements ICQVer, IMsg, IRequest 
 		// 如果消息来自匿名者
 		if (fromQQ == 80000000L && !fromAnonymous.equals("")) {
 			// 将匿名用户信息放到 anonymous 变量中
-			Anonymous anonymous = CQ.getAnonymous(fromAnonymous);
-			CQ.setGroupBan(fromGroup, anonymous.getAid(), 60);
+			// Anonymous anonymous = CQ.getAnonymous(fromAnonymous);
+			// CQ.setGroupBan(fromGroup, anonymous.getAid(), 60);
 		}
 
 		// 解析CQ码案例 如：[CQ:at,qq=100000]
@@ -248,8 +239,6 @@ public class Autoreply extends JcqAppAbstract implements ICQVer, IMsg, IRequest 
 
 		if (Methods.checkSwitch(fromGroup, msg))// 控制
 			return MSG_IGNORE;
-		if (msg.contains("迫害") && fromQQ == 1134808676L)
-			return MSG_IGNORE;
 		if (fromQQ == 2856986197L || fromQQ == 1592608126L) {
 			// 手动更新设置，不再需要重启
 			if (msg.equalsIgnoreCase("loadConfig")) {
@@ -265,9 +254,10 @@ public class Autoreply extends JcqAppAbstract implements ICQVer, IMsg, IRequest 
 				sendMessage(Long.parseLong(strings[1]), 0, strings[2]);
 				return MSG_IGNORE;
 			}
-
 		}
-
+		if (checkReplyTheGroup(fromGroup)) {
+			messageMap.put(fromQQ, new MessageSender(fromGroup, fromQQ, msg, subType, msgId, font));
+		}
 		/*
 		 * if (msg.equalsIgnoreCase(".live")) { boolean b = false; for (int i =
 		 * 0; i < livingManager.getMapFlag(); i++) { LivePerson lp =
@@ -277,18 +267,7 @@ public class Autoreply extends JcqAppAbstract implements ICQVer, IMsg, IRequest 
 		 * if (!b) { sendGroupMessage(fromGroup, "惊了 居然没有飞机佬直播"); } return
 		 * MSG_IGNORE; }
 		 */
-		if (checkReplyTheGroup(fromGroup)) {
-			if (threadCountG < 11) {
-				threadCountG++;
-				System.out.println("threadCount" + threadCountG);
-				new GroupMsgThread(subType, msgId, fromGroup, fromQQ, fromAnonymous, msg, font).start();
-			} else {
-				sendMessage(0, 2856986197L, "群消息过多");
-			}
-		}
-
 		return MSG_IGNORE;
-
 	}
 
 	/**
@@ -344,7 +323,6 @@ public class Autoreply extends JcqAppAbstract implements ICQVer, IMsg, IRequest 
 			if (fromGroup != 807242547L) {// c5
 				sendMessage(fromGroup, 0, "发点小电影啊");
 			}
-
 		}
 		return MSG_IGNORE;
 	}
@@ -434,6 +412,11 @@ public class Autoreply extends JcqAppAbstract implements ICQVer, IMsg, IRequest 
 		// 这里处理消息
 		if (fromQQ == CQ.getLoginQQ()) {
 			return MSG_IGNORE;
+		}
+		try {
+			Thread.sleep(random.nextInt(5000));
+		} catch (InterruptedException e) {
+			e.printStackTrace();
 		}
 		sendMessage(fromGroup, 0, "欢迎新大佬");
 
@@ -717,10 +700,18 @@ public class Autoreply extends JcqAppAbstract implements ICQVer, IMsg, IRequest 
 			this.subType = subType;
 		}
 
+		public GroupMsgThread(MessageSender ms) {
+			font = ms.getFont();
+			fromGroup = ms.getFromGroup();
+			fromQQ = ms.getFromQQ();
+			msg = ms.getMsg();
+			msgId = ms.getMsgId();
+			subType = ms.getSubType();
+		}
+
 		@Override
 		public synchronized void run() {
 			check();
-			threadCountG--;
 		}
 
 		private boolean check() {
@@ -794,10 +785,17 @@ public class Autoreply extends JcqAppAbstract implements ICQVer, IMsg, IRequest 
 			this.font = font;
 		}
 
+		public PrivateMsgThread(MessageSender ms) {
+			font = ms.getFont();
+			fromQQ = ms.getFromQQ();
+			msg = ms.getMsg();
+			msgId = ms.getMsgId();
+			subType = ms.getSubType();
+		}
+
 		@Override
 		public synchronized void run() {
 			check();
-			threadCountP--;
 		}
 
 		private boolean check() {
@@ -848,4 +846,26 @@ public class Autoreply extends JcqAppAbstract implements ICQVer, IMsg, IRequest 
 			}
 		}
 	}
+
+	public class checkGroupThread extends Thread {
+		@Override
+		public void run() {
+			while (true) {
+				for (MessageSender value : messageMap.values()) {
+					if (value.getFromGroup() == 0) {
+						new PrivateMsgThread(value).start();
+					} else {
+						new GroupMsgThread(value).start();
+					}
+				}
+				messageMap.clear();
+				try {
+					sleep(1500);
+				} catch (InterruptedException e) {
+					e.printStackTrace();
+				}
+			}
+		}
+	}
+
 }
