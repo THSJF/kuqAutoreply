@@ -6,10 +6,10 @@ public class Random {
 	}
 
 	public int nextInt() {
-		return new Random().nextInt();
+		return new java.util.Random().nextInt();
 	}
 
 	public int nextInt(int border) {
-		return new java.util.Random(border).nextInt(border);
+		return new java.util.Random().nextInt(border);
 	}
 }
