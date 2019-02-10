@@ -7,14 +7,21 @@ public class MessageSender {
 	private long fromGroup = 0;
 	private long fromQQ = 0;
 	private String msg = "";
+	private long timeStamp = 0;
 
-	public MessageSender(long fromGroup, long fromQQ, String msg, int subType, int msgId, int font) {
+	public MessageSender(long fromGroup, long fromQQ, String msg, long timeStamp) {
 		this.fromGroup = fromGroup;
 		this.fromQQ = fromQQ;
 		this.msg = msg;
-		this.subType = subType;
-		this.msgId = msgId;
-		this.font = font;
+		this.timeStamp = timeStamp;
+	}
+
+	public long getTimeStamp() {
+		return timeStamp;
+	}
+
+	public void setTimeStamp(long timeStamp) {
+		this.timeStamp = timeStamp;
 	}
 
 	public int getSubType() {

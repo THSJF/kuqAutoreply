@@ -115,7 +115,7 @@ public class Autoreply extends JcqAppAbstract implements ICQVer, IMsg, IRequest 
 		addFileTip();
 		timeTip.start();
 		messageMap.clear();
-		Thread messageWatcher = new checkGroupThread();
+		Thread messageWatcher = new checkMessageThread();
 		messageWatcher.start();
 		// 返回如：D:\CoolQ\app\com.sobte.cqp.jcq\app\com.example.demo\
 		return 0;
@@ -188,7 +188,7 @@ public class Autoreply extends JcqAppAbstract implements ICQVer, IMsg, IRequest 
 				sendMessage(Long.parseLong(strings[1]), 0, strings[2]);
 			}
 		}
-		messageMap.put(fromQQ, new MessageSender(0, fromQQ, msg, subType, msgId, font));
+		messageMap.put(fromQQ, new MessageSender(0, fromQQ, msg, System.currentTimeMillis()));
 		return MSG_IGNORE;
 	}
 
@@ -256,7 +256,14 @@ public class Autoreply extends JcqAppAbstract implements ICQVer, IMsg, IRequest 
 			}
 		}
 		if (checkReplyTheGroup(fromGroup)) {
-			messageMap.put(fromQQ, new MessageSender(fromGroup, fromQQ, msg, subType, msgId, font));
+			if (messageMap.get(fromQQ) == null) {
+				messageMap.put(fromQQ, new MessageSender(fromGroup, fromQQ, msg, System.currentTimeMillis()));
+			} // else if (System.currentTimeMillis() -
+				// messageMap.get(fromQQ).getTimeStamp() > 1000) {
+				// messageMap.put(fromQQ, new MessageSender(fromGroup, fromQQ,
+				// msg, System.currentTimeMillis()));
+				// }
+
 		}
 		/*
 		 * if (msg.equalsIgnoreCase(".live")) { boolean b = false; for (int i =
@@ -688,9 +695,10 @@ public class Autoreply extends JcqAppAbstract implements ICQVer, IMsg, IRequest 
 		String fromAnonymous = "";
 		String msg = "";
 		int font = 0;
+		long timeStamp = 0;
 
 		public GroupMsgThread(int subType, int msgId, long fromGroup, long fromQQ, String fromAnonymous, String msg,
-				int font) {
+				int font, long timeStamp) {
 			this.font = font;
 			this.fromAnonymous = fromAnonymous;
 			this.fromGroup = fromGroup;
@@ -698,6 +706,7 @@ public class Autoreply extends JcqAppAbstract implements ICQVer, IMsg, IRequest 
 			this.msg = msg;
 			this.msgId = msgId;
 			this.subType = subType;
+			this.timeStamp = timeStamp;
 		}
 
 		public GroupMsgThread(MessageSender ms) {
@@ -707,6 +716,7 @@ public class Autoreply extends JcqAppAbstract implements ICQVer, IMsg, IRequest 
 			msg = ms.getMsg();
 			msgId = ms.getMsgId();
 			subType = ms.getSubType();
+			timeStamp = ms.getTimeStamp();
 		}
 
 		@Override
@@ -776,13 +786,15 @@ public class Autoreply extends JcqAppAbstract implements ICQVer, IMsg, IRequest 
 		long fromQQ = 0;
 		String msg = "";
 		int font = 0;
+		long timeStamp = 0;
 
-		public PrivateMsgThread(int subType, int msgId, long fromQQ, String msg, int font) {
-			this.subType = subType;
-			this.msgId = msgId;
+		public PrivateMsgThread(int subType, int msgId, long fromQQ, String msg, int font, long timeStamp) {
+			this.font = font;
 			this.fromQQ = fromQQ;
 			this.msg = msg;
-			this.font = font;
+			this.msgId = msgId;
+			this.subType = subType;
+			this.timeStamp = timeStamp;
 		}
 
 		public PrivateMsgThread(MessageSender ms) {
@@ -791,6 +803,7 @@ public class Autoreply extends JcqAppAbstract implements ICQVer, IMsg, IRequest 
 			msg = ms.getMsg();
 			msgId = ms.getMsgId();
 			subType = ms.getSubType();
+			timeStamp = ms.getTimeStamp();
 		}
 
 		@Override
@@ -847,20 +860,29 @@ public class Autoreply extends JcqAppAbstract implements ICQVer, IMsg, IRequest 
 		}
 	}
 
-	public class checkGroupThread extends Thread {
+	public class checkMessageThread extends Thread {
 		@Override
 		public void run() {
+			HashMap<Long, MessageSender> delMap=new HashMap<>();
 			while (true) {
 				for (MessageSender value : messageMap.values()) {
-					if (value.getFromGroup() == 0) {
-						new PrivateMsgThread(value).start();
-					} else {
-						new GroupMsgThread(value).start();
+					if (System.currentTimeMillis() - value.getTimeStamp() > 1000) {
+						if (value.getFromGroup() == 0) {
+							new PrivateMsgThread(value).start();
+						} else {
+							new GroupMsgThread(value).start();
+						}
+						delMap.put(value.getFromQQ(), value);
 					}
 				}
-				messageMap.clear();
+				if (delMap.size()>0) {
+					for (MessageSender value : delMap.values()) {
+						messageMap.remove(value.getFromQQ());
+					}
+				}
+				delMap.clear();
 				try {
-					sleep(1500);
+					sleep(10);
 				} catch (InterruptedException e) {
 					e.printStackTrace();
 				}

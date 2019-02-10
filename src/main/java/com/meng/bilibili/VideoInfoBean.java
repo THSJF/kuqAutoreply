@@ -39,7 +39,7 @@ public class VideoInfoBean {
 		@Override
 		public String toString() {
 			return view + "次播放," + danmaku + "条弹幕," + reply + "条评论," + coin + "个硬币," + share + "次分享," + favorite
-					+ "人收藏," + like + "人赞," + dislike + "人踩。";
+					+ "人收藏," + like + "人赞。";// ," + dislike + "人踩。";
 		}
 
 	}

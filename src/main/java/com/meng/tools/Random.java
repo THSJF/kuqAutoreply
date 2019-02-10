@@ -6,10 +6,10 @@ public class Random {
 	}
 
 	public int nextInt() {
-		return (int) (System.currentTimeMillis() % Integer.MAX_VALUE);
+		return new Random().nextInt();
 	}
 
 	public int nextInt(int border) {
-		return (int) (System.currentTimeMillis() % Integer.MAX_VALUE) % border;
+		return new java.util.Random(border).nextInt(border);
 	}
 }
