@@ -4,12 +4,15 @@ import java.awt.Image;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
+import java.util.List;
 
 import javax.imageio.ImageIO;
 
 import com.meng.Autoreply;
 import com.meng.tools.FingerPrint;
 import com.sobte.cqp.jcq.entity.CQImage;
+import com.sobte.cqp.jcq.entity.Group;
+import com.sobte.cqp.jcq.entity.Member;
 
 public class RepeaterBanner {
 	private int repeatCount = 0;
@@ -35,18 +38,23 @@ public class RepeaterBanner {
 	public boolean check(long group, String msg, long QQ) throws Exception {
 		boolean b = false;
 		if (group == groupNum && (Autoreply.CC.getAt(msg) != 1620628713L) && (!msg.contains("禁言"))) {
-			if (msg.equalsIgnoreCase("ban0")) {
-				banRecorderMode = 0;
-				Autoreply.sendMessage(group, 0, "取消禁言复读机");
-			} else if (msg.equalsIgnoreCase("ban1")) {
-				banRecorderMode = 1;
-				Autoreply.sendMessage(group, 0, "复读轮盘");
-			} else if (msg.equalsIgnoreCase("ban2")) {
-				banRecorderMode = 2;
-				Autoreply.sendMessage(group, 0, "禁言所有复读机");
-			} else if (msg.equalsIgnoreCase("getban")) {
-				Autoreply.sendMessage(group, 0, "ban" + banRecorderMode);
-			}
+			 
+			 Member m=Autoreply.CQ.getGroupMemberInfo(group, QQ);
+			 if(m.getAuthority()==2||m.getAuthority()==3){
+				 if (msg.equalsIgnoreCase("ban0")) {
+						banRecorderMode = 0;
+						Autoreply.sendMessage(group, 0, "取消禁言复读机");
+					} else if (msg.equalsIgnoreCase("ban1")) {
+						banRecorderMode = 1;
+						Autoreply.sendMessage(group, 0, "复读轮盘");
+					} else if (msg.equalsIgnoreCase("ban2")) {
+						banRecorderMode = 2;
+						Autoreply.sendMessage(group, 0, "禁言所有复读机");
+					} else if (msg.equalsIgnoreCase("getban")) {
+						Autoreply.sendMessage(group, 0, "ban" + banRecorderMode);
+					}
+			 }
+			
 			float simi = getPicSimilar(msg);// 当前消息中图片和上一条消息中图片相似度
 			switch (banRecorderMode) {
 			case 0:
