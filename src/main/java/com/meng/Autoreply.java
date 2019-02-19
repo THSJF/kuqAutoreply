@@ -428,12 +428,12 @@ public class Autoreply extends JcqAppAbstract implements ICQVer, IMsg, IRequest 
 		sendMessage(fromGroup, 0, "欢迎新大佬");
 
 		if (fromGroup == 859561731L) { // 台长群
-			sendMessage(859561731L, 0, "芳赛sjf9961.github.io或扫描二维码");
-			try {
-				sendMessage(859561731L, 0, CC.image(new File(appDirectory + "pic/sjf9961.jpg")));
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
+			sendMessage(859561731L, 0, "芳赛服务器炸了");
+			/*
+			 * try { sendMessage(859561731L, 0, CC.image(new File(appDirectory +
+			 * "pic/sjf9961.jpg"))); } catch (IOException e) {
+			 * e.printStackTrace(); }
+			 */
 		}
 		/*
 		 * String[] strings = new String[] { "封魔录LNN", "梦时空LNN", "幻想乡LNN",
@@ -489,8 +489,8 @@ public class Autoreply extends JcqAppAbstract implements ICQVer, IMsg, IRequest 
 		/**
 		 * REQUEST_ADOPT 通过 REQUEST_REFUSE 拒绝
 		 */
-
-		CQ.setFriendAddRequest(responseFlag, REQUEST_ADOPT, null); //
+		QQInfo qInfo = CQ.getStrangerInfo(fromQQ);
+		CQ.setFriendAddRequest(responseFlag, REQUEST_ADOPT, qInfo.getNick()); //
 		sendMessage(0, fromQQ, "本体2856986197");
 		sendMessage(0, 2856986197L, fromQQ + "把我加为好友");
 		// 同意好友添加请求
@@ -528,13 +528,16 @@ public class Autoreply extends JcqAppAbstract implements ICQVer, IMsg, IRequest 
 		}
 
 		if (subtype == 1) { // 本号为群管理，判断是否为他人申请入群
-			CQ.setGroupAddRequest(responseFlag, REQUEST_GROUP_ADD, REQUEST_ADOPT, null);// 同意入群
-			sendMessage(fromGroup, 0, "新人的验证信息------\n" + msg);
+			if (fromQQ == 3035936740L | fromQQ == 169901502L | fromQQ == 2963261413L | fromQQ == 946433685L) {
+				CQ.setGroupAddRequest(responseFlag, REQUEST_GROUP_ADD, REQUEST_REFUSE, "烧饼禁入");
+			} else {
+				CQ.setGroupAddRequest(responseFlag, REQUEST_GROUP_ADD, REQUEST_ADOPT, null);// 同意入群
+				sendMessage(fromGroup, 0, "新人的验证信息------\n" + msg);
+			}
 		} else if (subtype == 2) {
 			CQ.setGroupAddRequest(responseFlag, REQUEST_GROUP_INVITE, REQUEST_ADOPT, null);// 同意进受邀群
 			sendMessage(0, 2856986197L, fromQQ + "邀请我加入群" + fromGroup);
 		}
-
 		return MSG_IGNORE;
 	}
 
@@ -863,7 +866,7 @@ public class Autoreply extends JcqAppAbstract implements ICQVer, IMsg, IRequest 
 	public class checkMessageThread extends Thread {
 		@Override
 		public void run() {
-			HashMap<Long, MessageSender> delMap=new HashMap<>();
+			HashMap<Long, MessageSender> delMap = new HashMap<>();
 			while (true) {
 				for (MessageSender value : messageMap.values()) {
 					if (System.currentTimeMillis() - value.getTimeStamp() > 1000) {
@@ -875,7 +878,7 @@ public class Autoreply extends JcqAppAbstract implements ICQVer, IMsg, IRequest 
 						delMap.put(value.getFromQQ(), value);
 					}
 				}
-				if (delMap.size()>0) {
+				if (delMap.size() > 0) {
 					for (MessageSender value : delMap.values()) {
 						messageMap.remove(value.getFromQQ());
 					}
