@@ -27,8 +27,7 @@ public class Methods {
 	public static final String helpMenu = "发送“赞我”可收到10次赞.二维码生成与识别，发送“二维码帮助”可获得使用方法."
 			+ "图片搜索，发送“sp.help”可获得使用方法.窥屏检测,群内发送“窥屏检测”然后稍等片刻. 哔哩哔哩链接详情，群内发送一个哔哩哔哩视频链接或专栏链接即可触发."
 			+ "苟利……(不解释，，，)。此生无悔……（，，）.roll，发送“roll.help”可获得使用方法."
-			+ "催更，发送“xx今天更了吗”即可触发，需要在配置文件中有这位up的信息. 复读和根据词库相应消息（不解释，，，）"
-			+ "“查看统计”可以查看自己的发言统计，“查看排行”可以查看各统计排行";
+			+ "催更，发送“xx今天更了吗”即可触发，需要在配置文件中有这位up的信息. 复读和根据词库相应消息（不解释，，，）" + "“查看统计”可以查看自己的发言统计，“查看排行”可以查看各统计排行";
 	static int arrayFlag = new java.util.Random().nextInt(5000);
 
 	// 主开关
@@ -55,6 +54,74 @@ public class Methods {
 		}
 		return false;
 	}
+
+	public static boolean isPohaitu(long fromGroup, long fromQQ, String msg) {
+		if (msg.equals("迫害图")) {
+			String[] strings = (new File(Autoreply.appDirectory + "pohai/")).list();
+			StringBuilder sBuilder = new StringBuilder("现在有");
+			for (String s : strings) {
+				sBuilder.append(" ").append(s);
+			}
+			sBuilder.append("的迫害图");
+			try {
+				Autoreply.sendGroupMessage(fromGroup, fromQQ, sBuilder.toString());
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+			return true;
+		}
+		if (msg.endsWith("迫害图")) {
+			switch (msg) {
+			case "零食迫害图":
+				msg = "鸽鸽迫害图";
+				break;
+			case "旭东迫害图":
+				msg = "天星厨迫害图";
+				break;
+			case "杏子迫害图":
+				msg = "星小渚迫害图";
+				break;
+			}
+			try {
+				File[] files = (new File(Autoreply.appDirectory + "pohai/" + msg.replace("迫害图", ""))).listFiles();
+				Autoreply.CQ.sendGroupMsg(fromGroup, Autoreply.CC.image((File) Methods.rfa(files)));
+				return true;
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+		}
+		return false;
+	}
+	
+
+	public static boolean isSetu(long fromGroup, long fromQQ, String msg) {
+		if (msg.equals("色图")) {
+			String[] strings = (new File(Autoreply.appDirectory + "setu/")).list();
+			StringBuilder sBuilder = new StringBuilder("现在有");
+			for (String s : strings) {
+				sBuilder.append(" ").append(s);
+			}
+			sBuilder.append("的色图");
+			try {
+				Autoreply.sendGroupMessage(fromGroup, fromQQ, sBuilder.toString());
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+			return true;
+		}
+		if (msg.endsWith("色图")) { 
+			try {
+				File[] files = (new File(Autoreply.appDirectory + "setu/" + msg.replace("色图", ""))).listFiles();
+				Autoreply.CQ.sendGroupMsg(fromGroup, Autoreply.CC.image((File) Methods.rfa(files)));
+				return true;
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+		}
+		return false;
+	}
+	
+	
 
 	// randomFromArray 随机返回数组中的一项
 	public static Object rfa(Object[] array) {

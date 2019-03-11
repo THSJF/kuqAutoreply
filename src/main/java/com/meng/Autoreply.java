@@ -22,6 +22,7 @@ import com.meng.tip.FileTipManager;
 import com.meng.tip.FileTipUploader;
 import com.meng.tip.TimeTip;
 import com.meng.tools.Random;
+import com.sobte.cqp.jcq.entity.CQImage;
 import com.sobte.cqp.jcq.entity.CoolQ;
 import com.sobte.cqp.jcq.entity.GroupFile;
 import com.sobte.cqp.jcq.entity.ICQVer;
@@ -246,6 +247,57 @@ public class Autoreply extends JcqAppAbstract implements ICQVer, IMsg, IRequest 
 				sendMessage(fromGroup, 0, "reload");
 				return MSG_IGNORE;
 			}
+			if (msg.contains("迫害图[CQ:image")) {
+				CQImage cqi = CC.getCQImage(msg);
+				String pohaituName = msg.substring(0, msg.indexOf("[CQ:image") - 3);
+				switch (pohaituName) {
+				case "零食":
+					msg = "鸽鸽";
+					break;
+				case "旭东":
+					msg = "天星厨";
+					break;
+				case "杏子":
+					msg = "星小渚";
+					break;
+				}
+				try {
+					cqi.download(appDirectory + File.separator + "pohai/" + pohaituName,
+							"pohaitu" + Autoreply.random.nextInt() + ".png");
+					try {
+						sendGroupMessage(fromGroup, fromQQ, "新图添加成功");
+					} catch (IOException e1) {
+						e1.printStackTrace();
+					}
+				} catch (IOException e) {
+					try {
+						sendGroupMessage(fromGroup, fromQQ, e.toString());
+					} catch (IOException e1) {
+						e1.printStackTrace();
+					}
+				}
+			}
+
+			if (msg.contains("色图[CQ:image")) {
+				CQImage cqi = CC.getCQImage(msg);
+				String pohaituName = msg.substring(0, msg.indexOf("[CQ:image") - 2);
+				try {
+					cqi.download(appDirectory + File.separator + "setu/" + pohaituName,
+							"setu" + Autoreply.random.nextInt() + ".png");
+					try {
+						sendGroupMessage(fromGroup, fromQQ, "新图添加成功");
+					} catch (IOException e1) {
+						e1.printStackTrace();
+					}
+				} catch (IOException e) {
+					try {
+						sendGroupMessage(fromGroup, fromQQ, e.toString());
+					} catch (IOException e1) {
+						e1.printStackTrace();
+					}
+				}
+			}
+
 			if (msg.equals("大膜法 膜神复诵")) {
 				new MoShenFuSong(fromGroup).start();
 			}
@@ -741,6 +793,10 @@ public class Autoreply extends JcqAppAbstract implements ICQVer, IMsg, IRequest 
 				sendMessage(fromGroup, 0, "完成");
 				return true;
 			}
+			if (Methods.isPohaitu(fromGroup, fromQQ, msg))
+				return true;
+			if (Methods.isSetu(fromGroup, fromQQ, msg))
+				return true;
 			if (barcodeManager.check(fromGroup, fromQQ, msg)) // 二维码
 				return true;
 			if (picSearchManager.check(fromGroup, fromQQ, msg))// 搜索图片
