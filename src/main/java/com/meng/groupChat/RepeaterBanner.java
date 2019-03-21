@@ -207,7 +207,7 @@ public class RepeaterBanner {
 			}
 		}
 		reverseFlag++;
-		ImageIO.write(b2, "jpg", file);// 也可以使用png但体积太大
+		ImageIO.write(b2, "png", file);// 也可以使用png但体积太大
 		return file;
 	}
 

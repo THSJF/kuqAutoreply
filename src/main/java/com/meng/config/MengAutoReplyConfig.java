@@ -1,4 +1,4 @@
-package com.meng;
+package com.meng.config;
 
 import java.io.IOException;
 import java.util.HashMap;
@@ -9,6 +9,8 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import com.google.gson.JsonSyntaxException;
+import com.meng.Autoreply;
+import com.meng.Methods;
 import com.meng.bilibili.UpperBean;
 
 public class MengAutoReplyConfig {

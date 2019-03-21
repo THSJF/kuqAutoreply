@@ -54,6 +54,18 @@ public class Methods {
 		}
 		return false;
 	}
+	 
+	public static String executeCmd(String command) throws IOException {   
+	    Runtime runtime = Runtime.getRuntime();  
+	    Process process = runtime.exec("cmd /c " + command);  
+	    BufferedReader br = new BufferedReader(new InputStreamReader(process.getInputStream(), "UTF-8"));  
+	    String line = null;  
+	    StringBuilder build = new StringBuilder();  
+	    while ((line = br.readLine()) != null) {   
+	        build.append(line);  
+	    }  
+	    return build.toString();  
+	}  
 
 	public static boolean isPohaitu(long fromGroup, long fromQQ, String msg) {
 		if (msg.equals("迫害图")) {
@@ -63,11 +75,7 @@ public class Methods {
 				sBuilder.append(" ").append(s);
 			}
 			sBuilder.append("的迫害图");
-			try {
-				Autoreply.sendGroupMessage(fromGroup, fromQQ, sBuilder.toString());
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
+			Autoreply.sendMessage(fromGroup, fromQQ, sBuilder.toString());
 			return true;
 		}
 		if (msg.endsWith("迫害图")) {
@@ -84,7 +92,10 @@ public class Methods {
 			}
 			try {
 				File[] files = (new File(Autoreply.appDirectory + "pohai/" + msg.replace("迫害图", ""))).listFiles();
-				Autoreply.CQ.sendGroupMsg(fromGroup, Autoreply.CC.image((File) Methods.rfa(files)));
+				if (files.length > 0) {
+					Autoreply.sendMessage(fromGroup, fromQQ, Autoreply.CC.image((File) Methods.rfa(files)));
+					Autoreply.useCount.incPohaitu(fromQQ);
+				}
 				return true;
 			} catch (IOException e) {
 				e.printStackTrace();
@@ -92,9 +103,11 @@ public class Methods {
 		}
 		return false;
 	}
-	
 
 	public static boolean isSetu(long fromGroup, long fromQQ, String msg) {
+		if (fromGroup == 703170126L || fromQQ == 2176282294L) {
+			return false;
+		}
 		if (msg.equals("色图")) {
 			String[] strings = (new File(Autoreply.appDirectory + "setu/")).list();
 			StringBuilder sBuilder = new StringBuilder("现在有");
@@ -102,17 +115,16 @@ public class Methods {
 				sBuilder.append(" ").append(s);
 			}
 			sBuilder.append("的色图");
-			try {
-				Autoreply.sendGroupMessage(fromGroup, fromQQ, sBuilder.toString());
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
+			Autoreply.sendMessage(fromGroup, fromQQ, sBuilder.toString());
 			return true;
 		}
-		if (msg.endsWith("色图")) { 
+		if (msg.endsWith("色图")) {
 			try {
 				File[] files = (new File(Autoreply.appDirectory + "setu/" + msg.replace("色图", ""))).listFiles();
-				Autoreply.CQ.sendGroupMsg(fromGroup, Autoreply.CC.image((File) Methods.rfa(files)));
+				if (files.length > 0) {
+					Autoreply.sendMessage(fromGroup, fromQQ, Autoreply.CC.image((File) Methods.rfa(files)));
+					Autoreply.useCount.incSetu(fromQQ);
+				}
 				return true;
 			} catch (IOException e) {
 				e.printStackTrace();
@@ -120,8 +132,6 @@ public class Methods {
 		}
 		return false;
 	}
-	
-	
 
 	// randomFromArray 随机返回数组中的一项
 	public static Object rfa(Object[] array) {

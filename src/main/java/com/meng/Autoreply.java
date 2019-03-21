@@ -12,6 +12,9 @@ import com.meng.bilibili.LiveManager;
 import com.meng.bilibili.LivePerson;
 import com.meng.bilibili.NewUpdateManager;
 import com.meng.bilibili.UpperBean;
+import com.meng.config.ConfigJavaBean;
+import com.meng.config.ConfigManager;
+import com.meng.config.MengAutoReplyConfig;
 import com.meng.groupChat.DicReplyGroup;
 import com.meng.groupChat.DicReplyManager;
 import com.meng.groupChat.RepeaterBanner;
@@ -61,16 +64,11 @@ public class Autoreply extends JcqAppAbstract implements ICQVer, IMsg, IRequest 
 	private FileTipManager fileTipManager;
 	private fanpohai fph;
 	private static DicReplyManager dicReplyManager;
-	private MengAutoReplyConfig mengAutoReplyConfig;
 	private CQcodeManager cQcodeManager = new CQcodeManager();
-	private NewUpdateManager newUpdate;
-	private LiveManager livingManager = new LiveManager();
 	private PicSearchManager picSearchManager = new PicSearchManager();
 	private BarcodeManager barcodeManager = new BarcodeManager();
 
-	private HashMap<Integer, Long> grg;
-	private HashMap<Integer, Long> nrq;
-	private HashMap<Integer, String> nrw;
+	private ConfigManager configManager;
 
 	private HashMap<Long, MessageSender> messageMap = new HashMap<>();
 
@@ -237,9 +235,14 @@ public class Autoreply extends JcqAppAbstract implements ICQVer, IMsg, IRequest 
 		// 这里处理消息
 
 		System.out.println(msg);
-
 		if (Methods.checkSwitch(fromGroup, msg))// 控制
 			return MSG_IGNORE;
+		if (msg.startsWith(".config") && fromQQ == 2856986197L) {
+			msg = msg.replace(".config", "");
+			configManager.checkSetConfig(fromGroup, msg);
+			return MSG_IGNORE;
+		}
+
 		if (fromQQ == 2856986197L || fromQQ == 1592608126L) {
 			// 手动更新设置，不再需要重启
 			if (msg.equalsIgnoreCase("loadConfig")) {
@@ -276,6 +279,7 @@ public class Autoreply extends JcqAppAbstract implements ICQVer, IMsg, IRequest 
 						e1.printStackTrace();
 					}
 				}
+				return MSG_IGNORE;
 			}
 
 			if (msg.contains("色图[CQ:image")) {
@@ -296,10 +300,12 @@ public class Autoreply extends JcqAppAbstract implements ICQVer, IMsg, IRequest 
 						e1.printStackTrace();
 					}
 				}
+				return MSG_IGNORE;
 			}
 
 			if (msg.equals("大膜法 膜神复诵")) {
 				new MoShenFuSong(fromGroup).start();
+				return MSG_IGNORE;
 			}
 			String[] strings = msg.split("\\.");
 			if (strings[0].equalsIgnoreCase("send")) {
@@ -441,7 +447,7 @@ public class Autoreply extends JcqAppAbstract implements ICQVer, IMsg, IRequest 
 					sendMessage(fromGroup, 0, qInfo.getNick() + "(" + qInfo.getQqId() + ")" + "跑莉");
 				} else if (subtype == 2) {
 					QQInfo qInfo2 = CQ.getStrangerInfo(fromQQ);
-					sendMessage(fromGroup, 0, qInfo.getNick() + "(" + qInfo.getQqId() + ")" + "被绿帽" + qInfo2.getNick()
+					sendMessage(fromGroup, 0, qInfo.getNick() + "(" + qInfo.getQqId() + ")" + "被" + qInfo2.getNick()
 							+ "(" + qInfo2.getQqId() + ")" + "玩完扔莉");
 				}
 			} catch (Exception e) {
@@ -670,58 +676,32 @@ public class Autoreply extends JcqAppAbstract implements ICQVer, IMsg, IRequest 
 	}
 
 	private void loadConfig() {
-		mengAutoReplyConfig = new MengAutoReplyConfig();
-		grg = mengAutoReplyConfig.getMapGroupReply();
-		nrq = mengAutoReplyConfig.getMapQQNotReply();
-		nrw = mengAutoReplyConfig.getMapWordNotReply();
+		configManager = new ConfigManager();
 		addGroupDic();
 		System.out.println("词库回复添加完成");
-		addUp();
-		System.out.println("催更添加完成");
-		addRecorder();
+		addRepeater();
 		System.out.println("复读机添加完成");
-		addLive();
-		System.out.println("直播提醒添加完成");
 	}
 
 	private void addGroupDic() {
-		HashMap<Integer, Long> gdr = mengAutoReplyConfig.getMapGroupDicReply();
 		dicReplyManager = new DicReplyManager();
-		for (int key : gdr.keySet()) {// 遍历
-			long groupNum = gdr.get(key);
-			dicReplyManager.addData(new DicReplyGroup(groupNum, appDirectory + "dic" + groupNum + ".json"));
+		for (String groupNumber : configManager.configJavaBean.mapGroupDicReply) {
+			dicReplyManager.addData(
+					new DicReplyGroup(Long.parseLong(groupNumber), appDirectory + "dic" + groupNumber + ".json"));
 		}
 	}
 
-	private void addRecorder() {
-		HashMap<Integer, String> gr = mengAutoReplyConfig.getMapGroupRecorder();
+	private void addRepeater() {
 		recoderManager = new RepeaterManager();
-		for (int key : gr.keySet()) {// 遍历
-			String[] groupCfg = gr.get(key).split("\\.");
+		for (String repeater : configManager.configJavaBean.mapGroupRepeater) {
+			String[] groupCfg = repeater.split("\\.");
 			recoderManager.addData(new RepeaterBanner(Long.parseLong(groupCfg[0]), Integer.parseInt(groupCfg[1])));
 		}
 	}
 
-	private void addUp() {
-		HashMap<Integer, UpperBean> bu = mengAutoReplyConfig.getMapBiliUp();
-		newUpdate = new NewUpdateManager();
-		for (int key : bu.keySet()) {// 遍历
-			newUpdate.addData(bu.get(key));
-		}
-	}
-
-	private void addLive() {
-		HashMap<String, String> mlt = mengAutoReplyConfig.getMapLiveTip();
-		livingManager = new LiveManager();
-		for (String key : mlt.keySet()) {// 遍历
-			livingManager.addData(new LivePerson(key, "https://live.bilibili.com/" + mlt.get(key)));
-		}
-		livingManager.start();
-	}
-
 	private boolean checkReplyTheGroup(long fromGroup) {
-		for (int key : grg.keySet()) {// 遍历
-			if (fromGroup == grg.get(key)) {
+		for (String group : configManager.configJavaBean.mapGroupReply) {// 遍历
+			if (fromGroup == Long.parseLong(group)) {
 				return true;
 			}
 		}
@@ -729,13 +709,13 @@ public class Autoreply extends JcqAppAbstract implements ICQVer, IMsg, IRequest 
 	}
 
 	private boolean checkNotReply(long fromQQ, String msg) {
-		for (int key : nrq.keySet()) {
-			if (fromQQ == nrq.get(key)) {
+		for (String nrq : configManager.configJavaBean.mapQQNotReply) {
+			if (fromQQ == Long.parseLong(nrq)) {
 				return true;
 			}
 		}
-		for (int key : nrw.keySet()) {
-			if (msg.contains(nrw.get(key))) {
+		for (String nrw : configManager.configJavaBean.mapWordNotReply) {
+			if (msg.contains(nrw)) {
 				return true;
 			}
 		}
@@ -821,8 +801,6 @@ public class Autoreply extends JcqAppAbstract implements ICQVer, IMsg, IRequest 
 				return true;
 			if (fph.check(fromQQ, fromGroup, msg))// 反迫害
 				return true;
-			if (newUpdate.check(fromGroup, msg))// 催更
-				return true;
 			if (recoderManager.check(fromGroup, fromQQ, msg))// 复读
 				return true;
 			if (dicReplyManager.check(fromGroup, fromQQ, msg))// 根据词库触发回答
@@ -882,6 +860,10 @@ public class Autoreply extends JcqAppAbstract implements ICQVer, IMsg, IRequest 
 				sendMessage(0, fromQQ, "完成");
 				return true;
 			}
+			if (Methods.isPohaitu(0, fromQQ, msg))
+				return true;
+			if (Methods.isSetu(0, fromQQ, msg))
+				return true;
 			if (barcodeManager.check(0, fromQQ, msg)) // 二维码解码
 				return true;
 			if (msg.equals("查看统计")) {

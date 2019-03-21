@@ -43,9 +43,6 @@ public class DicReplyManager {
 
 	public boolean check(long group, long qq, String msg) {
 		boolean b = false;
-		if (msg.contains("色图")) {
-			Autoreply.useCount.incSetu(qq);
-		}
 		// 查找公用词库（完全相同才会触发）
 		try {
 			b = b | checkPublicDic(group, qq, msg);
