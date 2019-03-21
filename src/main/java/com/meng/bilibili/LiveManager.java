@@ -1,30 +1,32 @@
 package com.meng.bilibili;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 
 import com.meng.Autoreply;
 import com.meng.Methods;
+import com.meng.config.ConfigJavaBean;
+import com.meng.config.ConfigManager;
 
 public class LiveManager extends Thread {
 
-	private HashMap<Integer, LivePerson> liveData = new HashMap<Integer, LivePerson>();
-	private int mapFlag = 0;
+	private ArrayList<LivePerson> liveData = new ArrayList<>();
 	private final String liveString = "\"live_time\":\"0000-00-00 00:00:00\"";// 如果网页代码中包含这个字符串
-																				// 则一定没有开播
 
 	public static boolean liveStart = true;
 
-	public LiveManager() {
-
+	public LiveManager(ConfigManager configManager) {
+		for (ConfigJavaBean.BiliUser cb : configManager.configJavaBean.mapBiliUser) {
+			liveData.add(new LivePerson(cb.name, "https://live.bilibili.com/" + cb.bid));
+		}
 	}
 
 	@Override
 	public void run() {
 		while (true) {
 			try {
-				// 遍历hashmap检测是否直播
 				if (liveStart) {
-					for (int i = 0; i < mapFlag; i++) {
+					for (int i = 0; i < liveData.size(); i++) {
 						LivePerson lPerson = liveData.get(i);
 						String htmlData = Methods.getSourceCode(lPerson.getLiveUrl());
 						boolean living = !htmlData.contains(liveString);
@@ -44,24 +46,14 @@ public class LiveManager extends Thread {
 						sleep(2000);
 					}
 				}
-				sleep(50000);
+				sleep(60000);
 			} catch (Exception e) {
 			}
 		}
-
-	}
-
-	public int getMapFlag() {
-		return mapFlag;
 	}
 
 	public LivePerson getPerson(int key) {
 		return liveData.get(key);
-	}
-
-	public void addData(LivePerson person) {
-		liveData.put(mapFlag, person);
-		mapFlag++;
 	}
 
 	private void sendMsg(LivePerson p) throws Exception {
@@ -94,14 +86,8 @@ public class LiveManager extends Thread {
 
 	private void tipStart(LivePerson p) {
 		switch (p.getName()) {
-		case "沙苗":
-			Autoreply.sendMessage(348595763L, 0, "red:发发发");
-			break;
-		case "记者":
-			Autoreply.sendMessage(859561731L, 0, "red:发发发");
-			break;
 		case "台长":
-			Autoreply.sendMessage(859561731L, 0, "red:发发发");
+			Autoreply.sendMessage(859561731L, 0, "想看台混矫正器");
 			break;
 		}
 	}

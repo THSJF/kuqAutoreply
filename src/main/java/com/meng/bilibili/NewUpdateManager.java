@@ -1,24 +1,18 @@
 package com.meng.bilibili;
 
-import java.util.HashMap;
-
 import com.google.gson.Gson;
 import com.meng.Autoreply;
 import com.meng.Methods;
+import com.meng.config.ConfigJavaBean;
+import com.meng.config.ConfigManager;
 
 public class NewUpdateManager {
 
-	private HashMap<Integer, UpperBean> hm = new HashMap<>();
 	private String[] words = new String[] { "更了吗", "出来更新", "什么时候更新啊", "在？看看更新", "怎么还不更新", "更新啊草绳" };
-	private int mapFlag = 0;
+	private ConfigManager configManager;
 
-	public NewUpdateManager() {
-
-	}
-
-	public void addData(UpperBean person) {
-		hm.put(mapFlag, person);
-		mapFlag++;
+	public NewUpdateManager(ConfigManager configManager) {
+		this.configManager = configManager;
 	}
 
 	public boolean check(long fromGroup, String msg) {
@@ -90,9 +84,8 @@ public class NewUpdateManager {
 	}
 
 	private boolean isUpper(String msg) {
-		for (int key : hm.keySet()) {
-			UpperBean bUp = hm.get(key);
-			if (msg.contains(bUp.name)) {
+		for (ConfigJavaBean.BiliUser cb : configManager.configJavaBean.mapBiliUser) {
+			if (msg.contains(cb.name)) {
 				return true;
 			}
 		}
@@ -100,30 +93,27 @@ public class NewUpdateManager {
 	}
 
 	private long getUpId(String msg) {
-		for (int key : hm.keySet()) {
-			UpperBean bUp = hm.get(key);
-			if (msg.contains(bUp.name)) {
-				return bUp.bid;
+		for (ConfigJavaBean.BiliUser cb : configManager.configJavaBean.mapBiliUser) {
+			if (msg.contains(cb.name)) {
+				return Long.parseLong(cb.bid);
 			}
 		}
 		return 0;
 	}
 
 	private String getUpName(String msg) {
-		for (int key : hm.keySet()) {
-			UpperBean bUp = hm.get(key);
-			if (msg.contains(bUp.name)) {
-				return bUp.name;
+		for (ConfigJavaBean.BiliUser cb : configManager.configJavaBean.mapBiliUser) {
+			if (msg.contains(cb.name)) {
+				return cb.name;
 			}
 		}
 		return "";
 	}
 
 	private long getUpQQ(String msg) {
-		for (int key : hm.keySet()) {
-			UpperBean bUp = hm.get(key);
-			if (msg.contains(bUp.name)) {
-				return bUp.QQ;
+		for (ConfigJavaBean.BiliUser cb : configManager.configJavaBean.mapBiliUser) {
+			if (msg.contains(cb.name)) {
+				return Long.parseLong(cb.qq);
 			}
 		}
 		return 0;

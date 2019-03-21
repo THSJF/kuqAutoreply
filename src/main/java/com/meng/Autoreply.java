@@ -9,12 +9,8 @@ import javax.swing.JOptionPane;
 import com.meng.barcode.BarcodeManager;
 import com.meng.bilibili.BiliLinkInfo;
 import com.meng.bilibili.LiveManager;
-import com.meng.bilibili.LivePerson;
 import com.meng.bilibili.NewUpdateManager;
-import com.meng.bilibili.UpperBean;
-import com.meng.config.ConfigJavaBean;
 import com.meng.config.ConfigManager;
-import com.meng.config.MengAutoReplyConfig;
 import com.meng.groupChat.DicReplyGroup;
 import com.meng.groupChat.DicReplyManager;
 import com.meng.groupChat.RepeaterBanner;
@@ -67,8 +63,9 @@ public class Autoreply extends JcqAppAbstract implements ICQVer, IMsg, IRequest 
 	private CQcodeManager cQcodeManager = new CQcodeManager();
 	private PicSearchManager picSearchManager = new PicSearchManager();
 	private BarcodeManager barcodeManager = new BarcodeManager();
-
+	private NewUpdateManager updateManager;
 	private ConfigManager configManager;
+	private LiveManager liveManager;
 
 	private HashMap<Long, MessageSender> messageMap = new HashMap<>();
 
@@ -681,6 +678,11 @@ public class Autoreply extends JcqAppAbstract implements ICQVer, IMsg, IRequest 
 		System.out.println("词库回复添加完成");
 		addRepeater();
 		System.out.println("复读机添加完成");
+		updateManager = new NewUpdateManager(configManager);
+		System.out.println("催更添加完成");
+		liveManager=new LiveManager(configManager);
+		System.out.println("直播检测添加完成");
+		
 	}
 
 	private void addGroupDic() {
@@ -792,6 +794,8 @@ public class Autoreply extends JcqAppAbstract implements ICQVer, IMsg, IRequest 
 			if (Methods.checkGou(fromGroup, msg))// 苟
 				return true;
 			if (Methods.checkMeng2(fromGroup, msg))// 萌2
+				return true;
+			if (updateManager.check(fromGroup, msg))
 				return true;
 			if (Methods.checkAt(fromGroup, fromQQ, msg))// @
 				return true;
