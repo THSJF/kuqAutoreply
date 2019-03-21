@@ -75,8 +75,8 @@ public class ConfigManager {
 			saveConfig();
 			Autoreply.sendMessage(fromGroup, 0, "已将" + msg.replace(".blockword.", "") + "加入屏蔽列表");
 		}
-		if (msg.startsWith(".blockword.")) {
-			String word = msg.replace(".blockword.", "");
+		if (msg.startsWith(".unblockword.")) {
+			String word = msg.replace(".unblockword.", "");
 			for (int i = 0; i < configJavaBean.mapQQNotReply.size(); i++) {
 				if (configJavaBean.mapQQNotReply.get(i).equals(word)) {
 					configJavaBean.mapQQNotReply.remove(i);
