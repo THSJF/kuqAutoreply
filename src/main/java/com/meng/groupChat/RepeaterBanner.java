@@ -4,14 +4,11 @@ import java.awt.Image;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
-import java.util.List;
-
 import javax.imageio.ImageIO;
 
 import com.meng.Autoreply;
 import com.meng.tools.FingerPrint;
 import com.sobte.cqp.jcq.entity.CQImage;
-import com.sobte.cqp.jcq.entity.Group;
 import com.sobte.cqp.jcq.entity.Member;
 
 public class RepeaterBanner {
