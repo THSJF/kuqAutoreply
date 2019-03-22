@@ -324,17 +324,14 @@ public class Autoreply extends JcqAppAbstract implements ICQVer, IMsg, IRequest 
 		}
 
 		if (msg.equalsIgnoreCase(".live")) {
-			boolean b = false;
+			StringBuilder sb = new StringBuilder("");
 			for (int i = 0; i < liveManager.getliveCount(); i++) {
 				LivePerson lp = liveManager.getPerson(i);
 				if (lp.isLiving()) {
-					sendMessage(fromGroup, fromQQ, lp.getName() + "正在直播" + lp.getLiveUrl());
+					sb.append(lp.getName() + "正在直播" + lp.getLiveUrl()).append("\n");
 				}
-				b = b || lp.isLiving();
 			}
-			if (!b) {
-				sendMessage(fromGroup, fromQQ, "居然没有飞机佬直播");
-			}
+			sendMessage(fromGroup, fromQQ, sb.toString().equals("") ? "居然没有飞机佬直播" : sb.toString());
 			return MSG_IGNORE;
 		}
 
