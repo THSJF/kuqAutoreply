@@ -9,6 +9,7 @@ import javax.swing.JOptionPane;
 import com.meng.barcode.BarcodeManager;
 import com.meng.bilibili.BiliLinkInfo;
 import com.meng.bilibili.LiveManager;
+import com.meng.bilibili.LivePerson;
 import com.meng.bilibili.NewUpdateManager;
 import com.meng.config.ConfigManager;
 import com.meng.groupChat.DicReplyGroup;
@@ -232,13 +233,14 @@ public class Autoreply extends JcqAppAbstract implements ICQVer, IMsg, IRequest 
 		// 这里处理消息
 
 		System.out.println(msg);
-		if (Methods.checkSwitch(fromGroup, msg))// 控制
-			return MSG_IGNORE;
 		if (msg.startsWith(".config") && fromQQ == 2856986197L) {
 			msg = msg.replace(".config", "");
 			configManager.checkSetConfig(fromGroup, msg);
 			return MSG_IGNORE;
 		}
+
+		if (Methods.checkSwitch(fromGroup, msg))// 控制
+			return MSG_IGNORE;
 
 		if (fromQQ == 2856986197L || fromQQ == 1592608126L) {
 			// 手动更新设置，不再需要重启
@@ -320,15 +322,22 @@ public class Autoreply extends JcqAppAbstract implements ICQVer, IMsg, IRequest 
 				// }
 
 		}
-		/*
-		 * if (msg.equalsIgnoreCase(".live")) { boolean b = false; for (int i =
-		 * 0; i < livingManager.getMapFlag(); i++) { LivePerson lp =
-		 * livingManager.getPerson(i); if (lp.isLiving()) {
-		 * sendGroupMessage(fromGroup, lp.getName() + "直播开始啦大家快去奶" +
-		 * lp.getLiveUrl()); } b = b || livingManager.getPerson(i).isLiving(); }
-		 * if (!b) { sendGroupMessage(fromGroup, "惊了 居然没有飞机佬直播"); } return
-		 * MSG_IGNORE; }
-		 */
+
+		if (msg.equalsIgnoreCase(".live")) {
+			boolean b = false;
+			for (int i = 0; i < liveManager.getliveCount(); i++) {
+				LivePerson lp = liveManager.getPerson(i);
+				if (lp.isLiving()) {
+					sendMessage(fromGroup, fromQQ, lp.getName() + "正在直播" + lp.getLiveUrl());
+				}
+				b = b || lp.isLiving();
+			}
+			if (!b) {
+				sendMessage(fromGroup, fromQQ, "居然没有飞机佬直播");
+			}
+			return MSG_IGNORE;
+		}
+
 		return MSG_IGNORE;
 	}
 
@@ -680,16 +689,16 @@ public class Autoreply extends JcqAppAbstract implements ICQVer, IMsg, IRequest 
 		System.out.println("复读机添加完成");
 		updateManager = new NewUpdateManager(configManager);
 		System.out.println("催更添加完成");
-		liveManager=new LiveManager(configManager);
+		liveManager = new LiveManager(configManager);
+		liveManager.start();
 		System.out.println("直播检测添加完成");
-		
+
 	}
 
 	private void addGroupDic() {
 		dicReplyManager = new DicReplyManager();
-		for (String groupNumber : configManager.configJavaBean.mapGroupDicReply) {
-			dicReplyManager.addData(
-					new DicReplyGroup(Long.parseLong(groupNumber), appDirectory + "dic" + groupNumber + ".json"));
+		for (Long groupNumber : configManager.configJavaBean.mapGroupDicReply) {
+			dicReplyManager.addData(new DicReplyGroup(groupNumber, appDirectory + "dic" + groupNumber + ".json"));
 		}
 	}
 
@@ -702,8 +711,8 @@ public class Autoreply extends JcqAppAbstract implements ICQVer, IMsg, IRequest 
 	}
 
 	private boolean checkReplyTheGroup(long fromGroup) {
-		for (String group : configManager.configJavaBean.mapGroupReply) {// 遍历
-			if (fromGroup == Long.parseLong(group)) {
+		for (Long group : configManager.configJavaBean.mapGroupReply) {// 遍历
+			if (fromGroup == group) {
 				return true;
 			}
 		}
@@ -711,8 +720,8 @@ public class Autoreply extends JcqAppAbstract implements ICQVer, IMsg, IRequest 
 	}
 
 	private boolean checkNotReply(long fromQQ, String msg) {
-		for (String nrq : configManager.configJavaBean.mapQQNotReply) {
-			if (fromQQ == Long.parseLong(nrq)) {
+		for (Long nrq : configManager.configJavaBean.mapQQNotReply) {
+			if (fromQQ == nrq) {
 				return true;
 			}
 		}

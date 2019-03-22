@@ -3,7 +3,6 @@ package com.meng.bilibili;
 import com.google.gson.Gson;
 import com.meng.Autoreply;
 import com.meng.Methods;
-import com.meng.config.ConfigJavaBean;
 import com.meng.config.ConfigManager;
 
 public class NewUpdateManager {
@@ -84,7 +83,7 @@ public class NewUpdateManager {
 	}
 
 	private boolean isUpper(String msg) {
-		for (ConfigJavaBean.BiliUser cb : configManager.configJavaBean.mapBiliUser) {
+		for (BilibiliUserJavaBean.BilibiliUser cb : configManager.bilibiliUserJavaBean.mapBiliUser) {
 			if (msg.contains(cb.name)) {
 				return true;
 			}
@@ -92,28 +91,25 @@ public class NewUpdateManager {
 		return false;
 	}
 
-	private long getUpId(String msg) {
-		for (ConfigJavaBean.BiliUser cb : configManager.configJavaBean.mapBiliUser) {
+	private int getUpId(String msg) {
+		for (BilibiliUserJavaBean.BilibiliUser cb : configManager.bilibiliUserJavaBean.mapBiliUser) {
+			if (cb.bid == 0) {
+				continue;
+			}
 			if (msg.contains(cb.name)) {
-				return Long.parseLong(cb.bid);
+				return cb.bid;
 			}
 		}
 		return 0;
 	}
 
-	private String getUpName(String msg) {
-		for (ConfigJavaBean.BiliUser cb : configManager.configJavaBean.mapBiliUser) {
-			if (msg.contains(cb.name)) {
-				return cb.name;
-			}
-		}
-		return "";
-	}
-
 	private long getUpQQ(String msg) {
-		for (ConfigJavaBean.BiliUser cb : configManager.configJavaBean.mapBiliUser) {
+		for (BilibiliUserJavaBean.BilibiliUser cb : configManager.bilibiliUserJavaBean.mapBiliUser) {
+			if (cb.qq == 0) {
+				continue;
+			}
 			if (msg.contains(cb.name)) {
-				return Long.parseLong(cb.qq);
+				return cb.qq;
 			}
 		}
 		return 0;

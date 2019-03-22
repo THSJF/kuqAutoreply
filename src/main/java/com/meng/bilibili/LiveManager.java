@@ -1,11 +1,9 @@
 package com.meng.bilibili;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 
 import com.meng.Autoreply;
 import com.meng.Methods;
-import com.meng.config.ConfigJavaBean;
 import com.meng.config.ConfigManager;
 
 public class LiveManager extends Thread {
@@ -16,8 +14,11 @@ public class LiveManager extends Thread {
 	public static boolean liveStart = true;
 
 	public LiveManager(ConfigManager configManager) {
-		for (ConfigJavaBean.BiliUser cb : configManager.configJavaBean.mapBiliUser) {
-			liveData.add(new LivePerson(cb.name, "https://live.bilibili.com/" + cb.bid));
+		for (BilibiliUserJavaBean.BilibiliUser cb : configManager.bilibiliUserJavaBean.mapBiliUser) {
+			if (cb.bliveRoom == 0) {
+				continue;
+			}
+			liveData.add(new LivePerson(cb.name, "https://live.bilibili.com/" + cb.bliveRoom, false));
 		}
 	}
 
@@ -89,15 +90,26 @@ public class LiveManager extends Thread {
 		case "台长":
 			Autoreply.sendMessage(859561731L, 0, "想看台混矫正器");
 			break;
+		case "最速":
+			Autoreply.sendMessage(855927922L, 0, Autoreply.CC.at(1012539034) + "今天，也是发气满满的一天");
+			break;
+		default:
+			if (p.autoTip == true) {
+				Autoreply.sendMessage(859561731L, 0, p.getLiveUrl() + "直播开始");
+			}
+			break;
 		}
 	}
 
 	private void tipFinish(LivePerson p) {
 		switch (p.getName()) {
-		case "记者":
-			Autoreply.sendMessage(855927922L, 0, Autoreply.CC.at(1012539034) + "该更新了吧");
+		default:
+
 			break;
 		}
 	}
 
+	public int getliveCount() {
+		return liveData.size();
+	}
 }

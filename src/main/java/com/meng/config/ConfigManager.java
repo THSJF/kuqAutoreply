@@ -1,33 +1,50 @@
 package com.meng.config;
 
 import java.io.File;
-import java.io.FileOutputStream;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.io.PrintStream;
-import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 
 import com.google.gson.Gson;
 import com.meng.Autoreply;
 import com.meng.Methods;
+import com.meng.bilibili.BilibiliUserJavaBean;
+import com.meng.bilibili.BilibiliUserJavaBean.BilibiliUser;
 
 public class ConfigManager {
 	public ConfigJavaBean configJavaBean = new ConfigJavaBean();
-
-	private String jsonString = "";
+	public BilibiliUserJavaBean bilibiliUserJavaBean = new BilibiliUserJavaBean();
+	private String jsonBaseConfig = "";
+	private String jsonPersonInfo = "";
 	private Gson gson = new Gson();
 
 	public ConfigManager() {
 		try {
-			File jsonFile = new File(Autoreply.appDirectory + "config.json");
-			if (!jsonFile.exists()) {
-				jsonString = gson.toJson(configJavaBean);
+			File jsonBaseConfigFile = new File(Autoreply.appDirectory + "config.json");
+			if (!jsonBaseConfigFile.exists()) {
+				jsonBaseConfig = gson.toJson(configJavaBean);
 				saveConfig();
 			}
-			jsonString = Methods.readFileToString(Autoreply.appDirectory + "config.json");
-			gson = new Gson();
-			configJavaBean = gson.fromJson(jsonString, ConfigJavaBean.class);
+			jsonBaseConfig = Methods.readFileToString(Autoreply.appDirectory + "config.json");
+			configJavaBean = gson.fromJson(jsonBaseConfig, ConfigJavaBean.class);
+
+			File jsonPersonFile = new File(Autoreply.appDirectory + "configPersonInfo.json");
+			if (!jsonPersonFile.exists()) {
+				jsonPersonInfo = gson.toJson(bilibiliUserJavaBean);
+				try { 
+					File file = new File(Autoreply.appDirectory + "configPersonInfo.json");
+					FileWriter fw = new FileWriter(file);
+					fw.write(jsonPersonInfo);
+					fw.flush();
+					fw.close();
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+			} else {
+				jsonPersonInfo = Methods.readFileToString(Autoreply.appDirectory + "configPersonInfo.json");
+				bilibiliUserJavaBean = gson.fromJson(jsonPersonInfo, BilibiliUserJavaBean.class);
+			}
+
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -36,7 +53,7 @@ public class ConfigManager {
 	public void checkSetConfig(long fromGroup, String msg) {
 
 		if (msg.startsWith(".addgroupreply.")) {
-			addGroupReply(msg.replace(".addgroupreply.", ""));
+			addGroupReply(Long.parseLong(msg.replace(".addgroupreply.", "")));
 			saveConfig();
 			Autoreply.sendMessage(fromGroup, 0, "已启用" + msg.replace(".addgroupreply.", "") + "群回复");
 		}
@@ -54,7 +71,7 @@ public class ConfigManager {
 
 		if (msg.startsWith(".blockuser")) {
 			long qqId = Autoreply.CC.getAt(msg.replace(".blockuser", ""));
-			addQQNotReply(String.valueOf(qqId));
+			addQQNotReply(qqId);
 			saveConfig();
 			Autoreply.sendMessage(fromGroup, 0, "已将" + qqId + "加入屏蔽列表");
 		}
@@ -71,7 +88,7 @@ public class ConfigManager {
 		}
 
 		if (msg.startsWith(".blockword.")) {
-			addQQNotReply(msg.replace(".blockword.", ""));
+			addWordNotReply(msg.replace(".blockword.", ""));
 			saveConfig();
 			Autoreply.sendMessage(fromGroup, 0, "已将" + msg.replace(".blockword.", "") + "加入屏蔽列表");
 		}
@@ -106,11 +123,11 @@ public class ConfigManager {
 
 	}
 
-	public ArrayList<String> getMapGroupReply() {
+	public ArrayList<Long> getMapGroupReply() {
 		return configJavaBean.mapGroupReply;
 	}
 
-	public ArrayList<String> getMapQQNotReply() {
+	public ArrayList<Long> getMapQQNotReply() {
 		return configJavaBean.mapQQNotReply;
 	}
 
@@ -122,19 +139,19 @@ public class ConfigManager {
 		return configJavaBean.mapGroupRepeater;
 	}
 
-	public ArrayList<String> getMapGroupDicReply() {
+	public ArrayList<Long> getMapGroupDicReply() {
 		return configJavaBean.mapGroupDicReply;
 	}
 
-	public ArrayList<ConfigJavaBean.BiliUser> getMapBiliUp() {
-		return configJavaBean.mapBiliUser;
+	public ArrayList<BilibiliUser> getMapBiliUp() {
+		return bilibiliUserJavaBean.mapBiliUser;
 	}
 
-	public void addGroupReply(String groupNumber) {
+	public void addGroupReply(Long groupNumber) {
 		configJavaBean.mapGroupReply.add(groupNumber);
 	}
 
-	public void addQQNotReply(String QQnumber) {
+	public void addQQNotReply(Long QQnumber) {
 		configJavaBean.mapQQNotReply.add(QQnumber);
 	}
 
@@ -146,17 +163,12 @@ public class ConfigManager {
 		configJavaBean.mapGroupRepeater.add(QQnumber);
 	}
 
-	public void addBilibiliUser(String name, String qq, String bid) {
-		ConfigJavaBean.BiliUser cb = configJavaBean.new BiliUser(name, qq, bid);
-		configJavaBean.mapBiliUser.add(cb);
-	}
-
 	public void saveConfig() {
 		try {
-			jsonString = gson.toJson(configJavaBean);
+			jsonBaseConfig = gson.toJson(configJavaBean);
 			File file = new File(Autoreply.appDirectory + "config.json");
 			FileWriter fw = new FileWriter(file);
-			fw.write(jsonString);
+			fw.write(jsonBaseConfig);
 			fw.flush();
 			fw.close();
 		} catch (IOException e) {
