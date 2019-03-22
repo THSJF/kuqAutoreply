@@ -54,18 +54,18 @@ public class Methods {
 		}
 		return false;
 	}
-	 
-	public static String executeCmd(String command) throws IOException {   
-	    Runtime runtime = Runtime.getRuntime();  
-	    Process process = runtime.exec("cmd /c " + command);  
-	    BufferedReader br = new BufferedReader(new InputStreamReader(process.getInputStream(), "UTF-8"));  
-	    String line = null;  
-	    StringBuilder build = new StringBuilder();  
-	    while ((line = br.readLine()) != null) {   
-	        build.append(line);  
-	    }  
-	    return build.toString();  
-	}  
+
+	public static String executeCmd(String command) throws IOException {
+		Runtime runtime = Runtime.getRuntime();
+		Process process = runtime.exec("cmd /c " + command);
+		BufferedReader br = new BufferedReader(new InputStreamReader(process.getInputStream(), "UTF-8"));
+		String line = null;
+		StringBuilder build = new StringBuilder();
+		while ((line = br.readLine()) != null) {
+			build.append(line);
+		}
+		return build.toString();
+	}
 
 	public static boolean isPohaitu(long fromGroup, long fromQQ, String msg) {
 		if (msg.equals("迫害图")) {
@@ -117,8 +117,17 @@ public class Methods {
 			sBuilder.append("的色图");
 			Autoreply.sendMessage(fromGroup, fromQQ, sBuilder.toString());
 			return true;
-		}
-		if (msg.endsWith("色图")) {
+		} else if (msg.equals("随机色图")) {
+			File[] files = (new File(Autoreply.appDirectory + "setu/")).listFiles();
+			File folder = (File) rfa(files);
+			File[] pics = folder.listFiles();
+			try {
+				Autoreply.sendMessage(fromGroup, fromQQ, Autoreply.CC.image((File) Methods.rfa(pics)));
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+			Autoreply.useCount.incSetu(fromQQ);
+		} else if (msg.endsWith("色图")) {
 			try {
 				File[] files = (new File(Autoreply.appDirectory + "setu/" + msg.replace("色图", ""))).listFiles();
 				if (files.length > 0) {
@@ -130,6 +139,7 @@ public class Methods {
 				e.printStackTrace();
 			}
 		}
+
 		return false;
 	}
 
