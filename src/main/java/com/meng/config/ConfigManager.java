@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Iterator;
 
 import com.google.gson.Gson;
 import com.meng.Autoreply;
@@ -31,7 +32,7 @@ public class ConfigManager {
 			File jsonPersonFile = new File(Autoreply.appDirectory + "configPersonInfo.json");
 			if (!jsonPersonFile.exists()) {
 				jsonPersonInfo = gson.toJson(bilibiliUserJavaBean);
-				try { 
+				try {
 					File file = new File(Autoreply.appDirectory + "configPersonInfo.json");
 					FileWriter fw = new FileWriter(file);
 					fw.write(jsonPersonInfo);
@@ -58,9 +59,9 @@ public class ConfigManager {
 			Autoreply.sendMessage(fromGroup, 0, "已启用" + msg.replace(".addgroupreply.", "") + "群回复");
 		}
 		if (msg.startsWith(".removegroupreply.")) {
-			String groupID = msg.replace(".removegroupreply.", "");
+			long groupID = Long.parseLong(msg.replace(".removegroupreply.", ""));
 			for (int i = 0; i < configJavaBean.mapGroupReply.size(); i++) {
-				if (configJavaBean.mapGroupReply.get(i).equals(groupID)) {
+				if (configJavaBean.mapGroupReply.get(i) == groupID) {
 					configJavaBean.mapGroupReply.remove(i);
 					break;
 				}
@@ -76,9 +77,9 @@ public class ConfigManager {
 			Autoreply.sendMessage(fromGroup, 0, "已将" + qqId + "加入屏蔽列表");
 		}
 		if (msg.startsWith(".unblockuser")) {
-			String qqId = String.valueOf(Autoreply.CC.getAt(msg.replace(".unblockuser", "")));
+			long qqId = Autoreply.CC.getAt(msg.replace(".unblockuser", ""));
 			for (int i = 0; i < configJavaBean.mapQQNotReply.size(); i++) {
-				if (configJavaBean.mapQQNotReply.get(i).equals(qqId)) {
+				if (configJavaBean.mapQQNotReply.get(i) == qqId) {
 					configJavaBean.mapQQNotReply.remove(i);
 					break;
 				}
@@ -148,18 +149,38 @@ public class ConfigManager {
 	}
 
 	public void addGroupReply(Long groupNumber) {
+		for (long l : configJavaBean.mapGroupReply) {
+			if (l == groupNumber) {
+				return;
+			}
+		}
 		configJavaBean.mapGroupReply.add(groupNumber);
 	}
 
 	public void addQQNotReply(Long QQnumber) {
+		for (long iterable_element : configJavaBean.mapQQNotReply) {
+			if (iterable_element == QQnumber) {
+				return;
+			}
+		}
 		configJavaBean.mapQQNotReply.add(QQnumber);
 	}
 
 	public void addWordNotReply(String content) {
+		for (String iterable_element : configJavaBean.mapWordNotReply) {
+			if (iterable_element.equals(content)) {
+				return;
+			}
+		}
 		configJavaBean.mapWordNotReply.add(content);
 	}
 
 	public void addGroupRepeater(String QQnumber) {
+		for (String iterable_element : configJavaBean.mapGroupRepeater) {
+			if (iterable_element.equals(QQnumber)) {
+				return;
+			}
+		}
 		configJavaBean.mapGroupRepeater.add(QQnumber);
 	}
 
