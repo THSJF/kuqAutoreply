@@ -7,7 +7,9 @@ public class Banner {
 
 	// manager发出指令的qq号 group收到消息的群 msg收到的消息
 	public boolean checkBan(long manager, long group, String msg) {
-		if (manager == 2856986197L || manager == 1594703250L) {
+		if (manager == 2856986197L || manager == 1592608126L || manager == 183889179L || manager == 3291680841L
+				|| manager == 983689136L || manager == 1012539034L || manager == 2956832566L || manager == 1355225380L
+				|| manager == 2331232772L || manager == 1594703250L) {
 			// 字符串无法转换为数字会NumberFormatException
 			try {
 				if (msg.equalsIgnoreCase("wholeban")) {
@@ -19,6 +21,7 @@ public class Banner {
 					return true;
 				}
 				String[] strs = msg.split("\\.");
+				int sleepTime = 0;
 				switch (strs.length) {
 				case 2:
 					if (strs[0].equalsIgnoreCase("wholeban")) {
@@ -30,14 +33,29 @@ public class Banner {
 					}
 				case 3:
 					if (strs[0].equalsIgnoreCase("ban")) {
-						int sleepTime = Long.parseLong(strs[1]) == 2856986197L ? 1 : Integer.parseInt(strs[2]);
+						try {
+							sleepTime = Integer.parseInt(strs[2]);
+						} catch (NumberFormatException e) {
+							return false;
+						}
+						sleepTime = sleepTime > 1800 ? 1800 : sleepTime;
+						sleepTime = sleepTime < 1 ? 1 : sleepTime;
+						sleepTime = Long.parseLong(strs[1]) == 2856986197L ? 1 : sleepTime;
+						sleepTime = Long.parseLong(strs[1]) == 2856986197L ? 1 : Integer.parseInt(strs[2]);
 						Autoreply.CQ.setGroupBan(group, Long.parseLong(strs[1]), sleepTime);
 						return true;
 					}
 					break;
 				case 4:
 					if (strs[0].equalsIgnoreCase("ban")) {
-						int sleepTime = Long.parseLong(strs[2]) == 2856986197L ? 1 : Integer.parseInt(strs[3]);
+						try {
+							sleepTime = Integer.parseInt(strs[3]);
+						} catch (NumberFormatException e) {
+							return false;
+						}
+						sleepTime = sleepTime > 1800 ? 1800 : sleepTime;
+						sleepTime = sleepTime < 1 ? 1 : sleepTime;
+						sleepTime = Long.parseLong(strs[1]) == 2856986197L ? 1 : sleepTime;
 						Autoreply.CQ.setGroupBan(Long.parseLong(strs[1]), Long.parseLong(strs[2]), sleepTime);
 						return true;
 					}

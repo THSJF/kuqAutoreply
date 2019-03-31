@@ -6,6 +6,8 @@ import java.util.HashMap;
 
 import javax.swing.JOptionPane;
 
+import org.json.JSONObject;
+
 import com.meng.barcode.BarcodeManager;
 import com.meng.bilibili.BiliLinkInfo;
 import com.meng.bilibili.LiveManager;
@@ -17,6 +19,8 @@ import com.meng.groupChat.DicReplyManager;
 import com.meng.groupChat.RepeaterBanner;
 import com.meng.groupChat.RepeaterManager;
 import com.meng.groupChat.fanpohai;
+import com.meng.ocr.OcrManager;
+import com.meng.ocr.Youtu;
 import com.meng.searchPicture.PicSearchManager;
 import com.meng.tip.FileTipManager;
 import com.meng.tip.FileTipUploader;
@@ -56,17 +60,18 @@ public class Autoreply extends JcqAppAbstract implements ICQVer, IMsg, IRequest 
 	private Banner banner = new Banner();
 	private RepeaterManager recoderManager;
 	private RollPlane rollPlane = new RollPlane();
-	private TimeTip timeTip = new TimeTip();
-	private BiliLinkInfo biliLinkInfo = new BiliLinkInfo();
+	private static TimeTip timeTip = new TimeTip();
+	public static BiliLinkInfo biliLinkInfo = new BiliLinkInfo();
 	private FileTipManager fileTipManager;
-	private fanpohai fph;
-	private static DicReplyManager dicReplyManager;
+	private static fanpohai fph;
+	public static DicReplyManager dicReplyManager;
 	private CQcodeManager cQcodeManager = new CQcodeManager();
 	private PicSearchManager picSearchManager = new PicSearchManager();
 	private BarcodeManager barcodeManager = new BarcodeManager();
-	private NewUpdateManager updateManager;
+	public static NewUpdateManager updateManager;
 	private ConfigManager configManager;
 	private LiveManager liveManager;
+	private OcrManager ocrManager = new OcrManager();
 
 	private HashMap<Long, MessageSender> messageMap = new HashMap<>();
 
@@ -244,11 +249,32 @@ public class Autoreply extends JcqAppAbstract implements ICQVer, IMsg, IRequest 
 
 		if (fromQQ == 2856986197L || fromQQ == 1592608126L) {
 			// 手动更新设置，不再需要重启
+			if (msg.equalsIgnoreCase("editstart")) {
+				configManager.allowEdit = true;
+			}
+			if (msg.equalsIgnoreCase("editend")) {
+				configManager.allowEdit = false;
+			}
 			if (msg.equalsIgnoreCase("loadConfig")) {
 				loadConfig();
 				sendMessage(fromGroup, 0, "reload");
 				return MSG_IGNORE;
 			}
+
+			if (msg.equals("大膜法 膜神复诵")) {
+				new MoShenFuSong(fromGroup).start();
+				return MSG_IGNORE;
+			}
+			String[] strings = msg.split("\\.");
+			if (strings[0].equalsIgnoreCase("send")) {
+				sendMessage(Long.parseLong(strings[1]), 0, strings[2]);
+				return MSG_IGNORE;
+			}
+		}
+
+		if (fromQQ == 2856986197L || fromQQ == 1592608126L || fromQQ == 183889179L || fromQQ == 3291680841L
+				|| fromQQ == 983689136L || fromQQ == 1012539034L || fromQQ == 2956832566L || fromQQ == 1355225380L
+				|| fromQQ == 2331232772L || fromQQ == 1594703250L) {
 			if (msg.contains("迫害图[CQ:image")) {
 				CQImage cqi = CC.getCQImage(msg);
 				String pohaituName = msg.substring(0, msg.indexOf("[CQ:image") - 3);
@@ -301,17 +327,8 @@ public class Autoreply extends JcqAppAbstract implements ICQVer, IMsg, IRequest 
 				}
 				return MSG_IGNORE;
 			}
-
-			if (msg.equals("大膜法 膜神复诵")) {
-				new MoShenFuSong(fromGroup).start();
-				return MSG_IGNORE;
-			}
-			String[] strings = msg.split("\\.");
-			if (strings[0].equalsIgnoreCase("send")) {
-				sendMessage(Long.parseLong(strings[1]), 0, strings[2]);
-				return MSG_IGNORE;
-			}
 		}
+
 		if (checkReplyTheGroup(fromGroup)) {
 			if (messageMap.get(fromQQ) == null) {
 				messageMap.put(fromQQ, new MessageSender(fromGroup, fromQQ, msg, System.currentTimeMillis()));
@@ -320,7 +337,6 @@ public class Autoreply extends JcqAppAbstract implements ICQVer, IMsg, IRequest 
 				// messageMap.put(fromQQ, new MessageSender(fromGroup, fromQQ,
 				// msg, System.currentTimeMillis()));
 				// }
-
 		}
 
 		if (msg.equalsIgnoreCase(".live")) {
@@ -627,8 +643,8 @@ public class Autoreply extends JcqAppAbstract implements ICQVer, IMsg, IRequest 
 			// 处理词库中为特殊消息做的标记
 			Methods.setRandomPop();
 			if (msg.startsWith("red:")) {
-				if (dicReplyManager.check(fromGroup, fromQQ, msg.replace("red:", "")))// 根据词库触发回答
-					return;
+				msg = msg.replace("red:", "");
+				return;
 			}
 			String[] stri = msg.split("\\:");
 			switch (stri[0]) {
@@ -823,6 +839,8 @@ public class Autoreply extends JcqAppAbstract implements ICQVer, IMsg, IRequest 
 				sendMessage(fromGroup, fromQQ, useCount.getTheFirst(fromQQ));
 				return true;
 			}
+			if (ocrManager.checkOcr(fromGroup, fromQQ, msg))
+				return true;
 			return false;
 		}
 	}

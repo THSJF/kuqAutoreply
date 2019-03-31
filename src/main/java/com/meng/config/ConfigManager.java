@@ -14,9 +14,12 @@ import com.meng.bilibili.BilibiliUserJavaBean.BilibiliUser;
 public class ConfigManager {
 	public ConfigJavaBean configJavaBean = new ConfigJavaBean();
 	public BilibiliUserJavaBean bilibiliUserJavaBean = new BilibiliUserJavaBean();
-	private String jsonBaseConfig = "";
-	private String jsonPersonInfo = "";
-	private Gson gson = new Gson();
+	public String jsonBaseConfig = "";
+	public String jsonPersonInfo = "";
+	public Gson gson = new Gson();
+	public SendManager sendManager;
+	public RecieveManager recieveManager;
+	public boolean allowEdit=false;
 
 	public ConfigManager() {
 		try {
@@ -48,6 +51,10 @@ public class ConfigManager {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
+		sendManager = new SendManager(this);
+		sendManager.start();
+		recieveManager=new RecieveManager(this);
+		recieveManager.start();
 	}
 
 	public void checkSetConfig(long fromGroup, String msg) {
