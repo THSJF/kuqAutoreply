@@ -1,8 +1,10 @@
 package com.meng.config;
 
 import java.io.File;
+import java.io.FileOutputStream;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.io.OutputStreamWriter;
 import java.util.ArrayList;
 
 import com.google.gson.Gson;
@@ -19,7 +21,7 @@ public class ConfigManager {
 	public Gson gson = new Gson();
 	public SendManager sendManager;
 	public RecieveManager recieveManager;
-	public boolean allowEdit=false;
+	public boolean allowEdit = false;
 
 	public ConfigManager() {
 		try {
@@ -53,7 +55,7 @@ public class ConfigManager {
 		}
 		sendManager = new SendManager(this);
 		sendManager.start();
-		recieveManager=new RecieveManager(this);
+		recieveManager = new RecieveManager(this);
 		recieveManager.start();
 	}
 
@@ -193,11 +195,16 @@ public class ConfigManager {
 	public void saveConfig() {
 		try {
 			jsonBaseConfig = gson.toJson(configJavaBean);
+			FileOutputStream fos = null;
+			OutputStreamWriter writer = null;
 			File file = new File(Autoreply.appDirectory + "config.json");
-			FileWriter fw = new FileWriter(file);
-			fw.write(jsonBaseConfig);
-			fw.flush();
-			fw.close();
+			fos = new FileOutputStream(file);
+			writer = new OutputStreamWriter(fos, "utf-8");
+			writer.write(jsonBaseConfig);
+			writer.flush();
+			if (fos != null) {
+				fos.close();
+			}
 		} catch (IOException e) {
 			e.printStackTrace();
 		}

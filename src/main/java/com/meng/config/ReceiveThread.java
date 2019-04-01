@@ -18,7 +18,7 @@ public class ReceiveThread extends Thread {
 
 	// 线程执行的操作，响应客户端的请求
 	public void run() {
-		if(!configManager.allowEdit){
+		if (!configManager.allowEdit) {
 			return;
 		}
 		InputStream is = null;
@@ -47,11 +47,17 @@ public class ReceiveThread extends Thread {
 				configManager.jsonPersonInfo = json;
 				configManager.bilibiliUserJavaBean = configManager.gson.fromJson(json, BilibiliUserJavaBean.class);
 				try {
+					FileOutputStream fos = null;
+					OutputStreamWriter writer = null;
 					File file = new File(Autoreply.appDirectory + "configPersonInfo.json");
-					FileWriter fw = new FileWriter(file);
-					fw.write(json);
-					fw.flush();
-					fw.close();
+					fos = new FileOutputStream(file);
+					writer = new OutputStreamWriter(fos, "utf-8");
+					writer.write(json);
+					writer.flush();
+					if (fos != null) {
+						fos.close();
+					}
+
 				} catch (IOException e) {
 					e.printStackTrace();
 				}
