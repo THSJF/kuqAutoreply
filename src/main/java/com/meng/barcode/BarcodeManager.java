@@ -37,8 +37,8 @@ public class BarcodeManager {
 		if (!files.exists()) {
 			files.mkdirs();
 		}
-		File barcode = new File(
-				Autoreply.appDirectory + "barcode/" + fromQQ + "/barcode" + Autoreply.random.nextInt() + ".png");
+		File barcode = new File(Autoreply.appDirectory + "barcode/" + fromQQ + "/barcode"
+				+ Autoreply.instence.random.nextInt() + ".png");
 		if (msg.startsWith("生成QR ")) {
 			ImageIO.write(BarcodeUtils.createQRCode(msg.replace("生成QR ", "")), "png", barcode);
 		} else if (msg.startsWith("生成PDF417 ")) {
@@ -46,16 +46,16 @@ public class BarcodeManager {
 		} else {
 			return false;
 		}
-		Methods.sendMsg(fromGroup, fromQQ, Autoreply.CC.image(barcode));
+		Methods.sendMsg(fromGroup, fromQQ, Autoreply.instence.CC.image(barcode));
 		return true;
 	}
 
 	private boolean dec(long fromGroup, long fromQQ, String msg) throws Exception {
-		CQImage cqImage = Autoreply.CC.getCQImage(msg);
+		CQImage cqImage = Autoreply.instence.CC.getCQImage(msg);
 		if (cqImage != null) {
 			Result result = null;
 			result = BarcodeUtils.decodeImage(cqImage.download(Autoreply.appDirectory + "barcode/" + fromQQ,
-					"barcode" + Autoreply.random.nextInt() + ".png"));
+					"barcode" + Autoreply.instence.random.nextInt() + ".png"));
 			if (result != null) {
 				Autoreply.sendMessage(fromGroup, fromQQ,
 						"二维码类型:" + result.getBarcodeFormat().toString() + "\n内容:" + result.getText());

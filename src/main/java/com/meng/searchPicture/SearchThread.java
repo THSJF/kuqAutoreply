@@ -88,7 +88,7 @@ public class SearchThread extends Thread {
 		for (int i = 0; i < size; i++) {
 			StringBuilder sBuilder = new StringBuilder("");
 			PicResults.Result tmpr = mResults.getResults().get(i);
-			//int simi = Integer.parseInt(tmpr.mSimilarity.substring(0, 2));
+			// int simi = Integer.parseInt(tmpr.mSimilarity.substring(0, 2));
 			// if (simi < 60 && !showAll) {
 			// continue;
 			// }
@@ -103,7 +103,7 @@ public class SearchThread extends Thread {
 				connection.setConnectTimeout(60000);
 				InputStream is = connection.getInputStream();
 				dFile = new File(Autoreply.appDirectory + "picSearch\\tmp\\",
-						Autoreply.random.nextInt() + picNumFlag++ + "pic.jpg");
+						Autoreply.instence.random.nextInt() + picNumFlag++ + "pic.jpg");
 				FileOutputStream out = new FileOutputStream(dFile);
 				int ii = 0;
 				while ((ii = is.read()) != -1) {
@@ -125,7 +125,7 @@ public class SearchThread extends Thread {
 				}
 			}
 			try {
-				sBuilder.append(Autoreply.CC.image(dFile)).append("\n");
+				sBuilder.append(Autoreply.instence.CC.image(dFile)).append("\n");
 			} catch (IOException e) {
 				Methods.sendMsg(fromGroup, fromQQ, e.toString());
 			}

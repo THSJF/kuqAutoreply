@@ -47,7 +47,7 @@ public class RollPlane {
 					break;
 				case "游戏":
 				case "game":
-					Autoreply.sendMessage(fromGroup, 0, "th" + (Autoreply.random.nextInt(16) + 1));
+					Autoreply.sendMessage(fromGroup, 0, "th" + (Autoreply.instence.random.nextInt(16) + 1));
 					break;
 				case "diff":
 				case "difficult":
@@ -162,7 +162,7 @@ public class RollPlane {
 	private void rollStage(String[] ss, long fromGroup) {
 		HashMap<Integer, String> hMap = new HashMap<>();// 存放数据
 		for (int i = 2; i < ss.length; i++) {
-			hMap.put(Autoreply.random.nextInt(), ss[i]);// 随机key
+			hMap.put(Autoreply.instence.random.nextInt(), ss[i]);// 随机key
 		}
 		int flag = 1;
 		StringBuilder sBuilder = new StringBuilder();

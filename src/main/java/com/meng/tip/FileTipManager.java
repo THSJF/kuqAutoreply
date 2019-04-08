@@ -46,11 +46,11 @@ public class FileTipManager extends Thread {
 						&& System.currentTimeMillis() - tftu.getfileLastTipTime() > 3600000 * 2) {// 一小时为3600000毫秒
 					if (tftu.getGroupNumber() == 807242547L && tftu.getQQNumber() == 1592608126L) {
 						Autoreply.sendMessage(tftu.getGroupNumber(), 0,
-								Autoreply.CC.at(tftu.getQQNumber()) + Methods.rfa(stringsC5));
+								Autoreply.instence.CC.at(tftu.getQQNumber()) + Methods.rfa(stringsC5));
 						tftu.setfileLastTipTime(System.currentTimeMillis());
 					} else {
 						Autoreply.sendMessage(tftu.getGroupNumber(), 0,
-								Autoreply.CC.at(tftu.getQQNumber()) + Methods.rfa(strings));
+								Autoreply.instence.CC.at(tftu.getQQNumber()) + Methods.rfa(strings));
 						tftu.setfileLastTipTime(System.currentTimeMillis());
 					}
 				}

@@ -67,17 +67,17 @@ public class TimeTip extends Thread {
 
 	public boolean check(long fromGroup, long fromQQ) {
 		if (!tipedZuisu && fromGroup == groupZuisu && fromQQ == jizhe) {
-			Autoreply.sendMessage(groupZuisu, 0, Autoreply.CC.at(jizhe) + "今天更新了吗？");
+			Autoreply.sendMessage(groupZuisu, 0, Autoreply.instence.CC.at(jizhe) + "今天更新了吗？");
 			tipedZuisu = true;
 			return true;
 		}
 		if (!tipedDiuRen && fromQQ == diuren) {
-			Autoreply.sendMessage(fromGroup, 0, Autoreply.CC.at(diuren) + "把你的女装给我交了");
+			Autoreply.sendMessage(fromGroup, 0, Autoreply.instence.CC.at(diuren) + "把你的女装给我交了");
 			tipedDiuRen = true;
 			return true;
 		}
 		if (!tipedZiyuan && fromGroup == groupZiyuan && fromQQ == ziyuan) {
-			Autoreply.sendMessage(groupZiyuan, 0, Autoreply.CC.at(ziyuan) + "昨天援交赚了多少？");
+			Autoreply.sendMessage(groupZiyuan, 0, Autoreply.instence.CC.at(ziyuan) + "昨天援交赚了多少？");
 			tipedZiyuan = true;
 			return true;
 		}

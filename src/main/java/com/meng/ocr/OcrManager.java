@@ -24,11 +24,11 @@ public class OcrManager {
 	public boolean checkOcr(long fromGroup, long fromQQ, String msg) {
 		JSONObject response;
 		try {
-			CQImage cqImage = Autoreply.CC.getCQImage(msg);
+			CQImage cqImage = Autoreply.instence.CC.getCQImage(msg);
 			File image = null;
 			if (cqImage != null) {
 				image = cqImage.download(Autoreply.appDirectory + "ocr/" + fromQQ,
-						"ocr" + Autoreply.random.nextInt() + ".png");
+						"ocr" + Autoreply.instence.random.nextInt() + ".png");
 			} else {
 				return false;
 			}
@@ -48,15 +48,15 @@ public class OcrManager {
 			return true;
 		if (Methods.checkLook(fromGroup, sb.toString()))// 窥屏检测
 			return true;
-		if (Autoreply.biliLinkInfo.check(fromGroup, fromQQ, sb.toString()))// 比利比利链接详情
+		if (Autoreply.instence.biliLinkInfo.check(fromGroup, fromQQ, sb.toString()))// 比利比利链接详情
 			return true;
 		if (Methods.checkGou(fromGroup, sb.toString()))// 苟
 			return true;
 		if (Methods.checkMeng2(fromGroup, sb.toString()))// 萌2
 			return true;
-		if (Autoreply.updateManager.check(fromGroup, sb.toString()))
+		if (Autoreply.instence.updateManager.check(fromGroup, sb.toString()))
 			return true;
-		if (Autoreply.dicReplyManager.check(fromGroup, fromQQ, sb.toString()))// 根据词库触发回答
+		if (Autoreply.instence.dicReplyManager.check(fromGroup, fromQQ, sb.toString()))// 根据词库触发回答
 			return true;
 
 		return true;

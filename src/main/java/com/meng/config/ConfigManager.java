@@ -57,13 +57,13 @@ public class ConfigManager {
 		}
 
 		if (msg.startsWith(".blockuser")) {
-			long qqId = Autoreply.CC.getAt(msg.replace(".blockuser", ""));
+			long qqId = Autoreply.instence.CC.getAt(msg.replace(".blockuser", ""));
 			addQQNotReply(qqId);
 			saveConfig();
 			Autoreply.sendMessage(fromGroup, 0, "已将" + qqId + "加入屏蔽列表");
 		}
 		if (msg.startsWith(".unblockuser")) {
-			long qqId = Autoreply.CC.getAt(msg.replace(".unblockuser", ""));
+			long qqId = Autoreply.instence.CC.getAt(msg.replace(".unblockuser", ""));
 			for (int i = 0; i < configJavaBean.mapQQNotReply.size(); i++) {
 				if (configJavaBean.mapQQNotReply.get(i) == qqId) {
 					configJavaBean.mapQQNotReply.remove(i);

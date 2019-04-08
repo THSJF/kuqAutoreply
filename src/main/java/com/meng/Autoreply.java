@@ -54,23 +54,24 @@ import com.sobte.cqp.jcq.event.JcqAppAbstract;
  */
 public class Autoreply extends JcqAppAbstract implements ICQVer, IMsg, IRequest {
 
-	public static boolean enable = true;
-	public static Random random = new Random();
-	public static CQCodeCC CC = new CQCodeCC();
-	public static UseCount useCount;
+	public static Autoreply instence;
+	public boolean enable = true;
+	public Random random = new Random();
+	public CQCodeCC CC = new CQCodeCC();
+	public UseCount useCount;
 	private Banner banner = new Banner();
 	private RepeaterManager recoderManager;
 	private RollPlane rollPlane = new RollPlane();
-	private static TimeTip timeTip = new TimeTip();
-	public static BiliLinkInfo biliLinkInfo = new BiliLinkInfo();
+	private TimeTip timeTip = new TimeTip();
+	public BiliLinkInfo biliLinkInfo = new BiliLinkInfo();
 	private FileTipManager fileTipManager;
-	private static fanpohai fph;
-	public static DicReplyManager dicReplyManager;
+	private fanpohai fph;
+	public DicReplyManager dicReplyManager;
 	private CQcodeManager cQcodeManager = new CQcodeManager();
 	private PicSearchManager picSearchManager = new PicSearchManager();
 	private BarcodeManager barcodeManager = new BarcodeManager();
-	public static NewUpdateManager updateManager;
-	private ConfigManager configManager;
+	public NewUpdateManager updateManager;
+	public ConfigManager configManager;
 	private LiveManager liveManager;
 	private OcrManager ocrManager = new OcrManager();
 
@@ -111,6 +112,7 @@ public class Autoreply extends JcqAppAbstract implements ICQVer, IMsg, IRequest 
 	 */
 	public int startup() {
 		// 获取应用数据目录(无需储存数据时，请将此行注释)
+		instence = this;
 		appDirectory = CQ.getAppDirectory();
 		useCount = new UseCount();
 		fph = new fanpohai();
@@ -317,7 +319,7 @@ public class Autoreply extends JcqAppAbstract implements ICQVer, IMsg, IRequest 
 				}
 				try {
 					cqi.download(appDirectory + File.separator + "pohai/" + pohaituName,
-							"pohaitu" + Autoreply.random.nextInt() + ".png");
+							"pohaitu" + random.nextInt() + ".png");
 					try {
 						sendGroupMessage(fromGroup, fromQQ, "新图添加成功");
 					} catch (IOException e1) {
@@ -338,7 +340,7 @@ public class Autoreply extends JcqAppAbstract implements ICQVer, IMsg, IRequest 
 				String pohaituName = msg.substring(0, msg.indexOf("[CQ:image") - 2);
 				try {
 					cqi.download(appDirectory + File.separator + "setu/" + pohaituName,
-							"setu" + Autoreply.random.nextInt() + ".png");
+							"setu" + random.nextInt() + ".png");
 					try {
 						sendGroupMessage(fromGroup, fromQQ, "新图添加成功");
 					} catch (IOException e1) {
@@ -664,7 +666,7 @@ public class Autoreply extends JcqAppAbstract implements ICQVer, IMsg, IRequest 
 	}
 
 	public static void sendGroupMessage(long fromGroup, long fromQQ, String msg) throws IOException {
-		if (enable) {
+		if (instence.enable) {
 			// 处理词库中为特殊消息做的标记
 			Methods.setRandomPop();
 			if (msg.startsWith("red:")) {
@@ -674,17 +676,18 @@ public class Autoreply extends JcqAppAbstract implements ICQVer, IMsg, IRequest 
 			String[] stri = msg.split("\\:");
 			switch (stri[0]) {
 			case "image":
-				CQ.sendGroupMsg(fromGroup, stri[2].replace("--image--", CC.image(new File(appDirectory + stri[1]))));
+				CQ.sendGroupMsg(fromGroup,
+						stri[2].replace("--image--", instence.CC.image(new File(appDirectory + stri[1]))));
 				break;
 			case "atFromQQ":
-				CQ.sendGroupMsg(fromGroup, CC.at(fromQQ) + stri[1]);
+				CQ.sendGroupMsg(fromGroup, instence.CC.at(fromQQ) + stri[1]);
 				break;
 			case "atQQ":
-				CQ.sendGroupMsg(fromGroup, CC.at(Long.parseLong(stri[1])) + stri[2]);
+				CQ.sendGroupMsg(fromGroup, instence.CC.at(Long.parseLong(stri[1])) + stri[2]);
 				break;
 			case "imageFolder":
 				File[] files = (new File(appDirectory + stri[1])).listFiles();
-				CQ.sendGroupMsg(fromGroup, stri[2].replace("--image--", CC.image((File) Methods.rfa(files))));
+				CQ.sendGroupMsg(fromGroup, stri[2].replace("--image--", instence.CC.image((File) Methods.rfa(files))));
 				break;
 			default:
 				CQ.sendGroupMsg(fromGroup, msg);
@@ -695,16 +698,17 @@ public class Autoreply extends JcqAppAbstract implements ICQVer, IMsg, IRequest 
 
 	public static void sendPrivateMessage(long fromQQ, String msg) throws IOException {
 		Methods.setRandomPop();
-		if (enable) {
+		if (instence.enable) {
 			// 处理词库中为特殊消息做的标记
 			String[] stri = msg.split("\\:");
 			switch (stri[0]) {
 			case "image":
-				CQ.sendPrivateMsg(fromQQ, stri[2].replace("--image--", CC.image(new File(appDirectory + stri[1]))));
+				CQ.sendPrivateMsg(fromQQ,
+						stri[2].replace("--image--", instence.CC.image(new File(appDirectory + stri[1]))));
 				break;
 			case "imageFolder":
 				File[] files = (new File(appDirectory + stri[1])).listFiles();
-				CQ.sendPrivateMsg(fromQQ, stri[2].replace("--image--", CC.image((File) Methods.rfa(files))));
+				CQ.sendPrivateMsg(fromQQ, stri[2].replace("--image--", instence.CC.image((File) Methods.rfa(files))));
 				break;
 			default:
 				CQ.sendPrivateMsg(fromQQ, msg);

@@ -14,16 +14,16 @@ public class CQcodeManager {
 	// 分享音乐
 	private boolean checkMusic(long fromGroup, String msg) {
 		if (msg.startsWith("[CQ:music")) {
-			int i = Autoreply.random.nextInt(3);
+			int i = Autoreply.instence.random.nextInt(3);
 			switch (i) {
 			case 0:
-				Autoreply.sendMessage(fromGroup,0, Autoreply.CC.music(22636603, "163", false));
+				Autoreply.sendMessage(fromGroup, 0, Autoreply.instence.CC.music(22636603, "163", false));
 				break;
 			case 1:
-				Autoreply.sendMessage(fromGroup,0, Autoreply.CC.music(103744845, "qq", false));
+				Autoreply.sendMessage(fromGroup, 0, Autoreply.instence.CC.music(103744845, "qq", false));
 				break;
 			case 2:
-				Autoreply.sendMessage(fromGroup,0, Autoreply.CC.music(103744852, "qq", false));
+				Autoreply.sendMessage(fromGroup, 0, Autoreply.instence.CC.music(103744852, "qq", false));
 				break;
 			}
 			return true;
@@ -46,7 +46,7 @@ public class CQcodeManager {
 			// Autoreply.sendMessage(fromGroup,0,
 			// "标题:" + title + "\n链接:" + link + "\n封面图:" + picture + "\n描述:" +
 			// describe);
-			Autoreply.sendMessage(fromGroup,0, "封面图:" + picture);
+			Autoreply.sendMessage(fromGroup, 0, "封面图:" + picture);
 			return true;
 		}
 		return false;

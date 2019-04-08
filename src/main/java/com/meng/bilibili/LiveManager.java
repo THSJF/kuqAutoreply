@@ -92,7 +92,7 @@ public class LiveManager extends Thread {
 			Autoreply.sendMessage(859561731L, 0, "想看台混矫正器");
 			break;
 		case "最速":
-			Autoreply.sendMessage(855927922L, 0, Autoreply.CC.at(1012539034) + "今天，也是发气满满的一天");
+			Autoreply.sendMessage(855927922L, 0, Autoreply.instence.CC.at(1012539034) + "今天，也是发气满满的一天");
 			break;
 		default:
 			if (p.autoTip == true) {

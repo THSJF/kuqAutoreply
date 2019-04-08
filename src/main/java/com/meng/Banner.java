@@ -75,7 +75,7 @@ public class Banner {
 						Autoreply.CQ.setGroupBan(group, manager, sleepTime);
 						return true;
 					}
-					if (Autoreply.random.nextInt() % 2 == 0) {
+					if (Autoreply.instence.random.nextInt() % 2 == 0) {
 						Autoreply.CQ.setGroupBan(group, Long.parseLong(strings[1]), sleepTime);
 					} else {
 						if (manager == 1592608126L) {

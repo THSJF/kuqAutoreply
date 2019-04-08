@@ -34,7 +34,7 @@ public class Methods {
 	public static boolean checkSwitch(long fromGroup, String msg) {
 		if (msg.equals(".stop")) {
 			Autoreply.sendMessage(fromGroup, 0, "disabled");
-			Autoreply.enable = false;
+			Autoreply.instence.enable = false;
 			return true;
 		}
 		if (msg.equals(".livestop")) {
@@ -43,7 +43,7 @@ public class Methods {
 			return true;
 		}
 		if (msg.equals(".start")) {
-			Autoreply.enable = true;
+			Autoreply.instence.enable = true;
 			Autoreply.sendMessage(fromGroup, 0, "enabled");
 			return true;
 		}
@@ -93,8 +93,8 @@ public class Methods {
 			try {
 				File[] files = (new File(Autoreply.appDirectory + "pohai/" + msg.replace("迫害图", ""))).listFiles();
 				if (files.length > 0) {
-					Autoreply.sendMessage(fromGroup, fromQQ, Autoreply.CC.image((File) Methods.rfa(files)));
-					Autoreply.useCount.incPohaitu(fromQQ);
+					Autoreply.sendMessage(fromGroup, fromQQ, Autoreply.instence.CC.image((File) Methods.rfa(files)));
+					Autoreply.instence.useCount.incPohaitu(fromQQ);
 				}
 				return true;
 			} catch (IOException e) {
@@ -122,17 +122,17 @@ public class Methods {
 			File folder = (File) rfa(files);
 			File[] pics = folder.listFiles();
 			try {
-				Autoreply.sendMessage(fromGroup, fromQQ, Autoreply.CC.image((File) Methods.rfa(pics)));
+				Autoreply.sendMessage(fromGroup, fromQQ, Autoreply.instence.CC.image((File) Methods.rfa(pics)));
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
-			Autoreply.useCount.incSetu(fromQQ);
+			Autoreply.instence.useCount.incSetu(fromQQ);
 		} else if (msg.endsWith("色图")) {
 			try {
 				File[] files = (new File(Autoreply.appDirectory + "setu/" + msg.replace("色图", ""))).listFiles();
 				if (files.length > 0) {
-					Autoreply.sendMessage(fromGroup, fromQQ, Autoreply.CC.image((File) Methods.rfa(files)));
-					Autoreply.useCount.incSetu(fromQQ);
+					Autoreply.sendMessage(fromGroup, fromQQ, Autoreply.instence.CC.image((File) Methods.rfa(files)));
+					Autoreply.instence.useCount.incSetu(fromQQ);
 				}
 				return true;
 			} catch (IOException e) {
@@ -145,21 +145,23 @@ public class Methods {
 
 	// randomFromArray 随机返回数组中的一项
 	public static Object rfa(Object[] array) {
-		return array[Autoreply.random.nextInt(2147483647) % array.length];
+		return array[Autoreply.instence.random.nextInt(2147483647) % array.length];
 	}
 
 	// 有@的时候
 	public static boolean checkAt(long fromGroup, long fromQQ, String msg) {
-		if (Autoreply.CC.getAt(msg) == 1620628713L) {
+		if (Autoreply.instence.CC.getAt(msg) == 1620628713L) {
 			// 过滤特定的文字
 			// @消息发送者并复读内容
 			if (!msg.contains("蓝") && !msg.contains("藍") && !msg.contains("赠送")) {
-				Autoreply.sendMessage(fromGroup, 0, Autoreply.CC.at(fromQQ) + msg.substring(msg.indexOf(" ") + 1));
+				Autoreply.sendMessage(fromGroup, 0,
+						Autoreply.instence.CC.at(fromQQ) + msg.substring(msg.indexOf(" ") + 1));
 				return true;
 			}
 			if (msg.contains("野兽先辈") || msg.contains("仰望星空派") || msg.contains("英国") || msg.contains("鬼杀酒")
 					|| msg.contains("羊杂碎布丁") || msg.contains("昏睡红茶") || msg.contains("英式鳗鱼冻")) {
-				Autoreply.sendMessage(fromGroup, 0, Autoreply.CC.at(fromQQ) + msg.substring(msg.indexOf(" ") + 1));
+				Autoreply.sendMessage(fromGroup, 0,
+						Autoreply.instence.CC.at(fromQQ) + msg.substring(msg.indexOf(" ") + 1));
 				return true;
 			}
 			return true;
@@ -248,9 +250,9 @@ public class Methods {
 	// 窥屏检测
 	public static boolean checkLook(long fromGroup, String msg) {
 		if (msg.equals("有人吗") || msg.equalsIgnoreCase("testip") || msg.equalsIgnoreCase("窥屏检测")) {
-			int port = Autoreply.random.nextInt(5000);
-			Autoreply.sendMessage(fromGroup, 0, Autoreply.CC.share("http://123.207.65.93:" + (port + 4000), "窥屏检测",
-					"滴滴滴", "http://123.207.65.93:" + (port + 4000) + "/111.jpg"));
+			int port = Autoreply.instence.random.nextInt(5000);
+			Autoreply.sendMessage(fromGroup, 0, Autoreply.instence.CC.share("http://123.207.65.93:" + (port + 4000),
+					"窥屏检测", "滴滴滴", "http://123.207.65.93:" + (port + 4000) + "/111.jpg"));
 			final IPGetter ipGetter = new IPGetter(fromGroup, port);
 			ipGetter.start();
 			Timer timer = new Timer();
@@ -308,7 +310,7 @@ public class Methods {
 		if (fromGroup == 0) {
 			Autoreply.sendMessage(0, fromQQ, msg);
 		} else {
-			Autoreply.sendMessage(fromGroup, 0, Autoreply.CC.at(fromQQ) + msg);
+			Autoreply.sendMessage(fromGroup, 0, Autoreply.instence.CC.at(fromQQ) + msg);
 		}
 	}
 

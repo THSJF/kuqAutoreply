@@ -16,7 +16,7 @@ public class RepeaterBanner {
 	private int banCount = 6;
 	private String lastMessageRecieved = "";
 	private long groupNum = 0;
-	private int reverseFlag = Autoreply.random.nextInt(4);
+	private int reverseFlag = Autoreply.instence.random.nextInt(4);
 	private int banRecorderMode = 0;
 	private boolean lastStatus = false;
 	private FingerPrint thisFp;
@@ -34,24 +34,24 @@ public class RepeaterBanner {
 
 	public boolean check(long group, String msg, long QQ) throws Exception {
 		boolean b = false;
-		if (group == groupNum && (Autoreply.CC.getAt(msg) != 1620628713L) && (!msg.contains("禁言"))) {
-			 
-			 Member m=Autoreply.CQ.getGroupMemberInfo(group, QQ);
-			 if(m.getAuthority()==2||m.getAuthority()==3){
-				 if (msg.equalsIgnoreCase("ban0")) {
-						banRecorderMode = 0;
-						Autoreply.sendMessage(group, 0, "取消禁言复读机");
-					} else if (msg.equalsIgnoreCase("ban1")) {
-						banRecorderMode = 1;
-						Autoreply.sendMessage(group, 0, "复读轮盘");
-					} else if (msg.equalsIgnoreCase("ban2")) {
-						banRecorderMode = 2;
-						Autoreply.sendMessage(group, 0, "禁言所有复读机");
-					} else if (msg.equalsIgnoreCase("getban")) {
-						Autoreply.sendMessage(group, 0, "ban" + banRecorderMode);
-					}
-			 }
-			
+		if (group == groupNum && (Autoreply.instence.CC.getAt(msg) != 1620628713L) && (!msg.contains("禁言"))) {
+
+			Member m = Autoreply.CQ.getGroupMemberInfo(group, QQ);
+			if (m.getAuthority() == 2 || m.getAuthority() == 3) {
+				if (msg.equalsIgnoreCase("ban0")) {
+					banRecorderMode = 0;
+					Autoreply.sendMessage(group, 0, "取消禁言复读机");
+				} else if (msg.equalsIgnoreCase("ban1")) {
+					banRecorderMode = 1;
+					Autoreply.sendMessage(group, 0, "复读轮盘");
+				} else if (msg.equalsIgnoreCase("ban2")) {
+					banRecorderMode = 2;
+					Autoreply.sendMessage(group, 0, "禁言所有复读机");
+				} else if (msg.equalsIgnoreCase("getban")) {
+					Autoreply.sendMessage(group, 0, "ban" + banRecorderMode);
+				}
+			}
+
 			float simi = getPicSimilar(msg);// 当前消息中图片和上一条消息中图片相似度
 			switch (banRecorderMode) {
 			case 0:
@@ -59,8 +59,8 @@ public class RepeaterBanner {
 				break;
 			case 1:
 				if (lastMessageRecieved.equals(msg) || (isPicMsgRepeat(lastMessageRecieved, msg, simi))) { // 上一条消息和当前消息相同或两张图片相似度过高都是复读
-					if (Autoreply.random.nextInt() % banCount == 0) {
-						int time = Autoreply.random.nextInt(60) + 1;
+					if (Autoreply.instence.random.nextInt() % banCount == 0) {
+						int time = Autoreply.instence.random.nextInt(60) + 1;
 						Autoreply.CQ.setGroupBan(group, QQ, time);
 						banCount = 6;
 						Autoreply.sendMessage(0, QQ, "你从“群复读轮盘”中获得了" + time + "秒禁言套餐");
@@ -69,7 +69,7 @@ public class RepeaterBanner {
 				break;
 			case 2:
 				if (lastMessageRecieved.equals(msg) || (isPicMsgRepeat(lastMessageRecieved, msg, simi))) {
-					int time = Autoreply.random.nextInt(60) + 1;
+					int time = Autoreply.instence.random.nextInt(60) + 1;
 					Autoreply.CQ.setGroupBan(group, QQ, time);
 					Autoreply.sendMessage(0, QQ, "你因复读获得了" + time + "秒禁言套餐");
 				}
@@ -105,14 +105,14 @@ public class RepeaterBanner {
 	private boolean repeatEnd(long qq, String msg) {
 		boolean b;
 		b = false;
-		Autoreply.useCount.incRepeatBreaker(qq); 
+		Autoreply.instence.useCount.incRepeatBreaker(qq);
 		return b;
 	}
 
 	private boolean repeatRunning(long qq, String msg) {
 		boolean b;
 		b = false;
-		Autoreply.useCount.incFudu(qq);
+		Autoreply.instence.useCount.incFudu(qq);
 		banCount--;
 		return b;
 	}
@@ -121,7 +121,7 @@ public class RepeaterBanner {
 		boolean b;
 		banCount = 6;
 		Autoreply.sendMessage(0, 2856986197L, msg);
-		Autoreply.useCount.incFudujiguanjia(qq);
+		Autoreply.instence.useCount.incFudujiguanjia(qq);
 		b = true;
 		reply(group, qq, msg);
 		return b;
@@ -140,7 +140,7 @@ public class RepeaterBanner {
 	// 如果是图片复读
 	private void replyPic(long group, long qq, String msg) throws IOException {
 		if (!msg.contains(".gif")) {
-			String imgCode = Autoreply.CC.image(rePic(imgFile));
+			String imgCode = Autoreply.instence.CC.image(rePic(imgFile));
 			String ms = new StringBuilder(msg.replaceAll("\\[CQ.*\\]", "")).reverse().toString();
 			if (ms.indexOf("蓝") != -1 || ms.indexOf("藍") != -1) {
 				return;
@@ -204,7 +204,7 @@ public class RepeaterBanner {
 			}
 		}
 		reverseFlag++;
-		ImageIO.write(b2, "png", file);// 也可以使用png但体积太大
+		ImageIO.write(b2, "png", file);
 		return file;
 	}
 
@@ -212,7 +212,7 @@ public class RepeaterBanner {
 	private float getPicSimilar(String msg) {
 		CQImage cm = null;
 		try {
-			cm = Autoreply.CC.getCQImage(msg);
+			cm = Autoreply.instence.CC.getCQImage(msg);
 		} catch (NumberFormatException e) {
 		}
 		if (cm != null) {// 如果当前消息有图片则开始处理

@@ -21,7 +21,7 @@ public class BiliLinkInfo {
 		}
 		if (msg.toLowerCase().contains(videoUrl) || res.toLowerCase().contains(videoUrl)
 				|| msg.toLowerCase().contains(articleUrl) || res.toLowerCase().contains(articleUrl)) {// 判断是否为哔哩哔哩链接
-			Autoreply.useCount.incBilibiliLink(fromQQ);
+			Autoreply.instence.useCount.incBilibiliLink(fromQQ);
 			String avString = "";
 			String cvString = "";
 			Gson gson = new Gson();
