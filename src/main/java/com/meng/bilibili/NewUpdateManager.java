@@ -3,6 +3,7 @@ package com.meng.bilibili;
 import com.google.gson.Gson;
 import com.meng.Autoreply;
 import com.meng.Methods;
+import com.meng.config.BilibiliUser;
 import com.meng.config.ConfigManager;
 
 public class NewUpdateManager {
@@ -83,7 +84,7 @@ public class NewUpdateManager {
 	}
 
 	private boolean isUpper(String msg) {
-		for (BilibiliUserJavaBean.BilibiliUser cb : configManager.bilibiliUserJavaBean.mapBiliUser) {
+		for (BilibiliUser cb : configManager.configJavaBean.mapBiliUser) {
 			if (msg.contains(cb.name)) {
 				return true;
 			}
@@ -92,7 +93,7 @@ public class NewUpdateManager {
 	}
 
 	private int getUpId(String msg) {
-		for (BilibiliUserJavaBean.BilibiliUser cb : configManager.bilibiliUserJavaBean.mapBiliUser) {
+		for (BilibiliUser cb : configManager.configJavaBean.mapBiliUser) {
 			if (cb.bid == 0) {
 				continue;
 			}
@@ -104,7 +105,7 @@ public class NewUpdateManager {
 	}
 
 	private long getUpQQ(String msg) {
-		for (BilibiliUserJavaBean.BilibiliUser cb : configManager.bilibiliUserJavaBean.mapBiliUser) {
+		for (BilibiliUser cb : configManager.configJavaBean.mapBiliUser) {
 			if (cb.qq == 0) {
 				continue;
 			}

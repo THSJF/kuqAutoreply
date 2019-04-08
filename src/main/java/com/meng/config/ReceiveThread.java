@@ -4,10 +4,8 @@ import java.io.*;
 import java.net.Socket;
 
 import com.meng.Autoreply;
-import com.meng.bilibili.BilibiliUserJavaBean;
 
 public class ReceiveThread extends Thread {
-	// 和本线程相关的Socket
 	Socket socket = null;
 	ConfigManager configManager;
 
@@ -16,7 +14,6 @@ public class ReceiveThread extends Thread {
 		this.configManager = configManager;
 	}
 
-	// 线程执行的操作，响应客户端的请求
 	public void run() {
 		if (!configManager.allowEdit) {
 			return;
@@ -26,8 +23,8 @@ public class ReceiveThread extends Thread {
 		BufferedReader br = null;
 		try {
 			is = socket.getInputStream();
-			isr = new InputStreamReader(is); // 将字节流转化为字符流
-			br = new BufferedReader(isr); // 添加缓冲
+			isr = new InputStreamReader(is);
+			br = new BufferedReader(isr);
 			String info = "";
 
 			int bufferSize = 1024;
@@ -44,12 +41,12 @@ public class ReceiveThread extends Thread {
 
 			try {
 				String json = new String(Base64.decryptBASE64(info), "utf-8");
-				configManager.jsonPersonInfo = json;
-				configManager.bilibiliUserJavaBean = configManager.gson.fromJson(json, BilibiliUserJavaBean.class);
+				configManager.jsonBaseConfig = json;
+				configManager.configJavaBean = configManager.gson.fromJson(json, ConfigJavaBean.class);
 				try {
 					FileOutputStream fos = null;
 					OutputStreamWriter writer = null;
-					File file = new File(Autoreply.appDirectory + "configPersonInfo.json");
+					File file = new File(Autoreply.appDirectory + "config.json");
 					fos = new FileOutputStream(file);
 					writer = new OutputStreamWriter(fos, "utf-8");
 					writer.write(json);

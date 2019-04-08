@@ -2,7 +2,6 @@ package com.meng.config;
 
 import java.io.File;
 import java.io.FileOutputStream;
-import java.io.FileWriter;
 import java.io.IOException;
 import java.io.OutputStreamWriter;
 import java.util.ArrayList;
@@ -10,14 +9,10 @@ import java.util.ArrayList;
 import com.google.gson.Gson;
 import com.meng.Autoreply;
 import com.meng.Methods;
-import com.meng.bilibili.BilibiliUserJavaBean;
-import com.meng.bilibili.BilibiliUserJavaBean.BilibiliUser;
 
 public class ConfigManager {
 	public ConfigJavaBean configJavaBean = new ConfigJavaBean();
-	public BilibiliUserJavaBean bilibiliUserJavaBean = new BilibiliUserJavaBean();
 	public String jsonBaseConfig = "";
-	public String jsonPersonInfo = "";
 	public Gson gson = new Gson();
 	public SendManager sendManager;
 	public RecieveManager recieveManager;
@@ -32,23 +27,6 @@ public class ConfigManager {
 			}
 			jsonBaseConfig = Methods.readFileToString(Autoreply.appDirectory + "config.json");
 			configJavaBean = gson.fromJson(jsonBaseConfig, ConfigJavaBean.class);
-
-			File jsonPersonFile = new File(Autoreply.appDirectory + "configPersonInfo.json");
-			if (!jsonPersonFile.exists()) {
-				jsonPersonInfo = gson.toJson(bilibiliUserJavaBean);
-				try {
-					File file = new File(Autoreply.appDirectory + "configPersonInfo.json");
-					FileWriter fw = new FileWriter(file);
-					fw.write(jsonPersonInfo);
-					fw.flush();
-					fw.close();
-				} catch (IOException e) {
-					e.printStackTrace();
-				}
-			} else {
-				jsonPersonInfo = Methods.readFileToString(Autoreply.appDirectory + "configPersonInfo.json");
-				bilibiliUserJavaBean = gson.fromJson(jsonPersonInfo, BilibiliUserJavaBean.class);
-			}
 
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -69,7 +47,7 @@ public class ConfigManager {
 		if (msg.startsWith(".removegroupreply.")) {
 			long groupID = Long.parseLong(msg.replace(".removegroupreply.", ""));
 			for (int i = 0; i < configJavaBean.mapGroupReply.size(); i++) {
-				if (configJavaBean.mapGroupReply.get(i) == groupID) {
+				if (configJavaBean.mapGroupReply.get(i).groupNum == groupID) {
 					configJavaBean.mapGroupReply.remove(i);
 					break;
 				}
@@ -132,7 +110,7 @@ public class ConfigManager {
 
 	}
 
-	public ArrayList<Long> getMapGroupReply() {
+	public ArrayList<GroupReply> getMapGroupReply() {
 		return configJavaBean.mapGroupReply;
 	}
 
@@ -153,16 +131,17 @@ public class ConfigManager {
 	}
 
 	public ArrayList<BilibiliUser> getMapBiliUp() {
-		return bilibiliUserJavaBean.mapBiliUser;
+		return configJavaBean.mapBiliUser;
 	}
 
 	public void addGroupReply(Long groupNumber) {
-		for (long l : configJavaBean.mapGroupReply) {
-			if (l == groupNumber) {
+		for (GroupReply groupReply : configJavaBean.mapGroupReply) {
+			if (groupReply.groupNum == groupNumber) {
 				return;
 			}
 		}
-		configJavaBean.mapGroupReply.add(groupNumber);
+		GroupReply groupReply = new GroupReply();
+		configJavaBean.mapGroupReply.add(groupReply);
 	}
 
 	public void addQQNotReply(Long QQnumber) {

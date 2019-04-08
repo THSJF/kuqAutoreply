@@ -14,6 +14,7 @@ import com.meng.bilibili.LiveManager;
 import com.meng.bilibili.LivePerson;
 import com.meng.bilibili.NewUpdateManager;
 import com.meng.config.ConfigManager;
+import com.meng.config.GroupReply;
 import com.meng.groupChat.DicReplyGroup;
 import com.meng.groupChat.DicReplyManager;
 import com.meng.groupChat.RepeaterBanner;
@@ -260,9 +261,34 @@ public class Autoreply extends JcqAppAbstract implements ICQVer, IMsg, IRequest 
 				sendMessage(fromGroup, 0, "reload");
 				return MSG_IGNORE;
 			}
-
-			if (msg.equals("大膜法 膜神复诵")) {
-				new MoShenFuSong(fromGroup).start();
+			if (msg.contains("大膜法")) {
+				if (msg.equals("大膜法 膜神复诵")) {
+					new MoShenFuSong(fromGroup, new Random().nextInt(4)).start();
+					return MSG_IGNORE;
+				}
+				if (msg.equals("大膜法 膜神复诵 Easy")) {
+					new MoShenFuSong(fromGroup, 0).start();
+					return MSG_IGNORE;
+				}
+				if (msg.equals("大膜法 膜神复诵 Normal")) {
+					new MoShenFuSong(fromGroup, 1).start();
+					return MSG_IGNORE;
+				}
+				if (msg.equals("大膜法 膜神复诵 Hard")) {
+					new MoShenFuSong(fromGroup, 2).start();
+					return MSG_IGNORE;
+				}
+				if (msg.equals("大膜法 膜神复诵 Lunatic")) {
+					new MoShenFuSong(fromGroup, 3).start();
+					return MSG_IGNORE;
+				}
+				if (msg.equals("大膜法 c568连")) {
+					new MoShenFuSong(fromGroup, 4).start();
+					return MSG_IGNORE;
+				}
+			}
+			if (msg.equals("大芳法 芳神复诵")) {
+				new MoShenFuSong(fromGroup, 5).start();
 				return MSG_IGNORE;
 			}
 			String[] strings = msg.split("\\.");
@@ -328,17 +354,6 @@ public class Autoreply extends JcqAppAbstract implements ICQVer, IMsg, IRequest 
 				return MSG_IGNORE;
 			}
 		}
-
-		if (checkReplyTheGroup(fromGroup)) {
-			if (messageMap.get(fromQQ) == null) {
-				messageMap.put(fromQQ, new MessageSender(fromGroup, fromQQ, msg, System.currentTimeMillis()));
-			} // else if (System.currentTimeMillis() -
-				// messageMap.get(fromQQ).getTimeStamp() > 1000) {
-				// messageMap.put(fromQQ, new MessageSender(fromGroup, fromQQ,
-				// msg, System.currentTimeMillis()));
-				// }
-		}
-
 		if (msg.equalsIgnoreCase(".live")) {
 			StringBuilder sb = new StringBuilder("");
 			for (int i = 0; i < liveManager.getliveCount(); i++) {
@@ -349,6 +364,16 @@ public class Autoreply extends JcqAppAbstract implements ICQVer, IMsg, IRequest 
 			}
 			sendMessage(fromGroup, fromQQ, sb.toString().equals("") ? "居然没有飞机佬直播" : sb.toString());
 			return MSG_IGNORE;
+		}
+
+		if (checkReplyTheGroup(fromGroup)) {
+			if (messageMap.get(fromQQ) == null) {
+				messageMap.put(fromQQ, new MessageSender(fromGroup, fromQQ, msg, System.currentTimeMillis()));
+			} // else if (System.currentTimeMillis() -
+				// messageMap.get(fromQQ).getTimeStamp() > 1000) {
+				// messageMap.put(fromQQ, new MessageSender(fromGroup, fromQQ,
+				// msg, System.currentTimeMillis()));
+				// }
 		}
 
 		return MSG_IGNORE;
@@ -724,8 +749,8 @@ public class Autoreply extends JcqAppAbstract implements ICQVer, IMsg, IRequest 
 	}
 
 	private boolean checkReplyTheGroup(long fromGroup) {
-		for (Long group : configManager.configJavaBean.mapGroupReply) {// 遍历
-			if (fromGroup == group) {
+		for (GroupReply groupReply : configManager.configJavaBean.mapGroupReply) {
+			if (groupReply.groupNum == fromGroup && groupReply.reply) {
 				return true;
 			}
 		}
