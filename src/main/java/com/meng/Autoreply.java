@@ -73,7 +73,7 @@ public class Autoreply extends JcqAppAbstract implements ICQVer, IMsg, IRequest 
 	public NewUpdateManager updateManager;
 	public ConfigManager configManager;
 	private LiveManager liveManager;
-	private OcrManager ocrManager = new OcrManager();
+	//private OcrManager ocrManager = new OcrManager();
 
 	private HashMap<Long, MessageSender> messageMap = new HashMap<>();
 
@@ -737,7 +737,7 @@ public class Autoreply extends JcqAppAbstract implements ICQVer, IMsg, IRequest 
 
 	}
 
-	private void addGroupDic() {
+	public void addGroupDic() {
 		dicReplyManager = new DicReplyManager();
 		for (Long groupNumber : configManager.configJavaBean.mapGroupDicReply) {
 			dicReplyManager.addData(new DicReplyGroup(groupNumber, appDirectory + "dic" + groupNumber + ".json"));
@@ -868,8 +868,8 @@ public class Autoreply extends JcqAppAbstract implements ICQVer, IMsg, IRequest 
 				sendMessage(fromGroup, fromQQ, useCount.getTheFirst(fromQQ));
 				return true;
 			}
-			if (ocrManager.checkOcr(fromGroup, fromQQ, msg))
-				return true;
+		//	if (ocrManager.checkOcr(fromGroup, fromQQ, msg))
+		//		return true;
 			return false;
 		}
 	}

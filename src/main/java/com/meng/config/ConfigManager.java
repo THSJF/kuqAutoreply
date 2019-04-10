@@ -14,8 +14,8 @@ public class ConfigManager {
 	public ConfigJavaBean configJavaBean = new ConfigJavaBean();
 	public String jsonBaseConfig = "";
 	public Gson gson = new Gson();
-	public SendManager sendManager;
-	public RecieveManager recieveManager;
+	public SocketConfigManager socketConfigManager;
+	public SocketDicManager socketDicManager;
 	public boolean allowEdit = false;
 
 	public ConfigManager() {
@@ -31,10 +31,10 @@ public class ConfigManager {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		sendManager = new SendManager(this);
-		sendManager.start();
-		recieveManager = new RecieveManager(this);
-		recieveManager.start();
+		socketConfigManager = new SocketConfigManager(this);
+		socketConfigManager.start();
+		socketDicManager=new SocketDicManager(this);
+		socketDicManager.start();
 	}
 
 	public void checkSetConfig(long fromGroup, String msg) {

@@ -4,13 +4,13 @@ import java.net.InetAddress;
 import java.net.ServerSocket;
 import java.net.Socket;
 
-public class RecieveManager extends Thread {
+public class SocketDicManager extends Thread {
 
 	public boolean running = true; 
 
 	ConfigManager configManager;
 
-	public RecieveManager(ConfigManager configManager) {
+	public SocketDicManager(ConfigManager configManager) {
 		this.configManager = configManager;
 	}
 
@@ -25,15 +25,11 @@ public class RecieveManager extends Thread {
 
 	private void check() throws Exception {
 		try { 
-			ServerSocket serverSocket = new ServerSocket(9760);
-			Socket socket = null; 
-			System.out.println("***服务器即将启动，等待客户端的链接***"); 
+			ServerSocket serverSocket = new ServerSocket(9961);
+			System.out.println("***9961即将启动，等待客户端的链接***"); 
 			while (running) {
-				socket = serverSocket.accept();
-				ReceiveThread receiveThread = new ReceiveThread(configManager, socket);
+				SocketDicThread receiveThread = new SocketDicThread(configManager, serverSocket);
 				receiveThread.start();
-				InetAddress address = socket.getInetAddress();
-				System.out.println("当前客户端的IP ： " + address.getHostAddress()); 
 				sleep(10);
 			}
 			serverSocket.close();
