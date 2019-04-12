@@ -1,4 +1,4 @@
-package com.meng.config;
+package com.meng.config.javabeans;
 
 public class BilibiliUser {
 	public String name = "";

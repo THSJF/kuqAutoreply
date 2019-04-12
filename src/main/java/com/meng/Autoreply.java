@@ -14,7 +14,8 @@ import com.meng.bilibili.LiveManager;
 import com.meng.bilibili.LivePerson;
 import com.meng.bilibili.NewUpdateManager;
 import com.meng.config.ConfigManager;
-import com.meng.config.GroupReply;
+import com.meng.config.javabeans.GroupRepeater;
+import com.meng.config.javabeans.GroupReply;
 import com.meng.groupChat.DicReplyGroup;
 import com.meng.groupChat.DicReplyManager;
 import com.meng.groupChat.RepeaterBanner;
@@ -60,7 +61,7 @@ public class Autoreply extends JcqAppAbstract implements ICQVer, IMsg, IRequest 
 	public CQCodeCC CC = new CQCodeCC();
 	public UseCount useCount;
 	private Banner banner = new Banner();
-	private RepeaterManager recoderManager;
+	private RepeaterManager repeatManager;
 	private RollPlane rollPlane = new RollPlane();
 	private TimeTip timeTip = new TimeTip();
 	public BiliLinkInfo biliLinkInfo = new BiliLinkInfo();
@@ -73,7 +74,7 @@ public class Autoreply extends JcqAppAbstract implements ICQVer, IMsg, IRequest 
 	public NewUpdateManager updateManager;
 	public ConfigManager configManager;
 	private LiveManager liveManager;
-	//private OcrManager ocrManager = new OcrManager();
+	// private OcrManager ocrManager = new OcrManager();
 
 	private HashMap<Long, MessageSender> messageMap = new HashMap<>();
 
@@ -739,21 +740,21 @@ public class Autoreply extends JcqAppAbstract implements ICQVer, IMsg, IRequest 
 
 	public void addGroupDic() {
 		dicReplyManager = new DicReplyManager();
-		for (Long groupNumber : configManager.configJavaBean.mapGroupDicReply) {
+		for (Long groupNumber : configManager.configJavaBean.groupDicReply) {
 			dicReplyManager.addData(new DicReplyGroup(groupNumber, appDirectory + "dic" + groupNumber + ".json"));
 		}
 	}
 
 	private void addRepeater() {
-		recoderManager = new RepeaterManager();
-		for (String repeater : configManager.configJavaBean.mapGroupRepeater) {
-			String[] groupCfg = repeater.split("\\.");
-			recoderManager.addData(new RepeaterBanner(Long.parseLong(groupCfg[0]), Integer.parseInt(groupCfg[1])));
+		repeatManager = new RepeaterManager();
+		for (GroupRepeater repeater : configManager.getMapGroupRepeater()) {
+			RepeaterBanner repeaterBanner = new RepeaterBanner(repeater);
+			repeatManager.addData(repeaterBanner);
 		}
 	}
 
 	private boolean checkReplyTheGroup(long fromGroup) {
-		for (GroupReply groupReply : configManager.configJavaBean.mapGroupReply) {
+		for (GroupReply groupReply : configManager.configJavaBean.groupReply) {
 			if (groupReply.groupNum == fromGroup && groupReply.reply) {
 				return true;
 			}
@@ -762,12 +763,12 @@ public class Autoreply extends JcqAppAbstract implements ICQVer, IMsg, IRequest 
 	}
 
 	private boolean checkNotReply(long fromQQ, String msg) {
-		for (Long nrq : configManager.configJavaBean.mapQQNotReply) {
+		for (Long nrq : configManager.configJavaBean.QQNotReply) {
 			if (fromQQ == nrq) {
 				return true;
 			}
 		}
-		for (String nrw : configManager.configJavaBean.mapWordNotReply) {
+		for (String nrw : configManager.configJavaBean.wordNotReply) {
 			if (msg.contains(nrw)) {
 				return true;
 			}
@@ -819,6 +820,15 @@ public class Autoreply extends JcqAppAbstract implements ICQVer, IMsg, IRequest 
 			}
 			if (checkNotReply(fromQQ, msg))// 指定不回复的项目
 				return true;
+			if (msg.equalsIgnoreCase("loaddic")) {
+				addGroupDic();
+				try {
+					sendGroupMessage(fromGroup, fromQQ, "loaded");
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+				return true;
+			}
 			if (msg.equals("赞我")) {
 				for (int i = 0; i < 10; i++) {
 					CQ.sendLike(fromQQ);
@@ -856,7 +866,7 @@ public class Autoreply extends JcqAppAbstract implements ICQVer, IMsg, IRequest 
 				return true;
 			if (fph.check(fromQQ, fromGroup, msg))// 反迫害
 				return true;
-			if (recoderManager.check(fromGroup, fromQQ, msg))// 复读
+			if (repeatManager.check(fromGroup, fromQQ, msg))// 复读
 				return true;
 			if (dicReplyManager.check(fromGroup, fromQQ, msg))// 根据词库触发回答
 				return true;
@@ -868,8 +878,8 @@ public class Autoreply extends JcqAppAbstract implements ICQVer, IMsg, IRequest 
 				sendMessage(fromGroup, fromQQ, useCount.getTheFirst(fromQQ));
 				return true;
 			}
-		//	if (ocrManager.checkOcr(fromGroup, fromQQ, msg))
-		//		return true;
+			// if (ocrManager.checkOcr(fromGroup, fromQQ, msg))
+			// return true;
 			return false;
 		}
 	}

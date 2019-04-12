@@ -8,6 +8,7 @@ import java.util.Scanner;
 
 import com.meng.Autoreply;
 import com.meng.Methods;
+import com.meng.config.javabeans.ConfigJavaBean;
 
 public class SocketConfigThread extends Thread {
 	Socket socket = null;
