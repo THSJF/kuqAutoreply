@@ -1,29 +1,26 @@
 package com.meng.groupChat;
 
-import java.util.HashSet;
+import java.util.HashMap;
 
 public class RepeaterManager {
 
-	private HashSet<RepeaterBanner> repeaters = new HashSet<>();
+	private HashMap<Long, RepeaterBanner> repeaters = new HashMap<>();
 
 	public RepeaterManager() {
 
 	}
 
 	public void addData(RepeaterBanner r) {
-		repeaters.add(r);
-	} 
+		repeaters.put(r.groupNumber, r);
+	}
 
 	// 遍历集合查看是否需要复读
 	public boolean check(long group, long QQ, String msg) {
-		boolean b = false;
-		for (RepeaterBanner repeaterBanner : repeaters) {
-			try {
-				b = b | repeaterBanner.check(group, msg, QQ);
-			} catch (Exception e) {
-				return false;
-			}
+		RepeaterBanner repeaterBanner = repeaters.get(group);
+		if (repeaterBanner == null) {
+			repeaterBanner = new RepeaterBanner(group);
+			addData(repeaterBanner);
 		}
-		return b;
+		return repeaterBanner.check(group, msg, QQ);
 	}
 }

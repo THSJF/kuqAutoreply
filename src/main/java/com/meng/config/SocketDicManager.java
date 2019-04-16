@@ -1,8 +1,6 @@
 package com.meng.config;
 
-import java.net.InetAddress;
 import java.net.ServerSocket;
-import java.net.Socket;
 
 public class SocketDicManager extends Thread {
 

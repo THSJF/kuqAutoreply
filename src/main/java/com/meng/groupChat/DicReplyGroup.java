@@ -1,5 +1,6 @@
 package com.meng.groupChat;
 
+import java.io.File;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -18,44 +19,52 @@ public class DicReplyGroup {
 	private JsonObject obj;
 	@SuppressWarnings("rawtypes")
 	private Iterator it;
-	private long groupNum;
+	public long groupNum;
 	private String jsonString;
 	private HashMap<Integer, String> replyPool = new HashMap<Integer, String>();// 存放所有可能出现的回答
 
-	public DicReplyGroup(long group, String filePath) {
+	public DicReplyGroup(long group) {
 		groupNum = group;
 		parser = new JsonParser();
 		try {
-			jsonString = Methods.readFileToString(filePath);
+			File dicFile = new File(Autoreply.appDirectory + "dic" + group + ".json");
+			if (dicFile.exists()) {
+				jsonString = Methods.readFileToString(dicFile.getAbsolutePath());
+			} else {
+				jsonString = "{}";
+			}
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
 	}
 
 	@SuppressWarnings("rawtypes")
-	public boolean checkMsg(long group, long qq, String msg) throws IOException {
+	public boolean checkMsg(long group, long qq, String msg) {
 		if (group == groupNum) {
-			obj = parser.parse(jsonString).getAsJsonObject();// 谷歌的GSON对象
-			it = obj.entrySet().iterator();
-			while (it.hasNext()) {// 遍历集合
-				Entry entry = (Entry) it.next();
-				if (Pattern.matches(".*" + (String) entry.getKey() + ".*", msg.replace(" ", "").trim())) { // 使用了正则表达式查找要进行的回复
-					JsonArray array = (JsonArray) entry.getValue(); // 根据词库特点，一个key对应一个数组
-					int arraySize = array.size();
-					if (arraySize != 0) {
-						int k = 0;
-						for (; k < arraySize; k++) {
-							// 读取出来的数据是带有引号的
-							// 将引号去掉并将对象放入Hashmap中
-							replyPool.put(k, Methods.removeCharAtStartAndEnd(array.get(k).toString()));
+			try {
+				obj = parser.parse(jsonString).getAsJsonObject();// 谷歌的GSON对象
+				it = obj.entrySet().iterator();
+				while (it.hasNext()) {// 遍历集合
+					Entry entry = (Entry) it.next();
+					if (Pattern.matches(".*" + (String) entry.getKey() + ".*", msg.replace(" ", "").trim())) { // 使用了正则表达式查找要进行的回复
+						JsonArray array = (JsonArray) entry.getValue(); // 根据词库特点，一个key对应一个数组
+						int arraySize = array.size();
+						if (arraySize != 0) {
+							int k = 0;
+							for (; k < arraySize; k++) {
+								// 读取出来的数据是带有引号的
+								// 将引号去掉并将对象放入Hashmap中
+								replyPool.put(k, Methods.removeCharAtStartAndEnd(array.get(k).toString()));
+							}
+							// 从所有的回答中随机选择一个
+							Autoreply.sendMessage(group, qq,
+									replyPool.get(Autoreply.instence.random.nextInt(2147483647) % k));
+							replyPool.clear();
+							return true;
 						}
-						// 从所有的回答中随机选择一个
-						Autoreply.sendMessage(group, qq,
-								replyPool.get(Autoreply.instence.random.nextInt(2147483647) % k));
-						replyPool.clear();
-						return true;
 					}
 				}
+			} catch (Exception e) {
 			}
 		}
 		return false;

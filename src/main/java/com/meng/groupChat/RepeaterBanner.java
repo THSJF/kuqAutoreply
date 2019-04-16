@@ -4,13 +4,13 @@ import java.awt.Image;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
+
 import javax.imageio.ImageIO;
 
 import com.meng.Autoreply;
-import com.meng.config.javabeans.GroupRepeater;
+import com.meng.config.javabeans.GroupConfig;
 import com.meng.tools.FingerPrint;
 import com.sobte.cqp.jcq.entity.CQImage;
-import com.sobte.cqp.jcq.entity.Member;
 
 public class RepeaterBanner {
 	private int repeatCount = 0;
@@ -21,37 +21,24 @@ public class RepeaterBanner {
 	private FingerPrint thisFp;
 	private FingerPrint lastFp;
 	private File imgFile;
-	GroupRepeater groupRepeater;
+	public long groupNumber = 0;
 
-	public RepeaterBanner(GroupRepeater groupRepeater) {
-		this.groupRepeater = groupRepeater;
+	public RepeaterBanner(long groupNumber) {
+		this.groupNumber = groupNumber;
 	}
 
-	public boolean check(long group, String msg, long QQ) throws Exception {
-		if (!groupRepeater.reply)
+	public boolean check(long fromGroup, String msg, long fromQQ) {
+		GroupConfig groupConfig = Autoreply.instence.configManager.configHashMap.get(fromGroup);
+		if (groupConfig == null) {
 			return false;
+		}
 		boolean b = false;
-		if (group == groupRepeater.groupNumber && (Autoreply.instence.CC.getAt(msg) != 1620628713L)
-				&& (!msg.contains("禁言"))) {
-
-			Member m = Autoreply.CQ.getGroupMemberInfo(group, QQ);
-			if (m.getAuthority() == 2 || m.getAuthority() == 3) {
-				if (msg.equalsIgnoreCase("ban0")) {
-					groupRepeater.mode = 0;
-					Autoreply.sendMessage(group, 0, "取消禁言复读机");
-				} else if (msg.equalsIgnoreCase("ban1")) {
-					groupRepeater.mode = 1;
-					Autoreply.sendMessage(group, 0, "复读轮盘");
-				} else if (msg.equalsIgnoreCase("ban2")) {
-					groupRepeater.mode = 2;
-					Autoreply.sendMessage(group, 0, "禁言所有复读机");
-				} else if (msg.equalsIgnoreCase("getban")) {
-					Autoreply.sendMessage(group, 0, "ban" + groupRepeater.mode);
-				}
+		try {
+			if (Autoreply.instence.CC.getAt(msg) == 1620628713L || msg.contains("禁言") || fromGroup != groupNumber) {
+				return true;
 			}
-
 			float simi = getPicSimilar(msg);// 当前消息中图片和上一条消息中图片相似度
-			switch (groupRepeater.mode) {
+			switch (groupConfig.repeatMode) {
 			case 0:
 
 				break;
@@ -59,23 +46,25 @@ public class RepeaterBanner {
 				if (lastMessageRecieved.equals(msg) || (isPicMsgRepeat(lastMessageRecieved, msg, simi))) { // 上一条消息和当前消息相同或两张图片相似度过高都是复读
 					if (Autoreply.instence.random.nextInt() % banCount == 0) {
 						int time = Autoreply.instence.random.nextInt(60) + 1;
-						Autoreply.CQ.setGroupBan(group, QQ, time);
+						Autoreply.CQ.setGroupBan(fromGroup, fromQQ, time);
 						banCount = 6;
-						Autoreply.sendMessage(0, QQ, "你从“群复读轮盘”中获得了" + time + "秒禁言套餐");
+						Autoreply.sendMessage(0, fromQQ, "你从“群复读轮盘”中获得了" + time + "秒禁言套餐");
 					}
 				}
 				break;
 			case 2:
 				if (lastMessageRecieved.equals(msg) || (isPicMsgRepeat(lastMessageRecieved, msg, simi))) {
 					int time = Autoreply.instence.random.nextInt(60) + 1;
-					Autoreply.CQ.setGroupBan(group, QQ, time);
-					Autoreply.sendMessage(0, QQ, "你因复读获得了" + time + "秒禁言套餐");
+					Autoreply.CQ.setGroupBan(fromGroup, fromQQ, time);
+					Autoreply.sendMessage(0, fromQQ, "你因复读获得了" + time + "秒禁言套餐");
 				}
 				lastMessageRecieved = msg;
 				return true;
 			}
-			b = checkRepeatStatu(group, QQ, msg, simi);
+			b = checkRepeatStatu(fromGroup, fromQQ, msg, simi);
 			lastMessageRecieved = msg;
+		} catch (Exception e) {
+			e.printStackTrace();
 		}
 		return b;
 	}
@@ -83,16 +72,16 @@ public class RepeaterBanner {
 	// 复读状态
 	private boolean checkRepeatStatu(long group, long qq, String msg, float simi) throws IOException {
 		boolean b = false;
-		if (!lastStatus && (lastMessageRecieved.equals(msg) || (isPicMsgRepeat(lastMessageRecieved, msg, simi)))) {
+		if (!lastStatus && (lastMessageRecieved.equals(msg) || isPicMsgRepeat(lastMessageRecieved, msg, simi))) {
 			b = repeatStart(group, qq, msg);
 		}
-		if (lastStatus && (lastMessageRecieved.equals(msg) || (isPicMsgRepeat(lastMessageRecieved, msg, simi)))) {
+		if (lastStatus && (lastMessageRecieved.equals(msg) || isPicMsgRepeat(lastMessageRecieved, msg, simi))) {
 			b = repeatRunning(qq, msg);
 		}
-		if (lastStatus && !lastMessageRecieved.equals(msg) && !(isPicMsgRepeat(lastMessageRecieved, msg, simi))) {
+		if (lastStatus && !lastMessageRecieved.equals(msg) && !isPicMsgRepeat(lastMessageRecieved, msg, simi)) {
 			b = repeatEnd(qq, msg);
 		}
-		if (lastMessageRecieved.equals(msg) || (isPicMsgRepeat(lastMessageRecieved, msg, simi))) {
+		if (lastMessageRecieved.equals(msg) || isPicMsgRepeat(lastMessageRecieved, msg, simi)) {
 			lastStatus = true;
 		} else {
 			lastStatus = false;
@@ -208,34 +197,27 @@ public class RepeaterBanner {
 
 	// 图片相似度判断
 	private float getPicSimilar(String msg) {
-		CQImage cm = null;
 		try {
-			cm = Autoreply.instence.CC.getCQImage(msg);
-		} catch (NumberFormatException e) {
-		}
-		if (cm != null) {// 如果当前消息有图片则开始处理
-			try {
+			CQImage cm = Autoreply.instence.CC.getCQImage(msg); 
+			if (cm != null) {// 如果当前消息有图片则开始处理
 				File files = new File(Autoreply.appDirectory + "reverse\\");
 				if (!files.exists()) {
 					files.mkdirs();
 				}
 				imgFile = cm.download(Autoreply.appDirectory + "reverse\\" + System.currentTimeMillis() + "recr.jpg");
-			} catch (IOException e) {
-			}
-			if (thisFp != null) {
-				lastFp = thisFp;
-			}
-			try {
+				if (thisFp != null) {
+					lastFp = thisFp;
+				}
 				thisFp = new FingerPrint(ImageIO.read(imgFile));
-			} catch (IOException e) {
+				if (lastFp != null) {
+					return thisFp.compare(lastFp);
+				}
+			} else {// 如果当前消息没有图片则删除临时的图片文件防止跨消息图片复读
+				thisFp = null;
+				lastFp = null;
+				imgFile.delete();
 			}
-			if (lastFp != null) {
-				return thisFp.compare(lastFp);
-			}
-		} else {// 如果当前消息没有图片则删除临时的图片文件防止跨消息图片复读
-			thisFp = null;
-			lastFp = null;
-			imgFile.delete();
+		} catch (Exception e) {
 		}
 		return 0;
 	}

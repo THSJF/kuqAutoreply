@@ -14,9 +14,8 @@ import com.meng.Methods;
 
 public class DicReplyManager {
 
-	private HashMap<Integer, DicReplyGroup> groupMap = new HashMap<Integer, DicReplyGroup>();
+	private HashMap<Long, DicReplyGroup> groupMap = new HashMap<Long, DicReplyGroup>();
 	private HashMap<Integer, String> replyPool = new HashMap<Integer, String>();
-	private int mapFlag = 0;
 	private JsonParser parser;
 	private JsonObject obj;
 	private String jsonString;
@@ -37,8 +36,7 @@ public class DicReplyManager {
 	}
 
 	public void addData(DicReplyGroup drp) {
-		groupMap.put(mapFlag, drp);
-		mapFlag++;
+		groupMap.put(drp.groupNum, drp);
 	}
 
 	public boolean check(long group, long qq, String msg) {
@@ -53,14 +51,8 @@ public class DicReplyManager {
 			return true;
 		}
 		// 查找群专用词库（触发条件为匹配正则表达式）
-		for (int i = 0; i < mapFlag; i++) {
-			try {
-				b = b | groupMap.get(i).checkMsg(group, qq, msg);
-			} catch (IOException e) {
-				return false;
-			}
-		}
-		return b;
+
+		return groupMap.get(group).checkMsg(group, qq, msg);
 	}
 
 	@SuppressWarnings("rawtypes")

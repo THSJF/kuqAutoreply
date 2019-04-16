@@ -1,16 +1,13 @@
 package com.meng.groupChat;
 
-import java.io.BufferedReader;
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.IOException;
-import java.io.InputStreamReader;
 
 import javax.imageio.ImageIO;
 
 import com.meng.Autoreply;
 import com.meng.Methods;
-import com.meng.config.javabeans.BilibiliUser;
+import com.meng.config.javabeans.PersonInfo;
 import com.meng.tools.FingerPrint;
 import com.sobte.cqp.jcq.entity.CQImage;
 
@@ -70,7 +67,7 @@ public class fanpohai {
 			}
 			if (bpohai) {
 				String folder = "";
-				for (BilibiliUser bilibiliUser : Autoreply.instence.configManager.configJavaBean.personInfo) {
+				for (PersonInfo bilibiliUser : Autoreply.instence.configManager.configJavaBean.personInfo) {
 					if (fromQQ == bilibiliUser.qq) {
 						folder = Autoreply.appDirectory + "pohai/" + bilibiliUser.name + "/";
 						break;

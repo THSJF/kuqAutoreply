@@ -21,6 +21,7 @@ public class UseCount {
 	String repeatBreakerPropName = propFodlerName + "repeatBreaker.properties";
 	String searchPicturePropName = propFodlerName + "searchPicture.properties";
 	String bilibililinkPropName = propFodlerName + "bilibililink.properties";
+	String speakPropName = propFodlerName + "speak.properties";
 
 	public UseCount() {
 		File propFileFoder = new File(propFodlerName);
@@ -32,6 +33,7 @@ public class UseCount {
 		File propFileSearchPicture = new File(searchPicturePropName);
 		File propFileBilibiliLink = new File(bilibililinkPropName);
 		File propFileRepeatBreaker = new File(repeatBreakerPropName);
+		File propFileSpeak = new File(speakPropName);
 		try {
 			if (!propFileFoder.exists())
 				propFileFoder.mkdirs();
@@ -49,6 +51,8 @@ public class UseCount {
 				propFileBilibiliLink.createNewFile();
 			if (!propFileRepeatBreaker.exists())
 				propFileRepeatBreaker.createNewFile();
+			if (!propFileSpeak.exists())
+				propFileSpeak.createNewFile();
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
@@ -201,6 +205,27 @@ public class UseCount {
 		}
 	}
 
+	public boolean incSpeak(long qq) {
+		try {
+			Properties prop = new Properties();
+			InputStream in = new BufferedInputStream(new FileInputStream(speakPropName));
+			prop.load(in); /// 加载属性列表
+			in.close();
+			FileOutputStream oFile = new FileOutputStream(speakPropName, false);// false覆盖原本数据，true追加数据
+			if (prop.get("qq" + qq) != null) {
+				prop.setProperty("qq" + qq, (Integer.parseInt((String) prop.get("qq" + qq)) + 1) + "");
+			} else {
+				prop.setProperty("qq" + qq, 1 + "");
+			}
+			prop.store(oFile, "speak times");
+			oFile.close();
+			return true;
+		} catch (Exception e) {
+			e.printStackTrace();
+			return false;
+		}
+	}
+
 	public String getMyCount(long qq) {
 		int setu = 0;
 		int pohai = 0;
@@ -209,6 +234,7 @@ public class UseCount {
 		int repeatBreaker = 0;
 		int bilibili = 0;
 		int searchPic = 0;
+		int speak = 0;
 
 		Properties prop;
 		InputStream in;
@@ -285,8 +311,18 @@ public class UseCount {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-		return "你共复读" + fudu + "次,迫害" + pohai + "次,带领复读" + fudujiguanjia + "次,打断复读" + repeatBreaker + "次,要色图" + setu
-				+ "次,搜图" + searchPic + "次,发送哔哩哔哩链接" + bilibili + "次";
+		try {
+			prop = new Properties();
+			in = new BufferedInputStream(new FileInputStream(speakPropName));
+			prop.load(in);
+			in.close();
+			if (prop.get("qq" + qq) != null)
+				speak = Integer.parseInt((String) prop.get("qq" + qq));
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		return "你共水群" + speak + "句,复读" + fudu + "次,迫害" + pohai + "次,带领复读" + fudujiguanjia + "次,打断复读" + repeatBreaker
+				+ "次,要色图" + setu + "次,搜图" + searchPic + "次,发送哔哩哔哩链接" + bilibili + "次";
 
 	}
 
@@ -298,6 +334,7 @@ public class UseCount {
 		int repeatBreaker = 0;
 		int bilibili = 0;
 		int searchPic = 0;
+		int speak = 0;
 
 		Properties prop;
 		InputStream in;
@@ -306,6 +343,24 @@ public class UseCount {
 		int tmpi = 0;
 		String key = "";
 
+		try {
+			prop = new Properties();
+			in = new BufferedInputStream(new FileInputStream(speakPropName));
+			prop.load(in);
+			in.close();
+			Iterator<String> it = prop.stringPropertyNames().iterator();
+			while (it.hasNext()) {
+				key = it.next();
+				tmpi = Integer.parseInt((String) prop.getProperty(key));
+				if (tmpi > speak) {
+					speak = tmpi;
+					tmpPeople = key;
+				}
+			}
+			sb.append(tmpPeople + "共水群" + speak + "句\n");
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 		try {
 			prop = new Properties();
 			in = new BufferedInputStream(new FileInputStream(setuPropName));

@@ -1,6 +1,6 @@
 package com.meng.config.javabeans;
 
-public class BilibiliUser {
+public class PersonInfo {
 	public String name = "";
 	public long qq = 0;
 	public int bid = 0;

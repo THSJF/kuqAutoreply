@@ -4,7 +4,7 @@ import com.google.gson.Gson;
 import com.meng.Autoreply;
 import com.meng.Methods;
 import com.meng.config.ConfigManager;
-import com.meng.config.javabeans.BilibiliUser;
+import com.meng.config.javabeans.PersonInfo;
 
 public class NewUpdateManager {
 
@@ -57,7 +57,6 @@ public class NewUpdateManager {
 					tipVideo(fromGroup, msg, videoUpdateTime, vlist);
 				}
 			}
-
 			return true;
 		}
 		return false;
@@ -65,7 +64,7 @@ public class NewUpdateManager {
 
 	private void tipVideo(long fromGroup, String msg, long videoUpdateTime, NewVideoBean.Data.Vlist vlist) {
 		if (System.currentTimeMillis() - videoUpdateTime < 86400000) {
-			Autoreply.sendMessage(fromGroup, 0, "更新莉，，，https://www.bilibili.com/video/av" + vlist.aid);
+			Autoreply.sendMessage(fromGroup, 0, "更新莉,,,https://www.bilibili.com/video/av" + vlist.aid);
 		} else {
 			Autoreply.sendMessage(fromGroup, 0, Autoreply.instence.CC.at(getUpQQ(msg)) + Methods.rfa(words));
 			Autoreply.sendMessage(fromGroup, 0,
@@ -75,7 +74,7 @@ public class NewUpdateManager {
 
 	private void tipArticle(long fromGroup, String msg, long articalUpdateTime, NewArticleBean.Data.Articles articles) {
 		if (System.currentTimeMillis() - articalUpdateTime < 86400000) {
-			Autoreply.sendMessage(fromGroup, 0, "更新莉，，，https://www.bilibili.com/read/cv" + articles.id);
+			Autoreply.sendMessage(fromGroup, 0, "更新莉,,,https://www.bilibili.com/read/cv" + articles.id);
 		} else {
 			Autoreply.sendMessage(fromGroup, 0, Autoreply.instence.CC.at(getUpQQ(msg)) + Methods.rfa(words));
 			Autoreply.sendMessage(fromGroup, 0,
@@ -84,7 +83,7 @@ public class NewUpdateManager {
 	}
 
 	private boolean isUpper(String msg) {
-		for (BilibiliUser cb : configManager.configJavaBean.personInfo) {
+		for (PersonInfo cb : configManager.configJavaBean.personInfo) {
 			if (msg.contains(cb.name)) {
 				return true;
 			}
@@ -93,7 +92,7 @@ public class NewUpdateManager {
 	}
 
 	private int getUpId(String msg) {
-		for (BilibiliUser cb : configManager.configJavaBean.personInfo) {
+		for (PersonInfo cb : configManager.configJavaBean.personInfo) {
 			if (cb.bid == 0) {
 				continue;
 			}
@@ -105,7 +104,7 @@ public class NewUpdateManager {
 	}
 
 	private long getUpQQ(String msg) {
-		for (BilibiliUser cb : configManager.configJavaBean.personInfo) {
+		for (PersonInfo cb : configManager.configJavaBean.personInfo) {
 			if (cb.qq == 0) {
 				continue;
 			}

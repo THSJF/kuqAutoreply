@@ -5,7 +5,7 @@ import java.util.ArrayList;
 import com.meng.Autoreply;
 import com.meng.Methods;
 import com.meng.config.ConfigManager;
-import com.meng.config.javabeans.BilibiliUser;
+import com.meng.config.javabeans.PersonInfo;
 
 public class LiveManager extends Thread {
 
@@ -15,7 +15,7 @@ public class LiveManager extends Thread {
 	public static boolean liveStart = true;
 
 	public LiveManager(ConfigManager configManager) {
-		for (BilibiliUser cb : configManager.configJavaBean.personInfo) {
+		for (PersonInfo cb : configManager.configJavaBean.personInfo) {
 			if (cb.bliveRoom == 0) {
 				continue;
 			}

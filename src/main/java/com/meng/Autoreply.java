@@ -6,23 +6,18 @@ import java.util.HashMap;
 
 import javax.swing.JOptionPane;
 
-import org.json.JSONObject;
-
 import com.meng.barcode.BarcodeManager;
 import com.meng.bilibili.BiliLinkInfo;
 import com.meng.bilibili.LiveManager;
 import com.meng.bilibili.LivePerson;
 import com.meng.bilibili.NewUpdateManager;
 import com.meng.config.ConfigManager;
-import com.meng.config.javabeans.GroupRepeater;
-import com.meng.config.javabeans.GroupReply;
+import com.meng.config.javabeans.GroupConfig;
 import com.meng.groupChat.DicReplyGroup;
 import com.meng.groupChat.DicReplyManager;
 import com.meng.groupChat.RepeaterBanner;
 import com.meng.groupChat.RepeaterManager;
 import com.meng.groupChat.fanpohai;
-import com.meng.ocr.OcrManager;
-import com.meng.ocr.Youtu;
 import com.meng.searchPicture.PicSearchManager;
 import com.meng.tip.FileTipManager;
 import com.meng.tip.FileTipUploader;
@@ -68,7 +63,7 @@ public class Autoreply extends JcqAppAbstract implements ICQVer, IMsg, IRequest 
 	private FileTipManager fileTipManager;
 	private fanpohai fph;
 	public DicReplyManager dicReplyManager;
-	private CQcodeManager cQcodeManager = new CQcodeManager();
+	private CQCodeManager CQcodeManager = new CQCodeManager();
 	private PicSearchManager picSearchManager = new PicSearchManager();
 	private BarcodeManager barcodeManager = new BarcodeManager();
 	public NewUpdateManager updateManager;
@@ -240,7 +235,8 @@ public class Autoreply extends JcqAppAbstract implements ICQVer, IMsg, IRequest 
 		// 此方法为获取消息中所有的CQ图片数据，错误时打印异常到控制台，返回 已解析的数据
 
 		// 这里处理消息
-
+ 
+		useCount.incSpeak(fromQQ);
 		System.out.println(msg);
 		if (msg.startsWith(".config") && fromQQ == 2856986197L) {
 			msg = msg.replace(".config", "");
@@ -253,43 +249,12 @@ public class Autoreply extends JcqAppAbstract implements ICQVer, IMsg, IRequest 
 
 		if (fromQQ == 2856986197L || fromQQ == 1592608126L) {
 			// 手动更新设置，不再需要重启
-			if (msg.equalsIgnoreCase("editstart")) {
-				configManager.allowEdit = true;
-			}
-			if (msg.equalsIgnoreCase("editend")) {
-				configManager.allowEdit = false;
-			}
 			if (msg.equalsIgnoreCase("loadConfig")) {
 				loadConfig();
 				sendMessage(fromGroup, 0, "reload");
 				return MSG_IGNORE;
 			}
-			if (msg.contains("大膜法")) {
-				if (msg.equals("大膜法 膜神复诵")) {
-					new MoShenFuSong(fromGroup, new Random().nextInt(4)).start();
-					return MSG_IGNORE;
-				}
-				if (msg.equals("大膜法 膜神复诵 Easy")) {
-					new MoShenFuSong(fromGroup, 0).start();
-					return MSG_IGNORE;
-				}
-				if (msg.equals("大膜法 膜神复诵 Normal")) {
-					new MoShenFuSong(fromGroup, 1).start();
-					return MSG_IGNORE;
-				}
-				if (msg.equals("大膜法 膜神复诵 Hard")) {
-					new MoShenFuSong(fromGroup, 2).start();
-					return MSG_IGNORE;
-				}
-				if (msg.equals("大膜法 膜神复诵 Lunatic")) {
-					new MoShenFuSong(fromGroup, 3).start();
-					return MSG_IGNORE;
-				}
-				if (msg.equals("大膜法 c568连")) {
-					new MoShenFuSong(fromGroup, 4).start();
-					return MSG_IGNORE;
-				}
-			}
+
 			if (msg.equals("大芳法 芳神复诵")) {
 				new MoShenFuSong(fromGroup, 5).start();
 				return MSG_IGNORE;
@@ -356,17 +321,6 @@ public class Autoreply extends JcqAppAbstract implements ICQVer, IMsg, IRequest 
 				}
 				return MSG_IGNORE;
 			}
-		}
-		if (msg.equalsIgnoreCase(".live")) {
-			StringBuilder sb = new StringBuilder("");
-			for (int i = 0; i < liveManager.getliveCount(); i++) {
-				LivePerson lp = liveManager.getPerson(i);
-				if (lp.isLiving()) {
-					sb.append(lp.getName() + "正在直播" + lp.getLiveUrl()).append("\n");
-				}
-			}
-			sendMessage(fromGroup, fromQQ, sb.toString().equals("") ? "居然没有飞机佬直播" : sb.toString());
-			return MSG_IGNORE;
 		}
 
 		if (checkReplyTheGroup(fromGroup)) {
@@ -726,10 +680,8 @@ public class Autoreply extends JcqAppAbstract implements ICQVer, IMsg, IRequest 
 
 	private void loadConfig() {
 		configManager = new ConfigManager();
-		addGroupDic();
-		System.out.println("词库回复添加完成");
-		addRepeater();
-		System.out.println("复读机添加完成");
+		addGroupReply();
+		System.out.println("群组回复添加完成");
 		updateManager = new NewUpdateManager(configManager);
 		System.out.println("催更添加完成");
 		liveManager = new LiveManager(configManager);
@@ -740,26 +692,29 @@ public class Autoreply extends JcqAppAbstract implements ICQVer, IMsg, IRequest 
 
 	public void addGroupDic() {
 		dicReplyManager = new DicReplyManager();
-		for (Long groupNumber : configManager.configJavaBean.groupDicReply) {
-			dicReplyManager.addData(new DicReplyGroup(groupNumber, appDirectory + "dic" + groupNumber + ".json"));
+		for (GroupConfig groupConfig : configManager.configHashMap.values()) {
+			if (groupConfig.isDic()) {
+				dicReplyManager.addData(new DicReplyGroup(groupConfig.groupNumber));
+			}
 		}
 	}
 
-	private void addRepeater() {
+	private void addGroupReply() {
+		dicReplyManager = new DicReplyManager();
 		repeatManager = new RepeaterManager();
-		for (GroupRepeater repeater : configManager.getMapGroupRepeater()) {
-			RepeaterBanner repeaterBanner = new RepeaterBanner(repeater);
-			repeatManager.addData(repeaterBanner);
+		for (GroupConfig groupConfig : configManager.configHashMap.values()) {
+			if (groupConfig.isDic()) {
+				dicReplyManager.addData(new DicReplyGroup(groupConfig.groupNumber));
+			}
+			if (groupConfig.isRepeat()) {
+				repeatManager.addData(new RepeaterBanner(groupConfig.groupNumber));
+			}
 		}
 	}
 
 	private boolean checkReplyTheGroup(long fromGroup) {
-		for (GroupReply groupReply : configManager.configJavaBean.groupReply) {
-			if (groupReply.groupNum == fromGroup && groupReply.reply) {
-				return true;
-			}
-		}
-		return false;
+		GroupConfig groupConfig = configManager.configHashMap.get(fromGroup);
+		return groupConfig != null && groupConfig.reply;
 	}
 
 	private boolean checkNotReply(long fromQQ, String msg) {
@@ -814,12 +769,16 @@ public class Autoreply extends JcqAppAbstract implements ICQVer, IMsg, IRequest 
 		}
 
 		private boolean check() {
+			if (checkNotReply(fromQQ, msg))// 指定不回复的项目
+				return true;
+			GroupConfig groupConfig = configManager.configHashMap.get(fromGroup);
+			if (!groupConfig.reply) {
+				return true;
+			}
 			if (msg.equals("-help")) {
 				sendMessage(fromGroup, 0, Methods.helpMenu);
 				return true;
 			}
-			if (checkNotReply(fromQQ, msg))// 指定不回复的项目
-				return true;
 			if (msg.equalsIgnoreCase("loaddic")) {
 				addGroupDic();
 				try {
@@ -829,26 +788,67 @@ public class Autoreply extends JcqAppAbstract implements ICQVer, IMsg, IRequest 
 				}
 				return true;
 			}
-			if (msg.equals("赞我")) {
+			if (msg.equalsIgnoreCase(".live")) {
+				StringBuilder sb = new StringBuilder("");
+				for (int i = 0; i < liveManager.getliveCount(); i++) {
+					LivePerson lp = liveManager.getPerson(i);
+					if (lp.isLiving()) {
+						sb.append(lp.getName() + "正在直播" + lp.getLiveUrl()).append("\n");
+					}
+				}
+				sendMessage(fromGroup, fromQQ, sb.toString().equals("") ? "居然没有飞机佬直播" : sb.toString());
+				return true;
+			}
+			if (msg.contains("大膜法")) {
+				if (!groupConfig.isMoshenfusong()) {
+					return true;
+				}
+				if (msg.equals("大膜法 膜神复诵")) {
+					new MoShenFuSong(fromGroup, new Random().nextInt(4)).start();
+					return true;
+				}
+				if (msg.equals("大膜法 膜神复诵 Easy")) {
+					new MoShenFuSong(fromGroup, 0).start();
+					return true;
+				}
+				if (msg.equals("大膜法 膜神复诵 Normal")) {
+					new MoShenFuSong(fromGroup, 1).start();
+					return true;
+				}
+				if (msg.equals("大膜法 膜神复诵 Hard")) {
+					new MoShenFuSong(fromGroup, 2).start();
+					return true;
+				}
+				if (msg.equals("大膜法 膜神复诵 Lunatic")) {
+					new MoShenFuSong(fromGroup, 3).start();
+					return true;
+				}
+				if (msg.equals("大膜法 c568连")) {
+					new MoShenFuSong(fromGroup, 4).start();
+					return true;
+				}
+			}
+			if (groupConfig.isZan() && msg.equals("赞我")) {
 				for (int i = 0; i < 10; i++) {
 					CQ.sendLike(fromQQ);
 				}
 				sendMessage(fromGroup, 0, "完成");
 				return true;
 			}
-			if (Methods.isPohaitu(fromGroup, fromQQ, msg))
+			if (groupConfig.isPohai() && Methods.isPohaitu(fromGroup, fromQQ, msg))
 				return true;
-			if (Methods.isSetu(fromGroup, fromQQ, msg))
+			if (groupConfig.isSetu() && Methods.isSetu(fromGroup, fromQQ, msg))
 				return true;
-			if (barcodeManager.check(fromGroup, fromQQ, msg)) // 二维码
+			if (groupConfig.isBarcode() && barcodeManager.check(fromGroup, fromQQ, msg)) // 二维码
 				return true;
-			if (picSearchManager.check(fromGroup, fromQQ, msg))// 搜索图片
+			if (groupConfig.isSearchPic() && picSearchManager.check(fromGroup, fromQQ, msg))// 搜索图片
 				return true;
-			if (Methods.checkLook(fromGroup, msg))// 窥屏检测
+			if (groupConfig.isKuiping() && Methods.checkLook(fromGroup, msg))// 窥屏检测
 				return true;
-			if (biliLinkInfo.check(fromGroup, fromQQ, msg))// 比利比利链接详情
+			if (groupConfig.isBilibiliCheck() && biliLinkInfo.check(fromGroup, fromQQ, msg))// 比利比利链接详情
 				return true;
-			if (cQcodeManager.check(fromGroup, msg))// 特殊信息(签到 分享等)
+			if (groupConfig.isCqCode() && CQcodeManager.check(fromGroup, msg))// 特殊信息(签到
+																				// 分享等)
 				return true;
 			if (banner.checkBan(fromQQ, fromGroup, msg))// 禁言
 				return true;
@@ -856,19 +856,19 @@ public class Autoreply extends JcqAppAbstract implements ICQVer, IMsg, IRequest 
 				return true;
 			if (Methods.checkMeng2(fromGroup, msg))// 萌2
 				return true;
-			if (updateManager.check(fromGroup, msg))
+			if (groupConfig.isCuigeng() && updateManager.check(fromGroup, msg))
 				return true;
 			if (Methods.checkAt(fromGroup, fromQQ, msg))// @
 				return true;
 			if (timeTip.check(fromGroup, fromQQ))// 根据时间提醒
 				return true;
-			if (rollPlane.check(fromGroup, msg))// roll
+			if (groupConfig.isRoll() && rollPlane.check(fromGroup, msg))// roll
 				return true;
 			if (fph.check(fromQQ, fromGroup, msg))// 反迫害
 				return true;
-			if (repeatManager.check(fromGroup, fromQQ, msg))// 复读
+			if (groupConfig.isRepeat() && repeatManager.check(fromGroup, fromQQ, msg))// 复读
 				return true;
-			if (dicReplyManager.check(fromGroup, fromQQ, msg))// 根据词库触发回答
+			if (groupConfig.isDic() && dicReplyManager.check(fromGroup, fromQQ, msg))// 根据词库触发回答
 				return true;
 			if (msg.equals("查看统计")) {
 				sendMessage(fromGroup, fromQQ, useCount.getMyCount(fromQQ));

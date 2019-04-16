@@ -1,6 +1,6 @@
 package com.meng;
 
-public class CQcodeManager {
+public class CQCodeManager {
 
 	public boolean check(long fromGroup, String msg) {
 		if (checkMusic(fromGroup, msg)) {

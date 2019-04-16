@@ -4,41 +4,37 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStreamWriter;
-import java.util.ArrayList;
+import java.util.HashMap;
 
 import com.google.gson.Gson;
 import com.meng.Autoreply;
 import com.meng.Methods;
-import com.meng.config.javabeans.BilibiliUser;
 import com.meng.config.javabeans.ConfigJavaBean;
-import com.meng.config.javabeans.GroupRepeater;
-import com.meng.config.javabeans.GroupReply;
+import com.meng.config.javabeans.GroupConfig;
 
 public class ConfigManager {
 	public ConfigJavaBean configJavaBean = new ConfigJavaBean();
-	public String jsonBaseConfig = "";
 	public Gson gson = new Gson();
-	public SocketConfigManager socketConfigManager;
-	public SocketDicManager socketDicManager;
 	public boolean allowEdit = false;
+	public HashMap<Long, GroupConfig> configHashMap = new HashMap<>();
 
 	public ConfigManager() {
 		try {
-			File jsonBaseConfigFile = new File(Autoreply.appDirectory + "config.json");
+			File jsonBaseConfigFile = new File(Autoreply.appDirectory + "configV2.json");
 			if (!jsonBaseConfigFile.exists()) {
-				jsonBaseConfig = gson.toJson(configJavaBean);
+				configJavaBean.groupConfigs.add(new GroupConfig());
 				saveConfig();
 			}
-			jsonBaseConfig = Methods.readFileToString(Autoreply.appDirectory + "config.json");
-			configJavaBean = gson.fromJson(jsonBaseConfig, ConfigJavaBean.class);
-
+			configJavaBean = gson.fromJson(Methods.readFileToString(Autoreply.appDirectory + "configV2.json"),
+					ConfigJavaBean.class);
+			for (GroupConfig groupConfig : configJavaBean.groupConfigs) {
+				configHashMap.put(groupConfig.groupNumber, groupConfig);
+			}
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		socketConfigManager = new SocketConfigManager(this);
-		socketConfigManager.start();
-		socketDicManager = new SocketDicManager(this);
-		socketDicManager.start();
+		new SocketConfigManager(this).start();
+		new SocketDicManager(this).start();
 	}
 
 	public void checkSetConfig(long fromGroup, String msg) {
@@ -63,40 +59,6 @@ public class ConfigManager {
 
 	}
 
-	public ArrayList<GroupReply> getMapGroupReply() {
-		return configJavaBean.groupReply;
-	}
-
-	public ArrayList<Long> getMapQQNotReply() {
-		return configJavaBean.QQNotReply;
-	}
-
-	public ArrayList<String> getMapWordNotReply() {
-		return configJavaBean.wordNotReply;
-	}
-
-	public ArrayList<GroupRepeater> getMapGroupRepeater() {
-		return configJavaBean.groupRepeater;
-	}
-
-	public ArrayList<Long> getMapGroupDicReply() {
-		return configJavaBean.groupDicReply;
-	}
-
-	public ArrayList<BilibiliUser> getPersonInfo() {
-		return configJavaBean.personInfo;
-	}
-
-	public void addGroupReply(Long groupNumber) {
-		for (GroupReply groupReply : configJavaBean.groupReply) {
-			if (groupReply.groupNum == groupNumber) {
-				return;
-			}
-		}
-		GroupReply groupReply = new GroupReply();
-		configJavaBean.groupReply.add(groupReply);
-	}
-
 	public void addQQNotReply(Long QQnumber) {
 		for (long iterable_element : configJavaBean.QQNotReply) {
 			if (iterable_element == QQnumber) {
@@ -117,13 +79,12 @@ public class ConfigManager {
 
 	public void saveConfig() {
 		try {
-			jsonBaseConfig = gson.toJson(configJavaBean);
 			FileOutputStream fos = null;
 			OutputStreamWriter writer = null;
-			File file = new File(Autoreply.appDirectory + "config.json");
+			File file = new File(Autoreply.appDirectory + "configV2.json");
 			fos = new FileOutputStream(file);
 			writer = new OutputStreamWriter(fos, "utf-8");
-			writer.write(jsonBaseConfig);
+			writer.write(gson.toJson(configJavaBean));
 			writer.flush();
 			if (fos != null) {
 				fos.close();
