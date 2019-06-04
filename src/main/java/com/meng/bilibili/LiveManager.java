@@ -2,15 +2,16 @@ package com.meng.bilibili;
 
 import java.util.ArrayList;
 
+import com.google.gson.Gson;
 import com.meng.Autoreply;
 import com.meng.Methods;
+import com.meng.bilibili.spaceToLive.SpaceToLiveJavaBean;
 import com.meng.config.ConfigManager;
 import com.meng.config.javabeans.PersonInfo;
 
 public class LiveManager extends Thread {
 
 	private ArrayList<LivePerson> liveData = new ArrayList<>();
-	private final String liveString = "\"live_time\":\"0000-00-00 00:00:00\"";// 如果网页代码中包含这个字符串
 
 	public static boolean liveStart = true;
 
@@ -19,7 +20,7 @@ public class LiveManager extends Thread {
 			if (cb.bliveRoom == 0) {
 				continue;
 			}
-			liveData.add(new LivePerson(cb.name, "https://live.bilibili.com/" + cb.bliveRoom, false));
+			liveData.add(new LivePerson(cb.name, cb.bid, cb.bliveRoom, false));
 		}
 	}
 
@@ -30,8 +31,13 @@ public class LiveManager extends Thread {
 				if (liveStart) {
 					for (int i = 0; i < liveData.size(); i++) {
 						LivePerson lPerson = liveData.get(i);
-						String htmlData = Methods.getSourceCode(lPerson.getLiveUrl());
-						boolean living = !htmlData.contains(liveString);
+						SpaceToLiveJavaBean sjb = new Gson().fromJson(Methods.getSourceCode(
+								"https://api.live.bilibili.com/room/v1/Room/getRoomInfoOld?mid=" + lPerson.getUid()),
+								SpaceToLiveJavaBean.class);
+						boolean living = sjb.data.liveStatus == 1;
+						if (lPerson.liveUrl == "") {
+							lPerson.liveUrl = sjb.data.url;
+						}
 						lPerson.setLiving(living);
 						if (lPerson.getFlag() != 0) {
 							if (living && lPerson.isNeedStartTip()) {
@@ -87,26 +93,37 @@ public class LiveManager extends Thread {
 	}
 
 	private void tipStart(LivePerson p) {
+
 		switch (p.getName()) {
 		case "台长":
 			Autoreply.sendMessage(859561731L, 0, "想看台混矫正器");
 			break;
-		case "最速":
-			Autoreply.sendMessage(855927922L, 0, Autoreply.instence.CC.at(1012539034) + "今天，也是发气满满的一天");
-			break;
-		default:
+		}
+		try {
 			if (p.autoTip == true) {
-				Autoreply.sendMessage(859561731L, 0, p.getLiveUrl() + "直播开始");
+				Autoreply.instence.naiManager.sendDanmaku(p.roomId, Autoreply.instence.naiManager.cookieSunny, "发发发");
+				Autoreply.instence.naiManager.sendDanmaku(p.roomId, Autoreply.instence.naiManager.cookieLuna, "发发发");
+				Autoreply.instence.naiManager.sendDanmaku(p.roomId, Autoreply.instence.naiManager.cookieStar, "发发发");
 			}
-			break;
+		} catch (Exception e) {
+			e.printStackTrace();
 		}
 	}
 
 	private void tipFinish(LivePerson p) {
 		switch (p.getName()) {
-		default:
-
+		case "台长":
+			Autoreply.sendMessage(859561731L, 0, "呜呜呜");
 			break;
+		}
+		try {
+			if (p.autoTip == true) {
+				Autoreply.instence.naiManager.sendDanmaku(p.roomId, Autoreply.instence.naiManager.cookieSunny, "呜呜呜");
+				Autoreply.instence.naiManager.sendDanmaku(p.roomId, Autoreply.instence.naiManager.cookieLuna, "呜呜呜");
+				Autoreply.instence.naiManager.sendDanmaku(p.roomId, Autoreply.instence.naiManager.cookieStar, "呜呜呜");
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
 		}
 	}
 

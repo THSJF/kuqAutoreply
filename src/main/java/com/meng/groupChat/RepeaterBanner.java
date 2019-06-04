@@ -2,11 +2,17 @@ package com.meng.groupChat;
 
 import java.awt.Image;
 import java.awt.image.BufferedImage;
+import java.io.ByteArrayOutputStream;
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.IOException;
 
 import javax.imageio.ImageIO;
 
+import com.madgag.gif.fmsware.AnimatedGifEncoder;
+import com.madgag.gif.fmsware.GifDecoder;
 import com.meng.Autoreply;
 import com.meng.config.javabeans.GroupConfig;
 import com.meng.tools.FingerPrint;
@@ -28,7 +34,7 @@ public class RepeaterBanner {
 	}
 
 	public boolean check(long fromGroup, String msg, long fromQQ) {
-		GroupConfig groupConfig = Autoreply.instence.configManager.configHashMap.get(fromGroup);
+		GroupConfig groupConfig = Autoreply.instence.configManager.getGroupConfig(fromGroup);
 		if (groupConfig == null) {
 			return false;
 		}
@@ -107,7 +113,6 @@ public class RepeaterBanner {
 	private boolean repeatStart(long group, long qq, String msg) throws IOException {
 		boolean b;
 		banCount = 6;
-		Autoreply.sendMessage(0, 2856986197L, msg);
 		Autoreply.instence.useCount.incFudujiguanjia(qq);
 		b = true;
 		reply(group, qq, msg);
@@ -126,17 +131,20 @@ public class RepeaterBanner {
 
 	// 如果是图片复读
 	private void replyPic(long group, long qq, String msg) throws IOException {
-		if (!msg.contains(".gif")) {
-			String imgCode = Autoreply.instence.CC.image(rePic(imgFile));
-			String ms = new StringBuilder(msg.replaceAll("\\[CQ.*\\]", "")).reverse().toString();
-			if (ms.indexOf("蓝") != -1 || ms.indexOf("藍") != -1) {
-				return;
-			}
-			Autoreply.sendMessage(group, 0, msg.startsWith("[") ? ms + imgCode : imgCode + ms);
-			repeatCount = repeatCount > 2 ? 0 : repeatCount + 1;
-		} else {
-			Autoreply.sendMessage(group, 0, msg);
+		String ms = new StringBuilder(msg.replaceAll("\\[CQ.*\\]", "")).reverse().toString();
+		if (ms.indexOf("蓝") != -1 || ms.indexOf("藍") != -1) {
+			return;
 		}
+		if (imgFile.getName().contains(".gif")) {
+			String imgCode = Autoreply.instence.CC.image(reverseGIF(imgFile));
+			Autoreply.sendMessage(group, 0, msg.startsWith("[") ? ms + imgCode : imgCode + ms);
+			// Autoreply.sendMessage(group, 0, msg);
+		} else {
+			String imgCode = Autoreply.instence.CC.image(rePic(imgFile));
+			Autoreply.sendMessage(group, 0, msg.startsWith("[") ? ms + imgCode : imgCode + ms);
+		}
+		repeatCount = repeatCount > 2 ? 0 : repeatCount + 1;
+		reverseFlag++;
 	}
 
 	// 如果是文本复读
@@ -159,10 +167,6 @@ public class RepeaterBanner {
 
 	// 反转图片
 	private File rePic(File file) throws IOException {
-		if (reverseFlag == 0) {
-			reverseFlag++;
-			return file;
-		}
 		Image im = ImageIO.read(file);
 		int w = im.getWidth(null);
 		int h = im.getHeight(null);
@@ -171,40 +175,208 @@ public class RepeaterBanner {
 		BufferedImage b2 = new BufferedImage(im.getWidth(null), im.getHeight(null), BufferedImage.TYPE_INT_RGB);
 		b2.getGraphics().drawImage(im.getScaledInstance(w, h, Image.SCALE_SMOOTH), 0, 0, null);
 
+		switch (reverseFlag % 4) {
+		case 0:
+			for (int y = 0; y < h; y++) {
+				for (int x = 0; x < w; x++) {
+					b2.setRGB(w - 1 - x, y, b.getRGB(x, y));// 镜之国
+				}
+			}
+			break;
+		case 1:
+			for (int y = 0; y < h; y++) {
+				for (int x = 0; x < w; x++) {
+					b2.setRGB(x, h - 1 - y, b.getRGB(x, y));// 天地
+				}
+			}
+			break;
+		case 2:
+			int halfH = h / 2;
+			for (int y = 0; y < h; y++) {
+				for (int x = 0; x < w; x++) {
+					b2.setRGB(x, y < halfH ? y + halfH : y - halfH, b.getRGB(x, y));// 天壤梦弓
+				}
+			}
+			break;
+		case 3:
+			for (int y = 0; y < h; y++) {
+				for (int x = 0; x < w; x++) {
+					b2.setRGB(w - 1 - x, h - 1 - y, b.getRGB(x, y));// Reverse_Hierarchy
+				}
+			}
+			break;
+		}
+		ImageIO.write(b2, "png", file);
+		return file;
+	}
+
+	public File reverseGIF(File gifFile) throws FileNotFoundException {
+		GifDecoder gifDecoder = new GifDecoder();
+		FileInputStream fis = new FileInputStream(gifFile);
+		gifDecoder.read(fis);
+		ByteArrayOutputStream baos = new ByteArrayOutputStream();
+		AnimatedGifEncoder localAnimatedGifEncoder = new AnimatedGifEncoder();
+		localAnimatedGifEncoder.start(baos);// start
+		localAnimatedGifEncoder.setRepeat(0);// 设置生成gif的开始播放时间。0为立即开始播放
+		BufferedImage bImage = gifDecoder.getFrame(0);
+		float fa = (float) bImage.getHeight() / (gifDecoder.getFrameCount());
+		switch (reverseFlag % 4) {
+		case 0:// 镜之国
+			for (int i = 0; i < gifDecoder.getFrameCount(); i++) {
+				localAnimatedGifEncoder.setDelay(gifDecoder.getDelay(i));
+				localAnimatedGifEncoder.addFrame(spell1(gifDecoder.getFrame(i), bImage));
+			}
+			break;
+		case 1:// 天地
+			for (int i = 0; i < gifDecoder.getFrameCount(); i++) {
+				localAnimatedGifEncoder.setDelay(gifDecoder.getDelay(i));
+				localAnimatedGifEncoder.addFrame(spell2(gifDecoder.getFrame(i), bImage));
+			}
+			break;
+		case 2:// 天壤梦弓
+			for (int i = 0; i < gifDecoder.getFrameCount(); i++) {
+				localAnimatedGifEncoder.setDelay(gifDecoder.getDelay(i));
+				localAnimatedGifEncoder.addFrame(
+						spell3(gifDecoder.getFrame(i), (int) (fa * (gifDecoder.getFrameCount() - i)), bImage));
+			}
+			break;
+		case 3:// Reverse Hierarchy
+			for (int i = 0; i < gifDecoder.getFrameCount(); i++) {
+				localAnimatedGifEncoder.setDelay(gifDecoder.getDelay(i));
+				localAnimatedGifEncoder.addFrame(spell4(gifDecoder.getFrame(i), bImage));
+			}
+			break;
+		}
+
+		localAnimatedGifEncoder.finish();
+		try {
+			FileOutputStream fos = new FileOutputStream(gifFile);
+			baos.writeTo(fos);
+			baos.flush();
+			fos.flush();
+			baos.close();
+			fos.close();
+		} catch (Exception e) {
+		}
+		return gifFile;
+	}
+
+	public BufferedImage spell1(BufferedImage current, BufferedImage cache) {
+		int w = current.getWidth(null);
+		int h = current.getHeight(null);
+		BufferedImage bmp = new BufferedImage(w, h, BufferedImage.TYPE_INT_RGB);
+		bmp.getGraphics().drawImage(cache.getScaledInstance(w, h, Image.SCALE_SMOOTH), 0, 0, null);
 		for (int y = 0; y < h; y++) {
 			for (int x = 0; x < w; x++) {
-				int rgb = b.getRGB(x, y);
-				switch (reverseFlag % 4) {
-				case 0:
-
-					break;
-				case 1:
-					b2.setRGB(w - 1 - x, y, rgb);// 左右
-					break;
-				case 2:
-					b2.setRGB(x, h - 1 - y, rgb);// 上下
-					break;
-				case 3:
-					b2.setRGB(w - 1 - x, h - 1 - y, rgb);// 旋转
-					break;
+				int i = current.getRGB(x, y);
+				if (i != 0) {
+					bmp.setRGB(w - 1 - x, y, i);// 镜之国
 				}
 			}
 		}
-		reverseFlag++;
-		ImageIO.write(b2, "png", file);
-		return file;
+		cache.getGraphics().drawImage(bmp.getScaledInstance(w, h, Image.SCALE_SMOOTH), 0, 0, null);
+		return bmp;
+	}
+
+	public BufferedImage spell2(BufferedImage current, BufferedImage cache) {
+		int w = current.getWidth(null);
+		int h = current.getHeight(null);
+		BufferedImage bmp = new BufferedImage(w, h, BufferedImage.TYPE_INT_RGB);
+		bmp.getGraphics().drawImage(cache.getScaledInstance(w, h, Image.SCALE_SMOOTH), 0, 0, null);
+		for (int y = 0; y < h; y++) {
+			for (int x = 0; x < w; x++) {
+				int i = current.getRGB(x, y);
+				if (i != 0) {
+					bmp.setRGB(x, h - 1 - y, i);// 天地
+				}
+			}
+		}
+		cache.getGraphics().drawImage(bmp.getScaledInstance(w, h, Image.SCALE_SMOOTH), 0, 0, null);
+		return bmp;
+	}
+
+	public BufferedImage spell3(BufferedImage current, int px, BufferedImage cache) {
+		int w = current.getWidth(null);
+		int h = current.getHeight(null);
+		BufferedImage bmp = new BufferedImage(w, h, BufferedImage.TYPE_INT_RGB);
+		bmp.getGraphics().drawImage(spell3_at1(cache, px).getScaledInstance(w, h, Image.SCALE_SMOOTH), 0, 0, null);
+		for (int y = 0; y < h; y++) {// 天壤梦弓
+			for (int x = 0; x < w; x++) {
+				int i = current.getRGB(x, y);
+				if (i != 0) {
+					if (y < h - px) {
+						bmp.setRGB(x, y + px, current.getRGB(x, y));
+					} else {
+						bmp.setRGB(x, y - (h - px), current.getRGB(x, y));
+					}
+				}
+			}
+		}
+		cache.getGraphics().drawImage(spell3_at1(bmp, -px).getScaledInstance(w, h, Image.SCALE_SMOOTH), 0, 0, null);
+		return bmp;
+	}
+
+	public BufferedImage spell3_at1(BufferedImage cache, int px) {
+		int w = cache.getWidth(null);
+		int h = cache.getHeight(null);
+		BufferedImage bmp = new BufferedImage(w, h, BufferedImage.TYPE_INT_RGB);
+		if (px > 0) {
+			for (int y = 0; y < h; y++) {
+				for (int x = 0; x < w; x++) {
+					if (y < h - px) {
+						bmp.setRGB(x, y + px, cache.getRGB(x, y));
+					} else {
+						bmp.setRGB(x, y - (h - px), cache.getRGB(x, y));
+					}
+				}
+			}
+		} else {
+			for (int y = 0; y < h; y++) {
+				for (int x = 0; x < w; x++) {
+					if (y >= -px) {
+						bmp.setRGB(x, y + px, cache.getRGB(x, y));
+					} else {
+						bmp.setRGB(x, y + h + px, cache.getRGB(x, y));
+					}
+				}
+			}
+		}
+		return bmp;
+	}
+
+	public BufferedImage spell4(BufferedImage current, BufferedImage cache) {
+		int w = current.getWidth(null);
+		int h = current.getHeight(null);
+		BufferedImage bmp = new BufferedImage(w, h, BufferedImage.TYPE_INT_RGB);
+		bmp.getGraphics().drawImage(cache.getScaledInstance(w, h, Image.SCALE_SMOOTH), 0, 0, null);
+		for (int y = 0; y < h; y++) {
+			for (int x = 0; x < w; x++) {
+				int i = current.getRGB(x, y);
+				if (i != 0) {
+					bmp.setRGB(w - 1 - x, h - 1 - y, current.getRGB(x, y));// Reverse_Hierarchy
+				}
+			}
+		}
+		cache.getGraphics().drawImage(bmp.getScaledInstance(w, h, Image.SCALE_SMOOTH), 0, 0, null);
+		return bmp;
 	}
 
 	// 图片相似度判断
 	private float getPicSimilar(String msg) {
 		try {
-			CQImage cm = Autoreply.instence.CC.getCQImage(msg); 
+			CQImage cm = Autoreply.instence.CC.getCQImage(msg);
 			if (cm != null) {// 如果当前消息有图片则开始处理
 				File files = new File(Autoreply.appDirectory + "reverse\\");
 				if (!files.exists()) {
 					files.mkdirs();
 				}
-				imgFile = cm.download(Autoreply.appDirectory + "reverse\\" + System.currentTimeMillis() + "recr.jpg");
+				if (msg.contains(".gif")) {
+					imgFile = cm
+							.download(Autoreply.appDirectory + "reverse\\" + System.currentTimeMillis() + "recr.gif");
+				} else {
+					imgFile = cm
+							.download(Autoreply.appDirectory + "reverse\\" + System.currentTimeMillis() + "recr.jpg");
+				}
 				if (thisFp != null) {
 					lastFp = thisFp;
 				}

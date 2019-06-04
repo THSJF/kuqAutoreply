@@ -18,66 +18,40 @@ public class MoShenFuSong extends Thread {
 		switch (flag) {
 		case 0:
 			try {
-				Autoreply.CQ.sendGroupMsg(fromGroup, Autoreply.instence.CC.image((File) Methods.rfa(files)));
-				sleep(2000);
-				Autoreply.CQ.sendGroupMsg(fromGroup, Autoreply.instence.CC.image((File) Methods.rfa(files)));
-				sleep(2000);
-				Autoreply.CQ.sendGroupMsg(fromGroup, Autoreply.instence.CC.image((File) Methods.rfa(files)));
-				sleep(2000);
-				Autoreply.CQ.sendGroupMsg(fromGroup, Autoreply.instence.CC.image((File) Methods.rfa(files)));
+				for (int i = 0; i < 4; ++i) {
+					Autoreply.CQ.sendGroupMsg(fromGroup, Autoreply.instence.CC.image((File) Methods.rfa(files)));
+					sleep(2000);
+				}
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
 			break;
 		case 1:
 			try {
-				Autoreply.CQ.sendGroupMsg(fromGroup, Autoreply.instence.CC.image((File) Methods.rfa(files)));
-				sleep(1000);
-				Autoreply.CQ.sendGroupMsg(fromGroup, Autoreply.instence.CC.image((File) Methods.rfa(files)));
-				sleep(1000);
-				Autoreply.CQ.sendGroupMsg(fromGroup, Autoreply.instence.CC.image((File) Methods.rfa(files)));
-				sleep(1000);
-				Autoreply.CQ.sendGroupMsg(fromGroup, Autoreply.instence.CC.image((File) Methods.rfa(files)));
-				sleep(1000);
-				Autoreply.CQ.sendGroupMsg(fromGroup, Autoreply.instence.CC.image((File) Methods.rfa(files)));
+				for (int i = 0; i < 5; ++i) {
+					Autoreply.CQ.sendGroupMsg(fromGroup, Autoreply.instence.CC.image((File) Methods.rfa(files)));
+					sleep(1000);
+				}
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
 			break;
 		case 2:
 			try {
-				Autoreply.CQ.sendGroupMsg(fromGroup, Autoreply.instence.CC.image((File) Methods.rfa(files)));
-				sleep(500);
-				Autoreply.CQ.sendGroupMsg(fromGroup, Autoreply.instence.CC.image((File) Methods.rfa(files)));
-				sleep(500);
-				Autoreply.CQ.sendGroupMsg(fromGroup, Autoreply.instence.CC.image((File) Methods.rfa(files)));
-				sleep(500);
-				Autoreply.CQ.sendGroupMsg(fromGroup, Autoreply.instence.CC.image((File) Methods.rfa(files)));
-				sleep(500);
-				Autoreply.CQ.sendGroupMsg(fromGroup, Autoreply.instence.CC.image((File) Methods.rfa(files)));
-				sleep(500);
-				Autoreply.CQ.sendGroupMsg(fromGroup, Autoreply.instence.CC.image((File) Methods.rfa(files)));
+				for (int i = 0; i < 6; ++i) {
+					Autoreply.CQ.sendGroupMsg(fromGroup, Autoreply.instence.CC.image((File) Methods.rfa(files)));
+					sleep(500);
+				}
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
 			break;
 		case 3:
 			try {
-				Autoreply.CQ.sendGroupMsg(fromGroup, Autoreply.instence.CC.image((File) Methods.rfa(files)));
-				sleep(100);
-				Autoreply.CQ.sendGroupMsg(fromGroup, Autoreply.instence.CC.image((File) Methods.rfa(files)));
-				sleep(100);
-				Autoreply.CQ.sendGroupMsg(fromGroup, Autoreply.instence.CC.image((File) Methods.rfa(files)));
-				sleep(100);
-				Autoreply.CQ.sendGroupMsg(fromGroup, Autoreply.instence.CC.image((File) Methods.rfa(files)));
-				sleep(100);
-				Autoreply.CQ.sendGroupMsg(fromGroup, Autoreply.instence.CC.image((File) Methods.rfa(files)));
-				sleep(100);
-				Autoreply.CQ.sendGroupMsg(fromGroup, Autoreply.instence.CC.image((File) Methods.rfa(files)));
-				sleep(100);
-				Autoreply.CQ.sendGroupMsg(fromGroup, Autoreply.instence.CC.image((File) Methods.rfa(files)));
-				sleep(100);
-				Autoreply.CQ.sendGroupMsg(fromGroup, Autoreply.instence.CC.image((File) Methods.rfa(files)));
+				for (int i = 0; i < 8; ++i) {
+					Autoreply.CQ.sendGroupMsg(fromGroup, Autoreply.instence.CC.image((File) Methods.rfa(files)));
+					sleep(100);
+				}
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
@@ -85,74 +59,9 @@ public class MoShenFuSong extends Thread {
 		case 4:
 			if (fromGroup == 822438633L) {
 				try {
-					Autoreply.CQ.sendGroupMsg(fromGroup, Autoreply.instence.CC.image((File) Methods.rfa(files)));
-					Autoreply.CQ.sendGroupMsg(fromGroup, Autoreply.instence.CC.image((File) Methods.rfa(files)));
-					Autoreply.CQ.sendGroupMsg(fromGroup, Autoreply.instence.CC.image((File) Methods.rfa(files)));
-					Autoreply.CQ.sendGroupMsg(fromGroup, Autoreply.instence.CC.image((File) Methods.rfa(files)));
-					Autoreply.CQ.sendGroupMsg(fromGroup, Autoreply.instence.CC.image((File) Methods.rfa(files)));
-					Autoreply.CQ.sendGroupMsg(fromGroup, Autoreply.instence.CC.image((File) Methods.rfa(files)));
-					Autoreply.CQ.sendGroupMsg(fromGroup, Autoreply.instence.CC.image((File) Methods.rfa(files)));
-					Autoreply.CQ.sendGroupMsg(fromGroup, Autoreply.instence.CC.image((File) Methods.rfa(files)));
-					Autoreply.CQ.sendGroupMsg(fromGroup, Autoreply.instence.CC.image((File) Methods.rfa(files)));
-					Autoreply.CQ.sendGroupMsg(fromGroup, Autoreply.instence.CC.image((File) Methods.rfa(files)));
-					Autoreply.CQ.sendGroupMsg(fromGroup, Autoreply.instence.CC.image((File) Methods.rfa(files)));
-					Autoreply.CQ.sendGroupMsg(fromGroup, Autoreply.instence.CC.image((File) Methods.rfa(files)));
-					Autoreply.CQ.sendGroupMsg(fromGroup, Autoreply.instence.CC.image((File) Methods.rfa(files)));
-					Autoreply.CQ.sendGroupMsg(fromGroup, Autoreply.instence.CC.image((File) Methods.rfa(files)));
-					Autoreply.CQ.sendGroupMsg(fromGroup, Autoreply.instence.CC.image((File) Methods.rfa(files)));
-					Autoreply.CQ.sendGroupMsg(fromGroup, Autoreply.instence.CC.image((File) Methods.rfa(files)));
-					Autoreply.CQ.sendGroupMsg(fromGroup, Autoreply.instence.CC.image((File) Methods.rfa(files)));
-					Autoreply.CQ.sendGroupMsg(fromGroup, Autoreply.instence.CC.image((File) Methods.rfa(files)));
-					Autoreply.CQ.sendGroupMsg(fromGroup, Autoreply.instence.CC.image((File) Methods.rfa(files)));
-					Autoreply.CQ.sendGroupMsg(fromGroup, Autoreply.instence.CC.image((File) Methods.rfa(files)));
-					Autoreply.CQ.sendGroupMsg(fromGroup, Autoreply.instence.CC.image((File) Methods.rfa(files)));
-					Autoreply.CQ.sendGroupMsg(fromGroup, Autoreply.instence.CC.image((File) Methods.rfa(files)));
-					Autoreply.CQ.sendGroupMsg(fromGroup, Autoreply.instence.CC.image((File) Methods.rfa(files)));
-					Autoreply.CQ.sendGroupMsg(fromGroup, Autoreply.instence.CC.image((File) Methods.rfa(files)));
-					Autoreply.CQ.sendGroupMsg(fromGroup, Autoreply.instence.CC.image((File) Methods.rfa(files)));
-					Autoreply.CQ.sendGroupMsg(fromGroup, Autoreply.instence.CC.image((File) Methods.rfa(files)));
-					Autoreply.CQ.sendGroupMsg(fromGroup, Autoreply.instence.CC.image((File) Methods.rfa(files)));
-					Autoreply.CQ.sendGroupMsg(fromGroup, Autoreply.instence.CC.image((File) Methods.rfa(files)));
-					Autoreply.CQ.sendGroupMsg(fromGroup, Autoreply.instence.CC.image((File) Methods.rfa(files)));
-					Autoreply.CQ.sendGroupMsg(fromGroup, Autoreply.instence.CC.image((File) Methods.rfa(files)));
-					Autoreply.CQ.sendGroupMsg(fromGroup, Autoreply.instence.CC.image((File) Methods.rfa(files)));
-					Autoreply.CQ.sendGroupMsg(fromGroup, Autoreply.instence.CC.image((File) Methods.rfa(files)));
-					Autoreply.CQ.sendGroupMsg(fromGroup, Autoreply.instence.CC.image((File) Methods.rfa(files)));
-					Autoreply.CQ.sendGroupMsg(fromGroup, Autoreply.instence.CC.image((File) Methods.rfa(files)));
-					Autoreply.CQ.sendGroupMsg(fromGroup, Autoreply.instence.CC.image((File) Methods.rfa(files)));
-					Autoreply.CQ.sendGroupMsg(fromGroup, Autoreply.instence.CC.image((File) Methods.rfa(files)));
-					Autoreply.CQ.sendGroupMsg(fromGroup, Autoreply.instence.CC.image((File) Methods.rfa(files)));
-					Autoreply.CQ.sendGroupMsg(fromGroup, Autoreply.instence.CC.image((File) Methods.rfa(files)));
-					Autoreply.CQ.sendGroupMsg(fromGroup, Autoreply.instence.CC.image((File) Methods.rfa(files)));
-					Autoreply.CQ.sendGroupMsg(fromGroup, Autoreply.instence.CC.image((File) Methods.rfa(files)));
-					Autoreply.CQ.sendGroupMsg(fromGroup, Autoreply.instence.CC.image((File) Methods.rfa(files)));
-					Autoreply.CQ.sendGroupMsg(fromGroup, Autoreply.instence.CC.image((File) Methods.rfa(files)));
-					Autoreply.CQ.sendGroupMsg(fromGroup, Autoreply.instence.CC.image((File) Methods.rfa(files)));
-					Autoreply.CQ.sendGroupMsg(fromGroup, Autoreply.instence.CC.image((File) Methods.rfa(files)));
-					Autoreply.CQ.sendGroupMsg(fromGroup, Autoreply.instence.CC.image((File) Methods.rfa(files)));
-					Autoreply.CQ.sendGroupMsg(fromGroup, Autoreply.instence.CC.image((File) Methods.rfa(files)));
-					Autoreply.CQ.sendGroupMsg(fromGroup, Autoreply.instence.CC.image((File) Methods.rfa(files)));
-					Autoreply.CQ.sendGroupMsg(fromGroup, Autoreply.instence.CC.image((File) Methods.rfa(files)));
-					Autoreply.CQ.sendGroupMsg(fromGroup, Autoreply.instence.CC.image((File) Methods.rfa(files)));
-					Autoreply.CQ.sendGroupMsg(fromGroup, Autoreply.instence.CC.image((File) Methods.rfa(files)));
-					Autoreply.CQ.sendGroupMsg(fromGroup, Autoreply.instence.CC.image((File) Methods.rfa(files)));
-					Autoreply.CQ.sendGroupMsg(fromGroup, Autoreply.instence.CC.image((File) Methods.rfa(files)));
-					Autoreply.CQ.sendGroupMsg(fromGroup, Autoreply.instence.CC.image((File) Methods.rfa(files)));
-					Autoreply.CQ.sendGroupMsg(fromGroup, Autoreply.instence.CC.image((File) Methods.rfa(files)));
-					Autoreply.CQ.sendGroupMsg(fromGroup, Autoreply.instence.CC.image((File) Methods.rfa(files)));
-					Autoreply.CQ.sendGroupMsg(fromGroup, Autoreply.instence.CC.image((File) Methods.rfa(files)));
-					Autoreply.CQ.sendGroupMsg(fromGroup, Autoreply.instence.CC.image((File) Methods.rfa(files)));
-					Autoreply.CQ.sendGroupMsg(fromGroup, Autoreply.instence.CC.image((File) Methods.rfa(files)));
-					Autoreply.CQ.sendGroupMsg(fromGroup, Autoreply.instence.CC.image((File) Methods.rfa(files)));
-					Autoreply.CQ.sendGroupMsg(fromGroup, Autoreply.instence.CC.image((File) Methods.rfa(files)));
-					Autoreply.CQ.sendGroupMsg(fromGroup, Autoreply.instence.CC.image((File) Methods.rfa(files)));
-					Autoreply.CQ.sendGroupMsg(fromGroup, Autoreply.instence.CC.image((File) Methods.rfa(files)));
-					Autoreply.CQ.sendGroupMsg(fromGroup, Autoreply.instence.CC.image((File) Methods.rfa(files)));
-					Autoreply.CQ.sendGroupMsg(fromGroup, Autoreply.instence.CC.image((File) Methods.rfa(files)));
-					Autoreply.CQ.sendGroupMsg(fromGroup, Autoreply.instence.CC.image((File) Methods.rfa(files)));
-					Autoreply.CQ.sendGroupMsg(fromGroup, Autoreply.instence.CC.image((File) Methods.rfa(files)));
-					Autoreply.CQ.sendGroupMsg(fromGroup, Autoreply.instence.CC.image((File) Methods.rfa(files)));
-					Autoreply.CQ.sendGroupMsg(fromGroup, Autoreply.instence.CC.image((File) Methods.rfa(files)));
+					for (int i = 0; i < 68; ++i) {
+						Autoreply.CQ.sendGroupMsg(fromGroup, Autoreply.instence.CC.image((File) Methods.rfa(files)));
+					}
 				} catch (Exception e) {
 					e.printStackTrace();
 				}
@@ -160,16 +69,9 @@ public class MoShenFuSong extends Thread {
 			break;
 		case 5:
 			try {
-				Autoreply.CQ.sendGroupMsg(fromGroup, Autoreply.instence.CC.image((File) Methods.rfa(filesFFF)));
-				sleep(200);
-				Autoreply.CQ.sendGroupMsg(fromGroup, Autoreply.instence.CC.image((File) Methods.rfa(filesFFF)));
-				sleep(200);
-				Autoreply.CQ.sendGroupMsg(fromGroup, Autoreply.instence.CC.image((File) Methods.rfa(filesFFF)));
-				sleep(200);
-				Autoreply.CQ.sendGroupMsg(fromGroup, Autoreply.instence.CC.image((File) Methods.rfa(filesFFF)));
-				sleep(200);
-				Autoreply.CQ.sendGroupMsg(fromGroup, Autoreply.instence.CC.image((File) Methods.rfa(filesFFF)));
-				sleep(200);
+				for (int i = 0; i < 5; ++i) {
+					Autoreply.CQ.sendGroupMsg(fromGroup, Autoreply.instence.CC.image((File) Methods.rfa(filesFFF)));
+				}
 			} catch (Exception e) {
 			}
 			break;

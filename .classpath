@@ -32,5 +32,6 @@
 	<classpathentry kind="lib" path="core-3.2.1.jar"/>
 	<classpathentry kind="lib" path="json.jar"/>
 	<classpathentry kind="lib" path="sun.misc.BASE64Decoder.jar"/>
+	<classpathentry kind="lib" path="animated-gif-lib-1.0.jar" sourcepath="F:/360安全浏览器下载/animated-gif-lib-1.1-sources.jar.zip"/>
 	<classpathentry kind="output" path="target/classes"/>
 </classpath>

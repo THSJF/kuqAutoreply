@@ -48,9 +48,6 @@ public class SocketConfigThread extends Thread {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		if (!configManager.allowEdit) {
-			return;
-		}
 	}
 
 	private String processText(String string) {
@@ -107,12 +104,7 @@ public class SocketConfigThread extends Thread {
 		default:
 			return "fafafa";
 		}
-
 		configManager.saveConfig();
-		configManager.configHashMap.clear();
-		for (GroupConfig groupConfig : configManager.configJavaBean.groupConfigs) {
-			configManager.configHashMap.put(groupConfig.groupNumber, groupConfig);
-		}
 		return "ok";
 	}
 

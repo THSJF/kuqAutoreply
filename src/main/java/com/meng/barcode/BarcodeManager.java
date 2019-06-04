@@ -47,18 +47,21 @@ public class BarcodeManager {
 			return false;
 		}
 		Methods.sendMsg(fromGroup, fromQQ, Autoreply.instence.CC.image(barcode));
+		barcode.delete();
 		return true;
 	}
 
 	private boolean dec(long fromGroup, long fromQQ, String msg) throws Exception {
 		CQImage cqImage = Autoreply.instence.CC.getCQImage(msg);
 		if (cqImage != null) {
+			File barcode = cqImage.download(Autoreply.appDirectory + "barcode/" + fromQQ,
+					"barcode" + Autoreply.instence.random.nextInt() + ".png");
 			Result result = null;
-			result = BarcodeUtils.decodeImage(cqImage.download(Autoreply.appDirectory + "barcode/" + fromQQ,
-					"barcode" + Autoreply.instence.random.nextInt() + ".png"));
+			result = BarcodeUtils.decodeImage(barcode);
 			if (result != null) {
 				Autoreply.sendMessage(fromGroup, fromQQ,
 						"二维码类型:" + result.getBarcodeFormat().toString() + "\n内容:" + result.getText());
+				barcode.delete();
 			} else {
 				return false;
 			}

@@ -7,9 +7,12 @@ import javax.imageio.ImageIO;
 
 import com.meng.Autoreply;
 import com.meng.Methods;
+import com.meng.config.javabeans.GroupConfig;
 import com.meng.config.javabeans.PersonInfo;
 import com.meng.tools.FingerPrint;
 import com.sobte.cqp.jcq.entity.CQImage;
+import com.sobte.cqp.jcq.entity.Member;
+import com.sobte.cqp.jcq.entity.QQInfo;
 
 public class fanpohai {
 	private FingerPrint[] fts;// 存放图片指纹的数组 用于对比新收到的图片和样本相似度
@@ -19,19 +22,19 @@ public class fanpohai {
 	private File tmpFile;
 
 	public fanpohai() {
-		try {
-			File[] pohaitu = new File(Autoreply.appDirectory + "fan\\").listFiles();
-			fts = new FingerPrint[pohaitu.length];
-			for (int i = 0; i < fts.length; i++) {
+		File[] pohaitu = new File(Autoreply.appDirectory + "fan\\").listFiles();
+		fts = new FingerPrint[pohaitu.length];
+		for (int i = 0; i < fts.length; i++) {
+			try {
 				fts[i] = new FingerPrint(ImageIO.read(pohaitu[i]));
+			} catch (Exception e) {
+				System.out.println(pohaitu[i].getAbsolutePath());
 			}
-			tmpFile = new File(Autoreply.appDirectory + "phtmp.jpg");
-		} catch (IOException e) {
-			e.printStackTrace();
 		}
+		tmpFile = new File(Autoreply.appDirectory + "phtmp.jpg");
 	}
 
-	public boolean check(long fromQQ, long fromGroup, String msg) {
+	public boolean check(long fromQQ, long fromGroup, String msg, long msgID) {
 		try {
 			boolean bpohai = false;
 			// 处理带有迫害二字的消息
@@ -52,20 +55,24 @@ public class fanpohai {
 					if (tmpFile.exists()) {
 						tmpFile.delete();
 					}
-					fp1 = new FingerPrint(ImageIO.read(cmCqImage.download(Autoreply.appDirectory + "phtmp.jpg")));
+					File tmpF = cmCqImage
+							.download(Autoreply.appDirectory + "fan1\\" + System.currentTimeMillis() + "phtmp.jpg");
+					fp1 = new FingerPrint(ImageIO.read(tmpF));
 					// 取值为所有样本中最高的相似度
-					for (int i = 0; i < fts.length; i++) {
-						float tf = fts[i].compare(fp1);
+					for (FingerPrint fg : fts) {
+						if (fg == null) {
+							continue;
+						}
+						float tf = fg.compare(fp1);
 						if (tf > simi) {
 							simi = tf;
 						}
 					}
-					if (simi > 0.92f) {
-						bpohai = true;
-					}
+					bpohai = simi > 0.92f;
+					tmpF.delete();
 				}
 			}
-			if (bpohai) {
+			if (bpohai || msg.equals("[CQ:bface,p=11361,id=1188CED678E40F79A536C60658990EE7]")) {
 				String folder = "";
 				for (PersonInfo bilibiliUser : Autoreply.instence.configManager.configJavaBean.personInfo) {
 					if (fromQQ == bilibiliUser.qq) {
@@ -74,14 +81,31 @@ public class fanpohai {
 					}
 				}
 				File file = new File(folder);
+				System.out.println(Autoreply.instence.CQ.getLoginQQ());
+				if (msgID != -1) {
+					for (GroupConfig gf : Autoreply.instence.configManager.configJavaBean.groupConfigs) {
+						if (gf.groupNumber == fromGroup && gf.isCheHuiMoTu()) {
+							Member qqInfo = Autoreply.instence.CQ.getGroupMemberInfoV2(fromGroup,
+									Autoreply.instence.CQ.getLoginQQ());
+							if (qqInfo.getAuthority() == 2 || qqInfo.getAuthority() == 3) {
+								Autoreply.instence.CQ.deleteMsg(msgID);
+								break;
+							}
+						}
+					}
+				}
 				if (folder.equals("") || !file.exists()) {
 					int ir = Autoreply.instence.random.nextInt(2147483647) % 3;
-					if (ir == 0) {
+					switch (ir) {
+					case 0:
 						Autoreply.sendMessage(fromGroup, 0, "鬼鬼");
-					} else if (ir == 1) {
+						break;
+					case 1:
 						Autoreply.sendMessage(fromGroup, 0, "除了迫害和膜你还知道什么");
-					} else {
+						break;
+					case 2:
 						Autoreply.sendMessage(fromGroup, 0, "草绳");
+						break;
 					}
 					return true;
 				} else {
@@ -91,7 +115,7 @@ public class fanpohai {
 				}
 			}
 			return false;
-		} catch (IOException e) {
+		} catch (Exception e) {
 			return false;
 		}
 	}

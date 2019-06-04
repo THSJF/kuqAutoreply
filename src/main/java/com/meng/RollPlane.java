@@ -116,6 +116,7 @@ public class RollPlane {
 		case "东方妖妖梦":
 		case "th7":
 		case "th07":
+		case "PCB":
 			Autoreply.sendMessage(fromGroup, 0, (String) Methods.rfa(pl07));
 			break;
 		case "东方永夜抄":
@@ -150,6 +151,7 @@ public class RollPlane {
 			break;
 		case "东方绀珠传":
 		case "th15":
+		case "LoLK":
 			Autoreply.sendMessage(fromGroup, 0, (String) Methods.rfa(pl15));
 			break;
 		case "东方天空璋":

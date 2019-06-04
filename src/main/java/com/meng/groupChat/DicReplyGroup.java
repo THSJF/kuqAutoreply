@@ -1,7 +1,9 @@
 package com.meng.groupChat;
 
 import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.OutputStreamWriter;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map.Entry;
@@ -31,6 +33,20 @@ public class DicReplyGroup {
 			if (dicFile.exists()) {
 				jsonString = Methods.readFileToString(dicFile.getAbsolutePath());
 			} else {
+				dicFile.createNewFile();
+				try {
+					FileOutputStream fos = null;
+					OutputStreamWriter writer = null;
+					fos = new FileOutputStream(dicFile);
+					writer = new OutputStreamWriter(fos, "utf-8");
+					writer.write("{}");
+					writer.flush();
+					if (fos != null) {
+						fos.close();
+					}
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
 				jsonString = "{}";
 			}
 		} catch (IOException e) {

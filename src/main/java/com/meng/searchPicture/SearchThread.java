@@ -54,7 +54,10 @@ public class SearchThread extends Thread {
 			mResults = new PicResults(Jsoup.parse(response.body()));
 		} catch (Exception e1) {
 			Methods.sendMsg(fromGroup, fromQQ, e1.toString());
+			picF.delete();
+			return;
 		}
+		picF.delete();
 		/*
 		 * ArrayList<String> items = getTable(response.body()); if (items ==
 		 * null) { if (fromGroup == -1) { Autoreply.sendPrivateMessage(fromQQ,
@@ -140,6 +143,7 @@ public class SearchThread extends Thread {
 			}
 			String tmp = sBuilder.toString().isEmpty() ? "没有相似度较高的图片" : sBuilder.toString();
 			Methods.sendMsg(fromGroup, fromQQ, tmp.contains("sankakucomplex") ? tmp + "\n小哥哥注意身体哦" : tmp);
+			dFile.delete();
 		}
 	}
 

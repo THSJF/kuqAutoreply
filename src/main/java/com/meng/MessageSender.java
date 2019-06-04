@@ -9,11 +9,12 @@ public class MessageSender {
 	private String msg = "";
 	private long timeStamp = 0;
 
-	public MessageSender(long fromGroup, long fromQQ, String msg, long timeStamp) {
+	public MessageSender(long fromGroup, long fromQQ, String msg, long timeStamp, int msgId) {
 		this.fromGroup = fromGroup;
 		this.fromQQ = fromQQ;
 		this.msg = msg;
 		this.timeStamp = timeStamp;
+		this.msgId = msgId;
 	}
 
 	public long getTimeStamp() {

@@ -11,12 +11,11 @@ import com.meng.Autoreply;
 import com.meng.Methods;
 import com.meng.config.javabeans.ConfigJavaBean;
 import com.meng.config.javabeans.GroupConfig;
+import com.meng.config.javabeans.PersonInfo;
 
 public class ConfigManager {
 	public ConfigJavaBean configJavaBean = new ConfigJavaBean();
 	public Gson gson = new Gson();
-	public boolean allowEdit = false;
-	public HashMap<Long, GroupConfig> configHashMap = new HashMap<>();
 
 	public ConfigManager() {
 		try {
@@ -27,14 +26,20 @@ public class ConfigManager {
 			}
 			configJavaBean = gson.fromJson(Methods.readFileToString(Autoreply.appDirectory + "configV2.json"),
 					ConfigJavaBean.class);
-			for (GroupConfig groupConfig : configJavaBean.groupConfigs) {
-				configHashMap.put(groupConfig.groupNumber, groupConfig);
-			}
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 		new SocketConfigManager(this).start();
 		new SocketDicManager(this).start();
+	}
+
+	public GroupConfig getGroupConfig(long fromGroup) {
+		for (GroupConfig gc : configJavaBean.groupConfigs) {
+			if (fromGroup == gc.groupNumber) {
+				return gc;
+			}
+		}
+		return null;
 	}
 
 	public void checkSetConfig(long fromGroup, String msg) {
@@ -92,5 +97,14 @@ public class ConfigManager {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
+	}
+
+	public String getNameFromQQ(long qq) {
+		for (PersonInfo p : configJavaBean.personInfo) {
+			if (p.qq == qq) {
+				return p.name;
+			}
+		}
+		return null;
 	}
 }

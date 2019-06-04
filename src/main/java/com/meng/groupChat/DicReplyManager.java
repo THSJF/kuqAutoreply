@@ -26,10 +26,6 @@ public class DicReplyManager {
 		parser = new JsonParser();
 		try {
 			jsonString = Methods.readFileToString(Autoreply.appDirectory + "dic.json");
-			File propFile = new File(Autoreply.appDirectory + "setu.properties");
-			if (!propFile.exists()) {
-				propFile.createNewFile();
-			}
 		} catch (IOException e) {
 			e.printStackTrace();
 		}

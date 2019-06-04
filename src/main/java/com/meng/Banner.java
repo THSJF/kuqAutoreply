@@ -100,6 +100,7 @@ public class Banner {
 				switch (st[1]) {
 				case "s":
 				case "second":
+				case "sec":
 					times = 1;
 					break;
 				case "min":
@@ -129,7 +130,7 @@ public class Banner {
 				Autoreply.CQ.setGroupBan(group, manager, sleepTime);
 			}
 		} catch (NumberFormatException e) {
-			Autoreply.CQ.setGroupBan(group, manager, 60);
+			Autoreply.CQ.setGroupBan(group, manager, 9961);
 			return true;
 		}
 		return false;

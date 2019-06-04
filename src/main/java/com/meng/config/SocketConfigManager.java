@@ -23,7 +23,7 @@ public class SocketConfigManager extends Thread {
 
 	private void check() throws Exception {
 		try { 
-			ServerSocket serverSocket = new ServerSocket(9700);
+			ServerSocket serverSocket = new ServerSocket(9701);
 			System.out.println("***9700即将启动，等待客户端的链接***"); 
 			while (running) {
 				SocketConfigThread receiveThread = new SocketConfigThread(configManager, serverSocket);

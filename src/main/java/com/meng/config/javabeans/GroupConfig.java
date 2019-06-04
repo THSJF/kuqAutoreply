@@ -143,4 +143,13 @@ public class GroupConfig {
 	public boolean isMoshenfusong() {
 		return booleans.get(13);
 	}
+
+	public void setCheHuiMoTu(boolean cheHui) {
+		booleans.set(14, cheHui);
+	}
+
+	public boolean isCheHuiMoTu() {
+		return booleans.get(14);
+	}
+	
 }
