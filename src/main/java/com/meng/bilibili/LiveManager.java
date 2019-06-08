@@ -1,7 +1,11 @@
 package com.meng.bilibili;
 
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.OutputStreamWriter;
 import java.util.ArrayList;
-
+import java.util.HashMap;
 import com.google.gson.Gson;
 import com.meng.Autoreply;
 import com.meng.Methods;
@@ -14,13 +18,25 @@ public class LiveManager extends Thread {
 	private ArrayList<LivePerson> liveData = new ArrayList<>();
 
 	public static boolean liveStart = true;
+	public HashMap<String, String> liveTimeMap = new HashMap<>();
 
 	public LiveManager(ConfigManager configManager) {
-		for (PersonInfo cb : configManager.configJavaBean.personInfo) {
+		ArrayList<PersonInfo> list = configManager.getPersonInfoList();
+		for (PersonInfo cb : list) {
 			if (cb.bliveRoom == 0) {
 				continue;
 			}
-			liveData.add(new LivePerson(cb.name, cb.bid, cb.bliveRoom, false));
+			liveData.add(new LivePerson(cb.name, cb.bid, cb.bliveRoom, cb.autoTip));
+		}
+		File liveTimeFile = new File(Autoreply.appDirectory + "liveTime.json");
+		if (!liveTimeFile.exists()) {
+			saveConfig();
+		}
+		try {
+			liveTimeMap = new Gson().fromJson(Methods.readFileToString(liveTimeFile.getAbsolutePath()), HashMap.class);
+			System.out.println(liveTimeMap);
+		} catch (Exception e) {
+			e.printStackTrace();
 		}
 	}
 
@@ -35,9 +51,7 @@ public class LiveManager extends Thread {
 								"https://api.live.bilibili.com/room/v1/Room/getRoomInfoOld?mid=" + lPerson.getUid()),
 								SpaceToLiveJavaBean.class);
 						boolean living = sjb.data.liveStatus == 1;
-						if (lPerson.liveUrl == "") {
-							lPerson.liveUrl = sjb.data.url;
-						}
+						lPerson.liveUrl = sjb.data.url;
 						lPerson.setLiving(living);
 						if (lPerson.getFlag() != 0) {
 							if (living && lPerson.isNeedStartTip()) {
@@ -68,6 +82,7 @@ public class LiveManager extends Thread {
 		switch (p.getFlag()) {
 		case 0:
 			if (p.isLiving()) {
+				p.liveStartTimeStamp = System.currentTimeMillis() / 1000;
 				p.setNeedStartTip(false);
 				p.setFlag(2);
 			} else {
@@ -77,6 +92,7 @@ public class LiveManager extends Thread {
 			break;
 		case 1:
 			tipStart(p);
+			p.liveStartTimeStamp = System.currentTimeMillis() / 1000;
 			p.setNeedStartTip(false);
 			// 勿添加break;
 		case 2:
@@ -85,6 +101,15 @@ public class LiveManager extends Thread {
 		case 3:
 			tipFinish(p);
 			p.setNeedStartTip(true);
+			if (liveTimeMap.get(p.getName()) == null) {
+				liveTimeMap.put(p.getName(), String.valueOf(System.currentTimeMillis() / 1000 - p.liveStartTimeStamp));
+				p.liveStartTimeStamp = 0;
+			} else {
+				long time = Long.parseLong(liveTimeMap.get(p.getName()));
+				time += System.currentTimeMillis() / 1000 - p.liveStartTimeStamp;
+				liveTimeMap.put(p.getName(), String.valueOf(time));
+			}
+			saveConfig();
 			// 勿添加break;
 		case 4:
 			p.setLiving(false);
@@ -96,38 +121,63 @@ public class LiveManager extends Thread {
 
 		switch (p.getName()) {
 		case "台长":
-			Autoreply.sendMessage(859561731L, 0, "想看台混矫正器");
+			// Autoreply.sendMessage(859561731L, 0, "想看台混矫正器");
 			break;
 		}
-		try {
-			if (p.autoTip == true) {
-				Autoreply.instence.naiManager.sendDanmaku(p.roomId, Autoreply.instence.naiManager.cookieSunny, "发发发");
-				Autoreply.instence.naiManager.sendDanmaku(p.roomId, Autoreply.instence.naiManager.cookieLuna, "发发发");
-				Autoreply.instence.naiManager.sendDanmaku(p.roomId, Autoreply.instence.naiManager.cookieStar, "发发发");
-			}
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
+		// try {
+		// if (p.autoTip) {
+		// Autoreply.instence.naiManager.sendDanmaku(p.roomId,
+		// Autoreply.instence.naiManager.cookieSunny, "发发发");
+		// Autoreply.instence.naiManager.sendDanmaku(p.roomId,
+		// Autoreply.instence.naiManager.cookieLuna, "发发发");
+		// Autoreply.instence.naiManager.sendDanmaku(p.roomId,
+		// Autoreply.instence.naiManager.cookieStar, "发发发");
+		// }
+		// } catch (Exception e) {
+		// e.printStackTrace();
+		// }
+		Autoreply.sendMessage(0, 2856986197L, p.getName() + "开始直播");
 	}
 
 	private void tipFinish(LivePerson p) {
 		switch (p.getName()) {
 		case "台长":
-			Autoreply.sendMessage(859561731L, 0, "呜呜呜");
+			// Autoreply.sendMessage(859561731L, 0, "呜呜呜");
 			break;
 		}
-		try {
-			if (p.autoTip == true) {
-				Autoreply.instence.naiManager.sendDanmaku(p.roomId, Autoreply.instence.naiManager.cookieSunny, "呜呜呜");
-				Autoreply.instence.naiManager.sendDanmaku(p.roomId, Autoreply.instence.naiManager.cookieLuna, "呜呜呜");
-				Autoreply.instence.naiManager.sendDanmaku(p.roomId, Autoreply.instence.naiManager.cookieStar, "呜呜呜");
-			}
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
+		// try {
+		// if (p.autoTip) {
+		// Autoreply.instence.naiManager.sendDanmaku(p.roomId,
+		// Autoreply.instence.naiManager.cookieSunny, "呜呜呜");
+		// Autoreply.instence.naiManager.sendDanmaku(p.roomId,
+		// Autoreply.instence.naiManager.cookieLuna, "呜呜呜");
+		// Autoreply.instence.naiManager.sendDanmaku(p.roomId,
+		// Autoreply.instence.naiManager.cookieStar, "呜呜呜");
+		// }
+		// } catch (Exception e) {
+		// e.printStackTrace();
+		// }
+		Autoreply.sendMessage(0, 2856986197L, p.getName() + "直播结束");
 	}
 
 	public int getliveCount() {
 		return liveData.size();
+	}
+
+	public void saveConfig() {
+		try {
+			FileOutputStream fos = null;
+			OutputStreamWriter writer = null;
+			File file = new File(Autoreply.appDirectory + "liveTime.json");
+			fos = new FileOutputStream(file);
+			writer = new OutputStreamWriter(fos, "utf-8");
+			writer.write(new Gson().toJson(liveTimeMap));
+			writer.flush();
+			if (fos != null) {
+				fos.close();
+			}
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 	}
 }

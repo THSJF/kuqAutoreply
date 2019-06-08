@@ -9,47 +9,47 @@ public class NewArticleBean {
 	public class Data {
 
 		public List<Articles> articles;
-		public String pn;
-		public String ps;
-		public String count;
+		public int pn;
+		public int ps;
+		public int count;
 
 		public class Articles {
-			public String id;
+			public int id;
 			public Category category;
 			public List<Categories> categories;
 			public String title;
 			public String summary;
 			public String banner_url;
-			public String template_id;
-			public String state;
+			public int template_id;
+			public int state;
 			public Author author;
-			public String reprint;
+			public int reprint;
 			public List<String> image_urls;
-			public String publish_time;
-			public String ctime;
+			public int publish_time;
+			public int ctime;
 			public Stats stats;
 			public List<Tags> tags;
-			public String words;
+			public int words;
 			public String dynamic;
 			public List<String> origin_image_urls;
-			public String list;
+			public boolean list;
 			public String is_like;
 			public Media media;
 
 			public class Category {
-				public String id;
-				public String parent_id;
+				public int id;
+				public int parent_id;
 				public String name;
 			}
 
 			public class Categories {
-				public String id;
-				public String parent_id;
+				public int id;
+				public int parent_id;
 				public String name;
 			}
 
 			public class Author {
-				public String mid;
+				public int mid;
 				public String name;
 				public String face;
 				public Pendant pendant;
@@ -57,20 +57,20 @@ public class NewArticleBean {
 				public Nameplate nameplate;
 
 				public class Pendant {
-					public String pid;
+					public int pid;
 					public String name;
 					public String image;
-					public String expire;
+					public int expire;
 				}
 
 				public class Official_verify {
-					public String type;
-					public String desc;
+					public int type;
+					public int desc;
 
 				}
 
 				public class Nameplate {
-					public String nid;
+					public int nid;
 					public String name;
 					public String image;
 					public String image_small;
@@ -80,30 +80,30 @@ public class NewArticleBean {
 			}
 
 			public class Stats {
-				public String view;
-				public String favorite;
-				public String like;
-				public String dislike;
-				public String reply;
-				public String share;
-				public String coin;
-				public String dynamic;
+				public int view;
+				public int favorite;
+				public int like;
+				public int dislike;
+				public int reply;
+				public int share;
+				public int coin;
+				public int dynamic;
 			}
 
 			public class Tags {
-				public String tid;
+				public int tid;
 				public String name;
 			}
 
 			public class Media {
-				public String score;
-				public String media_id;
+				public int score;
+				public int media_id;
 				public String title;
 				public String cover;
 				public String area;
-				public String type_id;
+				public int type_id;
 				public String type_name;
-				public String spoiler;
+				public int spoiler;
 			}
 		}
 	}

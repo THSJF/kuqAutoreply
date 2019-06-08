@@ -17,6 +17,7 @@ import com.meng.Autoreply;
 import com.meng.config.javabeans.GroupConfig;
 import com.meng.tools.FingerPrint;
 import com.sobte.cqp.jcq.entity.CQImage;
+import com.sobte.cqp.jcq.entity.Member;
 
 public class RepeaterBanner {
 	private int repeatCount = 0;
@@ -49,6 +50,10 @@ public class RepeaterBanner {
 
 				break;
 			case 1:
+				Member qqInfo = Autoreply.CQ.getGroupMemberInfoV2(fromGroup, Autoreply.CQ.getLoginQQ());
+				if (qqInfo.getAuthority() != 2 && qqInfo.getAuthority() != 3) {
+					break;
+				}
 				if (lastMessageRecieved.equals(msg) || (isPicMsgRepeat(lastMessageRecieved, msg, simi))) { // 上一条消息和当前消息相同或两张图片相似度过高都是复读
 					if (Autoreply.instence.random.nextInt() % banCount == 0) {
 						int time = Autoreply.instence.random.nextInt(60) + 1;
@@ -59,6 +64,10 @@ public class RepeaterBanner {
 				}
 				break;
 			case 2:
+				Member qqInfo2 = Autoreply.CQ.getGroupMemberInfoV2(fromGroup, Autoreply.CQ.getLoginQQ());
+				if (qqInfo2.getAuthority() != 2 && qqInfo2.getAuthority() != 3) {
+					break;
+				}
 				if (lastMessageRecieved.equals(msg) || (isPicMsgRepeat(lastMessageRecieved, msg, simi))) {
 					int time = Autoreply.instence.random.nextInt(60) + 1;
 					Autoreply.CQ.setGroupBan(fromGroup, fromQQ, time);

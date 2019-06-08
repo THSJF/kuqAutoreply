@@ -16,7 +16,6 @@ import com.meng.config.javabeans.PersonInfo;
 public class SocketConfigThread extends Thread {
 	Socket socket = null;
 	ConfigManager configManager;
-	Gson gson = new Gson();
 
 	public SocketConfigThread(ConfigManager configManager, ServerSocket serverSocket) {
 		try {
@@ -53,53 +52,53 @@ public class SocketConfigThread extends Thread {
 	private String processText(String string) {
 
 		if (string.equals("getFull")) {
-			return configManager.gson.toJson(configManager.configJavaBean);
+			return configManager.gson.toJson(configManager.getConfigJavaBean());
 		}
 		String type = string.substring(0, string.indexOf("."));
 		String content = string.substring(string.indexOf(".") + 1);
 
 		switch (NetworkType.valueOf(type)) {
 		case addGroup:
-			configManager.configJavaBean.groupConfigs.add(gson.fromJson(content, GroupConfig.class));
+			configManager.getGroupConfigList().add(configManager.gson.fromJson(content, GroupConfig.class));
 			break;
 		case addNotReplyUser:
-			configManager.configJavaBean.QQNotReply.add(Long.parseLong(content));
+			configManager.getQQNotReplyList().add(Long.parseLong(content));
 			break;
 		case addNotReplyWord:
-			configManager.configJavaBean.wordNotReply.add(content);
+			configManager.getWordNotReplyList().add(content);
 			break;
 		case addPersonInfo:
-			configManager.configJavaBean.personInfo.add(gson.fromJson(content, PersonInfo.class));
+			configManager.getPersonInfoList().add(configManager.gson.fromJson(content, PersonInfo.class));
 			break;
 		case removeGroup:
-			configManager.configJavaBean.groupConfigs.remove(Integer.parseInt(content));
+			configManager.getGroupConfigList().remove(Integer.parseInt(content));
 			break;
 		case removeNotReplyUser:
-			configManager.configJavaBean.QQNotReply.remove(Integer.parseInt(content));
+			configManager.getQQNotReplyList().remove(Integer.parseInt(content));
 			break;
 		case removeNotReplyWord:
-			configManager.configJavaBean.wordNotReply.remove(Integer.parseInt(content));
+			configManager.getWordNotReplyList().remove(Integer.parseInt(content));
 			break;
 		case removePersonInfo:
-			configManager.configJavaBean.personInfo.remove((content));
+			configManager.getPersonInfoList().remove((content));
 			break;
 		case setGroup:
 			String[] split = content.split(" ");
-			configManager.configJavaBean.groupConfigs.set(Integer.parseInt(split[0]),
-					gson.fromJson(split[1], GroupConfig.class));
+			configManager.getGroupConfigList().set(Integer.parseInt(split[0]),
+					configManager.gson.fromJson(split[1], GroupConfig.class));
 			break;
 		case setNotReplyUser:
 			String[] split2 = content.split(" ");
-			configManager.configJavaBean.QQNotReply.set(Integer.parseInt(split2[0]), Long.parseLong(split2[1]));
+			configManager.getQQNotReplyList().set(Integer.parseInt(split2[0]), Long.parseLong(split2[1]));
 			break;
 		case setNotReplyWord:
 			String[] split3 = content.split(" ");
-			configManager.configJavaBean.wordNotReply.set(Integer.parseInt(split3[0]), split3[1]);
+			configManager.getWordNotReplyList().set(Integer.parseInt(split3[0]), split3[1]);
 			break;
 		case setPersonInfo:
 			String[] split4 = content.split(" ");
-			configManager.configJavaBean.personInfo.set(Integer.parseInt(split4[0]),
-					gson.fromJson(split4[1], PersonInfo.class));
+			configManager.getPersonInfoList().set(Integer.parseInt(split4[0]),
+					configManager.gson.fromJson(split4[1], PersonInfo.class));
 			break;
 		default:
 			return "fafafa";

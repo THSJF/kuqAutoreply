@@ -68,35 +68,28 @@ public class fanpohai {
 							simi = tf;
 						}
 					}
-					bpohai = simi > 0.92f;
+					bpohai = simi > 0.97f;
 					tmpF.delete();
 				}
 			}
 			if (bpohai || msg.equals("[CQ:bface,p=11361,id=1188CED678E40F79A536C60658990EE7]")) {
 				String folder = "";
-				for (PersonInfo bilibiliUser : Autoreply.instence.configManager.configJavaBean.personInfo) {
-					if (fromQQ == bilibiliUser.qq) {
-						folder = Autoreply.appDirectory + "pohai/" + bilibiliUser.name + "/";
-						break;
-					}
+				PersonInfo personInfo = Autoreply.instence.configManager.getPersonInfoFromQQ(fromQQ);
+				if (personInfo != null) {
+					folder = Autoreply.appDirectory + "pohai/" + personInfo.name + "/";
 				}
 				File file = new File(folder);
-				System.out.println(Autoreply.instence.CQ.getLoginQQ());
 				if (msgID != -1) {
-					for (GroupConfig gf : Autoreply.instence.configManager.configJavaBean.groupConfigs) {
-						if (gf.groupNumber == fromGroup && gf.isCheHuiMoTu()) {
-							Member qqInfo = Autoreply.instence.CQ.getGroupMemberInfoV2(fromGroup,
-									Autoreply.instence.CQ.getLoginQQ());
-							if (qqInfo.getAuthority() == 2 || qqInfo.getAuthority() == 3) {
-								Autoreply.instence.CQ.deleteMsg(msgID);
-								break;
-							}
+					GroupConfig groupConfig = Autoreply.instence.configManager.getGroupConfig(fromGroup);
+					if (groupConfig != null && groupConfig.isCheHuiMoTu()) {
+						Member qqInfo = Autoreply.CQ.getGroupMemberInfoV2(fromGroup, Autoreply.CQ.getLoginQQ());
+						if (qqInfo.getAuthority() == 2 || qqInfo.getAuthority() == 3) {
+							Autoreply.CQ.deleteMsg(msgID);
 						}
 					}
 				}
 				if (folder.equals("") || !file.exists()) {
-					int ir = Autoreply.instence.random.nextInt(2147483647) % 3;
-					switch (ir) {
+					switch (Autoreply.instence.random.nextInt(3)) {
 					case 0:
 						Autoreply.sendMessage(fromGroup, 0, "鬼鬼");
 						break;

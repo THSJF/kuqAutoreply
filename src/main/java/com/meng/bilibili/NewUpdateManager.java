@@ -1,5 +1,7 @@
 package com.meng.bilibili;
 
+import java.util.ArrayList;
+
 import com.google.gson.Gson;
 import com.meng.Autoreply;
 import com.meng.Methods;
@@ -22,20 +24,22 @@ public class NewUpdateManager {
 			Gson gson = new Gson();
 			NewVideoBean.Data.Vlist vlist = null;
 			NewArticleBean.Data.Articles articles = null;
+			int upId = getUpId(msg);
+			if (upId == 0) {
+				return false;
+			}
 			try {
-				vlist = gson
-						.fromJson(Methods
-								.getSourceCode("https://space.bilibili.com/ajax/member/getSubmitVideos?mid="
-										+ getUpId(msg) + "&page=1&pagesize=1")
-								.replace("\"3\":", "\"n3\":").replace("\"4\":", "\"n4\":"),
-								NewVideoBean.class).data.vlist.get(0);
+				vlist = gson.fromJson(
+						Methods.getSourceCode("https://space.bilibili.com/ajax/member/getSubmitVideos?mid=" + upId
+								+ "&page=1&pagesize=1").replace("\"3\":", "\"n3\":").replace("\"4\":", "\"n4\":"),
+						NewVideoBean.class).data.vlist.get(0);
 			} catch (Exception e) {
 				System.out.println("no videos");
 			}
 			try {
 				articles = gson
 						.fromJson(
-								Methods.getSourceCode("http://api.bilibili.com/x/space/article?mid=" + getUpId(msg)
+								Methods.getSourceCode("http://api.bilibili.com/x/space/article?mid=" + upId
 										+ "&pn=1&ps=1&sort=publish_time&jsonp=jsonp"),
 								NewArticleBean.class).data.articles.get(0);
 			} catch (Exception e) {
@@ -43,14 +47,14 @@ public class NewUpdateManager {
 			}
 
 			if (vlist != null && articles == null) {
-				videoUpdateTime = Long.parseLong(vlist.created) * 1000;
+				videoUpdateTime = vlist.created * 1000;
 				tipVideo(fromGroup, msg, videoUpdateTime, vlist);
 			} else if (vlist == null && articles != null) {
-				articalUpdateTime = Long.parseLong(articles.publish_time) * 1000;
+				articalUpdateTime = articles.publish_time * 1000;
 				tipArticle(fromGroup, msg, articalUpdateTime, articles);
 			} else if (vlist != null && articles != null) {
-				videoUpdateTime = Long.parseLong(vlist.created) * 1000;
-				articalUpdateTime = Long.parseLong(articles.publish_time) * 1000;
+				videoUpdateTime = vlist.created * 1000;
+				articalUpdateTime = articles.publish_time * 1000;
 				if (articalUpdateTime > videoUpdateTime) {
 					tipArticle(fromGroup, msg, articalUpdateTime, articles);
 				} else {
@@ -83,7 +87,8 @@ public class NewUpdateManager {
 	}
 
 	private boolean isUpper(String msg) {
-		for (PersonInfo cb : configManager.configJavaBean.personInfo) {
+		ArrayList<PersonInfo> list = configManager.getPersonInfoList();
+		for (PersonInfo cb : list) {
 			if (msg.contains(cb.name)) {
 				return true;
 			}
@@ -92,7 +97,8 @@ public class NewUpdateManager {
 	}
 
 	private int getUpId(String msg) {
-		for (PersonInfo cb : configManager.configJavaBean.personInfo) {
+		ArrayList<PersonInfo> list = configManager.getPersonInfoList();
+		for (PersonInfo cb : list) {
 			if (cb.bid == 0) {
 				continue;
 			}
@@ -104,7 +110,8 @@ public class NewUpdateManager {
 	}
 
 	private long getUpQQ(String msg) {
-		for (PersonInfo cb : configManager.configJavaBean.personInfo) {
+		ArrayList<PersonInfo> list = configManager.getPersonInfoList();
+		for (PersonInfo cb : list) {
 			if (cb.qq == 0) {
 				continue;
 			}

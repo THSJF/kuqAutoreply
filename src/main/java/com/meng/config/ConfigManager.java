@@ -4,7 +4,11 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStreamWriter;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
+
+import javax.swing.text.StyledEditorKit.ForegroundAction;
 
 import com.google.gson.Gson;
 import com.meng.Autoreply;
@@ -14,8 +18,9 @@ import com.meng.config.javabeans.GroupConfig;
 import com.meng.config.javabeans.PersonInfo;
 
 public class ConfigManager {
-	public ConfigJavaBean configJavaBean = new ConfigJavaBean();
+	private ConfigJavaBean configJavaBean = new ConfigJavaBean();
 	public Gson gson = new Gson();
+	public HashSet<Long> qqAllowPass = new HashSet<>();
 
 	public ConfigManager() {
 		try {
@@ -26,6 +31,11 @@ public class ConfigManager {
 			}
 			configJavaBean = gson.fromJson(Methods.readFileToString(Autoreply.appDirectory + "configV2.json"),
 					ConfigJavaBean.class);
+			ListQQJavaBean listQQJavaBean = gson.fromJson(
+					Methods.readFileToString(Autoreply.appDirectory + "configAllowPass.json"), ListQQJavaBean.class);
+			for (long l : listQQJavaBean.qqList) {
+				qqAllowPass.add(l);
+			}
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -33,10 +43,63 @@ public class ConfigManager {
 		new SocketDicManager(this).start();
 	}
 
+	public ConfigJavaBean getConfigJavaBean() {
+		return configJavaBean;
+	}
+
+	public ArrayList<GroupConfig> getGroupConfigList() {
+		return configJavaBean.groupConfigs;
+	}
+
+	public ArrayList<Long> getQQNotReplyList() {
+		return configJavaBean.QQNotReply;
+	}
+
+	public ArrayList<String> getWordNotReplyList() {
+		return configJavaBean.wordNotReply;
+	}
+
+	public ArrayList<PersonInfo> getPersonInfoList() {
+		return configJavaBean.personInfo;
+	}
+
 	public GroupConfig getGroupConfig(long fromGroup) {
 		for (GroupConfig gc : configJavaBean.groupConfigs) {
 			if (fromGroup == gc.groupNumber) {
 				return gc;
+			}
+		}
+		return null;
+	}
+
+	public boolean isNotReplyGroup(long fromGroup) {
+		GroupConfig groupConfig = getGroupConfig(fromGroup);
+		if (groupConfig == null || !groupConfig.reply) {
+			return true;
+		}
+		return false;
+	}
+
+	public boolean isNotReplyQQ(long qq) {
+		if (configJavaBean.QQNotReply.contains(qq)) {
+			return true;
+		}
+		return false;
+	}
+
+	public boolean isNotReplyWord(String word) {
+		for (String nrw : configJavaBean.wordNotReply) {
+			if (word.contains(nrw)) {
+				return true;
+			}
+		}
+		return false;
+	}
+
+	public PersonInfo getPersonInfoFromQQ(long qq) {
+		for (PersonInfo pi : configJavaBean.personInfo) {
+			if (pi.qq == qq) {
+				return pi;
 			}
 		}
 		return null;

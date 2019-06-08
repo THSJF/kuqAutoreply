@@ -13,7 +13,7 @@ public class TimeTip extends Thread {
 	private long groupDNFmoDao = 424838564L;
 	private long groupXueXi = 312342896L;
 	private long groupTaiZhang = 859561731L;
-	private long groupDaiyuQun = 233861874L;
+	//private long groupDaiyuQun = 233861874L;
 	private long ziyuan = 2198634315L;
 	private long alice = 1326051907L;
 	private long YYS = 1418780411L;
@@ -22,7 +22,7 @@ public class TimeTip extends Thread {
 	private boolean tipedAlice = true;
 	private boolean tipedZiyuan = true;
 	private boolean tipedDiuRen = false;
-	private boolean tipedDaiYuQun = true;
+//	private boolean tipedDaiYuQun = true;
 
 	public TimeTip() {
 	}
@@ -34,7 +34,7 @@ public class TimeTip extends Thread {
 			if (c.get(Calendar.MINUTE) == 0) {
 				tipedDiuRen = false;
 				tipedAlice = false;
-				tipedDaiYuQun = false;
+		//		tipedDaiYuQun = false;
 				if (c.get(Calendar.HOUR_OF_DAY) == 6) {
 					tipedZiyuan = false;
 				}
@@ -61,17 +61,15 @@ public class TimeTip extends Thread {
 					}
 				}
 			}
-			if (!tipedDaiYuQun) {
-				try {
-					Autoreply.sendMessage(groupDaiyuQun, 0,
-							Autoreply.instence.CC.image(new File(Autoreply.appDirectory + "pic\\jiemo.jpg")));
-					Autoreply.sendMessage(groupDaiyuQun, 0,
-							Autoreply.instence.CC.image(new File(Autoreply.appDirectory + "pic\\heshui.gif")));
-				} catch (IOException e) {
-					e.printStackTrace();
-				}
-				tipedDaiYuQun = true;
-			}
+		//	if (!tipedDaiYuQun) {
+		//		try {
+		//			Autoreply.sendMessage(groupDaiyuQun, 0,
+		//					Autoreply.instence.CC.image(new File(Autoreply.appDirectory + "pic\\提醒\\jiemo.jpg")));
+		//		} catch (IOException e) {
+		//			e.printStackTrace();
+		//		}
+		//		tipedDaiYuQun = true;
+		//	}
 			try {
 				sleep(60000);
 			} catch (InterruptedException e) {
