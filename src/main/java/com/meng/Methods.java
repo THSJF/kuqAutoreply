@@ -26,7 +26,7 @@ public class Methods {
 	private static String meng2tmp = "";
 	private static String[] pop = "11|12|60|63|96|107|110|114|117|128|129|151|159|123|268|208|248|5|20|28|37|45|212|178|62|44|90|107|119|114|125|142|168|185|1|2|3|4|5|6|7|8|9"
 			.split("\\|");
-//	static int arrayFlag = new java.util.Random().nextInt(5000);
+	// static int arrayFlag = new java.util.Random().nextInt(5000);
 
 	// 主开关
 	public static boolean checkSwitch(long fromGroup, String msg) {
@@ -152,17 +152,19 @@ public class Methods {
 			// 过滤特定的文字
 			// @消息发送者并复读内容
 			if (!msg.contains("蓝") && !msg.contains("藍") && !msg.contains("赠送")) {
-				Autoreply.sendMessage(fromGroup, 0,
-						Autoreply.instence.CC.at(fromQQ) + msg.substring(msg.indexOf(" ") + 1));
+				Autoreply.sendMessage(fromGroup, 0, msg.replace("[CQ:at,qq=1620628713]", "[CQ:at,qq=" + fromQQ + "]"));
 				return true;
 			}
-			if (msg.contains("野兽先辈") || msg.contains("仰望星空派") || msg.contains("英国") || msg.contains("鬼杀酒")
-					|| msg.contains("羊杂碎布丁") || msg.contains("昏睡红茶") || msg.contains("英式鳗鱼冻")) {
-				Autoreply.sendMessage(fromGroup, 0,
-						Autoreply.instence.CC.at(fromQQ) + msg.substring(msg.indexOf(" ") + 1));
-				return true;
-			}
-			return true;
+			// if (msg.contains("野兽先辈") || msg.contains("仰望星空派") ||
+			// msg.contains("英国") || msg.contains("鬼杀酒")
+			// || msg.contains("羊杂碎布丁") || msg.contains("昏睡红茶") ||
+			// msg.contains("英式鳗鱼冻")) {
+			// Autoreply.sendMessage(fromGroup, 0,
+			// Autoreply.instence.CC.at(fromQQ) + msg.substring(msg.indexOf(" ")
+			// + 1));
+			// return true;
+			// }
+			// return true;
 		}
 		return false;
 	}

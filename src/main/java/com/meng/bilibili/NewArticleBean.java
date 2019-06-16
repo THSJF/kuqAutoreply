@@ -25,7 +25,7 @@ public class NewArticleBean {
 			public Author author;
 			public int reprint;
 			public List<String> image_urls;
-			public int publish_time;
+			public long publish_time;
 			public int ctime;
 			public Stats stats;
 			public List<Tags> tags;

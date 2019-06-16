@@ -19,4 +19,5 @@ public class CQCodeCC extends CQCode {
 			return null;
 		}
 	}
+	
 }

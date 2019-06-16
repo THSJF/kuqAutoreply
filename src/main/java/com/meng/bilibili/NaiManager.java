@@ -19,11 +19,22 @@ public class NaiManager {
 	public final String cookieSunny = "sid=5d245m2c; buvid3=6FE522EC-2313-4D06-B5FB-218F0ECD614240787infoc; DedeUserID=424436973; DedeUserID__ckMd5=9e1262810056755d; SESSDATA=2fd8d64b%2C1562489870%2Cf0715161; bili_jct=e5690748430c28d2e7916f16752b212d; _uuid=6FF4834C-2CD8-DC8D-31E7-19A8A9BFEC6870975infoc; LIVE_BUVID=AUTO5315598978735276";
 	public final String cookieLuna = "sid=93yvcyb4; buvid3=D5700998-DE0C-493E-9094-6026E85ED20C110266infoc; DedeUserID=424444960; DedeUserID__ckMd5=0abcb1088f3a304d; SESSDATA=f18a2369%2C1562489899%2Ce0653761; bili_jct=381291a284e4407d6e7fb80c4d23a7db; _uuid=91AE6FBB-6257-92EC-B9B6-5239ECF5929998878infoc; LIVE_BUVID=AUTO3315598979008780";
 	public final String cookieStar = "sid=68su41bu; buvid3=0005D079-181F-43AF-BF08-4AE9606BC3F2110255infoc; DedeUserID=424461971; DedeUserID__ckMd5=57442de70495d2e0; SESSDATA=a413f989%2C1562489945%2C526b2661; bili_jct=9f499ecfc9483d576674209ba59bcf28; _uuid=B88E3244-97CD-0B47-A24D-977C99B043DE45625infoc; LIVE_BUVID=AUTO8415598979476280";
+	public final String cookieXingHUo = "sid=cyc71ojs; buvid3=E1739C44-34A5-4B1E-88F0-AC0AAE12E0C340761infoc; DedeUserID=32845432; DedeUserID__ckMd5=6a8a7473e1de5637; SESSDATA=0019f79c%2C1562651400%2C9de38861; bili_jct=991d173da8e52fde89066f9c563c8bac; _uuid=7974E161-3373-0E1E-A4C1-582B53966AF901053infoc; LIVE_BUVID=AUTO5615600594032118";
+
+	public void checkXinghuo(long fromGroup, int roomId, long fromQQ, String msg) {
+		try {
+			sendDanmaku(roomId, cookieXingHUo, msg);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		if (fromGroup == -1) {
+			Autoreply.sendMessage(0, fromQQ, roomId + "已奶");
+		} else {
+			Autoreply.sendMessage(fromGroup, 0, roomId + "已奶");
+		}
+	}
 
 	public void check(long fromGroup, int roomId, long fromQQ, String msg) {
-		if (fromQQ != 2856986197L) {
-			return;
-		}
 		try {
 			sendDanmaku(roomId, cookieSunny, msg);
 			sendDanmaku(roomId, cookieLuna, msg);

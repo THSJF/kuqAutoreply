@@ -1,14 +1,12 @@
 package com.meng.config;
 
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStreamWriter;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.HashSet;
-
-import javax.swing.text.StyledEditorKit.ForegroundAction;
 
 import com.google.gson.Gson;
 import com.meng.Autoreply;
@@ -21,9 +19,12 @@ public class ConfigManager {
 	private ConfigJavaBean configJavaBean = new ConfigJavaBean();
 	public Gson gson = new Gson();
 	public HashSet<Long> qqAllowPass = new HashSet<>();
+	public PortConfig portConfig;
 
 	public ConfigManager() {
 		try {
+			portConfig = gson.fromJson(Methods.readFileToString(Autoreply.appDirectory + "grzxEditConfig.json"),
+					PortConfig.class);
 			File jsonBaseConfigFile = new File(Autoreply.appDirectory + "configV2.json");
 			if (!jsonBaseConfigFile.exists()) {
 				configJavaBean.groupConfigs.add(new GroupConfig());
@@ -105,6 +106,15 @@ public class ConfigManager {
 		return null;
 	}
 
+	public PersonInfo getPersonInfoFromName(String name) {
+		for (PersonInfo pi : configJavaBean.personInfo) {
+			if (pi.name.equals(name)) {
+				return pi;
+			}
+		}
+		return null;
+	}
+
 	public void checkSetConfig(long fromGroup, String msg) {
 
 		if (msg.startsWith(".blockuser")) {
@@ -170,4 +180,19 @@ public class ConfigManager {
 		}
 		return null;
 	}
+
+	public String readFileToString() throws Exception {
+		File file = new File(Autoreply.appDirectory + "grzxEditConfig.json");
+		if (!file.exists()) {
+			System.exit(0);
+			file.createNewFile();
+		}
+		Long filelength = file.length();
+		byte[] filecontent = new byte[filelength.intValue()];
+		FileInputStream in = new FileInputStream(file);
+		in.read(filecontent);
+		in.close();
+		return new String(filecontent, "UTF-8");
+	}
+
 }

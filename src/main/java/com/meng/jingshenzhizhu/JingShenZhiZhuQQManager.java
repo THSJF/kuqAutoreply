@@ -32,7 +32,7 @@ public class JingShenZhiZhuQQManager {
 	public JingShenZhiZhuQQManager(long fromGroup, String msg) {
 		this.fromGroup = fromGroup;
 		this.msg = msg;
- 
+
 		File files = new File(Autoreply.appDirectory + "jingshenzhizhu\\");
 		if (!files.exists()) {
 			files.mkdirs();
@@ -42,12 +42,12 @@ public class JingShenZhiZhuQQManager {
 			files2.mkdirs();
 		}
 		long id = Autoreply.instence.CC.getAt(msg);
-		if (id == -1000)
+		if (id == -1000 || id == -1)
 			return;
-		resultImageFile = new File(Autoreply.appDirectory + "jingshenzhizhu\\" + id + ".jpg"); 
+		resultImageFile = new File(Autoreply.appDirectory + "jingshenzhizhu\\" + id + ".jpg");
 		headImageFile = new File(Autoreply.appDirectory + "user/" + id + ".jpg");
-		downloadPicture("http://q2.qlogo.cn/headimg_dl?bs=" + id + "&dst_uin=" + id + "&dst_uin=" + id + "&;dst_uin=" + id
-				+ "&spec=5&url_enc=0&referer=bu_interface&term_type=PC");
+		downloadPicture("http://q2.qlogo.cn/headimg_dl?bs=" + id + "&dst_uin=" + id + "&dst_uin=" + id + "&;dst_uin="
+				+ id + "&spec=5&url_enc=0&referer=bu_interface&term_type=PC");
 		start(headImageFile);
 	}
 
@@ -58,7 +58,8 @@ public class JingShenZhiZhuQQManager {
 			BufferedImage des1 = chgPic(Rotate(headImage, 346), 190);
 			Image baseImage = null;
 			baseImage = ImageIO.read(new File(Autoreply.appDirectory + "pic\\6.png"));
-			BufferedImage b = new BufferedImage(baseImage.getWidth(null), baseImage.getHeight(null), BufferedImage.TYPE_INT_ARGB);
+			BufferedImage b = new BufferedImage(baseImage.getWidth(null), baseImage.getHeight(null),
+					BufferedImage.TYPE_INT_ARGB);
 			b.getGraphics().drawImage(baseImage, 0, 0, null);
 			b.getGraphics().drawImage(des1, -29, 30, null);
 			ImageIO.write(b, "png", resultImageFile);

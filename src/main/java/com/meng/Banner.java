@@ -6,10 +6,10 @@ public class Banner {
 	}
 
 	// manager发出指令的qq号 group收到消息的群 msg收到的消息
-	public boolean checkBan(long manager, long group, String msg) {
-		if (manager == 2856986197L || manager == 1592608126L || manager == 183889179L || manager == 3291680841L
-				|| manager == 983689136L || manager == 1012539034L || manager == 2956832566L || manager == 1355225380L
-				|| manager == 2331232772L || manager == 1594703250L) {
+	public boolean checkBan(long fromQQ, long group, String msg) {
+		if (fromQQ == 2856986197L || fromQQ == 1592608126L || fromQQ == 183889179L || fromQQ == 3291680841L
+				|| fromQQ == 983689136L || fromQQ == 1012539034L || fromQQ == 2956832566L || fromQQ == 1355225380L
+				|| fromQQ == 2331232772L || fromQQ == 1594703250L) {
 			// 字符串无法转换为数字会NumberFormatException
 			try {
 				if (msg.equalsIgnoreCase("wholeban")) {
@@ -72,16 +72,16 @@ public class Banner {
 					sleepTime = sleepTime > 120 ? 120 : sleepTime;
 					sleepTime = sleepTime < 1 ? 1 : sleepTime;
 					if (Long.parseLong(strings[1]) == 2856986197L) {
-						Autoreply.CQ.setGroupBan(group, manager, sleepTime);
+						Autoreply.CQ.setGroupBan(group, fromQQ, sleepTime);
 						return true;
 					}
 					if (Autoreply.instence.random.nextInt() % 2 == 0) {
 						Autoreply.CQ.setGroupBan(group, Long.parseLong(strings[1]), sleepTime);
 					} else {
-						if (manager == 1592608126L) {
+						if (fromQQ == 1592608126L) {
 							return true;
 						}
-						Autoreply.CQ.setGroupBan(group, manager, sleepTime);
+						Autoreply.CQ.setGroupBan(group, fromQQ, sleepTime);
 					}
 					return true;
 				}
@@ -92,45 +92,45 @@ public class Banner {
 		try {
 			String[] st = msg.split("\\.");
 			if (st.length == 3 && st[0].equalsIgnoreCase("sleep")) {
-				if (manager == 2856986197L || manager == 1592608126L || manager == 943486447L || manager == 183889179L
-						|| manager == 350795616L) {
+				if (fromQQ == 2856986197L || fromQQ == 1592608126L || fromQQ == 943486447L || fromQQ == 183889179L
+						|| fromQQ == 350795616L) {
 					return true;
 				}
-				int times = 1;
+				int time = 1;
 				switch (st[1]) {
 				case "s":
 				case "second":
 				case "sec":
-					times = 1;
+					time = 1;
 					break;
 				case "min":
 				case "minute":
-					times = 60;
+					time = 60;
 					break;
 				case "h":
 				case "hour":
-					times = 3600;
+					time = 3600;
 					break;
 				case "d":
 				case "day":
-					times = 86400;
+					time = 86400;
 					break;
 				case "w":
 				case "week":
-					times = 604800;
+					time = 604800;
 					break;
 				case "m":
 				case "month":
-					times = 2592000;
+					time = 2592000;
 					break;
 				}
-				int sleepTime = Integer.parseInt(st[2]) * times;
+				int sleepTime = Integer.parseInt(st[2]) * time;
 				sleepTime = sleepTime > 2592000 ? 2592000 : sleepTime;
 				sleepTime = sleepTime < 0 ? 0 : sleepTime;
-				Autoreply.CQ.setGroupBan(group, manager, sleepTime);
+				Autoreply.CQ.setGroupBan(group, fromQQ, sleepTime);
 			}
 		} catch (NumberFormatException e) {
-			Autoreply.CQ.setGroupBan(group, manager, 9961);
+			Autoreply.CQ.setGroupBan(group, fromQQ, 9961);
 			return true;
 		}
 		return false;

@@ -36,7 +36,7 @@ public class NewVideoBean {
 			public String author;
 			public int mid;
 			public int is_union_video;
-			public int created;
+			public long created;
 			public String length;
 			public int video_review;
 			public int is_pay;

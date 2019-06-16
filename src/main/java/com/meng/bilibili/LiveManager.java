@@ -34,7 +34,6 @@ public class LiveManager extends Thread {
 		}
 		try {
 			liveTimeMap = new Gson().fromJson(Methods.readFileToString(liveTimeFile.getAbsolutePath()), HashMap.class);
-			System.out.println(liveTimeMap);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -70,6 +69,22 @@ public class LiveManager extends Thread {
 				}
 				sleep(60000);
 			} catch (Exception e) {
+			}
+		}
+	}
+
+	public void saveNow() {
+		liveStart = false;
+		for (LivePerson lp : liveData) {
+			if (!lp.isLiving()) {
+				continue;
+			}
+			lp.setFlag(3);
+			try {
+				sendMsg(lp);
+				Thread.sleep(30);
+			} catch (Exception e) {
+				e.printStackTrace();
 			}
 		}
 	}
@@ -136,7 +151,8 @@ public class LiveManager extends Thread {
 		// } catch (Exception e) {
 		// e.printStackTrace();
 		// }
-		Autoreply.sendMessage(0, 2856986197L, p.getName() + "开始直播");
+	//	Autoreply.sendMessage(0, 2856986197L, p.getName() + "开始直播" + p.roomId);
+		Autoreply.sendMessage(1023432971, 0, p.getName() + "开始直播" + p.roomId);
 	}
 
 	private void tipFinish(LivePerson p) {

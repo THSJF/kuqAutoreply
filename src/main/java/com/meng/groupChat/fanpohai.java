@@ -68,7 +68,7 @@ public class fanpohai {
 							simi = tf;
 						}
 					}
-					bpohai = simi > 0.97f;
+					bpohai = simi > 0.95f;
 					tmpF.delete();
 				}
 			}

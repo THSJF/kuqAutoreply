@@ -23,8 +23,8 @@ public class SocketDicManager extends Thread {
 
 	private void check() throws Exception {
 		try { 
-			ServerSocket serverSocket = new ServerSocket(9999);
-			System.out.println("***9999dic即将启动，等待客户端的链接***"); 
+			ServerSocket serverSocket = new ServerSocket(configManager.portConfig.dicPort);
+			System.out.println("***dicPort即将启动，等待客户端的链接***"); 
 			while (running) {
 				SocketDicThread receiveThread = new SocketDicThread(configManager, serverSocket);
 				receiveThread.start();
