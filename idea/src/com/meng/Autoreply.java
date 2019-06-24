@@ -12,13 +12,18 @@ import com.meng.picEdit.JingShenZhiZhuManager;
 import com.meng.picEdit.PicEditManager;
 import com.meng.searchPicture.PicSearchManager;
 import com.meng.tip.*;
+import com.meng.tools.MRandom;
+import com.meng.tools.NotificationManager;
 import com.sobte.cqp.jcq.entity.*;
 import com.sobte.cqp.jcq.event.JcqAppAbstract;
 
 import javax.swing.*;
 import java.io.File;
 import java.io.IOException;
-import java.util.*;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Random;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
@@ -42,10 +47,10 @@ public class Autoreply extends JcqAppAbstract implements ICQVer, IMsg, IRequest 
 
     public static Autoreply instence;
     public boolean enable = true;
-    public Random random = new Random();
+    public MRandom random = new MRandom();
     public CQCodeCC CC = new CQCodeCC();
     public UserCounter useCount;
-    private Banner banner = new Banner();
+    private Banner banner;
     private RepeaterManager repeatManager;
     private RollPlane rollPlane = new RollPlane();
     private TimeTip timeTip = new TimeTip();
@@ -53,7 +58,7 @@ public class Autoreply extends JcqAppAbstract implements ICQVer, IMsg, IRequest 
     private fanpohai fph;
     public DicReplyManager dicReplyManager;
     private CQCodeManager CQcodeManager = new CQCodeManager();
-    private PicSearchManager picSearchManager = new PicSearchManager();
+    public PicSearchManager picSearchManager = new PicSearchManager();
     private BarcodeManager barcodeManager = new BarcodeManager();
     public NewUpdateManager updateManager;
     public ConfigManager configManager;
@@ -65,6 +70,7 @@ public class Autoreply extends JcqAppAbstract implements ICQVer, IMsg, IRequest 
     private FileInfoManager fileInfoManager = new FileInfoManager();
     private HashSet<Long> botOff = new HashSet<>();
     private PicEditManager picEditManager = new PicEditManager();
+    private NotificationManager notificationManager = new NotificationManager();
 
     /**
      * @param args 系统参数
@@ -105,6 +111,8 @@ public class Autoreply extends JcqAppAbstract implements ICQVer, IMsg, IRequest 
         instence = this;
         appDirectory = CQ.getAppDirectory();
         // 返回如：D:\CoolQ\app\com.sobte.cqp.jcq\app\com.example.demo\
+        configManager = new ConfigManager();
+        banner = new Banner(configManager);
         loadConfig();
         useCount = new UserCounter();
         fph = new fanpohai();
@@ -198,7 +206,7 @@ public class Autoreply extends JcqAppAbstract implements ICQVer, IMsg, IRequest 
             sendMessage(0, fromQQ, CC.record("mmm.mp3"));
             return MSG_IGNORE;
         }
-        if (fromQQ == 2856986197L) {
+        if (configManager.isMaster(fromQQ)) {
             String[] strings = msg.split("\\.");
             if (strings[0].equals("send")) {
                 switch (strings[2]) {
@@ -271,7 +279,7 @@ public class Autoreply extends JcqAppAbstract implements ICQVer, IMsg, IRequest 
                         int font) {
         // if (fromGroup != 312342896L)
         // return MSG_IGNORE;
-        // if (fromGroup != 1023432971L)
+        //  if (fromGroup != 1023432971L)
         // return MSG_IGNORE;
         // if (fromGroup != 617745343L)
         // return MSG_IGNORE;
@@ -305,14 +313,8 @@ public class Autoreply extends JcqAppAbstract implements ICQVer, IMsg, IRequest 
         if (configManager.isNotReplyWord(msg)) {
             return MSG_IGNORE;
         }
-        if (fromQQ == 1000000 && msg.contains("1620628713") && msg.contains("被管理员禁言")) {
-            sendMessage(0, 2856986197L, "在群" + fromGroup + "被禁言");
-            GroupConfig groupConfig = configManager.getGroupConfig(fromGroup);
-            groupConfig.reply = false;
-            sendMessage(0, 2856986197L, "关闭了回复群" + fromGroup);
-            configManager.saveConfig();
-            return MSG_IGNORE;
-        }
+        notificationManager.check(fromGroup, fromQQ, msg);
+
         if (Methods.checkSwitch(fromGroup, msg)) {// 控制
             return MSG_IGNORE;
         }
@@ -326,7 +328,7 @@ public class Autoreply extends JcqAppAbstract implements ICQVer, IMsg, IRequest 
             }
             return MSG_IGNORE;
         }
-        if (fromQQ == 2856986197L || fromQQ == 1592608126L || fromQQ == 2528419891L) {
+        if (configManager.isMaster(fromQQ)) {
             /*
              * if (msg.equals("startlist")) { List<Long> groups = new
              * ArrayList<>(); groups.add(959615179l); groups.add(838293150l);
@@ -354,14 +356,13 @@ public class Autoreply extends JcqAppAbstract implements ICQVer, IMsg, IRequest 
             // 手动更新设置，不再需要重启
             if (msg.equals("直播时间统计")) {
                 sendMessage(fromGroup, 0, liveManager.getLiveTimeCount());
-            } else if (msg.startsWith(".config")) {
-                msg = msg.replace(".config", "");
-                configManager.checkSetConfig(fromGroup, msg);
                 return MSG_IGNORE;
-            } else if (msg.equals("livesave")) {
+            }
+            if (msg.equals("livesave")) {
                 liveManager.saveNow();
                 return MSG_IGNORE;
-            } else if (msg.startsWith("nai.")) {
+            }
+            if (msg.startsWith("nai.")) {
                 String[] sarr = msg.split("\\.");
                 PersonInfo pInfo = configManager.getPersonInfoFromName(sarr[1]);
                 if (pInfo != null) {
@@ -370,46 +371,46 @@ public class Autoreply extends JcqAppAbstract implements ICQVer, IMsg, IRequest 
                     naiManager.check(fromGroup, Integer.parseInt(sarr[1]), fromQQ, sarr[2]);
                 }
                 return MSG_IGNORE;
-            } else if (msg.equalsIgnoreCase("loadConfig")) {
+            }
+            if (msg.equalsIgnoreCase("loadConfig")) {
                 loadConfig();
                 sendMessage(fromGroup, 0, "reload");
                 return MSG_IGNORE;
-            } else if ("精神支柱".equals(msg)) {
+            }
+            if ("精神支柱".equals(msg)) {
                 Autoreply.sendMessage(fromGroup, 0, CC.image(new File(appDirectory + "pic\\alice.png")));
                 return MSG_IGNORE;
-            } else if ("大芳法 芳神复诵".equals(msg)) {
+            }
+            if ("大芳法 芳神复诵".equals(msg)) {
                 new MoShenFuSong(fromGroup, 5).start();
                 return MSG_IGNORE;
-            } else {
-                String[] strings = msg.split("\\.");
-                if (strings[0].equalsIgnoreCase("send")) {
-                    switch (strings[2]) {
-                        case "喵":
-                            sendMessage(Long.parseLong(strings[1]), 0, CC.record("miao.mp3"));
-                            break;
-                        case "娇喘":
-                            sendMessage(Long.parseLong(strings[1]), 0, CC.record("mmm.mp3"));
-                            break;
-                        default:
-                            sendMessage(Long.parseLong(strings[1]), 0, strings[2]);
-                            break;
-                    }
-                    return MSG_IGNORE;
-                } else if (msg.startsWith("精神支柱[CQ:image")) {
-                    new JingShenZhiZhuManager(fromGroup, msg);
-                    return MSG_IGNORE;
+            }
+            String[] strings = msg.split("\\.");
+            if (strings[0].equalsIgnoreCase("send")) {
+                switch (strings[2]) {
+                    case "喵":
+                        sendMessage(Long.parseLong(strings[1]), 0, CC.record("miao.mp3"));
+                        break;
+                    case "娇喘":
+                        sendMessage(Long.parseLong(strings[1]), 0, CC.record("mmm.mp3"));
+                        break;
+                    default:
+                        sendMessage(Long.parseLong(strings[1]), 0, strings[2]);
+                        break;
                 }
+                return MSG_IGNORE;
+            }
+            if (msg.startsWith("精神支柱[CQ:image")) {
+                new JingShenZhiZhuManager(fromGroup, msg);
+                return MSG_IGNORE;
             }
         }
 
-        if (fromQQ == 2856986197L || fromQQ == 2528419891L || fromQQ == 1592608126L || fromQQ == 183889179L
-                || fromQQ == 3291680841L || fromQQ == 983689136L || fromQQ == 1012539034L || fromQQ == 2956832566L
-                || fromQQ == 1355225380L || fromQQ == 2331232772L || fromQQ == 1594703250L || fromQQ == 477133442L
-                || fromGroup == 959615179L || fromGroup == 312342896L) {
+        if (configManager.isAdmin(fromQQ) || fromGroup == 959615179L || fromGroup == 312342896L) {
             if (msg.contains("迫害图[CQ:image")) {
                 String pohaituName = msg.substring(0, msg.indexOf("[CQ:image") - 3);
                 String[] fileNames = msg.substring(msg.indexOf("["), msg.length() - 1).replace("[CQ:image,file=", "")
-                        .split("\\]");
+                        .split("]");
                 List<CQImage> imgList = CC.getCQImages(msg);
                 for (int i = 0; i < imgList.size(); ++i) {
                     switch (pohaituName) {
@@ -433,13 +434,13 @@ public class Autoreply extends JcqAppAbstract implements ICQVer, IMsg, IRequest 
                         return MSG_IGNORE;
                     }
                 }
-                sendGroupMessage(fromGroup, fromQQ, "新图添加成功");
+                sendGroupMessage(fromGroup, fromQQ, imgList.size() + "张图添加成功");
                 return MSG_IGNORE;
             }
             if (msg.contains("色图[CQ:image")) {
                 String setuName = msg.substring(0, msg.indexOf("[CQ:image") - 2);
                 String[] fileNames = msg.substring(msg.indexOf("["), msg.length() - 1).replace("[CQ:image,file=", "")
-                        .split("\\]");
+                        .split("]");
                 List<CQImage> imgList = CC.getCQImages(msg);
                 for (int i = 0; i < imgList.size(); ++i) {
                     try {
@@ -454,7 +455,6 @@ public class Autoreply extends JcqAppAbstract implements ICQVer, IMsg, IRequest 
                 return MSG_IGNORE;
             }
         }
-
         if (configManager.isNotReplyGroup(fromGroup)) {
             return MSG_IGNORE;
         }
@@ -586,14 +586,13 @@ public class Autoreply extends JcqAppAbstract implements ICQVer, IMsg, IRequest 
         }
         if (subtype == 1) {
             QQInfo qInfo = CQ.getStrangerInfo(beingOperateQQ);
-            String name = configManager.getNameFromQQ(beingOperateQQ);
-            sendMessage(fromGroup, 0, (name == null ? qInfo.getNick() : name) + "(" + qInfo.getQqId() + ")" + "跑莉");
+            PersonInfo personInfo = configManager.getPersonInfoFromQQ(beingOperateQQ);
+            sendMessage(fromGroup, 0, (personInfo == null ? qInfo.getNick() : personInfo.name) + "(" + qInfo.getQqId() + ")" + "跑莉");
         } else if (subtype == 2) {
             QQInfo qInfo = CQ.getStrangerInfo(beingOperateQQ);
             QQInfo qInfo2 = CQ.getStrangerInfo(fromQQ);
-            String name = configManager.getNameFromQQ(fromQQ);
-            sendMessage(fromGroup, 0, qInfo.getNick() + "(" + qInfo.getQqId() + ")" + "被"
-                    + (name == null ? qInfo2.getNick() : name) + "(" + qInfo2.getQqId() + ")" + "玩完扔莉");
+            PersonInfo personInfo = configManager.getPersonInfoFromQQ(fromQQ);
+            sendMessage(fromGroup, 0, qInfo.getNick() + "(" + qInfo.getQqId() + ")" + "被" + (personInfo == null ? qInfo2.getNick() : personInfo.name) + "(" + qInfo2.getQqId() + ")" + "玩完扔莉");
         }
         return MSG_IGNORE;
     }
@@ -701,7 +700,7 @@ public class Autoreply extends JcqAppAbstract implements ICQVer, IMsg, IRequest 
             if (personInfo != null) {
                 CQ.setGroupAddRequest(responseFlag, REQUEST_GROUP_ADD, REQUEST_ADOPT, null);
                 sendMessage(fromGroup, 0, "欢迎" + personInfo.name);
-            } else if (configManager.qqAllowPass.contains(fromQQ)) {
+            } else if (configManager.isAdmin(fromQQ) || configManager.isGroupAutoAllow(fromQQ)) {
                 CQ.setGroupAddRequest(responseFlag, REQUEST_GROUP_ADD, REQUEST_ADOPT, null);
                 sendMessage(fromGroup, 0, "此账号在自动允许列表中，已同意进群");
             } else {
@@ -751,20 +750,17 @@ public class Autoreply extends JcqAppAbstract implements ICQVer, IMsg, IRequest 
         // 处理词库中为特殊消息做的标记
         Methods.setRandomPop();
         try {
-
             if (msg.startsWith("red:")) {
                 msg = msg.replace("red:", "");
                 if (instence.messageMap.get(fromQQ) == null) {
-                    instence.messageMap.put(fromQQ,
-                            new MessageSender(fromGroup, fromQQ, msg, System.currentTimeMillis(), -1));
+                    instence.messageMap.put(fromQQ, new MessageSender(fromGroup, fromQQ, msg, System.currentTimeMillis(), -1));
                 }
                 return;
             }
-            String[] stri = msg.split("\\:");
+            String[] stri = msg.split(":");
             switch (stri[0]) {
                 case "image":
-                    CQ.sendGroupMsg(fromGroup,
-                            stri[2].replace("--image--", instence.CC.image(new File(appDirectory + stri[1]))));
+                    CQ.sendGroupMsg(fromGroup, stri[2].replace("--image--", instence.CC.image(new File(appDirectory + stri[1]))));
                     break;
                 case "atFromQQ":
                     CQ.sendGroupMsg(fromGroup, instence.CC.at(fromQQ) + stri[1]);
@@ -774,9 +770,7 @@ public class Autoreply extends JcqAppAbstract implements ICQVer, IMsg, IRequest 
                     break;
                 case "imageFolder":
                     File[] files = (new File(appDirectory + stri[1])).listFiles();
-                    if (files != null) {
-                        CQ.sendGroupMsg(fromGroup, stri[2].replace("--image--", instence.CC.image((File) Methods.rfa(files))));
-                    }
+                    CQ.sendGroupMsg(fromGroup, stri[2].replace("--image--", instence.CC.image((File) Methods.rfa(files))));
                     break;
                 default:
                     CQ.sendGroupMsg(fromGroup, msg);
@@ -818,7 +812,6 @@ public class Autoreply extends JcqAppAbstract implements ICQVer, IMsg, IRequest 
     }
 
     private void loadConfig() {
-        configManager = new ConfigManager();
         addGroupReply();
         System.out.println("群组回复添加完成");
         updateManager = new NewUpdateManager(configManager);
@@ -830,8 +823,7 @@ public class Autoreply extends JcqAppAbstract implements ICQVer, IMsg, IRequest 
 
     private void addGroupDic() {
         dicReplyManager = new DicReplyManager();
-        ArrayList<GroupConfig> list = configManager.getGroupConfigList();
-        for (GroupConfig groupConfig : list) {
+        for (GroupConfig groupConfig : configManager.configJavaBean.groupConfigs) {
             if (groupConfig.isDic()) {
                 dicReplyManager.addData(new DicReplyGroup(groupConfig.groupNumber));
             }
@@ -841,8 +833,7 @@ public class Autoreply extends JcqAppAbstract implements ICQVer, IMsg, IRequest 
     private void addGroupReply() {
         dicReplyManager = new DicReplyManager();
         repeatManager = new RepeaterManager();
-        ArrayList<GroupConfig> list = configManager.getGroupConfigList();
-        for (GroupConfig groupConfig : list) {
+        for (GroupConfig groupConfig : configManager.configJavaBean.groupConfigs) {
             if (groupConfig.isDic()) {
                 dicReplyManager.addData(new DicReplyGroup(groupConfig.groupNumber));
             }

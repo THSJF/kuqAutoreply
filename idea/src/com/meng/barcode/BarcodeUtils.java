@@ -26,7 +26,7 @@ import javax.imageio.ImageIO;
 
 /**
  * Created by xingli on 12/25/15.
- * https://github.com/iluhcm/QrCodeScanner/blob/master/app/src/main/java/com/
+ * https://github.com/iluhcm/QrCodeScanner/blob/masterList/app/src/main/java/com/
  * kaola/qrcodescanner/qrcode/utils/QrUtils.java 二维码相关功能类
  */
 public class BarcodeUtils {

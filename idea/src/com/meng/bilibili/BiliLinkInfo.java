@@ -15,12 +15,13 @@ public class BiliLinkInfo {
 
     public boolean check(long fromGroup, long fromQQ, String msg) {
         String subedUrl;
+        int ind = msg.indexOf("http");
         int ind1 = msg.indexOf(",text=");
         int ind2 = msg.indexOf(",title=");
-        if (ind1 != -1) {
-            subedUrl = msg.substring(msg.indexOf("http"), ind1);
-        } else if (ind2 != -1) {
-            subedUrl = msg.substring(msg.indexOf("http"), ind2);
+        if (ind != -1 && ind1 != -1) {
+            subedUrl = msg.substring(ind, ind1);
+        } else if (ind != -1 && ind2 != -1) {
+            subedUrl = msg.substring(ind, ind2);
         } else {
             subedUrl = msg;
         }

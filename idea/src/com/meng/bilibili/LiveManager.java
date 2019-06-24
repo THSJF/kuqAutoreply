@@ -27,8 +27,7 @@ public class LiveManager extends Thread {
     private HashMap<String, String> liveTimeMap = new HashMap<>();
 
     public LiveManager(ConfigManager configManager) {
-        ArrayList<PersonInfo> list = configManager.getPersonInfoList();
-        for (PersonInfo cb : list) {
+        for (PersonInfo cb : configManager.configJavaBean.personInfo) {
             if (cb.bliveRoom == 0) {
                 continue;
             }

@@ -31,24 +31,24 @@ public class UserCounter {
         }
         new Thread(() -> {
             while (true) {
-                try {
-                    Thread.sleep(60000);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
+                sleep(60000);
                 saveData();
             }
         }).start();
         new Thread(() -> {
             while (true) {
-                try {
-                    Thread.sleep(86400000);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
+                sleep(86400000);
                 backupData();
             }
         }).start();
+    }
+
+    private void sleep(long ms) {
+        try {
+            Thread.sleep(ms);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
     }
 
     public void incSetu(long qq) {
@@ -149,7 +149,7 @@ public class UserCounter {
             stringBuilder.append("\n").append("搜图").append(userInfo.sp).append("次");
         }
         if (userInfo.biliLink != 0) {
-            stringBuilder.append("\n").append("发送哔哩哔哩链接").append(userInfo.biliLink);
+            stringBuilder.append("\n").append("发送哔哩哔哩链接").append(userInfo.biliLink).append("次");
         }
         return stringBuilder.toString();
 
@@ -173,7 +173,6 @@ public class UserCounter {
         String spq = null;
         String speakq = null;
 
-        StringBuilder sb = new StringBuilder();
         for (Entry<String, UserInfo> entry : countMap.entrySet()) {
             UserInfo userInfo = entry.getValue();
             if (userInfo.speak > speak) {
@@ -209,6 +208,7 @@ public class UserCounter {
                 spq = entry.getKey();
             }
         }
+        StringBuilder sb = new StringBuilder();
         if (speakq != null) {
             sb.append(speakq).append("共水群").append(speak).append("句");
         }

@@ -14,94 +14,168 @@ import com.meng.config.javabeans.GroupConfig;
 import com.meng.config.javabeans.PersonInfo;
 
 public class SocketConfigThread extends Thread {
-	private Socket socket = null;
-	ConfigManager configManager;
+    private Socket socket = null;
+    private ConfigManager configManager;
 
-	public SocketConfigThread(ConfigManager configManager, ServerSocket serverSocket) {
-		try {
-			this.socket = serverSocket.accept();
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-		this.configManager = configManager;
-		InetAddress address = socket.getInetAddress();
-		System.out.println("当前客户端的IP ： " + address.getHostAddress());
-	}
+    public SocketConfigThread(ConfigManager configManager, ServerSocket serverSocket) {
+        try {
+            this.socket = serverSocket.accept();
+        } catch (IOException e) {
+            e.printStackTrace();
+            System.out.println("SocketConfigManager init failed");
+        }
+        this.configManager = configManager;
+        InetAddress address = socket.getInetAddress();
+        System.out.println("当前客户端的IP ： " + address.getHostAddress());
+    }
 
-	@Override
-	public void run() {
+    @Override
+    public void run() {
+        try {
+            InputStream inputStream = socket.getInputStream();
+            DataInputStream dataInputStream = new DataInputStream(inputStream);
+            String string = dataInputStream.readUTF();
+            // string = new String(Base64.decryptBASE64(string), "utf-8");
+            System.out.println("服务器读取客户端的：" + string);
+            OutputStream outputStream = socket.getOutputStream();
+            DataOutputStream dataOutputStream = new DataOutputStream(outputStream);
+            dataOutputStream.writeUTF(processText(string));
+            socket.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
 
-		try {
-			InputStream inputStream = socket.getInputStream();
-			DataInputStream dataInputStream = new DataInputStream(inputStream);
-			String string = dataInputStream.readUTF();
-			// string = new String(Base64.decryptBASE64(string), "utf-8");
-			System.out.println("服务器读取客户端的：" + string);
-			OutputStream outputStream = socket.getOutputStream();
-			DataOutputStream dataOutputStream = new DataOutputStream(outputStream);
-			dataOutputStream.writeUTF(processText(string));
-			socket.close();
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-	}
-
-	private String processText(String string) {
-
-		if (string.equals("getFull")) {
-			return configManager.gson.toJson(configManager.getConfigJavaBean());
-		}
-		String type = string.substring(0, string.indexOf("."));
-		String content = string.substring(string.indexOf(".") + 1);
-
-		switch (NetworkType.valueOf(type)) {
-		case addGroup:
-			configManager.getGroupConfigList().add(configManager.gson.fromJson(content, GroupConfig.class));
-			break;
-		case addNotReplyUser:
-			configManager.getQQNotReplyList().add(Long.parseLong(content));
-			break;
-		case addNotReplyWord:
-			configManager.getWordNotReplyList().add(content);
-			break;
-		case addPersonInfo:
-			configManager.getPersonInfoList().add(configManager.gson.fromJson(content, PersonInfo.class));
-			break;
-		case removeGroup:
-			configManager.getGroupConfigList().remove(Integer.parseInt(content));
-			break;
-		case removeNotReplyUser:
-			configManager.getQQNotReplyList().remove(Integer.parseInt(content));
-			break;
-		case removeNotReplyWord:
-			configManager.getWordNotReplyList().remove(Integer.parseInt(content));
-			break;
-		case removePersonInfo:
-			configManager.getPersonInfoList().remove((content));
-			break;
-		case setGroup:
-			String[] split = content.split(" ");
-			configManager.getGroupConfigList().set(Integer.parseInt(split[0]),
-					configManager.gson.fromJson(split[1], GroupConfig.class));
-			break;
-		case setNotReplyUser:
-			String[] split2 = content.split(" ");
-			configManager.getQQNotReplyList().set(Integer.parseInt(split2[0]), Long.parseLong(split2[1]));
-			break;
-		case setNotReplyWord:
-			String[] split3 = content.split(" ");
-			configManager.getWordNotReplyList().set(Integer.parseInt(split3[0]), split3[1]);
-			break;
-		case setPersonInfo:
-			String[] split4 = content.split(" ");
-			configManager.getPersonInfoList().set(Integer.parseInt(split4[0]),
-					configManager.gson.fromJson(split4[1], PersonInfo.class));
-			break;
-		default:
-			return "fafafa";
-		}
-		configManager.saveConfig();
-		return "ok";
-	}
+    private String processText(String string) {
+        if (string.equals("getFull")) {
+            return configManager.gson.toJson(configManager.configJavaBean);
+        }
+        String type = string.substring(0, string.indexOf("."));
+        String content = string.substring(string.indexOf(".") + 1);
+        switch (NetworkType.valueOf(type)) {
+            case addGroup:
+                configManager.configJavaBean.groupConfigs.add(configManager.gson.fromJson(content, GroupConfig.class));
+                break;
+            case addNotReplyUser:
+                configManager.configJavaBean.QQNotReply.add(Long.parseLong(content));
+                break;
+            case addNotReplyWord:
+                configManager.configJavaBean.wordNotReply.add(content);
+                break;
+            case addPersonInfo:
+                configManager.configJavaBean.personInfo.add(configManager.gson.fromJson(content, PersonInfo.class));
+                break;
+            case addMaster:
+                configManager.configJavaBean.masterList.add(Long.parseLong(content));
+                break;
+            case addAdmin:
+                configManager.configJavaBean.adminList.add(Long.parseLong(content));
+                break;
+            case addGroupAllow:
+                configManager.configJavaBean.groupAutoAllowList.add(Long.parseLong(content));
+                break;
+            case removeGroup:
+                configManager.configJavaBean.groupConfigs.remove(configManager.gson.fromJson(content, GroupConfig.class));
+                break;
+            case removeNotReplyUser:
+                configManager.configJavaBean.QQNotReply.remove(Long.parseLong(content));
+                break;
+            case removeNotReplyWord:
+                configManager.configJavaBean.wordNotReply.remove(content);
+                break;
+            case removePersonInfo:
+                configManager.configJavaBean.personInfo.remove(configManager.gson.fromJson(content, PersonInfo.class));
+                break;
+            case removeMaster:
+                configManager.configJavaBean.masterList.remove(Long.parseLong(content));
+                break;
+            case removeAdmin:
+                configManager.configJavaBean.adminList.remove(Long.parseLong(content));
+                break;
+            case removeGroupAllow:
+                configManager.configJavaBean.groupAutoAllowList.remove(Long.parseLong(content));
+                break;
+            case setGroup:
+                GroupConfig groupConfig =configManager.gson.fromJson(content, GroupConfig.class);
+                for (GroupConfig gc : configManager.configJavaBean.groupConfigs) {
+                    if (gc.groupNumber == groupConfig.groupNumber) {
+                        configManager.configJavaBean.groupConfigs.remove(gc);
+                        configManager.configJavaBean.groupConfigs.add(groupConfig);
+                        break;
+                    }
+                }
+                break;
+            case setNotReplyUser:
+                String[] split = content.split(" ");
+                long qq = Long.parseLong(split[0]);
+                for (long l : configManager.configJavaBean.QQNotReply) {
+                    if (l == qq) {
+                        configManager.configJavaBean.QQNotReply.remove(l);
+                        configManager.configJavaBean.QQNotReply.add(Long.parseLong(split[1]));
+                        break;
+                    }
+                }
+                break;
+            case setNotReplyWord:
+                String[] split2 = content.split(" ");
+                for (String s : configManager.configJavaBean.wordNotReply) {
+                    if (s.equals(split2[0])) {
+                        configManager.configJavaBean.wordNotReply.remove(s);
+                        configManager.configJavaBean.wordNotReply.add(split2[1]);
+                        break;
+                    }
+                }
+                break;
+            case setPersonInfo:
+                PersonInfo personInfo = configManager.gson.fromJson(content, PersonInfo.class);
+                boolean notContain = true;
+                for (PersonInfo pi : configManager.configJavaBean.personInfo) {
+                    if (pi.name.equals(personInfo.name) && pi.qq == personInfo.qq && pi.bid == personInfo.bid && pi.bliveRoom == personInfo.bliveRoom) {
+                        notContain = false;
+                    }
+                }
+                if (notContain) {
+                    configManager.configJavaBean.personInfo.add(personInfo);
+                }
+                break;
+            case setMaster:
+                String[] splitm = content.split(" ");
+                long qqm = Long.parseLong(splitm[0]);
+                for (long l : configManager.configJavaBean.QQNotReply) {
+                    if (l == qqm) {
+                        configManager.configJavaBean.masterList.remove(l);
+                        configManager.configJavaBean.masterList.add(Long.parseLong(splitm[1]));
+                        break;
+                    }
+                }
+                break;
+            case setAdmin:
+                String[] splita = content.split(" ");
+                long qqa = Long.parseLong(splita[0]);
+                for (long l : configManager.configJavaBean.QQNotReply) {
+                    if (l == qqa) {
+                        configManager.configJavaBean.adminList.remove(l);
+                        configManager.configJavaBean.adminList.add(Long.parseLong(splita[1]));
+                        break;
+                    }
+                }
+                break;
+            case setGroupAllow:
+                String[] splitg = content.split(" ");
+                long qqg = Long.parseLong(splitg[0]);
+                for (long l : configManager.configJavaBean.QQNotReply) {
+                    if (l == qqg) {
+                        configManager.configJavaBean.groupAutoAllowList.remove(l);
+                        configManager.configJavaBean.groupAutoAllowList.add(Long.parseLong(splitg[1]));
+                        break;
+                    }
+                }
+                break;
+            default:
+                return "fafafa";
+        }
+        configManager.saveConfig();
+        return "ok";
+    }
 
 }
