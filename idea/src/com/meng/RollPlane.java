@@ -22,7 +22,7 @@ public class RollPlane {
     private String[] pl16 = new String[]{"博丽灵梦", "琪露诺", "射命丸文", "雾雨魔理沙"};
     private String[] pl16s = new String[]{"春", "夏", "秋", "冬"};
     private String[] pl17 = new String[]{"博丽灵梦", "雾雨魔理沙", "魂魄妖梦"};
-    private String[] pl17s = new String[]{"熊哥", "鸟哥", "狗哥"};
+    private String[] pl17s = new String[]{"[CQ:emoji,id=128059]哥", "[CQ:emoji,id=128037]哥", "[CQ:emoji,id=128054]哥"};
     private String[] plDiff = new String[]{"easy", "normal", "hard", "lunatic"};
     private String[] cham = new String[]{"开局按↓去正下版底贴一下", "开局原地小转3圈顺时针", "开局原地小转3圈逆时针", "开局↑↓↑↓", "开局←→←→"};
 
@@ -64,7 +64,7 @@ public class RollPlane {
                         break;
                     case "help":
                     case "帮助":
-                        String str = "roll.help roll.帮助 不解释（\nroll.act roll.动作 孙晋芳杯规定动作随机选择（\nroll.game roll.游戏 可以随机选择游戏\nroll.difficult roll.diff roll.难度 可以随机选择难度\nroll.player roll.pl roll.plane接作品名或编号可随机选择机体（仅官方整数作）\nroll.stage roll.关卡 roll.面数 加玩家名可用来接力时随机选择面数，多个玩家名之间用.隔开\n";
+                        String str = "\nroll.game roll.游戏 可以随机选择游戏\nroll.difficult roll.diff roll.难度 可以随机选择难度\nroll.player roll.pl roll.plane接作品名或编号可随机选择机体（仅官方整数作）\nroll.stage roll.关卡 roll.面数 加玩家名可用来接力时随机选择面数，多个玩家名之间用.隔开\n";
                         Autoreply.sendMessage(fromGroup, 0, str);
                         break;
                 }
@@ -168,10 +168,11 @@ public class RollPlane {
             case "东方文花帖":
             case "th9.5":
             case "StB":
-            case "东方文花帖DS":
-            case "th12.5":
-            case "DS":
+                //       case "东方文花帖DS":
+                //       case "th12.5":
+                //       case "DS":
             case "妖精大战争":
+            case "th12.8":
             case "弹幕天邪鬼":
             case "th14.3":
             case "ISC":
@@ -179,6 +180,9 @@ public class RollPlane {
             case "th16.5":
             case "VD":
                 Autoreply.sendMessage(fromGroup, 0, "就一个飞机你roll你[CQ:emoji,id=128052]呢");
+                break;
+            default:
+                Autoreply.sendMessage(fromGroup, 0, "只有2un飞机游戏");
                 break;
         }
     }

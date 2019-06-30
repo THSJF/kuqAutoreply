@@ -115,6 +115,7 @@ public class RepeaterBanner {
         banCount = 6;
         Autoreply.instence.useCount.incFudujiguanjia(qq);
         reply(group, qq, msg);
+        Autoreply.instence.useCount.incFudu(Autoreply.CQ.getLoginQQ());
         return true;
     }
 

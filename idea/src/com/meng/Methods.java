@@ -14,6 +14,7 @@ import java.util.Map;
 import java.util.Timer;
 import java.util.TimerTask;
 
+import com.meng.picEdit.JingShenZhiZhuQQManager;
 import org.jsoup.Connection;
 import org.jsoup.Jsoup;
 
@@ -93,6 +94,7 @@ public class Methods {
             if (files.length > 0) {
                 Autoreply.sendMessage(fromGroup, fromQQ, Autoreply.instence.CC.image((File) Methods.rfa(files)));
                 Autoreply.instence.useCount.incPohaitu(fromQQ);
+                Autoreply.instence.useCount.incPohaitu(Autoreply.CQ.getLoginQQ());
             }
             return true;
         }
@@ -100,9 +102,6 @@ public class Methods {
     }
 
     public static boolean isSetu(long fromGroup, long fromQQ, String msg) {
-        if (fromGroup == 703170126L || fromQQ == 2176282294L) {
-            return false;
-        }
         if (msg.equals("色图")) {
             String[] strings = (new File(Autoreply.appDirectory + "setu/")).list();
             StringBuilder sBuilder = new StringBuilder("现在有");
@@ -118,11 +117,13 @@ public class Methods {
             File[] pics = folder.listFiles();
             Autoreply.sendMessage(fromGroup, fromQQ, Autoreply.instence.CC.image((File) Methods.rfa(pics)));
             Autoreply.instence.useCount.incSetu(fromQQ);
+            Autoreply.instence.useCount.incSetu(Autoreply.CQ.getLoginQQ());
         } else if (msg.endsWith("色图")) {
             File[] files = (new File(Autoreply.appDirectory + "setu/" + msg.replace("色图", ""))).listFiles();
             if (files.length > 0) {
                 Autoreply.sendMessage(fromGroup, fromQQ, Autoreply.instence.CC.image((File) Methods.rfa(files)));
                 Autoreply.instence.useCount.incSetu(fromQQ);
+                Autoreply.instence.useCount.incSetu(Autoreply.CQ.getLoginQQ());
             }
             return true;
         }
@@ -137,11 +138,15 @@ public class Methods {
 
     // 有@的时候
     public static boolean checkAt(long fromGroup, long fromQQ, String msg) {
-        if (Autoreply.instence.CC.getAt(msg) == 1620628713L) {
+        if (Autoreply.instence.CC.getAt(msg) == Autoreply.CQ.getLoginQQ()) {
             // 过滤特定的文字
             // @消息发送者并复读内容
             if (!msg.contains("蓝") && !msg.contains("藍") && !msg.contains("赠送")) {
                 Autoreply.sendMessage(fromGroup, 0, msg.replace("[CQ:at,qq=1620628713]", "[CQ:at,qq=" + fromQQ + "]"));
+                return true;
+            }
+            if (msg.startsWith("精神支柱[CQ:at")) {
+                new JingShenZhiZhuQQManager(fromGroup, fromQQ, msg);
                 return true;
             }
             // if (msg.contains("野兽先辈") || msg.contains("仰望星空派") ||

@@ -11,6 +11,7 @@ import java.io.OutputStreamWriter;
 import java.lang.reflect.Type;
 import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.Map.Entry;
 
 public class UserCounter {
@@ -126,7 +127,9 @@ public class UserCounter {
     public String getMyCount(long qq) {
         UserInfo userInfo = countMap.get(String.valueOf(qq));
         StringBuilder stringBuilder = new StringBuilder();
-        stringBuilder.append("你共");
+        if (qq != Autoreply.CQ.getLoginQQ()) {
+            stringBuilder.append("你共");
+        }
         if (userInfo.speak != 0) {
             stringBuilder.append("水群").append(userInfo.speak).append("句");
         }
@@ -143,7 +146,7 @@ public class UserCounter {
             stringBuilder.append("\n").append("打断复读").append(userInfo.repeatBreak).append("次");
         }
         if (userInfo.setu != 0) {
-            stringBuilder.append("\n").append("要色图").append(userInfo.setu).append("次");
+            stringBuilder.append("\n").append("色图").append(userInfo.setu).append("次");
         }
         if (userInfo.sp != 0) {
             stringBuilder.append("\n").append("搜图").append(userInfo.sp).append("次");
@@ -174,6 +177,9 @@ public class UserCounter {
         String speakq = null;
 
         for (Entry<String, UserInfo> entry : countMap.entrySet()) {
+            if (entry.getKey().equals(String.valueOf(Autoreply.CQ.getLoginQQ()))) {
+                continue;
+            }
             UserInfo userInfo = entry.getValue();
             if (userInfo.speak > speak) {
                 speak = userInfo.speak;
@@ -210,28 +216,28 @@ public class UserCounter {
         }
         StringBuilder sb = new StringBuilder();
         if (speakq != null) {
-            sb.append(speakq).append("共水群").append(speak).append("句");
+            sb.append(speakq).append("水群").append(speak).append("句");
         }
         if (setuq != null) {
-            sb.append("\n").append(setuq).append("共要色图").append(setu).append("次");
+            sb.append("\n").append(setuq).append("色图").append(setu).append("次");
         }
         if (pohaiq != null) {
-            sb.append("\n").append(pohaiq).append("共迫害").append(pohai).append("次");
+            sb.append("\n").append(pohaiq).append("迫害").append(pohai).append("次");
         }
         if (repeatStartq != null) {
-            sb.append("\n").append(repeatStartq).append("共带领复读").append(repeatStart).append("次");
+            sb.append("\n").append(repeatStartq).append("带领复读").append(repeatStart).append("次");
         }
         if (repeatq != null) {
-            sb.append("\n").append(repeatq).append("共复读").append(repeat).append("次");
+            sb.append("\n").append(repeatq).append("复读").append(repeat).append("次");
         }
         if (repeatBreakerq != null) {
-            sb.append("\n").append(repeatBreakerq).append("共打断复读").append(repeatBreaker).append("次");
+            sb.append("\n").append(repeatBreakerq).append("打断复读").append(repeatBreaker).append("次");
         }
         if (biliLinkq != null) {
-            sb.append("\n").append(biliLinkq).append("共发送哔哩哔哩链接").append(biliLink).append("次");
+            sb.append("\n").append(biliLinkq).append("发送哔哩哔哩链接").append(biliLink).append("次");
         }
         if (spq != null) {
-            sb.append("\n").append(spq).append("共搜图").append(sp).append("次");
+            sb.append("\n").append(spq).append("搜图").append(sp).append("次");
         }
         return sb.toString();
     }

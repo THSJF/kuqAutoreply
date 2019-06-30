@@ -47,11 +47,11 @@ public class ConfigManager {
     }
 
     public boolean isAdmin(long fromQQ) {
-        return configJavaBean.masterList.contains(fromQQ) || configJavaBean.adminList.contains(fromQQ);
+        return configJavaBean.adminList.contains(fromQQ) || configJavaBean.masterList.contains(fromQQ);
     }
 
     public boolean isGroupAutoAllow(long fromQQ) {
-        return configJavaBean.groupAutoAllowList.contains(fromQQ);
+        return configJavaBean.groupAutoAllowList.contains(fromQQ) || configJavaBean.adminList.contains(fromQQ) || configJavaBean.masterList.contains(fromQQ);
     }
 
     public GroupConfig getGroupConfig(long fromGroup) {

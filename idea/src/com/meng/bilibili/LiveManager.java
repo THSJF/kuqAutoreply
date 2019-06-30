@@ -21,7 +21,7 @@ import java.util.Map.Entry;
 
 public class LiveManager extends Thread {
 
-    private ArrayList<LivePerson> liveData = new ArrayList<>();
+    public ArrayList<LivePerson> livePerson = new ArrayList<>();
 
     public static boolean liveStart = true;
     private HashMap<String, String> liveTimeMap = new HashMap<>();
@@ -31,7 +31,7 @@ public class LiveManager extends Thread {
             if (cb.bliveRoom == 0) {
                 continue;
             }
-            liveData.add(new LivePerson(cb.name, cb.bid, cb.bliveRoom, cb.autoTip));
+            livePerson.add(new LivePerson(cb.name, cb.bid, cb.bliveRoom, cb.autoTip));
         }
         File liveTimeFile = new File(Autoreply.appDirectory + "liveTime.json");
         if (!liveTimeFile.exists()) {
@@ -51,7 +51,7 @@ public class LiveManager extends Thread {
         while (true) {
             try {
                 if (liveStart) {
-                    for (LivePerson lPerson : liveData) {
+                    for (LivePerson lPerson : livePerson) {
                         SpaceToLiveJavaBean sjb = new Gson().fromJson(Methods.getSourceCode(
                                 "https://api.live.bilibili.com/room/v1/Room/getRoomInfoOld?mid=" + lPerson.getUid()),
                                 SpaceToLiveJavaBean.class);
@@ -81,7 +81,7 @@ public class LiveManager extends Thread {
 
     public void saveNow() {
         liveStart = false;
-        for (LivePerson lp : liveData) {
+        for (LivePerson lp : livePerson) {
             if (!lp.isLiving()) {
                 continue;
             }
@@ -95,11 +95,7 @@ public class LiveManager extends Thread {
         }
     }
 
-    public LivePerson getPerson(int key) {
-        return liveData.get(key);
-    }
-
-    private void sendMsg(LivePerson p) throws Exception {
+    private void sendMsg(LivePerson p){
         switch (p.getFlag()) {
             case 0:
                 if (p.isLiving()) {
@@ -181,10 +177,6 @@ public class LiveManager extends Thread {
         // e.printStackTrace();
         // }
         Autoreply.sendMessage(0, 2856986197L, p.getName() + "直播结束");
-    }
-
-    public int getliveCount() {
-        return liveData.size();
     }
 
     public String getLiveTimeCount() {

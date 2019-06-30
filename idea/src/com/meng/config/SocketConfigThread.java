@@ -96,7 +96,7 @@ public class SocketConfigThread extends Thread {
                 configManager.configJavaBean.groupAutoAllowList.remove(Long.parseLong(content));
                 break;
             case setGroup:
-                GroupConfig groupConfig =configManager.gson.fromJson(content, GroupConfig.class);
+                GroupConfig groupConfig = configManager.gson.fromJson(content, GroupConfig.class);
                 for (GroupConfig gc : configManager.configJavaBean.groupConfigs) {
                     if (gc.groupNumber == groupConfig.groupNumber) {
                         configManager.configJavaBean.groupConfigs.remove(gc);
@@ -127,15 +127,17 @@ public class SocketConfigThread extends Thread {
                 }
                 break;
             case setPersonInfo:
-                PersonInfo personInfo = configManager.gson.fromJson(content, PersonInfo.class);
+                String[] obj = content.split(" ");
+                PersonInfo oldPersonInfo = configManager.gson.fromJson(obj[0], PersonInfo.class);
+                PersonInfo newPersonInfo = configManager.gson.fromJson(obj[1], PersonInfo.class);
                 boolean notContain = true;
                 for (PersonInfo pi : configManager.configJavaBean.personInfo) {
-                    if (pi.name.equals(personInfo.name) && pi.qq == personInfo.qq && pi.bid == personInfo.bid && pi.bliveRoom == personInfo.bliveRoom) {
+                    if (pi.name.equals(oldPersonInfo.name) && pi.qq == oldPersonInfo.qq && pi.bid == oldPersonInfo.bid && pi.bliveRoom == oldPersonInfo.bliveRoom) {
                         notContain = false;
                     }
                 }
                 if (notContain) {
-                    configManager.configJavaBean.personInfo.add(personInfo);
+                    configManager.configJavaBean.personInfo.add(newPersonInfo);
                 }
                 break;
             case setMaster:

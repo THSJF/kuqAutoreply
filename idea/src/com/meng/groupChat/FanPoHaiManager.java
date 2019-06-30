@@ -11,25 +11,27 @@ import com.sobte.cqp.jcq.entity.Member;
 import javax.imageio.ImageIO;
 import java.io.File;
 
-public class fanpohai {
+public class FanPoHaiManager {
     private FingerPrint[] fts;// 存放图片指纹的数组 用于对比新收到的图片和样本相似度
     private int pohaicishu = 0;// 收到的消息包含迫害二字的次数
     private int alpohai = Autoreply.instence.random.nextInt(5) + 2;// 收到的消息包含迫害二字的次数到达此值也会触发反迫害
 
-    public fanpohai() {
-        File[] pohaitu = new File(Autoreply.appDirectory + "fan\\").listFiles();
-        if (pohaitu != null) {
-            fts = new FingerPrint[pohaitu.length];
-        }
-        if (fts != null) {
-            for (int i = 0; i < fts.length; i++) {
-                try {
-                    fts[i] = new FingerPrint(ImageIO.read(pohaitu[i]));
-                } catch (Exception e) {
-                    System.out.println(pohaitu[i].getAbsolutePath());
-                }
-            }
-        }
+    public FanPoHaiManager() {
+       new Thread(() -> {
+           File[] pohaitu = new File(Autoreply.appDirectory + "fan\\").listFiles();
+           if (pohaitu != null) {
+               fts = new FingerPrint[pohaitu.length];
+           }
+           if (fts != null) {
+               for (int i = 0; i < fts.length; i++) {
+                   try {
+                       fts[i] = new FingerPrint(ImageIO.read(pohaitu[i]));
+                   } catch (Exception e) {
+                       System.out.println(pohaitu[i].getAbsolutePath());
+                   }
+               }
+           }
+       }).start();
     }
 
     public boolean check(long fromQQ, long fromGroup, String msg, long msgID) {
