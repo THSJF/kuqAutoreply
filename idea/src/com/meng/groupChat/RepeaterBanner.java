@@ -14,6 +14,7 @@ import javax.imageio.ImageIO;
 import com.madgag.gif.fmsware.AnimatedGifEncoder;
 import com.madgag.gif.fmsware.GifDecoder;
 import com.meng.Autoreply;
+import com.meng.Methods;
 import com.meng.config.javabeans.GroupConfig;
 import com.meng.tools.FingerPrint;
 import com.sobte.cqp.jcq.entity.CQImage;
@@ -57,7 +58,7 @@ public class RepeaterBanner {
                     if (lastMessageRecieved.equals(msg) || (isPicMsgRepeat(lastMessageRecieved, msg, simi))) { // 上一条消息和当前消息相同或两张图片相似度过高都是复读
                         if (Autoreply.instence.random.nextInt() % banCount == 0) {
                             int time = Autoreply.instence.random.nextInt(60) + 1;
-                            Autoreply.CQ.setGroupBan(fromGroup, fromQQ, time);
+                            Methods.ban(fromGroup, fromQQ, time);
                             banCount = 6;
                             Autoreply.sendMessage(0, fromQQ, "你从“群复读轮盘”中获得了" + time + "秒禁言套餐");
                         }
@@ -70,7 +71,7 @@ public class RepeaterBanner {
                     }
                     if (lastMessageRecieved.equals(msg) || (isPicMsgRepeat(lastMessageRecieved, msg, simi))) {
                         int time = Autoreply.instence.random.nextInt(60) + 1;
-                        Autoreply.CQ.setGroupBan(fromGroup, fromQQ, time);
+                        Methods.ban(fromGroup, fromQQ, time);
                         Autoreply.sendMessage(0, fromQQ, "你因复读获得了" + time + "秒禁言套餐");
                     }
                     lastMessageRecieved = msg;
@@ -131,17 +132,17 @@ public class RepeaterBanner {
 
     // 如果是图片复读
     private void replyPic(long group, long qq, String msg) throws IOException {
-        String ms = new StringBuilder(msg.replaceAll("\\[CQ.*]", "")).reverse().toString();
-        if (ms.contains("蓝") || ms.contains("藍")) {
+        if (msg.contains("蓝") || msg.contains("藍")) {
             return;
         }
         if (imgFile.getName().contains(".gif")) {
-            String imgCode = Autoreply.instence.CC.image(reverseGIF(imgFile));
-            Autoreply.sendMessage(group, 0, msg.startsWith("[") ? ms + imgCode : imgCode + ms);
-            // Autoreply.sendMessage(group, 0, msg);
+            String imgCode = new StringBuilder(Autoreply.instence.CC.image(reverseGIF(imgFile))).reverse().toString();
+            String ms = new StringBuilder(msg.replaceAll("\\[CQ.*]", imgCode)).reverse().toString();
+            Autoreply.sendMessage(group, 0, ms);
         } else {
-            String imgCode = Autoreply.instence.CC.image(rePic(imgFile));
-            Autoreply.sendMessage(group, 0, msg.startsWith("[") ? ms + imgCode : imgCode + ms);
+            String imgCode = new StringBuilder(Autoreply.instence.CC.image(rePic(imgFile))).reverse().toString();
+            String ms = new StringBuilder(msg.replaceAll("\\[CQ.*]", imgCode)).reverse().toString();
+            Autoreply.sendMessage(group, 0, ms);
         }
         repeatCount = repeatCount > 2 ? 0 : repeatCount + 1;
         reverseFlag++;
@@ -250,7 +251,6 @@ public class RepeaterBanner {
                 }
                 break;
         }
-
         localAnimatedGifEncoder.finish();
         try {
             FileOutputStream fos = new FileOutputStream(gifFile);

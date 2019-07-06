@@ -10,6 +10,7 @@ import com.meng.groupChat.*;
 import com.meng.groupFile.FileInfoManager;
 import com.meng.picEdit.JingShenZhiZhuManager;
 import com.meng.picEdit.PicEditManager;
+import com.meng.picEdit.ShenChuManager;
 import com.meng.searchPicture.PicSearchManager;
 import com.meng.tip.FileTipManager;
 import com.meng.tip.FileTipUploader;
@@ -61,9 +62,10 @@ public class Autoreply extends JcqAppAbstract implements ICQVer, IMsg, IRequest 
     private CQCodeManager CQcodeManager = new CQCodeManager();
     public PicSearchManager picSearchManager = new PicSearchManager();
     private BarcodeManager barcodeManager = new BarcodeManager();
+    private OggInterface oggInterface = new OggInterface();
     public NewUpdateManager updateManager;
     public ConfigManager configManager;
-    private LiveManager liveManager;
+    public LiveManager liveManager;
     public NaiManager naiManager;
     // private OcrManager ocrManager = new OcrManager();
     private boolean using = false;
@@ -194,64 +196,62 @@ public class Autoreply extends JcqAppAbstract implements ICQVer, IMsg, IRequest 
         // if (fromQQ != 2856986197L) {
         // return MSG_IGNORE;
         // }
-        if (configManager.isNotReplyQQ(fromQQ) || configManager.isNotReplyWord(msg)) {
-            return MSG_IGNORE;
-        }
-        if (Methods.checkXiong(fromQQ, msg)) {
-            return MSG_IGNORE;
-        }
-        if (msg.equals("喵")) {
-            sendMessage(0, fromQQ, CC.record("miao.mp3"));
-            return MSG_IGNORE;
-        } else if (msg.equals("娇喘")) {
-            sendMessage(0, fromQQ, CC.record("mmm.mp3"));
-            return MSG_IGNORE;
-        }
-        if (configManager.isMaster(fromQQ)) {
-            String[] strings = msg.split("\\.");
-            if (strings[0].equals("send")) {
-                switch (strings[2]) {
-                    case "喵":
-                        sendMessage(Long.parseLong(strings[1]), 0, CC.record("miao.mp3"));
-                        break;
-                    case "娇喘":
-                        sendMessage(Long.parseLong(strings[1]), 0, CC.record("mmm.mp3"));
-                        break;
-                    default:
-                        sendMessage(Long.parseLong(strings[1]), 0, strings[2]);
-                        break;
-                }
-                return MSG_IGNORE;
-            }
-            if ("nai.".startsWith(msg)) {
-                String[] sarr = msg.split("\\.");
-                naiManager.check(0, Integer.parseInt(sarr[1]), fromQQ, sarr[2]);
-                return MSG_IGNORE;
-            }
-            if (msg.equals("精神支柱")) {
-                Autoreply.sendMessage(0, 0, CC.image(new File(appDirectory + "pic\\alice.jpg")));
-                return MSG_IGNORE;
-            }
-            if (msg.equals(".live")) {
-                String msgSend = liveManager.livePerson.stream().filter(LivePerson::isLiving).map(lp -> lp.getName() + "正在直播" + lp.getLiveUrl() + "\n").collect(Collectors.joining("", "", ""));
-                sendMessage(0, fromQQ, msgSend.equals("") ? "居然没有飞机佬直播" : msgSend);
-                return MSG_IGNORE;
-            }
-        }
-        if (Methods.isSetu(0, fromQQ, msg)) {
-            return MSG_IGNORE;
-        }
-        if (picSearchManager.check(0, fromQQ, msg)) {// 搜索图片
-            return MSG_IGNORE;
-        }
-        if (msg.equals("查看统计")) {
-            sendMessage(0, fromQQ, useCount.getMyCount(fromQQ));
-            return MSG_IGNORE;
-        }
-        if (msg.equals("查看排行")) {
-            sendMessage(0, fromQQ, useCount.getTheFirst());
-            return MSG_IGNORE;
-        }
+       new Thread(() -> {
+           if (configManager.isNotReplyQQ(fromQQ) || configManager.isNotReplyWord(msg)) {
+               return ;
+           }
+           if (Methods.checkXiong(fromQQ, msg)) {
+               return ;
+           }
+           if (fromQQ == 2565128043L || configManager.isMaster(fromQQ)) {
+               if (oggInterface.processOgg(fromQQ, msg)) {
+                   return ;
+               }
+           }
+
+           if (configManager.isMaster(fromQQ)) {
+               if (msg.equals("喵")) {
+                   sendMessage(0, fromQQ, CC.record("miao.mp3"));
+                   return ;
+               } else if (msg.equals("娇喘")) {
+                   sendMessage(0, fromQQ, CC.record("mmm.mp3"));
+                   return ;
+               }
+               String[] strings = msg.split("\\.");
+               if (strings[0].equals("send")) {
+                   switch (strings[2]) {
+                       case "喵":
+                           sendMessage(Long.parseLong(strings[1]), 0, CC.record("miao.mp3"));
+                           break;
+                       case "娇喘":
+                           sendMessage(Long.parseLong(strings[1]), 0, CC.record("mmm.mp3"));
+                           break;
+                       default:
+                           sendMessage(Long.parseLong(strings[1]), 0, strings[2]);
+                           break;
+                   }
+                   return ;
+               }
+               if (msg.equals("精神支柱")) {
+                   Autoreply.sendMessage(0, 0, CC.image(new File(appDirectory + "pic\\alice.jpg")));
+                   return ;
+               }
+           }
+           if (Methods.isSetu(0, fromQQ, msg)) {
+               return ;
+           }
+           if (picSearchManager.check(0, fromQQ, msg)) {// 搜索图片
+               return ;
+           }
+           if (msg.equals("查看统计")) {
+               sendMessage(0, fromQQ, useCount.getMyCount(fromQQ));
+               return ;
+           }
+           if (msg.equals("查看排行")) {
+               sendMessage(0, fromQQ, useCount.getTheFirst());
+               return ;
+           }
+       }).start();
         return MSG_IGNORE;
     }
 
@@ -300,6 +300,7 @@ public class Autoreply extends JcqAppAbstract implements ICQVer, IMsg, IRequest 
 
         System.out.println(msg);
         // 指定不回复的项目
+        notificationManager.check(fromGroup, fromQQ, msg);
         if (configManager.isNotReplyQQ(fromQQ)) {
             return MSG_IGNORE;
         }
@@ -307,7 +308,6 @@ public class Autoreply extends JcqAppAbstract implements ICQVer, IMsg, IRequest 
         if (configManager.isNotReplyWord(msg)) {
             return MSG_IGNORE;
         }
-        notificationManager.check(fromGroup, fromQQ, msg);
 
         if (Methods.checkSwitch(fromGroup, msg)) {// 控制
             return MSG_IGNORE;
@@ -398,8 +398,12 @@ public class Autoreply extends JcqAppAbstract implements ICQVer, IMsg, IRequest 
                 new JingShenZhiZhuManager(fromGroup, msg);
                 return MSG_IGNORE;
             }
+            if (msg.startsWith("神触[CQ:image")) {
+                new ShenChuManager(fromGroup, msg);
+                return MSG_IGNORE;
+            }
         }
-        if (configManager.isAdmin(fromQQ) || fromGroup == 959615179L || fromGroup == 312342896L) {
+        if (configManager.isAdmin(fromQQ)) {
             if (msg.equals("鬼人正邪统计")) {
                 sendMessage(fromGroup, fromQQ, useCount.getMyCount(CQ.getLoginQQ()));
                 return MSG_IGNORE;
@@ -747,8 +751,11 @@ public class Autoreply extends JcqAppAbstract implements ICQVer, IMsg, IRequest 
         Methods.setRandomPop();
         try {
             if (msg.startsWith("red:")) {
-                msg = msg.replace("red:", "");
-                sendGroupMessage(fromGroup, fromQQ, msg);
+                msg = msg.substring(4);
+                if (dicReplyManager.check(fromGroup, fromQQ, msg)) {
+                    return;
+                }
+                messageMap.put(fromQQ, new MessageSender(fromGroup, fromQQ, msg, System.currentTimeMillis() + 999, -11));
                 return;
             }
             String[] stri = msg.split(":");
@@ -1011,5 +1018,11 @@ public class Autoreply extends JcqAppAbstract implements ICQVer, IMsg, IRequest 
             }
         }
     }
+
+    public static void sendToMaster(String msg) {
+        Autoreply.sendMessage(0, 2856986197L, msg);
+        Autoreply.sendMessage(0, 2565128043L, msg);
+    }
+
 
 }

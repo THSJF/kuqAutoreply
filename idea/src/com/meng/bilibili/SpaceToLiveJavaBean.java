@@ -1,4 +1,4 @@
-package com.meng.bilibili.spaceToLive;
+package com.meng.bilibili;
 
 public class SpaceToLiveJavaBean {
     public int code = 0;

@@ -4,7 +4,6 @@ import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.meng.Autoreply;
 import com.meng.Methods;
-import com.meng.bilibili.spaceToLive.SpaceToLiveJavaBean;
 import com.meng.config.ConfigManager;
 import com.meng.config.javabeans.PersonInfo;
 
@@ -95,7 +94,7 @@ public class LiveManager extends Thread {
         }
     }
 
-    private void sendMsg(LivePerson p){
+    private void sendMsg(LivePerson p) {
         switch (p.getFlag()) {
             case 0:
                 if (p.isLiving()) {
@@ -156,6 +155,7 @@ public class LiveManager extends Thread {
         // Autoreply.sendMessage(0, 2856986197L, p.getName() + "开始直播" +
         // p.roomId);
         Autoreply.sendMessage(1023432971, 0, p.getName() + "开始直播" + p.roomId);
+        Autoreply.sendToMaster(p.getName() + "开始直播" + p.roomId);
     }
 
     private void tipFinish(LivePerson p) {
@@ -176,7 +176,7 @@ public class LiveManager extends Thread {
         // } catch (Exception e) {
         // e.printStackTrace();
         // }
-        Autoreply.sendMessage(0, 2856986197L, p.getName() + "直播结束");
+        Autoreply.sendToMaster(p.getName() + "直播结束" + p.roomId);
     }
 
     public String getLiveTimeCount() {
@@ -211,8 +211,8 @@ public class LiveManager extends Thread {
 
     private void saveConfig() {
         try {
-            FileOutputStream fos = null;
-            OutputStreamWriter writer = null;
+            FileOutputStream fos;
+            OutputStreamWriter writer;
             File file = new File(Autoreply.appDirectory + "liveTime.json");
             fos = new FileOutputStream(file);
             writer = new OutputStreamWriter(fos, StandardCharsets.UTF_8);

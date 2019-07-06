@@ -1,13 +1,16 @@
 package com.meng.tools;
 
 import com.meng.Autoreply;
-import com.meng.config.javabeans.GroupConfig;
-
-import java.util.Map;
-import java.util.regex.Pattern;
+import com.meng.Methods;
 
 public class NotificationManager {
+
     public void check(long fromGroup, long fromQQ, String msg) {
+        long tmp = Autoreply.instence.CC.getAt(msg);
+        if (fromQQ == 2482513293L && msg.startsWith("复读警察,出动!") && tmp != -1000) {
+            //Autoreply.instence.CC.getAt(msg) == 3119583925L
+            Methods.ban(fromGroup, tmp, 0);
+        }
         if (fromQQ != 1000000) {
             return;
         }
@@ -67,35 +70,38 @@ public class NotificationManager {
     }
 
     private void onAnonymousAllow(long fromGroup) {
-        Autoreply.sendMessage(0, 2856986197L, fromGroup + "允许匿名");
+        Autoreply.sendToMaster(fromGroup + "允许匿名");
     }
 
     private void onAnonymousForbid(long fromGroup) {
-        Autoreply.sendMessage(0, 2856986197L, fromGroup + "禁止匿名");
+        Autoreply.sendToMaster(fromGroup + "禁止匿名");
     }
 
     private void onAllBan(long fromGroup) {
-        Autoreply.sendMessage(0, 2856986197L, fromGroup + "全员禁言");
+        Autoreply.sendToMaster(fromGroup + "全员禁言");
     }
 
     private void onAllRelease(long fromGroup) {
-        Autoreply.sendMessage(0, 2856986197L, fromGroup + "解除全员禁言");
+        Autoreply.sendToMaster(fromGroup + "解除全员禁言");
     }
 
     private void onBan(long fromGroup, long banQQ, int minute) {
         if (banQQ == Autoreply.CQ.getLoginQQ()) {
-            Autoreply.sendMessage(0, 2856986197L, "在群" + fromGroup + "被禁言");
-            GroupConfig groupConfig = Autoreply.instence.configManager.getGroupConfig(fromGroup);
-            groupConfig.reply = false;
-            Autoreply.sendMessage(0, 2856986197L, "关闭了回复群" + fromGroup);
+            Autoreply.instence.configManager.getGroupConfig(fromGroup).reply = false;
+            Autoreply.sendToMaster("在群" + fromGroup + "被禁言,关闭了回复群");
             Autoreply.instence.configManager.saveConfig();
         } else {
-            Autoreply.sendMessage(0, 2856986197L, "在群" + fromGroup + "中" + banQQ + "被禁言" + minute + "min");
+            Autoreply.sendToMaster("在群" + fromGroup + "中" + banQQ + "被禁言" + minute + "min");
         }
     }
 
     private void onRelease(long fromGroup, long banQQ) {
-        Autoreply.sendMessage(0, 2856986197L, "在群" + fromGroup + "中" + banQQ + "无罪释放");
+        if (Autoreply.instence.configManager.isNotReplyGroup(fromGroup)) {
+            return;
+        }
+        Autoreply.sendToMaster("在群" + fromGroup + "中" + banQQ + "无罪释放");
         Autoreply.sendMessage(fromGroup, banQQ, "恭喜出狱");
     }
+
+
 }

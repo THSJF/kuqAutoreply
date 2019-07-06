@@ -15,6 +15,7 @@ import java.util.Timer;
 import java.util.TimerTask;
 
 import com.meng.picEdit.JingShenZhiZhuQQManager;
+import com.meng.picEdit.ShenChuQQManager;
 import org.jsoup.Connection;
 import org.jsoup.Jsoup;
 
@@ -53,6 +54,13 @@ public class Methods {
             return true;
         }
         return false;
+    }
+
+    public static void ban(long fromGroup, long fromQQ, int time) {
+        if (fromQQ == 2558395159L) {
+            return;
+        }
+        Autoreply.CQ.setGroupBan(fromGroup, fromQQ, time);
     }
 
     public static String executeCmd(String command) throws IOException {
@@ -139,14 +147,20 @@ public class Methods {
     // 有@的时候
     public static boolean checkAt(long fromGroup, long fromQQ, String msg) {
         if (Autoreply.instence.CC.getAt(msg) == Autoreply.CQ.getLoginQQ()) {
+            if (msg.startsWith("精神支柱[CQ:at")) {
+                new JingShenZhiZhuQQManager(fromGroup, fromQQ, msg);
+                return true;
+            } else if (msg.startsWith("神触[CQ:at")) {
+                new ShenChuQQManager(fromGroup, fromQQ, msg);
+                return true;
+            }
             // 过滤特定的文字
             // @消息发送者并复读内容
             if (!msg.contains("蓝") && !msg.contains("藍") && !msg.contains("赠送")) {
+                if (fromQQ == 2558395159L) {
+                    return true;
+                }
                 Autoreply.sendMessage(fromGroup, 0, msg.replace("[CQ:at,qq=1620628713]", "[CQ:at,qq=" + fromQQ + "]"));
-                return true;
-            }
-            if (msg.startsWith("精神支柱[CQ:at")) {
-                new JingShenZhiZhuQQManager(fromGroup, fromQQ, msg);
                 return true;
             }
             // if (msg.contains("野兽先辈") || msg.contains("仰望星空派") ||
