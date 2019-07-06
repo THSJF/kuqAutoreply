@@ -13,6 +13,22 @@ public class BiliLinkInfo {
     public BiliLinkInfo() {
     }
 
+    public boolean checkOgg(long fromQQ, String msg) {
+        if (msg.startsWith("bav:")) {
+            Autoreply.sendMessage(0,fromQQ,processVideo(msg.substring(4)));
+            return true;
+        }
+        if (msg.startsWith("bcv:")) {
+            Autoreply.sendMessage(0,fromQQ,processArtical(msg.substring(4)));
+            return true;
+        }
+        if (msg.startsWith("blv:")) {
+            Autoreply.sendMessage(0,fromQQ,processLive(msg.substring(4)));
+            return true;
+        }
+        return false;
+    }
+
     public boolean check(long fromGroup, long fromQQ, String msg) {
         String subedUrl;
         int ind = msg.indexOf("http");

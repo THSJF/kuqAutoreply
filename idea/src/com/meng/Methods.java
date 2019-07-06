@@ -27,8 +27,6 @@ import com.meng.diaoXiongJiHua.XiongIPGetter;
 public class Methods {
     private static String motmp = "";
     private static String meng2tmp = "";
-    private static String[] pop = "11|12|60|63|96|107|110|114|117|128|129|151|159|123|268|208|248|5|20|28|37|45|212|178|62|44|90|107|119|114|125|142|168|185|1|2|3|4|5|6|7|8|9"
-            .split("\\|");
     // static int arrayFlag = new java.util.Random().nextInt(5000);
 
     // 主开关
@@ -66,7 +64,7 @@ public class Methods {
     public static String executeCmd(String command) throws IOException {
         Runtime runtime = Runtime.getRuntime();
         Process process = runtime.exec("cmd /c " + command);
-        BufferedReader br = new BufferedReader(new InputStreamReader(process.getInputStream(), "UTF-8"));
+        BufferedReader br = new BufferedReader(new InputStreamReader(process.getInputStream(), StandardCharsets.UTF_8));
         String line = null;
         StringBuilder build = new StringBuilder();
         while ((line = br.readLine()) != null) {
@@ -344,7 +342,7 @@ public class Methods {
     }
 
     public static void setRandomPop() {
-        Methods.getSourceCode("http://logic.content.qq.com/bubble/setup?callback=&id=" + (String) Methods.rfa(pop)
+        Methods.getSourceCode("http://logic.content.qq.com/bubble/setup?callback=&id=" + Autoreply.instence.random.nextInt(269)
                 + "&g_tk=" + Autoreply.CQ.getCsrfToken(), Autoreply.CQ.getCookies());
     }
 

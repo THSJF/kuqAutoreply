@@ -14,7 +14,7 @@ public class ArticleInfoBean {
         return data.toString();
     }
 
-    public class Data { // 内部类要定义成public的
+    public class Data {
         public String like;
         public String attention;
         public String favorite;

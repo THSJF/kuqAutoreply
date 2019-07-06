@@ -16,6 +16,11 @@ public class OggInterface {
         if (msg.endsWith("喵")) {
             msg = msg.substring(0, msg.length() - 1);
         }
+        if (msg.startsWith("ban")) {
+            String[] arr = msg.split("\\.");
+            Methods.ban(Long.parseLong(arr[1]), Long.parseLong(arr[2]), Integer.parseInt(arr[3]));
+            return true;
+        }
         if (msg.startsWith("av更新时间:")) {
             sendPrivateMessage(fromQQ, String.valueOf(Autoreply.instence.updateManager.getAVLastUpdateTime(msg.substring(7))));
             return true;
@@ -39,9 +44,16 @@ public class OggInterface {
             sendPrivateMessage(fromQQ, data.get("live_status").getAsInt() == 1 ? "true" : "false");
             return true;
         }
+        if (Autoreply.instence.biliLinkInfo.checkOgg(fromQQ, msg)) {
+            return true;
+        }
         if (msg.startsWith("直播状态bid:")) {
             SpaceToLiveJavaBean sjb = new Gson().fromJson(Methods.getSourceCode("https://api.live.bilibili.com/room/v1/Room/getRoomInfoOld?mid=" + msg.substring(8)), SpaceToLiveJavaBean.class);
             sendPrivateMessage(fromQQ, sjb.data.liveStatus == 1 ? "true" : "false");
+            return true;
+        }
+        if (msg.startsWith("获取直播间:")) {
+            sendPrivateMessage(fromQQ, Methods.getSourceCode("https://api.live.bilibili.com/room/v1/Room/getRoomInfoOld?mid=" + msg.substring(6)));
             return true;
         }
         if (msg.equals(".live")) {
