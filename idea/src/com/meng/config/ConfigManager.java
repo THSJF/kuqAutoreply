@@ -23,7 +23,7 @@ import com.meng.counter.UserInfo;
 public class ConfigManager {
     public ConfigJavaBean configJavaBean = new ConfigJavaBean();
     public Gson gson = new Gson();
-    public PortConfig portConfig;
+    PortConfig portConfig;
 
     public ConfigManager() {
         try {
@@ -32,8 +32,7 @@ public class ConfigManager {
             if (!jsonBaseConfigFile.exists()) {
                 saveConfig();
             }
-            Type type = new TypeToken<ConfigJavaBean>() {
-            }.getType();
+            Type type = new TypeToken<ConfigJavaBean>() {}.getType();
             configJavaBean = gson.fromJson(Methods.readFileToString(Autoreply.appDirectory + "configV3.json"), type);
         } catch (Exception e) {
             e.printStackTrace();

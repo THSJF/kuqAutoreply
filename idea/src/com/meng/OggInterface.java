@@ -62,14 +62,33 @@ public class OggInterface {
             return true;
         }
         if (msg.startsWith("add{")) {
-            PersonInfo p = null;
+            PersonInfo p;
             try {
                 p = new Gson().fromJson(msg.substring(3), PersonInfo.class);
             } catch (Exception e) {
                 sendPrivateMessage(fromQQ, e.toString());
+                return true;
             }
             if (p != null) {
                 Autoreply.instence.configManager.configJavaBean.personInfo.add(p);
+                Autoreply.instence.configManager.saveConfig();
+                sendPrivateMessage(fromQQ, msg + "成功");
+            } else {
+                sendPrivateMessage(fromQQ, "一个玄学问题导致了失败");
+            }
+            return true;
+        }
+
+        if (msg.startsWith("del{")) {
+            PersonInfo p;
+            try {
+                p = new Gson().fromJson(msg.substring(3), PersonInfo.class);
+            } catch (Exception e) {
+                sendPrivateMessage(fromQQ, e.toString());
+                return true;
+            }
+            if (p != null) {
+                Autoreply.instence.configManager.configJavaBean.personInfo.remove(p);
                 Autoreply.instence.configManager.saveConfig();
                 sendPrivateMessage(fromQQ, msg + "成功");
             } else {

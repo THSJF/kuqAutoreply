@@ -9,7 +9,7 @@ public class PersonInfo extends Object {
 
     @Override
     public int hashCode() {
-        return (int) (qq/10);
+        return (int) (qq / 10);
     }
 
     @Override
@@ -18,6 +18,6 @@ public class PersonInfo extends Object {
             return false;
         }
         PersonInfo p = (PersonInfo) obj;
-        return this.name.equals(p.name) && this.qq == p.qq && this.bid == p.bid && this.bliveRoom == p.bliveRoom;
+        return name.equals(p.name) && qq == p.qq && bid == p.bid && bliveRoom == p.bliveRoom;
     }
 }

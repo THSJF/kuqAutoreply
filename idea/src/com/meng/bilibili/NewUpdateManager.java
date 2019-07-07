@@ -71,8 +71,7 @@ public class NewUpdateManager {
             Autoreply.sendMessage(fromGroup, 0, "更新莉,,,https://www.bilibili.com/video/av" + vlist.aid);
         } else {
             Autoreply.sendMessage(fromGroup, 0, Autoreply.instence.CC.at(getUpQQ(msg)) + Methods.rfa(words));
-            Autoreply.sendMessage(fromGroup, 0,
-                    "你都" + ((System.currentTimeMillis() - videoUpdateTime) / 86400000) + "天没更新了");
+            Autoreply.sendMessage(fromGroup, 0, "你都" + ((System.currentTimeMillis() - videoUpdateTime) / 86400000) + "天没更新了");
         }
     }
 
@@ -81,8 +80,7 @@ public class NewUpdateManager {
             Autoreply.sendMessage(fromGroup, 0, "更新莉,,,https://www.bilibili.com/read/cv" + articles.id);
         } else {
             Autoreply.sendMessage(fromGroup, 0, Autoreply.instence.CC.at(getUpQQ(msg)) + Methods.rfa(words));
-            Autoreply.sendMessage(fromGroup, 0,
-                    "你都" + ((System.currentTimeMillis() - articalUpdateTime) / 86400000) + "天没更新了");
+            Autoreply.sendMessage(fromGroup, 0, "你都" + ((System.currentTimeMillis() - articalUpdateTime) / 86400000) + "天没更新了");
         }
     }
 
@@ -93,10 +91,7 @@ public class NewUpdateManager {
     public long getAVLastUpdateTime(String bid) {
         NewVideoBean.Data.Vlist vlist;
         try {
-            vlist = new Gson().fromJson(
-                    Methods.getSourceCode("https://space.bilibili.com/ajax/member/getSubmitVideos?mid=" + bid
-                            + "&page=1&pagesize=1").replace("\"3\":", "\"n3\":").replace("\"4\":", "\"n4\":"),
-                    NewVideoBean.class).data.vlist.get(0);
+            vlist = new Gson().fromJson(Methods.getSourceCode("https://space.bilibili.com/ajax/member/getSubmitVideos?mid=" + bid + "&page=1&pagesize=1").replace("\"3\":", "\"n3\":").replace("\"4\":", "\"n4\":"), NewVideoBean.class).data.vlist.get(0);
         } catch (Exception e) {
             System.out.println("no videos");
             return 0;
@@ -111,11 +106,7 @@ public class NewUpdateManager {
     public long getCVLastUpdateTime(String bid) {
         NewArticleBean.Data.Articles articles;
         try {
-            articles = new Gson()
-                    .fromJson(
-                            Methods.getSourceCode("http://api.bilibili.com/x/space/article?mid=" + bid
-                                    + "&pn=1&ps=1&sort=publish_time&jsonp=jsonp"),
-                            NewArticleBean.class).data.articles.get(0);
+            articles = new Gson().fromJson(Methods.getSourceCode("http://api.bilibili.com/x/space/article?mid=" + bid + "&pn=1&ps=1&sort=publish_time&jsonp=jsonp"), NewArticleBean.class).data.articles.get(0);
         } catch (Exception e) {
             System.out.println("no articles");
             return 0;

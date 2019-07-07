@@ -130,15 +130,13 @@ public class SocketConfigThread extends Thread {
                 String[] obj = content.split(" ");
                 PersonInfo oldPersonInfo = configManager.gson.fromJson(obj[0], PersonInfo.class);
                 PersonInfo newPersonInfo = configManager.gson.fromJson(obj[1], PersonInfo.class);
-                boolean notContain = true;
                 for (PersonInfo pi : configManager.configJavaBean.personInfo) {
                     if (pi.name.equals(oldPersonInfo.name) && pi.qq == oldPersonInfo.qq && pi.bid == oldPersonInfo.bid && pi.bliveRoom == oldPersonInfo.bliveRoom) {
-                        notContain = false;
+                        configManager.configJavaBean.personInfo.remove(oldPersonInfo);
+                        break;
                     }
                 }
-                if (notContain) {
-                    configManager.configJavaBean.personInfo.add(newPersonInfo);
-                }
+                configManager.configJavaBean.personInfo.add(newPersonInfo);
                 break;
             case setMaster:
                 String[] splitm = content.split(" ");
