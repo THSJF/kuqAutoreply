@@ -1,9 +1,10 @@
-package com.meng.bilibili;
+package com.meng.bilibili.live;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.meng.Autoreply;
-import com.meng.Methods;
+import com.meng.bilibili.main.SpaceToLiveJavaBean;
+import com.meng.tools.Methods;
 import com.meng.config.ConfigManager;
 import com.meng.config.javabeans.PersonInfo;
 
@@ -18,20 +19,22 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map.Entry;
 
-public class LiveManager extends Thread {
+public class LiveListener implements Runnable {
 
     public ArrayList<LivePerson> livePerson = new ArrayList<>();
-
+    private boolean loadFinish = false;
     public static boolean liveStart = true;
     private HashMap<String, String> liveTimeMap = new HashMap<>();
 
-    public LiveManager(ConfigManager configManager) {
-        for (PersonInfo cb : configManager.configJavaBean.personInfo) {
-            if (cb.bliveRoom == 0) {
-                continue;
+    public LiveListener(ConfigManager configManager) {
+        System.out.println("直播检测启动");
+        Autoreply.instence.threadPool.execute(() -> {
+            for (PersonInfo cb : configManager.configJavaBean.personInfo) {
+                LiveListener.this.addPerson(cb);
             }
-            livePerson.add(new LivePerson(cb.name, cb.bid, cb.bliveRoom, cb.autoTip));
-        }
+            loadFinish = true;
+            System.out.println("直播检测启动完成");
+        });
         File liveTimeFile = new File(Autoreply.appDirectory + "liveTime.json");
         if (!liveTimeFile.exists()) {
             saveConfig();
@@ -45,35 +48,65 @@ public class LiveManager extends Thread {
         }
     }
 
+    private void addPerson(PersonInfo personInfo) {
+        if (personInfo.bliveRoom == -1) {
+            return;
+        }
+        if (personInfo.bliveRoom == 0) {
+            if (personInfo.bid != 0) {
+                SpaceToLiveJavaBean sjb = new Gson().fromJson(Methods.getSourceCode("https://api.live.bilibili.com/room/v1/Room/getRoomInfoOld?mid=" + personInfo.bid), SpaceToLiveJavaBean.class);
+                if (sjb.data.roomid == 0) {
+                    personInfo.bliveRoom = -1;
+                    Autoreply.instence.configManager.saveConfig();
+                    return;
+                }
+                personInfo.bliveRoom = sjb.data.roomid;
+                Autoreply.instence.configManager.saveConfig();
+                System.out.println("检测到用户" + personInfo.name + "(" + personInfo.bid + ")的直播间" + personInfo.bliveRoom);
+                try {
+                    Thread.sleep(100);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+            } else {
+                return;
+            }
+        }
+        livePerson.add(new LivePerson(personInfo.name, personInfo.bid, personInfo.bliveRoom, personInfo.autoTip));
+    }
+
     @Override
     public void run() {
         while (true) {
             try {
+                if (!loadFinish) {
+                    Thread.sleep(1000);
+                    continue;
+                }
                 if (liveStart) {
                     for (LivePerson lPerson : livePerson) {
-                        SpaceToLiveJavaBean sjb = new Gson().fromJson(Methods.getSourceCode(
-                                "https://api.live.bilibili.com/room/v1/Room/getRoomInfoOld?mid=" + lPerson.getUid()),
-                                SpaceToLiveJavaBean.class);
+                        SpaceToLiveJavaBean sjb = new Gson().fromJson(Methods.getSourceCode("https://api.live.bilibili.com/room/v1/Room/getRoomInfoOld?mid=" + lPerson.bid), SpaceToLiveJavaBean.class);
                         boolean living = sjb.data.liveStatus == 1;
                         lPerson.liveUrl = sjb.data.url;
-                        lPerson.setLiving(living);
-                        if (lPerson.getFlag() != 0) {
-                            if (living && lPerson.isNeedStartTip()) {
-                                lPerson.setFlag(1);
-                            } else if (living && !lPerson.isNeedStartTip()) {
-                                lPerson.setFlag(2);
-                            } else if (!living && !lPerson.isNeedStartTip()) {
-                                lPerson.setFlag(3);
-                            } else if (!living && lPerson.isNeedStartTip()) {
-                                lPerson.setFlag(4);
+                        lPerson.living = living;
+                        if (lPerson.flag != 0) {
+                            if (living && lPerson.needStartTip) {
+                                lPerson.flag = 1;
+                            } else if (living && !lPerson.needStartTip) {
+                                lPerson.flag = 2;
+                            } else if (!living && !lPerson.needStartTip) {
+                                lPerson.flag = 3;
+                            } else if (!living && lPerson.needStartTip) {
+                                lPerson.flag = 4;
                             }
                         }
                         sendMsg(lPerson);
-                        sleep(2000);
+                        Thread.sleep(2000);
                     }
                 }
-                sleep(60000);
+                Thread.sleep(60000);
             } catch (Exception e) {
+                e.printStackTrace();
             }
         }
     }
@@ -81,10 +114,10 @@ public class LiveManager extends Thread {
     public void saveNow() {
         liveStart = false;
         for (LivePerson lp : livePerson) {
-            if (!lp.isLiving()) {
+            if (!lp.living) {
                 continue;
             }
-            lp.setFlag(3);
+            lp.flag = 3;
             try {
                 sendMsg(lp);
                 Thread.sleep(30);
@@ -95,40 +128,40 @@ public class LiveManager extends Thread {
     }
 
     private void sendMsg(LivePerson p) {
-        switch (p.getFlag()) {
+        switch (p.flag) {
             case 0:
-                if (p.isLiving()) {
+                if (p.living) {
                     p.liveStartTimeStamp = System.currentTimeMillis() / 1000;
-                    p.setNeedStartTip(false);
-                    p.setFlag(2);
+                    p.needStartTip = false;
+                    p.flag = 2;
                 } else {
-                    p.setNeedStartTip(true);
-                    p.setFlag(4);
+                    p.needStartTip = true;
+                    p.flag = 4;
                 }
                 break;
             case 1:
                 tipStart(p);
                 p.liveStartTimeStamp = System.currentTimeMillis() / 1000;
-                p.setNeedStartTip(false);
+                p.needStartTip = false;
                 // 勿添加break;
             case 2:
-                p.setLiving(true);
+                p.living = true;
                 break;
             case 3:
                 tipFinish(p);
-                p.setNeedStartTip(true);
-                if (liveTimeMap.get(p.getName()) == null) {
-                    liveTimeMap.put(p.getName(), String.valueOf(System.currentTimeMillis() / 1000 - p.liveStartTimeStamp));
+                p.needStartTip = true;
+                if (liveTimeMap.get(p.name) == null) {
+                    liveTimeMap.put(p.name, String.valueOf(System.currentTimeMillis() / 1000 - p.liveStartTimeStamp));
                     p.liveStartTimeStamp = 0;
                 } else {
-                    long time = Long.parseLong(liveTimeMap.get(p.getName()));
+                    long time = Long.parseLong(liveTimeMap.get(p.name));
                     time += System.currentTimeMillis() / 1000 - p.liveStartTimeStamp;
-                    liveTimeMap.put(p.getName(), String.valueOf(time));
+                    liveTimeMap.put(p.name, String.valueOf(time));
                 }
                 saveConfig();
                 // 勿添加break;
             case 4:
-                p.setLiving(false);
+                p.living = false;
                 break;
         }
     }
@@ -154,8 +187,8 @@ public class LiveManager extends Thread {
         // }
         // Autoreply.sendMessage(0, 2856986197L, p.getName() + "开始直播" +
         // p.roomId);
-        Autoreply.sendMessage(1023432971, 0, p.getName() + "开始直播" + p.roomId);
-        Autoreply.sendToMaster(p.getName() + "开始直播" + p.roomId);
+        Autoreply.sendMessage(1023432971, 0, p.name + "开始直播" + p.roomId);
+        Autoreply.sendToMaster(p.name + "开始直播" + p.roomId);
     }
 
     private void tipFinish(LivePerson p) {
@@ -176,7 +209,7 @@ public class LiveManager extends Thread {
         // } catch (Exception e) {
         // e.printStackTrace();
         // }
-        Autoreply.sendToMaster(p.getName() + "直播结束" + p.roomId);
+        Autoreply.sendToMaster(p.name + "直播结束" + p.roomId);
     }
 
     public String getLiveTimeCount() {

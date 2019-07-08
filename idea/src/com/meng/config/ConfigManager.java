@@ -6,19 +6,15 @@ import java.io.IOException;
 import java.io.OutputStreamWriter;
 import java.lang.reflect.Type;
 import java.nio.charset.StandardCharsets;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.HashSet;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.meng.Autoreply;
-import com.meng.Methods;
+import com.meng.tools.Methods;
 import com.meng.config.javabeans.ConfigJavaBean;
 import com.meng.config.javabeans.GroupConfig;
 import com.meng.config.javabeans.PersonInfo;
 import com.meng.config.javabeans.PortConfig;
-import com.meng.counter.UserInfo;
 
 public class ConfigManager {
     public ConfigJavaBean configJavaBean = new ConfigJavaBean();
@@ -32,13 +28,14 @@ public class ConfigManager {
             if (!jsonBaseConfigFile.exists()) {
                 saveConfig();
             }
-            Type type = new TypeToken<ConfigJavaBean>() {}.getType();
+            Type type = new TypeToken<ConfigJavaBean>() {
+            }.getType();
             configJavaBean = gson.fromJson(Methods.readFileToString(Autoreply.appDirectory + "configV3.json"), type);
         } catch (Exception e) {
             e.printStackTrace();
         }
-        new SocketConfigManager(this).start();
-        new SocketDicManager(this).start();
+        Autoreply.instence.threadPool.execute(new SocketConfigManager(this));
+        Autoreply.instence.threadPool.execute(new SocketDicManager(this));
     }
 
     public boolean isMaster(long fromQQ) {

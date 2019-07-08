@@ -1,4 +1,4 @@
-package com.meng;
+package com.meng.tools;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -11,12 +11,13 @@ import java.net.URLConnection;
 import java.nio.charset.StandardCharsets;
 import java.util.*;
 
+import com.meng.Autoreply;
 import com.meng.picEdit.JingShenZhiZhuQQManager;
 import com.meng.picEdit.ShenChuQQManager;
 import org.jsoup.Connection;
 import org.jsoup.Jsoup;
 
-import com.meng.bilibili.LiveManager;
+import com.meng.bilibili.live.LiveListener;
 import com.meng.lookGroup.IPGetter;
 
 import com.meng.diaoXiongJiHua.XiongIPGetter;
@@ -35,7 +36,7 @@ public class Methods {
         }
         if (msg.equals(".livestop")) {
             Autoreply.sendMessage(fromGroup, 0, "livedisabled");
-            LiveManager.liveStart = false;
+            LiveListener.liveStart = false;
             return true;
         }
         if (msg.equals(".start")) {
@@ -44,7 +45,7 @@ public class Methods {
             return true;
         }
         if (msg.equals(".livestart")) {
-            LiveManager.liveStart = true;
+            LiveListener.liveStart = true;
             Autoreply.sendMessage(fromGroup, 0, "liveenabled");
             return true;
         }
@@ -151,7 +152,7 @@ public class Methods {
             }
             // 过滤特定的文字
             // @消息发送者并复读内容
-            if (!msg.contains("蓝") && !msg.contains("藍") && !msg.contains("赠送")) {
+            if (msg.contains("蓝") || msg.contains("藍") || msg.contains("赠送")) {
                 return true;
             }
             if (fromQQ == 2558395159L) {
@@ -257,7 +258,7 @@ public class Methods {
             int port = Autoreply.instence.random.nextInt(5000);
             Autoreply.sendMessage(fromGroup, 0, Autoreply.instence.CC.share("http://123.207.65.93:" + (port + 4000), "窥屏检测", "滴滴滴", "http://123.207.65.93:" + (port + 4000) + "/111.jpg"));
             final IPGetter ipGetter = new IPGetter(fromGroup, port);
-            ipGetter.start();
+            Autoreply.instence.threadPool.execute(ipGetter);
             Timer timer = new Timer();
             timer.schedule(new TimerTask() {
                 @Override
@@ -277,7 +278,7 @@ public class Methods {
                 int port = Autoreply.instence.random.nextInt(5000);
                 Autoreply.sendMessage(0, fromQQ, Autoreply.instence.CC.share("http://123.207.65.93:" + (port + 4000), "东方绀珠传LNN", "东方绀珠传LNN", "http://123.207.65.93:" + (port + 4000) + "/1111.jpg"));
                 final XiongIPGetter ipGetter = new XiongIPGetter(fromQQ, port);
-                ipGetter.start();
+                Autoreply.instence.threadPool.execute(ipGetter);
                 Timer timer = new Timer();
                 timer.schedule(new TimerTask() {
                     @Override
@@ -291,7 +292,7 @@ public class Methods {
                 int port = Autoreply.instence.random.nextInt(5000);
                 Autoreply.sendMessage(0, fromQQ, Autoreply.instence.CC.share("http://123.207.65.93:" + (port + 4000), "东方绀珠传LNN", "东方绀珠传LNN", "http://123.207.65.93:" + (port + 4000) + "/1111.jpg"));
                 XiongIPGetter ipGetter = new XiongIPGetter(fromQQ, port);
-                ipGetter.start();
+                Autoreply.instence.threadPool.execute(ipGetter);
                 return true;
             }
         }

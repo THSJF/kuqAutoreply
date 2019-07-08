@@ -5,7 +5,6 @@ import javax.imageio.ImageIO;
 
 import com.google.zxing.Result;
 import com.meng.Autoreply;
-import com.meng.Methods;
 import com.sobte.cqp.jcq.entity.CQImage;
 
 public class BarcodeManager {

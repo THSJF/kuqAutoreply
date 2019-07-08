@@ -3,7 +3,6 @@ package com.meng.searchPicture;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
-import java.io.IOException;
 import java.io.InputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
@@ -12,9 +11,8 @@ import org.jsoup.Connection;
 import org.jsoup.Jsoup;
 
 import com.meng.Autoreply;
-import com.meng.Methods;
 
-public class SearchThread extends Thread {
+public class SearchThread implements Runnable {
 
     private long fromQQ = 0;
     private long fromGroup = -1;
@@ -43,18 +41,17 @@ public class SearchThread extends Thread {
         }
     }
 
-    private void check(File picF) throws Exception {
+    private void check(File picF) {
         FileInputStream fInputStream;
         try {
             fInputStream = new FileInputStream(picF);
-            Connection.Response response = Jsoup.connect("https://saucenao.com/search.php?db=" + database)
-                    .timeout(60000).data("file", "image.jpg", fInputStream).method(Connection.Method.POST).execute();
+            Connection.Response response = Jsoup.connect("https://saucenao.com/search.php?db=" + database).timeout(60000).data("file", "image.jpg", fInputStream).method(Connection.Method.POST).execute();
             if (response.statusCode() != 200) {
                 Autoreply.instence.picSearchManager.sendMsg(fromGroup, fromQQ, "statusCode" + response.statusCode());
             }
             mResults = new PicResults(Jsoup.parse(response.body()));
-        } catch (Exception e1) {
-            Autoreply.instence.picSearchManager.sendMsg(fromGroup, fromQQ, e1.toString());
+        } catch (Exception e) {
+            Autoreply.instence.picSearchManager.sendMsg(fromGroup, fromQQ, e.toString());
             picF.delete();
             return;
         }

@@ -3,7 +3,6 @@ package com.meng.searchPicture;
 import java.util.HashMap;
 
 import com.meng.Autoreply;
-import com.meng.Methods;
 import com.sobte.cqp.jcq.entity.CQImage;
 
 public class PicSearchManager {
@@ -36,7 +35,7 @@ public class PicSearchManager {
                     needPic = Integer.parseInt(ss[1]);
                     database = ss.length >= 3 ? Integer.parseInt(ss[2]) : 999;
                 }
-                new SearchThread(fromGroup, fromQQ, cqImage.download(Autoreply.appDirectory + "picSearch\\" + fromQQ, Autoreply.instence.random.nextInt() + "pic.jpg"), needPic, database).start();
+                Autoreply.instence.threadPool.execute(new SearchThread(fromGroup, fromQQ, cqImage.download(Autoreply.appDirectory + "picSearch\\" + fromQQ, Autoreply.instence.random.nextInt() + "pic.jpg"), needPic, database));
             } catch (Exception e) {
                 sendMsg(fromGroup, fromQQ, e.toString());
             }
@@ -57,7 +56,7 @@ public class PicSearchManager {
                     needPic = Integer.parseInt(ss[1]);
                     database = ss.length >= 3 ? Integer.parseInt(ss[2]) : 999;
                 }
-                new SearchThread(fromGroup, fromQQ, cqImage.download(Autoreply.appDirectory + "picSearch\\" + fromQQ, Autoreply.instence.random.nextInt() + "pic.jpg"), needPic, database).start();
+                Autoreply.instence.threadPool.execute(new SearchThread(fromGroup, fromQQ, cqImage.download(Autoreply.appDirectory + "picSearch\\" + fromQQ, Autoreply.instence.random.nextInt() + "pic.jpg"), needPic, database));
             } catch (Exception e) {
                 sendMsg(fromGroup, fromQQ, e.toString());
             }

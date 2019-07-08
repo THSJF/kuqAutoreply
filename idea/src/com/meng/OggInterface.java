@@ -3,9 +3,9 @@ package com.meng;
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
-import com.meng.bilibili.LivePerson;
-import com.meng.bilibili.SpaceToLiveJavaBean;
+import com.meng.bilibili.main.SpaceToLiveJavaBean;
 import com.meng.config.javabeans.PersonInfo;
+import com.meng.tools.Methods;
 
 import java.util.HashSet;
 import java.util.stream.Collectors;
@@ -57,20 +57,20 @@ public class OggInterface {
             return true;
         }
         if (msg.equals(".live")) {
-            String msgSend = Autoreply.instence.liveManager.livePerson.stream().filter(LivePerson::isLiving).map(lp -> lp.getName() + "正在直播" + lp.getLiveUrl() + "\n").collect(Collectors.joining());
+            String msgSend = Autoreply.instence.liveListener.livePerson.stream().filter(livePerson -> livePerson.living).map(livePerson -> livePerson.name + "正在直播" + livePerson.liveUrl + "\n").collect(Collectors.joining());
             sendPrivateMessage(fromQQ, msgSend.equals("") ? "居然没有飞机佬直播" : msgSend);
             return true;
         }
         if (msg.startsWith("add{")) {
-            PersonInfo p;
+            PersonInfo personInfo;
             try {
-                p = new Gson().fromJson(msg.substring(3), PersonInfo.class);
+                personInfo = new Gson().fromJson(msg.substring(3), PersonInfo.class);
             } catch (Exception e) {
                 sendPrivateMessage(fromQQ, e.toString());
                 return true;
             }
-            if (p != null) {
-                Autoreply.instence.configManager.configJavaBean.personInfo.add(p);
+            if (personInfo != null) {
+                Autoreply.instence.configManager.configJavaBean.personInfo.add(personInfo);
                 Autoreply.instence.configManager.saveConfig();
                 sendPrivateMessage(fromQQ, msg + "成功");
             } else {
@@ -78,7 +78,6 @@ public class OggInterface {
             }
             return true;
         }
-
         if (msg.startsWith("del{")) {
             PersonInfo p;
             try {

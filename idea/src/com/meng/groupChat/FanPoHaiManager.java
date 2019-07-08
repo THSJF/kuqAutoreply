@@ -1,7 +1,7 @@
 package com.meng.groupChat;
 
 import com.meng.Autoreply;
-import com.meng.Methods;
+import com.meng.tools.Methods;
 import com.meng.config.javabeans.GroupConfig;
 import com.meng.config.javabeans.PersonInfo;
 import com.meng.tools.FingerPrint;
@@ -17,21 +17,23 @@ public class FanPoHaiManager {
     private int alpohai = Autoreply.instence.random.nextInt(5) + 2;// 收到的消息包含迫害二字的次数到达此值也会触发反迫害
 
     public FanPoHaiManager() {
-       new Thread(() -> {
-           File[] pohaitu = new File(Autoreply.appDirectory + "fan\\").listFiles();
-           if (pohaitu != null) {
-               fts = new FingerPrint[pohaitu.length];
-           }
-           if (fts != null) {
-               for (int i = 0; i < fts.length; i++) {
-                   try {
-                       fts[i] = new FingerPrint(ImageIO.read(pohaitu[i]));
-                   } catch (Exception e) {
-                       System.out.println(pohaitu[i].getAbsolutePath());
-                   }
-               }
-           }
-       }).start();
+        System.out.println("反迫害启动");
+        Autoreply.instence.threadPool.execute(() -> {
+            File[] pohaitu = new File(Autoreply.appDirectory + "fan\\").listFiles();
+            if (pohaitu != null) {
+                fts = new FingerPrint[pohaitu.length];
+            }
+            if (fts != null) {
+                for (int i = 0; i < fts.length; i++) {
+                    try {
+                        fts[i] = new FingerPrint(ImageIO.read(pohaitu[i]));
+                    } catch (Exception e) {
+                        System.out.println(pohaitu[i].getAbsolutePath());
+                    }
+                }
+            }
+            System.out.println("反迫害启动完成");
+        });
     }
 
     public boolean check(long fromQQ, long fromGroup, String msg, long msgID) {

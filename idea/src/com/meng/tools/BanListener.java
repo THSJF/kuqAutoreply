@@ -1,12 +1,93 @@
 package com.meng.tools;
 
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 import com.meng.Autoreply;
-import com.meng.Methods;
+import com.sobte.cqp.jcq.entity.Member;
 
-public class NotificationManager {
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.OutputStreamWriter;
+import java.lang.reflect.Type;
+import java.nio.charset.StandardCharsets;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Map;
+
+public class BanListener {
+
+    private HashMap<String, HashSet<Long>> sleepSet = new HashMap<>();
+    private String configPath = Autoreply.appDirectory + "configV3_1.json";
+
+    public BanListener() {
+        File jsonBaseConfigFile = new File(configPath);
+        if (!jsonBaseConfigFile.exists()) {
+            saveConfig();
+        }
+        Type type = new TypeToken<HashMap<String, HashSet<Long>>>() {
+        }.getType();
+        try {
+            sleepSet = new Gson().fromJson(Methods.readFileToString(configPath), type);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        Autoreply.instence.threadPool.execute(() -> {
+            while (true) {
+                for (Map.Entry<String, HashSet<Long>> entry : sleepSet.entrySet()) {
+                    HashSet<Long> hsl = entry.getValue();
+                    for (long bqq : hsl) {
+                        Methods.ban(Long.parseLong(entry.getKey()), bqq, 2592000);
+                    }
+                }
+                try {
+                    Thread.sleep(2592000);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+            }
+        });
+    }
 
     public void check(long fromGroup, long fromQQ, String msg) {
         long tmp = Autoreply.instence.CC.getAt(msg);
+        if (msg.equals("夏眠列表")) {
+            Member qqInfo = Autoreply.CQ.getGroupMemberInfoV2(fromGroup, fromQQ);
+            if (Autoreply.instence.configManager.isAdmin(fromQQ) || qqInfo.getAuthority() == 2 || qqInfo.getAuthority() == 3) {
+                Autoreply.sendMessage(fromGroup, fromQQ, new Gson().toJson(sleepSet));
+                return;
+            }
+        }
+        if (msg.startsWith("夏眠结束[CQ:at,qq=")) {
+            Member qqInfo = Autoreply.CQ.getGroupMemberInfoV2(fromGroup, fromQQ);
+            if (Autoreply.instence.configManager.isAdmin(fromQQ) || qqInfo.getAuthority() == 2 || qqInfo.getAuthority() == 3) {
+                HashSet<Long> hs = sleepSet.get(String.valueOf(fromGroup));
+                if (hs == null) {
+                    Autoreply.sendMessage(fromGroup, fromQQ, "本群没有夏眠名单");
+                } else {
+                    hs.remove(tmp);
+                    Methods.ban(fromGroup, tmp, 0);
+                }
+                saveConfig();
+                return;
+            }
+        }
+        if (msg.startsWith("夏眠[CQ:at,qq=")) {
+            Member qqInfo = Autoreply.CQ.getGroupMemberInfoV2(fromGroup, fromQQ);
+            if (Autoreply.instence.configManager.isAdmin(fromQQ) || qqInfo.getAuthority() == 2 || qqInfo.getAuthority() == 3) {
+                HashSet<Long> hs = sleepSet.get(String.valueOf(fromGroup));
+                if (hs == null) {
+                    hs = new HashSet<>();
+                    hs.add(tmp);
+                    sleepSet.put(String.valueOf(fromGroup), hs);
+                } else {
+                    hs.add(tmp);
+                }
+                Methods.ban(fromGroup, tmp, 2592000);
+                saveConfig();
+                return;
+            }
+        }
         if (fromQQ == 2482513293L && msg.startsWith("复读警察,出动!") && tmp != -1000) {
             //Autoreply.instence.CC.getAt(msg) == 3119583925L
             Methods.ban(fromGroup, tmp, 0);
@@ -100,8 +181,34 @@ public class NotificationManager {
             return;
         }
         Autoreply.sendToMaster("在群" + fromGroup + "中" + banQQ + "无罪释放");
-        Autoreply.sendMessage(fromGroup, banQQ, "恭喜出狱");
+        boolean contain = false;
+        HashSet<Long> hse = sleepSet.get(String.valueOf(fromGroup));
+        if (hse != null) {
+            for (long qq : hse) {
+                if (qq == banQQ) {
+                    contain = true;
+                    break;
+                }
+            }
+        }
+        if (contain) {
+            Methods.ban(fromGroup, banQQ, 2592000);
+        } else {
+            Autoreply.sendMessage(fromGroup, banQQ, "恭喜出狱");
+        }
     }
 
 
+    private void saveConfig() {
+        try {
+            File file = new File(configPath);
+            FileOutputStream fos = new FileOutputStream(file);
+            OutputStreamWriter writer = new OutputStreamWriter(fos, StandardCharsets.UTF_8);
+            writer.write(new Gson().toJson(sleepSet));
+            writer.flush();
+            fos.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
 }

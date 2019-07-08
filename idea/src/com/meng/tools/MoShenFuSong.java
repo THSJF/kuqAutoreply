@@ -1,8 +1,11 @@
-package com.meng;
+package com.meng.tools;
+
+import com.meng.Autoreply;
+import com.meng.tools.Methods;
 
 import java.io.File;
 
-public class MoShenFuSong extends Thread {
+public class MoShenFuSong implements Runnable {
     private long fromGroup = 0;
     private int flag = 0;
 
@@ -57,7 +60,7 @@ public class MoShenFuSong extends Thread {
 
     private void sleeps(long ms) {
         try {
-            sleep(ms);
+            Thread.sleep(ms);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }

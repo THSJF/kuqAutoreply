@@ -1,12 +1,11 @@
 package com.meng.tip;
 
-import java.util.HashMap;
 import java.util.HashSet;
 
 import com.meng.Autoreply;
-import com.meng.Methods;
+import com.meng.tools.Methods;
 
-public class FileTipManager extends Thread {
+public class FileTipManager implements Runnable {
 
     public HashSet<FileTipUploader> dataMap = new HashSet<>();
 
@@ -17,9 +16,9 @@ public class FileTipManager extends Thread {
     }
 
     // 新文件上传时
-    public void onUploadFile(long groupNumber, long QQNumber) {
+    public void onUploadFile(long groupNumber, long qqNumber) {
         for (FileTipUploader tftu : dataMap) {
-            if (tftu.groupNumber == groupNumber && tftu.QQNumber == QQNumber) {
+            if (tftu.groupNumber == groupNumber && tftu.QQNumber == qqNumber) {
                 tftu.fileLastUpload = System.currentTimeMillis();
             }
         }
@@ -28,7 +27,7 @@ public class FileTipManager extends Thread {
     @Override
     public void run() {
         try {
-            sleep(600000);
+            Thread.sleep(600000);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
@@ -45,7 +44,7 @@ public class FileTipManager extends Thread {
                 }
             }
             try {
-                sleep(60000);
+                Thread.sleep(60000);
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }

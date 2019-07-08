@@ -14,7 +14,7 @@ import javax.imageio.ImageIO;
 import com.madgag.gif.fmsware.AnimatedGifEncoder;
 import com.madgag.gif.fmsware.GifDecoder;
 import com.meng.Autoreply;
-import com.meng.Methods;
+import com.meng.tools.Methods;
 import com.meng.config.javabeans.GroupConfig;
 import com.meng.tools.FingerPrint;
 import com.sobte.cqp.jcq.entity.CQImage;
@@ -86,7 +86,7 @@ public class RepeaterBanner {
     }
 
     // 复读状态
-    private boolean checkRepeatStatu(long group, long qq, String msg, float simi) throws IOException {
+    private boolean checkRepeatStatu(long group, long qq, String msg, float simi) {
         boolean b = false;
         if (!lastStatus && (lastMessageRecieved.equals(msg) || isPicMsgRepeat(lastMessageRecieved, msg, simi))) {
             b = repeatStart(group, qq, msg);
@@ -112,18 +112,22 @@ public class RepeaterBanner {
         return false;
     }
 
-    private boolean repeatStart(long group, long qq, String msg) throws IOException {
+    private boolean repeatStart(long group, long qq, String msg) {
         banCount = 6;
         Autoreply.instence.useCount.incFudujiguanjia(qq);
-        reply(group, qq, msg);
+        Autoreply.instence.threadPool.execute(() -> reply(group, qq, msg));
         Autoreply.instence.useCount.incFudu(Autoreply.CQ.getLoginQQ());
         return true;
     }
 
     // 回复
-    private boolean reply(long group, long qq, String msg) throws IOException {
+    private boolean reply(long group, long qq, String msg) {
         if (msg.contains("[CQ:image,file=")) {
-            replyPic(group, qq, msg);
+            try {
+                replyPic(group, qq, msg);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
         } else {
             replyText(group, qq, msg);
         }

@@ -1,10 +1,8 @@
-package com.meng.bilibili;
-
-import java.util.ArrayList;
+package com.meng.bilibili.main;
 
 import com.google.gson.Gson;
 import com.meng.Autoreply;
-import com.meng.Methods;
+import com.meng.tools.Methods;
 import com.meng.config.ConfigManager;
 import com.meng.config.javabeans.PersonInfo;
 
@@ -29,21 +27,12 @@ public class NewUpdateManager {
                 return false;
             }
             try {
-                vlist = gson.fromJson(
-                        Methods.getSourceCode("https://space.bilibili.com/ajax/member/getSubmitVideos?mid=" + upId
-                                + "&page=1&pagesize=1").replace("\"3\":", "\"n3\":").replace("\"4\":", "\"n4\":"),
-                        NewVideoBean.class).data.vlist.get(0);
+                vlist = gson.fromJson(Methods.getSourceCode("https://space.bilibili.com/ajax/member/getSubmitVideos?mid=" + upId + "&page=1&pagesize=1").replace("\"3\":", "\"n3\":").replace("\"4\":", "\"n4\":"), NewVideoBean.class).data.vlist.get(0);
             } catch (Exception e) {
-                System.out.println("no videos");
             }
             try {
-                articles = gson
-                        .fromJson(
-                                Methods.getSourceCode("http://api.bilibili.com/x/space/article?mid=" + upId
-                                        + "&pn=1&ps=1&sort=publish_time&jsonp=jsonp"),
-                                NewArticleBean.class).data.articles.get(0);
+                articles = gson.fromJson(Methods.getSourceCode("http://api.bilibili.com/x/space/article?mid=" + upId + "&pn=1&ps=1&sort=publish_time&jsonp=jsonp"), NewArticleBean.class).data.articles.get(0);
             } catch (Exception e) {
-                System.out.println("no articles");
             }
 
             if (vlist != null && articles == null) {
@@ -71,7 +60,12 @@ public class NewUpdateManager {
             Autoreply.sendMessage(fromGroup, 0, "更新莉,,,https://www.bilibili.com/video/av" + vlist.aid);
         } else {
             Autoreply.sendMessage(fromGroup, 0, Autoreply.instence.CC.at(getUpQQ(msg)) + Methods.rfa(words));
-            Autoreply.sendMessage(fromGroup, 0, "你都" + ((System.currentTimeMillis() - videoUpdateTime) / 86400000) + "天没更新了");
+            int days = (int) ((System.currentTimeMillis() - videoUpdateTime) / 86400000);
+            if (days <= 30) {
+                Autoreply.sendMessage(fromGroup, 0, "你都" + days + "天没更新了");
+            } else {
+                Autoreply.sendMessage(fromGroup, 0, +days + "天不更新,你咕你[CQ:emoji,id=128052]呢");
+            }
         }
     }
 
@@ -80,7 +74,12 @@ public class NewUpdateManager {
             Autoreply.sendMessage(fromGroup, 0, "更新莉,,,https://www.bilibili.com/read/cv" + articles.id);
         } else {
             Autoreply.sendMessage(fromGroup, 0, Autoreply.instence.CC.at(getUpQQ(msg)) + Methods.rfa(words));
-            Autoreply.sendMessage(fromGroup, 0, "你都" + ((System.currentTimeMillis() - articalUpdateTime) / 86400000) + "天没更新了");
+            int days = (int) ((System.currentTimeMillis() - articalUpdateTime) / 86400000);
+            if (days <= 30) {
+                Autoreply.sendMessage(fromGroup, 0, "你都" + days + "天没更新了");
+            } else {
+                Autoreply.sendMessage(fromGroup, 0, +days + "天不更新,你咕你[CQ:emoji,id=128052]呢");
+            }
         }
     }
 

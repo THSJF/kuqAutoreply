@@ -1,9 +1,9 @@
-package com.meng.counter;
+package com.meng.tools;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.meng.Autoreply;
-import com.meng.Methods;
+import com.meng.tools.Methods;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -11,12 +11,22 @@ import java.io.OutputStreamWriter;
 import java.lang.reflect.Type;
 import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.Map.Entry;
 
 public class UserCounter {
     private HashMap<String, UserInfo> countMap = new HashMap<>();
     private File file;
+
+    public class UserInfo {
+        public int speak = 0;
+        public int biliLink = 0;
+        public int repeat = 0;
+        public int repeatStart = 0;
+        public int repeatBreak = 0;
+        public int pohai = 0;
+        public int sp = 0;
+        public int setu = 0;
+    }
 
     public UserCounter() {
         file = new File(Autoreply.appDirectory + "properties\\UserCount.json");
@@ -30,18 +40,18 @@ public class UserCounter {
         } catch (Exception e) {
             e.printStackTrace();
         }
-        new Thread(() -> {
+        Autoreply.instence.threadPool.execute(() -> {
             while (true) {
                 sleep(60000);
                 saveData();
             }
-        }).start();
-        new Thread(() -> {
+        });
+        Autoreply.instence.threadPool.execute(() -> {
             while (true) {
                 sleep(86400000);
                 backupData();
             }
-        }).start();
+        });
     }
 
     private void sleep(long ms) {

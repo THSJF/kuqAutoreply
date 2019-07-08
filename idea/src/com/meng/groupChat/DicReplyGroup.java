@@ -5,7 +5,7 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import com.meng.Autoreply;
-import com.meng.Methods;
+import com.meng.tools.Methods;
 
 import java.io.File;
 import java.io.FileOutputStream;

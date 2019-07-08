@@ -4,7 +4,7 @@ import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import com.meng.Autoreply;
-import com.meng.Methods;
+import com.meng.tools.Methods;
 import com.sobte.cqp.jcq.entity.GroupFile;
 
 public class FileInfoManager {

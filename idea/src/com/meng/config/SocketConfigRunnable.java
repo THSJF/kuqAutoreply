@@ -13,11 +13,11 @@ import com.google.gson.Gson;
 import com.meng.config.javabeans.GroupConfig;
 import com.meng.config.javabeans.PersonInfo;
 
-public class SocketConfigThread extends Thread {
+public class SocketConfigRunnable implements Runnable {
     private Socket socket = null;
     private ConfigManager configManager;
 
-    public SocketConfigThread(ConfigManager configManager, ServerSocket serverSocket) {
+    public SocketConfigRunnable(ConfigManager configManager, ServerSocket serverSocket) {
         try {
             this.socket = serverSocket.accept();
         } catch (IOException e) {

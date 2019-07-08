@@ -1,4 +1,7 @@
-package com.meng;
+package com.meng.tools;
+
+import com.meng.Autoreply;
+import com.meng.tools.Methods;
 
 import java.util.HashMap;
 

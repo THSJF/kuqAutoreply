@@ -1,6 +1,8 @@
-package com.meng;
+package com.meng.groupChat;
 
+import com.meng.Autoreply;
 import com.meng.config.ConfigManager;
+import com.meng.tools.Methods;
 
 public class Banner {
     private ConfigManager configManager;

@@ -6,7 +6,7 @@ import java.util.HashSet;
 
 import com.meng.Autoreply;
 
-public class TimeTipManager extends Thread {
+public class TimeTipManager implements Runnable {
     private HashSet<TimeTipItem> hashSet = new HashSet<>();
 
     public TimeTipManager() {
@@ -19,15 +19,14 @@ public class TimeTipManager extends Thread {
         while (true) {
             Calendar c = Calendar.getInstance();
             for (TimeTipItem timeTipItem : hashSet) {
-                timeTipItem.needTip = c.get(Calendar.HOUR_OF_DAY) % timeTipItem.hour == 0
-                        && c.get(Calendar.MINUTE) == 0;
+                timeTipItem.needTip = c.get(Calendar.HOUR_OF_DAY) % timeTipItem.hour == 0 && c.get(Calendar.MINUTE) == 0;
                 if (timeTipItem.needTip) {
                     timeTipItem.runnable.run();
                     //	Autoreply.sendMessage(timeTipItem.targetGroup, 0, timeTipItem.tipMsg);
                 }
             }
             try {
-                sleep(60001);
+                Thread.sleep(60001);
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }

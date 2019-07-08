@@ -1,4 +1,4 @@
-package com.meng.bilibili;
+package com.meng.bilibili.live;
 
 import java.io.BufferedReader;
 import java.io.DataOutputStream;
@@ -8,19 +8,17 @@ import java.io.UnsupportedEncodingException;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.net.URLEncoder;
-import java.util.HashMap;
-import java.util.Map;
 
 import com.meng.Autoreply;
-import com.meng.Methods;
+import com.meng.tools.Methods;
 
 public class NaiManager {
 
     private final String POST_URL = "http://api.live.bilibili.com/msg/send";
-    private final String cookieSunny = "sid=5d245m2c; buvid3=6FE522EC-2313-4D06-B5FB-218F0ECD614240787infoc; DedeUserID=424436973; DedeUserID__ckMd5=9e1262810056755d; SESSDATA=2fd8d64b%2C1562489870%2Cf0715161; bili_jct=e5690748430c28d2e7916f16752b212d; _uuid=6FF4834C-2CD8-DC8D-31E7-19A8A9BFEC6870975infoc; LIVE_BUVID=AUTO5315598978735276";
-    private final String cookieLuna = "sid=93yvcyb4; buvid3=D5700998-DE0C-493E-9094-6026E85ED20C110266infoc; DedeUserID=424444960; DedeUserID__ckMd5=0abcb1088f3a304d; SESSDATA=f18a2369%2C1562489899%2Ce0653761; bili_jct=381291a284e4407d6e7fb80c4d23a7db; _uuid=91AE6FBB-6257-92EC-B9B6-5239ECF5929998878infoc; LIVE_BUVID=AUTO3315598979008780";
-    private final String cookieStar = "sid=68su41bu; buvid3=0005D079-181F-43AF-BF08-4AE9606BC3F2110255infoc; DedeUserID=424461971; DedeUserID__ckMd5=57442de70495d2e0; SESSDATA=a413f989%2C1562489945%2C526b2661; bili_jct=9f499ecfc9483d576674209ba59bcf28; _uuid=B88E3244-97CD-0B47-A24D-977C99B043DE45625infoc; LIVE_BUVID=AUTO8415598979476280";
-    private final String cookieXingHUo = "sid=cyc71ojs; buvid3=E1739C44-34A5-4B1E-88F0-AC0AAE12E0C340761infoc; DedeUserID=32845432; DedeUserID__ckMd5=6a8a7473e1de5637; SESSDATA=0019f79c%2C1562651400%2C9de38861; bili_jct=991d173da8e52fde89066f9c563c8bac; _uuid=7974E161-3373-0E1E-A4C1-582B53966AF901053infoc; LIVE_BUVID=AUTO5615600594032118";
+    private final String cookieSunny = "sid=iuddp3q8; buvid3=88CE640D-B46B-46F5-8A6D-4F74C54BC3A440753infoc; DedeUserID=424436973; DedeUserID__ckMd5=9e1262810056755d; SESSDATA=de997eb6%2C1565110064%2Ccaa47c71; bili_jct=8b6bc3ad47a2605fe80f9b7235c32f21; _uuid=1EA28D30-7F0B-0B7F-E2DC-9A05DA46349954313infoc; LIVE_BUVID=AUTO3815625180672914";
+    private final String cookieLuna = "sid=j4oxqgie; buvid3=DD86DBE2-AE29-4848-AEAC-294F8517C320110262infoc; DedeUserID=424444960; DedeUserID__ckMd5=0abcb1088f3a304d; SESSDATA=fd06b264%2C1565110091%2Ca344ea71; bili_jct=b2c274a72a0b21d303ba4dfb09c2e6b3; _uuid=56E84548-BAAE-476F-2B18-A0FE44604E0E80514infoc; LIVE_BUVID=AUTO7315625180939643";
+    private final String cookieStar = "sid=i7440w68; buvid3=D16A53C4-2628-4845-9773-5E23A6C857CF40779infoc; DedeUserID=424461971; DedeUserID__ckMd5=57442de70495d2e0; SESSDATA=909c5a67%2C1565110113%2C3a046a71; bili_jct=44a538c1d3ca73506a9b953173bf5477; _uuid=28B6C8C5-F955-1D29-0571-A65655F2F0FD02644infoc; LIVE_BUVID=AUTO5015625181152097";
+    private final String cookieXingHUo = "sid=cebgzd0p; buvid3=3AF52A07-66A8-4703-8502-D1ED49D5F8B7110244infoc; DedeUserID=32845432; DedeUserID__ckMd5=6a8a7473e1de5637; SESSDATA=61942582%2C1565164757%2C1ffe6c71; bili_jct=4fbf55846efc86f6980fab92c33d289d; _uuid=C2C713A5-6F78-7670-224D-8954E22E6AD847395infoc; LIVE_BUVID=AUTO8615625727608501";
 
     public void checkXinghuo(long fromGroup, int roomId, long fromQQ, String msg) {
         try {
@@ -59,8 +57,7 @@ public class NaiManager {
         connection.setRequestProperty("Connection", "keep-alive");
         connection.setRequestProperty("Accept", "application/json, text/javascript, */*; q=0.01");
         connection.setRequestProperty("Origin", "https://live.bilibili.com");
-        connection.setRequestProperty("User-Agent",
-                "Mozilla/5.0 (Windows NT 6.1; WOW64; rv:28.0) Gecko/20100101 Firefox/28.0");
+        connection.setRequestProperty("User-Agent", "Mozilla/5.0 (Windows NT 6.1; WOW64; rv:28.0) Gecko/20100101 Firefox/28.0");
         connection.setRequestProperty("Content-Type", "application/x-www-form-urlencoded; charset=UTF-8");
         connection.setRequestProperty("Referer", "https://live.bilibili.com/" + roomId);
         connection.setRequestProperty("Accept-Encoding", "gzip, deflate, br");

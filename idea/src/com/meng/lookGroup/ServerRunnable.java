@@ -1,19 +1,14 @@
-package com.meng.diaoXiongJiHua;
+package com.meng.lookGroup;
 
 import java.io.*;
 import java.net.Socket;
 
-import com.meng.Autoreply;
+public class ServerRunnable implements Runnable {
+    // 和本线程相关的Socket
+    private Socket socket;
 
-public class XiongServerThread implements Runnable {
-    Socket socket = null;
-    long fromQQ = 0;
-    String string = "";
-
-    public XiongServerThread(Socket socket, long fromQQ, String string) {
+    public ServerRunnable(Socket socket) {
         this.socket = socket;
-        this.fromQQ = fromQQ;
-        this.string = string;
     }
 
     @Override
@@ -28,13 +23,10 @@ public class XiongServerThread implements Runnable {
             is = socket.getInputStream();
             isr = new InputStreamReader(is); // 将字节流转化为字符流
             br = new BufferedReader(isr); // 添加缓冲
-            String info;
+            String info = null;
             // 循环读取数据
             while ((info = br.readLine()) != null) {
                 System.out.println("客户端:" + info);
-                if (info.startsWith("User-Agent")) {
-                    Autoreply.sendMessage(0, fromQQ, string + info);
-                }
             }
             socket.shutdownInput(); // 关闭输入流
             // 获取输出流，响应客户端的请求

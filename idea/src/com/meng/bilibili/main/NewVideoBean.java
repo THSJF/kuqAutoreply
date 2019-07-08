@@ -1,4 +1,4 @@
-package com.meng.bilibili;
+package com.meng.bilibili.main;
 
 import java.util.List;
 
