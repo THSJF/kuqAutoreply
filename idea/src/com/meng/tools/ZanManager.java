@@ -15,8 +15,7 @@ import java.util.HashSet;
 
 public class ZanManager {
     private HashSet<Long> hashSet = new HashSet<>();
-
-    private String configPath = Autoreply.appDirectory + "configV3_2.json";
+    private String configPath = Autoreply.appDirectory + "configV3_zan.json";
 
     public ZanManager() {
         File jsonBaseConfigFile = new File(configPath);

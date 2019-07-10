@@ -6,8 +6,12 @@ import com.google.gson.JsonParser;
 import com.meng.bilibili.main.SpaceToLiveJavaBean;
 import com.meng.config.javabeans.PersonInfo;
 import com.meng.tools.Methods;
+import com.sobte.cqp.jcq.entity.Group;
+import com.sobte.cqp.jcq.entity.Member;
 
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.stream.Collectors;
 
 public class OggInterface {
@@ -15,6 +19,41 @@ public class OggInterface {
     public boolean processOgg(long fromQQ, String msg) {
         if (msg.endsWith("喵")) {
             msg = msg.substring(0, msg.length() - 1);
+        }
+        if (msg.startsWith("findInAll:")) {
+            HashSet<Group> hashSet = new HashSet<>();
+            long qq;
+            try {
+                qq = Long.parseLong(msg.substring(10));
+            } catch (Exception e) {
+                PersonInfo personInfo = Autoreply.instence.configManager.getPersonInfoFromName(msg.substring(10));
+                if (personInfo == null) {
+                    sendPrivateMessage(fromQQ, "no info");
+                    return true;
+                }
+                qq = personInfo.qq;
+            }
+            List<Group> groups = Autoreply.CQ.getGroupList();
+            sendPrivateMessage(fromQQ, "running");
+            for (Group group : groups) {
+                if (group.getId() == 959615179L || group.getId() == 666247478L) {
+                    continue;
+                }
+                ArrayList<Member> members = (ArrayList<Member>) Autoreply.CQ.getGroupMemberList(group.getId());
+                for (Member member : members) {
+                    if (member.getQqId() == qq) {
+                        hashSet.add(group);
+                        break;
+                    }
+                }
+            }
+            StringBuilder stringBuilder = new StringBuilder();
+            stringBuilder.append(qq).append("在这些群中出现");
+            for (Group l : hashSet) {
+                stringBuilder.append("\n").append(l.getId()).append(l.getName());
+            }
+            sendPrivateMessage(fromQQ, stringBuilder.toString());
+            return true;
         }
         if (msg.startsWith("ban")) {
             String[] arr = msg.split("\\.");

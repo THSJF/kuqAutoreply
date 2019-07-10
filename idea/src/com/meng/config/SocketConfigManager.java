@@ -24,7 +24,7 @@ public class SocketConfigManager implements Runnable {
     private void check() {
         try {
             ServerSocket serverSocket = new ServerSocket(configManager.portConfig.configPort);
-            System.out.println("***configPort即将启动，等待客户端的链接***");
+            System.out.println("configPort启动");
             while (true) {
                 Autoreply.instence.threadPool.execute(new SocketConfigRunnable(configManager, serverSocket));
                 Thread.sleep(10);

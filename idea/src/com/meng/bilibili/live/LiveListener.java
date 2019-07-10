@@ -16,6 +16,7 @@ import java.lang.reflect.Type;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Map.Entry;
 
@@ -26,8 +27,11 @@ public class LiveListener implements Runnable {
     public static boolean liveStart = true;
     private HashMap<String, String> liveTimeMap = new HashMap<>();
 
+    private String configPath = Autoreply.appDirectory + "configV3_livetip.json";
+    private HashMap<String, HashSet<Long>> tipSet = new HashMap<>();
+
     public LiveListener(ConfigManager configManager) {
-        System.out.println("直播检测启动");
+        System.out.println("直播检测启动中");
         Autoreply.instence.threadPool.execute(() -> {
             for (PersonInfo cb : configManager.configJavaBean.personInfo) {
                 LiveListener.this.addPerson(cb);
@@ -35,18 +39,42 @@ public class LiveListener implements Runnable {
             loadFinish = true;
             System.out.println("直播检测启动完成");
         });
-        File liveTimeFile = new File(Autoreply.appDirectory + "liveTime.json");
-        if (!liveTimeFile.exists()) {
+        File jsonBaseConfigFile = new File(configPath);
+        if (!jsonBaseConfigFile.exists()) {
             saveConfig();
         }
-        Type type = new TypeToken<HashMap<String, String>>() {
-        }.getType();
         try {
-            liveTimeMap = new Gson().fromJson(Methods.readFileToString(liveTimeFile.getAbsolutePath()), type);
+            Type token = new TypeToken<HashMap<String, HashSet<Long>>>() {
+            }.getType();
+            tipSet = new Gson().fromJson(Methods.readFileToString(configPath), token);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        File liveTimeFile = new File(Autoreply.appDirectory + "liveTime.json");
+        if (!liveTimeFile.exists()) {
+            saveLiveTime();
+        }
+        try {
+            Type token = new TypeToken<HashMap<String, String>>() {
+            }.getType();
+            liveTimeMap = new Gson().fromJson(Methods.readFileToString(liveTimeFile.getAbsolutePath()), token);
         } catch (Exception e) {
             e.printStackTrace();
         }
     }
+
+    public void addTipPerson(long fromGroup, long bid) {
+        HashSet<Long> groupSet = tipSet.get(String.valueOf(bid));
+        if (groupSet != null) {
+            groupSet.add(fromGroup);
+        } else {
+            groupSet = new HashSet<>();
+            groupSet.add(fromGroup);
+            tipSet.put(String.valueOf(bid), groupSet);
+        }
+        saveConfig();
+    }
+
 
     private void addPerson(PersonInfo personInfo) {
         if (personInfo.bliveRoom == -1) {
@@ -106,6 +134,7 @@ public class LiveListener implements Runnable {
                 }
                 Thread.sleep(60000);
             } catch (Exception e) {
+                System.out.println("直播监视出了问题：");
                 e.printStackTrace();
             }
         }
@@ -158,7 +187,7 @@ public class LiveListener implements Runnable {
                     time += System.currentTimeMillis() / 1000 - p.liveStartTimeStamp;
                     liveTimeMap.put(p.name, String.valueOf(time));
                 }
-                saveConfig();
+                saveLiveTime();
                 // 勿添加break;
             case 4:
                 p.living = false;
@@ -187,8 +216,14 @@ public class LiveListener implements Runnable {
         // }
         // Autoreply.sendMessage(0, 2856986197L, p.getName() + "开始直播" +
         // p.roomId);
-        Autoreply.sendMessage(1023432971, 0, p.name + "开始直播" + p.roomId);
+        Autoreply.sendMessage(1023432971, 0, p.name + "开始直播" + p.roomId,true);
         Autoreply.sendToMaster(p.name + "开始直播" + p.roomId);
+        HashSet<Long> groupSet = tipSet.get(String.valueOf(p.bid));
+        if (groupSet != null) {
+            for (long group : groupSet) {
+                Autoreply.sendMessage(group, 0, p.name + "开始直播" + p.roomId,true);
+            }
+        }
     }
 
     private void tipFinish(LivePerson p) {
@@ -210,6 +245,12 @@ public class LiveListener implements Runnable {
         // e.printStackTrace();
         // }
         Autoreply.sendToMaster(p.name + "直播结束" + p.roomId);
+        HashSet<Long> groupSet = tipSet.get(String.valueOf(p.bid));
+        if (groupSet != null) {
+            for (long group : groupSet) {
+                Autoreply.sendMessage(group, 0, p.name + "直播结束" + p.roomId,true);
+            }
+        }
     }
 
     public String getLiveTimeCount() {
@@ -242,14 +283,25 @@ public class LiveListener implements Runnable {
 
     }
 
+    private void saveLiveTime() {
+        try {
+            File file = new File(Autoreply.appDirectory + "liveTime.json");
+            FileOutputStream fos = new FileOutputStream(file);
+            OutputStreamWriter writer = new OutputStreamWriter(fos, StandardCharsets.UTF_8);
+            writer.write(new Gson().toJson(liveTimeMap));
+            writer.flush();
+            fos.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
     private void saveConfig() {
         try {
-            FileOutputStream fos;
-            OutputStreamWriter writer;
-            File file = new File(Autoreply.appDirectory + "liveTime.json");
-            fos = new FileOutputStream(file);
-            writer = new OutputStreamWriter(fos, StandardCharsets.UTF_8);
-            writer.write(new Gson().toJson(liveTimeMap));
+            File file = new File(configPath);
+            FileOutputStream fos = new FileOutputStream(file);
+            OutputStreamWriter writer = new OutputStreamWriter(fos, StandardCharsets.UTF_8);
+            writer.write(new Gson().toJson(tipSet));
             writer.flush();
             fos.close();
         } catch (IOException e) {

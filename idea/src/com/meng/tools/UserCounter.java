@@ -3,7 +3,6 @@ package com.meng.tools;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.meng.Autoreply;
-import com.meng.tools.Methods;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -26,6 +25,7 @@ public class UserCounter {
         public int pohai = 0;
         public int sp = 0;
         public int setu = 0;
+        public int mengEr = 0;
     }
 
     public UserCounter() {
@@ -40,18 +40,8 @@ public class UserCounter {
         } catch (Exception e) {
             e.printStackTrace();
         }
-        Autoreply.instence.threadPool.execute(() -> {
-            while (true) {
-                sleep(60000);
-                saveData();
-            }
-        });
-        Autoreply.instence.threadPool.execute(() -> {
-            while (true) {
-                sleep(86400000);
-                backupData();
-            }
-        });
+        Autoreply.instence.threadPool.execute(this::saveData);
+        Autoreply.instence.threadPool.execute(this::backupData);
     }
 
     private void sleep(long ms) {
@@ -134,6 +124,15 @@ public class UserCounter {
         ++userInfo.speak;
     }
 
+    public void incMengEr(long qq) {
+        UserInfo userInfo = countMap.get(String.valueOf(qq));
+        if (userInfo == null) {
+            userInfo = new UserInfo();
+            countMap.put(String.valueOf(qq), userInfo);
+        }
+        ++userInfo.mengEr;
+    }
+
     public String getMyCount(long qq) {
         UserInfo userInfo = countMap.get(String.valueOf(qq));
         StringBuilder stringBuilder = new StringBuilder();
@@ -164,6 +163,9 @@ public class UserCounter {
         if (userInfo.biliLink != 0) {
             stringBuilder.append("\n").append("发送哔哩哔哩链接").append(userInfo.biliLink).append("次");
         }
+        if (userInfo.mengEr != 0) {
+            stringBuilder.append("\n").append("无悔发言").append(userInfo.mengEr).append("次");
+        }
         return stringBuilder.toString();
 
     }
@@ -177,6 +179,7 @@ public class UserCounter {
         int biliLink = 0;
         int sp = 0;
         int speak = 0;
+        int mengEr = 0;
         String setuq = null;
         String pohaiq = null;
         String repeatStartq = null;
@@ -185,6 +188,7 @@ public class UserCounter {
         String biliLinkq = null;
         String spq = null;
         String speakq = null;
+        String mengErq = null;
 
         for (Entry<String, UserInfo> entry : countMap.entrySet()) {
             if (entry.getKey().equals(String.valueOf(Autoreply.CQ.getLoginQQ()))) {
@@ -223,6 +227,10 @@ public class UserCounter {
                 sp = userInfo.sp;
                 spq = entry.getKey();
             }
+            if (userInfo.mengEr > mengEr) {
+                mengEr = userInfo.mengEr;
+                mengErq = entry.getKey();
+            }
         }
         StringBuilder sb = new StringBuilder();
         if (speakq != null) {
@@ -249,31 +257,40 @@ public class UserCounter {
         if (spq != null) {
             sb.append("\n").append(spq).append("搜图").append(sp).append("次");
         }
+        if (mengErq != null) {
+            sb.append("\n").append(mengErq).append("无悔发言").append(mengEr).append("次");
+        }
         return sb.toString();
     }
 
     private void saveData() {
-        try {
-            FileOutputStream fos = new FileOutputStream(file);
-            OutputStreamWriter writer = new OutputStreamWriter(fos, StandardCharsets.UTF_8);
-            writer.write(new Gson().toJson(countMap));
-            writer.flush();
-            fos.close();
-        } catch (Exception e) {
-            e.printStackTrace();
+        while (true) {
+            sleep(60000);
+            try {
+                FileOutputStream fos = new FileOutputStream(file);
+                OutputStreamWriter writer = new OutputStreamWriter(fos, StandardCharsets.UTF_8);
+                writer.write(new Gson().toJson(countMap));
+                writer.flush();
+                fos.close();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
         }
     }
 
     private void backupData() {
-        try {
-            File backup = new File(file.getAbsolutePath() + ".bak" + System.currentTimeMillis());
-            FileOutputStream fos = new FileOutputStream(backup);
-            OutputStreamWriter writer = new OutputStreamWriter(fos, StandardCharsets.UTF_8);
-            writer.write(new Gson().toJson(countMap));
-            writer.flush();
-            fos.close();
-        } catch (Exception e) {
-            e.printStackTrace();
+        while (true) {
+            sleep(86400000);
+            try {
+                File backup = new File(file.getAbsolutePath() + ".bak" + System.currentTimeMillis());
+                FileOutputStream fos = new FileOutputStream(backup);
+                OutputStreamWriter writer = new OutputStreamWriter(fos, StandardCharsets.UTF_8);
+                writer.write(new Gson().toJson(countMap));
+                writer.flush();
+                fos.close();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
         }
     }
 }

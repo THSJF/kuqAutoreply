@@ -18,7 +18,7 @@ import java.util.Map;
 public class BanListener {
 
     private HashMap<String, HashSet<Long>> sleepSet = new HashMap<>();
-    private String configPath = Autoreply.appDirectory + "configV3_1.json";
+    private String configPath = Autoreply.appDirectory + "configV3_sleep.json";
 
     public BanListener() {
         File jsonBaseConfigFile = new File(configPath);
@@ -34,16 +34,13 @@ public class BanListener {
         }
         Autoreply.instence.threadPool.execute(() -> {
             while (true) {
-                for (Map.Entry<String, HashSet<Long>> entry : sleepSet.entrySet()) {
-                    HashSet<Long> hsl = entry.getValue();
-                    for (long bqq : hsl) {
-                        Methods.ban(Long.parseLong(entry.getKey()), bqq, 2592000);
-                    }
-                }
                 try {
-                    Thread.sleep(2592000);
+                    Thread.sleep(2592000000L);
                 } catch (InterruptedException e) {
                     e.printStackTrace();
+                }
+                for (Map.Entry<String, HashSet<Long>> entry : sleepSet.entrySet()) {
+                    sleep(Long.parseLong(entry.getKey()), entry.getValue(), 2592000);
                 }
             }
         });
@@ -66,7 +63,7 @@ public class BanListener {
                     Autoreply.sendMessage(fromGroup, fromQQ, "本群没有夏眠名单");
                 } else {
                     hs.remove(tmp);
-                    Methods.ban(fromGroup, tmp, 0);
+                    sleep(fromGroup, tmp, 0);
                 }
                 saveConfig();
                 return;
@@ -83,7 +80,7 @@ public class BanListener {
                 } else {
                     hs.add(tmp);
                 }
-                Methods.ban(fromGroup, tmp, 2592000);
+                sleep(fromGroup, tmp, 2592000);
                 saveConfig();
                 return;
             }
@@ -114,7 +111,7 @@ public class BanListener {
                     long qq = Long.parseLong(msg.substring(msg.lastIndexOf("(") + 1, msg.lastIndexOf(")")));
                     String timeStr = msg.substring(msg.indexOf(keyWord) + keyWord.length());
                     if (timeStr.equals("1月")) {
-                        Autoreply.sendMessage(0, 2856986197L, "在群" + fromGroup + "中" + qq + "被禁言一个月");
+                        Autoreply.sendToMaster("在群" + fromGroup + "中" + qq + "被禁言一个月");
                         return;
                     }
                     String[] time = timeStr.split("(天|小时)");
@@ -144,7 +141,7 @@ public class BanListener {
                     }
                     onBan(fromGroup, qq, minute);
                 } else if (msg.contains("被管理员解除禁言")) {
-                    long qq = Long.parseLong(msg.substring(msg.indexOf("(") + 1, msg.lastIndexOf(")")));
+                    long qq = Long.parseLong(msg.substring(msg.lastIndexOf("(") + 1, msg.lastIndexOf(")")));
                     onRelease(fromGroup, qq);
                 }
         }
@@ -181,23 +178,54 @@ public class BanListener {
             return;
         }
         Autoreply.sendToMaster("在群" + fromGroup + "中" + banQQ + "无罪释放");
+        if (checkSleep(fromGroup, banQQ)) {
+            return;
+        }
+        Autoreply.sendMessage(fromGroup, banQQ, "恭喜出狱");
+    }
+
+    public boolean checkSleep(long fromGroup, long fromQQ) {
         boolean contain = false;
         HashSet<Long> hse = sleepSet.get(String.valueOf(fromGroup));
-        if (hse != null) {
-            for (long qq : hse) {
-                if (qq == banQQ) {
-                    contain = true;
-                    break;
-                }
+        if (hse == null) {
+            return false;
+        }
+        for (long qq : hse) {
+            if (qq == fromQQ) {
+                contain = true;
+                break;
             }
         }
         if (contain) {
-            Methods.ban(fromGroup, banQQ, 2592000);
+            sleep(fromGroup, fromQQ, 2592000);
+        }
+        return contain;
+    }
+
+    private void sleep(long fromGroup, HashSet<Long> banQQSet, int time) {
+        Member qqInfo = Autoreply.CQ.getGroupMemberInfoV2(fromGroup, Autoreply.CQ.getLoginQQ());
+        if (qqInfo.getAuthority() == 2 || qqInfo.getAuthority() == 3) {
+            for (long banQQ : banQQSet) {
+                Methods.ban(fromGroup, banQQ, time);
+            }
         } else {
-            Autoreply.sendMessage(fromGroup, banQQ, "恭喜出狱");
+            StringBuilder banqqs = new StringBuilder();
+            for (long banQQ : banQQSet) {
+                banqqs.append(" ").append(banQQ);
+            }
+          //  Autoreply.sendToMaster("#mutegroupuser " + fromGroup + " " + (time / 60) + banqqs.toString());
         }
     }
 
+
+    private void sleep(long fromGroup, long banQQ, int time) {
+        Member qqInfo = Autoreply.CQ.getGroupMemberInfoV2(fromGroup, Autoreply.CQ.getLoginQQ());
+        if (qqInfo.getAuthority() == 2 || qqInfo.getAuthority() == 3) {
+            Methods.ban(fromGroup, banQQ, time);
+        } else {
+        //    Autoreply.sendToMaster("#mutegroupuser " + fromGroup + " " + (time / 60) + " " + banQQ);
+        }
+    }
 
     private void saveConfig() {
         try {

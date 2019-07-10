@@ -103,6 +103,7 @@ public class FanPoHaiManager {
                     File[] files = file.listFiles();
                     if (files != null) {
                         Autoreply.sendMessage(fromGroup, 0, Autoreply.instence.CC.image((File) Methods.rfa(files)));
+                        Autoreply.instence.useCount.incPohaitu(Autoreply.CQ.getLoginQQ());
                     }
                     return true;
                 }

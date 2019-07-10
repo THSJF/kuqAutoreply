@@ -90,8 +90,8 @@ public class Methods {
                 case "旭东迫害图":
                     msg = "天星厨迫害图";
                     break;
-                case "杏子迫害图":
-                    msg = "星小渚迫害图";
+                case "星小渚迫害图":
+                    msg = "杏子迫害图";
                     break;
             }
             File[] files = (new File(Autoreply.appDirectory + "pohai/" + msg.replace("迫害图", ""))).listFiles();
