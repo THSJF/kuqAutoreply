@@ -1,18 +1,12 @@
 package com.meng;
 
-import com.google.gson.Gson;
-import com.google.gson.reflect.TypeToken;
 import com.meng.config.javabeans.GroupConfig;
 import com.meng.config.javabeans.PersonInfo;
 import com.meng.tools.Methods;
+import com.sobte.cqp.jcq.entity.Group;
+import com.sobte.cqp.jcq.entity.Member;
 import com.sobte.cqp.jcq.entity.QQInfo;
 
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.OutputStreamWriter;
-import java.lang.reflect.Type;
-import java.nio.charset.StandardCharsets;
 import java.util.HashSet;
 
 import static com.meng.Autoreply.sendMessage;
@@ -20,48 +14,27 @@ import static com.meng.Autoreply.sendToMaster;
 
 public class GroupMemberChangerListener {
 
-    private HashSet<Long> hashSetGroup = new HashSet<>();
-    private HashSet<Long> hashSetQQ = new HashSet<>();
-
-    private String configPathGroup = Autoreply.appDirectory + "configV3_black_group.json";
-    private String configPathQQ = Autoreply.appDirectory + "configV3_black_qq.json";
-
     public GroupMemberChangerListener() {
-        File jsonBaseConfigFile = new File(configPathGroup);
-        if (!jsonBaseConfigFile.exists()) {
-            saveConfig();
-        }
-        Type type = new TypeToken<HashSet<Long>>() {
-        }.getType();
-        try {
-            hashSetGroup = new Gson().fromJson(Methods.readFileToString(configPathGroup), type);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        File jsonBaseConfigFile2 = new File(configPathQQ);
-        if (!jsonBaseConfigFile2.exists()) {
-            saveConfig();
-        }
-        Type type2 = new TypeToken<HashSet<Long>>() {
-        }.getType();
-        try {
-            hashSetQQ = new Gson().fromJson(Methods.readFileToString(configPathQQ), type2);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
     }
 
     public void checkIncrease(int subtype, int sendTime, long fromGroup, long fromQQ, long beingOperateQQ) {
-        if (qqInBlack(beingOperateQQ)) {
-            return;
+        if (Autoreply.instence.configManager.isBlackQQ(fromQQ)) {
+            Methods.ban(fromGroup, fromQQ, 300);
         }
         PersonInfo personInfo = Autoreply.instence.configManager.getPersonInfoFromQQ(beingOperateQQ);
+        if (personInfo != null && personInfo.name.equals("熊哥")) {
+            sendMessage(959615179L, 0, Autoreply.instence.CC.at(-1) + "熊加入了群" + fromGroup);
+            return;
+        }
+        if (Autoreply.instence.configManager.isNotReplyGroup(fromGroup)) {
+            return;
+        }
         if (personInfo != null) {
             sendMessage(fromGroup, 0, "欢迎" + personInfo.name);
         } else {
             sendMessage(fromGroup, 0, "欢迎新大佬");
         }
-        Autoreply.instence.banListener.checkSleep(fromGroup, beingOperateQQ);
+        Autoreply.instence.banListener.checkSleepMsg(fromGroup, beingOperateQQ);
         if (fromGroup == 859561731L) { // 台长群
             sendMessage(859561731L, 0, "芳赛服务器炸了");
             /*
@@ -74,17 +47,39 @@ public class GroupMemberChangerListener {
 
     public void checkDecrease(int subtype, int sendTime, long fromGroup, long fromQQ, long beingOperateQQ) {
         if (subtype == 1) {
+            if (beingOperateQQ == 2856986197L) {
+                Autoreply.CQ.setGroupLeave(fromGroup, false);
+                sendMessage(fromGroup, 0, "主人离开了，各位再见");
+            }
+            if (Autoreply.instence.configManager.isNotReplyGroup(fromGroup)) {
+                return;
+            }
+            if (Autoreply.instence.configManager.isBlackQQ(beingOperateQQ)) {
+                return;
+            }
             QQInfo qInfo = Autoreply.CQ.getStrangerInfo(beingOperateQQ);
             PersonInfo personInfo = Autoreply.instence.configManager.getPersonInfoFromQQ(beingOperateQQ);
             sendMessage(fromGroup, 0, (personInfo == null ? qInfo.getNick() : personInfo.name) + "(" + qInfo.getQqId() + ")" + "跑莉");
         } else if (subtype == 2) {
             if (beingOperateQQ == 2856986197L) {
+                Autoreply.instence.threadPool.execute(() -> {
+                    addBlack(fromGroup, fromQQ);
+                    Autoreply.CQ.setGroupLeave(fromGroup, false);
+                });
+                return;
+            }
+            if (beingOperateQQ == 2558395159L) {
                 Autoreply.CQ.setGroupLeave(fromGroup, false);
-                addBlack(fromGroup, fromQQ);
                 return;
             }
             if (beingOperateQQ == Autoreply.CQ.getLoginQQ()) {
                 addBlack(fromGroup, fromQQ);
+                return;
+            }
+            if (Autoreply.instence.configManager.isNotReplyGroup(fromGroup)) {
+                return;
+            }
+            if (Autoreply.instence.configManager.isNotReplyQQ(beingOperateQQ)) {
                 return;
             }
             QQInfo qInfo = Autoreply.CQ.getStrangerInfo(beingOperateQQ);
@@ -95,50 +90,25 @@ public class GroupMemberChangerListener {
         }
     }
 
-    private void addBlack(long fromGroup, long fromQQ) {
-        hashSetGroup.add(fromGroup);
-        hashSetQQ.add(fromQQ);
-        Autoreply.instence.configManager.configJavaBean.QQNotReply.add(fromQQ);
+    private void addBlack(long group, long qq) {
+        Autoreply.instence.configManager.configJavaBean.blackListQQ.add(qq);
+        Autoreply.instence.configManager.configJavaBean.blackListGroup.add(group);
         for (GroupConfig groupConfig : Autoreply.instence.configManager.configJavaBean.groupConfigs) {
-            if (groupConfig.groupNumber == fromGroup) {
+            if (groupConfig.groupNumber == group) {
                 Autoreply.instence.configManager.configJavaBean.groupConfigs.remove(groupConfig);
                 break;
             }
         }
         Autoreply.instence.configManager.saveConfig();
-        saveConfig();
-        sendToMaster("已将用户" + fromQQ + "加入黑名单");
-        sendToMaster("已将群" + fromGroup + "加入黑名单");
-    }
-
-    public boolean qqInBlack(long qq) {
-        return hashSetQQ.contains(qq);
-    }
-
-    public boolean groupInBlack(long group) {
-        return hashSetGroup.contains(group);
-    }
-
-    private void saveConfig() {
-        try {
-            File file = new File(configPathGroup);
-            FileOutputStream fos = new FileOutputStream(file);
-            OutputStreamWriter writer = new OutputStreamWriter(fos, StandardCharsets.UTF_8);
-            writer.write(new Gson().toJson(hashSetGroup));
-            writer.flush();
-            fos.close();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        try {
-            File file = new File(configPathQQ);
-            FileOutputStream fos = new FileOutputStream(file);
-            OutputStreamWriter writer = new OutputStreamWriter(fos, StandardCharsets.UTF_8);
-            writer.write(new Gson().toJson(hashSetQQ));
-            writer.flush();
-            fos.close();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        Autoreply.instence.threadPool.execute(() -> {
+            HashSet<Group> groups = Methods.findQQInAllGroup(qq);
+            for (Group g : groups) {
+                if (Methods.ban(g.getId(), qq, 300)) {
+                    //    sendMessage(g.getId(), 0, "不要问为什么你会进黑名单，你干了什么自己知道");
+                }
+            }
+        });
+        sendToMaster("已将用户" + qq + "加入黑名单");
+        sendToMaster("已将群" + group + "加入黑名单");
     }
 }

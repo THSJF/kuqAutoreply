@@ -4,6 +4,7 @@ import com.meng.config.ConfigManager;
 import com.meng.config.javabeans.PersonInfo;
 import com.meng.picEdit.JingShenZhiZhuManager;
 import com.meng.picEdit.ShenChuManager;
+import com.meng.tools.Methods;
 import com.meng.tools.MoShenFuSong;
 import com.sobte.cqp.jcq.entity.CQImage;
 import com.sobte.cqp.jcq.entity.Group;
@@ -27,50 +28,8 @@ public class AdminMessageProcessor {
 
     public boolean check(long fromGroup, long fromQQ, String msg) {
         if (configManager.isMaster(fromQQ)) {
-            if (msg.startsWith("更新提醒[CQ:at,qq=")) {
-                List<Long> tipQQs = Autoreply.instence.CC.getAts(msg);
-                HashSet<Long> succeed = new HashSet<>();
-                for (long qq : tipQQs) {
-                    for (PersonInfo personInfo : Autoreply.instence.configManager.configJavaBean.personInfo) {
-                        if (qq == personInfo.qq) {
-                            if (personInfo.bid == 0) {
-                                continue;
-                            }
-                            Autoreply.instence.updateListener.addTipPerson(fromGroup, personInfo.bid);
-                            succeed.add(qq);
-                            break;
-                        }
-                    }
-                }
-                StringBuilder stringBuilder = new StringBuilder();
-                stringBuilder.append("成功：");
-                for (long l : succeed) {
-                    stringBuilder.append("\n").append(l);
-                }
-                sendMessage(fromGroup, fromQQ, stringBuilder.toString());
-                return true;
-            }
-            if (msg.startsWith("直播提醒[CQ:at,qq=")) {
-                List<Long> tipQQs = Autoreply.instence.CC.getAts(msg);
-                HashSet<Long> succeed = new HashSet<>();
-                for (long qq : tipQQs) {
-                    for (PersonInfo personInfo : Autoreply.instence.configManager.configJavaBean.personInfo) {
-                        if (qq == personInfo.qq) {
-                            if (personInfo.bid == 0) {
-                                continue;
-                            }
-                            Autoreply.instence.liveListener.addTipPerson(fromGroup, personInfo.bid);
-                            succeed.add(qq);
-                            break;
-                        }
-                    }
-                }
-                StringBuilder stringBuilder = new StringBuilder();
-                stringBuilder.append("成功：");
-                for (long l : succeed) {
-                    stringBuilder.append("\n").append(l);
-                }
-                sendMessage(fromGroup, fromQQ, stringBuilder.toString());
+            if (msg.equals("saveconfig")) {
+                Autoreply.instence.configManager.saveConfig();
                 return true;
             }
             if (msg.equals("线程数")) {
@@ -120,11 +79,11 @@ public class AdminMessageProcessor {
                 }
                 return true;
             }
-            if ("精神支柱".equals(msg)) {
+            if (msg.equals("精神支柱")) {
                 sendMessage(fromGroup, 0, Autoreply.instence.CC.image(new File(Autoreply.appDirectory + "pic\\alice.png")));
                 return true;
             }
-            if ("大芳法 芳神复诵".equals(msg)) {
+            if (msg.equals("大芳法 芳神复诵")) {
                 Autoreply.instence.threadPool.execute(new MoShenFuSong(fromGroup, 5));
                 return true;
             }
@@ -161,40 +120,7 @@ public class AdminMessageProcessor {
             }
             if (msg.startsWith("findInAll:")) {
                 String finalMsg1 = msg;
-                Autoreply.instence.threadPool.execute(() -> {
-                    HashSet<Group> hashSet = new HashSet<>();
-                    long qq;
-                    try {
-                        qq = Long.parseLong(finalMsg1.substring(10));
-                    } catch (Exception e) {
-                        PersonInfo personInfo = configManager.getPersonInfoFromName(finalMsg1.substring(10));
-                        if (personInfo == null) {
-                            sendMessage(fromGroup, fromQQ, "no info");
-                            return;
-                        }
-                        qq = personInfo.qq;
-                    }
-                    List<Group> groups = Autoreply.CQ.getGroupList();
-                    sendMessage(fromGroup, fromQQ, "running");
-                    for (Group group : groups) {
-                        if (group.getId() == 959615179L || group.getId() == 666247478L) {
-                            continue;
-                        }
-                        ArrayList<Member> members = (ArrayList<Member>) Autoreply.CQ.getGroupMemberList(group.getId());
-                        for (Member member : members) {
-                            if (member.getQqId() == qq) {
-                                hashSet.add(group);
-                                break;
-                            }
-                        }
-                    }
-                    StringBuilder stringBuilder = new StringBuilder();
-                    stringBuilder.append(qq).append("在这些群中出现");
-                    for (Group l : hashSet) {
-                        stringBuilder.append("\n").append(l.getId()).append(l.getName());
-                    }
-                    sendMessage(fromGroup, fromQQ, stringBuilder.toString());
-                });
+                Autoreply.instence.threadPool.execute(() -> Methods.findQQInAllGroup(0, fromQQ, finalMsg1));
                 return true;
             }
             if (msg.contains("迫害图[CQ:image")) {

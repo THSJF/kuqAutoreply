@@ -19,21 +19,17 @@ import com.meng.config.javabeans.PortConfig;
 public class ConfigManager {
     public ConfigJavaBean configJavaBean = new ConfigJavaBean();
     public Gson gson = new Gson();
-    PortConfig portConfig;
+    public PortConfig portConfig = new PortConfig();
 
     public ConfigManager() {
-        try {
-            portConfig = gson.fromJson(Methods.readFileToString(Autoreply.appDirectory + "grzxEditConfig.json"), PortConfig.class);
-            File jsonBaseConfigFile = new File(Autoreply.appDirectory + "configV3.json");
-            if (!jsonBaseConfigFile.exists()) {
-                saveConfig();
-            }
-            Type type = new TypeToken<ConfigJavaBean>() {
-            }.getType();
-            configJavaBean = gson.fromJson(Methods.readFileToString(Autoreply.appDirectory + "configV3.json"), type);
-        } catch (Exception e) {
-            e.printStackTrace();
+        portConfig = gson.fromJson(Methods.readFileToString(Autoreply.appDirectory + "grzxEditConfig.json"), PortConfig.class);
+        File jsonBaseConfigFile = new File(Autoreply.appDirectory + "configV3.json");
+        if (!jsonBaseConfigFile.exists()) {
+            saveConfig();
         }
+        Type type = new TypeToken<ConfigJavaBean>() {
+        }.getType();
+        configJavaBean = gson.fromJson(Methods.readFileToString(Autoreply.appDirectory + "configV3.json"), type);
         Autoreply.instence.threadPool.execute(new SocketConfigManager(this));
         Autoreply.instence.threadPool.execute(new SocketDicManager(this));
     }
@@ -65,7 +61,15 @@ public class ConfigManager {
     }
 
     public boolean isNotReplyQQ(long qq) {
-        return configJavaBean.QQNotReply.contains(qq);
+        return configJavaBean.QQNotReply.contains(qq) || configJavaBean.blackListQQ.contains(qq);
+    }
+
+    public boolean isBlackQQ(long qq) {
+        return configJavaBean.blackListQQ.contains(qq);
+    }
+
+    public boolean isBlackGroup(long qq) {
+        return configJavaBean.blackListGroup.contains(qq);
     }
 
     public boolean isNotReplyWord(String word) {
@@ -89,6 +93,15 @@ public class ConfigManager {
     public PersonInfo getPersonInfoFromName(String name) {
         for (PersonInfo pi : configJavaBean.personInfo) {
             if (pi.name.equals(name)) {
+                return pi;
+            }
+        }
+        return null;
+    }
+
+    public PersonInfo getPersonInfoFromBid(long bid) {
+        for (PersonInfo pi : configJavaBean.personInfo) {
+            if (pi.bid == bid) {
                 return pi;
             }
         }

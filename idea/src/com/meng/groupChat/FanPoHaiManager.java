@@ -80,8 +80,9 @@ public class FanPoHaiManager {
                 if (msgID != -1) {
                     GroupConfig groupConfig = Autoreply.instence.configManager.getGroupConfig(fromGroup);
                     if (groupConfig != null && groupConfig.isCheHuiMoTu()) {
-                        Member qqInfo = Autoreply.CQ.getGroupMemberInfoV2(fromGroup, Autoreply.CQ.getLoginQQ());
-                        if (qqInfo.getAuthority() == 2 || qqInfo.getAuthority() == 3) {
+                        Member me = Autoreply.CQ.getGroupMemberInfoV2(fromGroup, Autoreply.CQ.getLoginQQ());
+                        Member ban = Autoreply.CQ.getGroupMemberInfoV2(fromGroup, Autoreply.CQ.getLoginQQ());
+                        if (me.getAuthority() - ban.getAuthority() > 0) {
                             Autoreply.CQ.deleteMsg(msgID);
                         }
                     }

@@ -70,7 +70,7 @@ public class BarcodeUtils {
     }
 
     public static Result decodeImage(File img) {
-        BufferedImage image = null;
+        BufferedImage image;
         Result result = null;
         try {
             image = ImageIO.read(img);

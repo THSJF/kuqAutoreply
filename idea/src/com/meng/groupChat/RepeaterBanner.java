@@ -42,7 +42,7 @@ public class RepeaterBanner {
         }
         boolean b = false;
         try {
-            if (Autoreply.instence.CC.getAt(msg) == 1620628713L || msg.contains("禁言") || fromGroup != groupNumber) {
+            if (msg.contains("禁言") || fromGroup != groupNumber) {
                 return true;
             }
             float simi = getPicSimilar(msg);// 当前消息中图片和上一条消息中图片相似度
@@ -51,28 +51,22 @@ public class RepeaterBanner {
 
                     break;
                 case 1:
-                    Member qqInfo = Autoreply.CQ.getGroupMemberInfoV2(fromGroup, Autoreply.CQ.getLoginQQ());
-                    if (qqInfo.getAuthority() != 2 && qqInfo.getAuthority() != 3) {
-                        break;
-                    }
-                    if (lastMessageRecieved.equals(msg) || (isPicMsgRepeat(lastMessageRecieved, msg, simi))) { // 上一条消息和当前消息相同或两张图片相似度过高都是复读
+                    if (lastMessageRecieved.equals(msg) || isPicMsgRepeat(lastMessageRecieved, msg, simi)) { // 上一条消息和当前消息相同或两张图片相似度过高都是复读
                         if (Autoreply.instence.random.nextInt() % banCount == 0) {
                             int time = Autoreply.instence.random.nextInt(60) + 1;
-                            Methods.ban(fromGroup, fromQQ, time);
                             banCount = 6;
-                            Autoreply.sendMessage(0, fromQQ, "你从“群复读轮盘”中获得了" + time + "秒禁言套餐");
+                            if (Methods.ban(fromGroup, fromQQ, time)) {
+                                Autoreply.sendMessage(0, fromQQ, "你从“群复读轮盘”中获得了" + time + "秒禁言套餐");
+                            }
                         }
                     }
                     break;
                 case 2:
-                    Member qqInfo2 = Autoreply.CQ.getGroupMemberInfoV2(fromGroup, Autoreply.CQ.getLoginQQ());
-                    if (qqInfo2.getAuthority() != 2 && qqInfo2.getAuthority() != 3) {
-                        break;
-                    }
-                    if (lastMessageRecieved.equals(msg) || (isPicMsgRepeat(lastMessageRecieved, msg, simi))) {
+                    if (lastMessageRecieved.equals(msg) || isPicMsgRepeat(lastMessageRecieved, msg, simi)) {
                         int time = Autoreply.instence.random.nextInt(60) + 1;
-                        Methods.ban(fromGroup, fromQQ, time);
-                        Autoreply.sendMessage(0, fromQQ, "你因复读获得了" + time + "秒禁言套餐");
+                        if (Methods.ban(fromGroup, fromQQ, time)) {
+                            Autoreply.sendMessage(0, fromQQ, "你因复读获得了" + time + "秒禁言套餐");
+                        }
                     }
                     lastMessageRecieved = msg;
                     return true;

@@ -74,6 +74,12 @@ public class SocketConfigRunnable implements Runnable {
             case addGroupAllow:
                 configManager.configJavaBean.groupAutoAllowList.add(Long.parseLong(content));
                 break;
+            case addBlackQQ:
+                configManager.configJavaBean.blackListQQ.add(Long.parseLong(content));
+                break;
+            case addBlackGroup:
+                configManager.configJavaBean.blackListGroup.add(Long.parseLong(content));
+                break;
             case removeGroup:
                 configManager.configJavaBean.groupConfigs.remove(configManager.gson.fromJson(content, GroupConfig.class));
                 break;
@@ -94,6 +100,12 @@ public class SocketConfigRunnable implements Runnable {
                 break;
             case removeGroupAllow:
                 configManager.configJavaBean.groupAutoAllowList.remove(Long.parseLong(content));
+                break;
+            case removeBlackQQ:
+                configManager.configJavaBean.blackListQQ.remove(Long.parseLong(content));
+                break;
+            case removeBlackGroup:
+                configManager.configJavaBean.blackListGroup.remove(Long.parseLong(content));
                 break;
             case setGroup:
                 GroupConfig groupConfig = configManager.gson.fromJson(content, GroupConfig.class);
@@ -139,34 +151,56 @@ public class SocketConfigRunnable implements Runnable {
                 configManager.configJavaBean.personInfo.add(newPersonInfo);
                 break;
             case setMaster:
-                String[] splitm = content.split(" ");
-                long qqm = Long.parseLong(splitm[0]);
+                String[] splitmaster = content.split(" ");
+                long qqm = Long.parseLong(splitmaster[0]);
                 for (long l : configManager.configJavaBean.QQNotReply) {
                     if (l == qqm) {
                         configManager.configJavaBean.masterList.remove(l);
-                        configManager.configJavaBean.masterList.add(Long.parseLong(splitm[1]));
+                        configManager.configJavaBean.masterList.add(Long.parseLong(splitmaster[1]));
                         break;
                     }
                 }
                 break;
             case setAdmin:
-                String[] splita = content.split(" ");
-                long qqa = Long.parseLong(splita[0]);
+                String[] splitadmin = content.split(" ");
+                long qqa = Long.parseLong(splitadmin[0]);
                 for (long l : configManager.configJavaBean.QQNotReply) {
                     if (l == qqa) {
                         configManager.configJavaBean.adminList.remove(l);
-                        configManager.configJavaBean.adminList.add(Long.parseLong(splita[1]));
+                        configManager.configJavaBean.adminList.add(Long.parseLong(splitadmin[1]));
                         break;
                     }
                 }
                 break;
             case setGroupAllow:
-                String[] splitg = content.split(" ");
-                long qqg = Long.parseLong(splitg[0]);
+                String[] splitgroup = content.split(" ");
+                long qqg = Long.parseLong(splitgroup[0]);
                 for (long l : configManager.configJavaBean.QQNotReply) {
                     if (l == qqg) {
                         configManager.configJavaBean.groupAutoAllowList.remove(l);
-                        configManager.configJavaBean.groupAutoAllowList.add(Long.parseLong(splitg[1]));
+                        configManager.configJavaBean.groupAutoAllowList.add(Long.parseLong(splitgroup[1]));
+                        break;
+                    }
+                }
+                break;
+            case setBlackQQ:
+                String[] splitblackqq = content.split(" ");
+                long qqblack = Long.parseLong(splitblackqq[0]);
+                for (long l : configManager.configJavaBean.blackListQQ) {
+                    if (l == qqblack) {
+                        configManager.configJavaBean.blackListQQ.remove(l);
+                        configManager.configJavaBean.blackListQQ.add(Long.parseLong(splitblackqq[1]));
+                        break;
+                    }
+                }
+                break;
+            case setBlackGroup:
+                String[] splitblackgroup = content.split(" ");
+                long blackGroup = Long.parseLong(splitblackgroup[0]);
+                for (long l : configManager.configJavaBean.blackListGroup) {
+                    if (l == blackGroup) {
+                        configManager.configJavaBean.blackListGroup.remove(l);
+                        configManager.configJavaBean.blackListGroup.add(Long.parseLong(splitblackgroup[1]));
                         break;
                     }
                 }

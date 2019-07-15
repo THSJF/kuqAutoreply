@@ -2,6 +2,7 @@ package com.meng.bilibili.main;
 
 import com.google.gson.Gson;
 import com.meng.Autoreply;
+import com.meng.bilibili.BiliLinkInfo;
 import com.meng.tools.Methods;
 import com.meng.config.ConfigManager;
 import com.meng.config.javabeans.PersonInfo;
@@ -16,13 +17,13 @@ public class NewUpdateManager {
     }
 
     public boolean check(long fromGroup, String msg) {
-        if (isUpper(msg) && msg.contains("今天") && msg.contains("更") && msg.contains("吗")) {
+        if (msg.contains("今天更了吗") && isUpper(msg.substring(0, msg.indexOf("今天更了吗")))) {
             long videoUpdateTime = 0;
             long articalUpdateTime = 0;
             Gson gson = new Gson();
             NewVideoBean.Data.Vlist vlist = null;
             NewArticleBean.Data.Articles articles = null;
-            int upId = getUpId(msg);
+            int upId = getUpId(msg.substring(0, msg.indexOf("今天更了吗")));
             if (upId == 0) {
                 return false;
             }
@@ -34,7 +35,6 @@ public class NewUpdateManager {
                 articles = gson.fromJson(Methods.getSourceCode("http://api.bilibili.com/x/space/article?mid=" + upId + "&pn=1&ps=1&sort=publish_time&jsonp=jsonp"), NewArticleBean.class).data.articles.get(0);
             } catch (Exception e) {
             }
-
             if (vlist != null && articles == null) {
                 videoUpdateTime = vlist.created * 1000;
                 tipVideo(fromGroup, msg, videoUpdateTime, vlist);
@@ -58,8 +58,9 @@ public class NewUpdateManager {
     private void tipVideo(long fromGroup, String msg, long videoUpdateTime, NewVideoBean.Data.Vlist vlist) {
         if (System.currentTimeMillis() - videoUpdateTime < 86400000) {
             Autoreply.sendMessage(fromGroup, 0, "更新莉,,,https://www.bilibili.com/video/av" + vlist.aid);
+            Autoreply.sendMessage(fromGroup, 0, BiliLinkInfo.encodeBilibiliURL(vlist.aid, true));
         } else {
-            Autoreply.sendMessage(fromGroup, 0, Autoreply.instence.CC.at(getUpQQ(msg)) + Methods.rfa(words));
+            Autoreply.sendMessage(fromGroup, 0, Autoreply.instence.CC.at(getUpQQ(msg.substring(0, msg.indexOf("今天更了吗")))) + Methods.rfa(words));
             int days = (int) ((System.currentTimeMillis() - videoUpdateTime) / 86400000);
             if (days <= 30) {
                 Autoreply.sendMessage(fromGroup, 0, "你都" + days + "天没更新了");
@@ -72,8 +73,9 @@ public class NewUpdateManager {
     private void tipArticle(long fromGroup, String msg, long articalUpdateTime, NewArticleBean.Data.Articles articles) {
         if (System.currentTimeMillis() - articalUpdateTime < 86400000) {
             Autoreply.sendMessage(fromGroup, 0, "更新莉,,,https://www.bilibili.com/read/cv" + articles.id);
+            Autoreply.sendMessage(fromGroup, 0, BiliLinkInfo.encodeBilibiliURL(articles.id, false));
         } else {
-            Autoreply.sendMessage(fromGroup, 0, Autoreply.instence.CC.at(getUpQQ(msg)) + Methods.rfa(words));
+            Autoreply.sendMessage(fromGroup, 0, Autoreply.instence.CC.at(getUpQQ(msg.substring(0, msg.indexOf("今天更了吗")))) + Methods.rfa(words));
             int days = (int) ((System.currentTimeMillis() - articalUpdateTime) / 86400000);
             if (days <= 30) {
                 Autoreply.sendMessage(fromGroup, 0, "你都" + days + "天没更新了");
@@ -115,7 +117,7 @@ public class NewUpdateManager {
 
     private boolean isUpper(String msg) {
         for (PersonInfo cb : configManager.configJavaBean.personInfo) {
-            if (msg.contains(cb.name) && cb.bid != 0) {
+            if (msg.equals(cb.name) && cb.bid != 0) {
                 return true;
             }
         }
@@ -127,7 +129,7 @@ public class NewUpdateManager {
             if (cb.bid == 0) {
                 continue;
             }
-            if (msg.contains(cb.name)) {
+            if (msg.equals(cb.name)) {
                 return cb.bid;
             }
         }
@@ -136,7 +138,7 @@ public class NewUpdateManager {
 
     private long getUpQQ(String msg) {
         for (PersonInfo cb : configManager.configJavaBean.personInfo) {
-            if (msg.contains(cb.name)) {
+            if (msg.equals(cb.name)) {
                 return cb.qq;
             }
         }

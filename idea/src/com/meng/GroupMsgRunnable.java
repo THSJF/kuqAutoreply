@@ -36,6 +36,10 @@ public class GroupMsgRunnable implements Runnable {
     }
 
     private boolean check() {
+        if (msg.contains("@") && Autoreply.instence.CC.getAt(msg) == -1000) {
+            sendMessage(fromGroup, fromQQ, "野蛮假at");
+            return true;
+        }
         if (msg.equalsIgnoreCase("loaddic")) {
             Autoreply.instence.addGroupDic();
             sendMessage(fromGroup, fromQQ, "loaded");
@@ -43,6 +47,9 @@ public class GroupMsgRunnable implements Runnable {
         }
         if (msg.equals("椰叶查询")) {
             sendMessage(fromGroup, fromQQ, "查询结果：" + Autoreply.instence.CC.at(fromQQ));
+            return true;
+        }
+        if (Methods.checkAt(fromGroup, fromQQ, msg)) {//@
             return true;
         }
         GroupConfig groupConfig = Autoreply.instence.configManager.getGroupConfig(fromGroup);
@@ -113,9 +120,6 @@ public class GroupMsgRunnable implements Runnable {
             return true;
         }
         if (groupConfig.isCuigeng() && Autoreply.instence.updateManager.check(fromGroup, msg)) {
-            return true;
-        }
-        if (Methods.checkAt(fromGroup, fromQQ, msg)) {//@
             return true;
         }
         if (Autoreply.instence.timeTip.check(fromGroup, fromQQ)) {// 根据时间提醒

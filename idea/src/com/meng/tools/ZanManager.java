@@ -24,53 +24,33 @@ public class ZanManager {
         }
         Type type = new TypeToken<HashSet<Long>>() {
         }.getType();
-        try {
-            hashSet = new Gson().fromJson(Methods.readFileToString(configPath), type);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        hashSet = new Gson().fromJson(Methods.readFileToString(configPath), type);
     }
 
     public void sendZan() {
-        int ii;
         for (long l : Autoreply.instence.configManager.configJavaBean.masterList) {
-            for (int i = 0; i < 10; i++) {
-                ii = Autoreply.CQ.sendLike(l);
-                if (ii != 0) {
-                    Autoreply.sendToMaster("赞" + l + "失败,返回值" + ii);
-                }
-            }
-            try {
-                Thread.sleep(1000);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
+            zanCore(l);
         }
         for (long l : Autoreply.instence.configManager.configJavaBean.adminList) {
-            for (int i = 0; i < 10; i++) {
-                ii = Autoreply.CQ.sendLike(l);
-                if (ii != 0) {
-                    Autoreply.sendToMaster("赞" + l + "失败,返回值" + ii);
-                }
-            }
-            try {
-                Thread.sleep(1000);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
+            zanCore(l);
         }
         for (long l : hashSet) {
-            for (int i = 0; i < 10; i++) {
-                ii = Autoreply.CQ.sendLike(l);
-                if (ii != 0) {
-                    Autoreply.sendToMaster("赞" + l + "失败,返回值" + ii);
-                }
+            zanCore(l);
+        }
+    }
+
+    private void zanCore(long l) {
+        int ii;
+        for (int i = 0; i < 10; i++) {
+            ii = Autoreply.CQ.sendLike(l);
+            if (ii != 0) {
+                Autoreply.sendToMaster("赞" + l + "失败,返回值" + ii);
             }
-            try {
-                Thread.sleep(1000);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
+        }
+        try {
+            Thread.sleep(1000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
         }
     }
 

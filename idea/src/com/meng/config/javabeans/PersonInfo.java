@@ -1,11 +1,14 @@
 package com.meng.config.javabeans;
 
+import java.util.ArrayList;
+
 public class PersonInfo extends Object {
     public String name = "";
     public long qq = 0;
     public int bid = 0;
     public int bliveRoom = 0;
     public boolean autoTip = false;
+    public ArrayList<Long> tipIn = new ArrayList<>();
 
     @Override
     public int hashCode() {

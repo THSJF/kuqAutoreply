@@ -1,31 +1,34 @@
 package com.meng.groupChat;
 
-import com.google.gson.JsonArray;
-import com.google.gson.JsonElement;
-import com.google.gson.JsonObject;
-import com.google.gson.JsonParser;
+import com.google.gson.*;
+import com.google.gson.reflect.TypeToken;
 import com.meng.Autoreply;
 import com.meng.tools.Methods;
 
+import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.OutputStreamWriter;
+import java.lang.reflect.Type;
+import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map.Entry;
+import java.util.regex.Pattern;
 
 public class DicReplyManager {
 
-    private HashMap<Long, DicReplyGroup> groupMap = new HashMap<Long, DicReplyGroup>();
-    private HashMap<Integer, String> replyPool = new HashMap<Integer, String>();
-    private JsonParser parser;
-    private String jsonString;
+    private HashMap<Long, DicReplyGroup> groupMap = new HashMap<>();
+    private HashMap<String, HashSet<String>> dic = new HashMap<>();
 
     public DicReplyManager() {
-        parser = new JsonParser();
-        try {
-            jsonString = Methods.readFileToString(Autoreply.appDirectory + "dic\\dic.json");
-        } catch (IOException e) {
-            e.printStackTrace();
+        File dicFile = new File(Autoreply.appDirectory + "dic\\dic.json");
+        if (!dicFile.exists()) {
+            saveDic(dicFile, dic);
         }
+        Type type = new TypeToken<HashMap<String, HashSet<String>>>() {
+        }.getType();
+        dic = new Gson().fromJson(Methods.readFileToString(dicFile.getAbsolutePath()), type);
     }
 
     public void addData(DicReplyGroup drp) {
@@ -41,25 +44,25 @@ public class DicReplyManager {
         return groupMap.get(group).checkMsg(group, qq, msg);
     }
 
-    @SuppressWarnings("rawtypes")
     private boolean checkPublicDic(long group, long qq, String msg) {
-        HashSet<String> replyPool = new HashSet<>();
-        try {
-            JsonObject obj = parser.parse(jsonString).getAsJsonObject();
-            for (Entry<String, JsonElement> stringJsonElementEntry : obj.entrySet()) {
-                if (((Entry) stringJsonElementEntry).getKey().toString().equals(msg)) {
-                    JsonArray array = (JsonArray) ((Entry) stringJsonElementEntry).getValue();
-                    for (Object o : array) {
-                        replyPool.add(Methods.removeCharAtStartAndEnd(o.toString()));// 读取出来的数据是带有引号的
-                    }
-                    Autoreply.sendMessage(group, qq,
-                            (String) replyPool.toArray()[Autoreply.instence.random.nextInt(array.size())]);
-                    return true;
-                }
+        for (String key : dic.keySet()) {
+            if (key.equals(msg)) {
+                Autoreply.sendMessage(group, qq, (String) dic.get(key).toArray()[Autoreply.instence.random.nextInt(dic.get(key).size())]);
+                return true;
             }
-        } catch (Exception e) {
         }
         return false;
     }
 
+    static void saveDic(File dicFile, HashMap<String, HashSet<String>> dic) {
+        try {
+            FileOutputStream fos = new FileOutputStream(dicFile);
+            OutputStreamWriter writer = new OutputStreamWriter(fos, StandardCharsets.UTF_8);
+            writer.write(new Gson().toJson(dic));
+            writer.flush();
+            fos.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
 }

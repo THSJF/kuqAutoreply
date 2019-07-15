@@ -20,22 +20,9 @@ import java.util.HashSet;
 public class UpdateListener implements Runnable {
 
     private ArrayList<UpdatePerson> updatePerson = new ArrayList<>();
-    private String configPath = Autoreply.appDirectory + "configV3_update.json";
-    private HashMap<String, HashSet<Long>> tipSet = new HashMap<>();
 
     public UpdateListener(ConfigManager configManager) {
         System.out.println("更新检测启动中");
-        File jsonBaseConfigFile = new File(configPath);
-        if (!jsonBaseConfigFile.exists()) {
-            saveConfig();
-        }
-        Type type = new TypeToken<HashMap<String, HashSet<Long>>>() {
-        }.getType();
-        try {
-            tipSet = new Gson().fromJson(Methods.readFileToString(configPath), type);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
         for (PersonInfo cb : configManager.configJavaBean.personInfo) {
             addPerson(cb);
         }
@@ -47,18 +34,6 @@ public class UpdateListener implements Runnable {
             return;
         }
         updatePerson.add(new UpdatePerson(personInfo.name, personInfo.bid));
-    }
-
-    public void addTipPerson(long fromGroup, long bid) {
-        HashSet<Long> groupSet = tipSet.get(String.valueOf(bid));
-        if (groupSet != null) {
-            groupSet.add(fromGroup);
-        } else {
-            groupSet = new HashSet<>();
-            groupSet.add(fromGroup);
-            tipSet.put(String.valueOf(bid), groupSet);
-        }
-        saveConfig();
     }
 
     @Override
@@ -110,24 +85,11 @@ public class UpdateListener implements Runnable {
     private void tip(String updater, String msg) {
         Autoreply.sendMessage(1023432971, 0, msg, true);
         Autoreply.sendToMaster(msg);
-        HashSet<Long> groupSet = tipSet.get(updater);
-        if (groupSet != null) {
-            for (long group : groupSet) {
+        ArrayList<Long> groupList = Autoreply.instence.configManager.getPersonInfoFromBid(Long.parseLong(updater)).tipIn;
+        if (groupList != null) {
+            for (long group : groupList) {
                 Autoreply.sendMessage(group, 0, msg, true);
             }
-        }
-    }
-
-    private void saveConfig() {
-        try {
-            File file = new File(configPath);
-            FileOutputStream fos = new FileOutputStream(file);
-            OutputStreamWriter writer = new OutputStreamWriter(fos, StandardCharsets.UTF_8);
-            writer.write(new Gson().toJson(tipSet));
-            writer.flush();
-            fos.close();
-        } catch (IOException e) {
-            e.printStackTrace();
         }
     }
 }

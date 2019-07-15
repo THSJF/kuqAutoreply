@@ -51,7 +51,7 @@ public class GroupConfig extends Object {
         return booleans.get(6);
     }
 
-    public boolean isCheckLink() {
+    public boolean isSleep() {
         return booleans.get(7);
     }
 

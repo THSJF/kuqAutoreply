@@ -21,38 +21,8 @@ public class OggInterface {
             msg = msg.substring(0, msg.length() - 1);
         }
         if (msg.startsWith("findInAll:")) {
-            HashSet<Group> hashSet = new HashSet<>();
-            long qq;
-            try {
-                qq = Long.parseLong(msg.substring(10));
-            } catch (Exception e) {
-                PersonInfo personInfo = Autoreply.instence.configManager.getPersonInfoFromName(msg.substring(10));
-                if (personInfo == null) {
-                    sendPrivateMessage(fromQQ, "no info");
-                    return true;
-                }
-                qq = personInfo.qq;
-            }
-            List<Group> groups = Autoreply.CQ.getGroupList();
-            sendPrivateMessage(fromQQ, "running");
-            for (Group group : groups) {
-                if (group.getId() == 959615179L || group.getId() == 666247478L) {
-                    continue;
-                }
-                ArrayList<Member> members = (ArrayList<Member>) Autoreply.CQ.getGroupMemberList(group.getId());
-                for (Member member : members) {
-                    if (member.getQqId() == qq) {
-                        hashSet.add(group);
-                        break;
-                    }
-                }
-            }
-            StringBuilder stringBuilder = new StringBuilder();
-            stringBuilder.append(qq).append("在这些群中出现");
-            for (Group l : hashSet) {
-                stringBuilder.append("\n").append(l.getId()).append(l.getName());
-            }
-            sendPrivateMessage(fromQQ, stringBuilder.toString());
+            String finalMsg = msg;
+            Autoreply.instence.threadPool.execute(() -> Methods.findQQInAllGroup(0, fromQQ, finalMsg));
             return true;
         }
         if (msg.startsWith("ban")) {

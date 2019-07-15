@@ -29,37 +29,54 @@ public class BiliLinkInfo {
             Autoreply.sendMessage(0, fromQQ, processLive(msg.substring(4)));
             return true;
         }
-        return false;
-    }
-
-    // FromUriOpen@bilibili://YXY1ODI3Njg3OT9hYnRlc3Q9RSZ0cz0xNTYyNTYzNjI0JmV4cGlkPTc3MV83NjhfNjgzXzgyMiZ1dWlkPTk2MkQ1QjBELTM4NTUtMjkzRC00OEQwLUY4REQyQkQ3MkQwRTExOTE3aW5mb2M=
-
-
-    public boolean check(long fromGroup, long fromQQ, String msg) {
-        String subedUrl;
         if (msg.startsWith("FromUriOpen@bilibili://")) {
-            String id = null;
+            String subedString = null;
             try {
-                id = new String(Base64.decryptBASE64(msg.substring(23)));
+                subedString = new String(Base64.decryptBASE64(msg.substring(23)));
             } catch (Exception e) {
                 e.printStackTrace();
             }
             String result = null;
-            if (id == null) {
+            if (subedString == null) {
                 return false;
             }
-            if (id.startsWith("av")) {
-                result += "av" + id + "\n";
-                result += processVideo(getVideoId(id));
-            } else if (id.startsWith("cv")) {
-                result += "cv" + id + "\n";
-                result += processArtical(getArticalId(id));
+            if (subedString.startsWith("av")) {
+                result = "av" + getVideoId(subedString);
+            } else if (subedString.startsWith("cv")) {
+                result = "cv" + getArticalId(subedString);
             }
             if (result != null) {
-                Autoreply.instence.useCount.incBilibiliLink(fromQQ);
-                Autoreply.sendMessage(fromGroup, 0, result);
-                return !msg.contains("[CQ:share,url=");
+                Autoreply.sendMessage(0, fromQQ, result);
+                return true;
             }
+        }
+        return false;
+    }
+    // FromUriOpen@bilibili://YXY1ODI3Njg3OT9hYnRlc3Q9RSZ0cz0xNTYyNTYzNjI0JmV4cGlkPTc3MV83NjhfNjgzXzgyMiZ1dWlkPTk2MkQ1QjBELTM4NTUtMjkzRC00OEQwLUY4REQyQkQ3MkQwRTExOTE3aW5mb2M=
+
+    public boolean check(long fromGroup, long fromQQ, String msg) {
+        String subedUrl;
+        if (msg.startsWith("FromUriOpen@bilibili://")) {
+            String subedString = null;
+            try {
+                subedString = new String(Base64.decryptBASE64(msg.substring(23)));
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+            String result = "";
+            if (subedString == null) {
+                return false;
+            }
+            if (subedString.startsWith("av")) {
+                result += "av" + getVideoId(subedString) + "\n";
+                result += processVideo(getVideoId(subedString));
+            } else if (subedString.startsWith("cv")) {
+                result += "cv" + getArticalId(subedString) + "\n";
+                result += processArtical(getArticalId(subedString));
+            }
+            Autoreply.instence.useCount.incBilibiliLink(fromQQ);
+            Autoreply.sendMessage(fromGroup, 0, result);
+            return !msg.contains("[CQ:share,url=");
         } else {
             int ind = msg.indexOf("http");
             int ind1 = msg.indexOf(",text=");
@@ -154,5 +171,14 @@ public class BiliLinkInfo {
             }
         }
         return stringBuilder.toString();
+    }
+
+    public static String encodeBilibiliURL(long id, boolean av) {
+        try {
+            return "FromUriOpen@bilibili://" + Base64.encryptBASE64(((av ? "av:" : "cv") + id).getBytes());
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
     }
 }

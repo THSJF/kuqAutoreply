@@ -30,12 +30,11 @@ public class BarcodeManager {
         if (!files.exists()) {
             files.mkdirs();
         }
-        File barcode = new File(Autoreply.appDirectory + "barcode/" + fromQQ + "/barcode"
-                + Autoreply.instence.random.nextInt() + ".png");
+        File barcode = new File(Autoreply.appDirectory + "barcode/" + fromQQ + "/barcode" + Autoreply.instence.random.nextInt() + ".png");
         if (msg.startsWith("生成QR ")) {
-            ImageIO.write(BarcodeUtils.createQRCode(msg.replace("生成QR ", "")), "png", barcode);
+            ImageIO.write(BarcodeUtils.createQRCode(msg.substring(5)), "png", barcode);
         } else if (msg.startsWith("生成PDF417 ")) {
-            ImageIO.write(BarcodeUtils.createPDF417(msg.replace("生成PDF417 ", "")), "png", barcode);
+            ImageIO.write(BarcodeUtils.createPDF417(msg.substring(9)), "png", barcode);
         } else {
             return false;
         }

@@ -12,8 +12,11 @@ import java.nio.charset.StandardCharsets;
 import java.util.*;
 
 import com.meng.Autoreply;
+import com.meng.config.javabeans.PersonInfo;
 import com.meng.picEdit.JingShenZhiZhuQQManager;
 import com.meng.picEdit.ShenChuQQManager;
+import com.sobte.cqp.jcq.entity.Group;
+import com.sobte.cqp.jcq.entity.Member;
 import org.jsoup.Connection;
 import org.jsoup.Jsoup;
 
@@ -25,7 +28,6 @@ import com.meng.diaoXiongJiHua.XiongIPGetter;
 public class Methods {
     private static String motmp = "";
     private static String meng2tmp = "";
-    // static int arrayFlag = new java.util.Random().nextInt(5000);
 
     // 主开关
     public static boolean checkSwitch(long fromGroup, String msg) {
@@ -52,11 +54,56 @@ public class Methods {
         return false;
     }
 
-    public static void ban(long fromGroup, long fromQQ, int time) {
-        if (fromQQ == 2558395159L) {
-            return;
+    public static boolean ban(long fromGroup, long banQQ, int time) {
+        if (banQQ == 2558395159L || Autoreply.instence.configManager.isAdmin(banQQ)) {
+            return false;
         }
-        Autoreply.CQ.setGroupBan(fromGroup, fromQQ, time);
+        Member me = Autoreply.CQ.getGroupMemberInfoV2(fromGroup, Autoreply.CQ.getLoginQQ());
+        Member ban = Autoreply.CQ.getGroupMemberInfoV2(fromGroup, banQQ);
+        if (me.getAuthority() - ban.getAuthority() > 0) {
+            Autoreply.CQ.setGroupBan(fromGroup, banQQ, time);
+            Autoreply.instence.useCount.incGbanCount(Autoreply.CQ.getLoginQQ());
+            return true;
+        } else {
+            Member ogg = Autoreply.CQ.getGroupMemberInfoV2(fromGroup, 2565128043L);
+            if (ogg.getAuthority() - ban.getAuthority() > 0) {
+                Autoreply.sendToMaster("#mutegroupuser " + fromGroup + " " + (time / 60) + " " + banQQ);
+                Autoreply.instence.useCount.incGbanCount(Autoreply.CQ.getLoginQQ());
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public static void ban(long fromGroup, HashSet<Long> banQQs, int time) {
+        long[] qqs = new long[banQQs.size()];
+        int i = 0;
+        for (long qq : banQQs) {
+            qqs[i++] = qq;
+        }
+        ban(fromGroup, qqs, time);
+    }
+
+    public static void ban(long fromGroup, long[] banQQs, int time) {
+        Member me = Autoreply.CQ.getGroupMemberInfoV2(fromGroup, Autoreply.CQ.getLoginQQ());
+        Member ogg = Autoreply.CQ.getGroupMemberInfoV2(fromGroup, 2565128043L);
+        StringBuilder banqqs = new StringBuilder("");
+        for (long banQQ : banQQs) {
+            if (banQQ == 2558395159L) {
+                continue;
+            }
+            Member ban = Autoreply.CQ.getGroupMemberInfoV2(fromGroup, banQQ);
+            if (me.getAuthority() - ban.getAuthority() > 0) {
+                Autoreply.CQ.setGroupBan(fromGroup, banQQ, time);
+                Autoreply.instence.useCount.incGbanCount(Autoreply.CQ.getLoginQQ());
+            } else if (ogg.getAuthority() - ban.getAuthority() > 0) {
+                banqqs.append(" ").append(banQQ);
+                Autoreply.instence.useCount.incGbanCount(Autoreply.CQ.getLoginQQ());
+            }
+        }
+        if (!banqqs.toString().equals("")) {
+            Autoreply.sendToMaster("#mutegroupuser " + fromGroup + " " + (time / 60) + banqqs.toString());
+        }
     }
 
     public static String executeCmd(String command) throws IOException {
@@ -95,7 +142,7 @@ public class Methods {
                     break;
             }
             File[] files = (new File(Autoreply.appDirectory + "pohai/" + msg.replace("迫害图", ""))).listFiles();
-            if (files.length > 0) {
+            if (files != null && files.length > 0) {
                 Autoreply.sendMessage(fromGroup, fromQQ, Autoreply.instence.CC.image((File) Methods.rfa(files)));
                 Autoreply.instence.useCount.incPohaitu(fromQQ);
                 Autoreply.instence.useCount.incPohaitu(Autoreply.CQ.getLoginQQ());
@@ -158,34 +205,30 @@ public class Methods {
             if (fromQQ == 2558395159L) {
                 return true;
             }
-            Autoreply.sendMessage(fromGroup, 0, msg.replace("[CQ:at,qq=1620628713]", "[CQ:at,qq=" + fromQQ + "]"));
-
-            // if (msg.contains("野兽先辈") || msg.contains("仰望星空派") ||
-            // msg.contains("英国") || msg.contains("鬼杀酒")
-            // || msg.contains("羊杂碎布丁") || msg.contains("昏睡红茶") ||
-            // msg.contains("英式鳗鱼冻")) {
-            // Autoreply.sendMessage(fromGroup, 0,
-            // Autoreply.instence.CC.at(fromQQ) + msg.substring(msg.indexOf(" ")
-            // + 1));
-            // return true;
-            // }
-            // return true;
+            Autoreply.sendMessage(fromGroup, 0, msg.replace("[CQ:at,qq=" + Autoreply.CQ.getLoginQQ() + "]", "[CQ:at,qq=" + fromQQ + "]"));
+            return true;
         }
         return false;
     }
 
     // 读取文本文件
-    public static String readFileToString(String fileName) throws IOException, UnsupportedEncodingException {
-        File file = new File(fileName);
-        if (!file.exists()) {
-            file.createNewFile();
+    public static String readFileToString(String fileName) {
+        String s = "{}";
+        try {
+            File file = new File(fileName);
+            if (!file.exists()) {
+                file.createNewFile();
+            }
+            long filelength = file.length();
+            byte[] filecontent = new byte[(int) filelength];
+            FileInputStream in = new FileInputStream(file);
+            in.read(filecontent);
+            in.close();
+            s = new String(filecontent, StandardCharsets.UTF_8);
+        } catch (Exception e) {
+
         }
-        long filelength = file.length();
-        byte[] filecontent = new byte[(int) filelength];
-        FileInputStream in = new FileInputStream(file);
-        in.read(filecontent);
-        in.close();
-        return new String(filecontent, StandardCharsets.UTF_8);
+        return s;
     }
 
     // 删除字符串中指定位置的文字
@@ -195,18 +238,16 @@ public class Methods {
 
     // 获取字符串中指定位置的文字
     public static String getStringBetween(String str, String start, String end, int index) {
-
         int flagA = str.indexOf(start, index);
         int flagB = str.indexOf(end, flagA + 1);
         if (flagA < 0 || flagB < 0) {
             return null;
-        } else {
-            flagA = flagA + start.length();
-            if (flagA < 0 || flagB < 0) {
-                return null;
-            }
-            return str.substring(flagA, flagB);
         }
+        flagA = flagA + start.length();
+        if (flagA < 0) {
+            return null;
+        }
+        return str.substring(flagA, flagB);
     }
 
     // 删除字符串两端
@@ -342,7 +383,7 @@ public class Methods {
     }
 
     public static Map<String, String> cookieToMap(String value) {
-        Map<String, String> map = new HashMap<String, String>();
+        Map<String, String> map = new HashMap<>();
         String[] values = value.split("; ");
         for (String val : values) {
             String[] vals = val.split("=");
@@ -372,16 +413,13 @@ public class Methods {
 
     public static String getSourceCode(String url, String cookie) {
         Connection.Response response = null;
-        Connection connection = null;
+        Connection connection;
         try {
-            connection = Jsoup.connect(url);
+            connection = Jsoup.connect(url).ignoreContentType(true).method(Connection.Method.GET);
             if (cookie != null) {
                 connection.cookies(cookieToMap(cookie));
             }
-            connection.ignoreContentType(true).method(Connection.Method.GET);
             response = connection.execute();
-            //  if (response.statusCode() != 200) {
-            //  }
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -391,12 +429,53 @@ public class Methods {
             return null;
         }
     }
-    // public static String getG_tk(String skey) {
-    // int hash = 5381;
-    // int flag = skey.length();
-    // for (int i = 0; i < flag; i++) {
-    // hash = hash + hash * 32 + skey.charAt(i);
-    // }
-    // return String.valueOf(hash & 0x7fffffff);
-    // }
+
+    public static void findQQInAllGroup(long fromGroup, long fromQQ, String msg) {
+        long findqq;
+        try {
+            findqq = Long.parseLong(msg.substring(10));
+        } catch (Exception e) {
+            findqq = Autoreply.instence.CC.getAt(msg);
+        }
+        if (findqq <= 0) {
+            Autoreply.sendMessage(fromGroup, fromQQ, "QQ账号错误");
+            return;
+        }
+        Autoreply.sendMessage(fromGroup, fromQQ, "running");
+        HashSet<Group> hashSet = findQQInAllGroup(findqq);
+        StringBuilder stringBuilder = new StringBuilder();
+        stringBuilder.append(findqq).append("在这些群中出现");
+        for (Group l : hashSet) {
+            stringBuilder.append("\n").append(l.getId()).append(l.getName());
+        }
+        Autoreply.sendMessage(fromGroup, fromQQ, stringBuilder.toString());
+    }
+
+    public static HashSet<Group> findQQInAllGroup(long findQQ) {
+        List<Group> groups = Autoreply.CQ.getGroupList();
+        HashSet<Group> hashSet = new HashSet<>();
+        for (Group group : groups) {
+            if (group.getId() == 959615179L || group.getId() == 666247478L) {
+                continue;
+            }
+            ArrayList<Member> members = (ArrayList<Member>) Autoreply.CQ.getGroupMemberList(group.getId());
+            for (Member member : members) {
+                if (member.getQqId() == findQQ) {
+                    hashSet.add(group);
+                    break;
+                }
+            }
+        }
+        return hashSet;
+    }
+
+
+  /*  public static String getG_tk(String skey) {
+        int hash = 5381;
+        int flag = skey.length();
+        for (int i = 0; i < flag; i++) {
+            hash = hash + hash * 32 + skey.charAt(i);
+        }
+        return String.valueOf(hash & 0x7fffffff);
+    }*/
 }

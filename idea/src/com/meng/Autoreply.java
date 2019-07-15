@@ -83,6 +83,7 @@ public class Autoreply extends JcqAppAbstract implements ICQVer, IMsg, IRequest 
 
     public static String lastSend = " ";
     public static String lastSend2 = "  ";
+    public static boolean tipedBreak = false;
 
     /**
      * @param args 系统参数
@@ -289,7 +290,7 @@ public class Autoreply extends JcqAppAbstract implements ICQVer, IMsg, IRequest 
                         int font) {
         // if (fromGroup != 312342896L)
         // return MSG_IGNORE;
-        //if (fromGroup != 1023432971L)
+        // if (fromGroup != 1023432971L)
         //    return MSG_IGNORE;
         // if (fromGroup != 617745343L)
         // return MSG_IGNORE;
@@ -316,18 +317,26 @@ public class Autoreply extends JcqAppAbstract implements ICQVer, IMsg, IRequest 
 
         //  System.out.println(msg);
         // 指定不回复的项目
-        banListener.check(fromGroup, fromQQ, msg);
+        if (Autoreply.instence.configManager.isBlackQQ(fromQQ)) {
+            System.out.println("black:" + fromQQ);
+            if (Methods.ban(fromGroup, fromQQ, 300)) {
+                sendMessage(fromGroup, fromQQ, "嘘 别说话");
+            }
+        }
         if (configManager.isNotReplyQQ(fromQQ)) {
             return MSG_IGNORE;
         }
+        banListener.check(fromGroup, fromQQ, msg);
         useCount.incSpeak(fromQQ);
         if (msg.contains("此生无悔入东方") || msg.contains("方东入悔无生此")) {
             useCount.incMengEr(fromQQ);
         }
+        if (CC.getCQImage(msg) != null) {
+            useCount.incPic(fromQQ);
+        }
         if (configManager.isNotReplyWord(msg)) {
             return MSG_IGNORE;
         }
-
         if (Methods.checkSwitch(fromGroup, msg)) {// 控制
             return MSG_IGNORE;
         }
@@ -341,11 +350,9 @@ public class Autoreply extends JcqAppAbstract implements ICQVer, IMsg, IRequest 
             }
             return MSG_IGNORE;
         }
-
         if (adminMessageProcessor.check(fromGroup, fromQQ, msg)) {
             return MSG_IGNORE;
         }
-
         if (configManager.isNotReplyGroup(fromGroup)) {
             return MSG_IGNORE;
         }
@@ -464,9 +471,6 @@ public class Autoreply extends JcqAppAbstract implements ICQVer, IMsg, IRequest 
     @Override
     public int groupMemberDecrease(int subtype, int sendTime, long fromGroup, long fromQQ, long beingOperateQQ) {
         // 这里处理消息
-        if (configManager.isNotReplyGroup(fromGroup)) {
-            return MSG_IGNORE;
-        }
         groupMemberChangerListener.checkDecrease(subtype, sendTime, fromGroup, fromQQ, beingOperateQQ);
         return MSG_IGNORE;
     }
@@ -485,7 +489,7 @@ public class Autoreply extends JcqAppAbstract implements ICQVer, IMsg, IRequest 
     @Override
     public int groupMemberIncrease(int subtype, int sendTime, long fromGroup, long fromQQ, long beingOperateQQ) {
         // 这里处理消息
-        if (beingOperateQQ == CQ.getLoginQQ() || configManager.isNotReplyGroup(fromGroup)) {
+        if (beingOperateQQ == CQ.getLoginQQ()) {
             return MSG_IGNORE;
         }
         groupMemberChangerListener.checkIncrease(subtype, sendTime, fromGroup, fromQQ, beingOperateQQ);
@@ -522,7 +526,7 @@ public class Autoreply extends JcqAppAbstract implements ICQVer, IMsg, IRequest 
     @Override
     public int requestAddFriend(int subtype, int sendTime, long fromQQ, String msg, String responseFlag) {
         // 这里处理消息
-        if (groupMemberChangerListener.qqInBlack(fromQQ) || configManager.isNotReplyQQ(fromQQ)) {
+        if (configManager.isNotReplyQQ(fromQQ)) {
             CQ.setFriendAddRequest(responseFlag, REQUEST_REFUSE, "");
             sendMessage(0, 2856986197L, "拒绝了" + fromQQ + "加为好友");
             return MSG_IGNORE;
@@ -560,7 +564,10 @@ public class Autoreply extends JcqAppAbstract implements ICQVer, IMsg, IRequest 
          */
         System.out.println("groupAdd");
         if (subtype == 1) {
-            if (groupMemberChangerListener.qqInBlack(fromQQ)) {
+            if (configManager.isBlackQQ(fromQQ)) {
+                CQ.setGroupAddRequest(responseFlag, REQUEST_GROUP_ADD, REQUEST_ADOPT, null);
+                Methods.ban(fromGroup, fromQQ, 2592000);
+                sendMessage(fromGroup, fromQQ, "不要问为什么你会进黑名单，你干了什么自己知道");
                 return MSG_IGNORE;
             }
             PersonInfo personInfo = configManager.getPersonInfoFromQQ(fromQQ);
@@ -574,7 +581,7 @@ public class Autoreply extends JcqAppAbstract implements ICQVer, IMsg, IRequest 
                 sendMessage(fromGroup, 0, "有人申请加群，绿帽赶紧瞅瞅");
             }
         } else if (subtype == 2) {
-            if (groupMemberChangerListener.qqInBlack(fromQQ) || groupMemberChangerListener.groupInBlack(fromGroup)) {
+            if (configManager.isBlackQQ(fromQQ) || configManager.isBlackGroup(fromGroup)) {
                 CQ.setFriendAddRequest(responseFlag, REQUEST_REFUSE, "");
                 sendMessage(0, 2856986197L, "拒绝了" + fromQQ + "邀请我加入群" + fromGroup);
                 return MSG_IGNORE;
@@ -701,12 +708,18 @@ public class Autoreply extends JcqAppAbstract implements ICQVer, IMsg, IRequest 
         if (fromGroup == 0 || fromGroup == -1) {
             instence.sendPrivateMessage(fromQQ, msg);
         } else {
-            if ((msg.equals(lastSend) && lastSend.equals(lastSend2))) {
-                instence.sendGroupMessage(fromGroup, fromQQ, "打断");
-            } else {
+            if (isTip) {
                 instence.sendGroupMessage(fromGroup, fromQQ, msg);
-            }
-            if (!isTip) {
+            } else {
+                if (msg.equals(lastSend) && lastSend.equals(lastSend2)) {
+                    if (!tipedBreak) {
+                        instence.sendGroupMessage(fromGroup, fromQQ, "打断");
+                        tipedBreak = true;
+                    }
+                } else {
+                    instence.sendGroupMessage(fromGroup, fromQQ, msg);
+                    tipedBreak = false;
+                }
                 lastSend2 = lastSend;
                 lastSend = msg;
             }

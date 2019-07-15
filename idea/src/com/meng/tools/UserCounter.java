@@ -18,6 +18,7 @@ public class UserCounter {
 
     public class UserInfo {
         public int speak = 0;
+        public int pic = 0;
         public int biliLink = 0;
         public int repeat = 0;
         public int repeatStart = 0;
@@ -26,6 +27,8 @@ public class UserCounter {
         public int sp = 0;
         public int setu = 0;
         public int mengEr = 0;
+        public int ban = 0;
+        public int gban = 0;
     }
 
     public UserCounter() {
@@ -33,104 +36,81 @@ public class UserCounter {
         if (!file.exists()) {
             saveData();
         }
-        try {
-            Type type = new TypeToken<HashMap<String, UserInfo>>() {
-            }.getType();
-            countMap = new Gson().fromJson(Methods.readFileToString(file.getAbsolutePath()), type);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+        Type type = new TypeToken<HashMap<String, UserInfo>>() {
+        }.getType();
+        countMap = new Gson().fromJson(Methods.readFileToString(file.getAbsolutePath()), type);
         Autoreply.instence.threadPool.execute(this::saveData);
         Autoreply.instence.threadPool.execute(this::backupData);
     }
 
-    private void sleep(long ms) {
-        try {
-            Thread.sleep(ms);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
+
+    public void incSpeak(long qq) {
+        UserInfo userInfo = getBean(qq);
+        ++userInfo.speak;
+    }
+
+    public void incPic(long qq) {
+        UserInfo userInfo = getBean(qq);
+        ++userInfo.pic;
     }
 
     public void incSetu(long qq) {
-        UserInfo userInfo = countMap.get(String.valueOf(qq));
-        if (userInfo == null) {
-            userInfo = new UserInfo();
-            countMap.put(String.valueOf(qq), userInfo);
-        }
+        UserInfo userInfo = getBean(qq);
         ++userInfo.setu;
     }
 
     public void incPohaitu(long qq) {
-        UserInfo userInfo = countMap.get(String.valueOf(qq));
-        if (userInfo == null) {
-            userInfo = new UserInfo();
-            countMap.put(String.valueOf(qq), userInfo);
-        }
+        UserInfo userInfo = getBean(qq);
         ++userInfo.pohai;
     }
 
     public void incFudujiguanjia(long qq) {
-        UserInfo userInfo = countMap.get(String.valueOf(qq));
-        if (userInfo == null) {
-            userInfo = new UserInfo();
-            countMap.put(String.valueOf(qq), userInfo);
-        }
+        UserInfo userInfo = getBean(qq);
         ++userInfo.repeatStart;
     }
 
     public void incFudu(long qq) {
-        UserInfo userInfo = countMap.get(String.valueOf(qq));
-        if (userInfo == null) {
-            userInfo = new UserInfo();
-            countMap.put(String.valueOf(qq), userInfo);
-        }
+        UserInfo userInfo = getBean(qq);
         ++userInfo.repeat;
     }
 
     public void incRepeatBreaker(long qq) {
-        UserInfo userInfo = countMap.get(String.valueOf(qq));
-        if (userInfo == null) {
-            userInfo = new UserInfo();
-            countMap.put(String.valueOf(qq), userInfo);
-        }
+        UserInfo userInfo = getBean(qq);
         ++userInfo.repeatBreak;
     }
 
     public void incSearchPicture(long qq) {
-        UserInfo userInfo = countMap.get(String.valueOf(qq));
-        if (userInfo == null) {
-            userInfo = new UserInfo();
-            countMap.put(String.valueOf(qq), userInfo);
-        }
+        UserInfo userInfo = getBean(qq);
         ++userInfo.sp;
     }
 
     public void incBilibiliLink(long qq) {
-        UserInfo userInfo = countMap.get(String.valueOf(qq));
-        if (userInfo == null) {
-            userInfo = new UserInfo();
-            countMap.put(String.valueOf(qq), userInfo);
-        }
+        UserInfo userInfo = getBean(qq);
         ++userInfo.biliLink;
     }
 
-    public void incSpeak(long qq) {
-        UserInfo userInfo = countMap.get(String.valueOf(qq));
-        if (userInfo == null) {
-            userInfo = new UserInfo();
-            countMap.put(String.valueOf(qq), userInfo);
-        }
-        ++userInfo.speak;
+    public void incMengEr(long qq) {
+        UserInfo userInfo = getBean(qq);
+        ++userInfo.mengEr;
     }
 
-    public void incMengEr(long qq) {
+    public void incBanCount(long qq) {
+        UserInfo userInfo = getBean(qq);
+        ++userInfo.ban;
+    }
+
+    public void incGbanCount(long qq) {
+        UserInfo userInfo = getBean(qq);
+        ++userInfo.gban;
+    }
+
+    private UserInfo getBean(long qq) {
         UserInfo userInfo = countMap.get(String.valueOf(qq));
         if (userInfo == null) {
             userInfo = new UserInfo();
             countMap.put(String.valueOf(qq), userInfo);
         }
-        ++userInfo.mengEr;
+        return userInfo;
     }
 
     public String getMyCount(long qq) {
@@ -141,6 +121,9 @@ public class UserCounter {
         }
         if (userInfo.speak != 0) {
             stringBuilder.append("水群").append(userInfo.speak).append("句");
+        }
+        if (userInfo.pic != 0) {
+            stringBuilder.append("发图").append(userInfo.pic).append("次");
         }
         if (userInfo.repeat != 0) {
             stringBuilder.append("\n").append("复读").append(userInfo.repeat).append("次");
@@ -166,12 +149,19 @@ public class UserCounter {
         if (userInfo.mengEr != 0) {
             stringBuilder.append("\n").append("无悔发言").append(userInfo.mengEr).append("次");
         }
+        if (userInfo.ban != 0) {
+            stringBuilder.append("\n").append("口球").append(userInfo.ban).append("次");
+        }
+        if (userInfo.gban != 0) {
+            stringBuilder.append("\n").append("给大佬递口球").append(userInfo.gban).append("次");
+        }
         return stringBuilder.toString();
 
     }
 
     public String getTheFirst() {
         int setu = 0;
+        int pic = 0;
         int pohai = 0;
         int repeatStart = 0;
         int repeat = 0;
@@ -180,7 +170,9 @@ public class UserCounter {
         int sp = 0;
         int speak = 0;
         int mengEr = 0;
+        int ban = 0;
         String setuq = null;
+        String picq = null;
         String pohaiq = null;
         String repeatStartq = null;
         String repeatq = null;
@@ -189,6 +181,7 @@ public class UserCounter {
         String spq = null;
         String speakq = null;
         String mengErq = null;
+        String banq = null;
 
         for (Entry<String, UserInfo> entry : countMap.entrySet()) {
             if (entry.getKey().equals(String.valueOf(Autoreply.CQ.getLoginQQ()))) {
@@ -198,6 +191,10 @@ public class UserCounter {
             if (userInfo.speak > speak) {
                 speak = userInfo.speak;
                 speakq = entry.getKey();
+            }
+            if (userInfo.pic > pic) {
+                pic = userInfo.pic;
+                picq = entry.getKey();
             }
             if (userInfo.setu > setu) {
                 setu = userInfo.setu;
@@ -231,10 +228,17 @@ public class UserCounter {
                 mengEr = userInfo.mengEr;
                 mengErq = entry.getKey();
             }
+            if (userInfo.ban > ban) {
+                ban = userInfo.ban;
+                banq = entry.getKey();
+            }
         }
         StringBuilder sb = new StringBuilder();
         if (speakq != null) {
             sb.append(speakq).append("水群").append(speak).append("句");
+        }
+        if (picq != null) {
+            sb.append(picq).append("发图").append(pic).append("次");
         }
         if (setuq != null) {
             sb.append("\n").append(setuq).append("色图").append(setu).append("次");
@@ -260,13 +264,16 @@ public class UserCounter {
         if (mengErq != null) {
             sb.append("\n").append(mengErq).append("无悔发言").append(mengEr).append("次");
         }
+        if (banq != null) {
+            sb.append("\n").append(banq).append("口球").append(ban).append("次");
+        }
         return sb.toString();
     }
 
     private void saveData() {
         while (true) {
-            sleep(60000);
             try {
+                Thread.sleep(60000);
                 FileOutputStream fos = new FileOutputStream(file);
                 OutputStreamWriter writer = new OutputStreamWriter(fos, StandardCharsets.UTF_8);
                 writer.write(new Gson().toJson(countMap));
@@ -280,8 +287,8 @@ public class UserCounter {
 
     private void backupData() {
         while (true) {
-            sleep(86400000);
             try {
+                Thread.sleep(86400000);
                 File backup = new File(file.getAbsolutePath() + ".bak" + System.currentTimeMillis());
                 FileOutputStream fos = new FileOutputStream(backup);
                 OutputStreamWriter writer = new OutputStreamWriter(fos, StandardCharsets.UTF_8);
