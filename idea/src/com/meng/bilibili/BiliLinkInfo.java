@@ -75,6 +75,7 @@ public class BiliLinkInfo {
                 result += processArtical(getArticalId(subedString));
             }
             Autoreply.instence.useCount.incBilibiliLink(fromQQ);
+            Autoreply.instence.groupCount.incBilibiliLink(fromGroup);
             Autoreply.sendMessage(fromGroup, 0, result);
             return !msg.contains("[CQ:share,url=");
         } else {
@@ -98,6 +99,7 @@ public class BiliLinkInfo {
             }
             if (result != null) {
                 Autoreply.instence.useCount.incBilibiliLink(fromQQ);
+                Autoreply.instence.groupCount.incBilibiliLink(fromGroup);
                 Autoreply.sendMessage(fromGroup, 0, result);
                 // 如果不是分享链接就拦截消息
                 return !msg.contains("[CQ:share,url=");

@@ -12,27 +12,25 @@ import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
 import java.util.Map.Entry;
 
-public class UserCounter {
-    private HashMap<String, UserInfo> countMap = new HashMap<>();
+public class GroupCounter {
+    private HashMap<String, GroupInfo> countMap = new HashMap<>();
     private File file;
 
-    public class UserInfo {
+    public class GroupInfo {
         public int speak = 0;
         public int pic = 0;
         public int biliLink = 0;
         public int repeat = 0;
-        public int repeatStart = 0;
         public int repeatBreak = 0;
         public int pohai = 0;
         public int sp = 0;
         public int setu = 0;
         public int mengEr = 0;
         public int ban = 0;
-        public int gban = 0;
     }
 
-    public UserCounter() {
-        file = new File(Autoreply.appDirectory + "properties\\UserCount.json");
+    public GroupCounter() {
+        file = new File(Autoreply.appDirectory + "properties\\GroupCount.json");
         if (!file.exists()) {
             try {
                 FileOutputStream fos = new FileOutputStream(file);
@@ -44,124 +42,105 @@ public class UserCounter {
                 e.printStackTrace();
             }
         }
-        Type type = new TypeToken<HashMap<String, UserInfo>>() {
+        Type type = new TypeToken<HashMap<String, GroupInfo>>() {
         }.getType();
         countMap = new Gson().fromJson(Methods.readFileToString(file.getAbsolutePath()), type);
         Autoreply.instence.threadPool.execute(this::saveData);
         Autoreply.instence.threadPool.execute(this::backupData);
     }
 
-
     public void incSpeak(long qq) {
-        UserInfo userInfo = getBean(qq);
-        ++userInfo.speak;
+        GroupInfo groupInfo = getBean(qq);
+        ++groupInfo.speak;
     }
 
     public void incPic(long qq) {
-        UserInfo userInfo = getBean(qq);
-        ++userInfo.pic;
+        GroupInfo groupInfo = getBean(qq);
+        ++groupInfo.pic;
     }
 
     public void incSetu(long qq) {
-        UserInfo userInfo = getBean(qq);
-        ++userInfo.setu;
+        GroupInfo groupInfo = getBean(qq);
+        ++groupInfo.setu;
     }
 
     public void incPohaitu(long qq) {
-        UserInfo userInfo = getBean(qq);
-        ++userInfo.pohai;
-    }
-
-    public void incFudujiguanjia(long qq) {
-        UserInfo userInfo = getBean(qq);
-        ++userInfo.repeatStart;
+        GroupInfo groupInfo = getBean(qq);
+        ++groupInfo.pohai;
     }
 
     public void incFudu(long qq) {
-        UserInfo userInfo = getBean(qq);
-        ++userInfo.repeat;
+        GroupInfo groupInfo = getBean(qq);
+        ++groupInfo.repeat;
     }
 
     public void incRepeatBreaker(long qq) {
-        UserInfo userInfo = getBean(qq);
-        ++userInfo.repeatBreak;
+        GroupInfo groupInfo = getBean(qq);
+        ++groupInfo.repeatBreak;
     }
 
     public void incSearchPicture(long qq) {
-        UserInfo userInfo = getBean(qq);
-        ++userInfo.sp;
+        GroupInfo groupInfo = getBean(qq);
+        ++groupInfo.sp;
     }
 
     public void incBilibiliLink(long qq) {
-        UserInfo userInfo = getBean(qq);
-        ++userInfo.biliLink;
+        GroupInfo groupInfo = getBean(qq);
+        ++groupInfo.biliLink;
     }
 
     public void incMengEr(long qq) {
-        UserInfo userInfo = getBean(qq);
-        ++userInfo.mengEr;
+        GroupInfo groupInfo = getBean(qq);
+        ++groupInfo.mengEr;
     }
 
     public void incBanCount(long qq) {
-        UserInfo userInfo = getBean(qq);
-        ++userInfo.ban;
+        GroupInfo groupInfo = getBean(qq);
+        ++groupInfo.ban;
     }
 
-    public void incGbanCount(long qq) {
-        UserInfo userInfo = getBean(qq);
-        ++userInfo.gban;
-    }
-
-    private UserInfo getBean(long qq) {
-        UserInfo userInfo = countMap.get(String.valueOf(qq));
-        if (userInfo == null) {
-            userInfo = new UserInfo();
-            countMap.put(String.valueOf(qq), userInfo);
+    private GroupInfo getBean(long qq) {
+        GroupInfo groupInfo = countMap.get(String.valueOf(qq));
+        if (groupInfo == null) {
+            groupInfo = new GroupInfo();
+            countMap.put(String.valueOf(qq), groupInfo);
         }
-        return userInfo;
+        return groupInfo;
     }
 
     public String getMyCount(long qq) {
-        UserInfo userInfo = countMap.get(String.valueOf(qq));
+        GroupInfo groupInfo = countMap.get(String.valueOf(qq));
         StringBuilder stringBuilder = new StringBuilder();
-        if (qq != Autoreply.CQ.getLoginQQ()) {
-            stringBuilder.append("你共");
+        stringBuilder.append("你群共");
+        if (groupInfo.speak != 0) {
+            stringBuilder.append("水群").append(groupInfo.speak).append("句");
         }
-        if (userInfo.speak != 0) {
-            stringBuilder.append("水群").append(userInfo.speak).append("句");
+        if (groupInfo.pic != 0) {
+            stringBuilder.append("\n").append("发图").append(groupInfo.pic).append("次");
         }
-        if (userInfo.pic != 0) {
-            stringBuilder.append("\n").append("发图").append(userInfo.pic).append("次");
+        if (groupInfo.repeat != 0) {
+            stringBuilder.append("\n").append("复读").append(groupInfo.repeat).append("次");
         }
-        if (userInfo.repeat != 0) {
-            stringBuilder.append("\n").append("复读").append(userInfo.repeat).append("次");
+        if (groupInfo.pohai != 0) {
+            stringBuilder.append("\n").append("迫害").append(groupInfo.pohai).append("次");
         }
-        if (userInfo.pohai != 0) {
-            stringBuilder.append("\n").append("迫害").append(userInfo.pohai).append("次");
+        if (groupInfo.repeatBreak != 0) {
+            stringBuilder.append("\n").append("打断复读").append(groupInfo.repeatBreak).append("次");
         }
-        if (userInfo.repeatStart != 0) {
-            stringBuilder.append("\n").append("带领复读").append(userInfo.repeatStart).append("次");
+        if (groupInfo.setu != 0) {
+            stringBuilder.append("\n").append("色图").append(groupInfo.setu).append("次");
         }
-        if (userInfo.repeatBreak != 0) {
-            stringBuilder.append("\n").append("打断复读").append(userInfo.repeatBreak).append("次");
+        if (groupInfo.sp != 0) {
+            stringBuilder.append("\n").append("搜图").append(groupInfo.sp).append("次");
         }
-        if (userInfo.setu != 0) {
-            stringBuilder.append("\n").append("色图").append(userInfo.setu).append("次");
+        if (groupInfo.biliLink != 0) {
+            stringBuilder.append("\n").append("bilibili链接").append(groupInfo.biliLink).append("次");
         }
-        if (userInfo.sp != 0) {
-            stringBuilder.append("\n").append("搜图").append(userInfo.sp).append("次");
+        if (groupInfo.mengEr != 0) {
+            stringBuilder.append("\n").append("无悔发言").append(groupInfo.mengEr).append("次");
         }
-        if (userInfo.biliLink != 0) {
-            stringBuilder.append("\n").append("发送哔哩哔哩链接").append(userInfo.biliLink).append("次");
-        }
-        if (userInfo.mengEr != 0) {
-            stringBuilder.append("\n").append("无悔发言").append(userInfo.mengEr).append("次");
-        }
-        if (userInfo.ban != 0) {
-            stringBuilder.append("\n").append("口球").append(userInfo.ban).append("次");
-        }
-        if (userInfo.gban != 0) {
-            stringBuilder.append("\n").append("给大佬递口球").append(userInfo.gban).append("次");
+        if (groupInfo.ban != 0) {
+            stringBuilder.append("\n").append("口球").append(groupInfo.ban).append("次");
         }
         return stringBuilder.toString();
 
@@ -171,7 +150,6 @@ public class UserCounter {
         int setu = 0;
         int pic = 0;
         int pohai = 0;
-        int repeatStart = 0;
         int repeat = 0;
         int repeatBreaker = 0;
         int biliLink = 0;
@@ -182,7 +160,6 @@ public class UserCounter {
         String setuq = null;
         String picq = null;
         String pohaiq = null;
-        String repeatStartq = null;
         String repeatq = null;
         String repeatBreakerq = null;
         String biliLinkq = null;
@@ -191,53 +168,49 @@ public class UserCounter {
         String mengErq = null;
         String banq = null;
 
-        for (Entry<String, UserInfo> entry : countMap.entrySet()) {
+        for (Entry<String, GroupInfo> entry : countMap.entrySet()) {
             if (entry.getKey().equals(String.valueOf(Autoreply.CQ.getLoginQQ()))) {
                 continue;
             }
-            UserInfo userInfo = entry.getValue();
-            if (userInfo.speak > speak) {
-                speak = userInfo.speak;
+            GroupInfo groupInfo = entry.getValue();
+            if (groupInfo.speak > speak) {
+                speak = groupInfo.speak;
                 speakq = entry.getKey();
             }
-            if (userInfo.pic > pic) {
-                pic = userInfo.pic;
+            if (groupInfo.pic > pic) {
+                pic = groupInfo.pic;
                 picq = entry.getKey();
             }
-            if (userInfo.setu > setu) {
-                setu = userInfo.setu;
+            if (groupInfo.setu > setu) {
+                setu = groupInfo.setu;
                 setuq = entry.getKey();
             }
-            if (userInfo.pohai > pohai) {
-                pohai = userInfo.pohai;
+            if (groupInfo.pohai > pohai) {
+                pohai = groupInfo.pohai;
                 pohaiq = entry.getKey();
             }
-            if (userInfo.repeatStart > repeatStart) {
-                repeatStart = userInfo.repeatStart;
-                repeatStartq = entry.getKey();
-            }
-            if (userInfo.repeat > repeat) {
-                repeat = userInfo.repeat;
+            if (groupInfo.repeat > repeat) {
+                repeat = groupInfo.repeat;
                 repeatq = entry.getKey();
             }
-            if (userInfo.repeatBreak > repeatBreaker) {
-                repeatBreaker = userInfo.repeatBreak;
+            if (groupInfo.repeatBreak > repeatBreaker) {
+                repeatBreaker = groupInfo.repeatBreak;
                 repeatBreakerq = entry.getKey();
             }
-            if (userInfo.biliLink > biliLink) {
-                biliLink = userInfo.biliLink;
+            if (groupInfo.biliLink > biliLink) {
+                biliLink = groupInfo.biliLink;
                 biliLinkq = entry.getKey();
             }
-            if (userInfo.sp > sp) {
-                sp = userInfo.sp;
+            if (groupInfo.sp > sp) {
+                sp = groupInfo.sp;
                 spq = entry.getKey();
             }
-            if (userInfo.mengEr > mengEr) {
-                mengEr = userInfo.mengEr;
+            if (groupInfo.mengEr > mengEr) {
+                mengEr = groupInfo.mengEr;
                 mengErq = entry.getKey();
             }
-            if (userInfo.ban > ban) {
-                ban = userInfo.ban;
+            if (groupInfo.ban > ban) {
+                ban = groupInfo.ban;
                 banq = entry.getKey();
             }
         }
@@ -254,9 +227,6 @@ public class UserCounter {
         if (pohaiq != null) {
             sb.append("\n").append(pohaiq).append("迫害").append(pohai).append("次");
         }
-        if (repeatStartq != null) {
-            sb.append("\n").append(repeatStartq).append("带领复读").append(repeatStart).append("次");
-        }
         if (repeatq != null) {
             sb.append("\n").append(repeatq).append("复读").append(repeat).append("次");
         }
@@ -264,7 +234,7 @@ public class UserCounter {
             sb.append("\n").append(repeatBreakerq).append("打断复读").append(repeatBreaker).append("次");
         }
         if (biliLinkq != null) {
-            sb.append("\n").append(biliLinkq).append("发送哔哩哔哩链接").append(biliLink).append("次");
+            sb.append("\n").append(biliLinkq).append("bilibili链接").append(biliLink).append("次");
         }
         if (spq != null) {
             sb.append("\n").append(spq).append("搜图").append(sp).append("次");

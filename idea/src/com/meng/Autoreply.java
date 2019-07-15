@@ -52,6 +52,7 @@ public class Autoreply extends JcqAppAbstract implements ICQVer, IMsg, IRequest 
     public MRandom random = new MRandom();
     public CQCodeCC CC = new CQCodeCC();
     public UserCounter useCount;
+    public GroupCounter groupCount;
     public Banner banner;
     public RepeaterManager repeatManager;
     public RollPlane rollPlane = new RollPlane();
@@ -148,6 +149,7 @@ public class Autoreply extends JcqAppAbstract implements ICQVer, IMsg, IRequest 
         liveListener = new LiveListener(configManager);
         updateListener = new UpdateListener(configManager);
         useCount = new UserCounter();
+        groupCount = new GroupCounter();
         fph = new FanPoHaiManager();
         naiManager = new NaiManager();
         FileTipManager fileTipManager = new FileTipManager();
@@ -286,8 +288,7 @@ public class Autoreply extends JcqAppAbstract implements ICQVer, IMsg, IRequest 
      * @return 关于返回值说明, 见 {@link #privateMsg 私聊消息} 的方法
      */
     @Override
-    public int groupMsg(int subType, int msgId, long fromGroup, long fromQQ, String fromAnonymous, String msg,
-                        int font) {
+    public int groupMsg(int subType, int msgId, long fromGroup, long fromQQ, String fromAnonymous, String msg, int font) {
         // if (fromGroup != 312342896L)
         // return MSG_IGNORE;
         // if (fromGroup != 1023432971L)
@@ -328,11 +329,14 @@ public class Autoreply extends JcqAppAbstract implements ICQVer, IMsg, IRequest 
         }
         banListener.check(fromGroup, fromQQ, msg);
         useCount.incSpeak(fromQQ);
+        groupCount.incSpeak(fromGroup);
         if (msg.contains("此生无悔入东方") || msg.contains("方东入悔无生此")) {
             useCount.incMengEr(fromQQ);
+            groupCount.incMengEr(fromGroup);
         }
         if (CC.getCQImage(msg) != null) {
             useCount.incPic(fromQQ);
+            groupCount.incPic(fromGroup);
         }
         if (configManager.isNotReplyWord(msg)) {
             return MSG_IGNORE;
@@ -642,24 +646,29 @@ public class Autoreply extends JcqAppAbstract implements ICQVer, IMsg, IRequest 
             String[] stri = msg.split(":");
             switch (stri[0]) {
                 case "image":
-                    Autoreply.instence.useCount.incSpeak(CQ.getLoginQQ());
+                    useCount.incSpeak(CQ.getLoginQQ());
+                    groupCount.incSpeak(fromGroup);
                     CQ.sendGroupMsg(fromGroup, stri[2].replace("--image--", instence.CC.image(new File(appDirectory + stri[1]))));
                     break;
                 case "atFromQQ":
-                    Autoreply.instence.useCount.incSpeak(CQ.getLoginQQ());
+                    useCount.incSpeak(CQ.getLoginQQ());
+                    groupCount.incSpeak(fromGroup);
                     CQ.sendGroupMsg(fromGroup, instence.CC.at(fromQQ) + stri[1]);
                     break;
                 case "atQQ":
-                    Autoreply.instence.useCount.incSpeak(CQ.getLoginQQ());
+                    useCount.incSpeak(CQ.getLoginQQ());
+                    groupCount.incSpeak(fromGroup);
                     CQ.sendGroupMsg(fromGroup, instence.CC.at(Long.parseLong(stri[1])) + stri[2]);
                     break;
                 case "imageFolder":
-                    Autoreply.instence.useCount.incSpeak(CQ.getLoginQQ());
+                    useCount.incSpeak(CQ.getLoginQQ());
+                    groupCount.incSpeak(fromGroup);
                     File[] files = (new File(appDirectory + stri[1])).listFiles();
                     CQ.sendGroupMsg(fromGroup, stri[2].replace("--image--", instence.CC.image((File) Methods.rfa(files))));
                     break;
                 default:
-                    Autoreply.instence.useCount.incSpeak(CQ.getLoginQQ());
+                    useCount.incSpeak(CQ.getLoginQQ());
+                    groupCount.incSpeak(fromGroup);
                     CQ.sendGroupMsg(fromGroup, msg);
                     break;
             }

@@ -1,24 +1,18 @@
 package com.meng.groupChat;
 
-import java.awt.Image;
-import java.awt.image.BufferedImage;
-import java.io.ByteArrayOutputStream;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.IOException;
 
-import javax.imageio.ImageIO;
-
-import com.madgag.gif.fmsware.AnimatedGifEncoder;
-import com.madgag.gif.fmsware.GifDecoder;
 import com.meng.Autoreply;
-import com.meng.tools.Methods;
 import com.meng.config.javabeans.GroupConfig;
 import com.meng.tools.FingerPrint;
+import com.meng.tools.Methods;
+import com.meng.tools.gifHelper.AnimatedGifEncoder;
+import com.meng.tools.gifHelper.GifDecoder;
 import com.sobte.cqp.jcq.entity.CQImage;
-import com.sobte.cqp.jcq.entity.Member;
+
+import javax.imageio.ImageIO;
+import java.awt.*;
+import java.awt.image.BufferedImage;
+import java.io.*;
 
 public class RepeaterBanner {
     private int repeatCount = 0;
@@ -86,22 +80,24 @@ public class RepeaterBanner {
             b = repeatStart(group, qq, msg);
         }
         if (lastStatus && (lastMessageRecieved.equals(msg) || isPicMsgRepeat(lastMessageRecieved, msg, simi))) {
-            b = repeatRunning(qq, msg);
+            b = repeatRunning(group, qq, msg);
         }
         if (lastStatus && !lastMessageRecieved.equals(msg) && !isPicMsgRepeat(lastMessageRecieved, msg, simi)) {
-            b = repeatEnd(qq, msg);
+            b = repeatEnd(group, qq, msg);
         }
         lastStatus = lastMessageRecieved.equals(msg) || isPicMsgRepeat(lastMessageRecieved, msg, simi);
         return b;
     }
 
-    private boolean repeatEnd(long qq, String msg) {
+    private boolean repeatEnd(long group, long qq, String msg) {
         Autoreply.instence.useCount.incRepeatBreaker(qq);
+        Autoreply.instence.groupCount.incRepeatBreaker(group);
         return false;
     }
 
-    private boolean repeatRunning(long qq, String msg) {
+    private boolean repeatRunning(long group, long qq, String msg) {
         Autoreply.instence.useCount.incFudu(qq);
+        Autoreply.instence.groupCount.incFudu(group);
         banCount--;
         return false;
     }
@@ -109,6 +105,7 @@ public class RepeaterBanner {
     private boolean repeatStart(long group, long qq, String msg) {
         banCount = 6;
         Autoreply.instence.useCount.incFudujiguanjia(qq);
+        Autoreply.instence.groupCount.incFudu(group);
         Autoreply.instence.threadPool.execute(() -> reply(group, qq, msg));
         Autoreply.instence.useCount.incFudu(Autoreply.CQ.getLoginQQ());
         return true;
@@ -169,43 +166,47 @@ public class RepeaterBanner {
         Image im = ImageIO.read(file);
         int w = im.getWidth(null);
         int h = im.getHeight(null);
+        int size = w * h;
         BufferedImage b = new BufferedImage(im.getWidth(null), im.getHeight(null), BufferedImage.TYPE_INT_ARGB);
         b.getGraphics().drawImage(im.getScaledInstance(w, h, Image.SCALE_SMOOTH), 0, 0, null);
-        BufferedImage b2 = new BufferedImage(im.getWidth(null), im.getHeight(null), BufferedImage.TYPE_INT_ARGB);
-        b2.getGraphics().drawImage(im.getScaledInstance(w, h, Image.SCALE_SMOOTH), 0, 0, null);
-
+        int[] ib = b.getRGB(0, 0, w, h, new int[size], 0, w);
+        int[] ib2 = new int[size];
         switch (reverseFlag % 4) {
             case 0:
-                for (int y = 0; y < h; y++) {
-                    for (int x = 0; x < w; x++) {
-                        b2.setRGB(w - 1 - x, y, b.getRGB(x, y));// 镜之国
+                for (int y = 0; y < h; ++y) {
+                    int yw = y * w;
+                    for (int x = 0; x < w; ++x) {
+                        ib2[(w - 1 - x) + yw] = ib[x + yw]; // 镜之国
                     }
                 }
                 break;
             case 1:
                 for (int y = 0; y < h; y++) {
-                    for (int x = 0; x < w; x++) {
-                        b2.setRGB(x, h - 1 - y, b.getRGB(x, y));// 天地
+                    // 天地
+                    if (w >= 0) {
+                        System.arraycopy(ib, y * w, ib2, (h - 1 - y) * w, w);
                     }
                 }
                 break;
             case 2:
                 int halfH = h / 2;
                 for (int y = 0; y < h; y++) {
-                    for (int x = 0; x < w; x++) {
-                        b2.setRGB(x, y < halfH ? y + halfH : y - halfH, b.getRGB(x, y));// 天壤梦弓
+                    // 天壤梦弓
+                    if (w >= 0) {
+                        System.arraycopy(ib, y * w, ib2, (y < halfH ? y + halfH : y - halfH) * w, w);
                     }
                 }
                 break;
             case 3:
                 for (int y = 0; y < h; y++) {
                     for (int x = 0; x < w; x++) {
-                        b2.setRGB(w - 1 - x, h - 1 - y, b.getRGB(x, y));// Reverse_Hierarchy
+                        ib2[(w - 1 - x) + (h - 1 - y) * w] = ib[x + y * w]; // Reverse_Hierarchy
                     }
                 }
                 break;
         }
-        ImageIO.write(b2, "png", file);
+        b.setRGB(0, 0, w, h, ib2, 0, w);
+        ImageIO.write(b, "png", file);
         return file;
     }
 
@@ -215,9 +216,17 @@ public class RepeaterBanner {
         gifDecoder.read(fis);
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
         AnimatedGifEncoder localAnimatedGifEncoder = new AnimatedGifEncoder();
+        BufferedImage cacheImage = gifDecoder.getFrame(0);
+        int tw = cacheImage.getWidth(null) - 1;
+        int th = cacheImage.getHeight(null) - 1;
+        if (cacheImage.getRGB(0, 0) == 0 &&
+                cacheImage.getRGB(tw, 0) == 0 &&
+                cacheImage.getRGB(0, th) == 0 &&
+                cacheImage.getRGB(tw, th) == 0) {
+            localAnimatedGifEncoder.setTransparent(new Color(0, 0, 0, 0));
+        }
         localAnimatedGifEncoder.start(baos);// start
         localAnimatedGifEncoder.setRepeat(0);// 设置生成gif的开始播放时间。0为立即开始播放
-        BufferedImage cacheImage = gifDecoder.getFrame(0);
         float fa = (float) cacheImage.getHeight() / (gifDecoder.getFrameCount());
         switch (reverseFlag % 4) {
             case 0:// 镜之国
@@ -237,8 +246,7 @@ public class RepeaterBanner {
             case 2:// 天壤梦弓
                 for (int i = 0; i < gifDecoder.getFrameCount(); i++) {
                     localAnimatedGifEncoder.setDelay(gifDecoder.getDelay(i));
-                    localAnimatedGifEncoder.addFrame(
-                            spell3(gifDecoder.getFrame(i), (int) (fa * (gifDecoder.getFrameCount() - i)), cacheImage));
+                    localAnimatedGifEncoder.addFrame(spell3(gifDecoder.getFrame(i), (int) (fa * (gifDecoder.getFrameCount() - i)), cacheImage));
                 }
                 break;
             case 3:// Reverse Hierarchy
@@ -265,12 +273,12 @@ public class RepeaterBanner {
     private BufferedImage spell1(BufferedImage current, BufferedImage cache) {
         int w = current.getWidth(null);
         int h = current.getHeight(null);
-        BufferedImage bmp = new BufferedImage(w, h, BufferedImage.TYPE_INT_ARGB);
+        BufferedImage bmp = new BufferedImage(w, h, BufferedImage.TYPE_3BYTE_BGR);
         bmp.getGraphics().drawImage(cache.getScaledInstance(w, h, Image.SCALE_SMOOTH), 0, 0, null);
         for (int y = 0; y < h; y++) {
             for (int x = 0; x < w; x++) {
                 int i = current.getRGB(x, y);
-                bmp.setRGB(w - 1 - x, y, i);// 镜之国
+                bmp.setRGB(w - 1 - x, y, i == 0 ? 1 : i);// 镜之国
             }
         }
         cache.getGraphics().drawImage(bmp.getScaledInstance(w, h, Image.SCALE_SMOOTH), 0, 0, null);
@@ -280,13 +288,11 @@ public class RepeaterBanner {
     private BufferedImage spell1(BufferedImage current) {
         int w = current.getWidth(null);
         int h = current.getHeight(null);
-        BufferedImage bmp = new BufferedImage(w, h, BufferedImage.TYPE_INT_ARGB);
+        BufferedImage bmp = new BufferedImage(w, h, BufferedImage.TYPE_3BYTE_BGR);
         for (int y = 0; y < h; y++) {
             for (int x = 0; x < w; x++) {
                 int i = current.getRGB(x, y);
-                if (i != 0) {
-                    bmp.setRGB(w - 1 - x, y, i);// 镜之国
-                }
+                bmp.setRGB(w - 1 - x, y, i == 0 ? 1 : i);// 镜之国
             }
         }
         return bmp;
@@ -295,11 +301,12 @@ public class RepeaterBanner {
     private BufferedImage spell2(BufferedImage current, BufferedImage cache) {
         int w = current.getWidth(null);
         int h = current.getHeight(null);
-        BufferedImage bmp = new BufferedImage(w, h, BufferedImage.TYPE_INT_ARGB);
+        BufferedImage bmp = new BufferedImage(w, h, BufferedImage.TYPE_3BYTE_BGR);
         bmp.getGraphics().drawImage(cache.getScaledInstance(w, h, Image.SCALE_SMOOTH), 0, 0, null);
         for (int y = 0; y < h; y++) {
             for (int x = 0; x < w; x++) {
-                bmp.setRGB(x, h - 1 - y, current.getRGB(x, y));// 天地
+                int i = current.getRGB(x, y);
+                bmp.setRGB(x, h - 1 - y, i == 0 ? 1 : i);// 天地
             }
         }
         cache.getGraphics().drawImage(bmp.getScaledInstance(w, h, Image.SCALE_SMOOTH), 0, 0, null);
@@ -309,10 +316,11 @@ public class RepeaterBanner {
     private BufferedImage spell2(BufferedImage current) {
         int w = current.getWidth(null);
         int h = current.getHeight(null);
-        BufferedImage bmp = new BufferedImage(w, h, BufferedImage.TYPE_INT_ARGB);
+        BufferedImage bmp = new BufferedImage(w, h, BufferedImage.TYPE_3BYTE_BGR);
         for (int y = 0; y < h; y++) {
             for (int x = 0; x < w; x++) {
-                bmp.setRGB(x, h - 1 - y, current.getRGB(x, y));// 天地
+                int i = current.getRGB(x, y);
+                bmp.setRGB(x, h - 1 - y, i == 0 ? 1 : i);// 天地
             }
         }
         return bmp;
@@ -321,7 +329,7 @@ public class RepeaterBanner {
     private BufferedImage spell3(BufferedImage current, int px, BufferedImage cache) {
         int w = current.getWidth(null);
         int h = current.getHeight(null);
-        BufferedImage bmp = new BufferedImage(w, h, BufferedImage.TYPE_INT_ARGB);
+        BufferedImage bmp = new BufferedImage(w, h, BufferedImage.TYPE_3BYTE_BGR);
         bmp.getGraphics().drawImage(spell3_at1(cache, px).getScaledInstance(w, h, Image.SCALE_SMOOTH), 0, 0, null);
         spell3Process(current, px, w, h, bmp);
         cache.getGraphics().drawImage(spell3_at1(bmp, -px).getScaledInstance(w, h, Image.SCALE_SMOOTH), 0, 0, null);
@@ -331,7 +339,7 @@ public class RepeaterBanner {
     private BufferedImage spell3_at1(BufferedImage cache, int px) {
         int w = cache.getWidth(null);
         int h = cache.getHeight(null);
-        BufferedImage bmp = new BufferedImage(w, h, BufferedImage.TYPE_INT_ARGB);
+        BufferedImage bmp = new BufferedImage(w, h, BufferedImage.TYPE_3BYTE_BGR);
         int j;
         if (px > 0) {
             spell3Process(cache, px, w, h, bmp);
@@ -339,10 +347,11 @@ public class RepeaterBanner {
             for (int y = 0; y < h; y++) {
                 for (int x = 0; x < w; x++) {
                     j = y + px;
+                    int i = cache.getRGB(x, y);
                     if (j >= 0) {
-                        bmp.setRGB(x, j, cache.getRGB(x, y));
+                        bmp.setRGB(x, j, i == 0 ? 1 : i);
                     } else {
-                        bmp.setRGB(x, j + h, cache.getRGB(x, y));
+                        bmp.setRGB(x, j + h, i == 0 ? 1 : i);
                     }
                 }
             }
@@ -355,10 +364,11 @@ public class RepeaterBanner {
         for (int y = 0; y < h; y++) {
             for (int x = 0; x < w; x++) {
                 j = y + px;
+                int i = cache.getRGB(x, y);
                 if (j < h) {
-                    bmp.setRGB(x, j, cache.getRGB(x, y));
+                    bmp.setRGB(x, j, i == 0 ? 1 : i);
                 } else {
-                    bmp.setRGB(x, j - h, cache.getRGB(x, y));
+                    bmp.setRGB(x, j - h, i == 0 ? 1 : i);
                 }
             }
         }
@@ -385,7 +395,8 @@ public class RepeaterBanner {
     private void spell4Process(BufferedImage current, int w, int h, BufferedImage bmp) {
         for (int y = 0; y < h; y++) {
             for (int x = 0; x < w; x++) {
-                bmp.setRGB(w - 1 - x, h - 1 - y, current.getRGB(x, y));// Reverse_Hierarchy
+                int i = current.getRGB(x, y);
+                bmp.setRGB(w - 1 - x, h - 1 - y, i == 0 ? 1 : i);// Reverse_Hierarchy
             }
         }
     }
@@ -400,11 +411,9 @@ public class RepeaterBanner {
                     files.mkdirs();
                 }
                 if (msg.contains(".gif")) {
-                    imgFile = cm
-                            .download(Autoreply.appDirectory + "reverse\\" + System.currentTimeMillis() + "recr.gif");
+                    imgFile = cm.download(Autoreply.appDirectory + "reverse\\" + System.currentTimeMillis() + "recr.gif");
                 } else {
-                    imgFile = cm
-                            .download(Autoreply.appDirectory + "reverse\\" + System.currentTimeMillis() + "recr.jpg");
+                    imgFile = cm.download(Autoreply.appDirectory + "reverse\\" + System.currentTimeMillis() + "recr.jpg");
                 }
                 if (thisFp != null) {
                     lastFp = thisFp;

@@ -7,13 +7,9 @@ import com.meng.picEdit.ShenChuManager;
 import com.meng.tools.Methods;
 import com.meng.tools.MoShenFuSong;
 import com.sobte.cqp.jcq.entity.CQImage;
-import com.sobte.cqp.jcq.entity.Group;
-import com.sobte.cqp.jcq.entity.Member;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
 import java.util.concurrent.ThreadPoolExecutor;
 

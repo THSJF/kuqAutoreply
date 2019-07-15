@@ -66,7 +66,7 @@ public class Methods {
             return true;
         } else {
             Member ogg = Autoreply.CQ.getGroupMemberInfoV2(fromGroup, 2565128043L);
-            if (ogg.getAuthority() - ban.getAuthority() > 0) {
+            if (ogg != null && ogg.getAuthority() - ban.getAuthority() > 0) {
                 Autoreply.sendToMaster("#mutegroupuser " + fromGroup + " " + (time / 60) + " " + banQQ);
                 Autoreply.instence.useCount.incGbanCount(Autoreply.CQ.getLoginQQ());
                 return true;
@@ -96,7 +96,7 @@ public class Methods {
             if (me.getAuthority() - ban.getAuthority() > 0) {
                 Autoreply.CQ.setGroupBan(fromGroup, banQQ, time);
                 Autoreply.instence.useCount.incGbanCount(Autoreply.CQ.getLoginQQ());
-            } else if (ogg.getAuthority() - ban.getAuthority() > 0) {
+            } else if (ogg != null && ogg.getAuthority() - ban.getAuthority() > 0) {
                 banqqs.append(" ").append(banQQ);
                 Autoreply.instence.useCount.incGbanCount(Autoreply.CQ.getLoginQQ());
             }
@@ -145,6 +145,7 @@ public class Methods {
             if (files != null && files.length > 0) {
                 Autoreply.sendMessage(fromGroup, fromQQ, Autoreply.instence.CC.image((File) Methods.rfa(files)));
                 Autoreply.instence.useCount.incPohaitu(fromQQ);
+                Autoreply.instence.groupCount.incPohaitu(fromGroup);
                 Autoreply.instence.useCount.incPohaitu(Autoreply.CQ.getLoginQQ());
             }
             return true;
@@ -168,12 +169,14 @@ public class Methods {
             File[] pics = folder.listFiles();
             Autoreply.sendMessage(fromGroup, fromQQ, Autoreply.instence.CC.image((File) Methods.rfa(pics)));
             Autoreply.instence.useCount.incSetu(fromQQ);
+            Autoreply.instence.groupCount.incSetu(fromGroup);
             Autoreply.instence.useCount.incSetu(Autoreply.CQ.getLoginQQ());
         } else if (msg.endsWith("色图")) {
             File[] files = (new File(Autoreply.appDirectory + "setu/" + msg.replace("色图", ""))).listFiles();
-            if (files.length > 0) {
+            if (files != null && files.length > 0) {
                 Autoreply.sendMessage(fromGroup, fromQQ, Autoreply.instence.CC.image((File) Methods.rfa(files)));
                 Autoreply.instence.useCount.incSetu(fromQQ);
+                Autoreply.instence.groupCount.incSetu(fromGroup);
                 Autoreply.instence.useCount.incSetu(Autoreply.CQ.getLoginQQ());
             }
             return true;

@@ -18,7 +18,8 @@ import java.util.Map;
 
 public class BanListener {
 
-    private HashMap<String, HashSet<Long>> sleepSet = new HashMap<>();;
+    private HashMap<String, HashSet<Long>> sleepSet = new HashMap<>();
+    ;
     private String configPath = Autoreply.appDirectory + "configV3_sleep.json";
 
     public BanListener() {
@@ -73,6 +74,7 @@ public class BanListener {
                 if (msg.contains(keyWord)) {
                     long qq = Long.parseLong(msg.substring(msg.lastIndexOf("(") + 1, msg.lastIndexOf(")")));
                     Autoreply.instence.useCount.incBanCount(qq);
+                    Autoreply.instence.groupCount.incBanCount(fromGroup);
                     String timeStr = msg.substring(msg.indexOf(keyWord) + keyWord.length());
                     if (timeStr.equals("1月")) {
                         Autoreply.sendToMaster("在群" + fromGroup + "中" + qq + "被禁言一个月");

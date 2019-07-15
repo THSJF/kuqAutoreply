@@ -36,12 +36,13 @@ public class DicReplyGroup {
     }
 
     public boolean checkMsg(long group, long qq, String msg) {
-        if (group == groupNum) {
-            for (String key : dic.keySet()) {
-                if (Pattern.matches(".*" + key + ".*", msg.replace(" ", "").trim())) {
-                    Autoreply.sendMessage(group, qq, (String) dic.get(key).toArray()[Autoreply.instence.random.nextInt(dic.get(key).size())]);
-                    return true;
-                }
+        if (group != groupNum) {
+            return false;
+        }
+        for (String key : dic.keySet()) {
+            if (Pattern.matches(".*" + key + ".*", msg.replace(" ", "").trim())) {
+                Autoreply.sendMessage(group, qq, (String) dic.get(key).toArray()[Autoreply.instence.random.nextInt(dic.get(key).size())]);
+                return true;
             }
         }
         return false;

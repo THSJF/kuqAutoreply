@@ -140,6 +140,14 @@ public class GroupMsgRunnable implements Runnable {
             sendMessage(fromGroup, fromQQ, Autoreply.instence.useCount.getTheFirst());
             return true;
         }
+        if (msg.equals("查看群统计")) {
+            sendMessage(fromGroup, fromQQ, Autoreply.instence.groupCount.getMyCount(fromGroup));
+            return true;
+        }
+        if (msg.equals("查看群排行")) {
+            sendMessage(fromGroup, fromQQ, Autoreply.instence.groupCount.getTheFirst());
+            return true;
+        }
         if (msg.equals("查看活跃数据")) {
             sendMessage(fromGroup, fromQQ, "https://qqweb.qq.com/m/qun/activedata/active.html?gc=" + fromGroup);
             return true;

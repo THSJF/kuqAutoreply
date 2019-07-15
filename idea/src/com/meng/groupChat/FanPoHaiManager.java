@@ -10,9 +10,10 @@ import com.sobte.cqp.jcq.entity.Member;
 
 import javax.imageio.ImageIO;
 import java.io.File;
+import java.util.HashSet;
 
 public class FanPoHaiManager {
-    private FingerPrint[] fts;// 存放图片指纹的数组 用于对比新收到的图片和样本相似度
+    private HashSet<FingerPrint> fts = new HashSet<>(64);// 存放图片指纹的数组 用于对比新收到的图片和样本相似度
     private int pohaicishu = 0;// 收到的消息包含迫害二字的次数
     private int alpohai = Autoreply.instence.random.nextInt(5) + 2;// 收到的消息包含迫害二字的次数到达此值也会触发反迫害
 
@@ -21,14 +22,11 @@ public class FanPoHaiManager {
         Autoreply.instence.threadPool.execute(() -> {
             File[] pohaitu = new File(Autoreply.appDirectory + "fan\\").listFiles();
             if (pohaitu != null) {
-                fts = new FingerPrint[pohaitu.length];
-            }
-            if (fts != null) {
-                for (int i = 0; i < fts.length; i++) {
+                for (File file : pohaitu) {
                     try {
-                        fts[i] = new FingerPrint(ImageIO.read(pohaitu[i]));
+                        fts.add(new FingerPrint(ImageIO.read(file)));
                     } catch (Exception e) {
-                        System.out.println(pohaitu[i].getAbsolutePath());
+                        System.out.println(file.getAbsolutePath());
                     }
                 }
             }
@@ -53,8 +51,7 @@ public class FanPoHaiManager {
                 CQImage cmCqImage = Autoreply.instence.CC.getCQImage(msg);
                 if (cmCqImage != null) {
                     float simi = 0.0f;
-                    File tmpF = cmCqImage
-                            .download(Autoreply.appDirectory + "fan1\\" + System.currentTimeMillis() + "phtmp.jpg");
+                    File tmpF = cmCqImage.download(Autoreply.appDirectory + "fan1\\" + System.currentTimeMillis() + "phtmp.jpg");
                     FingerPrint fp1 = new FingerPrint(ImageIO.read(tmpF));
                     // 取值为所有样本中最高的相似度
                     for (FingerPrint fg : fts) {
@@ -105,6 +102,7 @@ public class FanPoHaiManager {
                     if (files != null) {
                         Autoreply.sendMessage(fromGroup, 0, Autoreply.instence.CC.image((File) Methods.rfa(files)));
                         Autoreply.instence.useCount.incPohaitu(Autoreply.CQ.getLoginQQ());
+                        Autoreply.instence.groupCount.incPohaitu(fromGroup);
                     }
                     return true;
                 }

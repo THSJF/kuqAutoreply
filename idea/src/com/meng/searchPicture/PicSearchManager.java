@@ -26,6 +26,7 @@ public class PicSearchManager {
         if (cqImage != null && (msg.toLowerCase().startsWith("sp"))) {
             try {
                 Autoreply.instence.useCount.incSearchPicture(fromQQ);
+                Autoreply.instence.groupCount.incSearchPicture(fromGroup);
                 Autoreply.instence.useCount.incSearchPicture(Autoreply.CQ.getLoginQQ());
                 sendMsg(fromGroup, fromQQ, "土豆折寿中……");
                 int needPic = 1;
@@ -48,6 +49,7 @@ public class PicSearchManager {
             try {
                 sendMsg(fromGroup, fromQQ, "土豆折寿中……");
                 Autoreply.instence.useCount.incSearchPicture(fromQQ);
+                Autoreply.instence.groupCount.incSearchPicture(fromGroup);
                 Autoreply.instence.useCount.incSearchPicture(Autoreply.CQ.getLoginQQ());
                 int needPic = 1;
                 int database = 999;
