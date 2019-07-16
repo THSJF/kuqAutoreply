@@ -131,7 +131,7 @@ public class UserCounter {
             stringBuilder.append("水群").append(userInfo.speak).append("句");
         }
         if (userInfo.pic != 0) {
-            stringBuilder.append("\n").append("发图").append(userInfo.pic).append("次");
+            stringBuilder.append("\n").append("发图").append(userInfo.pic).append("张");
         }
         if (userInfo.repeat != 0) {
             stringBuilder.append("\n").append("复读").append(userInfo.repeat).append("次");
@@ -246,7 +246,7 @@ public class UserCounter {
             sb.append(speakq).append("水群").append(speak).append("句");
         }
         if (picq != null) {
-            sb.append("\n").append(picq).append("发图").append(pic).append("次");
+            sb.append("\n").append(picq).append("发图").append(pic).append("张");
         }
         if (setuq != null) {
             sb.append("\n").append(setuq).append("色图").append(setu).append("次");

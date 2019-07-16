@@ -1,7 +1,8 @@
-package com.meng.tools;
+package com.meng.tools.override;
 
 import java.io.File;
 import java.io.IOException;
+import java.nio.file.Files;
 
 import com.sobte.cqp.jcq.entity.CQImage;
 import com.sobte.cqp.jcq.entity.IniFile;
@@ -24,14 +25,18 @@ public class CQCodeCC extends CQCode {
 
     @Override
     public String image(File path) {
+        String fileName = path.getName();
+        File target = new File("data/image/" + fileName);
+        if (target.exists()) {
+            target.delete();
+        }
         try {
-            CQImage image;
-            image = new CQImage(path, false);
-            path = image.download("data/image/", image.getName());
-            path.deleteOnExit();
-            return StringHelper.stringConcat("[CQ:image,file=", path.getName(), "]");
-        } catch (Exception e) {
+            Files.copy(path.toPath(), target.toPath());
+        } catch (IOException e) {
+            e.printStackTrace();
             return null;
         }
+        target.deleteOnExit();
+        return image(fileName);
     }
 }

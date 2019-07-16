@@ -31,6 +31,10 @@ public class DicReplyManager {
         dic = new Gson().fromJson(Methods.readFileToString(dicFile.getAbsolutePath()), type);
     }
 
+    public void clear() {
+        groupMap.clear();
+    }
+
     public void addData(DicReplyGroup drp) {
         groupMap.put(drp.groupNum, drp);
     }

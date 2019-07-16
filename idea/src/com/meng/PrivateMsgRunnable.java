@@ -3,8 +3,11 @@ package com.meng;
 import com.meng.config.javabeans.GroupConfig;
 import com.meng.tools.Methods;
 import com.meng.tools.MoShenFuSong;
+import com.sobte.cqp.jcq.entity.CQImage;
 
 import java.io.File;
+import java.io.IOException;
+import java.util.List;
 import java.util.Random;
 import java.util.stream.Collectors;
 
@@ -36,6 +39,19 @@ public class PrivateMsgRunnable implements Runnable {
     }
 
     private boolean check() {
+        File[] imageFiles = null;
+        List<CQImage> images = Autoreply.instence.CC.getCQImages(msg);
+        if (images.size() != 0) {
+            imageFiles = new File[images.size()];
+            for (int i = 0, imagesSize = images.size(); i < imagesSize; i++) {
+                CQImage image = images.get(i);
+                try {
+                    imageFiles[i] = Autoreply.instence.fileTypeUtil.checkFormat(image.download(Autoreply.appDirectory + "downloadImages/", image.getMd5()));
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
         if (msg.equals(".live")) {
             String msgSend = Autoreply.instence.liveListener.livePerson.stream().filter(livePerson -> livePerson.living).map(livePerson -> livePerson.name + "正在直播" + livePerson.liveUrl + "\n").collect(Collectors.joining());
             sendMessage(fromGroup, fromQQ, msgSend.equals("") ? "居然没有飞机佬直播" : msgSend);
@@ -47,10 +63,10 @@ public class PrivateMsgRunnable implements Runnable {
         if (Methods.isSetu(fromGroup, fromQQ, msg)) {
             return true;
         }
-        if (Autoreply.instence.barcodeManager.check(fromGroup, fromQQ, msg)) {// 二维码
+        if (Autoreply.instence.barcodeManager.check(fromGroup, fromQQ, msg, imageFiles)) {// 二维码
             return true;
         }
-        if (Autoreply.instence.picSearchManager.check(fromGroup, fromQQ, msg)) {// 搜索图片
+        if (Autoreply.instence.picSearchManager.check(fromGroup, fromQQ, msg, imageFiles)) {// 搜索图片
             return true;
         }
         if (Methods.checkGou(fromGroup, msg)) {// 苟

@@ -3,14 +3,17 @@ package com.meng;
 import com.meng.config.javabeans.GroupConfig;
 import com.meng.tools.Methods;
 import com.meng.tools.MoShenFuSong;
+import com.sobte.cqp.jcq.entity.CQImage;
 
 import java.io.File;
+import java.io.IOException;
+import java.util.List;
 import java.util.Random;
 import java.util.stream.Collectors;
 
 import static com.meng.Autoreply.sendMessage;
 
-public class GroupMsgRunnable implements Runnable {
+public class GroupMsgPart2Runnable implements Runnable {
     private int subType = 0;
     private int msgId = 0;
     private long fromGroup = 0;
@@ -19,8 +22,9 @@ public class GroupMsgRunnable implements Runnable {
     private String msg = "";
     private int font = 0;
     private long timeStamp = 0;
+    private File[] imageFiles = null;
 
-    GroupMsgRunnable(MessageSender ms) {
+    public GroupMsgPart2Runnable(MessageSender ms) {
         font = ms.font;
         fromGroup = ms.fromGroup;
         fromQQ = ms.fromQQ;
@@ -28,6 +32,7 @@ public class GroupMsgRunnable implements Runnable {
         msgId = ms.msgId;
         subType = ms.subType;
         timeStamp = ms.timeStamp;
+        imageFiles = ms.imageFiles;
     }
 
     @Override
@@ -53,12 +58,16 @@ public class GroupMsgRunnable implements Runnable {
             return true;
         }
         GroupConfig groupConfig = Autoreply.instence.configManager.getGroupConfig(fromGroup);
-        if (groupConfig.isRepeat() && Autoreply.instence.repeatManager.check(fromGroup, fromQQ, msg)) {// 复读
+        if (groupConfig.isRepeat() && Autoreply.instence.repeatManager.check(fromGroup, fromQQ, msg, imageFiles)) {// 复读
             return true;
         }
         if (msg.equals(".live")) {
             String msgSend = Autoreply.instence.liveListener.livePerson.stream().filter(livePerson -> livePerson.living).map(livePerson -> livePerson.name + "正在直播" + livePerson.liveUrl + "\n").collect(Collectors.joining());
             sendMessage(fromGroup, fromQQ, msgSend.equals("") ? "居然没有飞机佬直播" : msgSend);
+            return true;
+        }
+        if (msg.startsWith("[CQ:location,lat=")) {
+            sendMessage(fromGroup, 0, Autoreply.instence.CC.location(35.594993, 118.869838, 15, "守矢神社", "此生无悔入东方 来世愿生幻想乡"));
             return true;
         }
         if (msg.contains("大膜法")) {
@@ -95,10 +104,10 @@ public class GroupMsgRunnable implements Runnable {
         if (groupConfig.isSetu() && Methods.isSetu(fromGroup, fromQQ, msg)) {
             return true;
         }
-        if (groupConfig.isBarcode() && Autoreply.instence.barcodeManager.check(fromGroup, fromQQ, msg)) {// 二维码
+        if (groupConfig.isBarcode() && Autoreply.instence.barcodeManager.check(fromGroup, fromQQ, msg, imageFiles)) {// 二维码
             return true;
         }
-        if (groupConfig.isSearchPic() && Autoreply.instence.picSearchManager.check(fromGroup, fromQQ, msg)) {// 搜索图片
+        if (groupConfig.isSearchPic() && Autoreply.instence.picSearchManager.check(fromGroup, fromQQ, msg, imageFiles)) {// 搜索图片
             return true;
         }
         if (groupConfig.isKuiping() && Methods.checkLook(fromGroup, msg)) {// 窥屏检测

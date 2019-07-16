@@ -1,8 +1,8 @@
 package com.meng.picEdit;
 
-import com.madgag.gif.fmsware.AnimatedGifEncoder;
-import com.madgag.gif.fmsware.GifDecoder;
 import com.meng.Autoreply;
+import com.meng.tools.gifHelper.AnimatedGifEncoder;
+import com.meng.tools.gifHelper.GifDecoder;
 import com.sobte.cqp.jcq.entity.CQImage;
 
 import javax.imageio.ImageIO;

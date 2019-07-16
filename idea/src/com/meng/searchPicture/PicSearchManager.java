@@ -1,5 +1,6 @@
 package com.meng.searchPicture;
 
+import java.io.File;
 import java.util.HashMap;
 
 import com.meng.Autoreply;
@@ -12,7 +13,7 @@ public class PicSearchManager {
     public PicSearchManager() {
     }
 
-    public boolean check(long fromGroup, long fromQQ, String msg) {
+    public boolean check(long fromGroup, long fromQQ, String msg, File[] imageFiles) {
         if (msg.equalsIgnoreCase("sp.help")) {
             if (fromGroup != 0) {
                 sendMsg(fromGroup, fromQQ, "使用方式已私聊发送");
@@ -22,8 +23,11 @@ public class PicSearchManager {
             sendMsg(0, fromQQ, "网站代号：\n0 H-Magazines\n2 H-Game CG\n3 DoujinshiDB\n5 pixiv Images\n8 Nico Nico Seiga\n9 Danbooru\n10 drawr Images\n11 Nijie Images\n12 Yande.re\n13 Openings.moe\n15 Shutterstock\n16 FAKKU\n18 H-Misc\n19 2D-Market\n20 MediBang\n21 Anime\n22 H-Anime\n23 Movies\n24 Shows\n25 Gelbooru\n26 Konachan\n27 Sankaku Channel\n28 Anime-Pictures.net\n29 e621.net\n30 Idol Complex\n31 bcy.net Illust\n32 bcy.net Cosplay\n33 PortalGraphics.net (Hist)\n34 deviantArt\n35 Pawoo.net\n36 Manga");
             return true;
         }
-        CQImage cqImage = Autoreply.instence.CC.getCQImage(msg);
-        if (cqImage != null && (msg.toLowerCase().startsWith("sp"))) {
+        File imageFile = null;
+        if (imageFiles != null && imageFiles.length > 0) {
+            imageFile = imageFiles[0];
+        }
+        if (imageFile != null && (msg.toLowerCase().startsWith("sp"))) {
             try {
                 Autoreply.instence.useCount.incSearchPicture(fromQQ);
                 Autoreply.instence.groupCount.incSearchPicture(fromGroup);
@@ -36,16 +40,16 @@ public class PicSearchManager {
                     needPic = Integer.parseInt(ss[1]);
                     database = ss.length >= 3 ? Integer.parseInt(ss[2]) : 999;
                 }
-                Autoreply.instence.threadPool.execute(new SearchThread(fromGroup, fromQQ, cqImage.download(Autoreply.appDirectory + "picSearch\\" + fromQQ, Autoreply.instence.random.nextInt() + "pic.jpg"), needPic, database));
+                Autoreply.instence.threadPool.execute(new SearchThread(fromGroup, fromQQ, imageFile, needPic, database));
             } catch (Exception e) {
                 sendMsg(fromGroup, fromQQ, e.toString());
             }
             return true;
-        } else if (cqImage == null && (msg.startsWith("sp.") || msg.equals("sp"))) {
+        } else if (imageFile == null && (msg.startsWith("sp.") || msg.equals("sp"))) {
             userNotSendPicture.put(fromQQ, msg);
             sendMsg(fromGroup, fromQQ, "需要一张图片");
             return true;
-        } else if (cqImage != null && userNotSendPicture.get(fromQQ) != null) {
+        } else if (imageFile != null && userNotSendPicture.get(fromQQ) != null) {
             try {
                 sendMsg(fromGroup, fromQQ, "土豆折寿中……");
                 Autoreply.instence.useCount.incSearchPicture(fromQQ);
@@ -58,7 +62,7 @@ public class PicSearchManager {
                     needPic = Integer.parseInt(ss[1]);
                     database = ss.length >= 3 ? Integer.parseInt(ss[2]) : 999;
                 }
-                Autoreply.instence.threadPool.execute(new SearchThread(fromGroup, fromQQ, cqImage.download(Autoreply.appDirectory + "picSearch\\" + fromQQ, Autoreply.instence.random.nextInt() + "pic.jpg"), needPic, database));
+                Autoreply.instence.threadPool.execute(new SearchThread(fromGroup, fromQQ, imageFile, needPic, database));
             } catch (Exception e) {
                 sendMsg(fromGroup, fromQQ, e.toString());
             }

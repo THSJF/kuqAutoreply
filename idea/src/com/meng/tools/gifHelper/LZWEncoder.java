@@ -59,7 +59,7 @@ class LZWEncoder {
     // ratio decreases, but after the table fills.  The variable-length output
     // codes are re-sized at this point, and a special CLEAR code is generated
     // for the decompressor.  Late addition:  construct the table according to
-    // file size for noticeable speed improvement on small files.  Please direct
+    // file size for noticeable speed improvement on small imageFiles.  Please direct
     // questions about this implementation to ames!jaw.
 
     int g_init_bits;

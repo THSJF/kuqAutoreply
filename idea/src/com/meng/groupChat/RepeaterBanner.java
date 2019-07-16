@@ -20,16 +20,15 @@ public class RepeaterBanner {
     private String lastMessageRecieved = "";
     private int reverseFlag = Autoreply.instence.random.nextInt(4);
     private boolean lastStatus = false;
-    private FingerPrint thisFp;
-    private FingerPrint lastFp;
-    private File imgFile;
+    private FingerPrint[] thisFp;
+    private FingerPrint[] lastFp;
     long groupNumber = 0;
 
     public RepeaterBanner(long groupNumber) {
         this.groupNumber = groupNumber;
     }
 
-    public boolean check(long fromGroup, String msg, long fromQQ) {
+    public boolean check(long fromGroup, long fromQQ, String msg, File[] imageFiles) {
         GroupConfig groupConfig = Autoreply.instence.configManager.getGroupConfig(fromGroup);
         if (groupConfig == null) {
             return false;
@@ -39,7 +38,7 @@ public class RepeaterBanner {
             if (msg.contains("禁言") || fromGroup != groupNumber) {
                 return true;
             }
-            float simi = getPicSimilar(msg);// 当前消息中图片和上一条消息中图片相似度
+            float simi = getPicSimilar(imageFiles);// 当前消息中图片和上一条消息中图片相似度
             switch (groupConfig.repeatMode) {
                 case 0:
 
@@ -65,7 +64,7 @@ public class RepeaterBanner {
                     lastMessageRecieved = msg;
                     return true;
             }
-            b = checkRepeatStatu(fromGroup, fromQQ, msg, simi);
+            b = checkRepeatStatu(fromGroup, fromQQ, msg, imageFiles, simi);
             lastMessageRecieved = msg;
         } catch (Exception e) {
             e.printStackTrace();
@@ -74,10 +73,10 @@ public class RepeaterBanner {
     }
 
     // 复读状态
-    private boolean checkRepeatStatu(long group, long qq, String msg, float simi) {
+    private boolean checkRepeatStatu(long group, long qq, String msg, File[] imageFiles, float simi) {
         boolean b = false;
         if (!lastStatus && (lastMessageRecieved.equals(msg) || isPicMsgRepeat(lastMessageRecieved, msg, simi))) {
-            b = repeatStart(group, qq, msg);
+            b = repeatStart(group, qq, msg, imageFiles);
         }
         if (lastStatus && (lastMessageRecieved.equals(msg) || isPicMsgRepeat(lastMessageRecieved, msg, simi))) {
             b = repeatRunning(group, qq, msg);
@@ -102,43 +101,46 @@ public class RepeaterBanner {
         return false;
     }
 
-    private boolean repeatStart(long group, long qq, String msg) {
+    private boolean repeatStart(long group, long qq, String msg, File[] imageFiles) {
         banCount = 6;
         Autoreply.instence.useCount.incFudujiguanjia(qq);
         Autoreply.instence.groupCount.incFudu(group);
-        Autoreply.instence.threadPool.execute(() -> reply(group, qq, msg));
+        Autoreply.instence.threadPool.execute(() -> reply(group, qq, msg, imageFiles));
         Autoreply.instence.useCount.incFudu(Autoreply.CQ.getLoginQQ());
         return true;
     }
 
     // 回复
-    private boolean reply(long group, long qq, String msg) {
-        if (msg.contains("[CQ:image,file=")) {
+    private boolean reply(long group, long qq, String msg, File[] imageFiles) {
+        if (msg.contains("蓝") || msg.contains("藍")) {
+            return true;
+        }
+        if (imageFiles == null) {
+            replyText(group, qq, msg);
+        } else {
             try {
-                replyPic(group, qq, msg);
+                replyPic(group, qq, msg, imageFiles);
             } catch (IOException e) {
                 e.printStackTrace();
             }
-        } else {
-            replyText(group, qq, msg);
         }
         return true;
     }
 
     // 如果是图片复读
-    private void replyPic(long group, long qq, String msg) throws IOException {
-        if (msg.contains("蓝") || msg.contains("藍")) {
-            return;
+    private void replyPic(long group, long qq, String msg, File[] imageFiles) throws IOException {
+        int index = 0;
+        StringBuilder stringBuilder = new StringBuilder(msg);
+        for (File imageFile : imageFiles) {
+            index = msg.indexOf("[CQ:image,file=", index);
+            if (Autoreply.instence.fileTypeUtil.getFileType(imageFile).equals("gif")) {
+                stringBuilder.replace(index, index + 52, new StringBuilder(Autoreply.instence.CC.image(reverseGIF(imageFile))).reverse().toString());
+            } else {
+                stringBuilder.replace(index, index + 52, new StringBuilder(Autoreply.instence.CC.image(reversePic(imageFile))).reverse().toString());
+            }
+            index += 52;
         }
-        if (imgFile.getName().contains(".gif")) {
-            String imgCode = new StringBuilder(Autoreply.instence.CC.image(reverseGIF(imgFile))).reverse().toString();
-            String ms = new StringBuilder(msg.replaceAll("\\[CQ.*]", imgCode)).reverse().toString();
-            Autoreply.sendMessage(group, 0, ms);
-        } else {
-            String imgCode = new StringBuilder(Autoreply.instence.CC.image(rePic(imgFile))).reverse().toString();
-            String ms = new StringBuilder(msg.replaceAll("\\[CQ.*]", imgCode)).reverse().toString();
-            Autoreply.sendMessage(group, 0, ms);
-        }
+        Autoreply.sendMessage(group, 0, stringBuilder.reverse().toString());
         repeatCount = repeatCount > 2 ? 0 : repeatCount + 1;
         reverseFlag++;
     }
@@ -153,30 +155,27 @@ public class RepeaterBanner {
             repeatCount++;
         } else {
             String newmsg = new StringBuilder(msg).reverse().toString();
-            if (newmsg.contains("蓝") || newmsg.contains("藍")) {
-                return;
-            }
             Autoreply.sendMessage(group, 0, newmsg.equals(msg) ? newmsg + " " : newmsg);
             repeatCount = 0;
         }
     }
 
     // 反转图片
-    private File rePic(File file) throws IOException {
+    private File reversePic(File file) throws IOException {
         Image im = ImageIO.read(file);
         int w = im.getWidth(null);
         int h = im.getHeight(null);
         int size = w * h;
         BufferedImage b = new BufferedImage(im.getWidth(null), im.getHeight(null), BufferedImage.TYPE_INT_ARGB);
         b.getGraphics().drawImage(im.getScaledInstance(w, h, Image.SCALE_SMOOTH), 0, 0, null);
-        int[] ib = b.getRGB(0, 0, w, h, new int[size], 0, w);
-        int[] ib2 = new int[size];
+        int[] rgb1 = b.getRGB(0, 0, w, h, new int[size], 0, w);
+        int[] rgb2 = new int[size];
         switch (reverseFlag % 4) {
             case 0:
                 for (int y = 0; y < h; ++y) {
                     int yw = y * w;
                     for (int x = 0; x < w; ++x) {
-                        ib2[(w - 1 - x) + yw] = ib[x + yw]; // 镜之国
+                        rgb2[(w - 1 - x) + yw] = rgb1[x + yw]; // 镜之国
                     }
                 }
                 break;
@@ -184,7 +183,7 @@ public class RepeaterBanner {
                 for (int y = 0; y < h; y++) {
                     // 天地
                     if (w >= 0) {
-                        System.arraycopy(ib, y * w, ib2, (h - 1 - y) * w, w);
+                        System.arraycopy(rgb1, y * w, rgb2, (h - 1 - y) * w, w);
                     }
                 }
                 break;
@@ -193,19 +192,19 @@ public class RepeaterBanner {
                 for (int y = 0; y < h; y++) {
                     // 天壤梦弓
                     if (w >= 0) {
-                        System.arraycopy(ib, y * w, ib2, (y < halfH ? y + halfH : y - halfH) * w, w);
+                        System.arraycopy(rgb1, y * w, rgb2, (y < halfH ? y + halfH : y - halfH) * w, w);
                     }
                 }
                 break;
             case 3:
                 for (int y = 0; y < h; y++) {
                     for (int x = 0; x < w; x++) {
-                        ib2[(w - 1 - x) + (h - 1 - y) * w] = ib[x + y * w]; // Reverse_Hierarchy
+                        rgb2[(w - 1 - x) + (h - 1 - y) * w] = rgb1[x + y * w]; // Reverse_Hierarchy
                     }
                 }
                 break;
         }
-        b.setRGB(0, 0, w, h, ib2, 0, w);
+        b.setRGB(0, 0, w, h, rgb2, 0, w);
         ImageIO.write(b, "png", file);
         return file;
     }
@@ -273,7 +272,7 @@ public class RepeaterBanner {
     private BufferedImage spell1(BufferedImage current, BufferedImage cache) {
         int w = current.getWidth(null);
         int h = current.getHeight(null);
-        BufferedImage bmp = new BufferedImage(w, h, BufferedImage.TYPE_3BYTE_BGR);
+        BufferedImage bmp = new BufferedImage(w, h, BufferedImage.TYPE_INT_ARGB);
         bmp.getGraphics().drawImage(cache.getScaledInstance(w, h, Image.SCALE_SMOOTH), 0, 0, null);
         for (int y = 0; y < h; y++) {
             for (int x = 0; x < w; x++) {
@@ -288,7 +287,7 @@ public class RepeaterBanner {
     private BufferedImage spell1(BufferedImage current) {
         int w = current.getWidth(null);
         int h = current.getHeight(null);
-        BufferedImage bmp = new BufferedImage(w, h, BufferedImage.TYPE_3BYTE_BGR);
+        BufferedImage bmp = new BufferedImage(w, h, BufferedImage.TYPE_INT_ARGB);
         for (int y = 0; y < h; y++) {
             for (int x = 0; x < w; x++) {
                 int i = current.getRGB(x, y);
@@ -301,7 +300,7 @@ public class RepeaterBanner {
     private BufferedImage spell2(BufferedImage current, BufferedImage cache) {
         int w = current.getWidth(null);
         int h = current.getHeight(null);
-        BufferedImage bmp = new BufferedImage(w, h, BufferedImage.TYPE_3BYTE_BGR);
+        BufferedImage bmp = new BufferedImage(w, h, BufferedImage.TYPE_INT_ARGB);
         bmp.getGraphics().drawImage(cache.getScaledInstance(w, h, Image.SCALE_SMOOTH), 0, 0, null);
         for (int y = 0; y < h; y++) {
             for (int x = 0; x < w; x++) {
@@ -316,7 +315,7 @@ public class RepeaterBanner {
     private BufferedImage spell2(BufferedImage current) {
         int w = current.getWidth(null);
         int h = current.getHeight(null);
-        BufferedImage bmp = new BufferedImage(w, h, BufferedImage.TYPE_3BYTE_BGR);
+        BufferedImage bmp = new BufferedImage(w, h, BufferedImage.TYPE_INT_ARGB);
         for (int y = 0; y < h; y++) {
             for (int x = 0; x < w; x++) {
                 int i = current.getRGB(x, y);
@@ -329,7 +328,7 @@ public class RepeaterBanner {
     private BufferedImage spell3(BufferedImage current, int px, BufferedImage cache) {
         int w = current.getWidth(null);
         int h = current.getHeight(null);
-        BufferedImage bmp = new BufferedImage(w, h, BufferedImage.TYPE_3BYTE_BGR);
+        BufferedImage bmp = new BufferedImage(w, h, BufferedImage.TYPE_INT_ARGB);
         bmp.getGraphics().drawImage(spell3_at1(cache, px).getScaledInstance(w, h, Image.SCALE_SMOOTH), 0, 0, null);
         spell3Process(current, px, w, h, bmp);
         cache.getGraphics().drawImage(spell3_at1(bmp, -px).getScaledInstance(w, h, Image.SCALE_SMOOTH), 0, 0, null);
@@ -339,7 +338,7 @@ public class RepeaterBanner {
     private BufferedImage spell3_at1(BufferedImage cache, int px) {
         int w = cache.getWidth(null);
         int h = cache.getHeight(null);
-        BufferedImage bmp = new BufferedImage(w, h, BufferedImage.TYPE_3BYTE_BGR);
+        BufferedImage bmp = new BufferedImage(w, h, BufferedImage.TYPE_INT_ARGB);
         int j;
         if (px > 0) {
             spell3Process(cache, px, w, h, bmp);
@@ -402,34 +401,44 @@ public class RepeaterBanner {
     }
 
     // 图片相似度判断
-    private float getPicSimilar(String msg) {
+    private float getPicSimilar(File[] imageFiles) {
+        if (imageFiles == null) {
+            thisFp = null;
+            lastFp = null;
+            return 0;
+        }
+        if (lastFp == null) {
+            return 0;
+        }
+        if (lastFp.length != imageFiles.length) {
+            return 0;
+        }
+        float simi = 100;
+        float[] tmp = new float[imageFiles.length];
         try {
-            CQImage cm = Autoreply.instence.CC.getCQImage(msg);
-            if (cm != null) {// 如果当前消息有图片则开始处理
-                File files = new File(Autoreply.appDirectory + "reverse\\");
-                if (!files.exists()) {
-                    files.mkdirs();
-                }
-                if (msg.contains(".gif")) {
-                    imgFile = cm.download(Autoreply.appDirectory + "reverse\\" + System.currentTimeMillis() + "recr.gif");
-                } else {
-                    imgFile = cm.download(Autoreply.appDirectory + "reverse\\" + System.currentTimeMillis() + "recr.jpg");
-                }
+            for (File imageFile : imageFiles) {
                 if (thisFp != null) {
                     lastFp = thisFp;
                 }
-                thisFp = new FingerPrint(ImageIO.read(imgFile));
-                if (lastFp != null) {
-                    return thisFp.compare(lastFp);
+                thisFp = new FingerPrint[imageFiles.length];
+                for (int ii = 0; ii < imageFiles.length; ++ii) {
+                    thisFp[ii] = new FingerPrint(ImageIO.read(imageFile));
                 }
-            } else {// 如果当前消息没有图片则删除临时的图片文件防止跨消息图片复读
-                thisFp = null;
-                lastFp = null;
-                imgFile.delete();
+                for (int iii = 0; iii < imageFiles.length; ++iii) {
+                    if (lastFp != null) {
+                        tmp[iii] = thisFp[iii].compare(lastFp[iii]);
+                    }
+                }
+            }
+            for (float f : tmp) {
+                if (simi > f) {
+                    simi = f;
+                }
             }
         } catch (Exception e) {
+            return 0;
         }
-        return 0;
+        return simi;
     }
 
     private String getMsgText(String msg) {

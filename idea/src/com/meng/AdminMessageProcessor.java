@@ -79,6 +79,24 @@ public class AdminMessageProcessor {
                 sendMessage(fromGroup, 0, Autoreply.instence.CC.image(new File(Autoreply.appDirectory + "pic\\alice.png")));
                 return true;
             }
+            if (msg.startsWith("生成位置")) {
+                String[] args = msg.split(",");
+                if (args.length == 6) {
+                    try {
+                        sendMessage(fromGroup, 0,
+                                Autoreply.instence.CC.location(
+                                        Double.parseDouble(args[2]),
+                                        Double.parseDouble(args[1]),
+                                        Integer.parseInt(args[3]),
+                                        args[4],
+                                        args[5]));
+                        return true;
+                    } catch (Exception e) {
+                        sendMessage(fromGroup, fromQQ, "参数错误,生成位置.经度double.纬度double.倍数int.名称string.描述string");
+                        return true;
+                    }
+                }
+            }
             if (msg.equals("大芳法 芳神复诵")) {
                 Autoreply.instence.threadPool.execute(new MoShenFuSong(fromGroup, 5));
                 return true;
@@ -99,13 +117,11 @@ public class AdminMessageProcessor {
                 return true;
             }
             if (msg.startsWith("精神支柱[CQ:image")) {
-                String finalMsg = msg;
-                Autoreply.instence.threadPool.execute(() -> new JingShenZhiZhuManager(fromGroup, finalMsg));
+                Autoreply.instence.threadPool.execute(() -> new JingShenZhiZhuManager(fromGroup, msg));
                 return true;
             }
             if (msg.startsWith("神触[CQ:image")) {
-                String finalMsg = msg;
-                Autoreply.instence.threadPool.execute(() -> new ShenChuManager(fromGroup, finalMsg));
+                Autoreply.instence.threadPool.execute(() -> new ShenChuManager(fromGroup, msg));
                 return true;
             }
         }
@@ -115,53 +131,54 @@ public class AdminMessageProcessor {
                 return true;
             }
             if (msg.startsWith("findInAll:")) {
-                String finalMsg1 = msg;
-                Autoreply.instence.threadPool.execute(() -> Methods.findQQInAllGroup(0, fromQQ, finalMsg1));
+                Autoreply.instence.threadPool.execute(() -> Methods.findQQInAllGroup(fromGroup, fromQQ, msg));
                 return true;
             }
             if (msg.contains("迫害图[CQ:image")) {
-                String pohaituName = msg.substring(0, msg.indexOf("[CQ:image") - 3);
-                String[] fileNames = msg.substring(msg.indexOf("["), msg.length() - 1).replace("[CQ:image,file=", "").split("]");
-                List<CQImage> imgList = Autoreply.instence.CC.getCQImages(msg);
-                for (int i = 0; i < imgList.size(); ++i) {
+                Autoreply.instence.threadPool.execute(() -> {
+                    String pohaituName = msg.substring(0, msg.indexOf("[CQ:image") - 3);
                     switch (pohaituName) {
                         case "零食":
-                            msg = "鸽鸽";
+                            pohaituName = "鸽鸽";
                             break;
                         case "旭东":
-                            msg = "天星厨";
+                            pohaituName = "天星厨";
                             break;
                         case "星小渚":
-                            msg = "杏子";
+                            pohaituName = "杏子";
                             break;
                         default:
                             break;
                     }
-                    try {
-                        imgList.get(i).download(Autoreply.appDirectory + File.separator + "pohai/" + pohaituName, fileNames[i]);
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                        sendMessage(fromGroup, fromQQ, e.toString());
-                        return true;
+                    List<CQImage> imgList = Autoreply.instence.CC.getCQImages(msg);
+                    for (CQImage cqImage : imgList) {
+                        try {
+                            Autoreply.instence.fileTypeUtil.checkFormat(cqImage.download(Autoreply.appDirectory + File.separator + "pohai/" + pohaituName, cqImage.getMd5()));
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                            sendMessage(fromGroup, fromQQ, e.toString());
+                            return;
+                        }
                     }
-                }
-                sendMessage(fromGroup, fromQQ, imgList.size() + "张图添加成功");
+                    sendMessage(fromGroup, fromQQ, imgList.size() + "张图添加成功");
+                });
                 return true;
             }
             if (msg.contains("色图[CQ:image")) {
-                String setuName = msg.substring(0, msg.indexOf("[CQ:image") - 2);
-                String[] fileNames = msg.substring(msg.indexOf("["), msg.length() - 1).replace("[CQ:image,file=", "").split("]");
-                List<CQImage> imgList = Autoreply.instence.CC.getCQImages(msg);
-                for (int i = 0; i < imgList.size(); ++i) {
-                    try {
-                        imgList.get(i).download(Autoreply.appDirectory + File.separator + "setu/" + setuName, fileNames[i]);
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                        sendMessage(fromGroup, fromQQ, e.toString());
-                        return true;
+                Autoreply.instence.threadPool.execute(() -> {
+                    String setuName = msg.substring(0, msg.indexOf("[CQ:image") - 2);
+                    List<CQImage> imgList = Autoreply.instence.CC.getCQImages(msg);
+                    for (CQImage cqImage : imgList) {
+                        try {
+                            Autoreply.instence.fileTypeUtil.checkFormat(cqImage.download(Autoreply.appDirectory + File.separator + "setu/" + setuName, cqImage.getMd5()));
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                            sendMessage(fromGroup, fromQQ, e.toString());
+                            return;
+                        }
                     }
-                }
-                sendMessage(fromGroup, fromQQ, imgList.size() + "张图添加成功");
+                    sendMessage(fromGroup, fromQQ, imgList.size() + "张图添加成功");
+                });
                 return true;
             }
         }

@@ -65,8 +65,8 @@ public class SearchThread implements Runnable {
          *
          * int size = its.size() > 3 ? 3 : its.size(); for (int i = 0; i < size;
          * i++) { NaoJavabean tmp = its.get(i); File dFile = null; try { File
-         * files = new File(Autoreply.appDirectory + "picSearch\\tmp\\"); if
-         * (!files.exists()) { files.mkdirs(); } URL url = new
+         * imageFiles = new File(Autoreply.appDirectory + "picSearch\\tmp\\"); if
+         * (!imageFiles.exists()) { imageFiles.mkdirs(); } URL url = new
          * URL(tmp.getLuesuotu()); HttpURLConnection connection =
          * (HttpURLConnection) url.openConnection(); InputStream is =
          * connection.getInputStream(); dFile = new File(Autoreply.appDirectory

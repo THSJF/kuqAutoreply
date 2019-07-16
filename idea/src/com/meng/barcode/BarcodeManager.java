@@ -12,11 +12,12 @@ public class BarcodeManager {
     public BarcodeManager() {
     }
 
-    public boolean check(long fromGroup, long fromQQ, String msg) {
+    public boolean check(long fromGroup, long fromQQ, String msg, File[] images) {
         try {
             if (enc(fromGroup, fromQQ, msg)) {
                 return true;
-            } else if (dec(fromGroup, fromQQ, msg)) {
+            }
+            if (dec(fromGroup, fromQQ, images)) {
                 return true;
             }
         } catch (Exception e) {
@@ -26,31 +27,36 @@ public class BarcodeManager {
     }
 
     private boolean enc(long fromGroup, long fromQQ, String msg) throws Exception {
-        File files = new File(Autoreply.appDirectory + "barcode/" + fromQQ);
-        if (!files.exists()) {
-            files.mkdirs();
-        }
-        File barcode = new File(Autoreply.appDirectory + "barcode/" + fromQQ + "/barcode" + Autoreply.instence.random.nextInt() + ".png");
+        File barcode;
         if (msg.startsWith("生成QR ")) {
+            File files = new File(Autoreply.instence.createdImageFolder);
+            if (!files.exists()) {
+                files.mkdirs();
+            }
+            barcode = new File(Autoreply.instence.createdImageFolder + Autoreply.instence.random.nextInt() + ".png");
             ImageIO.write(BarcodeUtils.createQRCode(msg.substring(5)), "png", barcode);
         } else if (msg.startsWith("生成PDF417 ")) {
+            File files = new File(Autoreply.instence.createdImageFolder);
+            if (!files.exists()) {
+                files.mkdirs();
+            }
+            barcode = new File(Autoreply.instence.createdImageFolder + Autoreply.instence.random.nextInt() + ".png");
             ImageIO.write(BarcodeUtils.createPDF417(msg.substring(9)), "png", barcode);
         } else {
             return false;
         }
         Autoreply.instence.picSearchManager.sendMsg(fromGroup, fromQQ, Autoreply.instence.CC.image(barcode));
-        barcode.delete();
         return true;
     }
 
-    private boolean dec(long fromGroup, long fromQQ, String msg) throws Exception {
-        CQImage cqImage = Autoreply.instence.CC.getCQImage(msg);
-        if (cqImage != null) {
-            File barcode = cqImage.download(Autoreply.appDirectory + "barcode/" + fromQQ, "barcode" + Autoreply.instence.random.nextInt() + ".png");
+    private boolean dec(long fromGroup, long fromQQ, File[] imageFiles) {
+        if (imageFiles == null) {
+            return false;
+        }
+        for (File barcode : imageFiles) {
             Result result = BarcodeUtils.decodeImage(barcode);
             if (result != null) {
                 Autoreply.instence.picSearchManager.sendMsg(fromGroup, fromQQ, "二维码类型:" + result.getBarcodeFormat().toString() + "\n内容:" + result.getText());
-                barcode.delete();
                 return true;
             }
         }
