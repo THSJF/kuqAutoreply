@@ -4,7 +4,6 @@ import com.meng.config.javabeans.GroupConfig;
 import com.meng.config.javabeans.PersonInfo;
 import com.meng.tools.Methods;
 import com.sobte.cqp.jcq.entity.Group;
-import com.sobte.cqp.jcq.entity.Member;
 import com.sobte.cqp.jcq.entity.QQInfo;
 
 import java.util.HashSet;
@@ -23,20 +22,20 @@ public class GroupMemberChangerListener {
         }
         PersonInfo personInfo = Autoreply.instence.configManager.getPersonInfoFromQQ(beingOperateQQ);
         if (personInfo != null && personInfo.name.equals("熊哥")) {
-            sendMessage(959615179L, 0, Autoreply.instence.CC.at(-1) + "熊加入了群" + fromGroup);
+            sendMessage(959615179L, 0, Autoreply.instence.CC.at(-1) + "熊加入了群" + fromGroup, true);
             return;
         }
         if (Autoreply.instence.configManager.isNotReplyGroup(fromGroup)) {
             return;
         }
         if (personInfo != null) {
-            sendMessage(fromGroup, 0, "欢迎" + personInfo.name);
+            sendMessage(fromGroup, 0, "欢迎" + personInfo.name, true);
         } else {
-            sendMessage(fromGroup, 0, "欢迎新大佬");
+            sendMessage(fromGroup, 0, "欢迎新大佬", true);
         }
         Autoreply.instence.banListener.checkSleepMsg(fromGroup, beingOperateQQ);
         if (fromGroup == 859561731L) { // 台长群
-            sendMessage(859561731L, 0, "芳赛服务器炸了");
+            sendMessage(859561731L, 0, "芳赛服务器炸了", true);
             /*
              * try { sendMessage(859561731L, 0, CC.image(new File(appDirectory +
              * "pic/sjf9961.jpg"))); } catch (IOException e) {
@@ -49,7 +48,7 @@ public class GroupMemberChangerListener {
         if (subtype == 1) {
             if (beingOperateQQ == 2856986197L) {
                 Autoreply.CQ.setGroupLeave(fromGroup, false);
-                sendMessage(fromGroup, 0, "主人离开了，各位再见");
+                sendMessage(fromGroup, 0, "主人离开了，各位再见", true);
             }
             if (Autoreply.instence.configManager.isNotReplyGroup(fromGroup)) {
                 return;
@@ -59,7 +58,7 @@ public class GroupMemberChangerListener {
             }
             QQInfo qInfo = Autoreply.CQ.getStrangerInfo(beingOperateQQ);
             PersonInfo personInfo = Autoreply.instence.configManager.getPersonInfoFromQQ(beingOperateQQ);
-            sendMessage(fromGroup, 0, (personInfo == null ? qInfo.getNick() : personInfo.name) + "(" + qInfo.getQqId() + ")" + "跑莉");
+            sendMessage(fromGroup, 0, (personInfo == null ? qInfo.getNick() : personInfo.name) + "(" + qInfo.getQqId() + ")" + "跑莉", true);
         } else if (subtype == 2) {
             if (beingOperateQQ == 2856986197L) {
                 Autoreply.instence.threadPool.execute(() -> {
@@ -86,7 +85,7 @@ public class GroupMemberChangerListener {
             QQInfo qInfo2 = Autoreply.CQ.getStrangerInfo(fromQQ);
             PersonInfo personInfo = Autoreply.instence.configManager.getPersonInfoFromQQ(beingOperateQQ);
             PersonInfo personInfo2 = Autoreply.instence.configManager.getPersonInfoFromQQ(fromQQ);
-            sendMessage(fromGroup, 0, (personInfo == null ? qInfo.getNick() : personInfo.name) + "(" + qInfo.getQqId() + ")" + "被" + (personInfo2 == null ? qInfo2.getNick() : personInfo2.name) + "(" + qInfo2.getQqId() + ")" + "玩完扔莉");
+            sendMessage(fromGroup, 0, (personInfo == null ? qInfo.getNick() : personInfo.name) + "(" + qInfo.getQqId() + ")" + "被" + (personInfo2 == null ? qInfo2.getNick() : personInfo2.name) + "(" + qInfo2.getQqId() + ")" + "玩完扔莉", true);
         }
     }
 

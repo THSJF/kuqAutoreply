@@ -3,9 +3,14 @@ package com.meng.groupChat;
 import com.meng.Autoreply;
 import com.meng.config.ConfigManager;
 import com.meng.tools.Methods;
+import com.sobte.cqp.jcq.entity.Member;
+
+import java.util.HashMap;
+import java.util.function.Function;
 
 public class Banner {
     private ConfigManager configManager;
+    public HashMap<Long, HashMap<Long, BanType>> banMap = new HashMap<>();
 
     public Banner(ConfigManager configManager) {
         this.configManager = configManager;
@@ -62,6 +67,18 @@ public class Banner {
                         time = 2592000;
                         e.printStackTrace();
                     }
+                    HashMap<Long, BanType> targetQQAndType = banMap.computeIfAbsent(fromGroup, k -> new HashMap<>());
+                    BanType lastOp = targetQQAndType.computeIfAbsent(targetQQ, k -> BanType.ByUser);
+                    BanType thisOp = getType(fromGroup, fromQQ);
+                    if (thisOp.getPermission() - lastOp.getPermission() < 0) {
+                        Autoreply.sendMessage(fromGroup, fromQQ, "你无法修改等级比你高的人进行的操作");
+                        return true;
+                    }
+                    if (time == 0) {
+                        targetQQAndType.remove(targetQQ);
+                    } else {
+                        targetQQAndType.put(targetQQ, thisOp);
+                    }
                     if (checkBan(fromGroup, targetQQ, fromQQ, time)) {
                         return true;
                     }
@@ -94,6 +111,18 @@ public class Banner {
                         e.printStackTrace();
                         targetQQ = fromQQ;
                         time = 2592000;
+                    }
+                    HashMap<Long, BanType> targetQQAndType = banMap.computeIfAbsent(fromGroup, k -> new HashMap<>());
+                    BanType lastOp = targetQQAndType.computeIfAbsent(targetQQ, k -> BanType.ByUser);
+                    BanType thisOp = getType(fromGroup, fromQQ);
+                    if (thisOp.getPermission() - lastOp.getPermission() < 0) {
+                        Autoreply.sendMessage(fromGroup, fromQQ, "你无法修改等级比你高的人进行的操作");
+                        return true;
+                    }
+                    if (time == 0) {
+                        targetQQAndType.remove(targetQQ);
+                    } else {
+                        targetQQAndType.put(targetQQ, thisOp);
                     }
                     if (checkBan(targetGroup, targetQQ, fromQQ, time)) {
                         return true;
@@ -187,5 +216,22 @@ public class Banner {
             return true;
         }
         return false;
+    }
+
+    public BanType getType(long fromGroup, long fromQQ) {
+        if (configManager.isMaster(fromQQ)) {
+            return BanType.ByMaster;
+        }
+        Member member = Autoreply.CQ.getGroupMemberInfoV2(fromGroup, fromQQ);
+        if (member.getAuthority() == 3) {
+            return BanType.ByGroupMaster;
+        }
+        if (configManager.isAdmin(fromQQ)) {
+            return BanType.ByAdmin;
+        }
+        if (member.getAuthority() == 2) {
+            return BanType.ByGroupAdmin;
+        }
+        return BanType.ByUser;
     }
 }

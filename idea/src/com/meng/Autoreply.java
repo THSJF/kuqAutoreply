@@ -242,7 +242,7 @@ public class Autoreply extends JcqAppAbstract implements ICQVer, IMsg, IRequest 
             if (Methods.checkXiong(fromQQ, msg)) {
                 return;
             }
-            if (fromQQ == 2565128043L || configManager.isMaster(fromQQ)) {
+            if (fromQQ == 2057480282L || configManager.isMaster(fromQQ)) {
                 if (oggInterface.processOgg(fromQQ, msg)) {
                     return;
                 }
@@ -297,8 +297,8 @@ public class Autoreply extends JcqAppAbstract implements ICQVer, IMsg, IRequest 
     public int groupMsg(int subType, int msgId, long fromGroup, long fromQQ, String fromAnonymous, String msg, int font) {
         // if (fromGroup != 312342896L)
         // return MSG_IGNORE;
-        // if (fromGroup != 1023432971L)
-        //    return MSG_IGNORE;
+        //  if (fromGroup != 1023432971L)
+        //   return MSG_IGNORE;
         // if (fromGroup != 617745343L)
         // return MSG_IGNORE;
         // 如果消息来自匿名者
@@ -746,6 +746,6 @@ public class Autoreply extends JcqAppAbstract implements ICQVer, IMsg, IRequest 
 
     public static void sendToMaster(String msg) {
         Autoreply.sendMessage(0, 2856986197L, msg, true);
-        Autoreply.sendMessage(0, 2565128043L, msg, true);
+        Autoreply.sendMessage(0, 2057480282L, msg, true);
     }
 }

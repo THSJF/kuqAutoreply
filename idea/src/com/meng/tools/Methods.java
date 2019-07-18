@@ -65,7 +65,7 @@ public class Methods {
             Autoreply.instence.useCount.incGbanCount(Autoreply.CQ.getLoginQQ());
             return true;
         } else {
-            Member ogg = Autoreply.CQ.getGroupMemberInfoV2(fromGroup, 2565128043L);
+            Member ogg = Autoreply.CQ.getGroupMemberInfoV2(fromGroup, 2057480282L);
             if (ogg != null && ogg.getAuthority() - ban.getAuthority() > 0) {
                 Autoreply.sendToMaster("#mutegroupuser " + fromGroup + " " + (time / 60) + " " + banQQ);
                 Autoreply.instence.useCount.incGbanCount(Autoreply.CQ.getLoginQQ());
@@ -86,7 +86,7 @@ public class Methods {
 
     public static void ban(long fromGroup, long[] banQQs, int time) {
         Member me = Autoreply.CQ.getGroupMemberInfoV2(fromGroup, Autoreply.CQ.getLoginQQ());
-        Member ogg = Autoreply.CQ.getGroupMemberInfoV2(fromGroup, 2565128043L);
+        Member ogg = Autoreply.CQ.getGroupMemberInfoV2(fromGroup, 2057480282L);
         StringBuilder banqqs = new StringBuilder("");
         for (long banQQ : banQQs) {
             if (banQQ == 2558395159L) {

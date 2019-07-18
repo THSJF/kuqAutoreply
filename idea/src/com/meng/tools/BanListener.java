@@ -4,6 +4,7 @@ import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.meng.Autoreply;
 import com.meng.config.javabeans.GroupConfig;
+import com.meng.groupChat.BanType;
 import com.sobte.cqp.jcq.entity.Member;
 
 import java.io.File;
@@ -45,13 +46,13 @@ public class BanListener {
     }
 
     public void check(long fromGroup, long fromQQ, String msg) {
-        long tmp = Autoreply.instence.CC.getAt(msg);
+        long targetQQ = Autoreply.instence.CC.getAt(msg);
         if (msg.startsWith("夏眠")) {
             checkSleepMsg(fromGroup, fromQQ, msg);
         }
-        if (fromQQ == 2482513293L && msg.startsWith("复读警察,出动!") && tmp != -1000) {
+        if (fromQQ == 2482513293L && msg.startsWith("复读警察,出动!") && targetQQ != -1000) {
             //Autoreply.instence.CC.getAt(msg) == 3119583925L
-            Methods.ban(fromGroup, tmp, 0);
+            Methods.ban(fromGroup, targetQQ, 0);
         }
         if (fromQQ != 1000000) {
             return;
@@ -177,12 +178,12 @@ public class BanListener {
         if (!Autoreply.instence.configManager.isAdmin(fromQQ) && qqInfo.getAuthority() == 1) {
             return;
         }
-        if (msg.equals("夏眠结束")) {
+        if (Autoreply.instence.configManager.isMaster(fromQQ) && msg.equals("夏眠结束")) {
             HashSet<Long> hashSet = sleepSet.get(String.valueOf(fromGroup));
             if (hashSet != null) {
-                for (long qq : hashSet) {
-                    Methods.ban(fromGroup, qq, 0);
-                }
+                Methods.ban(fromGroup, hashSet, 0);
+                sleepSet.remove(String.valueOf(fromGroup));
+                saveConfig();
             }
             return;
         }
@@ -190,28 +191,44 @@ public class BanListener {
             Autoreply.sendMessage(fromGroup, fromQQ, new Gson().toJson(sleepSet));
             return;
         }
-        long tmp = Autoreply.instence.CC.getAt(msg);
+        long targetQQ = Autoreply.instence.CC.getAt(msg);
         if (msg.startsWith("夏眠结束[CQ:at,qq=")) {
+            HashMap<Long, BanType> targetQQAndType = Autoreply.instence.banner.banMap.computeIfAbsent(fromGroup, k -> new HashMap<>());
+            BanType lastOp = targetQQAndType.computeIfAbsent(targetQQ, k -> BanType.ByUser);
+            BanType thisOp = Autoreply.instence.banner.getType(fromGroup, fromQQ);
+            if (thisOp.getPermission() - lastOp.getPermission() < 0) {
+                Autoreply.sendMessage(fromGroup, fromQQ, "你无法修改等级比你高的人进行的操作");
+                return;
+            }
+            targetQQAndType.put(targetQQ, thisOp);
             HashSet<Long> hs = sleepSet.get(String.valueOf(fromGroup));
             if (hs == null) {
                 Autoreply.sendMessage(fromGroup, fromQQ, "本群没有夏眠名单");
             } else {
-                hs.remove(tmp);
-                Methods.ban(fromGroup, tmp, 0);
+                hs.remove(targetQQ);
+                Methods.ban(fromGroup, targetQQ, 0);
             }
             saveConfig();
             return;
         }
         if (msg.startsWith("夏眠[CQ:at,qq=")) {
+            HashMap<Long, BanType> targetQQAndType = Autoreply.instence.banner.banMap.computeIfAbsent(fromGroup, k -> new HashMap<>());
+            BanType lastOp = targetQQAndType.computeIfAbsent(targetQQ, k -> BanType.ByUser);
+            BanType thisOp = Autoreply.instence.banner.getType(fromGroup, fromQQ);
+            if (thisOp.getPermission() - lastOp.getPermission() < 0) {
+                Autoreply.sendMessage(fromGroup, fromQQ, "你无法修改等级比你高的人进行的操作");
+                return;
+            }
+            targetQQAndType.put(targetQQ, thisOp);
             HashSet<Long> hs = sleepSet.get(String.valueOf(fromGroup));
             if (hs == null) {
                 hs = new HashSet<>();
-                hs.add(tmp);
+                hs.add(targetQQ);
                 sleepSet.put(String.valueOf(fromGroup), hs);
             } else {
-                hs.add(tmp);
+                hs.add(targetQQ);
             }
-            Methods.ban(fromGroup, tmp, 2592000);
+            Methods.ban(fromGroup, targetQQ, 2592000);
             saveConfig();
         }
     }
