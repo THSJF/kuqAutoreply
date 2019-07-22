@@ -56,11 +56,6 @@ public class AdminMessageProcessor {
                 sendMessage(fromGroup, 0, Autoreply.instence.liveListener.getLiveTimeCount());
                 return true;
             }
-            if (msg.startsWith("ocr")) {
-                if (Autoreply.instence.ocrManager.checkOcr(fromGroup, fromQQ, msg)) {
-                    return true;
-                }
-            }
             if (msg.equals("livesave")) {
                 Autoreply.instence.liveListener.saveNow();
                 return true;
@@ -98,7 +93,7 @@ public class AdminMessageProcessor {
                 }
             }
             if (msg.equals("大芳法 芳神复诵")) {
-                Autoreply.instence.threadPool.execute(new MoShenFuSong(fromGroup, 5));
+                Autoreply.instence.threadPool.execute(new MoShenFuSong(fromGroup, fromQQ, 6));
                 return true;
             }
             String[] strings = msg.split("\\.");

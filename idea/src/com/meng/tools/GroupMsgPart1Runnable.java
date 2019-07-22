@@ -67,6 +67,11 @@ public class GroupMsgPart1Runnable implements Runnable {
             sendMessage(fromGroup, 0, "已停用");
             return;
         }
+        if (Autoreply.instence.configManager.isAdmin(fromQQ) && msg.startsWith("ocr")) {
+            if (Autoreply.instence.ocrManager.checkOcr(fromGroup, fromQQ, msg, imageFiles)) {
+                return;
+            }
+        }
         if (Autoreply.instence.botOff.contains(fromGroup)) {
             return;
         }

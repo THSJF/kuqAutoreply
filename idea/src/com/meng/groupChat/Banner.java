@@ -6,7 +6,6 @@ import com.meng.tools.Methods;
 import com.sobte.cqp.jcq.entity.Member;
 
 import java.util.HashMap;
-import java.util.function.Function;
 
 public class Banner {
     private ConfigManager configManager;
@@ -16,7 +15,7 @@ public class Banner {
         this.configManager = configManager;
     }
 
-    public boolean checkBan(long fromQQ, long fromGroup, String msg) {
+    public boolean checkBan(long fromGroup, long fromQQ, String msg) {
         String[] strs = msg.split("\\.");
         switch (strs.length) {
             case 1:

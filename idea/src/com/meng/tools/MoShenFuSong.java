@@ -6,12 +6,14 @@ import com.meng.tools.Methods;
 import java.io.File;
 
 public class MoShenFuSong implements Runnable {
-    private long fromGroup = 0;
-    private int flag = 0;
+    private long fromGroup;
+    private long fromQQ;
+    private int flag;
 
-    public MoShenFuSong(long fromGroup, int flag) {
+    public MoShenFuSong(long fromGroup, long fromQQ, int flag) {
         this.fromGroup = fromGroup;
         this.flag = flag;
+        this.fromQQ = fromQQ;
     }
 
     @Override
@@ -44,13 +46,19 @@ public class MoShenFuSong implements Runnable {
                 }
                 break;
             case 4:
-                if (fromGroup == 822438633L) {
+                for (int i = 0; i < 24; ++i) {
+                    Autoreply.CQ.sendGroupMsg(fromGroup, Autoreply.instence.CC.image((File) Methods.rfa(files)));
+                    sleeps(100);
+                }
+                break;
+            case 5:
+                if (Autoreply.instence.configManager.isMaster(fromQQ)) {
                     for (int i = 0; i < 68; ++i) {
                         Autoreply.CQ.sendGroupMsg(fromGroup, Autoreply.instence.CC.image((File) Methods.rfa(files)));
                     }
                 }
                 break;
-            case 5:
+            case 6:
                 for (int i = 0; i < 5; ++i) {
                     Autoreply.CQ.sendGroupMsg(fromGroup, Autoreply.instence.CC.image((File) Methods.rfa(filesFFF)));
                 }

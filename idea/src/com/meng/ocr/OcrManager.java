@@ -20,18 +20,14 @@ public class OcrManager {
     public Youtu faceYoutu = new Youtu(APP_ID, SECRET_ID, SECRET_KEY, Youtu.API_YOUTU_END_POINT, USER_ID);
     public Gson gson = new Gson();
 
-    public boolean checkOcr(long fromGroup, long fromQQ, String msg) {
+    public boolean checkOcr(long fromGroup, long fromQQ, String msg, File[] imageFiles) {
         JSONObject response;
         try {
-            CQImage cqImage = Autoreply.instence.CC.getCQImage(msg);
-            File image = null;
-            if (cqImage != null) {
-                image = cqImage.download(Autoreply.appDirectory + "ocr/" + fromQQ,
-                        "ocr" + Autoreply.instence.random.nextInt() + ".png");
+            if (imageFiles[0] != null) {
+                response = faceYoutu.GeneralOcr(imageFiles[0].getAbsolutePath());
             } else {
                 return false;
             }
-            response = faceYoutu.GeneralOcr(image.getPath());
         } catch (Exception e) {
             e.printStackTrace();
             return false;

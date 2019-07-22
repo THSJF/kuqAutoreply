@@ -76,22 +76,25 @@ public class GroupMsgPart2Runnable implements Runnable {
             }
             switch (msg) {
                 case "大膜法 膜神复诵":
-                    Autoreply.instence.threadPool.execute(new MoShenFuSong(fromGroup, new Random().nextInt(4)));
+                    Autoreply.instence.threadPool.execute(new MoShenFuSong(fromGroup, fromQQ, new Random().nextInt(4)));
                     break;
                 case "大膜法 膜神复诵 Easy":
-                    Autoreply.instence.threadPool.execute(new MoShenFuSong(fromGroup, 0));
+                    Autoreply.instence.threadPool.execute(new MoShenFuSong(fromGroup, fromQQ, 0));
                     break;
                 case "大膜法 膜神复诵 Normal":
-                    Autoreply.instence.threadPool.execute(new MoShenFuSong(fromGroup, 1));
+                    Autoreply.instence.threadPool.execute(new MoShenFuSong(fromGroup, fromQQ, 1));
                     break;
                 case "大膜法 膜神复诵 Hard":
-                    Autoreply.instence.threadPool.execute(new MoShenFuSong(fromGroup, 2));
+                    Autoreply.instence.threadPool.execute(new MoShenFuSong(fromGroup, fromQQ, 2));
                     break;
                 case "大膜法 膜神复诵 Lunatic":
-                    Autoreply.instence.threadPool.execute(new MoShenFuSong(fromGroup, 3));
+                    Autoreply.instence.threadPool.execute(new MoShenFuSong(fromGroup, fromQQ, 3));
+                    break;
+                case "大膜法 膜神复诵 Overdrive":
+                    Autoreply.instence.threadPool.execute(new MoShenFuSong(fromGroup, fromQQ, 4));
                     break;
                 case "大膜法 c568连":
-                    Autoreply.instence.threadPool.execute(new MoShenFuSong(fromGroup, 4));
+                    Autoreply.instence.threadPool.execute(new MoShenFuSong(fromGroup, fromQQ, 5));
                     break;
                 default:
                     break;
@@ -110,9 +113,9 @@ public class GroupMsgPart2Runnable implements Runnable {
         if (groupConfig.isSearchPic() && Autoreply.instence.picSearchManager.check(fromGroup, fromQQ, msg, imageFiles)) {// 搜索图片
             return true;
         }
-        if (groupConfig.isKuiping() && Methods.checkLook(fromGroup, msg)) {// 窥屏检测
-            return true;
-        }
+        //   if (groupConfig.isKuiping() && Methods.checkLook(fromGroup, msg)) {// 窥屏检测
+        //       return true;
+        //    }
         if (groupConfig.isBilibiliCheck() && Autoreply.instence.biliLinkInfo.check(fromGroup, fromQQ, msg)) {// 比利比利链接详情
             return true;
         }

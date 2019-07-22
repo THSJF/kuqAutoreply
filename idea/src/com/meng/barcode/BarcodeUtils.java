@@ -39,6 +39,10 @@ public class BarcodeUtils {
         return createBarcode(text, BarcodeFormat.PDF_417, 500);
     }
 
+    public static BufferedImage createAwesome(String contents, int size, float dotScale, int colorLight, BufferedImage background) {
+        return AwesomeQRCode.create(contents, size, dotScale, colorLight, background);
+    }
+
     public static BufferedImage createBarcode(String text, BarcodeFormat format,
                                               int size) {
         try {

@@ -239,9 +239,9 @@ public class Autoreply extends JcqAppAbstract implements ICQVer, IMsg, IRequest 
             return MSG_IGNORE;
         }
         Autoreply.instence.threadPool.execute(() -> {
-            if (Methods.checkXiong(fromQQ, msg)) {
-                return;
-            }
+            //     if (Methods.checkXiong(fromQQ, msg)) {
+            //         return;
+            //      }
             if (fromQQ == 2057480282L || configManager.isMaster(fromQQ)) {
                 if (oggInterface.processOgg(fromQQ, msg)) {
                     return;
@@ -297,7 +297,7 @@ public class Autoreply extends JcqAppAbstract implements ICQVer, IMsg, IRequest 
     public int groupMsg(int subType, int msgId, long fromGroup, long fromQQ, String fromAnonymous, String msg, int font) {
         // if (fromGroup != 312342896L)
         // return MSG_IGNORE;
-        //  if (fromGroup != 1023432971L)
+        //   if (fromGroup != 1023432971L)
         //   return MSG_IGNORE;
         // if (fromGroup != 617745343L)
         // return MSG_IGNORE;

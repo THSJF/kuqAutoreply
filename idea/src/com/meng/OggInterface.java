@@ -27,7 +27,9 @@ public class OggInterface {
         }
         if (msg.startsWith("ban")) {
             String[] arr = msg.split("\\.");
-            Methods.ban(Long.parseLong(arr[1]), Long.parseLong(arr[2]), Integer.parseInt(arr[3]));
+            if (arr.length == 4) {
+                Autoreply.instence.banner.checkBan(0, fromQQ, msg);
+            }
             return true;
         }
         if (msg.startsWith("av更新时间:")) {

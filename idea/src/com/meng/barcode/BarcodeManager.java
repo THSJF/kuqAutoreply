@@ -1,5 +1,7 @@
 package com.meng.barcode;
 
+import java.awt.*;
+import java.awt.image.BufferedImage;
 import java.io.File;
 import javax.imageio.ImageIO;
 
@@ -14,7 +16,7 @@ public class BarcodeManager {
 
     public boolean check(long fromGroup, long fromQQ, String msg, File[] images) {
         try {
-            if (enc(fromGroup, fromQQ, msg)) {
+            if (enc(fromGroup, fromQQ, msg, images)) {
                 return true;
             }
             if (dec(fromGroup, fromQQ, images)) {
@@ -26,7 +28,7 @@ public class BarcodeManager {
         return false;
     }
 
-    private boolean enc(long fromGroup, long fromQQ, String msg) throws Exception {
+    private boolean enc(long fromGroup, long fromQQ, String msg, File[] imageFiles) throws Exception {
         File barcode;
         if (msg.startsWith("生成QR ")) {
             File files = new File(Autoreply.instence.createdImageFolder);
@@ -35,7 +37,25 @@ public class BarcodeManager {
             }
             barcode = new File(Autoreply.instence.createdImageFolder + Autoreply.instence.random.nextInt() + ".png");
             ImageIO.write(BarcodeUtils.createQRCode(msg.substring(5)), "png", barcode);
-        } else if (msg.startsWith("生成PDF417 ")) {
+        } else /*if (msg.startsWith("生成QR[CQ:image")) {
+            File files = new File(Autoreply.instence.createdImageFolder);
+            if (!files.exists()) {
+                files.mkdirs();
+            }
+            barcode = new File(Autoreply.instence.createdImageFolder + Autoreply.instence.random.nextInt() + ".png");
+            if (!Autoreply.instence.fileTypeUtil.getFileType(imageFiles[0]).equals("gif")) {
+                barcode = new File(Autoreply.instence.createdImageFolder + Autoreply.instence.random.nextInt() + ".png");
+                ImageIO.write(
+                        BarcodeUtils.createAwesome(
+                                msg.substring(9),
+                                500,
+                                0.3f,
+                                0xffffffff,
+                                ImageIO.read(imageFiles[0]))
+                        , "png", barcode);
+
+            }
+        } else */if (msg.startsWith("生成PDF417 ")) {
             File files = new File(Autoreply.instence.createdImageFolder);
             if (!files.exists()) {
                 files.mkdirs();
