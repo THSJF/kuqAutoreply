@@ -9,7 +9,6 @@ import com.sobte.cqp.jcq.entity.QQInfo;
 import java.util.HashSet;
 
 import static com.meng.Autoreply.sendMessage;
-import static com.meng.Autoreply.sendToMaster;
 
 public class GroupMemberChangerListener {
 
@@ -107,7 +106,7 @@ public class GroupMemberChangerListener {
                 }
             }
         });
-        sendToMaster("已将用户" + qq + "加入黑名单");
-        sendToMaster("已将群" + group + "加入黑名单");
+        Autoreply.sendMessage(1023432971, 0, "已将用户" + qq + "加入黑名单");
+        Autoreply.sendMessage(1023432971, 0, "已将群" + group + "加入黑名单");
     }
 }

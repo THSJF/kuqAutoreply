@@ -44,7 +44,7 @@ public class ZanManager {
         for (int i = 0; i < 10; i++) {
             ii = Autoreply.CQ.sendLike(l);
             if (ii != 0) {
-                Autoreply.sendToMaster("赞" + l + "失败,返回值" + ii);
+                System.out.println("赞" + l + "失败,返回值" + ii);
             }
         }
         try {

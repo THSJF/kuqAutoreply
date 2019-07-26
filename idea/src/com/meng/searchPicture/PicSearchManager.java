@@ -72,11 +72,11 @@ public class PicSearchManager {
         return false;
     }
 
-    public void sendMsg(long fromGroup, long fromQQ, String msg) {
+    public int sendMsg(long fromGroup, long fromQQ, String msg) {
         if (fromGroup == 0) {
-            Autoreply.sendMessage(0, fromQQ, msg);
+            return Autoreply.sendMessage(0, fromQQ, msg);
         } else {
-            Autoreply.sendMessage(fromGroup, 0, Autoreply.instence.CC.at(fromQQ) + msg);
+            return Autoreply.sendMessage(fromGroup, 0, Autoreply.instence.CC.at(fromQQ) + msg);
         }
     }
 }

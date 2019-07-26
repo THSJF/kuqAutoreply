@@ -190,7 +190,6 @@ public class LiveListener implements Runnable {
         // Autoreply.sendMessage(0, 2856986197L, p.getName() + "开始直播" +
         // p.roomId);
         Autoreply.sendMessage(1023432971, 0, p.name + "开始直播" + p.roomId, true);
-        Autoreply.sendToMaster(p.name + "开始直播" + p.roomId);
         ArrayList<Long> groupList = Autoreply.instence.configManager.getPersonInfoFromName(p.name).tipIn;
         for (long group : groupList) {
             Autoreply.sendMessage(group, 0, p.name + "开始直播" + p.roomId, true);
@@ -215,7 +214,7 @@ public class LiveListener implements Runnable {
         // } catch (Exception e) {
         // e.printStackTrace();
         // }
-        Autoreply.sendToMaster(p.name + "直播结束" + p.roomId);
+        Autoreply.sendMessage(1023432971, 0, p.name + "开始直播" + p.roomId, true);
         ArrayList<Long> groupList = Autoreply.instence.configManager.getPersonInfoFromName(p.name).tipIn;
         for (long group : groupList) {
             Autoreply.sendMessage(group, 0, p.name + "直播结束" + p.roomId, true);

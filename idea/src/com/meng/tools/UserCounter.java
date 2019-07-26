@@ -29,6 +29,7 @@ public class UserCounter {
         public int mengEr = 0;
         public int ban = 0;
         public int gban = 0;
+        public int time = 0;
     }
 
     public UserCounter() {
@@ -112,6 +113,11 @@ public class UserCounter {
         ++userInfo.gban;
     }
 
+    public void decLife(long qq) {
+        UserInfo userInfo = getBean(qq);
+        --userInfo.time;
+    }
+
     private UserInfo getBean(long qq) {
         UserInfo userInfo = countMap.get(String.valueOf(qq));
         if (userInfo == null) {
@@ -163,6 +169,9 @@ public class UserCounter {
         if (userInfo.gban != 0) {
             stringBuilder.append("\n").append("给大佬递口球").append(userInfo.gban).append("次");
         }
+        if (userInfo.time != 0) {
+            stringBuilder.append("\n").append("时间").append(userInfo.time).append("秒");
+        }
         return stringBuilder.toString();
 
     }
@@ -179,6 +188,7 @@ public class UserCounter {
         int speak = 0;
         int mengEr = 0;
         int ban = 0;
+        int time = 0;
         String setuq = null;
         String picq = null;
         String pohaiq = null;
@@ -190,6 +200,7 @@ public class UserCounter {
         String speakq = null;
         String mengErq = null;
         String banq = null;
+        String timeq = null;
 
         for (Entry<String, UserInfo> entry : countMap.entrySet()) {
             if (entry.getKey().equals(String.valueOf(Autoreply.CQ.getLoginQQ()))) {
@@ -240,6 +251,10 @@ public class UserCounter {
                 ban = userInfo.ban;
                 banq = entry.getKey();
             }
+            if (userInfo.time > time) {
+                time = userInfo.time;
+                timeq = entry.getKey();
+            }
         }
         StringBuilder sb = new StringBuilder();
         if (speakq != null) {
@@ -274,6 +289,9 @@ public class UserCounter {
         }
         if (banq != null) {
             sb.append("\n").append(banq).append("口球").append(ban).append("次");
+        }
+        if (timeq != null) {
+            sb.append("\n").append(timeq).append("时间").append(time).append("秒");
         }
         return sb.toString();
     }

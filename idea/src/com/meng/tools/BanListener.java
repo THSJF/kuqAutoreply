@@ -78,7 +78,7 @@ public class BanListener {
                     Autoreply.instence.groupCount.incBanCount(fromGroup);
                     String timeStr = msg.substring(msg.indexOf(keyWord) + keyWord.length());
                     if (timeStr.equals("1月")) {
-                        Autoreply.sendToMaster("在群" + fromGroup + "中" + qq + "被禁言一个月");
+                        Autoreply.sendMessage(1023432971, 0, "在群" + fromGroup + "中" + qq + "被禁言一个月", true);
                         return;
                     }
                     String[] time = timeStr.split("(天|小时)");
@@ -115,28 +115,28 @@ public class BanListener {
     }
 
     private void onAnonymousAllow(long fromGroup) {
-        Autoreply.sendToMaster(fromGroup + "允许匿名");
+        Autoreply.sendMessage(1023432971, 0, fromGroup + "允许匿名");
     }
 
     private void onAnonymousForbid(long fromGroup) {
-        Autoreply.sendToMaster(fromGroup + "禁止匿名");
+        Autoreply.sendMessage(1023432971, 0, fromGroup + "禁止匿名");
     }
 
     private void onAllBan(long fromGroup) {
-        Autoreply.sendToMaster(fromGroup + "全员禁言");
+        Autoreply.sendMessage(1023432971, 0, fromGroup + "全员禁言");
     }
 
     private void onAllRelease(long fromGroup) {
-        Autoreply.sendToMaster(fromGroup + "解除全员禁言");
+        Autoreply.sendMessage(1023432971, 0, fromGroup + "解除全员禁言");
     }
 
     private void onBan(long fromGroup, long banQQ, int minute) {
         if (banQQ == Autoreply.CQ.getLoginQQ()) {
             Autoreply.instence.configManager.getGroupConfig(fromGroup).reply = false;
-            Autoreply.sendToMaster("在群" + fromGroup + "被禁言,关闭了回复群");
+            Autoreply.sendMessage(1023432971, 0, "在群" + fromGroup + "被禁言,关闭了回复群");
             Autoreply.instence.configManager.saveConfig();
         } else {
-            Autoreply.sendToMaster("在群" + fromGroup + "中" + banQQ + "被禁言" + minute + "min");
+            Autoreply.sendMessage(1023432971, 0, "在群" + fromGroup + "中" + banQQ + "被禁言" + minute + "min");
         }
     }
 
@@ -144,7 +144,7 @@ public class BanListener {
         if (Autoreply.instence.configManager.isNotReplyGroup(fromGroup)) {
             return;
         }
-        Autoreply.sendToMaster("在群" + fromGroup + "中" + banQQ + "无罪释放");
+        Autoreply.sendMessage(1023432971, 0, "在群" + fromGroup + "中" + banQQ + "无罪释放");
         if (checkSleepMsg(fromGroup, banQQ)) {
             return;
         }
@@ -212,25 +212,23 @@ public class BanListener {
             return;
         }
         if (msg.startsWith("夏眠[CQ:at,qq=")) {
-            HashMap<Long, BanType> targetQQAndType = Autoreply.instence.banner.banMap.computeIfAbsent(fromGroup, k -> new HashMap<>());
-            BanType lastOp = targetQQAndType.computeIfAbsent(targetQQ, k -> BanType.ByUser);
-            BanType thisOp = Autoreply.instence.banner.getType(fromGroup, fromQQ);
-            if (thisOp.getPermission() - lastOp.getPermission() < 0) {
-                Autoreply.sendMessage(fromGroup, fromQQ, "你无法修改等级比你高的人进行的操作");
-                return;
-            }
-            targetQQAndType.put(targetQQ, thisOp);
-            HashSet<Long> hs = sleepSet.get(String.valueOf(fromGroup));
-            if (hs == null) {
-                hs = new HashSet<>();
-                hs.add(targetQQ);
-                sleepSet.put(String.valueOf(fromGroup), hs);
-            } else {
-                hs.add(targetQQ);
-            }
-            Methods.ban(fromGroup, targetQQ, 2592000);
-            saveConfig();
+            addSummerSleep(fromGroup, fromQQ, targetQQ);
         }
+    }
+
+    public void addSummerSleep(long fromGroup, long fromQQ, long targetQQ) {
+        HashMap<Long, BanType> targetQQAndType = Autoreply.instence.banner.banMap.computeIfAbsent(fromGroup, k -> new HashMap<>());
+        BanType lastOp = targetQQAndType.computeIfAbsent(targetQQ, k -> BanType.ByUser);
+        BanType thisOp = Autoreply.instence.banner.getType(fromGroup, fromQQ);
+        if (thisOp.getPermission() - lastOp.getPermission() < 0) {
+            Autoreply.sendMessage(fromGroup, fromQQ, "你无法修改等级比你高的人进行的操作");
+            return;
+        }
+        targetQQAndType.put(targetQQ, thisOp);
+        HashSet<Long> hs = sleepSet.computeIfAbsent(String.valueOf(fromGroup), k -> new HashSet<>());
+        hs.add(targetQQ);
+        Methods.ban(fromGroup, targetQQ, 2592000);
+        saveConfig();
     }
 
     private void saveConfig() {

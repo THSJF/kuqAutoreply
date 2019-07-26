@@ -55,7 +55,7 @@ public class OggInterface {
             sendPrivateMessage(fromQQ, data.get("live_status").getAsInt() == 1 ? "true" : "false");
             return true;
         }
-        if (Autoreply.instence.biliLinkInfo.checkOgg(fromQQ, msg)) {
+        if (Autoreply.instence.biliLinkInfo.checkOgg(0, fromQQ, msg)) {
             return true;
         }
         if (msg.startsWith("直播状态bid:")) {

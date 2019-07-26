@@ -7,6 +7,7 @@ import javax.imageio.ImageIO;
 
 import com.google.zxing.Result;
 import com.meng.Autoreply;
+import com.meng.tools.Methods;
 import com.sobte.cqp.jcq.entity.CQImage;
 
 public class BarcodeManager {
@@ -76,7 +77,15 @@ public class BarcodeManager {
         for (File barcode : imageFiles) {
             Result result = BarcodeUtils.decodeImage(barcode);
             if (result != null) {
-                Autoreply.instence.picSearchManager.sendMsg(fromGroup, fromQQ, "二维码类型:" + result.getBarcodeFormat().toString() + "\n内容:" + result.getText());
+                String barResult = result.getText();
+                if (barResult.startsWith("https://qm.qq.com/cgi-bin/qm/qr?k=")) {
+                    String html = Methods.getSourceCode(barResult);
+                    int flag = html.indexOf("var rawuin = ") + "var rawuin = ".length();
+                    String groupNum = html.substring(flag, html.indexOf(";", flag));
+                    Autoreply.instence.picSearchManager.sendMsg(fromGroup, fromQQ, "群号为:" + groupNum);
+                } else {
+                    Autoreply.instence.picSearchManager.sendMsg(fromGroup, fromQQ, "二维码类型:" + result.getBarcodeFormat().toString() + "\n内容:" + result.getText());
+                }
                 return true;
             }
         }

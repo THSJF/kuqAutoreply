@@ -131,7 +131,7 @@ public class Autoreply extends JcqAppAbstract implements ICQVer, IMsg, IRequest 
         createdImageFolder = Autoreply.appDirectory + "createdImages/";
         // 返回如：D:\CoolQ\app\com.sobte.cqp.jcq\app\com.example.demo\
         System.out.println("开始加载");
-        threadPool.execute(() -> sendToMaster("启动中"));
+        threadPool.execute(() -> Autoreply.sendMessage(1023432971, 0, "启动中"));
         long startTime = System.currentTimeMillis();
         configManager = new ConfigManager();
         groupMemberChangerListener = new GroupMemberChangerListener();
@@ -166,6 +166,7 @@ public class Autoreply extends JcqAppAbstract implements ICQVer, IMsg, IRequest 
         threadPool.execute(fileTipManager);
         threadPool.execute(timeTip);
         threadPool.execute(new checkMessageRunnable());
+        threadPool.execute(new CleanRunnable());
 
         System.out.println("加载完成,用时" + (System.currentTimeMillis() - startTime));
         return 0;
@@ -242,7 +243,7 @@ public class Autoreply extends JcqAppAbstract implements ICQVer, IMsg, IRequest 
             //     if (Methods.checkXiong(fromQQ, msg)) {
             //         return;
             //      }
-            if (fromQQ == 2057480282L || configManager.isMaster(fromQQ)) {
+            if (fromQQ == Autoreply.instence.configManager.configJavaBean.ogg || configManager.isMaster(fromQQ)) {
                 if (oggInterface.processOgg(fromQQ, msg)) {
                     return;
                 }
@@ -336,7 +337,7 @@ public class Autoreply extends JcqAppAbstract implements ICQVer, IMsg, IRequest 
         banListener.check(fromGroup, fromQQ, msg);
         useCount.incSpeak(fromQQ);
         groupCount.incSpeak(fromGroup);
-        if (msg.contains("此生无悔入东方") || msg.contains("方东入悔无生此")) {
+        if ((msg.contains("此生无悔入东方") && !msg.equals("此生无悔入东方")) || msg.contains("方东入悔无生此")) {
             useCount.incMengEr(fromQQ);
             groupCount.incMengEr(fromGroup);
         }
@@ -605,9 +606,9 @@ public class Autoreply extends JcqAppAbstract implements ICQVer, IMsg, IRequest 
         return 0;
     }
 
-    private void sendGroupMessage(long fromGroup, long fromQQ, String msg) {
+    private int sendGroupMessage(long fromGroup, long fromQQ, String msg) {
         if (!instence.enable) {
-            return;
+            return -1;
         }
         // 处理词库中为特殊消息做的标记
         Methods.setRandomPop();
@@ -615,66 +616,61 @@ public class Autoreply extends JcqAppAbstract implements ICQVer, IMsg, IRequest 
             if (msg.startsWith("red:")) {
                 msg = msg.substring(4);
                 if (dicReplyManager.check(fromGroup, fromQQ, msg)) {
-                    return;
+                    return -1;
                 }
                 messageMap.put(fromQQ, new MessageSender(fromGroup, fromQQ, msg, System.currentTimeMillis() + 999, -11, null));
-                return;
+                return -1;
             }
             String[] stri = msg.split(":");
             switch (stri[0]) {
                 case "image":
                     useCount.incSpeak(CQ.getLoginQQ());
                     groupCount.incSpeak(fromGroup);
-                    CQ.sendGroupMsg(fromGroup, stri[2].replace("--image--", instence.CC.image(new File(appDirectory + stri[1]))));
-                    break;
+                    return CQ.sendGroupMsg(fromGroup, stri[2].replace("--image--", instence.CC.image(new File(appDirectory + stri[1]))));
                 case "atFromQQ":
                     useCount.incSpeak(CQ.getLoginQQ());
                     groupCount.incSpeak(fromGroup);
-                    CQ.sendGroupMsg(fromGroup, instence.CC.at(fromQQ) + stri[1]);
-                    break;
+                    return CQ.sendGroupMsg(fromGroup, instence.CC.at(fromQQ) + stri[1]);
                 case "atQQ":
                     useCount.incSpeak(CQ.getLoginQQ());
                     groupCount.incSpeak(fromGroup);
-                    CQ.sendGroupMsg(fromGroup, instence.CC.at(Long.parseLong(stri[1])) + stri[2]);
-                    break;
+                    return CQ.sendGroupMsg(fromGroup, instence.CC.at(Long.parseLong(stri[1])) + stri[2]);
                 case "imageFolder":
                     useCount.incSpeak(CQ.getLoginQQ());
                     groupCount.incSpeak(fromGroup);
                     File[] files = (new File(appDirectory + stri[1])).listFiles();
-                    CQ.sendGroupMsg(fromGroup, stri[2].replace("--image--", instence.CC.image((File) Methods.rfa(files))));
-                    break;
+                    return CQ.sendGroupMsg(fromGroup, stri[2].replace("--image--", instence.CC.image((File) Methods.rfa(files))));
                 default:
                     useCount.incSpeak(CQ.getLoginQQ());
                     groupCount.incSpeak(fromGroup);
-                    CQ.sendGroupMsg(fromGroup, msg);
-                    break;
+                    return CQ.sendGroupMsg(fromGroup, msg);
             }
         } catch (Exception e) {
             e.printStackTrace();
         }
+        return -1;
     }
 
-    private void sendPrivateMessage(long fromQQ, String msg) {
+    private int sendPrivateMessage(long fromQQ, String msg) {
         if (!instence.enable) {
-            return;
+            return -1;
         }
         Methods.setRandomPop();
         // 处理词库中为特殊消息做的标记
         String[] stri = msg.split(":");
         switch (stri[0]) {
             case "image":
-                CQ.sendPrivateMsg(fromQQ, stri[2].replace("--image--", instence.CC.image(new File(appDirectory + stri[1]))));
-                break;
+                return CQ.sendPrivateMsg(fromQQ, stri[2].replace("--image--", instence.CC.image(new File(appDirectory + stri[1]))));
             case "imageFolder":
                 File[] files = (new File(appDirectory + stri[1])).listFiles();
                 if (files != null) {
-                    CQ.sendPrivateMsg(fromQQ, stri[2].replace("--image--", instence.CC.image((File) Methods.rfa(files))));
+                    return CQ.sendPrivateMsg(fromQQ, stri[2].replace("--image--", instence.CC.image((File) Methods.rfa(files))));
                 }
                 break;
             default:
-                CQ.sendPrivateMsg(fromQQ, msg);
-                break;
+                return CQ.sendPrivateMsg(fromQQ, msg);
         }
+        return -1;
     }
 
     public void addGroupDic() {
@@ -686,30 +682,32 @@ public class Autoreply extends JcqAppAbstract implements ICQVer, IMsg, IRequest 
         }
     }
 
-    public static void sendMessage(long fromGroup, long fromQQ, String msg) {
-        sendMessage(fromGroup, fromQQ, msg, false);
+    public static int sendMessage(long fromGroup, long fromQQ, String msg) {
+        return sendMessage(fromGroup, fromQQ, msg, false);
     }
 
-    public static void sendMessage(long fromGroup, long fromQQ, String msg, boolean isTip) {
+    public static int sendMessage(long fromGroup, long fromQQ, String msg, boolean isTip) {
+        int value = -1;
         if (fromGroup == 0 || fromGroup == -1) {
-            instence.sendPrivateMessage(fromQQ, msg);
+            value = instence.sendPrivateMessage(fromQQ, msg);
         } else {
             if (isTip) {
-                instence.sendGroupMessage(fromGroup, fromQQ, msg);
+                value = instence.sendGroupMessage(fromGroup, fromQQ, msg);
             } else {
                 if (msg.equals(lastSend) && lastSend.equals(lastSend2)) {
                     if (!tipedBreak) {
-                        instence.sendGroupMessage(fromGroup, fromQQ, "打断");
                         tipedBreak = true;
+                        value = instence.sendGroupMessage(fromGroup, fromQQ, "打断");
                     }
                 } else {
-                    instence.sendGroupMessage(fromGroup, fromQQ, msg);
                     tipedBreak = false;
+                    value = instence.sendGroupMessage(fromGroup, fromQQ, msg);
                 }
                 lastSend2 = lastSend;
                 lastSend = msg;
             }
         }
+        return value;
     }
 
     private class checkMessageRunnable implements Runnable {
@@ -742,10 +740,5 @@ public class Autoreply extends JcqAppAbstract implements ICQVer, IMsg, IRequest 
                 }
             }
         }
-    }
-
-    public static void sendToMaster(String msg) {
-        Autoreply.sendMessage(0, 2856986197L, msg, true);
-        Autoreply.sendMessage(0, 2057480282L, msg, true);
     }
 }

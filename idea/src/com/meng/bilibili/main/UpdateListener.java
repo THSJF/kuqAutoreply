@@ -84,7 +84,6 @@ public class UpdateListener implements Runnable {
 
     private void tip(String updater, String msg) {
         Autoreply.sendMessage(1023432971, 0, msg, true);
-        Autoreply.sendToMaster(msg);
         ArrayList<Long> groupList = Autoreply.instence.configManager.getPersonInfoFromBid(Long.parseLong(updater)).tipIn;
         if (groupList != null) {
             for (long group : groupList) {

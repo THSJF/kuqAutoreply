@@ -2,6 +2,7 @@ package com.meng.groupChat;
 
 
 import com.meng.Autoreply;
+import com.meng.WarnMessageProcessor;
 import com.meng.config.javabeans.GroupConfig;
 import com.meng.tools.FingerPrint;
 import com.meng.tools.Methods;
@@ -23,15 +24,20 @@ public class RepeaterBanner {
     private FingerPrint[] thisFp;
     private FingerPrint[] lastFp;
     long groupNumber = 0;
+    private WarnMessageProcessor warnMessageProcessor;
 
     public RepeaterBanner(long groupNumber) {
         this.groupNumber = groupNumber;
+        warnMessageProcessor = new WarnMessageProcessor();
     }
 
     public boolean check(long fromGroup, long fromQQ, String msg, File[] imageFiles) {
         GroupConfig groupConfig = Autoreply.instence.configManager.getGroupConfig(fromGroup);
         if (groupConfig == null) {
             return false;
+        }
+        if (warnMessageProcessor.check(fromGroup, fromQQ, msg)) {
+            return true;
         }
         boolean b = false;
         try {

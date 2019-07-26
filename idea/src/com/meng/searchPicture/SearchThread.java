@@ -7,6 +7,7 @@ import java.io.InputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
 
+import com.meng.tools.DeleteMessageRunnable;
 import org.jsoup.Connection;
 import org.jsoup.Jsoup;
 
@@ -47,7 +48,7 @@ public class SearchThread implements Runnable {
             fInputStream = new FileInputStream(picF);
             Connection.Response response = Jsoup.connect("https://saucenao.com/search.php?db=" + database).timeout(60000).data("file", "image.jpg", fInputStream).method(Connection.Method.POST).execute();
             if (response.statusCode() != 200) {
-                Autoreply.instence.picSearchManager.sendMsg(fromGroup, fromQQ, "statusCode" + response.statusCode());
+                Autoreply.instence.threadPool.execute(new DeleteMessageRunnable(Autoreply.instence.picSearchManager.sendMsg(fromGroup, fromQQ, "statusCode" + response.statusCode())));
             }
             mResults = new PicResults(Jsoup.parse(response.body()));
         } catch (Exception e) {

@@ -27,6 +27,7 @@ public class GroupCounter {
         public int setu = 0;
         public int mengEr = 0;
         public int ban = 0;
+        public int time = 0;
     }
 
     public GroupCounter() {
@@ -99,6 +100,12 @@ public class GroupCounter {
         ++groupInfo.ban;
     }
 
+    public void decLife(long qq) {
+        GroupInfo groupInfo = getBean(qq);
+        --groupInfo.time;
+    }
+
+
     private GroupInfo getBean(long qq) {
         GroupInfo groupInfo = countMap.get(String.valueOf(qq));
         if (groupInfo == null) {
@@ -142,6 +149,9 @@ public class GroupCounter {
         if (groupInfo.ban != 0) {
             stringBuilder.append("\n").append("口球").append(groupInfo.ban).append("次");
         }
+        if (groupInfo.time != 0) {
+            stringBuilder.append("\n").append("时间").append(groupInfo.time).append("秒");
+        }
         return stringBuilder.toString();
 
     }
@@ -157,6 +167,7 @@ public class GroupCounter {
         int speak = 0;
         int mengEr = 0;
         int ban = 0;
+        int time = 0;
         String setuq = null;
         String picq = null;
         String pohaiq = null;
@@ -167,6 +178,7 @@ public class GroupCounter {
         String speakq = null;
         String mengErq = null;
         String banq = null;
+        String timeq = null;
 
         for (Entry<String, GroupInfo> entry : countMap.entrySet()) {
             if (entry.getKey().equals(String.valueOf(Autoreply.CQ.getLoginQQ()))) {
@@ -213,6 +225,10 @@ public class GroupCounter {
                 ban = groupInfo.ban;
                 banq = entry.getKey();
             }
+            if (groupInfo.time > time) {
+                time = groupInfo.time;
+                timeq = entry.getKey();
+            }
         }
         StringBuilder sb = new StringBuilder();
         if (speakq != null) {
@@ -244,6 +260,9 @@ public class GroupCounter {
         }
         if (banq != null) {
             sb.append("\n").append(banq).append("口球").append(ban).append("次");
+        }
+        if (timeq != null) {
+            sb.append("\n").append(timeq).append("时间").append(time).append("秒");
         }
         return sb.toString();
     }

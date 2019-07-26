@@ -3,6 +3,7 @@ package com.meng;
 import com.meng.config.javabeans.GroupConfig;
 import com.meng.tools.Methods;
 import com.meng.tools.MoShenFuSong;
+import com.meng.tools.UserCounter;
 import com.sobte.cqp.jcq.entity.CQImage;
 
 import java.io.File;
@@ -107,6 +108,9 @@ public class GroupMsgPart2Runnable implements Runnable {
         if (groupConfig.isSetu() && Methods.isSetu(fromGroup, fromQQ, msg)) {
             return true;
         }
+        if (groupConfig.isNvZhuang() && Methods.isNvZhuang(fromGroup, fromQQ, msg)) {
+            return true;
+        }
         if (groupConfig.isBarcode() && Autoreply.instence.barcodeManager.check(fromGroup, fromQQ, msg, imageFiles)) {// 二维码
             return true;
         }
@@ -126,9 +130,13 @@ public class GroupMsgPart2Runnable implements Runnable {
             return true;
         }
         if (Methods.checkGou(fromGroup, msg)) {// 苟
+            Autoreply.instence.useCount.decLife(fromQQ);
+            Autoreply.instence.groupCount.decLife(fromGroup);
             return true;
         }
         if (Methods.checkMeng2(fromGroup, msg)) {// 萌2
+            Autoreply.instence.useCount.incMengEr(fromQQ);
+            Autoreply.instence.groupCount.decLife(fromGroup);
             return true;
         }
         if (groupConfig.isCuigeng() && Autoreply.instence.updateManager.check(fromGroup, msg)) {

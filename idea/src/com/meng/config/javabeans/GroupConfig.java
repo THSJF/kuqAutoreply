@@ -71,7 +71,7 @@ public class GroupConfig extends Object {
         return booleans.get(11);
     }
 
-    public boolean isZan() {
+    public boolean isNvZhuang() {
         return booleans.get(12);
     }
 

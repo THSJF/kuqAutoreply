@@ -65,9 +65,9 @@ public class Methods {
             Autoreply.instence.useCount.incGbanCount(Autoreply.CQ.getLoginQQ());
             return true;
         } else {
-            Member ogg = Autoreply.CQ.getGroupMemberInfoV2(fromGroup, 2057480282L);
+            Member ogg = Autoreply.CQ.getGroupMemberInfoV2(fromGroup, Autoreply.instence.configManager.configJavaBean.ogg);
             if (ogg != null && ogg.getAuthority() - ban.getAuthority() > 0) {
-                Autoreply.sendToMaster("#mutegroupuser " + fromGroup + " " + (time / 60) + " " + banQQ);
+                Autoreply.sendMessage(1023432971, 0, "#mutegroupuser " + fromGroup + " " + (time / 60) + " " + banQQ);
                 Autoreply.instence.useCount.incGbanCount(Autoreply.CQ.getLoginQQ());
                 return true;
             }
@@ -86,7 +86,7 @@ public class Methods {
 
     public static void ban(long fromGroup, long[] banQQs, int time) {
         Member me = Autoreply.CQ.getGroupMemberInfoV2(fromGroup, Autoreply.CQ.getLoginQQ());
-        Member ogg = Autoreply.CQ.getGroupMemberInfoV2(fromGroup, 2057480282L);
+        Member ogg = Autoreply.CQ.getGroupMemberInfoV2(fromGroup, Autoreply.instence.configManager.configJavaBean.ogg);
         StringBuilder banqqs = new StringBuilder("");
         for (long banQQ : banQQs) {
             if (banQQ == 2558395159L) {
@@ -102,7 +102,7 @@ public class Methods {
             }
         }
         if (!banqqs.toString().equals("")) {
-            Autoreply.sendToMaster("#mutegroupuser " + fromGroup + " " + (time / 60) + banqqs.toString());
+            Autoreply.sendMessage(1023432971, 0, "#mutegroupuser " + fromGroup + " " + (time / 60) + banqqs.toString());
         }
     }
 
@@ -143,7 +143,7 @@ public class Methods {
             }
             File[] files = (new File(Autoreply.appDirectory + "pohai/" + msg.replace("迫害图", ""))).listFiles();
             if (files != null && files.length > 0) {
-                Autoreply.sendMessage(fromGroup, fromQQ, Autoreply.instence.CC.image((File) Methods.rfa(files)));
+                Autoreply.instence.threadPool.execute(new DeleteMessageRunnable(Autoreply.sendMessage(fromGroup, fromQQ, Autoreply.instence.CC.image((File) Methods.rfa(files)))));
                 Autoreply.instence.useCount.incPohaitu(fromQQ);
                 Autoreply.instence.groupCount.incPohaitu(fromGroup);
                 Autoreply.instence.useCount.incPohaitu(Autoreply.CQ.getLoginQQ());
@@ -167,17 +167,39 @@ public class Methods {
             File[] files = (new File(Autoreply.appDirectory + "setu/")).listFiles();
             File folder = (File) rfa(files);
             File[] pics = folder.listFiles();
-            Autoreply.sendMessage(fromGroup, fromQQ, Autoreply.instence.CC.image((File) Methods.rfa(pics)));
+            Autoreply.instence.threadPool.execute(new DeleteMessageRunnable(Autoreply.sendMessage(fromGroup, fromQQ, Autoreply.instence.CC.image((File) Methods.rfa(pics)))));
             Autoreply.instence.useCount.incSetu(fromQQ);
             Autoreply.instence.groupCount.incSetu(fromGroup);
             Autoreply.instence.useCount.incSetu(Autoreply.CQ.getLoginQQ());
         } else if (msg.endsWith("色图")) {
             File[] files = (new File(Autoreply.appDirectory + "setu/" + msg.replace("色图", ""))).listFiles();
             if (files != null && files.length > 0) {
-                Autoreply.sendMessage(fromGroup, fromQQ, Autoreply.instence.CC.image((File) Methods.rfa(files)));
+                Autoreply.instence.threadPool.execute(new DeleteMessageRunnable(Autoreply.sendMessage(fromGroup, fromQQ, Autoreply.instence.CC.image((File) Methods.rfa(files)))));
                 Autoreply.instence.useCount.incSetu(fromQQ);
                 Autoreply.instence.groupCount.incSetu(fromGroup);
                 Autoreply.instence.useCount.incSetu(Autoreply.CQ.getLoginQQ());
+            }
+            return true;
+        }
+        return false;
+    }
+
+    public static boolean isNvZhuang(long fromGroup, long fromQQ, String msg) {
+        if (msg.equals("随机女装")) {
+            File[] files = (new File(Autoreply.appDirectory + "nvzhuang/")).listFiles();
+            File folder = (File) rfa(files);
+            File[] pics = folder.listFiles();
+            Autoreply.instence.useCount.incSetu(fromQQ);
+            Autoreply.instence.groupCount.incSetu(fromGroup);
+            Autoreply.instence.useCount.incSetu(Autoreply.CQ.getLoginQQ());
+            Autoreply.instence.threadPool.execute(new DeleteMessageRunnable(Autoreply.sendMessage(fromGroup, fromQQ, Autoreply.instence.CC.image((File) Methods.rfa(pics)))));
+        } else if (msg.endsWith("女装")) {
+            File[] files = (new File(Autoreply.appDirectory + "nvzhuang/" + msg.replace("女装", ""))).listFiles();
+            if (files != null && files.length > 0) {
+                Autoreply.instence.useCount.incSetu(fromQQ);
+                Autoreply.instence.groupCount.incSetu(fromGroup);
+                Autoreply.instence.useCount.incSetu(Autoreply.CQ.getLoginQQ());
+                Autoreply.instence.threadPool.execute(new DeleteMessageRunnable(Autoreply.sendMessage(fromGroup, fromQQ, Autoreply.instence.CC.image((File) Methods.rfa(files)))));
             }
             return true;
         }
@@ -192,6 +214,9 @@ public class Methods {
 
     // 有@的时候
     public static boolean checkAt(long fromGroup, long fromQQ, String msg) {
+        if (msg.contains("#") || msg.contains("﹟")) {
+            return false;
+        }
         if (Autoreply.instence.CC.getAt(msg) == Autoreply.CQ.getLoginQQ()) {
             if (msg.startsWith("精神支柱[CQ:at")) {
                 new JingShenZhiZhuQQManager(fromGroup, fromQQ, Autoreply.instence.CC.at(fromQQ));
@@ -205,7 +230,7 @@ public class Methods {
             if (msg.contains("蓝") || msg.contains("藍") || msg.contains("赠送")) {
                 return true;
             }
-            if (fromQQ == 2558395159L || fromQQ == 2057480282L) {
+            if (fromQQ == 2558395159L || fromQQ == Autoreply.instence.configManager.configJavaBean.ogg) {
                 return true;
             }
             Autoreply.sendMessage(fromGroup, 0, msg.replace("[CQ:at,qq=" + Autoreply.CQ.getLoginQQ() + "]", "[CQ:at,qq=" + fromQQ + "]"));
@@ -261,7 +286,7 @@ public class Methods {
 
     // 暴力行为
     public static boolean checkGou(long fromGroup, String msg) {
-        if (msg.equals("苟") || msg.equals("苟？") || msg.equals("苟?")) {
+        if (msg.equals("苟") || msg.equals("苟？") || msg.equals("苟?") || msg.equals("苟...") || msg.startsWith("苟…")) {
             motmp = "利";
             Autoreply.sendMessage(fromGroup, 0, "利");
             return true;
