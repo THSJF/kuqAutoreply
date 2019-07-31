@@ -230,7 +230,7 @@ public class Methods {
             if (msg.contains("蓝") || msg.contains("藍") || msg.contains("赠送")) {
                 return true;
             }
-            if (fromQQ == 2558395159L || fromQQ == Autoreply.instence.configManager.configJavaBean.ogg) {
+            if (fromQQ == 2558395159L || fromQQ == 1281911569L || fromQQ == Autoreply.instence.configManager.configJavaBean.ogg) {
                 return true;
             }
             Autoreply.sendMessage(fromGroup, 0, msg.replace("[CQ:at,qq=" + Autoreply.CQ.getLoginQQ() + "]", "[CQ:at,qq=" + fromQQ + "]"));

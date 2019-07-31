@@ -214,7 +214,7 @@ public class LiveListener implements Runnable {
         // } catch (Exception e) {
         // e.printStackTrace();
         // }
-        Autoreply.sendMessage(1023432971, 0, p.name + "开始直播" + p.roomId, true);
+        Autoreply.sendMessage(1023432971, 0, p.name + "直播结束" + p.roomId, true);
         ArrayList<Long> groupList = Autoreply.instence.configManager.getPersonInfoFromName(p.name).tipIn;
         for (long group : groupList) {
             Autoreply.sendMessage(group, 0, p.name + "直播结束" + p.roomId, true);

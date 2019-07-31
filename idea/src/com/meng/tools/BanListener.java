@@ -136,7 +136,7 @@ public class BanListener {
             Autoreply.sendMessage(1023432971, 0, "在群" + fromGroup + "被禁言,关闭了回复群");
             Autoreply.instence.configManager.saveConfig();
         } else {
-            Autoreply.sendMessage(1023432971, 0, "在群" + fromGroup + "中" + banQQ + "被禁言" + minute + "min");
+      //      Autoreply.sendMessage(1023432971, 0, "在群" + fromGroup + "中" + banQQ + "被禁言" + minute + "min");
         }
     }
 
@@ -144,11 +144,11 @@ public class BanListener {
         if (Autoreply.instence.configManager.isNotReplyGroup(fromGroup)) {
             return;
         }
-        Autoreply.sendMessage(1023432971, 0, "在群" + fromGroup + "中" + banQQ + "无罪释放");
+    //    Autoreply.sendMessage(1023432971, 0, "在群" + fromGroup + "中" + banQQ + "无罪释放");
         if (checkSleepMsg(fromGroup, banQQ)) {
             return;
         }
-        Autoreply.sendMessage(fromGroup, banQQ, "恭喜出狱");
+   //     Autoreply.sendMessage(fromGroup, banQQ, "恭喜出狱");
     }
 
     public boolean checkSleepMsg(long fromGroup, long fromQQ) {

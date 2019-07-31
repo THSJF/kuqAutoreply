@@ -56,13 +56,14 @@ public class GroupMsgPart1Runnable implements Runnable {
         if (Autoreply.instence.fph.check(fromQQ, fromGroup, msg, msgId, imageFiles)) {
             return;
         }
-        if (msg.equals(".on")) {
+        if (msg.equals(".on") && (Autoreply.CQ.getGroupMemberInfoV2(fromGroup, fromQQ).getAuthority() > 1 || Autoreply.instence.configManager.isAdmin(fromQQ))) {
             if (Autoreply.instence.botOff.contains(fromGroup)) {
                 Autoreply.instence.botOff.remove(fromGroup);
                 sendMessage(fromGroup, 0, "已启用");
                 return;
             }
-        } else if (msg.equals(".off")) {
+        }
+        if (msg.equals(".off") && (Autoreply.CQ.getGroupMemberInfoV2(fromGroup, fromQQ).getAuthority() > 1 || Autoreply.instence.configManager.isAdmin(fromQQ))) {
             Autoreply.instence.botOff.add(fromGroup);
             sendMessage(fromGroup, 0, "已停用");
             return;
@@ -71,6 +72,10 @@ public class GroupMsgPart1Runnable implements Runnable {
             if (Autoreply.instence.ocrManager.checkOcr(fromGroup, fromQQ, msg, imageFiles)) {
                 return;
             }
+        }
+        if (msg.equals("权限检查")) {
+            Autoreply.sendMessage(fromGroup, fromQQ, String.valueOf(Autoreply.CQ.getGroupMemberInfoV2(fromGroup, fromQQ).getAuthority()));
+            return;
         }
         if (Autoreply.instence.botOff.contains(fromGroup)) {
             return;

@@ -58,7 +58,6 @@ public class WarnMessageProcessor {
         }
         lastMsg = msg;
         lastSender = fromQQ;
-        System.out.println("result " + b);
         return b;
     }
 
@@ -79,7 +78,7 @@ public class WarnMessageProcessor {
 
     private boolean isAtme(String msg) {
         List<Long> list = Autoreply.instence.CC.getAts(msg);
-        long me = 1620628713L;
+        long me = Autoreply.CQ.getLoginQQ();
         for (long l : list) {
             if (l == me) {
                 return true;

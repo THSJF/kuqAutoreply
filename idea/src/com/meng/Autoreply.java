@@ -331,6 +331,31 @@ public class Autoreply extends JcqAppAbstract implements ICQVer, IMsg, IRequest 
                 sendMessage(fromGroup, fromQQ, "嘘 别说话");
             }
         }
+
+        if (msg.equals(".admin enable") && Autoreply.instence.configManager.isAdmin(fromQQ)) {
+            GroupConfig groupConfig = Autoreply.instence.configManager.getGroupConfig(fromGroup);
+            if (groupConfig == null) {
+                Autoreply.sendMessage(fromGroup, fromQQ, "本群没有默认配置");
+                return MSG_IGNORE;
+            }
+            groupConfig.reply = true;
+            Autoreply.sendMessage(fromGroup, fromQQ, "已由admin启用");
+            Autoreply.instence.configManager.saveConfig();
+            return MSG_IGNORE;
+        }
+
+        if (msg.equals(".admin disable") && Autoreply.instence.configManager.isAdmin(fromQQ)) {
+            GroupConfig groupConfig = Autoreply.instence.configManager.getGroupConfig(fromGroup);
+            if (groupConfig == null) {
+                Autoreply.sendMessage(fromGroup, fromQQ, "本群没有默认配置");
+                return MSG_IGNORE;
+            }
+            groupConfig.reply = false;
+            Autoreply.sendMessage(fromGroup, fromQQ, "已由admin停用");
+            Autoreply.instence.configManager.saveConfig();
+            return MSG_IGNORE;
+        }
+
         if (configManager.isNotReplyQQ(fromQQ)) {
             return MSG_IGNORE;
         }
@@ -340,6 +365,10 @@ public class Autoreply extends JcqAppAbstract implements ICQVer, IMsg, IRequest 
         if ((msg.contains("此生无悔入东方") && !msg.equals("此生无悔入东方")) || msg.contains("方东入悔无生此")) {
             useCount.incMengEr(fromQQ);
             groupCount.incMengEr(fromGroup);
+        }
+        if (msg.contains("艹") || msg.contains("草")) {
+            useCount.incGrass(fromQQ);
+            groupCount.incGrass(fromGroup);
         }
         if (configManager.isNotReplyWord(msg)) {
             return MSG_IGNORE;
@@ -555,7 +584,7 @@ public class Autoreply extends JcqAppAbstract implements ICQVer, IMsg, IRequest 
             PersonInfo personInfo = configManager.getPersonInfoFromQQ(fromQQ);
             if (personInfo != null) {
                 CQ.setGroupAddRequest(responseFlag, REQUEST_GROUP_ADD, REQUEST_ADOPT, null);
-                sendMessage(fromGroup, 0, "欢迎" + personInfo.name);
+                //        sendMessage(fromGroup, 0, "欢迎" + personInfo.name);
             } else if (configManager.isGroupAutoAllow(fromQQ)) {
                 CQ.setGroupAddRequest(responseFlag, REQUEST_GROUP_ADD, REQUEST_ADOPT, null);
                 sendMessage(fromGroup, 0, "此账号在自动允许列表中，已同意进群");

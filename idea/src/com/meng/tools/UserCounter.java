@@ -30,6 +30,7 @@ public class UserCounter {
         public int ban = 0;
         public int gban = 0;
         public int time = 0;
+        public int grass = 0;
     }
 
     public UserCounter() {
@@ -118,6 +119,11 @@ public class UserCounter {
         --userInfo.time;
     }
 
+    public void incGrass(long qq) {
+        UserInfo userInfo = getBean(qq);
+        ++userInfo.grass;
+    }
+
     private UserInfo getBean(long qq) {
         UserInfo userInfo = countMap.get(String.valueOf(qq));
         if (userInfo == null) {
@@ -172,6 +178,9 @@ public class UserCounter {
         if (userInfo.time != 0) {
             stringBuilder.append("\n").append("时间").append(userInfo.time).append("秒");
         }
+        if (userInfo.grass != 0) {
+            stringBuilder.append("\n").append("为绿化贡献").append(userInfo.grass).append("棵草");
+        }
         return stringBuilder.toString();
 
     }
@@ -189,6 +198,7 @@ public class UserCounter {
         int mengEr = 0;
         int ban = 0;
         int time = 0;
+        int grass = 0;
         String setuq = null;
         String picq = null;
         String pohaiq = null;
@@ -201,6 +211,7 @@ public class UserCounter {
         String mengErq = null;
         String banq = null;
         String timeq = null;
+        String grassq = null;
 
         for (Entry<String, UserInfo> entry : countMap.entrySet()) {
             if (entry.getKey().equals(String.valueOf(Autoreply.CQ.getLoginQQ()))) {
@@ -251,9 +262,13 @@ public class UserCounter {
                 ban = userInfo.ban;
                 banq = entry.getKey();
             }
-            if (userInfo.time > time) {
+            if (userInfo.time < time) {
                 time = userInfo.time;
                 timeq = entry.getKey();
+            }
+            if (userInfo.grass > grass) {
+                grass = userInfo.grass;
+                grassq = entry.getKey();
             }
         }
         StringBuilder sb = new StringBuilder();
@@ -292,6 +307,9 @@ public class UserCounter {
         }
         if (timeq != null) {
             sb.append("\n").append(timeq).append("时间").append(time).append("秒");
+        }
+        if (grassq != null) {
+            sb.append("\n").append(grassq).append("为绿化贡献").append(grass).append("棵草");
         }
         return sb.toString();
     }

@@ -43,8 +43,8 @@ public class AdminMessageProcessor {
             }
             if (msg.startsWith("ban")) {
                 String[] arr = msg.split("\\.");
-                if (arr.length == 4) {
-                    Autoreply.instence.banner.checkBan(0, fromQQ, msg);
+                if (arr.length == 3 || arr.length == 4) {
+                    Autoreply.instence.banner.checkBan(fromGroup, fromQQ, msg);
                 }
                 return true;
             }
@@ -71,7 +71,7 @@ public class AdminMessageProcessor {
                 Autoreply.sendMessage(fromGroup, fromQQ, data.get("live_status").getAsInt() == 1 ? "true" : "false");
                 return true;
             }
-            if (Autoreply.instence.biliLinkInfo.checkOgg(fromGroup,fromQQ, msg)) {
+            if (Autoreply.instence.biliLinkInfo.checkOgg(fromGroup, fromQQ, msg)) {
                 return true;
             }
             if (msg.startsWith("直播状态bid:")) {

@@ -28,6 +28,7 @@ public class GroupCounter {
         public int mengEr = 0;
         public int ban = 0;
         public int time = 0;
+        public int grass = 0;
     }
 
     public GroupCounter() {
@@ -105,6 +106,10 @@ public class GroupCounter {
         --groupInfo.time;
     }
 
+    public void incGrass(long qq) {
+        GroupInfo groupInfo = getBean(qq);
+        ++groupInfo.grass;
+    }
 
     private GroupInfo getBean(long qq) {
         GroupInfo groupInfo = countMap.get(String.valueOf(qq));
@@ -152,6 +157,9 @@ public class GroupCounter {
         if (groupInfo.time != 0) {
             stringBuilder.append("\n").append("时间").append(groupInfo.time).append("秒");
         }
+        if (groupInfo.grass != 0) {
+            stringBuilder.append("\n").append("为绿化贡献").append(groupInfo.grass).append("棵草");
+        }
         return stringBuilder.toString();
 
     }
@@ -168,6 +176,7 @@ public class GroupCounter {
         int mengEr = 0;
         int ban = 0;
         int time = 0;
+        int grass = 0;
         String setuq = null;
         String picq = null;
         String pohaiq = null;
@@ -179,11 +188,9 @@ public class GroupCounter {
         String mengErq = null;
         String banq = null;
         String timeq = null;
+        String grassq = null;
 
         for (Entry<String, GroupInfo> entry : countMap.entrySet()) {
-            if (entry.getKey().equals(String.valueOf(Autoreply.CQ.getLoginQQ()))) {
-                continue;
-            }
             GroupInfo groupInfo = entry.getValue();
             if (groupInfo.speak > speak) {
                 speak = groupInfo.speak;
@@ -225,9 +232,13 @@ public class GroupCounter {
                 ban = groupInfo.ban;
                 banq = entry.getKey();
             }
-            if (groupInfo.time > time) {
+            if (groupInfo.time < time) {
                 time = groupInfo.time;
                 timeq = entry.getKey();
+            }
+            if (groupInfo.grass > grass) {
+                grass = groupInfo.grass;
+                grassq = entry.getKey();
             }
         }
         StringBuilder sb = new StringBuilder();
@@ -235,7 +246,7 @@ public class GroupCounter {
             sb.append(speakq).append("水群").append(speak).append("句");
         }
         if (picq != null) {
-            sb.append("\n").append(picq).append("发图").append(pic).append("次");
+            sb.append("\n").append(picq).append("发图").append(pic).append("张");
         }
         if (setuq != null) {
             sb.append("\n").append(setuq).append("色图").append(setu).append("次");
@@ -263,6 +274,9 @@ public class GroupCounter {
         }
         if (timeq != null) {
             sb.append("\n").append(timeq).append("时间").append(time).append("秒");
+        }
+        if (grassq != null) {
+            sb.append("\n").append(grassq).append("为绿化贡献").append(grass).append("棵草");
         }
         return sb.toString();
     }
