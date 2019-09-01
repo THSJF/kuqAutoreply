@@ -6,7 +6,6 @@ import com.meng.tools.Methods;
 import com.sobte.cqp.jcq.entity.Member;
 
 import java.util.HashMap;
-import java.util.function.Function;
 
 public class Banner {
     private ConfigManager configManager;
@@ -67,18 +66,8 @@ public class Banner {
                         time = 2592000;
                         e.printStackTrace();
                     }
-                    HashMap<Long, BanType> targetQQAndType = banMap.computeIfAbsent(fromGroup, new Function<Long, HashMap<Long, BanType>>() {
-                        @Override
-                        public HashMap<Long, BanType> apply(Long k) {
-                            return new HashMap<>();
-                        }
-                    });
-                    BanType lastOp = targetQQAndType.computeIfAbsent(targetQQ, new Function<Long, BanType>() {
-                        @Override
-                        public BanType apply(Long k) {
-                            return BanType.ByUser;
-                        }
-                    });
+                    HashMap<Long, BanType> targetQQAndType = banMap.computeIfAbsent(fromGroup, k -> new HashMap<>());
+                    BanType lastOp = targetQQAndType.computeIfAbsent(targetQQ, k -> BanType.ByUser);
                     BanType thisOp = getType(fromGroup, fromQQ);
                     if (thisOp.getPermission() - lastOp.getPermission() < 0) {
                         Autoreply.sendMessage(fromGroup, fromQQ, "你无法修改等级比你高的人进行的操作");
@@ -122,18 +111,8 @@ public class Banner {
                         targetQQ = fromQQ;
                         time = 2592000;
                     }
-                    HashMap<Long, BanType> targetQQAndType = banMap.computeIfAbsent(fromGroup, new Function<Long, HashMap<Long, BanType>>() {
-                        @Override
-                        public HashMap<Long, BanType> apply(Long k) {
-                            return new HashMap<>();
-                        }
-                    });
-                    BanType lastOp = targetQQAndType.computeIfAbsent(targetQQ, new Function<Long, BanType>() {
-                        @Override
-                        public BanType apply(Long k) {
-                            return BanType.ByUser;
-                        }
-                    });
+                    HashMap<Long, BanType> targetQQAndType = banMap.computeIfAbsent(fromGroup, k -> new HashMap<>());
+                    BanType lastOp = targetQQAndType.computeIfAbsent(targetQQ, k -> BanType.ByUser);
                     BanType thisOp = getType(fromGroup, fromQQ);
                     if (thisOp.getPermission() - lastOp.getPermission() < 0) {
                         Autoreply.sendMessage(fromGroup, fromQQ, "你无法修改等级比你高的人进行的操作");

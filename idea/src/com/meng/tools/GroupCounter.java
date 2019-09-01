@@ -47,18 +47,8 @@ public class GroupCounter {
         Type type = new TypeToken<HashMap<String, GroupInfo>>() {
         }.getType();
         countMap = new Gson().fromJson(Methods.readFileToString(file.getAbsolutePath()), type);
-        Autoreply.instence.threadPool.execute(new Runnable() {
-            @Override
-            public void run() {
-                saveData();
-            }
-        });
-        Autoreply.instence.threadPool.execute(new Runnable() {
-            @Override
-            public void run() {
-                backupData();
-            }
-        });
+        Autoreply.instence.threadPool.execute(this::saveData);
+        Autoreply.instence.threadPool.execute(this::backupData);
     }
 
     public void incSpeak(long qq) {

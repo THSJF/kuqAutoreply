@@ -16,7 +16,6 @@ import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
-import java.util.function.Function;
 
 public class BanListener {
 
@@ -32,18 +31,15 @@ public class BanListener {
         Type type = new TypeToken<HashMap<String, HashSet<Long>>>() {
         }.getType();
         sleepSet = new Gson().fromJson(Methods.readFileToString(configPath), type);
-        Autoreply.instence.threadPool.execute(new Runnable() {
-            @Override
-            public void run() {
-                while (true) {
-                    try {
-                        Thread.sleep(2592000000L);
-                    } catch (InterruptedException e) {
-                        e.printStackTrace();
-                    }
-                    for (Map.Entry<String, HashSet<Long>> entry : sleepSet.entrySet()) {
-                        Methods.ban(Long.parseLong(entry.getKey()), entry.getValue(), 2592000);
-                    }
+        Autoreply.instence.threadPool.execute(() -> {
+            while (true) {
+                try {
+                    Thread.sleep(2592000000L);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+                for (Map.Entry<String, HashSet<Long>> entry : sleepSet.entrySet()) {
+                    Methods.ban(Long.parseLong(entry.getKey()), entry.getValue(), 2592000);
                 }
             }
         });
@@ -197,18 +193,8 @@ public class BanListener {
         }
         long targetQQ = Autoreply.instence.CC.getAt(msg);
         if (msg.startsWith("夏眠结束[CQ:at,qq=")) {
-            HashMap<Long, BanType> targetQQAndType = Autoreply.instence.banner.banMap.computeIfAbsent(fromGroup, new Function<Long, HashMap<Long, BanType>>() {
-                @Override
-                public HashMap<Long, BanType> apply(Long k) {
-                    return new HashMap<>();
-                }
-            });
-            BanType lastOp = targetQQAndType.computeIfAbsent(targetQQ, new Function<Long, BanType>() {
-                @Override
-                public BanType apply(Long k) {
-                    return BanType.ByUser;
-                }
-            });
+            HashMap<Long, BanType> targetQQAndType = Autoreply.instence.banner.banMap.computeIfAbsent(fromGroup, k -> new HashMap<>());
+            BanType lastOp = targetQQAndType.computeIfAbsent(targetQQ, k -> BanType.ByUser);
             BanType thisOp = Autoreply.instence.banner.getType(fromGroup, fromQQ);
             if (thisOp.getPermission() - lastOp.getPermission() < 0) {
                 Autoreply.sendMessage(fromGroup, fromQQ, "你无法修改等级比你高的人进行的操作");
@@ -231,30 +217,15 @@ public class BanListener {
     }
 
     public void addSummerSleep(long fromGroup, long fromQQ, long targetQQ) {
-        HashMap<Long, BanType> targetQQAndType = Autoreply.instence.banner.banMap.computeIfAbsent(fromGroup, new Function<Long, HashMap<Long, BanType>>() {
-            @Override
-            public HashMap<Long, BanType> apply(Long k) {
-                return new HashMap<>();
-            }
-        });
-        BanType lastOp = targetQQAndType.computeIfAbsent(targetQQ, new Function<Long, BanType>() {
-            @Override
-            public BanType apply(Long k) {
-                return BanType.ByUser;
-            }
-        });
+        HashMap<Long, BanType> targetQQAndType = Autoreply.instence.banner.banMap.computeIfAbsent(fromGroup, k -> new HashMap<>());
+        BanType lastOp = targetQQAndType.computeIfAbsent(targetQQ, k -> BanType.ByUser);
         BanType thisOp = Autoreply.instence.banner.getType(fromGroup, fromQQ);
         if (thisOp.getPermission() - lastOp.getPermission() < 0) {
             Autoreply.sendMessage(fromGroup, fromQQ, "你无法修改等级比你高的人进行的操作");
             return;
         }
         targetQQAndType.put(targetQQ, thisOp);
-        HashSet<Long> hs = sleepSet.computeIfAbsent(String.valueOf(fromGroup), new Function<String, HashSet<Long>>() {
-            @Override
-            public HashSet<Long> apply(String k) {
-                return new HashSet<>();
-            }
-        });
+        HashSet<Long> hs = sleepSet.computeIfAbsent(String.valueOf(fromGroup), k -> new HashSet<>());
         hs.add(targetQQ);
         Methods.ban(fromGroup, targetQQ, 2592000);
         saveConfig();

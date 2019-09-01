@@ -36,23 +36,20 @@ public class TimeTip implements Runnable {
                 tipedAlice = false;
                 //		tipedDaiYuQun = false;
                 if (c.get(Calendar.HOUR_OF_DAY) == 23) {
-                    Autoreply.instence.threadPool.execute(new Runnable() {
-                        @Override
-                        public void run() {
-                            for (GroupConfig groupConfig : Autoreply.instence.configManager.configJavaBean.groupConfigs) {
-                                if (groupConfig.reply) {
-                                    if (Autoreply.sendMessage(groupConfig.groupNumber, 0, "少女休息中...", true) < 0) {
-                                        continue;
-                                    }
-                                    try {
-                                        Thread.sleep(1000);
-                                    } catch (InterruptedException e) {
-                                        e.printStackTrace();
-                                    }
+                    Autoreply.instence.threadPool.execute(() -> {
+                        for (GroupConfig groupConfig : Autoreply.instence.configManager.configJavaBean.groupConfigs) {
+                            if (groupConfig.reply) {
+                                if (Autoreply.sendMessage(groupConfig.groupNumber, 0, "少女休息中...", true) < 0) {
+                                    continue;
+                                }
+                                try {
+                                    Thread.sleep(1000);
+                                } catch (InterruptedException e) {
+                                    e.printStackTrace();
                                 }
                             }
-                            Autoreply.sleeping = true;
                         }
+                        Autoreply.sleeping = true;
                     });
                 }
                 if (c.get(Calendar.HOUR_OF_DAY) == 6) {

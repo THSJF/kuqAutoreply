@@ -10,18 +10,8 @@ public class TimeTipManager implements Runnable {
     private HashSet<TimeTipItem> hashSet = new HashSet<>();
 
     public TimeTipManager() {
-        hashSet.add(new TimeTipItem(233861874L, -1, 1, new Runnable() {
-            @Override
-            public void run() {
-                Autoreply.sendMessage(233861874L, 0, Autoreply.instence.CC.image(new File(Autoreply.appDirectory + "pic\\提醒\\jiemo.jpg")));
-            }
-        }));
-        hashSet.add(new TimeTipItem(233861874L, -1, 1, new Runnable() {
-            @Override
-            public void run() {
-                Autoreply.sendMessage(233861874L, 0, Autoreply.instence.CC.image(new File(Autoreply.appDirectory + "pic\\提醒\\jieli.jpg")));
-            }
-        }));
+        hashSet.add(new TimeTipItem(233861874L, -1, 1, () -> Autoreply.sendMessage(233861874L, 0, Autoreply.instence.CC.image(new File(Autoreply.appDirectory + "pic\\提醒\\jiemo.jpg")))));
+        hashSet.add(new TimeTipItem(233861874L, -1, 1, () -> Autoreply.sendMessage(233861874L, 0, Autoreply.instence.CC.image(new File(Autoreply.appDirectory + "pic\\提醒\\jieli.jpg")))));
     }
 
     @Override

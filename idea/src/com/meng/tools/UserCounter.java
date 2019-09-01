@@ -56,18 +56,8 @@ public class UserCounter {
         Type type = new TypeToken<HashMap<String, UserInfo>>() {
         }.getType();
         countMap = new Gson().fromJson(Methods.readFileToString(file.getAbsolutePath()), type);
-        Autoreply.instence.threadPool.execute(new Runnable() {
-            @Override
-            public void run() {
-                saveData();
-            }
-        });
-        Autoreply.instence.threadPool.execute(new Runnable() {
-            @Override
-            public void run() {
-                backupData();
-            }
-        });
+        Autoreply.instence.threadPool.execute(() -> saveData());
+        Autoreply.instence.threadPool.execute(this::backupData);
     }
 
 

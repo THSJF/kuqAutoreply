@@ -8,7 +8,6 @@ import com.meng.config.javabeans.PersonInfo;
 import com.meng.tools.Methods;
 
 import java.util.HashSet;
-import java.util.stream.Collectors;
 
 public class OggInterface {
 
@@ -18,12 +17,7 @@ public class OggInterface {
         }
         if (msg.startsWith("findInAll:")) {
             String finalMsg = msg;
-            Autoreply.instence.threadPool.execute(new Runnable() {
-                @Override
-                public void run() {
-                    Methods.findQQInAllGroup(0, fromQQ, finalMsg);
-                }
-            });
+            Autoreply.instence.threadPool.execute(() -> Methods.findQQInAllGroup(0, fromQQ, finalMsg));
             return true;
         }
         if (msg.startsWith("ban")) {

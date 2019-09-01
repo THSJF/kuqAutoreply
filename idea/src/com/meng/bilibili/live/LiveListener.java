@@ -28,15 +28,12 @@ public class LiveListener implements Runnable {
 
     public LiveListener(ConfigManager configManager) {
         System.out.println("直播检测启动中");
-        Autoreply.instence.threadPool.execute(new Runnable() {
-            @Override
-            public void run() {
-                for (PersonInfo cb : configManager.configJavaBean.personInfo) {
-                    LiveListener.this.checkPerson(cb);
-                }
-                loadFinish = true;
-                System.out.println("直播检测启动完成");
+        Autoreply.instence.threadPool.execute(() -> {
+            for (PersonInfo cb : configManager.configJavaBean.personInfo) {
+                LiveListener.this.checkPerson(cb);
             }
+            loadFinish = true;
+            System.out.println("直播检测启动完成");
         });
         File liveTimeFile = new File(Autoreply.appDirectory + "liveTime.json");
         if (!liveTimeFile.exists()) {
@@ -89,12 +86,7 @@ public class LiveListener implements Runnable {
                     }
                     SpaceToLiveJavaBean sjb = new Gson().fromJson(Methods.getSourceCode("https://api.live.bilibili.com/room/v1/Room/getRoomInfoOld?mid=" + personInfo.bid), SpaceToLiveJavaBean.class);
                     boolean living = sjb.data.liveStatus == 1;
-                    LivePerson livePerson = livePersonMap.computeIfAbsent(personInfo.bid, new Function<Integer, LivePerson>() {
-                        @Override
-                        public LivePerson apply(Integer k) {
-                            return new LivePerson();
-                        }
-                    });
+                    LivePerson livePerson = livePersonMap.computeIfAbsent(personInfo.bid, k -> new LivePerson());
                     livePerson.liveUrl = sjb.data.url;
                     if (livePerson.needTip) {
                         if (!livePerson.lastStatus && living) {
@@ -120,12 +112,7 @@ public class LiveListener implements Runnable {
             if (personInfo.bliveRoom == 0 || personInfo.bliveRoom == -1) {
                 continue;
             }
-            LivePerson livePerson = livePersonMap.computeIfAbsent(personInfo.bid, new Function<Integer, LivePerson>() {
-                @Override
-                public LivePerson apply(Integer k) {
-                    return new LivePerson();
-                }
-            });
+            LivePerson livePerson = livePersonMap.computeIfAbsent(personInfo.bid, k -> new LivePerson());
             countLiveTime(personInfo, livePerson);
             livePerson.liveStartTimeStamp = System.currentTimeMillis() / 1000;
         }

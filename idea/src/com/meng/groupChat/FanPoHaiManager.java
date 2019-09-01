@@ -18,22 +18,19 @@ public class FanPoHaiManager {
 
     public FanPoHaiManager() {
         System.out.println("反迫害启动");
-        Autoreply.instence.threadPool.execute(new Runnable() {
-            @Override
-            public void run() {
-                File[] pohaitu = new File(Autoreply.appDirectory + "fan\\").listFiles();
-                if (pohaitu != null) {
-                    for (File file : pohaitu) {
-                        try {
-                            fingerPrints.add(new FingerPrint(ImageIO.read(file)));
-                        } catch (Exception e) {
-                            System.out.println(file.getAbsolutePath());
-                        }
+        Autoreply.instence.threadPool.execute(() -> {
+            File[] pohaitu = new File(Autoreply.appDirectory + "fan\\").listFiles();
+            if (pohaitu != null) {
+                for (File file : pohaitu) {
+                    try {
+                        fingerPrints.add(new FingerPrint(ImageIO.read(file)));
+                    } catch (Exception e) {
+                        System.out.println(file.getAbsolutePath());
                     }
                 }
-                System.out.println("反迫害启动完成");
-                Autoreply.sleeping = false;
             }
+            System.out.println("反迫害启动完成");
+            Autoreply.sleeping = false;
         });
     }
 
