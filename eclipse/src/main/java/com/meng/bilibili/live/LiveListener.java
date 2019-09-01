@@ -26,7 +26,7 @@ public class LiveListener implements Runnable {
     private boolean loadFinish = false;
     private HashMap<String, String> liveTimeMap = new HashMap<>();
 
-    public LiveListener(ConfigManager configManager) {
+    public LiveListener(final ConfigManager configManager) {
         System.out.println("直播检测启动中");
         Autoreply.instence.threadPool.execute(new Runnable() {
             @Override

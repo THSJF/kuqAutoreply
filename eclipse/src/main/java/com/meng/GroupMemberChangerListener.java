@@ -37,7 +37,7 @@ public class GroupMemberChangerListener {
         } */
     }
 
-    public void checkDecrease(int subtype, int sendTime, long fromGroup, long fromQQ, long beingOperateQQ) {
+    public void checkDecrease(int subtype, int sendTime, final long fromGroup, final long fromQQ, long beingOperateQQ) {
         if (subtype == 1) {
             if (beingOperateQQ == 2856986197L) {
                 Autoreply.CQ.setGroupLeave(fromGroup, false);

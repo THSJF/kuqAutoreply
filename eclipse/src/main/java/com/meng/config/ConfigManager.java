@@ -110,7 +110,7 @@ public class ConfigManager {
         return null;
     }
 
-    public void addBlack(long group, long qq) {
+    public void addBlack(long group, final long qq) {
         configJavaBean.blackListQQ.add(qq);
         configJavaBean.blackListGroup.add(group);
         for (GroupConfig groupConfig : configJavaBean.groupConfigs) {

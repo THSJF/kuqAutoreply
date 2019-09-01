@@ -62,7 +62,7 @@ public class GroupMsgPart2Runnable implements Runnable {
         }
         if (msg.equals(".live")) {
             String msgSend;
-            StringBuilder stringBuilder = new StringBuilder();
+            final StringBuilder stringBuilder = new StringBuilder();
             Autoreply.instence.liveListener.livePersonMap.forEach(new BiConsumer<Integer, LivePerson>() {
                 @Override
                 public void accept(Integer key, LivePerson livePerson) {

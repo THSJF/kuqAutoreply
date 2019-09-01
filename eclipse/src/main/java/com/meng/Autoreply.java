@@ -25,12 +25,13 @@ import com.sobte.cqp.jcq.entity.IMsg;
 import com.sobte.cqp.jcq.entity.IRequest;
 import com.sobte.cqp.jcq.event.JcqAppAbstract;
 
-import javax.swing.*;
 import java.io.File;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+
+import javax.swing.JOptionPane;
 
 /*
  * 本文件是JCQ插件的主类<br>
@@ -238,7 +239,7 @@ public class Autoreply extends JcqAppAbstract implements ICQVer, IMsg, IRequest 
      * 忽略本条消息
      */
     @Override
-    public int privateMsg(int subType, int msgId, long fromQQ, String msg, int font) {
+    public int privateMsg(int subType, final int msgId, final long fromQQ, final String msg, int font) {
         // 这里处理消息
         // if (fromQQ != 2856986197L) {
         // return MSG_IGNORE;
@@ -542,7 +543,7 @@ public class Autoreply extends JcqAppAbstract implements ICQVer, IMsg, IRequest 
      * @return 关于返回值说明, 见 {@link #privateMsg 私聊消息} 的方法
      */
     @Override
-    public int requestAddFriend(int subtype, int sendTime, long fromQQ, String msg, String responseFlag) {
+    public int requestAddFriend(int subtype, int sendTime, final long fromQQ, String msg, final String responseFlag) {
         // 这里处理消息
         if (configManager.isNotReplyQQ(fromQQ)) {
             threadPool.execute(new Runnable() {
@@ -583,7 +584,7 @@ public class Autoreply extends JcqAppAbstract implements ICQVer, IMsg, IRequest 
      * @return 关于返回值说明, 见 {@link #privateMsg 私聊消息} 的方法
      */
     @Override
-    public int requestAddGroup(int subtype, int sendTime, long fromGroup, long fromQQ, String msg, String responseFlag) {
+    public int requestAddGroup(int subtype, int sendTime, final long fromGroup, final long fromQQ, String msg, final String responseFlag) {
         // 这里处理消息
 
         /*

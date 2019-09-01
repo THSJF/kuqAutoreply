@@ -107,7 +107,7 @@ public class RepeaterBanner {
         return false;
     }
 
-    private boolean repeatStart(long group, long qq, String msg, File[] imageFiles) {
+    private boolean repeatStart(final long group, final long qq, final String msg, final File[] imageFiles) {
         banCount = 6;
         Autoreply.instence.useCount.incFudujiguanjia(qq);
         Autoreply.instence.groupCount.incFudu(group);

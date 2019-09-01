@@ -33,8 +33,8 @@ public class AdminMessageProcessor {
         this.configManager = configManager;
     }
 
-    public boolean check(long fromGroup, long fromQQ, String message) {
-        String msg;
+    public boolean check(final long fromGroup, final long fromQQ, String message) {
+        final String msg;
         if (message.endsWith("喵")) {
             msg = message.substring(0, message.length() - 1);
         } else {
@@ -143,7 +143,7 @@ public class AdminMessageProcessor {
             }
             if (msg.equals(".live")) {
                 String msgSend;
-                StringBuilder stringBuilder = new StringBuilder();
+                final StringBuilder stringBuilder = new StringBuilder();
                 Autoreply.instence.liveListener.livePersonMap.forEach(new BiConsumer<Integer, LivePerson>() {
                     @Override
                     public void accept(Integer key, LivePerson livePerson) {
