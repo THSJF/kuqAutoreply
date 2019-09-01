@@ -1,197 +1,150 @@
 package com.meng.config;
 
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStreamWriter;
-import java.util.ArrayList;
+import java.lang.reflect.Type;
+import java.nio.charset.StandardCharsets;
 import java.util.HashSet;
 
 import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 import com.meng.Autoreply;
-import com.meng.Methods;
+import com.meng.tools.Methods;
 import com.meng.config.javabeans.ConfigJavaBean;
 import com.meng.config.javabeans.GroupConfig;
 import com.meng.config.javabeans.PersonInfo;
+import com.meng.config.javabeans.PortConfig;
+import com.sobte.cqp.jcq.entity.Group;
 
 public class ConfigManager {
-	private ConfigJavaBean configJavaBean = new ConfigJavaBean();
-	public Gson gson = new Gson();
-	public HashSet<Long> qqAllowPass = new HashSet<>();
-	public PortConfig portConfig;
+    public ConfigJavaBean configJavaBean = new ConfigJavaBean();
+    public Gson gson = new Gson();
+    public PortConfig portConfig = new PortConfig();
 
-	public ConfigManager() {
-		try {
-			portConfig = gson.fromJson(Methods.readFileToString(Autoreply.appDirectory + "grzxEditConfig.json"),
-					PortConfig.class);
-			File jsonBaseConfigFile = new File(Autoreply.appDirectory + "configV2.json");
-			if (!jsonBaseConfigFile.exists()) {
-				saveConfig();
-			}
-			configJavaBean = gson.fromJson(Methods.readFileToString(Autoreply.appDirectory + "configV2.json"),
-					ConfigJavaBean.class);
-			ListQQJavaBean listQQJavaBean = gson.fromJson(
-					Methods.readFileToString(Autoreply.appDirectory + "configAllowPass.json"), ListQQJavaBean.class);
-			for (long l : listQQJavaBean.qqList) {
-				qqAllowPass.add(l);
-			}
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-		new SocketConfigManager(this).start();
-		new SocketDicManager(this).start();
-	}
+    public ConfigManager() {
+        portConfig = gson.fromJson(Methods.readFileToString(Autoreply.appDirectory + "grzxEditConfig.json"), PortConfig.class);
+        File jsonBaseConfigFile = new File(Autoreply.appDirectory + "configV3.json");
+        if (!jsonBaseConfigFile.exists()) {
+            saveConfig();
+        }
+        Type type = new TypeToken<ConfigJavaBean>() {
+        }.getType();
+        configJavaBean = gson.fromJson(Methods.readFileToString(Autoreply.appDirectory + "configV3.json"), type);
+        Autoreply.instence.threadPool.execute(new SocketConfigManager(this));
+        Autoreply.instence.threadPool.execute(new SocketDicManager(this));
+    }
 
-	public ConfigJavaBean getConfigJavaBean() {
-		return configJavaBean;
-	}
+    public boolean isMaster(long fromQQ) {
+        return configJavaBean.masterList.contains(fromQQ);
+    }
 
-	public ArrayList<GroupConfig> getGroupConfigList() {
-		return configJavaBean.groupConfigs;
-	}
+    public boolean isAdmin(long fromQQ) {
+        return configJavaBean.adminList.contains(fromQQ) || configJavaBean.masterList.contains(fromQQ);
+    }
 
-	public ArrayList<Long> getQQNotReplyList() {
-		return configJavaBean.QQNotReply;
-	}
+    public boolean isGroupAutoAllow(long fromQQ) {
+        return configJavaBean.groupAutoAllowList.contains(fromQQ) || configJavaBean.adminList.contains(fromQQ) || configJavaBean.masterList.contains(fromQQ);
+    }
 
-	public ArrayList<String> getWordNotReplyList() {
-		return configJavaBean.wordNotReply;
-	}
+    public GroupConfig getGroupConfig(long fromGroup) {
+        for (GroupConfig gc : configJavaBean.groupConfigs) {
+            if (fromGroup == gc.groupNumber) {
+                return gc;
+            }
+        }
+        return null;
+    }
 
-	public ArrayList<PersonInfo> getPersonInfoList() {
-		return configJavaBean.personInfo;
-	}
+    public boolean isNotReplyGroup(long fromGroup) {
+        GroupConfig groupConfig = getGroupConfig(fromGroup);
+        return groupConfig == null || !groupConfig.reply;
+    }
 
-	public GroupConfig getGroupConfig(long fromGroup) {
-		for (GroupConfig gc : configJavaBean.groupConfigs) {
-			if (fromGroup == gc.groupNumber) {
-				return gc;
-			}
-		}
-		return null;
-	}
+    public boolean isNotReplyQQ(long qq) {
+        return configJavaBean.QQNotReply.contains(qq) || configJavaBean.blackListQQ.contains(qq);
+    }
 
-	public boolean isNotReplyGroup(long fromGroup) {
-		GroupConfig groupConfig = getGroupConfig(fromGroup);
-		if (groupConfig == null || !groupConfig.reply) {
-			return true;
-		}
-		return false;
-	}
+    public boolean isBlackQQ(long qq) {
+        return configJavaBean.blackListQQ.contains(qq);
+    }
 
-	public boolean isNotReplyQQ(long qq) {
-		if (configJavaBean.QQNotReply.contains(qq)) {
-			return true;
-		}
-		return false;
-	}
+    public boolean isBlackGroup(long qq) {
+        return configJavaBean.blackListGroup.contains(qq);
+    }
 
-	public boolean isNotReplyWord(String word) {
-		for (String nrw : configJavaBean.wordNotReply) {
-			if (word.contains(nrw)) {
-				return true;
-			}
-		}
-		return false;
-	}
+    public boolean isNotReplyWord(String word) {
+        for (String nrw : configJavaBean.wordNotReply) {
+            if (word.contains(nrw)) {
+                return true;
+            }
+        }
+        return false;
+    }
 
-	public PersonInfo getPersonInfoFromQQ(long qq) {
-		for (PersonInfo pi : configJavaBean.personInfo) {
-			if (pi.qq == qq) {
-				return pi;
-			}
-		}
-		return null;
-	}
+    public PersonInfo getPersonInfoFromQQ(long qq) {
+        for (PersonInfo pi : configJavaBean.personInfo) {
+            if (pi.qq == qq) {
+                return pi;
+            }
+        }
+        return null;
+    }
 
-	public PersonInfo getPersonInfoFromName(String name) {
-		for (PersonInfo pi : configJavaBean.personInfo) {
-			if (pi.name.equals(name)) {
-				return pi;
-			}
-		}
-		return null;
-	}
+    public PersonInfo getPersonInfoFromName(String name) {
+        for (PersonInfo pi : configJavaBean.personInfo) {
+            if (pi.name.equals(name)) {
+                return pi;
+            }
+        }
+        return null;
+    }
 
-	public void checkSetConfig(long fromGroup, String msg) {
+    public PersonInfo getPersonInfoFromBid(long bid) {
+        for (PersonInfo pi : configJavaBean.personInfo) {
+            if (pi.bid == bid) {
+                return pi;
+            }
+        }
+        return null;
+    }
 
-		if (msg.startsWith(".blockuser")) {
-			long qqId = Autoreply.instence.CC.getAt(msg.replace(".blockuser", ""));
-			addQQNotReply(qqId);
-			saveConfig();
-			Autoreply.sendMessage(fromGroup, 0, "已将" + qqId + "加入屏蔽列表");
-		}
-		if (msg.startsWith(".unblockuser")) {
-			long qqId = Autoreply.instence.CC.getAt(msg.replace(".unblockuser", ""));
-			for (int i = 0; i < configJavaBean.QQNotReply.size(); i++) {
-				if (configJavaBean.QQNotReply.get(i) == qqId) {
-					configJavaBean.QQNotReply.remove(i);
-					break;
-				}
-			}
-			saveConfig();
-			Autoreply.sendMessage(fromGroup, 0, "已将" + qqId + "解除屏蔽");
-		}
+    public void addBlack(long group, long qq) {
+        configJavaBean.blackListQQ.add(qq);
+        configJavaBean.blackListGroup.add(group);
+        for (GroupConfig groupConfig : configJavaBean.groupConfigs) {
+            if (groupConfig.groupNumber == group) {
+                configJavaBean.groupConfigs.remove(groupConfig);
+                break;
+            }
+        }
+        saveConfig();
+        Autoreply.instence.threadPool.execute(new Runnable() {
+            @Override
+            public void run() {
+                HashSet<Group> groups = Methods.findQQInAllGroup(qq);
+                for (Group g : groups) {
+                    // if (Methods.ban(g.getId(), qq, 300)) {
+                    //    sendMessage(g.getId(), 0, "不要问为什么你会进黑名单，你干了什么自己知道");
+                    //   }
+                }
+            }
+        });
+        Autoreply.sendMessage(1023432971, 0, "已将用户" + qq + "加入黑名单");
+        Autoreply.sendMessage(1023432971, 0, "已将群" + group + "加入黑名单");
+    }
 
-	}
-
-	public void addQQNotReply(Long QQnumber) {
-		for (long iterable_element : configJavaBean.QQNotReply) {
-			if (iterable_element == QQnumber) {
-				return;
-			}
-		}
-		configJavaBean.QQNotReply.add(QQnumber);
-	}
-
-	public void addWordNotReply(String content) {
-		for (String iterable_element : configJavaBean.wordNotReply) {
-			if (iterable_element.equals(content)) {
-				return;
-			}
-		}
-		configJavaBean.wordNotReply.add(content);
-	}
-
-	public void saveConfig() {
-		try {
-			FileOutputStream fos = null;
-			OutputStreamWriter writer = null;
-			File file = new File(Autoreply.appDirectory + "configV2.json");
-			fos = new FileOutputStream(file);
-			writer = new OutputStreamWriter(fos, "utf-8");
-			writer.write(gson.toJson(configJavaBean));
-			writer.flush();
-			if (fos != null) {
-				fos.close();
-			}
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-	}
-
-	public String getNameFromQQ(long qq) {
-		for (PersonInfo p : configJavaBean.personInfo) {
-			if (p.qq == qq) {
-				return p.name;
-			}
-		}
-		return null;
-	}
-
-	public String readFileToString() throws Exception {
-		File file = new File(Autoreply.appDirectory + "grzxEditConfig.json");
-		if (!file.exists()) {
-			System.exit(0);
-			file.createNewFile();
-		}
-		Long filelength = file.length();
-		byte[] filecontent = new byte[filelength.intValue()];
-		FileInputStream in = new FileInputStream(file);
-		in.read(filecontent);
-		in.close();
-		return new String(filecontent, "UTF-8");
-	}
-
+    public void saveConfig() {
+        try {
+            File file = new File(Autoreply.appDirectory + "configV3.json");
+            FileOutputStream fos = new FileOutputStream(file);
+            OutputStreamWriter writer = new OutputStreamWriter(fos, StandardCharsets.UTF_8);
+            writer.write(gson.toJson(configJavaBean));
+            writer.flush();
+            fos.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
 }

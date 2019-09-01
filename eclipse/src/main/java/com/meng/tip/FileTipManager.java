@@ -1,65 +1,53 @@
 package com.meng.tip;
 
-import java.util.HashMap;
+import java.util.HashSet;
 
 import com.meng.Autoreply;
-import com.meng.Methods;
+import com.meng.tools.Methods;
 
-public class FileTipManager extends Thread {
+public class FileTipManager implements Runnable {
 
-	private int mapFlag = 0;
-	private HashMap<Integer, FileTipUploader> dataMap = new HashMap<Integer, FileTipUploader>();
+    public HashSet<FileTipUploader> dataMap = new HashSet<>();
 
-	String[] stringsC5 = new String[] { "更新了吗", "出来打牌", "在？看看牌", "把你的打牌图给我交了" };
-	String[] strings = new String[] { "更新了吗", "出来更新" };
+    private String[] stringsC5 = new String[]{"更新了吗", "出来打牌", "在？看看牌", "把你的打牌图给我交了"};
+    private String[] strings = new String[]{"更新了吗", "出来更新"};
 
-	public FileTipManager() {
-	}
+    public FileTipManager() {
+    }
 
-	public void addData(FileTipUploader r) {
-		dataMap.put(mapFlag, r);
-		mapFlag++;
-	}
+    // 新文件上传时
+    public void onUploadFile(long groupNumber, long qqNumber) {
+        for (FileTipUploader tftu : dataMap) {
+            if (tftu.groupNumber == groupNumber && tftu.QQNumber == qqNumber) {
+                tftu.fileLastUpload = System.currentTimeMillis();
+            }
+        }
+    }
 
-	// 新文件上传时
-	public void onUploadFile(long groupNumber, long QQNumber) {
-		for (int i = 0; i < mapFlag; i++) {
-			FileTipUploader tftu = dataMap.get(i);
-			if (tftu.getGroupNumber() == groupNumber && tftu.getQQNumber() == QQNumber) {
-				tftu.setFileLastUpload(System.currentTimeMillis());
-			}
-		}
-	}
-
-	@Override
-	public void run() {
-		try {
-			sleep(600000);// 线程休眠60000毫秒
-		} catch (InterruptedException e) {
-			e.printStackTrace();
-		}
-		while (true) {
-			for (int i = 0; i < mapFlag; i++) {
-				FileTipUploader tftu = dataMap.get(i);
-				// System.currentTimeMillis()获取的是从1970年到当前过了多少毫秒
-				if (System.currentTimeMillis() - tftu.getFileLastUpload() > 86400000// 一天为86400000毫秒
-						&& System.currentTimeMillis() - tftu.getfileLastTipTime() > 3600000 * 2) {// 一小时为3600000毫秒
-					if (tftu.getGroupNumber() == 807242547L && tftu.getQQNumber() == 1592608126L) {
-						Autoreply.sendMessage(tftu.getGroupNumber(), 0,
-								Autoreply.instence.CC.at(tftu.getQQNumber()) + Methods.rfa(stringsC5));
-						tftu.setfileLastTipTime(System.currentTimeMillis());
-					} else {
-						Autoreply.sendMessage(tftu.getGroupNumber(), 0,
-								Autoreply.instence.CC.at(tftu.getQQNumber()) + Methods.rfa(strings));
-						tftu.setfileLastTipTime(System.currentTimeMillis());
-					}
-				}
-			}
-			try {
-				sleep(60000);// 线程休眠60000毫秒
-			} catch (InterruptedException e) {
-				e.printStackTrace();
-			}
-		}
-	}
+    @Override
+    public void run() {
+        try {
+            Thread.sleep(600000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        while (true) {
+            for (FileTipUploader tftu : dataMap) {
+                if (System.currentTimeMillis() - tftu.fileLastUpload > 86400000 && System.currentTimeMillis() - tftu.fileLastTipTime > 7200000) {
+                    if (tftu.groupNumber == 807242547L && tftu.QQNumber == 1592608126L) {
+                        Autoreply.sendMessage(tftu.groupNumber, 0, Autoreply.instence.CC.at(tftu.QQNumber) + Methods.rfa(stringsC5));
+                        tftu.fileLastTipTime = System.currentTimeMillis();
+                    } else {
+                        Autoreply.sendMessage(tftu.groupNumber, 0, Autoreply.instence.CC.at(tftu.QQNumber) + Methods.rfa(strings));
+                        tftu.fileLastTipTime = System.currentTimeMillis();
+                    }
+                }
+            }
+            try {
+                Thread.sleep(60000);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }
+    }
 }

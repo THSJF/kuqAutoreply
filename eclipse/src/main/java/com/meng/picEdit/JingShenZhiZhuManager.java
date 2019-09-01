@@ -1,91 +1,108 @@
 package com.meng.picEdit;
 
-import java.awt.Dimension;
-import java.awt.Graphics2D;
-import java.awt.Image;
-import java.awt.Rectangle;
-import java.awt.image.BufferedImage;
-import java.io.File;
-import java.io.IOException;
+import com.meng.Autoreply;
+import com.meng.tools.gifHelper.AnimatedGifEncoder;
+import com.meng.tools.gifHelper.GifDecoder;
+import com.sobte.cqp.jcq.entity.CQImage;
 
 import javax.imageio.ImageIO;
-
-import com.meng.Autoreply;
-import com.sobte.cqp.jcq.entity.CQImage;
+import java.awt.*;
+import java.awt.image.BufferedImage;
+import java.io.*;
 
 public class JingShenZhiZhuManager {
 
-	private long fromGroup = 0;
-	private File f;
+    private long fromGroup = 0;
+    private File f;
 
-	public JingShenZhiZhuManager(long fromGroup, String msg) {
-		this.fromGroup = fromGroup;
-		CQImage cm = Autoreply.instence.CC.getCQImage(msg);
-		if (cm == null)
-			return;
-		File files = new File(Autoreply.appDirectory + "jingshenzhizhu\\");
-		if (!files.exists()) {
-			files.mkdirs();
-		}
-		if (msg.contains(".gif"))
-			return;
-		try {
-			f = cm.download(Autoreply.appDirectory + "jingshenzhizhu\\" + System.currentTimeMillis() + ".jpg");
-			a(f);
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-	}
+    public JingShenZhiZhuManager(long fromGroup, String msg) {
+        this.fromGroup = fromGroup;
+        CQImage cm = Autoreply.instence.CC.getCQImage(msg);
+        if (cm == null) {
+            return;
+        }
+        File files = new File(Autoreply.appDirectory + "jingshenzhizhu\\");
+        if (!files.exists()) {
+            files.mkdirs();
+        }
+        try {
+            if (msg.contains(".gif")) {
+                f = cm.download(Autoreply.appDirectory + "jingshenzhizhu\\" + System.currentTimeMillis() + ".gif");
+                Autoreply.sendMessage(fromGroup, 0, Autoreply.instence.CC.image(animGif2to1(f)));
+            } else {
+                f = cm.download(Autoreply.appDirectory + "jingshenzhizhu\\" + System.currentTimeMillis() + ".jpg");
+                startCreate(f);
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
 
-	public void a(File file) {
-		try {
-			BufferedImage src = null;
-			src = ImageIO.read(file);
-			BufferedImage des1 = chgPic(Rotate(src, 346), 190);
-			Image im = null;
-			im = ImageIO.read(new File(Autoreply.appDirectory + "pic\\6.png"));
-			BufferedImage b = new BufferedImage(im.getWidth(null), im.getHeight(null), BufferedImage.TYPE_INT_ARGB);
-			b.getGraphics().drawImage(im, 0, 0, null);
-			b.getGraphics().drawImage(des1, -29, 30, null);
-			ImageIO.write(b, "png", f);
-			Autoreply.sendMessage(fromGroup, 0, Autoreply.instence.CC.image(f));
-		} catch (Exception e) {
-		}
-	}
+    private void startCreate(File file) {
+        try {
+            BufferedImage src;
+            src = ImageIO.read(file);
+            BufferedImage des1 = chgPic(JingShenZhiZhuQQManager.rotateImage(src, 346), 190);
+            Image im = ImageIO.read(new File(Autoreply.appDirectory + "pic\\6.png"));
+            BufferedImage b = new BufferedImage(im.getWidth(null), im.getHeight(null), BufferedImage.TYPE_INT_ARGB);
+            b.getGraphics().drawImage(im, 0, 0, null);
+            b.getGraphics().drawImage(des1, -29, 30, null);
+            ImageIO.write(b, "png", f);
+            Autoreply.sendMessage(fromGroup, 0, Autoreply.instence.CC.image(f));
+        } catch (Exception e) {
+        }
+    }
 
-	public BufferedImage Rotate(Image src, int angel) {
-		int src_width = src.getWidth(null);
-		int src_height = src.getHeight(null);
-		if (angel >= 90) {
-			if (angel / 90 % 2 == 1) {
-				int temp = src_height;
-				src_height = src_width;
-				src_width = temp;
-			}
-		}
-		double r = Math.sqrt(src_height * src_height + src_width * src_width) / 2;
-		double len = 2 * Math.sin(Math.toRadians(angel % 90) / 2) * r;
-		double angel_alpha = (Math.PI - Math.toRadians(angel % 90)) / 2;
-		double angel_dalta_width = Math.atan((double) src_height / src_width);
-		double angel_dalta_height = Math.atan((double) src_width / src_height);
-		int len_dalta_width = (int) (len * Math.cos(Math.PI - angel_alpha - angel_dalta_width));
-		int len_dalta_height = (int) (len * Math.cos(Math.PI - angel_alpha - angel_dalta_height));
-		int des_width = src_width + len_dalta_width * 2;
-		int des_height = src_height + len_dalta_height * 2;
-		Rectangle rect_des = new Rectangle(new Dimension(des_width, des_height));
-		BufferedImage res = new BufferedImage(rect_des.width, rect_des.height, BufferedImage.TYPE_INT_ARGB);
-		Graphics2D g2 = res.createGraphics();
-		g2.translate((rect_des.width - src_width) / 2, (rect_des.height - src_height) / 2);
-		g2.rotate(Math.toRadians(angel), src_width / 2, src_height / 2);
-		g2.drawImage(src, null, null);
-		return res;
-	}
+    // 按比例压缩图片
 
-	// 按比例压缩图片
-	public BufferedImage chgPic(BufferedImage img, int newSize) {
-		BufferedImage img2 = new BufferedImage(newSize, newSize, BufferedImage.TYPE_INT_ARGB);
-		img2.getGraphics().drawImage(img, 0, 0, newSize, newSize, null);
-		return img2;
-	}
+    private BufferedImage chgPic(BufferedImage img, int newSize) {
+        BufferedImage img2 = new BufferedImage(newSize, newSize, BufferedImage.TYPE_INT_ARGB);
+        img2.getGraphics().drawImage(img, 0, 0, newSize, newSize, null);
+        return img2;
+    }
 
+    private BufferedImage chgPic(BufferedImage img, int newW, int newH) {
+        BufferedImage img2 = new BufferedImage(newW, newH, BufferedImage.TYPE_INT_ARGB);
+        img2.getGraphics().drawImage(img, 0, 0, newW, newH, null);
+        return img2;
+    }
+
+    private File animGif2to1(File gifFile) throws FileNotFoundException {
+        BufferedImage backImage;
+        try {
+            backImage = ImageIO.read(new File(Autoreply.appDirectory + "pic\\6.png"));
+        } catch (IOException e) {
+            e.printStackTrace();
+            return null;
+        }
+        GifDecoder gifDecoder = new GifDecoder();
+        FileInputStream fis = new FileInputStream(gifFile);
+        gifDecoder.read(fis);
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        AnimatedGifEncoder localAnimatedGifEncoder = new AnimatedGifEncoder();
+        localAnimatedGifEncoder.start(baos);// start
+        localAnimatedGifEncoder.setRepeat(0);// 设置生成gif的开始播放时间。0为立即开始播放
+        for (int i = 0; i < gifDecoder.getFrameCount(); i++) {
+            localAnimatedGifEncoder.setDelay(gifDecoder.getDelay(i));
+            localAnimatedGifEncoder.addFrame(processFrame(gifDecoder.getFrame(i), backImage));
+        }
+        localAnimatedGifEncoder.finish();
+        try {
+            FileOutputStream fos = new FileOutputStream(gifFile);
+            baos.writeTo(fos);
+            baos.flush();
+            fos.flush();
+            baos.close();
+            fos.close();
+        } catch (Exception e) {
+        }
+        return gifFile;
+    }
+
+    private BufferedImage processFrame(BufferedImage gifFrame, BufferedImage background) {
+        double frameH = ((double) gifFrame.getHeight(null)) / gifFrame.getWidth(null) * 190;
+        //      System.out.println("w1:" + gifFrame.getWidth(null) + " h1:" + gifFrame.getHeight(null) + " w2:" + frameH);
+        background.getGraphics().drawImage(chgPic(JingShenZhiZhuQQManager.rotateImage(gifFrame, 346), 190, (int) frameH).getScaledInstance(190, 190, Image.SCALE_SMOOTH), -29, 30, null);
+        return background;
+    }
 }

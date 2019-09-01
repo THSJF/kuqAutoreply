@@ -6,6 +6,8 @@ import java.awt.color.ColorSpace;
 import java.awt.image.BufferedImage;
 import java.awt.image.ColorConvertOp;
 import java.util.Arrays;
+import java.util.function.IntConsumer;
+import java.util.function.IntPredicate;
 import java.util.stream.IntStream;
 
 public final class FingerPrint {
@@ -187,7 +189,12 @@ public final class FingerPrint {
         byte[] dst = src.clone();
         int mean = mean(src);
         // 将数组元素转为无符号整数再比较
-        IntStream.range(0, dst.length).forEach(i -> dst[i] = (byte) (((int) dst[i] & 0xff) >= mean ? 1 : 0));
+        IntStream.range(0, dst.length).forEach(new IntConsumer() {
+            @Override
+            public void accept(int i) {
+                dst[i] = (byte) (((int) dst[i] & 0xff) >= mean ? 1 : 0);
+            }
+        });
         return dst;
 
     }
@@ -307,7 +314,12 @@ public final class FingerPrint {
         if (f1.length != f2.length) {
             throw new IllegalArgumentException("mismatch FingerPrint length");
         }
-        int sameCount = (int) IntStream.range(0, f1.length).filter(i -> f1[i] == f2[i]).count();
+        int sameCount = (int) IntStream.range(0, f1.length).filter(new IntPredicate() {
+            @Override
+            public boolean test(int i) {
+                return f1[i] == f2[i];
+            }
+        }).count();
         return (float) sameCount / f1.length;
     }
 

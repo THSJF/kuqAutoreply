@@ -1,39 +1,36 @@
 package com.meng.config;
 
+import com.meng.Autoreply;
+
 import java.net.ServerSocket;
 
-public class SocketDicManager extends Thread {
+public class SocketDicManager implements Runnable {
 
-	public boolean running = true; 
+    private ConfigManager configManager;
 
-	ConfigManager configManager;
+    public SocketDicManager(ConfigManager configManager) {
+        this.configManager = configManager;
+    }
 
-	public SocketDicManager(ConfigManager configManager) {
-		this.configManager = configManager;
-	}
+    @Override
+    public void run() {
+        try {
+            check();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
 
-	@Override
-	public void run() {
-		try {
-			check();
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-	}
-
-	private void check() throws Exception {
-		try { 
-			ServerSocket serverSocket = new ServerSocket(configManager.portConfig.dicPort);
-			System.out.println("***dicPort即将启动，等待客户端的链接***"); 
-			while (running) {
-				SocketDicThread receiveThread = new SocketDicThread(configManager, serverSocket);
-				receiveThread.start();
-				sleep(10);
-			}
-			serverSocket.close();
-			interrupt();
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-	}
+    private void check() {
+        try {
+            ServerSocket serverSocket = new ServerSocket(configManager.portConfig.dicPort);
+            System.out.println("dicPort启动");
+            while (true) {
+                Autoreply.instence.threadPool.execute(new SocketDicRunnable(configManager, serverSocket));
+                Thread.sleep(10);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
 }

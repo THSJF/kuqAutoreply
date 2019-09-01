@@ -6,6 +6,7 @@ import java.io.IOException;
 import java.io.OutputStreamWriter;
 import java.lang.reflect.Type;
 import java.nio.charset.StandardCharsets;
+import java.util.HashSet;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
@@ -15,6 +16,7 @@ import com.meng.config.javabeans.ConfigJavaBean;
 import com.meng.config.javabeans.GroupConfig;
 import com.meng.config.javabeans.PersonInfo;
 import com.meng.config.javabeans.PortConfig;
+import com.sobte.cqp.jcq.entity.Group;
 
 public class ConfigManager {
     public ConfigJavaBean configJavaBean = new ConfigJavaBean();
@@ -106,6 +108,31 @@ public class ConfigManager {
             }
         }
         return null;
+    }
+
+    public void addBlack(long group, long qq) {
+        configJavaBean.blackListQQ.add(qq);
+        configJavaBean.blackListGroup.add(group);
+        for (GroupConfig groupConfig : configJavaBean.groupConfigs) {
+            if (groupConfig.groupNumber == group) {
+                configJavaBean.groupConfigs.remove(groupConfig);
+                break;
+            }
+        }
+        saveConfig();
+        Autoreply.instence.threadPool.execute(new Runnable() {
+            @Override
+            public void run() {
+                HashSet<Group> groups = Methods.findQQInAllGroup(qq);
+                for (Group g : groups) {
+                    // if (Methods.ban(g.getId(), qq, 300)) {
+                    //    sendMessage(g.getId(), 0, "不要问为什么你会进黑名单，你干了什么自己知道");
+                    //   }
+                }
+            }
+        });
+        Autoreply.sendMessage(1023432971, 0, "已将用户" + qq + "加入黑名单");
+        Autoreply.sendMessage(1023432971, 0, "已将群" + group + "加入黑名单");
     }
 
     public void saveConfig() {
