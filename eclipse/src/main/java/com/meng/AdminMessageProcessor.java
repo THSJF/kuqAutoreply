@@ -224,6 +224,11 @@ public class AdminMessageProcessor {
                 sendMessage(fromGroup, fromQQ, s);
                 return true;
             }
+            if(msg.equalsIgnoreCase("System.gc();")){
+            	System.gc();
+                sendMessage(fromGroup, fromQQ, "gc start");
+                return true;
+            }
             if (msg.equals("zan-now")) {
                 sendMessage(fromGroup, fromQQ, "start");
                 Autoreply.instence.threadPool.execute(new Runnable() {
