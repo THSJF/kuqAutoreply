@@ -448,7 +448,7 @@ public class Autoreply extends JcqAppAbstract implements ICQVer, IMsg, IRequest 
         if (configManager.isNotReplyGroup(fromGroup)) {
             return MSG_IGNORE;
         }
-        fileInfoManager.check(subType, sendTime, fromGroup, fromQQ, file);
+     //   fileInfoManager.check(subType, sendTime, fromGroup, fromQQ, file);
         return MSG_IGNORE;
     }
 

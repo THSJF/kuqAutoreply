@@ -158,6 +158,10 @@ public class RepeaterBanner {
 
     // 如果是文本复读
     private void replyText(Long group, long qq, String msg) {
+    	if(msg.contains("此生无悔入东方")){
+    		Autoreply.sendMessage(group, 0, msg);
+    		return;
+    	}
         if (repeatCount < 3) {
             Autoreply.sendMessage(group, 0, msg);
             repeatCount++;
