@@ -41,6 +41,13 @@ public class AdminMessageProcessor {
             msg = message;
         }
         if (configManager.isMaster(fromQQ)) {
+		  if(msg.equals("-help")){
+			String s=".stop .start 总开关|block艾特一人 加入屏蔽列表|black艾特一人 加入黑名单|blackgroup加空格加群号 群加入黑名单 多群号中间空格隔开|findInAll:QQ号 查找共同群|"+
+			"ban.QQ.时间 ban.群号.QQ.时间 禁言,单位为秒|find: 在配置文件中查找人信息"+
+			"|添加图片|查看统计的直播时间|查看鬼人正邪发言统计|线程信息";
+			Autoreply.sendMessage(fromGroup,0,s);
+			return true;
+		  }
             if (msg.equals(".stop")) {
                 Autoreply.sendMessage(fromGroup, 0, "disabled");
                 Autoreply.sleeping = true;
@@ -99,13 +106,7 @@ public class AdminMessageProcessor {
                 });
                 return true;
             }
-            if (msg.startsWith("ban")) {
-                String[] arr = msg.split("\\.");
-                if (arr.length == 3 || arr.length == 4) {
-                    Autoreply.instence.banner.checkBan(fromGroup, fromQQ, msg);
-                }
-                return true;
-            }
+            
             if (msg.startsWith("av更新时间:")) {
                 Autoreply.sendMessage(fromGroup, fromQQ, String.valueOf(Autoreply.instence.updateManager.getAVLastUpdateTime(msg.substring(7))));
                 return true;
@@ -332,6 +333,19 @@ public class AdminMessageProcessor {
             }
         }
         if (configManager.isAdmin(fromQQ)) {
+		  
+			if(msg.equals("-help")){
+				String s="ban.QQ.时间 ban.群号.QQ.时间 禁言,单位为秒|添加图片|查看统计的直播时间|查看鬼人正邪发言统计|";
+				Autoreply.sendMessage(fromGroup,0,s);
+				return true;
+			  }
+			if (msg.startsWith("ban")) {
+                String[] arr = msg.split("\\.");
+                if (arr.length == 3 || arr.length == 4) {
+                    Autoreply.instence.banner.checkBan(fromGroup, fromQQ, msg);
+				  }
+                return true;
+			  }
             if (msg.equals("鬼人正邪统计")) {
                 sendMessage(fromGroup, fromQQ, Autoreply.instence.useCount.getMyCount(Autoreply.CQ.getLoginQQ()));
                 return true;
