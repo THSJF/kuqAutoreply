@@ -182,7 +182,7 @@ public class BanListener {
         if (!Autoreply.instence.configManager.isAdmin(fromQQ) && qqInfo.getAuthority() == 1) {
             return;
         }
-        if (Autoreply.instence.configManager.isMaster(fromQQ) && msg.equals("夏眠结束")) {
+        if (Autoreply.instence.configManager.isAdmin(fromQQ) && msg.equals("夏眠结束")) {
             HashSet<Long> hashSet = sleepSet.get(String.valueOf(fromGroup));
             if (hashSet != null) {
                 Methods.ban(fromGroup, hashSet, 0);

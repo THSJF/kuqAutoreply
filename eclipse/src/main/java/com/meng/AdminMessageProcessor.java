@@ -44,7 +44,7 @@ public class AdminMessageProcessor {
 		  if(msg.equals("-help")){
 			String s=".stop .start 总开关|block艾特一人 加入屏蔽列表|black艾特一人 加入黑名单|blackgroup加空格加群号 群加入黑名单 多群号中间空格隔开|findInAll:QQ号 查找共同群|"+
 			"ban.QQ.时间 ban.群号.QQ.时间 禁言,单位为秒|find: 在配置文件中查找人信息"+
-			"|添加图片|查看统计的直播时间|查看鬼人正邪发言统计|线程信息";
+			".on .off 不修改配置文件的单群开关|.admin enable  .admin disable 修改配置文件的单群开关|添加图片|查看统计的直播时间|查看鬼人正邪发言统计|线程信息|夏眠";
 			Autoreply.sendMessage(fromGroup,0,s);
 			return true;
 		  }
@@ -335,7 +335,7 @@ public class AdminMessageProcessor {
         if (configManager.isAdmin(fromQQ)) {
 		  
 			if(msg.equals("-help")){
-				String s="ban.QQ.时间 ban.群号.QQ.时间 禁言,单位为秒|添加图片|查看统计的直播时间|查看鬼人正邪发言统计|";
+				String s="ban.QQ.时间 ban.群号.QQ.时间 禁言,单位为秒|.on .off 不修改配置文件的单群开关|.admin enable  .admin disable 修改配置文件的单群开关|添加图片|查看统计的直播时间|查看鬼人正邪发言统计|";
 				Autoreply.sendMessage(fromGroup,0,s);
 				return true;
 			  }
