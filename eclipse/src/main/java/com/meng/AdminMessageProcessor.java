@@ -25,12 +25,42 @@ import java.util.function.BiConsumer;
 import java.util.stream.Collectors;
 
 import static com.meng.Autoreply.sendMessage;
+import java.util.*;
 
 public class AdminMessageProcessor {
     private ConfigManager configManager;
+	private HashMap<String,String> masterPermission=new HashMap<>();
+	private HashMap<String,String> adminPermission=new HashMap<>();
+	
 
     public AdminMessageProcessor(ConfigManager configManager) {
         this.configManager = configManager;
+		masterPermission.put(".start .stop","总开关");
+		masterPermission.put("block艾特一人","屏蔽列表");
+		masterPermission.put("black艾特一人","黑名单");
+		masterPermission.put("blackgroup加空格加群号","群加入黑名单");
+		masterPermission.put("av更新时间:","用户最新后更新视频时间");
+		masterPermission.put("avJson:","av信息");
+		masterPermission.put("cv更新时间:","用户最后更新文章时间");
+		masterPermission.put("cvJson:","cv信息");
+		masterPermission.put("直播状态lid:","直播间状态");
+		masterPermission.put("直播状态bid:","从UID获取直播间状态");
+		masterPermission.put("获取直播间:","从UID获取直播间ID");
+		masterPermission.put("线程数","线程池信息");
+		masterPermission.put("直播时间统计","统计的直播时间");
+		masterPermission.put("nai","三月精账号奶人");
+		masterPermission.put("bav:","视频信息");
+		masterPermission.put("bcv:","文章信息");
+		masterPermission.put("blv:","直播间信息");
+		
+		adminPermission.put("findInAll:","查找共同群");
+		adminPermission.put("添加图片","加图");
+		adminPermission.put("鬼人正邪统计","鬼人正邪发言统计");
+		adminPermission.put(".on .off","不修改配置文件的单群开关");
+		adminPermission.put(".admin enable  .admin disable","修改配置文件的单群开关");
+		
+		masterPermission.putAll(adminPermission);
+		
     }
 
     public boolean check(final long fromGroup, final long fromQQ, String message) {
@@ -42,10 +72,7 @@ public class AdminMessageProcessor {
         }
         if (configManager.isMaster(fromQQ)) {
 		  if(msg.equals("-help")){
-			String s=".stop .start 总开关|block艾特一人 加入屏蔽列表|black艾特一人 加入黑名单|blackgroup加空格加群号 群加入黑名单 多群号中间空格隔开|findInAll:QQ号 查找共同群|"+
-			"ban.QQ.时间 ban.群号.QQ.时间 禁言,单位为秒|find: 在配置文件中查找人信息"+
-			".on .off 不修改配置文件的单群开关|.admin enable  .admin disable 修改配置文件的单群开关|添加图片|查看统计的直播时间|查看鬼人正邪发言统计|线程信息|夏眠";
-			Autoreply.sendMessage(fromGroup,0,s);
+			Autoreply.sendMessage(fromGroup,0,masterPermission.toString());
 			return true;
 		  }
             if (msg.equals(".stop")) {
@@ -140,21 +167,6 @@ public class AdminMessageProcessor {
             }
             if (msg.startsWith("获取直播间:")) {
                 Autoreply.sendMessage(fromGroup, fromQQ, Methods.getSourceCode("https://api.live.bilibili.com/room/v1/Room/getRoomInfoOld?mid=" + msg.substring(6)));
-                return true;
-            }
-            if (msg.equals(".live")) {
-                String msgSend;
-                final StringBuilder stringBuilder = new StringBuilder();
-                Autoreply.instence.liveListener.livePersonMap.forEach(new BiConsumer<Integer, LivePerson>() {
-                    @Override
-                    public void accept(Integer key, LivePerson livePerson) {
-                        if (livePerson.lastStatus) {
-                            stringBuilder.append(Autoreply.instence.configManager.getPersonInfoFromBid(key).name).append("正在直播").append(livePerson.liveUrl).append("\n");
-                        }
-                    }
-                });
-                msgSend = stringBuilder.toString();
-                Autoreply.sendMessage(fromGroup, fromQQ, msgSend.equals("") ? "居然没有飞机佬直播" : msgSend);
                 return true;
             }
             if (msg.startsWith("add{")) {
@@ -288,7 +300,7 @@ public class AdminMessageProcessor {
                 Autoreply.instence.threadPool.execute(new MoShenFuSong(fromGroup, fromQQ, 6));
                 return true;
             }
-            String[] strings = msg.split("\\.");
+            String[] strings = msg.split("\\.",3);
             if (strings[0].equals("send")) {
                 switch (strings[2]) {
                     case "喵":
@@ -335,8 +347,7 @@ public class AdminMessageProcessor {
         if (configManager.isAdmin(fromQQ)) {
 		  
 			if(msg.equals("-help")){
-				String s="ban.QQ.时间 ban.群号.QQ.时间 禁言,单位为秒|.on .off 不修改配置文件的单群开关|.admin enable  .admin disable 修改配置文件的单群开关|添加图片|查看统计的直播时间|查看鬼人正邪发言统计|";
-				Autoreply.sendMessage(fromGroup,0,s);
+				Autoreply.sendMessage(fromGroup,0,adminPermission.toString());
 				return true;
 			  }
 			if (msg.startsWith("ban")) {
