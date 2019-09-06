@@ -84,13 +84,6 @@ public class GroupMsgPart1Runnable implements Runnable {
         if (Autoreply.instence.botOff.contains(fromGroup)) {
             return;
         }
-        while (Autoreply.instence.using) {
-            try {
-                Thread.sleep(1);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-        }
         if (Autoreply.instence.messageMap.get(fromQQ) == null) {
             Autoreply.instence.messageMap.put(fromQQ, new MessageSender(fromGroup, fromQQ, msg, System.currentTimeMillis(), msgId, imageFiles));
         }
