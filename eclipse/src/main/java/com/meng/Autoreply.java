@@ -33,7 +33,6 @@ import java.util.concurrent.Executors;
 
 import javax.swing.JOptionPane;
 import com.meng.config.*;
-import java.util.concurrent.*;
 
 /*
  * 本文件是JCQ插件的主类<br>
@@ -73,7 +72,7 @@ public class Autoreply extends JcqAppAbstract implements ICQVer, IMsg, IRequest 
     public ConfigManager configManager;
     public NaiManager naiManager;
     public OcrManager ocrManager = new OcrManager();
-    public ConcurrentHashMap<Long, MessageSender> messageMap = new ConcurrentHashMap<>();
+    public HashMap<Long, MessageSender> messageMap = new HashMap<>();
     private FileInfoManager fileInfoManager = new FileInfoManager();
     public PicEditManager picEditManager = new PicEditManager();
     public BanListener banListener;
@@ -93,6 +92,7 @@ public class Autoreply extends JcqAppAbstract implements ICQVer, IMsg, IRequest 
     public static boolean sleeping = true;
 
     public FanPoHaiManager fph;
+    public boolean using = false;
     public HashSet<Long> botOff = new HashSet<>();
 
     /**
@@ -789,7 +789,9 @@ public class Autoreply extends JcqAppAbstract implements ICQVer, IMsg, IRequest 
     private class checkMessageRunnable implements Runnable {
         @Override
         public void run() {
-             while (true) {
+            HashMap<Long, MessageSender> delMap = new HashMap<>(32);
+            while (true) {
+                using = true;
                 for (MessageSender value : messageMap.values()) {
                     if (System.currentTimeMillis() - value.timeStamp > 1000) {
                         if (value.fromGroup != 0) {
@@ -797,8 +799,16 @@ public class Autoreply extends JcqAppAbstract implements ICQVer, IMsg, IRequest 
                         } else {
                             threadPool.execute(new PrivateMsgRunnable(value));
                         }
+                        delMap.put(value.fromQQ, value);
                     }
                 }
+                using = false;
+                if (delMap.size() > 0) {
+                    for (MessageSender value : delMap.values()) {
+                        messageMap.remove(value.fromQQ);
+                    }
+                }
+                delMap.clear();
                 try {
                     Thread.sleep(10);
                 } catch (InterruptedException e) {
