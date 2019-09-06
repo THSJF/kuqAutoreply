@@ -32,50 +32,52 @@ public class RepeaterBanner {
     }
 
     public boolean check(long fromGroup, long fromQQ, String msg, File[] imageFiles) {
-        GroupConfig groupConfig = Autoreply.instence.configManager.getGroupConfig(fromGroup);
-        if (groupConfig == null) {
-            return false;
-        }
-        if (warnMessageProcessor.check(fromGroup, fromQQ, msg)) {
-            return true;
-        }
-        boolean b = false;
-        try {
-            if (msg.contains("禁言") || fromGroup != groupNumber) {
-                return true;
-            }
-            float simi = getPicSimilar(imageFiles);// 当前消息中图片和上一条消息中图片相似度
-            switch (groupConfig.repeatMode) {
-                case 0:
+		synchronized(this){
+			GroupConfig groupConfig = Autoreply.instence.configManager.getGroupConfig(fromGroup);
+			if (groupConfig == null) {
+				return false;
+			  }
+			if (warnMessageProcessor.check(fromGroup, fromQQ, msg)) {
+				return true;
+			  }
+			boolean b = false;
+			try {
+				if (msg.contains("禁言") || fromGroup != groupNumber) {
+					return true;
+				  }
+				float simi = getPicSimilar(imageFiles);// 当前消息中图片和上一条消息中图片相似度
+				switch (groupConfig.repeatMode) {
+					case 0:
 
-                    break;
-                case 1:
-                    if (lastMessageRecieved.equals(msg) || isPicMsgRepeat(lastMessageRecieved, msg, simi)) { // 上一条消息和当前消息相同或两张图片相似度过高都是复读
-                        if (Autoreply.instence.random.nextInt() % banCount == 0) {
-                            int time = Autoreply.instence.random.nextInt(60) + 1;
-                            banCount = 6;
-                            if (Methods.ban(fromGroup, fromQQ, time)) {
-                                Autoreply.sendMessage(0, fromQQ, "你从“群复读轮盘”中获得了" + time + "秒禁言套餐");
-                            }
-                        }
-                    }
-                    break;
-                case 2:
-                    if (lastMessageRecieved.equals(msg) || isPicMsgRepeat(lastMessageRecieved, msg, simi)) {
-                        int time = Autoreply.instence.random.nextInt(60) + 1;
-                        if (Methods.ban(fromGroup, fromQQ, time)) {
-                            Autoreply.sendMessage(0, fromQQ, "你因复读获得了" + time + "秒禁言套餐");
-                        }
-                    }
-                    lastMessageRecieved = msg;
-                    return true;
-            }
-            b = checkRepeatStatu(fromGroup, fromQQ, msg, imageFiles, simi);
-            lastMessageRecieved = msg;
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return b;
+					  break;
+					case 1:
+					  if (lastMessageRecieved.equals(msg) || isPicMsgRepeat(lastMessageRecieved, msg, simi)) { // 上一条消息和当前消息相同或两张图片相似度过高都是复读
+						  if (Autoreply.instence.random.nextInt() % banCount == 0) {
+							  int time = Autoreply.instence.random.nextInt(60) + 1;
+							  banCount = 6;
+							  if (Methods.ban(fromGroup, fromQQ, time)) {
+								  Autoreply.sendMessage(0, fromQQ, "你从“群复读轮盘”中获得了" + time + "秒禁言套餐");
+								}
+							}
+						}
+					  break;
+					case 2:
+					  if (lastMessageRecieved.equals(msg) || isPicMsgRepeat(lastMessageRecieved, msg, simi)) {
+						  int time = Autoreply.instence.random.nextInt(60) + 1;
+						  if (Methods.ban(fromGroup, fromQQ, time)) {
+							  Autoreply.sendMessage(0, fromQQ, "你因复读获得了" + time + "秒禁言套餐");
+							}
+						}
+					  lastMessageRecieved = msg;
+					  return true;
+				  }
+				b = checkRepeatStatu(fromGroup, fromQQ, msg, imageFiles, simi);
+				lastMessageRecieved = msg;
+			  } catch (Exception e) {
+				e.printStackTrace();
+			  }
+			  return b;
+		} 
     }
 
     // 复读状态
