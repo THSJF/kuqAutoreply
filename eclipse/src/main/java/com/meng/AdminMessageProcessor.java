@@ -12,6 +12,7 @@ import com.sobte.cqp.jcq.entity.*;
 import java.io.*;
 import java.util.*;
 import java.util.concurrent.*;
+import java.util.function.BiConsumer;
 
 import static com.meng.Autoreply.sendMessage;
 
