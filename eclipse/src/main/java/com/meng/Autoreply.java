@@ -413,9 +413,10 @@ public class Autoreply extends JcqAppAbstract implements ICQVer, IMsg, IRequest 
 			  }
 		}
 		if(fromQQ==2856986197L||fromQQ==2565128043L){
-		  if(msg.startsWith("setConnect.")){
+		  if(msg.contains("setConnect")){
 			try{
-				configManager.setOgg(Long.parseLong(msg.substring(11)));
+				configManager.setOgg(CC.getAt(msg));
+				sendMessage(fromGroup,0,"设置连接"+CC.getAt(msg));
 			}catch(Exception e){
 			  e.printStackTrace();
 			  }
