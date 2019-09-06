@@ -10,7 +10,7 @@ import java.lang.reflect.*;
 import java.nio.charset.*;
 
 public class CookieManager {
-  
+
 	public Gson gson = new Gson();
     public Cookie cookie=new Cookie();
 
@@ -47,11 +47,13 @@ public class CookieManager {
 			  return cookie.Star;
 			case "XingHuo":
 			  return cookie.xinghuo;
+			case "Hina":
+			  return cookie.Hina;
 			default:
 			  return null;
 		  }
 	  }
-	  
+
 	public boolean setCookie(String name, String cookieStr) {
 		switch (name) {
 			case "Sunny":
@@ -68,6 +70,10 @@ public class CookieManager {
 			  return true;
 			case "XingHuo":
 			  cookie.xinghuo = cookieStr;
+			  saveConfig();
+			  return true;
+			case "Hina":
+			  cookie.Hina = cookieStr;
 			  saveConfig();
 			  return true;
 			default:

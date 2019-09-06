@@ -5,4 +5,5 @@ public class Cookie {
 	public String Luna="";
 	public String Star="";
 	public String xinghuo="";
+	public String Hina="";
   }

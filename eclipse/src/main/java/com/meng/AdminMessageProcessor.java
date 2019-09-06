@@ -371,6 +371,21 @@ public class AdminMessageProcessor {
 				Autoreply.sendMessage(fromGroup,0,adminPermission.toString());
 				return true;
 			  }
+			if (msg.equals(".live")) {
+				String msgSend;
+				final StringBuilder stringBuilder = new StringBuilder();
+				Autoreply.instence.liveListener.livePersonMap.forEach(new BiConsumer<Integer, LivePerson>() {
+					  @Override
+					  public void accept(Integer key, LivePerson livePerson) {
+						  if (livePerson.lastStatus) {
+							  stringBuilder.append(Autoreply.instence.configManager.getPersonInfoFromBid(key).name).append("正在直播").append(livePerson.liveUrl).append("\n");
+							}
+						}
+					});
+				msgSend = stringBuilder.toString();
+				Autoreply.sendMessage(fromGroup, fromQQ, msgSend.equals("") ? "居然没有飞机佬直播" : msgSend);
+				return true;
+			  }
 			if (msg.startsWith("ban")) {
                 String[] arr = msg.split("\\.");
                 if (arr.length == 3 || arr.length == 4) {
