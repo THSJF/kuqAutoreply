@@ -1,63 +1,59 @@
 package com.meng;
 
-import com.google.gson.Gson;
-import com.google.gson.JsonObject;
-import com.google.gson.JsonParser;
-import com.meng.bilibili.live.LiveListener;
-import com.meng.bilibili.live.LivePerson;
-import com.meng.bilibili.main.SpaceToLiveJavaBean;
-import com.meng.config.ConfigManager;
-import com.meng.config.javabeans.PersonInfo;
-import com.meng.picEdit.JingShenZhiZhuManager;
-import com.meng.picEdit.ShenChuManager;
-import com.meng.tools.DeleteMessageRunnable;
-import com.meng.tools.Methods;
-import com.meng.tools.MoShenFuSong;
-import com.sobte.cqp.jcq.entity.CQImage;
-
-import java.io.File;
-import java.io.IOException;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.concurrent.ThreadPoolExecutor;
-import java.util.function.BiConsumer;
-import java.util.stream.Collectors;
+import com.google.gson.*;
+import com.meng.bilibili.live.*;
+import com.meng.bilibili.main.*;
+import com.meng.config.*;
+import com.meng.config.javabeans.*;
+import com.meng.picEdit.*;
+import com.meng.tools.*;
+import com.meng.tools.override.*;
+import com.sobte.cqp.jcq.entity.*;
+import java.io.*;
+import java.util.*;
+import java.util.concurrent.*;
 
 import static com.meng.Autoreply.sendMessage;
-import java.util.*;
 
 public class AdminMessageProcessor {
     private ConfigManager configManager;
-	private HashMap<String,String> masterPermission=new HashMap<>();
-	private HashMap<String,String> adminPermission=new HashMap<>();
+	private MyLinkedHashMap<String,String> masterPermission=new MyLinkedHashMap<>();
+	private MyLinkedHashMap<String,String> adminPermission=new MyLinkedHashMap<>();
 	
 
     public AdminMessageProcessor(ConfigManager configManager) {
         this.configManager = configManager;
-		masterPermission.put(".start .stop","总开关");
-		masterPermission.put("block艾特一人","屏蔽列表");
-		masterPermission.put("black艾特一人","黑名单");
-		masterPermission.put("blackgroup加空格加群号","群加入黑名单");
-		masterPermission.put("av更新时间:","用户最新后更新视频时间");
-		masterPermission.put("avJson:","av信息");
-		masterPermission.put("cv更新时间:","用户最后更新文章时间");
-		masterPermission.put("cvJson:","cv信息");
-		masterPermission.put("直播状态lid:","直播间状态");
-		masterPermission.put("直播状态bid:","从UID获取直播间状态");
-		masterPermission.put("获取直播间:","从UID获取直播间ID");
-		masterPermission.put("线程数","线程池信息");
+		masterPermission.put(".start|.stop","总开关");
+		masterPermission.put("find:[QQ号]","在配置文件中查找此人");
+		masterPermission.put("z.add[艾特至少一人]","点赞列表");
+		masterPermission.put("zan-now","立即启动点赞线程,尽量不要用");
+		masterPermission.put("block[艾特一人]","屏蔽列表");
+		masterPermission.put("black[艾特一人]","黑名单");
+		masterPermission.put("blackgroup [群号]","群加入黑名单,多群用空格隔开");
+		masterPermission.put("av更新时间:[UID]","用户最新后更新视频时间");
+		masterPermission.put("avJson:[AV号]","av信息");
+		masterPermission.put("cv更新时间:[UID]","用户最后更新文章时间");
+		masterPermission.put("cvJson:[CV号]","cv信息");
+		masterPermission.put("直播状态lid:[直播间号]","直播间状态");
+		masterPermission.put("直播状态bid:[UID]","从UID获取直播间状态");
+		masterPermission.put("获取直播间:[UID]","从UID获取直播间ID");
 		masterPermission.put("直播时间统计","统计的直播时间");
-		masterPermission.put("nai","三月精账号奶人");
-		masterPermission.put("bav:","视频信息");
-		masterPermission.put("bcv:","文章信息");
-		masterPermission.put("blv:","直播间信息");
+		masterPermission.put("nai.[称呼|直播间号].[内容]","三月精账号发送弹幕");
+		masterPermission.put("bav:[AV号]","视频信息");
+		masterPermission.put("bcv:[CV号]","文章信息");
+		masterPermission.put("blv:[直播间号]","直播间信息");
+		masterPermission.put("精神支柱[图片]|神触[图片]","使用图片生成表情包");
+		masterPermission.put("cookie.[称呼].[cookie字符串]","设置cookie,可选值Sunny,Luna,Star,XingHuo,Hina");
+		masterPermission.put("send.[群号].[内容]","内容转发至指定群");
 		
-		adminPermission.put("findInAll:","查找共同群");
-		adminPermission.put("添加图片","加图");
+		adminPermission.put("findInAll:[QQ号]","查找共同群");
+		adminPermission.put("ban.[QQ号|艾特].[时间]|ban.[群号].[QQ号].[时间]","禁言,单位为秒");
+		adminPermission.put("加图指令懒得写了","色图迫害图女装");
 		adminPermission.put("鬼人正邪统计","鬼人正邪发言统计");
-		adminPermission.put(".on .off","不修改配置文件的单群开关");
-		adminPermission.put(".admin enable  .admin disable","修改配置文件的单群开关");
+		adminPermission.put("线程数","线程池信息");
+		adminPermission.put(".on|.off","不修改配置文件的单群开关");
+		adminPermission.put(".admin enable|.admin disable","修改配置文件的单群开关");
+		adminPermission.put(".live","不管配置文件如何,都回复直播列表");
 		
 		masterPermission.putAll(adminPermission);
 		
@@ -316,23 +312,10 @@ public class AdminMessageProcessor {
                 return true;
             }
 			if (strings[0].equals("cookie")) {
-                switch (strings[1]) {
-                    case "Sunny":
-					  Autoreply.instence.cookieManager.setCookie("Sunny",strings[2]);
-					 break; 
-					case "Luna":
-					  Autoreply.instence.cookieManager.setCookie("Luna",strings[2]);
-					  break;
-					case "Star":
-					  Autoreply.instence.cookieManager.setCookie("Star",strings[2]);
-					  break;
-					case "XingHuo":
-					  Autoreply.instence.cookieManager.setCookie("XingHuo",strings[2]);
-					  break;
-					default:
-					Autoreply.sendMessage(fromGroup,0,"名称不存在");
+				if(!Autoreply.instence.cookieManager.setCookie(strings[1],strings[2])){
+				  Autoreply.sendMessage(fromGroup,0,"添加失败");
 					return true;
-				  }
+				 }
 				  Autoreply.sendMessage(fromGroup,0,"已为"+strings[1]+"设置cookie");
                 return true;
 			  }

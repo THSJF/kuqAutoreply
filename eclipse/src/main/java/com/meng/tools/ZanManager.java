@@ -55,13 +55,11 @@ public class ZanManager {
     }
 
     public boolean checkAdd(long fromGroup, long fromQQ, String msg) {
-        if (Autoreply.instence.configManager.isMaster(fromQQ)) {
             if (msg.startsWith("z.add")) {
                 hashSet.addAll(Autoreply.instence.CC.getAts(msg));
                 saveConfig();
                 Autoreply.sendMessage(fromGroup, fromQQ, "已添加至赞列表");
                 return true;
-            }
         }
         return false;
     }

@@ -134,6 +134,11 @@ public class ConfigManager {
         Autoreply.sendMessage(1023432971, 0, "已将用户" + qq + "加入黑名单");
         Autoreply.sendMessage(1023432971, 0, "已将群" + group + "加入黑名单");
     }
+	
+	public void setOgg(long qqNum){
+	  configJavaBean.ogg=qqNum;
+	  saveConfig();
+	}
 
     public void saveConfig() {
         try {
