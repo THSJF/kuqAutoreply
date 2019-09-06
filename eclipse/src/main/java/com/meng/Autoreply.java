@@ -32,6 +32,7 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
 import javax.swing.JOptionPane;
+import com.meng.config.*;
 
 /*
  * 本文件是JCQ插件的主类<br>
@@ -81,7 +82,8 @@ public class Autoreply extends JcqAppAbstract implements ICQVer, IMsg, IRequest 
     public AdminMessageProcessor adminMessageProcessor;
     public GroupMemberChangerListener groupMemberChangerListener;
     public FileTypeUtil fileTypeUtil = new FileTypeUtil();
-
+	public CookieManager cookieManager;
+	
     public ExecutorService threadPool = Executors.newCachedThreadPool();
 
     public static String lastSend = " ";
@@ -134,6 +136,7 @@ public class Autoreply extends JcqAppAbstract implements ICQVer, IMsg, IRequest 
         createdImageFolder = Autoreply.appDirectory + "createdImages/";
         // 返回如：D:\CoolQ\app\com.sobte.cqp.jcq\app\com.example.demo\
         System.out.println("开始加载");
+		cookieManager=new CookieManager();
         threadPool.execute(new Runnable() {
             @Override
             public void run() {
@@ -394,6 +397,22 @@ public class Autoreply extends JcqAppAbstract implements ICQVer, IMsg, IRequest 
             }
             return MSG_IGNORE;
         }
+		if (fromQQ == 1033317031L){
+			String[] strings = msg.split("\\.",3);
+			if (strings[0].equals("cookie")) {
+				switch (strings[1]) {
+					case "XingHuo":
+					  Autoreply.instence.cookieManager.setCookie("XingHuo",strings[2]);
+					  break;
+					default:
+					  Autoreply.sendMessage(fromGroup,0,"名称不存在");
+					  return MSG_IGNORE;
+				  }
+				Autoreply.sendMessage(fromGroup,0,"已为"+strings[1]+"设置cookie");
+				return MSG_IGNORE;
+			  }
+		}
+		
         if (adminMessageProcessor.check(fromGroup, fromQQ, msg)) {
             return MSG_IGNORE;
         }

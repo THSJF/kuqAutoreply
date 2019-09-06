@@ -315,6 +315,27 @@ public class AdminMessageProcessor {
                 }
                 return true;
             }
+			if (strings[0].equals("cookie")) {
+                switch (strings[1]) {
+                    case "Sunny":
+					  Autoreply.instence.cookieManager.setCookie("Sunny",strings[2]);
+					 break; 
+					case "Luna":
+					  Autoreply.instence.cookieManager.setCookie("Luna",strings[2]);
+					  break;
+					case "Star":
+					  Autoreply.instence.cookieManager.setCookie("Star",strings[2]);
+					  break;
+					case "XingHuo":
+					  Autoreply.instence.cookieManager.setCookie("XingHuo",strings[2]);
+					  break;
+					default:
+					Autoreply.sendMessage(fromGroup,0,"名称不存在");
+					return true;
+				  }
+				  Autoreply.sendMessage(fromGroup,0,"已为"+strings[1]+"设置cookie");
+                return true;
+			  }
             if (msg.startsWith("精神支柱[CQ:image")) {
                 Autoreply.instence.threadPool.execute(new Runnable() {
                     @Override

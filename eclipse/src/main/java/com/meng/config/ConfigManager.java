@@ -123,12 +123,12 @@ public class ConfigManager {
         Autoreply.instence.threadPool.execute(new Runnable() {
             @Override
             public void run() {
-                HashSet<Group> groups = Methods.findQQInAllGroup(qq);
-                for (Group g : groups) {
+            //    HashSet<Group> groups = Methods.findQQInAllGroup(qq);
+             //   for (Group g : groups) {
                     // if (Methods.ban(g.getId(), qq, 300)) {
                     //    sendMessage(g.getId(), 0, "不要问为什么你会进黑名单，你干了什么自己知道");
                     //   }
-                }
+            //    }
             }
         });
         Autoreply.sendMessage(1023432971, 0, "已将用户" + qq + "加入黑名单");
