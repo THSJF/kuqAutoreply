@@ -10,7 +10,7 @@ import com.meng.config.javabeans.*;
 
 public class LiveRoomListenerRunnable implements Runnable {
 	public Map<String,String> liveHead=new HashMap<>();
-		public HashMap<Long,Long> peopleMap=new HashMap<>();
+	public HashMap<Long,Long> peopleMap=new HashMap<>();
 
 	public LiveRoomListenerRunnable() {
 		liveHead.put("Host", "api.live.bilibili.com");
@@ -23,8 +23,8 @@ public class LiveRoomListenerRunnable implements Runnable {
 	@Override
 	public void run() {
 		while (true) {
-			try{
-				for(LivePerson lp:Autoreply.instence.liveListener.livePersonMap.values()){
+			try {
+				for (LivePerson lp:Autoreply.instence.liveListener.livePersonMap.values()) {
 
 					String json=readDanmakuData(Autoreply.instence.cookieManager.cookie.Sunny, lp.roomID);
 					JsonObject jobj=new JsonParser().parse(json).getAsJsonObject();
@@ -34,17 +34,18 @@ public class LiveRoomListenerRunnable implements Runnable {
 					for (JsonElement jo:jaar) {
 						try {
 							long timeStamp=simpleDateFormat.parse(jo.getAsJsonObject().get("timeline").getAsString()).getTime();
-							//	String name=jo.get("nickname").getAsString();
+							String name=jo.getAsJsonObject().get("nickname").getAsString();
 							long uid=jo.getAsJsonObject().get("uid").getAsLong();
-							if (System.currentTimeMillis() - timeStamp > 60 * 60 * 1000) {
+							if (System.currentTimeMillis() - timeStamp > 10 * 60 * 1000) {
 								continue;
 							  }
 							if (!peopleMap.containsKey(uid)) {
 								peopleMap.put(uid, timeStamp);
 								PersonInfo pi1=Autoreply.instence.configManager.getPersonInfoFromBid(uid);
 								PersonInfo pi2=Autoreply.instence.configManager.getPersonInfoFromLiveId(Integer.parseInt(lp.roomID));
-
-								System.out.println(pi1.name + "出现在"+pi2.name+"的直播间"+lp.roomID);
+								String n1=pi1 == null ?name: pi1.name;
+								//	System.out.println();
+								Autoreply.instence.sendMessage(1023432971, 0, n1 + "出现在" + pi2.name + "的直播间" + lp.roomID);
 							  }							
 						  } catch (ParseException e) {
 							e.printStackTrace();
@@ -53,16 +54,16 @@ public class LiveRoomListenerRunnable implements Runnable {
 					Iterator it=peopleMap.entrySet().iterator();
 					while (it.hasNext()) {
 						Map.Entry<Long,Long> entry=(Map.Entry<Long, Long>) it.next();
-						if (System.currentTimeMillis() - entry.getValue() > 60 * 60 * 1000) {
+						if (System.currentTimeMillis() - entry.getValue() > 10 * 60 * 1000) {
 							it.remove(); 
 						  }
 					  }
-					
+
 				  }
-			}catch(Exception e){
-			  e.printStackTrace();
+			  } catch (Exception e) {
+				e.printStackTrace();
 			  }
-			  try {
+			try {
 				Thread.sleep(1000);
 			  } catch (InterruptedException e) {
 
@@ -94,4 +95,4 @@ public class LiveRoomListenerRunnable implements Runnable {
 			return null;
 		  }
 	  } 
-}
+  }
