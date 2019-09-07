@@ -36,7 +36,7 @@ public class LiveRoomListenerRunnable implements Runnable {
 							long timeStamp=simpleDateFormat.parse(jo.getAsJsonObject().get("timeline").getAsString()).getTime();
 							String name=jo.getAsJsonObject().get("nickname").getAsString();
 							long uid=jo.getAsJsonObject().get("uid").getAsLong();
-							if (System.currentTimeMillis() - timeStamp > 10 * 60 * 1000) {
+							if (System.currentTimeMillis() - timeStamp > 5 * 60 * 1000) {
 								continue;
 							  }
 							if (!peopleMap.containsKey(uid)) {
@@ -56,7 +56,7 @@ public class LiveRoomListenerRunnable implements Runnable {
 					Iterator it=peopleMap.entrySet().iterator();
 					while (it.hasNext()) {
 						Map.Entry<Long,Long> entry=(Map.Entry<Long, Long>) it.next();
-						if (System.currentTimeMillis() - entry.getValue() > 9 * 60 * 1000) {
+						if (System.currentTimeMillis() - entry.getValue() > 10 * 60 * 1000) {
 							it.remove(); 
 						  }
 					  }
