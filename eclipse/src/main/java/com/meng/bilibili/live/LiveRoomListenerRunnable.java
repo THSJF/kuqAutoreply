@@ -31,11 +31,11 @@ public class LiveRoomListenerRunnable implements Runnable {
 					JsonArray jaar=jobj.get("data").getAsJsonObject().get("room").getAsJsonArray();
 					SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 
-					for (JsonObject jo:jaar) {
+					for (JsonElement jo:jaar) {
 						try {
-							long timeStamp=simpleDateFormat.parse(jo.get("timeline").getAsString()).getTime();
+							long timeStamp=simpleDateFormat.parse(jo.getAsJsonObject().get("timeline").getAsString()).getTime();
 							//	String name=jo.get("nickname").getAsString();
-							long uid=jo.get("uid").getAsLong();
+							long uid=jo.getAsJsonObject().get("uid").getAsLong();
 							if (System.currentTimeMillis() - timeStamp > 60 * 60 * 1000) {
 								continue;
 							  }
@@ -57,15 +57,16 @@ public class LiveRoomListenerRunnable implements Runnable {
 							it.remove(); 
 						  }
 					  }
-					try {
-						Thread.sleep(1000);
-					  } catch (InterruptedException e) {
-
-					  } 
+					
 				  }
 			}catch(Exception e){
 			  e.printStackTrace();
-			}
+			  }
+			  try {
+				Thread.sleep(1000);
+			  } catch (InterruptedException e) {
+
+			  } 
 		  }
 	  }
 

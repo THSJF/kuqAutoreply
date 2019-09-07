@@ -23,7 +23,7 @@ import java.util.concurrent.*;
 
 public class LiveListener implements Runnable {
 
-    public HashMap<Integer, LivePerson> livePersonMap = new HashMap<>();
+    public ConcurrentHashMap<Integer, LivePerson> livePersonMap = new ConcurrentHashMap<>();
     private boolean loadFinish = false;
     private ConcurrentHashMap<String, String> liveTimeMap = new ConcurrentHashMap<>();
 
@@ -44,7 +44,7 @@ public class LiveListener implements Runnable {
             saveLiveTime();
         }
         try {
-            Type token = new TypeToken<HashMap<String, String>>() {
+            Type token = new TypeToken<ConcurrentHashMap<String, String>>() {
             }.getType();
             liveTimeMap = new Gson().fromJson(Methods.readFileToString(liveTimeFile.getAbsolutePath()), token);
         } catch (Exception e) {
