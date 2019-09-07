@@ -46,7 +46,9 @@ public class LiveRoomListenerRunnable implements Runnable {
 								String n1=pi1 == null ?name: pi1.name;
 								//	System.out.println();
 								Autoreply.instence.sendMessage(1023432971, 0, n1 + "出现在" + pi2.name + "的直播间" + lp.roomID);
-							  }							
+							  } else {
+								peopleMap.put(uid, timeStamp);
+							  }
 						  } catch (ParseException e) {
 							e.printStackTrace();
 						  }
@@ -54,7 +56,7 @@ public class LiveRoomListenerRunnable implements Runnable {
 					Iterator it=peopleMap.entrySet().iterator();
 					while (it.hasNext()) {
 						Map.Entry<Long,Long> entry=(Map.Entry<Long, Long>) it.next();
-						if (System.currentTimeMillis() - entry.getValue() > 10 * 60 * 1000) {
+						if (System.currentTimeMillis() - entry.getValue() > 9 * 60 * 1000) {
 							it.remove(); 
 						  }
 					  }
@@ -64,7 +66,7 @@ public class LiveRoomListenerRunnable implements Runnable {
 				e.printStackTrace();
 			  }
 			try {
-				Thread.sleep(1000);
+				Thread.sleep(2000);
 			  } catch (InterruptedException e) {
 
 			  } 
