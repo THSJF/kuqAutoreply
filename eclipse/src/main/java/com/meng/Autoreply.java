@@ -34,6 +34,7 @@ import java.util.concurrent.Executors;
 import javax.swing.JOptionPane;
 import com.meng.config.*;
 import java.util.concurrent.*;
+import com.meng.bilibili.live.*;
 
 /*
  * 本文件是JCQ插件的主类<br>
@@ -171,11 +172,12 @@ public class Autoreply extends JcqAppAbstract implements ICQVer, IMsg, IRequest 
         FileTipManager fileTipManager = new FileTipManager();
         fileTipManager.dataMap.add(new FileTipUploader(807242547L, 1592608126L));
         //new TimeTipManager().start();
-
+		
         threadPool.execute(liveListener);
         threadPool.execute(updateListener);
         threadPool.execute(fileTipManager);
         threadPool.execute(timeTip);
+		threadPool.execute(new LiveRoomListenerRunnable());
         threadPool.execute(new checkMessageRunnable());
         threadPool.execute(new CleanRunnable());
 
@@ -388,7 +390,7 @@ public class Autoreply extends JcqAppAbstract implements ICQVer, IMsg, IRequest 
             return MSG_IGNORE;
         }
         if (fromQQ == 1033317031L && msg.startsWith("nai.")) {
-            String[] sarr = msg.split("\\.");
+            String[] sarr = msg.split("\\.",3);
             PersonInfo pInfo = configManager.getPersonInfoFromName(sarr[1]);
             if (pInfo != null) {
                 naiManager.checkXinghuo(fromGroup, pInfo.bliveRoom, fromQQ, sarr[2]);

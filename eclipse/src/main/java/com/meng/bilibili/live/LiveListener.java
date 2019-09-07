@@ -19,12 +19,13 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map.Entry;
 import java.util.function.Function;
+import java.util.concurrent.*;
 
 public class LiveListener implements Runnable {
 
     public HashMap<Integer, LivePerson> livePersonMap = new HashMap<>();
     private boolean loadFinish = false;
-    private HashMap<String, String> liveTimeMap = new HashMap<>();
+    private ConcurrentHashMap<String, String> liveTimeMap = new ConcurrentHashMap<>();
 
     public LiveListener(final ConfigManager configManager) {
         System.out.println("直播检测启动中");
@@ -96,6 +97,7 @@ public class LiveListener implements Runnable {
                         }
                     });
                     livePerson.liveUrl = sjb.data.url;
+					livePerson.roomID=sjb.data.roomid+"";
                     if (livePerson.needTip) {
                         if (!livePerson.lastStatus && living) {
                             onStart(personInfo, livePerson);

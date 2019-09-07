@@ -262,7 +262,7 @@ public class AdminMessageProcessor {
                 return true;
             }
             if (msg.startsWith("nai.")) {
-                String[] sarr = msg.split("\\.");
+                String[] sarr = msg.split("\\.",3);
                 PersonInfo pInfo = configManager.getPersonInfoFromName(sarr[1]);
                 if (pInfo != null) {
                     Autoreply.instence.naiManager.check(fromGroup, pInfo.bliveRoom, fromQQ, sarr[2]);

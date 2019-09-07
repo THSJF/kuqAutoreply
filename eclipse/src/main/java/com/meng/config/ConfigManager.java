@@ -109,6 +109,15 @@ public class ConfigManager {
         }
         return null;
     }
+	
+	public PersonInfo getPersonInfoFromLiveId(long lid) {
+        for (PersonInfo pi : configJavaBean.personInfo) {
+            if (pi.bliveRoom == lid) {
+                return pi;
+			  }
+		  }
+        return null;
+	  }
 
     public void addBlack(long group, final long qq) {
         configJavaBean.blackListQQ.add(qq);
