@@ -59,7 +59,7 @@ public class Methods {
         ban(fromGroup, qqs, time);
     }
 
-    public static void ban(long fromGroup, long[] banQQs, int time) {
+    public static void ban(long fromGroup, long[] banQQs, float time) {
         Member me = Autoreply.CQ.getGroupMemberInfoV2(fromGroup, Autoreply.CQ.getLoginQQ());
         Member ogg = Autoreply.CQ.getGroupMemberInfoV2(fromGroup, Autoreply.instence.configManager.configJavaBean.ogg);
         StringBuilder banqqs = new StringBuilder("");
@@ -69,7 +69,7 @@ public class Methods {
             }
             Member ban = Autoreply.CQ.getGroupMemberInfoV2(fromGroup, banQQ);
             if (me.getAuthority() - ban.getAuthority() > 0) {
-                Autoreply.CQ.setGroupBan(fromGroup, banQQ, time);
+                Autoreply.CQ.setGroupBan(fromGroup, banQQ, (int)time);
                 Autoreply.instence.useCount.incGbanCount(Autoreply.CQ.getLoginQQ());
             } else if (ogg != null && ogg.getAuthority() - ban.getAuthority() > 0) {
                 banqqs.append(" ").append(banQQ);
