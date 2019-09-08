@@ -78,9 +78,6 @@ public class PrivateMsgRunnable implements Runnable {
         if (Autoreply.instence.picSearchManager.check(fromGroup, fromQQ, msg, imageFiles)) {// 搜索图片
             return true;
         }
-        if (Methods.checkMeng2(fromGroup, msg)) {// 萌2
-            return true;
-        }
         if (Autoreply.instence.rollPlane.check(fromGroup, msg)) {// roll
             return true;
         }
