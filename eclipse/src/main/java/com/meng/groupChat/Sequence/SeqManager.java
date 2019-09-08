@@ -7,21 +7,25 @@ public class SeqManager {
 	private ArrayList<SeqBean> seqs=new ArrayList<>();
 
 	public SeqManager() {
-		seqs.add(new SeqBean(time,1));
+		seqs.add(new SeqBean(time, 1));
 	  }
 
 	public boolean check(long fromGroup, long fromQQ, String msg) {
 		for (SeqBean sb:seqs) {
 			if (msg.equals(sb.content[sb.pos])) {
-				sb.pos+=2;
+				if (msg.equals(sb.content[0])) {
+					sb.pos = 0;
+				  }
+				++sb.pos;			
 				if (sb.pos >= sb.content.length) {
 					sb.pos = 0;
 				  } else {
-					Autoreply.sendMessage(fromGroup, 0, sb.content[sb.pos-1]);
+					Autoreply.sendMessage(fromGroup, 0, sb.content[sb.pos]);
 				  }
-				  if(sb.flag==1){
-					  Autoreply.instence.useCount.decLife(fromQQ);
-					  Autoreply.instence.groupCount.decLife(fromGroup);
+				++sb.pos;
+				if (sb.flag == 1) {
+					Autoreply.instence.useCount.decLife(fromQQ);
+					Autoreply.instence.groupCount.decLife(fromGroup);
 				  }
 				return true;
 			  }
