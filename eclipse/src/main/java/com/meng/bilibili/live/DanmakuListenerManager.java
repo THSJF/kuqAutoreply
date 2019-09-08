@@ -27,6 +27,15 @@ public class DanmakuListenerManager {
             e.printStackTrace();
 		  }
 	  }
+	  
+	  public DanmakuListener getListener(int room){
+		for(DanmakuListener dl:listener){
+		  if(dl.room==room){
+			return dl;
+		  }
+		}
+		return null;
+	  }
 
 	public boolean addMotherWord(String s) {
 		try {

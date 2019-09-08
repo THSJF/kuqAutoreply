@@ -14,6 +14,7 @@ import java.nio.charset.*;
 import java.util.*;
 import java.util.Map.*;
 import java.util.concurrent.*;
+import java.util.function.Function;
 
 public class LiveListener implements Runnable {
 
@@ -84,6 +85,18 @@ public class LiveListener implements Runnable {
                     }
                     SpaceToLiveJavaBean sjb = new Gson().fromJson(Methods.getSourceCode("https://api.live.bilibili.com/room/v1/Room/getRoomInfoOld?mid=" + personInfo.bid), SpaceToLiveJavaBean.class);
                     boolean living = sjb.data.liveStatus == 1;
+					if(living){
+					  if(Autoreply.instence.danmakuListenerManager.getListener(personInfo.bliveRoom)==null){
+						  DanmakuListener dl=new DanmakuListener(new URI("wss://broadcastlv.chat.bilibili.com:2245/sub"), personInfo.bliveRoom);
+						  dl.connect();
+						  Autoreply.instence.danmakuListenerManager.listener.add(dl);
+					  }
+					}else{
+						DanmakuListener dl=Autoreply.instence.danmakuListenerManager.getListener(personInfo.bliveRoom);
+						if(dl!=null){
+							dl.close();
+						} 
+					}
                     LivePerson livePerson = livePersonMap.computeIfAbsent(personInfo.bid, new Function<Integer, LivePerson>() {
                         @Override
                         public LivePerson apply(Integer k) {
@@ -130,7 +143,7 @@ public class LiveListener implements Runnable {
     private void onStart(PersonInfo personInfo, LivePerson livePerson) {
         livePerson.liveStartTimeStamp = System.currentTimeMillis() / 1000;
 		try {
-			Autoreply.instence.danmakuListenerManager.listener.add(new DanmakuListener(new URI("wss://broadcastlv.chat.bilibili.com:2245/sub"), personInfo.bliveRoom));
+			Autoreply.instence.danmakuListenerManager.listener.add();
 		  } catch (URISyntaxException e) {}
         tipStart(personInfo);
     }

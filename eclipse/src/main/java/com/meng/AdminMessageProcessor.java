@@ -84,7 +84,7 @@ public class AdminMessageProcessor {
             }
 			if(msg.startsWith("mother.")){
 			  if(msg.length()>7){
-				  if(Autoreply.instence.liveRoomListenerRunnable.addMotherWord(msg.substring(7))){
+				  if(Autoreply.instence.danmakuListenerManager.addMotherWord(msg.substring(7))){
 					  Autoreply.sendMessage(fromGroup,0,msg.substring(7)+"已添加");
 				  }else{
 					Autoreply.sendMessage(fromGroup,0,"添加失败");
