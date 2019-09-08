@@ -82,6 +82,14 @@ public class AdminMessageProcessor {
                 Autoreply.sendMessage(fromGroup, 0, "enabled");
                 return true;
             }
+			if(msg.startsWith("mother.")){
+			  if(msg.length()>7){
+				  Autoreply.instence.liveRoomListenerRunnable.addMotherWord(msg.substring(7));
+			  }else{
+				Autoreply.sendMessage(fromGroup,0,"参数有误");
+			  }
+			  return true;
+			}
             if (msg.startsWith("block[CQ:at")) {
                 StringBuilder sb = new StringBuilder();
                 List<Long> qqs = Autoreply.instence.CC.getAts(msg);

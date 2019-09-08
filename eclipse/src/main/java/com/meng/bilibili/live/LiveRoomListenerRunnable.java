@@ -1,16 +1,20 @@
 package com.meng.bilibili.live;
 
 import com.google.gson.*;
+import com.google.gson.reflect.*;
+import com.meng.*;
+import com.meng.tools.*;
+import java.io.*;
+import java.lang.reflect.*;
+import java.nio.charset.*;
 import java.text.*;
 import java.util.*;
 import org.jsoup.*;
-import com.meng.tools.*;
-import com.meng.*;
-import com.meng.config.javabeans.*;
 
 public class LiveRoomListenerRunnable implements Runnable {
 	public Map<String,String> liveHead=new HashMap<>();
 	public HashSet<MsgBean> peopleSet=new HashSet<MsgBean>();
+	public HashSet<String> motherSet=new HashSet<>();
 
 
 	public LiveRoomListenerRunnable() {
@@ -19,6 +23,29 @@ public class LiveRoomListenerRunnable implements Runnable {
         liveHead.put("Content-Type", "application/x-www-form-urlencoded; charset=UTF-8");
         liveHead.put("Connection", "keep-alive");
         liveHead.put("Origin", "https://live.bilibili.com");
+
+		File notherMapFile = new File(Autoreply.appDirectory + "mother.json");
+        if (!notherMapFile.exists()) {
+            saveMotherMap();
+		  }
+        try {
+            Type token = new TypeToken<HashSet<String>>() {
+			  }.getType();
+            motherSet = new Gson().fromJson(Methods.readFileToString(notherMapFile.getAbsolutePath()), token);
+		  } catch (Exception e) {
+            e.printStackTrace();
+		  }
+
+	  }
+
+	public boolean addMotherWord(String s) {
+		try {
+			motherSet.add(s);
+			saveMotherMap();
+		  } catch (Exception e) {
+			return false;
+		  }
+		return true;
 	  }
 
 	@Override
@@ -40,7 +67,7 @@ public class LiveRoomListenerRunnable implements Runnable {
 							String msg=jo.text;
 							long uid=jo.uid; 
 							if (!peopleSet.contains(jo)) {			
-								if ((jo.text.contains("hop")||jo.text.contains("Хоп")) && jo.text.contains("点歌")) {
+								if (containsMother(jo.text) && jo.text.contains("点歌")) {
 									//System.out.println("你点你妈呢");
 									Autoreply.instence.naiManager.sendDanmaku(lp.roomID, Autoreply.instence.cookieManager.cookie.Sunny, "您点您妈呢");
 									Autoreply.instence.naiManager.sendDanmaku(lp.roomID, Autoreply.instence.cookieManager.cookie.Luna, "您点您妈呢");
@@ -95,4 +122,26 @@ public class LiveRoomListenerRunnable implements Runnable {
 			return null;
 		  }
 	  } 
+
+	private boolean containsMother(String msg) {
+		for (String s:motherSet) {
+			if (msg.contains(s)) {
+				return true;
+			  }
+		  }
+		return false;
+	  }
+
+	private void saveMotherMap() {
+        try {
+            File file = new File(Autoreply.appDirectory + "mother.json");
+            FileOutputStream fos = new FileOutputStream(file);
+            OutputStreamWriter writer = new OutputStreamWriter(fos, StandardCharsets.UTF_8);
+            writer.write(new Gson().toJson(motherSet));
+            writer.flush();
+            fos.close();
+		  } catch (IOException e) {
+            e.printStackTrace();
+		  }
+	  }
   }
