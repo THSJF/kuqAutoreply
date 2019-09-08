@@ -16,7 +16,7 @@ public class SeqManager {
 	public SeqManager() {
 		File jsonFile = new File(Autoreply.appDirectory + "seq.json");
         if (!jsonFile.exists()) {
-            saveLiveTime();
+            saveData();
 		  }
 		  
 		Type type = new TypeToken<HashMap<String, ArrayList<String>>>() {
@@ -49,12 +49,13 @@ public class SeqManager {
 			  }
 			if (msg.equals(sb.content[sb.pos])) {
 				++sb.pos;			
-				if (sb.pos >= sb.content.length) {
-					sb.pos = 0;
-				  } else {
+				if (sb.pos < sb.content.length) {
 					Autoreply.sendMessage(fromGroup, 0, sb.content[sb.pos]);
 				  }
 				++sb.pos;
+				if(sb.pos>=sb.content.length-1){
+				  sb.pos=0;
+				}
 				if (sb.flag == 1) {
 					Autoreply.instence.useCount.decLife(fromQQ);
 					Autoreply.instence.groupCount.decLife(fromGroup);
@@ -68,7 +69,7 @@ public class SeqManager {
 		return false;
 	  }
 
-	private void saveLiveTime() {
+	private void saveData() {
         try {
             File file = new File(Autoreply.appDirectory + "seq.json");
             FileOutputStream fos = new FileOutputStream(file);
