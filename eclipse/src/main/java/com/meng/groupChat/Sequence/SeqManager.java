@@ -12,31 +12,23 @@ import com.google.gson.reflect.*;
 public class SeqManager {
     private ArrayList<SeqBean> seqs=new ArrayList<>();
 	private HashMap<String, ArrayList<String>> jsonData = new HashMap<>();
-	
+
 	public SeqManager() {
 		File jsonFile = new File(Autoreply.appDirectory + "seq.json");
         if (!jsonFile.exists()) {
             saveData();
 		  }
-		  
 		Type type = new TypeToken<HashMap<String, ArrayList<String>>>() {
 		  }.getType();
         jsonData = new Gson().fromJson(Methods.readFileToString(jsonFile.getAbsolutePath()), type);
-		
-		  
    		for (String key : jsonData.keySet()) {
-		  ArrayList<String> al=jsonData.get(key);
+			ArrayList<String> al=jsonData.get(key);
 			String[] content=al.toArray(new String[al.size()]);
 			int flag=0;
-			switch (key) {
-				case "time":
-				case "time1":
-				  flag = 1;
-				  break;
-				case "menger":
-				case "menger2":
-				  flag = 2;
-				  break;
+			if (key.startsWith("time")) {
+				flag = 1;
+			  } else if (key.startsWith("menger")) {
+				flag = 2;
 			  }
 			seqs.add(new SeqBean(content, flag));
 		  }
@@ -53,9 +45,9 @@ public class SeqManager {
 					Autoreply.sendMessage(fromGroup, 0, sb.content[sb.pos]);
 				  }
 				++sb.pos;
-				if(sb.pos>=sb.content.length-1){
-				  sb.pos=0;
-				}
+				if (sb.pos >= sb.content.length - 1) {
+					sb.pos = 0;
+				  }
 				if (sb.flag == 1) {
 					Autoreply.instence.useCount.decLife(fromQQ);
 					Autoreply.instence.groupCount.decLife(fromGroup);
