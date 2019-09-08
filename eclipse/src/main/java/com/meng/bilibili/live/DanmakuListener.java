@@ -69,8 +69,8 @@ public class DanmakuListener extends WebSocketClient {
 				  	PersonInfo pi1=Autoreply.instence.configManager.getPersonInfoFromBid(uid);
 					PersonInfo pi2=Autoreply.instence.configManager.getPersonInfoFromLiveId(room);
 					String n1=pi1 == null ?name: pi1.name;
-					//Autoreply.instence.sendMessage(1023432971, 0, n1 + "出现在" + pi2.name + "的直播间" + room);
-					Autoreply.instence.sendMessage(1023432971, 0, n1 + "在" + pi2.name + "的直播间" + room + "说:" + text);
+					Autoreply.instence.sendMessage(1023432971, 0, n1 + "出现在" + pi2.name + "的直播间" + room);
+					//Autoreply.instence.sendMessage(1023432971, 0, n1 + "在" + pi2.name + "的直播间" + room + "说:" + text);
 				  }
 				peopleMap.put(uid, System.currentTimeMillis());
 				if (Autoreply.instence.danmakuListenerManager.containsMother(text) && text.contains("点歌")) {
