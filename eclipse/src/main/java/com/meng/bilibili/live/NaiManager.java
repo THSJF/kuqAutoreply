@@ -16,7 +16,7 @@ public class NaiManager {
 
     private final String POST_URL = "http://api.live.bilibili.com/msg/send";
     
-    public void checkXinghuo(long fromGroup, int roomId, long fromQQ, String msg) {
+    public void checkXinghuo(long fromGroup, String roomId, long fromQQ, String msg) {
         try {
             sendDanmaku(roomId, Autoreply.instence.cookieManager.cookie.xinghuo, msg);
         } catch (IOException e) {
@@ -25,7 +25,7 @@ public class NaiManager {
         Autoreply.sendMessage(fromGroup, fromQQ, roomId + "已奶");
     }
 
-    public void check(long fromGroup, int roomId, long fromQQ, String msg) {
+    public void check(long fromGroup, String roomId, long fromQQ, String msg) {
         try {
             sendDanmaku(roomId, Autoreply.instence.cookieManager.cookie.Sunny, msg);
             sendDanmaku(roomId, Autoreply.instence.cookieManager.cookie.Luna, msg);
@@ -36,7 +36,7 @@ public class NaiManager {
         Autoreply.sendMessage(fromGroup, fromQQ, roomId + "已奶");
     }
 
-    private void sendDanmaku(int roomId, String cookie, String msg) throws IOException {
+    public void sendDanmaku(String roomId, String cookie, String msg) throws IOException {
         URL postUrl = new URL(POST_URL);
         String content = "";// 要发出的数据
         // 打开连接

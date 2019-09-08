@@ -396,9 +396,9 @@ public class Autoreply extends JcqAppAbstract implements ICQVer, IMsg, IRequest 
             String[] sarr = msg.split("\\.",3);
             PersonInfo pInfo = configManager.getPersonInfoFromName(sarr[1]);
             if (pInfo != null) {
-                naiManager.checkXinghuo(fromGroup, pInfo.bliveRoom, fromQQ, sarr[2]);
+                naiManager.checkXinghuo(fromGroup, pInfo.bliveRoom+"", fromQQ, sarr[2]);
             } else {
-                naiManager.checkXinghuo(fromGroup, Integer.parseInt(sarr[1]), fromQQ, sarr[2]);
+                naiManager.checkXinghuo(fromGroup, sarr[1], fromQQ, sarr[2]);
             }
             return MSG_IGNORE;
         }
