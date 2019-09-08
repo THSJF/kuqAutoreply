@@ -6,26 +6,29 @@ import com.meng.tools.*;
 import java.io.*;
 import java.nio.charset.*;
 import java.util.*;
+import java.lang.reflect.*;
+import com.google.gson.reflect.*;
 
 public class SeqManager {
 	//public String[] time=new String[]{"苟","利","国","家","生","死","以","岂","因","祸","福","避","趋","之"};
 	//public String[] menger=new String[]{"此","生","无","悔","入","东","方","来","世","愿","生","幻","想","乡"};
 	private ArrayList<SeqBean> seqs=new ArrayList<>();
-	public JsonObject jsonObject;
+	private HashMap<String, ArrayList<String>> jsonData = new HashMap<>();
+	
 	public SeqManager() {
-		File liveTimeFile = new File(Autoreply.appDirectory + "seq.json");
-        if (!liveTimeFile.exists()) {
+		File jsonFile = new File(Autoreply.appDirectory + "seq.json");
+        if (!jsonFile.exists()) {
             saveLiveTime();
 		  }
-        jsonObject = new JsonParser().parse(Methods.readFileToString(liveTimeFile.getAbsolutePath())).getAsJsonObject();
-		LinkedTreeMap linkedTreeMap = (LinkedTreeMap) ((Object)jsonObject);
-		for (Object o : linkedTreeMap.keySet()) {
-			String key = (String) o;
-			JsonArray jsonArray=(JsonArray) linkedTreeMap.get(key);
-			String[] content=new String[jsonArray.size()];
-			for (int i=0;i < content.length;++i) {
-				content[i] = jsonArray.get(i).getAsString();
-			  }
+		  
+		Type type = new TypeToken<HashMap<String, ArrayList<String>>>() {
+		  }.getType();
+        jsonData = new Gson().fromJson(Methods.readFileToString(jsonFile.getAbsolutePath()), type);
+		
+		  
+   		for (String key : jsonData.keySet()) {
+		  ArrayList<String> al=jsonData.get(key);
+			String[] content=al.toArray(new String[al.size()]);
 			int flag=0;
 			switch (key) {
 				case "time":
@@ -72,7 +75,7 @@ public class SeqManager {
             File file = new File(Autoreply.appDirectory + "seq.json");
             FileOutputStream fos = new FileOutputStream(file);
             OutputStreamWriter writer = new OutputStreamWriter(fos, StandardCharsets.UTF_8);
-            writer.write(new Gson().toJson(new Object()));
+            writer.write(new Gson().toJson(jsonData));
             writer.flush();
             fos.close();
 		  } catch (IOException e) {

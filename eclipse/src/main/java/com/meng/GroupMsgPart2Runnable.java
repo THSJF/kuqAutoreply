@@ -137,16 +137,6 @@ public class GroupMsgPart2Runnable implements Runnable {
         if (Autoreply.instence.banner.checkBan(fromQQ, fromGroup, msg)) {// 禁言
             return true;
         }
-     /*   if (Methods.checkGou(fromGroup, msg)) {// 苟
-            Autoreply.instence.useCount.decLife(fromQQ);
-            Autoreply.instence.groupCount.decLife(fromGroup);
-            return true;
-        }
-        if (Methods.checkMeng2(fromGroup, msg)) {// 萌2
-            Autoreply.instence.useCount.incMengEr(fromQQ);
-            Autoreply.instence.groupCount.decLife(fromGroup);
-            return true;
-        }*/
         if (groupConfig.isCuigeng() && Autoreply.instence.updateManager.check(fromGroup, msg)) {
             return true;
         }
