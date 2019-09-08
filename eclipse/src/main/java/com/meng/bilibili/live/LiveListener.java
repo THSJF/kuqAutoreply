@@ -142,20 +142,11 @@ public class LiveListener implements Runnable {
 
     private void onStart(PersonInfo personInfo, LivePerson livePerson) {
         livePerson.liveStartTimeStamp = System.currentTimeMillis() / 1000;
-		try {
-			Autoreply.instence.danmakuListenerManager.listener.add();
-		  } catch (URISyntaxException e) {}
         tipStart(personInfo);
     }
 
     private void onStop(PersonInfo personInfo, LivePerson livePerson) {
         countLiveTime(personInfo, livePerson);
-		for(DanmakuListener dl:Autoreply.instence.danmakuListenerManager.listener){
-		  if(dl.room==personInfo.bliveRoom){
-			dl.close();
-			break;
-		  }
-		}
         tipFinish(personInfo);
     }
 
@@ -227,7 +218,7 @@ public class LiveListener implements Runnable {
 
     private void saveLiveTime() {
         try {
-            File file = new File(Autoreply.appDirectory + "liveTime.json");
+            File file = new File(Autoreply.appDirectory + "liveTime2.json");
             FileOutputStream fos = new FileOutputStream(file);
             OutputStreamWriter writer = new OutputStreamWriter(fos, StandardCharsets.UTF_8);
             writer.write(new Gson().toJson(liveTimeMap));
