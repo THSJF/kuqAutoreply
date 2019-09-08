@@ -344,7 +344,7 @@ public class Methods {
     }
 
     // 萌二
-    public static boolean checkMeng2(long fromGroup, String msg) {
+  /*  public static boolean checkMeng2(long fromGroup, String msg) {
 
         if (msg.equals("此")) {
             meng2tmp = "生";
@@ -379,7 +379,7 @@ public class Methods {
             return true;
         }
         return false;
-    }
+    }*/
 
     public static void setRandomPop() {
         Methods.getSourceCode("http://logic.content.qq.com/bubble/setup?callback=&id=" + new Random().nextInt(269) + "&g_tk=" + Autoreply.CQ.getCsrfToken(), Autoreply.CQ.getCookies());

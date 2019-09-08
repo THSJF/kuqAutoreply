@@ -380,7 +380,7 @@ public class Autoreply extends JcqAppAbstract implements ICQVer, IMsg, IRequest 
         banListener.check(fromGroup, fromQQ, msg);
         useCount.incSpeak(fromQQ);
         groupCount.incSpeak(fromGroup);
-        if ((msg.contains("此生无悔入东方") && !msg.equals("此生无悔入东方")) || msg.contains("方东入悔无生此")) {
+        if (msg.contains("方东入悔无生此")) {
             useCount.incMengEr(fromQQ);
             groupCount.incMengEr(fromGroup);
         }

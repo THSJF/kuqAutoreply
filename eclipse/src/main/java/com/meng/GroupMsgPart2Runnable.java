@@ -141,12 +141,12 @@ public class GroupMsgPart2Runnable implements Runnable {
             Autoreply.instence.useCount.decLife(fromQQ);
             Autoreply.instence.groupCount.decLife(fromGroup);
             return true;
-        }*/
+        }
         if (Methods.checkMeng2(fromGroup, msg)) {// 萌2
             Autoreply.instence.useCount.incMengEr(fromQQ);
             Autoreply.instence.groupCount.decLife(fromGroup);
             return true;
-        }
+        }*/
         if (groupConfig.isCuigeng() && Autoreply.instence.updateManager.check(fromGroup, msg)) {
             return true;
         }
