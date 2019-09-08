@@ -35,6 +35,7 @@ import javax.swing.JOptionPane;
 import com.meng.config.*;
 import java.util.concurrent.*;
 import com.meng.bilibili.live.*;
+import com.meng.groupChat.Sequence.*;
 
 /*
  * 本文件是JCQ插件的主类<br>
@@ -85,6 +86,7 @@ public class Autoreply extends JcqAppAbstract implements ICQVer, IMsg, IRequest 
     public GroupMemberChangerListener groupMemberChangerListener;
     public FileTypeUtil fileTypeUtil = new FileTypeUtil();
 	public CookieManager cookieManager;
+	public SeqManager seqManager=new SeqManager();
 	
     public ExecutorService threadPool = Executors.newCachedThreadPool();
 

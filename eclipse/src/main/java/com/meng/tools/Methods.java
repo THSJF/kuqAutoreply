@@ -260,7 +260,7 @@ public class Methods {
     }
 
     // 暴力行为
-    public static boolean checkGou(long fromGroup, String msg) {
+/*    public static boolean checkGou(long fromGroup, String msg) {
         if (msg.equals("苟") || msg.equals("苟？") || msg.equals("苟?") || msg.equals("苟...") || msg.startsWith("苟…")) {
             motmp = "利";
             Autoreply.sendMessage(fromGroup, 0, "利");
@@ -295,7 +295,7 @@ public class Methods {
         }
         return false;
     }
-
+*/
     // 窥屏检测
     public static boolean checkLook(long fromGroup, String msg) {
         if (msg.equals("有人吗") || msg.equalsIgnoreCase("testip") || msg.equalsIgnoreCase("窥屏检测")) {
