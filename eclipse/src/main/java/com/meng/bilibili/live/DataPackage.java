@@ -1,4 +1,5 @@
 package com.meng.bilibili.live;
+import java.io.*;
 
 public class DataPackage {
 	public byte[] data;
@@ -20,7 +21,7 @@ public class DataPackage {
 		write(getBytes(op = opCode));
 		write(getBytes(seq = 1));
 		write(jsonByte);
-		body = new String(jsonByte);
+		body = jsonStr;
 	  }   
 
 	public DataPackage(byte[] pack) {
@@ -30,7 +31,9 @@ public class DataPackage {
 		version = readShort();
 		op = readInt();
 		seq = readInt();
-		body = new String(data, 16, data.length - 16);
+		try {
+			body = new String(data, 16, length - 16, "utf-8");
+		  } catch (UnsupportedEncodingException e) {}
 	  }
 
 	private void write(byte[] bs) {
