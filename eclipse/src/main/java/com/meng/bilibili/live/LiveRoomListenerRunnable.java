@@ -3,6 +3,7 @@ package com.meng.bilibili.live;
 import com.google.gson.*;
 import com.google.gson.reflect.*;
 import com.meng.*;
+import com.meng.config.javabeans.*;
 import com.meng.tools.*;
 import java.io.*;
 import java.lang.reflect.*;
@@ -73,6 +74,10 @@ public class LiveRoomListenerRunnable implements Runnable {
 									Autoreply.instence.naiManager.sendDanmaku(lp.roomID, Autoreply.instence.cookieManager.cookie.Luna, "您点您妈呢");
 									Autoreply.instence.naiManager.sendDanmaku(lp.roomID, Autoreply.instence.cookieManager.cookie.Star, "您点您妈呢");				
 								  }
+								PersonInfo pi1=Autoreply.instence.configManager.getPersonInfoFromBid(uid);
+								PersonInfo pi2=Autoreply.instence.configManager.getPersonInfoFromLiveId(Integer.parseInt(lp.roomID));
+								String n1=pi1 == null ?name: pi1.name;
+								Autoreply.instence.sendMessage(1023432971, 0, n1 + "出现在" + pi2.name + "的直播间" + lp.roomID);
 							  }
 							peopleSet.add(jo);
 						  } catch (ParseException e) {
