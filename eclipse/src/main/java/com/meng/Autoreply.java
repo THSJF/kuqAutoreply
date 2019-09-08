@@ -86,7 +86,7 @@ public class Autoreply extends JcqAppAbstract implements ICQVer, IMsg, IRequest 
     public GroupMemberChangerListener groupMemberChangerListener;
     public FileTypeUtil fileTypeUtil = new FileTypeUtil();
 	public CookieManager cookieManager;
-	public SeqManager seqManager=new SeqManager();
+	public SeqManager seqManager;
 	
     public ExecutorService threadPool = Executors.newCachedThreadPool();
 
@@ -171,6 +171,7 @@ public class Autoreply extends JcqAppAbstract implements ICQVer, IMsg, IRequest 
         groupCount = new GroupCounter();
         fph = new FanPoHaiManager();
         naiManager = new NaiManager();
+		seqManager = new SeqManager();
         FileTipManager fileTipManager = new FileTipManager();
         fileTipManager.dataMap.add(new FileTipUploader(807242547L, 1592608126L));
         //new TimeTipManager().start();

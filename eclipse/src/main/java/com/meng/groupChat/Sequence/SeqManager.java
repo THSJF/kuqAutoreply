@@ -10,9 +10,7 @@ import java.lang.reflect.*;
 import com.google.gson.reflect.*;
 
 public class SeqManager {
-	//public String[] time=new String[]{"苟","利","国","家","生","死","以","岂","因","祸","福","避","趋","之"};
-	//public String[] menger=new String[]{"此","生","无","悔","入","东","方","来","世","愿","生","幻","想","乡"};
-	private ArrayList<SeqBean> seqs=new ArrayList<>();
+    private ArrayList<SeqBean> seqs=new ArrayList<>();
 	private HashMap<String, ArrayList<String>> jsonData = new HashMap<>();
 	
 	public SeqManager() {
