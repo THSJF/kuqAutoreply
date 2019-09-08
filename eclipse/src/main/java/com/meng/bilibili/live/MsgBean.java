@@ -17,7 +17,7 @@ public class MsgBean {
 			return false;
 		  }
 		MsgBean mb=(MsgBean) o;
-		return text.equals(mb.text) && nickname.equals(mb.nickname) && uid == mb.uid && timeline.equals(mb.timeline);
+		return uid == mb.uid;
 	  }
 
   }
