@@ -42,9 +42,9 @@ public class LiveRoomListenerRunnable implements Runnable {
 							if (!peopleSet.contains(jo)) {			
 								if (jo.text.contains("hop") && jo.text.contains("点歌")) {
 									//System.out.println("你点你妈呢");
-									Autoreply.instence.naiManager.sendDanmaku(lp.roomID, Autoreply.instence.cookieManager.cookie.Sunny, "你点你妈呢");
-									Autoreply.instence.naiManager.sendDanmaku(lp.roomID, Autoreply.instence.cookieManager.cookie.Luna, "你点你妈呢");
-									Autoreply.instence.naiManager.sendDanmaku(lp.roomID, Autoreply.instence.cookieManager.cookie.Star, "你点你妈呢");				
+									Autoreply.instence.naiManager.sendDanmaku(lp.roomID, Autoreply.instence.cookieManager.cookie.Sunny, "您点您妈呢");
+									Autoreply.instence.naiManager.sendDanmaku(lp.roomID, Autoreply.instence.cookieManager.cookie.Luna, "您点您妈呢");
+									Autoreply.instence.naiManager.sendDanmaku(lp.roomID, Autoreply.instence.cookieManager.cookie.Star, "您点您妈呢");				
 								  }
 							  }
 							peopleSet.add(jo);
