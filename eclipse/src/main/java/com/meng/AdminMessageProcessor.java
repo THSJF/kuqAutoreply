@@ -84,7 +84,11 @@ public class AdminMessageProcessor {
             }
 			if(msg.startsWith("mother.")){
 			  if(msg.length()>7){
-				  Autoreply.instence.liveRoomListenerRunnable.addMotherWord(msg.substring(7));
+				  if(Autoreply.instence.liveRoomListenerRunnable.addMotherWord(msg.substring(7))){
+					  Autoreply.sendMessage(fromGroup,0,msg.substring(7)+"已添加");
+				  }else{
+					Autoreply.sendMessage(fromGroup,0,"添加失败");
+				  }
 			  }else{
 				Autoreply.sendMessage(fromGroup,0,"参数有误");
 			  }
