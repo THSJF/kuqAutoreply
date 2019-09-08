@@ -24,8 +24,9 @@ public class DataPackage {
 		body = jsonStr;
 	  }   
 
-	public DataPackage(byte[] pack) {
+	public DataPackage(byte[] pack, int offset) {
 		data = pack;
+		pos = offset;
 		length = readInt();
 		headLen = readShort();
 		version = readShort();
