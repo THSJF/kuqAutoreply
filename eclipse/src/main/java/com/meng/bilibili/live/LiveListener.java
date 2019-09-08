@@ -1,24 +1,18 @@
 package com.meng.bilibili.live;
 
-import com.google.gson.Gson;
-import com.google.gson.reflect.TypeToken;
-import com.meng.Autoreply;
-import com.meng.bilibili.main.SpaceToLiveJavaBean;
-import com.meng.tools.Methods;
-import com.meng.config.ConfigManager;
-import com.meng.config.javabeans.PersonInfo;
-
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.OutputStreamWriter;
-import java.lang.reflect.Type;
-import java.nio.charset.StandardCharsets;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.Map.Entry;
-import java.util.function.Function;
+import com.google.gson.*;
+import com.google.gson.reflect.*;
+import com.meng.*;
+import com.meng.bilibili.main.*;
+import com.meng.config.*;
+import com.meng.config.javabeans.*;
+import com.meng.tools.*;
+import java.io.*;
+import java.lang.reflect.*;
+import java.net.*;
+import java.nio.charset.*;
+import java.util.*;
+import java.util.Map.*;
 import java.util.concurrent.*;
 
 public class LiveListener implements Runnable {
@@ -39,7 +33,7 @@ public class LiveListener implements Runnable {
                 System.out.println("直播检测启动完成");
             }
         });
-        File liveTimeFile = new File(Autoreply.appDirectory + "liveTime.json");
+        File liveTimeFile = new File(Autoreply.appDirectory + "liveTime2.json");
         if (!liveTimeFile.exists()) {
             saveLiveTime();
         }
@@ -135,11 +129,20 @@ public class LiveListener implements Runnable {
 
     private void onStart(PersonInfo personInfo, LivePerson livePerson) {
         livePerson.liveStartTimeStamp = System.currentTimeMillis() / 1000;
+		try {
+			Autoreply.instence.danmakuListenerManager.listener.add(new DanmakuListener(new URI("wss://broadcastlv.chat.bilibili.com:2245/sub"), personInfo.bliveRoom));
+		  } catch (URISyntaxException e) {}
         tipStart(personInfo);
     }
 
     private void onStop(PersonInfo personInfo, LivePerson livePerson) {
         countLiveTime(personInfo, livePerson);
+		for(DanmakuListener dl:Autoreply.instence.danmakuListenerManager.listener){
+		  if(dl.room==personInfo.bliveRoom){
+			dl.close();
+			break;
+		  }
+		}
         tipFinish(personInfo);
     }
 

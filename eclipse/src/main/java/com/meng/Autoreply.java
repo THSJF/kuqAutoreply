@@ -87,7 +87,7 @@ public class Autoreply extends JcqAppAbstract implements ICQVer, IMsg, IRequest 
     public FileTypeUtil fileTypeUtil = new FileTypeUtil();
 	public CookieManager cookieManager;
 	public SeqManager seqManager;
-	public LiveRoomListenerRunnable liveRoomListenerRunnable;
+	public DanmakuListenerManager danmakuListenerManager;
 	
     public ExecutorService threadPool = Executors.newCachedThreadPool();
 
@@ -181,8 +181,8 @@ public class Autoreply extends JcqAppAbstract implements ICQVer, IMsg, IRequest 
         threadPool.execute(updateListener);
         threadPool.execute(fileTipManager);
         threadPool.execute(timeTip);
-		liveRoomListenerRunnable=new LiveRoomListenerRunnable();
-		threadPool.execute(liveRoomListenerRunnable);
+		
+		danmakuListenerManager=new DanmakuListenerManager();
         threadPool.execute(new checkMessageRunnable());
         threadPool.execute(new CleanRunnable());
 
