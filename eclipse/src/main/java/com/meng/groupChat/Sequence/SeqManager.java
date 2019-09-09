@@ -51,11 +51,11 @@ public class SeqManager {
 			if (msg.equals(sb.content[sb.pos])) {
 				++sb.pos;			
 				if (sb.pos < sb.content.length) {
-					return sb.content[sb.pos];
-				  }
-				++sb.pos;
-				if (sb.pos >= sb.content.length - 1) {
-					sb.pos = 0;
+					++sb.pos;
+					if (sb.pos >= sb.content.length - 1) {
+						sb.pos = 0;
+					  }
+					return sb.content[sb.pos - 1];
 				  }
 				if (sb.flag == 1) {
 					Autoreply.instence.useCount.decLife(fromQQ);
