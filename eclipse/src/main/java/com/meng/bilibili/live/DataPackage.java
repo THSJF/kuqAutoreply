@@ -21,7 +21,6 @@ public class DataPackage {
 		write(getBytes(op = opCode));
 		write(getBytes(seq = 1));
 		write(jsonByte);
-		body = jsonStr;
 	  }   
 
 	public DataPackage(byte[] pack, int offset) {
@@ -34,7 +33,10 @@ public class DataPackage {
 		seq = readInt();
 		try {
 			body = new String(data, 16, length - 16, "utf-8");
-		  } catch (UnsupportedEncodingException e) {}
+		  } catch (UnsupportedEncodingException e) {
+			throw new RuntimeException("unsupported encoding");
+		  }
+		data = null;
 	  }
 
 	private void write(byte[] bs) {
@@ -58,7 +60,7 @@ public class DataPackage {
 		bs[1] = (byte) (s & 0xff) ;
 		return bs;	
 	  }
-
+	/*大端模式*/
 	public short readShort() {
         return (short) ((data[pos++] & 0xff) << 8 | (data[pos++] & 0xff) << 0);
 	  }
@@ -66,6 +68,6 @@ public class DataPackage {
 	public int readInt() {
         return (data[pos++] & 0xff) << 24 | (data[pos++] & 0xff) << 16 | (data[pos++] & 0xff) << 8 | (data[pos++] & 0xff) << 0;
 	  }
-
+	
   }
 

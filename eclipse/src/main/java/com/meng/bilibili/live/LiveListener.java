@@ -87,7 +87,7 @@ public class LiveListener implements Runnable {
                     boolean living = sjb.data.liveStatus == 1;
 					if(living){
 					  if(Autoreply.instence.danmakuListenerManager.getListener(personInfo.bliveRoom)==null){
-						  DanmakuListener dl=new DanmakuListener(new URI("wss://broadcastlv.chat.bilibili.com:2245/sub"), personInfo.bliveRoom);
+						  DanmakuListener dl=new DanmakuListener(new URI("wss://broadcastlv.chat.bilibili.com:2245/sub"), personInfo);
 						  dl.connect();
 						  Autoreply.instence.danmakuListenerManager.listener.add(dl);
 					  }
@@ -114,9 +114,8 @@ public class LiveListener implements Runnable {
                     }
                     livePerson.lastStatus = living;
                     livePerson.needTip = true;
-                    Thread.sleep(2000);
+                    Thread.sleep(1000);
                 }
-                Thread.sleep(60000);
             } catch (Exception e) {
                 System.out.println("直播监视出了问题：");
                 e.printStackTrace();
@@ -192,15 +191,15 @@ public class LiveListener implements Runnable {
         StringBuilder stringBuilder = new StringBuilder();
         while (iterator.hasNext()) {
             Entry<String, String> entry = iterator.next();
-            stringBuilder.append(entry.getKey()).append(cal(Integer.parseInt(entry.getValue()))).append("\n");
+            stringBuilder.append(entry.getKey()).append(cal(Long.parseLong(entry.getValue()))).append("\n");
         }
         return stringBuilder.toString();
     }
 
-    private String cal(int second) {
-        int h = 0;
-        int min = 0;
-        int temp = second % 3600;
+    private String cal(long second) {
+        long h = 0;
+        long min = 0;
+        long temp = second % 3600;
         if (second > 3600) {
             h = second / 3600;
             if (temp > 60) {
