@@ -14,7 +14,7 @@ import java.nio.charset.*;
 import java.util.*;
 import java.util.Map.*;
 import java.util.concurrent.*;
-import java.util.function.Function;
+import org.jsoup.*;
 
 public class LiveListener implements Runnable {
 
@@ -160,7 +160,59 @@ public class LiveListener implements Runnable {
         }
         saveLiveTime();
     }
-
+	
+	public void setBan(long fromGroup, String roomId, String blockId, String hour) {
+        Connection.Response response = null;
+        try {
+			Map<String, String> liveHead = new HashMap<>();
+			liveHead.put("Host", "api.live.bilibili.com");
+			liveHead.put("Accept", "application/json, text/javascript, */*; q=0.01");
+			liveHead.put("Content-Type", "application/x-www-form-urlencoded; charset=UTF-8");
+			liveHead.put("Connection", "keep-alive");
+			liveHead.put("Origin", "https://live.bilibili.com");
+            Connection connection = Jsoup.connect("https://api.live.bilibili.com/banned_service/v2/Silent/add_block_user");
+            String csrf = Methods.cookieToMap(Autoreply.instence.cookieManager.cookie.Hina).get("bili_jct");
+            connection.userAgent(Autoreply.instence.userAgent)
+			  .headers(liveHead)
+			  .ignoreContentType(true)
+			  .referrer("https://live.bilibili.com/" + roomId)
+			  .cookies(Methods.cookieToMap(Autoreply.instence.cookieManager.cookie.Hina))
+			  .method(Connection.Method.POST)
+			  .data("hour", hour)
+			  .data("roomid", roomId)
+			  .data("block_uid", blockId)
+			  .data("csrf_token", csrf)
+			  .data("csrf", csrf)
+			  .data("visit_id", "");
+            response = connection.execute();
+            if (response.statusCode() != 200) {
+                return;
+			  }
+            JsonParser parser = new JsonParser();
+            JsonObject obj = parser.parse(response.body()).getAsJsonObject();
+            switch (obj.get("code").getAsInt()) {
+                case 0:
+				  if (!obj.get("message").getAsString().equals("")) {
+					  Autoreply.sendMessage(fromGroup, 0, obj.getAsJsonObject("message").getAsString());
+                    } else {
+					  Autoreply.sendMessage(fromGroup, 0, blockId + "在直播间" + roomId + "被禁言" + hour + "小时");
+                    }
+				  break;
+                case 1990000:
+				  if (obj.get("message").getAsString().equals("risk")) {
+					  Autoreply.sendMessage(fromGroup, 0, "需要在官方客户端进行账号风险验证");
+                    }
+				  break;
+                default:
+				  Autoreply.sendMessage(fromGroup, 0, response.body());
+				  break;
+			  }
+		  } catch (Exception e) {
+            if (response != null) {
+                Autoreply.sendMessage(fromGroup, 0, "服务器无回应");
+			  }
+		  }
+	  }
 
     private void tipStart(PersonInfo p) {
         if (!p.isTipLive()) {

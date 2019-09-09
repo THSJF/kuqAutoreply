@@ -62,7 +62,7 @@ public class NaiManager {
         connection.setRequestProperty("Connection", "keep-alive");
         connection.setRequestProperty("Accept", "application/json, text/javascript, */*; q=0.01");
         connection.setRequestProperty("Origin", "https://live.bilibili.com");
-        connection.setRequestProperty("User-Agent", "Mozilla/5.0 (Windows NT 6.1; WOW64; rv:28.0) Gecko/20100101 Firefox/28.0");
+        connection.setRequestProperty("User-Agent", Autoreply.instence.userAgent);
         connection.setRequestProperty("Content-Type", "application/x-www-form-urlencoded; charset=UTF-8");
         connection.setRequestProperty("Referer", "https://live.bilibili.com/" + roomId);
         connection.setRequestProperty("Accept-Encoding", "gzip, deflate, br");

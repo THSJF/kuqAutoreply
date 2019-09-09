@@ -259,43 +259,6 @@ public class Methods {
         return removeCharAt(tmp, tmp.length() - 1);
     }
 
-    // 暴力行为
-/*    public static boolean checkGou(long fromGroup, String msg) {
-        if (msg.equals("苟") || msg.equals("苟？") || msg.equals("苟?") || msg.equals("苟...") || msg.startsWith("苟…")) {
-            motmp = "利";
-            Autoreply.sendMessage(fromGroup, 0, "利");
-            return true;
-        } else if (msg.equals("国") && motmp.equals("利")) {
-            motmp = "家";
-            Autoreply.sendMessage(fromGroup, 0, "家");
-            return true;
-        } else if (msg.equals("生") && motmp.equals("家")) {
-            motmp = "死";
-            Autoreply.sendMessage(fromGroup, 0, "死");
-            return true;
-        } else if (msg.equals("以") && motmp.equals("死")) {
-            motmp = "岂";
-            Autoreply.sendMessage(fromGroup, 0, "岂");
-            return true;
-        } else if (msg.equals("因") && motmp.equals("岂")) {
-            motmp = "祸";
-            Autoreply.sendMessage(fromGroup, 0, "祸");
-            return true;
-        } else if (msg.equals("福") && motmp.equals("祸")) {
-            motmp = "避";
-            Autoreply.sendMessage(fromGroup, 0, "避");
-            return true;
-        } else if (msg.equals("趋") && motmp.equals("避")) {
-            motmp = "之";
-            Autoreply.sendMessage(fromGroup, 0, "之");
-            return true;
-        } else if (msg.equals("苟利国家生死以")) {
-            Autoreply.sendMessage(fromGroup, 0, "岂因祸福避趋之");
-            return true;
-        }
-        return false;
-    }
-*/
     // 窥屏检测
     public static boolean checkLook(long fromGroup, String msg) {
         if (msg.equals("有人吗") || msg.equalsIgnoreCase("testip") || msg.equalsIgnoreCase("窥屏检测")) {
@@ -342,44 +305,6 @@ public class Methods {
         }
         return false;
     }
-
-    // 萌二
-  /*  public static boolean checkMeng2(long fromGroup, String msg) {
-
-        if (msg.equals("此")) {
-            meng2tmp = "生";
-            Autoreply.sendMessage(fromGroup, 0, "生");
-            return true;
-        } else if (msg.equals("无") && meng2tmp.equals("生")) {
-            meng2tmp = "悔";
-            Autoreply.sendMessage(fromGroup, 0, "悔");
-            return true;
-        } else if (msg.equals("入") && meng2tmp.equals("悔")) {
-            meng2tmp = "东";
-            Autoreply.sendMessage(fromGroup, 0, "东");
-            return true;
-        } else if (msg.equals("方") && meng2tmp.equals("东")) {
-            meng2tmp = "来";
-            Autoreply.sendMessage(fromGroup, 0, "来");
-            return true;
-        } else if (msg.equals("世") && meng2tmp.equals("来")) {
-            meng2tmp = "愿";
-            Autoreply.sendMessage(fromGroup, 0, "愿");
-            return true;
-        } else if (msg.equals("生") && meng2tmp.equals("愿")) {
-            meng2tmp = "幻";
-            Autoreply.sendMessage(fromGroup, 0, "幻");
-            return true;
-        } else if (msg.equals("想") && meng2tmp.equals("幻")) {
-            meng2tmp = "乡";
-            Autoreply.sendMessage(fromGroup, 0, "乡");
-            return true;
-        } else if (msg.equals("此生无悔入东方")) {
-            Autoreply.sendMessage(fromGroup, 0, "来世愿生幻想乡");
-            return true;
-        }
-        return false;
-    }*/
 
     public static void setRandomPop() {
         Methods.getSourceCode("http://logic.content.qq.com/bubble/setup?callback=&id=" + new Random().nextInt(269) + "&g_tk=" + Autoreply.CQ.getCsrfToken(), Autoreply.CQ.getCookies());

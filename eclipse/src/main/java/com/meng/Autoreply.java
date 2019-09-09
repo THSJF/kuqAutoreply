@@ -96,6 +96,7 @@ public class Autoreply extends JcqAppAbstract implements ICQVer, IMsg, IRequest 
     public static boolean tipedBreak = false;
     public static boolean sleeping = true;
 
+	public String userAgent="Mozilla/5.0 (Windows NT 6.1; WOW64; rv:28.0) Gecko/20100101 Firefox/28.0";
     public FanPoHaiManager fph;
     public HashSet<Long> botOff = new HashSet<>();
 

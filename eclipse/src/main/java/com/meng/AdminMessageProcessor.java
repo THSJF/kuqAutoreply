@@ -46,6 +46,7 @@ public class AdminMessageProcessor {
 		masterPermission.put("精神支柱[图片]|神触[图片]", "使用图片生成表情包");
 		masterPermission.put("cookie.[称呼].[cookie字符串]", "设置cookie,可选值Sunny,Luna,Star,XingHuo,Hina");
 		masterPermission.put("send.[群号].[内容]", "内容转发至指定群");
+		masterPermission.put("lban.[直播间号|直播间主人].[被禁言UID|被禁言者称呼].[时间]","直播间禁言,单位为小时");
 
 		adminPermission.put("findInAll:[QQ号]", "查找共同群");
 		adminPermission.put("ban.[QQ号|艾特].[时间]|ban.[群号].[QQ号].[时间]", "禁言,单位为秒");
@@ -83,20 +84,19 @@ public class AdminMessageProcessor {
 				return true;
 			  }
 			if (msg.startsWith("blink.")) {
-				String[] strs=msg.split("\\.", 3);
+				String[] strs=msg.split("\\.", 2);
 				PersonInfo pi=Autoreply.instence.configManager.getPersonInfoFromName(strs[1]);
 				if (pi == null) {	  
 					JsonParser parser = new JsonParser();
 					JsonObject obj = parser.parse(Methods.getSourceCode("https://api.live.bilibili.com/room/v1/Room/playUrl?cid=" + strs[1] + "&quality=4&platform=web")).getAsJsonObject();
-					final JsonArray ja = obj.get("data").getAsJsonObject().get("durl").getAsJsonArray();
+					JsonArray ja = obj.get("data").getAsJsonObject().get("durl").getAsJsonArray();
 					Autoreply.sendMessage(fromGroup, 0, ja.get(0).getAsJsonObject().get("url").getAsString());
 				  } else {
 					JsonParser parser = new JsonParser();
 					JsonObject obj = parser.parse(Methods.getSourceCode("https://api.live.bilibili.com/room/v1/Room/playUrl?cid=" + pi.bliveRoom + "&quality=4&platform=web")).getAsJsonObject();
-					final JsonArray ja = obj.get("data").getAsJsonObject().get("durl").getAsJsonArray();
+					JsonArray ja = obj.get("data").getAsJsonObject().get("durl").getAsJsonArray();
 					Autoreply.sendMessage(fromGroup, 0, ja.get(0).getAsJsonObject().get("url").getAsString());			  
 				  }	
-
 				return true;
 			  } 
 		  }
@@ -114,6 +114,21 @@ public class AdminMessageProcessor {
                 Autoreply.sleeping = false;
                 Autoreply.sendMessage(fromGroup, 0, "enabled");
                 return true;
+			  }
+			if (msg.startsWith("lban.")) {
+				String[] ss=msg.split("\\.");
+				String rid=ss[1];
+				String uid=ss[2];
+				PersonInfo mas=Autoreply.instence.configManager.getPersonInfoFromName(ss[1]);
+				if (mas != null) {
+					rid = mas.bliveRoom + "";
+				  }
+				PersonInfo ban=Autoreply.instence.configManager.getPersonInfoFromName(ss[2]);
+				if (ban != null) {
+					uid = ban.bid + "";
+				  }
+				Autoreply.instence.liveListener.setBan(fromGroup, rid, uid, ss[3]);
+				return true;
 			  }
 			if (msg.startsWith("mother.")) {
 				if (msg.length() > 7) {
