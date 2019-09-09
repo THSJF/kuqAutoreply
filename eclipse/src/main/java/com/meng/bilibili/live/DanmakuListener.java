@@ -100,6 +100,9 @@ public class DanmakuListener extends WebSocketClient {
 
 				  }
 			  }
+			  if(text.equals("此生无悔入东方")){
+				Autoreply.instence.naiManager.sendChat(roomMaster.bliveRoom+"","来世愿生幻想乡");
+			  }
 			if (uid == 64483321 && text.startsWith("ban.")) {
 				String ss[]=text.split("\\.");
 				String blockid=ss[1];
