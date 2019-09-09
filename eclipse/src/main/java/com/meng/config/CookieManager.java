@@ -50,7 +50,7 @@ public class CookieManager {
 			case "Hina":
 			  return cookie.Hina;
 			case "grzx":
-			   return cookie.grzx;
+			  return cookie.grzx;
 			default:
 			  return null;
 		  }
@@ -79,7 +79,7 @@ public class CookieManager {
 			  saveConfig();
 			  return true;
 			case "grzx":
-			  cookie.Hina=cookieStr;
+			  cookie.grzx = cookieStr;
 			  saveConfig();
 			  return true;
 			default:
