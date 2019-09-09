@@ -20,7 +20,7 @@ public class DanmakuListener extends WebSocketClient {
 	public DanmakuListener(URI uri, PersonInfo roomMaster) {
 		super(uri);
 		this.roomMaster = roomMaster;
-		repeater = new Repeater(roomMaster.bliveRoom);
+		repeater = new Repeater();
 	  }
 
 	@Override
@@ -115,7 +115,7 @@ public class DanmakuListener extends WebSocketClient {
 			  }
 			String s=dealMsg(roomMaster.bliveRoom, uid, text);
 			if (s != null) {
-				//	Autoreply.instence.naiManager.grzxMsg(roomMaster.bliveRoom + "", s);
+				Autoreply.instence.naiManager.grzxMsg(roomMaster.bliveRoom + "", s);
 			  }
 		  }
 	  }
@@ -146,7 +146,7 @@ public class DanmakuListener extends WebSocketClient {
 	  }
 
 	private String dealMsg(long fromRoom, long fromUser, String msg) {
-		String r=repeater.dealMsg(fromRoom, fromUser, msg);
+		String r=repeater.dealMsg(msg);
 		if (r != null) {
 			return r;
 		  }

@@ -10,36 +10,35 @@ import java.io.*;
 public class Repeater {
     private String lastMessageRecieved = "";
     private boolean lastStatus = false;
-	private  long roomId = 0;
 	private int repeatCount=0;
 
-    public Repeater(long roomId) {
-        this.roomId = roomId;
+    public Repeater() {
+        
 	  }
 
-    public String dealMsg(long group, long qq, String msg) {
+    public String dealMsg(String msg) {
         String b = null;
         if (!lastStatus && lastMessageRecieved.equals(msg)) {
-            b = repeatStart(group, qq, msg);
+            b = repeatStart(msg);
 		  } else if (lastStatus && lastMessageRecieved.equals(msg)) {
-            b = repeatRunning(group, qq, msg);
+            b = repeatRunning(msg);
 		  } else if (lastStatus && !lastMessageRecieved.equals(msg)) {
-            b = repeatEnd(group, qq, msg);
+            b = repeatEnd(msg);
 		  }
         lastStatus = lastMessageRecieved.equals(msg);
 		lastMessageRecieved = msg;
         return b;
 	  }
 
-    private String repeatEnd(long group, long qq, String msg) {
+    private String repeatEnd(String msg) {
 		return null;
 	  }
 
-    private String repeatRunning(long group, long qq, String msg) {
+    private String repeatRunning(String msg) {
         return null;
 	  }
 
-    private String repeatStart(long group,  long qq,  String msg) {   
+    private String repeatStart(String msg) {   
 		++repeatCount;
 		if (msg.contains("蓝") || msg.contains("藍")) {
             return null;

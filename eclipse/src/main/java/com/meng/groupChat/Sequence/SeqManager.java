@@ -48,6 +48,13 @@ public class SeqManager {
 			if (msg.equals(sb.content[0])) {
 				sb.pos = 0;
 			  }
+			if (sb.flag == 1) {
+				Autoreply.instence.useCount.decLife(fromQQ);
+				Autoreply.instence.groupCount.decLife(fromGroup);
+			  } else if (sb.flag == 2) {
+				Autoreply.instence.useCount.incMengEr(fromQQ);
+				Autoreply.instence.groupCount.incMengEr(fromGroup);
+			  }
 			if (msg.equals(sb.content[sb.pos])) {
 				++sb.pos;			
 				if (sb.pos < sb.content.length) {
@@ -55,14 +62,11 @@ public class SeqManager {
 					if (sb.pos >= sb.content.length - 1) {
 						sb.pos = 0;
 					  }
-					return sb.content[sb.pos - 1];
-				  }
-				if (sb.flag == 1) {
-					Autoreply.instence.useCount.decLife(fromQQ);
-					Autoreply.instence.groupCount.decLife(fromGroup);
-				  } else if (sb.flag == 2) {
-					Autoreply.instence.useCount.incMengEr(fromQQ);
-					Autoreply.instence.groupCount.incMengEr(fromGroup);
+					if (sb.pos == 0) {
+						return sb.content[sb.content.length - 1];
+					  } else {
+						return sb.content[sb.pos - 1];
+					  }
 				  }
 				break;
 			  }
