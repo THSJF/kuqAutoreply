@@ -34,6 +34,15 @@ public class NaiManager {
         return "";
 	}
 
+	public String grzxMsg(String roomId, String msg) {
+		try {
+            sendDanmaku(roomId, Autoreply.instence.cookieManager.cookie.grzx, msg);
+		  } catch (IOException e) {
+            return e.toString();
+		  }
+        return "";
+	  }
+	
     public void check(long fromGroup, String roomId, long fromQQ, String msg) {
         try {
             sendDanmaku(roomId, Autoreply.instence.cookieManager.cookie.Sunny, msg);

@@ -49,6 +49,8 @@ public class CookieManager {
 			  return cookie.xinghuo;
 			case "Hina":
 			  return cookie.Hina;
+			case "grzx":
+			   return cookie.grzx;
 			default:
 			  return null;
 		  }
@@ -74,6 +76,10 @@ public class CookieManager {
 			  return true;
 			case "Hina":
 			  cookie.Hina = cookieStr;
+			  saveConfig();
+			  return true;
+			case "grzx":
+			  cookie.Hina=cookieStr;
 			  saveConfig();
 			  return true;
 			default:

@@ -44,7 +44,7 @@ public class AdminMessageProcessor {
 		masterPermission.put("bcv:[CV号]", "文章信息");
 		masterPermission.put("blv:[直播间号]", "直播间信息");
 		masterPermission.put("精神支柱[图片]|神触[图片]", "使用图片生成表情包");
-		masterPermission.put("cookie.[称呼].[cookie字符串]", "设置cookie,可选值Sunny,Luna,Star,XingHuo,Hina");
+		masterPermission.put("cookie.[称呼].[cookie字符串]", "设置cookie,可选值Sunny,Luna,Star,XingHuo,Hina,grzx");
 		masterPermission.put("send.[群号].[内容]", "内容转发至指定群");
 		masterPermission.put("lban.[直播间号|直播间主人].[被禁言UID|被禁言者称呼].[时间]","直播间禁言,单位为小时");
 

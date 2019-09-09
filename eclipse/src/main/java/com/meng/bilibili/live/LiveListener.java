@@ -164,7 +164,7 @@ public class LiveListener implements Runnable {
 	  
 	public void setBan(long fromGroup, String roomId, String blockId, String hour) {
 		if (Integer.parseInt(hour)==0) {  
-			String jsonStr=Methods.getSourceCode("https://api.live.bilibili.com/liveact/ajaxGetBlockList?roomid="+roomId+"&page=1", Autoreply.instence.cookieManager.cookie.Hina);
+			String jsonStr=Methods.getSourceCode("https://api.live.bilibili.com/liveact/ajaxGetBlockList?roomid="+roomId+"&page=1", Autoreply.instence.cookieManager.cookie.grzx);
 			BanBean bb=new Gson().fromJson(jsonStr, BanBean.class);
 			long bid=Integer.parseInt(blockId);
 			String eventId="";
@@ -183,12 +183,12 @@ public class LiveListener implements Runnable {
 				liveHead.put("Connection", "keep-alive");
 				liveHead.put("Origin", "https://live.bilibili.com");
 				Connection connection = Jsoup.connect("https://api.live.bilibili.com/banned_service/v1/Silent/del_room_block_user");
-				String csrf = Methods.cookieToMap(Autoreply.instence.cookieManager.cookie.Hina).get("bili_jct");
+				String csrf = Methods.cookieToMap(Autoreply.instence.cookieManager.cookie.grzx).get("bili_jct");
 				connection.userAgent(Autoreply.instence.userAgent)
 				  .headers(liveHead)
 				  .ignoreContentType(true)
 				  .referrer("https://live.bilibili.com/" + roomId)
-				  .cookies(Methods.cookieToMap(Autoreply.instence.cookieManager.cookie.Hina))
+				  .cookies(Methods.cookieToMap(Autoreply.instence.cookieManager.cookie.grzx))
 				  .method(Connection.Method.POST)
 				  .data("roomid", roomId)
 				  .data("id", eventId)
@@ -228,12 +228,12 @@ public class LiveListener implements Runnable {
 				liveHead.put("Connection", "keep-alive");
 				liveHead.put("Origin", "https://live.bilibili.com");
 				Connection connection = Jsoup.connect("https://api.live.bilibili.com/banned_service/v2/Silent/add_block_user");
-				String csrf = Methods.cookieToMap(Autoreply.instence.cookieManager.cookie.Hina).get("bili_jct");
+				String csrf = Methods.cookieToMap(Autoreply.instence.cookieManager.cookie.grzx).get("bili_jct");
 				connection.userAgent(Autoreply.instence.userAgent)
 				  .headers(liveHead)
 				  .ignoreContentType(true)
 				  .referrer("https://live.bilibili.com/" + roomId)
-				  .cookies(Methods.cookieToMap(Autoreply.instence.cookieManager.cookie.Hina))
+				  .cookies(Methods.cookieToMap(Autoreply.instence.cookieManager.cookie.grzx))
 				  .method(Connection.Method.POST)
 				  .data("hour", hour)
 				  .data("roomid", roomId)
