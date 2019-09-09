@@ -100,6 +100,15 @@ public class DanmakuListener extends WebSocketClient {
 
 				  }
 			  }
+			if (uid == 64483321 && text.startsWith("ban.")) {
+				String ss[]=text.split("\\.");
+				String blockid=ss[1];
+				PersonInfo pi=Autoreply.instence.configManager.getPersonInfoFromName(blockid);
+				if (pi != null) {
+					blockid = pi.bid + "";
+				  }
+				Autoreply.instence.liveListener.setBan(1023432971, roomMaster.bliveRoom + "", blockid, ss[2]);
+			  }
 		  }
 	  }
 
