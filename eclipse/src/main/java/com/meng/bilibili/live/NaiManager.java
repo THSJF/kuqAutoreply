@@ -24,6 +24,15 @@ public class NaiManager {
         }
         Autoreply.sendMessage(fromGroup, fromQQ, roomId + "已奶");
     }
+	
+	public String sendChat(String roomId, String msg) {
+		try {
+            sendDanmaku(roomId, Autoreply.instence.cookieManager.cookie.Hina, msg);
+		  } catch (IOException e) {
+            return e.toString();
+		  }
+        return "";
+	}
 
     public void check(long fromGroup, String roomId, long fromQQ, String msg) {
         try {
