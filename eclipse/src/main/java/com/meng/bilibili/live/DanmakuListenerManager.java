@@ -30,7 +30,7 @@ public class DanmakuListenerManager {
 	  
 	  public DanmakuListener getListener(int room){
 		for(DanmakuListener dl:listener){
-		  if(dl.room==room){
+		  if(dl.roomMaster.bliveRoom==room){
 			return dl;
 		  }
 		}

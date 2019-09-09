@@ -73,7 +73,7 @@ public class DanmakuListener extends WebSocketClient {
 				  break;
 			  }
 		  }while(offset < bytes.length - 1);
-		  
+
 	  }
 
 	private void onDanmaku(DataPackage dp) {
@@ -84,18 +84,16 @@ public class DanmakuListener extends WebSocketClient {
 			String text=jaar.get(1).getAsString();
 			String name=jaar2.get(1).getAsString();
 			long uid=jaar2.get(0).getAsLong();
-		//	System.out.println("uid:" + uid + " name:" + name + " text:" + text);
-
+			//	System.out.println("uid:" + uid + " name:" + name + " text:" + text);
+			PersonInfo pi1=Autoreply.instence.configManager.getPersonInfoFromBid(uid);
+			PersonInfo pi2=Autoreply.instence.configManager.getPersonInfoFromLiveId(roomMaster.bliveRoom);
+			String n1=pi1 == null ?name: pi1.name;
 			if (peopleMap.get(uid) == null) {
-				PersonInfo pi1=Autoreply.instence.configManager.getPersonInfoFromBid(uid);
-				PersonInfo pi2=Autoreply.instence.configManager.getPersonInfoFromLiveId(roomMaster.bliveRoom);
-				String n1=pi1 == null ?name: pi1.name;
 				Autoreply.instence.sendMessage(1023432971, 0, n1 + "出现在" + pi2.name + "的直播间" + roomMaster.bliveRoom);
-				//Autoreply.instence.sendMessage(1023432971, 0, n1 + "在" + pi2.name + "的直播间" + room + "说:" + text);
 			  }
 			peopleMap.put(uid, System.currentTimeMillis());
+			Autoreply.instence.sendMessage(666247478, 0, n1 + "在" + pi2.name + "的直播间" + roomMaster.bliveRoom + "说:" + text);
 			if (Autoreply.instence.danmakuListenerManager.containsMother(text) && text.startsWith("点歌")) {
-				//System.out.println("你点你妈呢");
 				try {
 					Autoreply.instence.naiManager.sendDanmaku(roomMaster.bliveRoom + "", Autoreply.instence.cookieManager.cookie.Sunny, "您点您妈呢");
 					Autoreply.instence.naiManager.sendDanmaku(roomMaster.bliveRoom + "", Autoreply.instence.cookieManager.cookie.Luna, "您点您妈呢");
@@ -106,7 +104,7 @@ public class DanmakuListener extends WebSocketClient {
 			  }
 		  }
 	  }
-	
+
 
 	@Override
 	public void onClose(int i, String s, boolean b) {
