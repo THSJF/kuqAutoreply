@@ -3,6 +3,7 @@ package com.meng.bilibili.live;
 import com.google.gson.*;
 import com.meng.*;
 import com.meng.config.javabeans.*;
+import com.meng.groupChat.*;
 import java.net.*;
 import java.nio.*;
 import java.util.*;
@@ -14,11 +15,12 @@ public class DanmakuListener extends WebSocketClient {
 
 	public PersonInfo roomMaster;
 	public ConcurrentHashMap<Long,Long> peopleMap=new ConcurrentHashMap<>();
-
+	public Repeater repeater;
 
 	public DanmakuListener(URI uri, PersonInfo roomMaster) {
 		super(uri);
 		this.roomMaster = roomMaster;
+		repeater = new Repeater(roomMaster.bliveRoom);
 	  }
 
 	@Override
@@ -113,7 +115,7 @@ public class DanmakuListener extends WebSocketClient {
 			  }
 			String s=dealMsg(roomMaster.bliveRoom, uid, text);
 			if (s != null) {
-				Autoreply.instence.naiManager.grzxMsg(roomMaster.bliveRoom + "", text);
+				//	Autoreply.instence.naiManager.grzxMsg(roomMaster.bliveRoom + "", s);
 			  }
 		  }
 	  }
@@ -144,45 +146,14 @@ public class DanmakuListener extends WebSocketClient {
 	  }
 
 	private String dealMsg(long fromRoom, long fromUser, String msg) {
-		if (msg.equals("此生无悔入东方")) {
-			return "来世愿生幻想乡";
+		String r=repeater.dealMsg(fromRoom, fromUser, msg);
+		if (r != null) {
+			return r;
 		  }
-		if (msg.equals("红魔地灵夜神雪")) {
-			return "永夜风神星莲船";
+		String r1=Autoreply.instence.seqManager.dealMsg(0, 0, msg);
+		if (r1 != null) {
+			return r1;
 		  }
-		if (msg.equals("非想天则文花贴")) {
-			return "萃梦神灵绯想天";
-		  }
-		if (msg.equals("冥界地狱异变起")) {
-			return "樱下华胥主谋现";
-		  }	  
-		if (msg.equals("净罪无改渡黄泉")) {
-			return "华鸟风月是非辨";
-		  }	  
-		if (msg.equals("境界颠覆入迷途")) {
-			return "幻想花开啸风弄";
-		  }
-		if (msg.equals("二色花蝶双生缘")) {
-			return "前缘未尽今生还";
-		  }
-		if (msg.equals("星屑洒落雨霖铃")) {
-			return "虹彩彗光银尘耀";
-		  }
-		if (msg.equals("无寿迷蝶彼岸归")) {
-			return "幻真如画妖如月";
-		  } 
-		if (msg.equals("永劫夜宵哀伤起")) {
-			return "幼社灵中幻似梦";
-		  }
-		if (msg.equals("追忆往昔巫女缘")) {
-			return "须弥之间冥梦现";
-		  }
-		if (msg.equals("境界颠覆入迷途")) {
-			return "歌雅风颂心无念";
-		  }
-		if (msg.equals("仁榀华诞井中天")) {
-			return "幻想花开啸风弄";
-		  }	                         
 		return null;
 	  }
 

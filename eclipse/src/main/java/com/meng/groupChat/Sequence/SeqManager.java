@@ -35,6 +35,15 @@ public class SeqManager {
 	  }
 
 	public boolean check(long fromGroup, long fromQQ, String msg) {
+		String s=null;
+		s = dealMsg(fromGroup, fromQQ, msg);
+		if (s != null) {
+			Autoreply.sendMessage(fromGroup, 0, s);
+		  }
+		return false;
+	  }
+
+	public String dealMsg(long fromGroup, long fromQQ, String msg) {
 		for (SeqBean sb:seqs) {
 			if (msg.equals(sb.content[0])) {
 				sb.pos = 0;
@@ -42,7 +51,7 @@ public class SeqManager {
 			if (msg.equals(sb.content[sb.pos])) {
 				++sb.pos;			
 				if (sb.pos < sb.content.length) {
-					Autoreply.sendMessage(fromGroup, 0, sb.content[sb.pos]);
+					return sb.content[sb.pos];
 				  }
 				++sb.pos;
 				if (sb.pos >= sb.content.length - 1) {
@@ -55,10 +64,10 @@ public class SeqManager {
 					Autoreply.instence.useCount.incMengEr(fromQQ);
 					Autoreply.instence.groupCount.incMengEr(fromGroup);
 				  }
-				return true;
+				break;
 			  }
 		  }
-		return false;
+		return null;
 	  }
 
 	private void saveData() {
