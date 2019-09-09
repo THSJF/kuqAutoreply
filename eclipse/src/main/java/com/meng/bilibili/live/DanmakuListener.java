@@ -41,7 +41,6 @@ public class DanmakuListener extends WebSocketClient {
 					}
 				}
 			}).start();
-		System.out.println("open");
 	  }
 
 	@Override
@@ -57,7 +56,6 @@ public class DanmakuListener extends WebSocketClient {
 		int offset=0;  
 		do{
 			DataPackage dp=decode(bytes, offset);
-			System.out.println("on message:" + dp.body);
 			offset += dp.length;
 			switch (dp.op) {
 				case 2:

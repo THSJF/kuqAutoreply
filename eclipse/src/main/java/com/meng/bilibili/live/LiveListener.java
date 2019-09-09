@@ -14,6 +14,7 @@ import java.nio.charset.*;
 import java.util.*;
 import java.util.Map.*;
 import java.util.concurrent.*;
+import java.util.function.Function;
 import org.jsoup.*;
 
 public class LiveListener implements Runnable {
@@ -160,7 +161,6 @@ public class LiveListener implements Runnable {
         }
         saveLiveTime();
     }
-	
 	public void setBan(long fromGroup, String roomId, String blockId, String hour) {
         Connection.Response response = null;
         try {
