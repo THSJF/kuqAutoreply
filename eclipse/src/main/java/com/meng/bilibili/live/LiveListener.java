@@ -163,8 +163,8 @@ public class LiveListener implements Runnable {
 	  }
 	  
 	public void setBan(long fromGroup, String roomId, String blockId, String hour) {
-		if (hour == "0") {  
-			String jsonStr=Methods.getSourceCode("https://api.live.bilibili.com/liveact/ajaxGetBlockList?roomid=9721948&page=1", Autoreply.instence.cookieManager.cookie.Hina);
+		if (Integer.parseInt(hour)==0) {  
+			String jsonStr=Methods.getSourceCode("https://api.live.bilibili.com/liveact/ajaxGetBlockList?roomid="+roomId+"&page=1", Autoreply.instence.cookieManager.cookie.Hina);
 			BanBean bb=new Gson().fromJson(jsonStr, BanBean.class);
 			long bid=Integer.parseInt(blockId);
 			String eventId="";
@@ -208,12 +208,7 @@ public class LiveListener implements Runnable {
 						} else {
 						  Autoreply.sendMessage(fromGroup, 0, blockId + "在直播间" + roomId + "被禁言" + hour + "小时");
 						}
-					  break;
-					case 1990000:
-					  if (obj.get("message").getAsString().equals("risk")) {
-						  Autoreply.sendMessage(fromGroup, 0, "需要在官方客户端进行账号风险验证");
-						}
-					  break;
+					  break;			
 					default:
 					  Autoreply.sendMessage(fromGroup, 0, response.body());
 					  break;
@@ -258,11 +253,6 @@ public class LiveListener implements Runnable {
 						  Autoreply.sendMessage(fromGroup, 0, obj.getAsJsonObject("message").getAsString());
 						} else {
 						  Autoreply.sendMessage(fromGroup, 0, blockId + "在直播间" + roomId + "被禁言" + hour + "小时");
-						}
-					  break;
-					case 1990000:
-					  if (obj.get("message").getAsString().equals("risk")) {
-						  Autoreply.sendMessage(fromGroup, 0, "需要在官方客户端进行账号风险验证");
 						}
 					  break;
 					default:
