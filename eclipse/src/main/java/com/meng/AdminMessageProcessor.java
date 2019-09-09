@@ -80,8 +80,8 @@ public class AdminMessageProcessor {
 				if (!resu.equals("")) {
 					Autoreply.sendMessage(fromGroup, 0, resu);
 				  }
+				return true;
 			  }
-			return true;
 		  }
         if (configManager.isMaster(fromQQ)) {
 			if (msg.equals("-help")) {
