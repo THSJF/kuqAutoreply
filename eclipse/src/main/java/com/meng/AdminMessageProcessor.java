@@ -73,7 +73,7 @@ public class AdminMessageProcessor {
 				PersonInfo pi=Autoreply.instence.configManager.getPersonInfoFromName(strs[1]);
 				String resu;
 				if (pi == null) {
-					resu = Autoreply.instence.naiManager.sendChat(pi.bliveRoom + "", strs[1]);
+					resu = Autoreply.instence.naiManager.sendChat(strs[1], strs[2]);
 				  } else {
 					resu = Autoreply.instence.naiManager.sendChat(pi.bliveRoom + "", strs[2]);
 				  }	
@@ -82,6 +82,23 @@ public class AdminMessageProcessor {
 				  }
 				return true;
 			  }
+			if (msg.startsWith("blink.")) {
+				String[] strs=msg.split("\\.", 3);
+				PersonInfo pi=Autoreply.instence.configManager.getPersonInfoFromName(strs[1]);
+				if (pi == null) {	  
+					JsonParser parser = new JsonParser();
+					JsonObject obj = parser.parse(Methods.getSourceCode("https://api.live.bilibili.com/room/v1/Room/playUrl?cid=" + strs[1] + "&quality=4&platform=web")).getAsJsonObject();
+					final JsonArray ja = obj.get("data").getAsJsonObject().get("durl").getAsJsonArray();
+					Autoreply.sendMessage(fromGroup, 0, ja.get(0).getAsJsonObject().get("url").getAsString());
+				  } else {
+					JsonParser parser = new JsonParser();
+					JsonObject obj = parser.parse(Methods.getSourceCode("https://api.live.bilibili.com/room/v1/Room/playUrl?cid=" + pi.bliveRoom + "&quality=4&platform=web")).getAsJsonObject();
+					final JsonArray ja = obj.get("data").getAsJsonObject().get("durl").getAsJsonArray();
+					Autoreply.sendMessage(fromGroup, 0, ja.get(0).getAsJsonObject().get("url").getAsString());			  
+				  }	
+
+				return true;
+			  } 
 		  }
         if (configManager.isMaster(fromQQ)) {
 			if (msg.equals("-help")) {
