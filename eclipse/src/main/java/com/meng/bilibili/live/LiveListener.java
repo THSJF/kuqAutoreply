@@ -104,6 +104,7 @@ public class LiveListener implements Runnable {
 							  return new LivePerson();
 							}
 						});
+					livePerson.liveStartTimeStamp=System.currentTimeMillis()/1000;
                     livePerson.liveUrl = sjb.data.url;
 					livePerson.roomID = sjb.data.roomid + "";
                     if (livePerson.needTip) {
