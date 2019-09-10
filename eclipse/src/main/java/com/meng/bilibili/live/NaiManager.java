@@ -11,6 +11,9 @@ import java.net.URLEncoder;
 
 import com.meng.Autoreply;
 import com.meng.tools.Methods;
+import com.google.gson.*;
+import com.meng.config.javabeans.*;
+import com.meng.config.*;
 
 public class NaiManager {
 
@@ -92,13 +95,29 @@ public class NaiManager {
         out.close();
         BufferedReader reader = new BufferedReader(new InputStreamReader(connection.getInputStream()));
         String line;
-        System.out.println(" Contents of post request ");
+		String res="";
         while ((line = reader.readLine()) != null) {
-            System.out.println(line);
+            res+=line;
         }
-        System.out.println(" Contents of post request ends ");
         reader.close();
         connection.disconnect();
+		JsonObject jobj=new JsonParser().parse(res).getAsJsonObject();
+		int code=jobj.get("code").getAsInt();
+		ConfigManager cm=Autoreply.instence.configManager;
+		long roomL=Long.parseLong(roomId);
+		if(code==1003){
+		  PersonInfo pi=cm.getPersonInfoFromLiveId(roomL);
+		  if(pi==null){
+			return;
+		  }
+		  cm.configJavaBean.personInfo.remove(pi);
+		  cm.saveConfig();
+		  for(LivePerson lp:Autoreply.instence.liveListener.livePersonMap.values()){
+			if(lp.roomID.equals(roomId)){
+			  Autoreply.instence.liveListener.livePersonMap.remove(pi.bid);
+			}
+		  }
+		}
     }
 
     public String encode(String url) {

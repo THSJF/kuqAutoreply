@@ -29,7 +29,7 @@ public class LiveListener implements Runnable {
 			  @Override
 			  public void run() {
 				  for (PersonInfo cb : configManager.configJavaBean.personInfo) {
-					  LiveListener.this.checkPerson(cb);
+					  checkPerson(cb);
 					}
 				  loadFinish = true;
 				  System.out.println("直播检测启动完成");
