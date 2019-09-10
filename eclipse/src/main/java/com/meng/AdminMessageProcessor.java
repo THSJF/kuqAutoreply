@@ -234,6 +234,9 @@ public class AdminMessageProcessor {
                     Autoreply.sendMessage(fromGroup, fromQQ, e.toString());
                     return true;
 				  }
+				  if(msg.contains("砂")){
+				    personInfo=null;
+				  }
                 if (personInfo != null) {
                     Autoreply.instence.configManager.configJavaBean.personInfo.add(personInfo);
                     Autoreply.instence.configManager.saveConfig();

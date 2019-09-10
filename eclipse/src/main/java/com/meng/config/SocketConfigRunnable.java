@@ -52,6 +52,9 @@ public class SocketConfigRunnable implements Runnable {
         }
         String type = string.substring(0, string.indexOf("."));
         String content = string.substring(string.indexOf(".") + 1);
+		if(content.contains("砂")){
+			return "fafafa";
+		}
         switch (NetworkType.valueOf(type)) {
             case addGroup:
                 configManager.configJavaBean.groupConfigs.add(configManager.gson.fromJson(content, GroupConfig.class));
