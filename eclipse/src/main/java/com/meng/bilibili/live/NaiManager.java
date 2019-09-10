@@ -115,6 +115,10 @@ public class NaiManager {
 		  for(LivePerson lp:Autoreply.instence.liveListener.livePersonMap.values()){
 			if(lp.roomID.equals(roomId)){
 			  Autoreply.instence.liveListener.livePersonMap.remove(pi.bid);
+				DanmakuListener dl=Autoreply.instence.danmakuListenerManager.getListener((int)roomL);
+				if (dl != null) {
+					dl.close();
+				  } 
 			}
 		  }
 		}

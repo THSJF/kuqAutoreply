@@ -50,7 +50,7 @@ public class DanmakuListener extends WebSocketClient {
 		Iterator it=peopleMap.entrySet().iterator();
 		while (it.hasNext()) {
 			Map.Entry<Long,Long> entry= (Map.Entry<Long, Long>) it.next();
-			if (System.currentTimeMillis() - entry.getValue() > 10 * 60 * 1000) {
+			if (System.currentTimeMillis() - entry.getValue() > 60 * 60 * 1000) {
 				it.remove(); 
 			  }
 		  }
