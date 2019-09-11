@@ -90,10 +90,10 @@ public class DanmakuListener extends WebSocketClient {
 				PersonInfo pi2=Autoreply.instence.configManager.getPersonInfoFromLiveId(roomMaster.bliveRoom);
 				String n1=pi1 == null ?name: pi1.name;
 				if (peopleMap.get(uid) == null) {
-					Autoreply.instence.sendMessage(1023432971, 0, n1 + "出现在" + pi2.name + "的直播间" + roomMaster.bliveRoom);
+				//	Autoreply.instence.sendMessage(1023432971, 0, n1 + "出现在" + pi2.name + "的直播间" + roomMaster.bliveRoom);
 				  }
 				peopleMap.put(uid, System.currentTimeMillis());
-				Autoreply.instence.sendMessage(666247478, 0,  pi2.name + roomMaster.bliveRoom + " " + n1 + ":" + text);
+			//	Autoreply.instence.sendMessage(666247478, 0,  pi2.name + roomMaster.bliveRoom + " " + n1 + ":" + text);
 				if (Autoreply.instence.danmakuListenerManager.containsMother(text) && text.startsWith("点歌")) {
 					try {
 						Autoreply.instence.naiManager.sendDanmaku(roomMaster.bliveRoom + "", Autoreply.instence.cookieManager.cookie.Sunny, "您点您妈呢");
