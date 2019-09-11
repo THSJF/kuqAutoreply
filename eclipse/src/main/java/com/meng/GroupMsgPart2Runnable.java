@@ -11,6 +11,7 @@ import java.util.function.BiConsumer;
 import java.util.stream.Collectors;
 
 import static com.meng.Autoreply.sendMessage;
+import com.meng.ocr.sign.*;
 
 public class GroupMsgPart2Runnable implements Runnable {
     private int subType = 0;
@@ -173,6 +174,10 @@ public class GroupMsgPart2Runnable implements Runnable {
         if (Autoreply.instence.picEditManager.check(fromGroup, fromQQ, msg)) {
             return true;
         }
+		if(msg.equals(".jrrp")){
+			long oneDay=24 * 60 * 60 * 1000;		
+			sendMessage(fromGroup,0,(Integer.parseInt(MD5.stringToMD5(String.valueOf(fromQQ + System.currentTimeMillis() / oneDay)).substring(28), 16) % 101)+"");
+		}
 		Autoreply.instence.seqManager.check(fromGroup,fromQQ,msg);
         return groupConfig.isDic() && Autoreply.instence.dicReplyManager.check(fromGroup, fromQQ, msg);
     }
