@@ -178,13 +178,15 @@ public class GroupMsgPart2Runnable implements Runnable {
 		if (msg.equals(".jrrp")) {
 			Member m=Autoreply.CQ.getGroupMemberInfo(fromGroup, fromQQ);
 			String res;
+			long oneDay=24 * 60 * 60 * 1000;				
+			int ipro=Integer.parseInt(MD5.stringToMD5(String.valueOf(fromQQ + System.currentTimeMillis() / oneDay)).substring(26), 16) % 10001;
+			float fpro=((float)ipro)/100;
 			if (m != null) {
-				res = m.getNick() + "今天的人品是:";
+				res = String.format("%s今天会在%.2f%%处疮痍",m.getNick(),fpro);
 			  } else {
-				res = "你今天的人品是:";
+				res = String.format("你今天会在%.2f%%处疮痍",fpro);
 			  }
-			long oneDay=24 * 60 * 60 * 1000;		
-			sendMessage(fromGroup, 0, res + (Integer.parseInt(MD5.stringToMD5(String.valueOf(fromQQ + System.currentTimeMillis() / oneDay)).substring(28), 16) % 101));
+			sendMessage(fromGroup, 0, res);
 		  }
 		Autoreply.instence.seqManager.check(fromGroup, fromQQ, msg);
         return groupConfig.isDic() && Autoreply.instence.dicReplyManager.check(fromGroup, fromQQ, msg);
