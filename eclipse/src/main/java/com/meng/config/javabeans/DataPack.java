@@ -6,7 +6,7 @@ public class DataPack {
 
 	private byte[] data;
 	private int pos=0;
-
+	private final int headLength=10;
 	public static DataPack encode(int opCode, byte[] data) {
 		return new DataPack((short)opCode, data);
 	  }
@@ -24,7 +24,7 @@ public class DataPack {
 	  }
 
 	public DataPack(short opCode, byte[] toEncode) {
-		data = new byte[10 + toEncode.length];
+		data = new byte[headLength + toEncode.length];
 		write(getBytes(data.length));
 		write(getBytes((short)10));
 		write(getBytes((short)1));
@@ -38,7 +38,7 @@ public class DataPack {
 
 	public String getString() {
 		try {
-			return new String(data, 12, getLength() - 12, "utf-8");
+			return new String(data, headLength, getLength() - headLength, "utf-8");
 		  } catch (UnsupportedEncodingException e) {
 			return null;
 		  }
@@ -49,7 +49,7 @@ public class DataPack {
 	  }
 
 	public byte[] getBodyData() {
-		byte [] bts=new byte[getLength() - 12];
+		byte [] bts=new byte[getLength() - headLength];
 		for (int i=0;i < bts.length;++i) {
 			bts[i] = data[i + 12];
 		  }
@@ -69,7 +69,7 @@ public class DataPack {
 		return readShort(data, 6);
 	  }
 
-	public short getOp() {
+	public short getOpCode() {
 		return readShort(data, 8);
 	  }
 
