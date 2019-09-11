@@ -88,7 +88,7 @@ public class Autoreply extends JcqAppAbstract implements ICQVer, IMsg, IRequest 
 	public CookieManager cookieManager;
 	public SeqManager seqManager;
 	public DanmakuListenerManager danmakuListenerManager;
-	
+	public ConnectServer connectServer;
     public ExecutorService threadPool = Executors.newCachedThreadPool();
 
     public static String lastSend = " ";
@@ -174,6 +174,10 @@ public class Autoreply extends JcqAppAbstract implements ICQVer, IMsg, IRequest 
         fph = new FanPoHaiManager();
         naiManager = new NaiManager();
 		seqManager = new SeqManager();
+		try {
+			connectServer = new ConnectServer(9961);
+			connectServer.start();
+		  } catch (java.net.UnknownHostException e) {}
         FileTipManager fileTipManager = new FileTipManager();
         fileTipManager.dataMap.add(new FileTipUploader(807242547L, 1592608126L));
         //new TimeTipManager().start();
