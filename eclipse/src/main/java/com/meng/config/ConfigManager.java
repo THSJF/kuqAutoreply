@@ -35,6 +35,15 @@ public class ConfigManager {
         Autoreply.instence.threadPool.execute(new SocketConfigManager(this));
         Autoreply.instence.threadPool.execute(new SocketDicManager(this));
     }
+	
+	public boolean containsGroup(long group){
+		for(GroupConfig gf:configJavaBean.groupConfigs){
+			if(gf.groupNumber==group){
+				return true;
+			}
+		}
+		return false;
+	}
 
     public boolean isMaster(long fromQQ) {
         return configJavaBean.masterList.contains(fromQQ);
