@@ -670,7 +670,8 @@ public class Autoreply extends JcqAppAbstract implements ICQVer, IMsg, IRequest 
 			if(configManager.isMaster(fromQQ)||configManager.containsGroup(fromGroup)){
 				CQ.setGroupAddRequest(responseFlag,REQUEST_GROUP_INVITE,REQUEST_ADOPT,null);
 				sendMessage(0, 2856986197L, "Master"+ fromQQ + "邀请我加入群" + fromGroup);			
-			}
+				return MSG_IGNORE;
+				}
             sendMessage(0, 2856986197L, fromQQ + "邀请我加入群" + fromGroup);
         }
         /*
