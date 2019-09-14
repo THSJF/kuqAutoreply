@@ -31,6 +31,8 @@ public class AdminMessageProcessor {
 		masterPermission.put("zan-now","立即启动点赞线程,尽量不要用");
 		masterPermission.put("block[艾特一人]","屏蔽列表");
 		masterPermission.put("black[艾特一人]","黑名单");
+		masterPermission.put("-live.[start|stop]","开关直播(hina)");
+		masterPermission.put("-live.rename.[字符串]","直播改名(hina)");
 		masterPermission.put("blackgroup [群号]","群加入黑名单,多群用空格隔开");
 		masterPermission.put("av更新时间:[UID]","用户最新后更新视频时间");
 		masterPermission.put("avJson:[AV号]","av信息");
@@ -552,7 +554,6 @@ public class AdminMessageProcessor {
 	}
 
 	public String start (int roomID, String cookie) throws IOException {
-
         Connection connection = Jsoup.connect("https://api.live.bilibili.com/room/v1/Room/startLive");
         String csrf = Methods.cookieToMap(cookie).get("bili_jct");
         Map<String, String> liveHead = new HashMap<>();
@@ -576,6 +577,9 @@ public class AdminMessageProcessor {
 
         JsonParser parser = new JsonParser();
         JsonObject obj = parser.parse(response.body()).getAsJsonObject();
+		if(obj.get("code").getAsInt()==0){
+			return "开播成功";
+		}
 		return obj.get("message").getAsString();
     }
 
@@ -602,6 +606,9 @@ public class AdminMessageProcessor {
 
         JsonParser parser = new JsonParser();
         JsonObject obj = parser.parse(response.body()).getAsJsonObject();
+		if(obj.get("code").getAsInt()==0){
+			return "关闭成功";
+		}
 		return obj.get("message").getAsString();
     }
 
