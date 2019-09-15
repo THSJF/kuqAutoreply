@@ -59,7 +59,8 @@ public class AdminMessageProcessor {
 		adminPermission.put(".on|.off","不修改配置文件的单群开关");
 		adminPermission.put(".admin enable|.admin disable","修改配置文件的单群开关");
 		adminPermission.put(".live","不管配置文件如何,都回复直播列表");
-		adminPermission.put("-int [add|sub|mul|div] [int] [int]","int运算(溢出)");
+		adminPermission.put("-int [+|-|*|/|<<|>>|>>>|%|^|&||] [int] [int]","int运算(溢出)");
+		adminPermission.put("-uint [int]","int字节转uint");
 		masterPermission.putAll(adminPermission);
 
 	}
@@ -448,17 +449,38 @@ public class AdminMessageProcessor {
 					int a2=Integer.parseInt(args[3]);
 					String resu="";
 					switch(args[1]){
-						case "add":
+						case "+":
 							resu=(a1+a2)+"";
 							break;
-						case "sub":
+						case "-":
 							resu=(a1-a2)+"";
 							break;
-						case "mul":
+						case "*":
 							resu=(a1*a2)+"";
 							break;
-						case "div":
+						case "/":
 							resu=(a1/a2)+"";
+							break;
+						case ">>":
+							resu=(a1>>a2)+"";
+							break;
+						case ">>>":
+							resu=(a1>>>a2)+"";
+							break;
+						case "<<":
+							resu=(a1<<a2)+"";
+							break;
+						case "^":
+							resu=(a1^a2)+"";
+							break;
+						case "%":
+							resu=(a1%a2)+"";
+							break;
+						case "|":
+							resu=(a1|a2)+"";
+							break;
+						case "&":
+							resu=(a1&a2)+"";
 							break;
 					}
 					Autoreply.sendMessage(fromGroup,0,resu);
@@ -467,7 +489,17 @@ public class AdminMessageProcessor {
 				}
 				return true;
 			}
-			
+			if(msg.startsWith("-uint ")){
+				String[] args=msg.split("\\s",2);
+				try{
+					int i=Integer.parseInt(args[1]);
+					Autoreply.sendMessage(fromGroup,0,(-1l&i)+"");
+				}catch(Exception e){
+					Autoreply.sendMessage(fromGroup,0,e.toString());
+				}
+				
+			}
+				
 			if(msg.equals(".live")) {
 				String msgSend;
 				final StringBuilder stringBuilder = new StringBuilder();
