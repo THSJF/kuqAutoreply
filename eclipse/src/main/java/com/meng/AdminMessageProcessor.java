@@ -59,7 +59,7 @@ public class AdminMessageProcessor {
 		adminPermission.put(".on|.off","不修改配置文件的单群开关");
 		adminPermission.put(".admin enable|.admin disable","修改配置文件的单群开关");
 		adminPermission.put(".live","不管配置文件如何,都回复直播列表");
-		adminPermission.put("-int [+|-|*|/|<<|>>|>>>|%|^|&||] [int] [int]","int运算(溢出)");
+		adminPermission.put("-int [int] [+|-|*|/|<<|>>|>>>|%|^|&||] [int]","int运算(溢出)");
 		adminPermission.put("-uint [int]","int字节转uint");
 		masterPermission.putAll(adminPermission);
 
@@ -442,64 +442,64 @@ public class AdminMessageProcessor {
 				Autoreply.sendMessage(fromGroup,0,adminPermission.toString());
 				return true;
 			}
-			if(msg.startsWith("-int ")){
-				try{
-					String[] args=msg.split("\\s",4);
-					int a1=Integer.parseInt(args[2]);
+			if(msg.startsWith("-int ")) {
+				try {
+					String[] args=msg.split(" ",4);
+					int a1=Integer.parseInt(args[1]);
 					int a2=Integer.parseInt(args[3]);
-					String resu="";
-					switch(args[1]){
+					String resu="failed";
+					switch(args[2]) {
 						case "+":
-							resu=(a1+a2)+"";
+							resu = "result:" + (a1 + a2);
 							break;
 						case "-":
-							resu=(a1-a2)+"";
+							resu = "result:" + (a1 - a2);
 							break;
 						case "*":
-							resu=(a1*a2)+"";
+							resu = "result:" + (a1 * a2);
 							break;
 						case "/":
-							resu=(a1/a2)+"";
+							resu = "result:" + (a1 / a2);
 							break;
 						case ">>":
-							resu=(a1>>a2)+"";
+							resu = "result:" + (a1 >> a2);
 							break;
 						case ">>>":
-							resu=(a1>>>a2)+"";
+							resu = "result:" + (a1 >>> a2);
 							break;
 						case "<<":
-							resu=(a1<<a2)+"";
+							resu = "result:" + (a1 << a2);
 							break;
 						case "^":
-							resu=(a1^a2)+"";
+							resu = "result:" + (a1 ^ a2);
 							break;
 						case "%":
-							resu=(a1%a2)+"";
+							resu = "result:" + (a1 % a2);
 							break;
 						case "|":
-							resu=(a1|a2)+"";
+							resu = "result:" + (a1 | a2);
 							break;
 						case "&":
-							resu=(a1&a2)+"";
+							resu = "result:" + (a1 & a2);
 							break;
 					}
 					Autoreply.sendMessage(fromGroup,0,resu);
-				}catch(Exception e){
+				} catch(Exception e) {
 					Autoreply.sendMessage(fromGroup,0,e.toString());
 				}
 				return true;
 			}
-			if(msg.startsWith("-uint ")){
+			if(msg.startsWith("-uint ")) {
 				String[] args=msg.split("\\s",2);
-				try{
-					int i=Integer.parseInt(args[1]);
-					Autoreply.sendMessage(fromGroup,0,(-1l&i)+"");
-				}catch(Exception e){
+				try {
+					long l=Integer.parseInt(args[1]);
+					Autoreply.sendMessage(fromGroup,0,(l & 0x00000000ffffffff) + "");
+				} catch(Exception e) {
 					Autoreply.sendMessage(fromGroup,0,e.toString());
 				}
-				
+
 			}
-				
+
 			if(msg.equals(".live")) {
 				String msgSend;
 				final StringBuilder stringBuilder = new StringBuilder();
@@ -636,7 +636,7 @@ public class AdminMessageProcessor {
 
         JsonParser parser = new JsonParser();
         JsonObject obj = parser.parse(response.body()).getAsJsonObject();
-		if(obj.get("code").getAsInt()==0){
+		if(obj.get("code").getAsInt() == 0) {
 			return "开播成功";
 		}
 		return obj.get("message").getAsString();
@@ -665,7 +665,7 @@ public class AdminMessageProcessor {
 
         JsonParser parser = new JsonParser();
         JsonObject obj = parser.parse(response.body()).getAsJsonObject();
-		if(obj.get("code").getAsInt()==0){
+		if(obj.get("code").getAsInt() == 0) {
 			return "关闭成功";
 		}
 		return obj.get("message").getAsString();
