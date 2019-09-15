@@ -75,7 +75,7 @@ public class SocketConfigRunnable implements Runnable {
                 configManager.configJavaBean.adminList.add(Long.parseLong(content));
                 break;
             case addGroupAllow:
-                configManager.configJavaBean.groupAutoAllowList.add(Long.parseLong(content));
+				configManager.addAutoAllow(Long.parseLong(content));
                 break;
             case addBlackQQ:
                 configManager.configJavaBean.blackListQQ.add(Long.parseLong(content));
@@ -102,7 +102,7 @@ public class SocketConfigRunnable implements Runnable {
                 configManager.configJavaBean.adminList.remove(Long.parseLong(content));
                 break;
             case removeGroupAllow:
-                configManager.configJavaBean.groupAutoAllowList.remove(Long.parseLong(content));
+                configManager.removeAutoAllow(Long.parseLong(content));
                 break;
             case removeBlackQQ:
                 configManager.configJavaBean.blackListQQ.remove(Long.parseLong(content));
@@ -180,8 +180,8 @@ public class SocketConfigRunnable implements Runnable {
                 long qqg = Long.parseLong(splitgroup[0]);
                 for (long l : configManager.configJavaBean.QQNotReply) {
                     if (l == qqg) {
-                        configManager.configJavaBean.groupAutoAllowList.remove(l);
-                        configManager.configJavaBean.groupAutoAllowList.add(Long.parseLong(splitgroup[1]));
+                        configManager.removeAutoAllow(l);
+                        configManager.addAutoAllow(Long.parseLong(splitgroup[1]));
                         break;
                     }
                 }

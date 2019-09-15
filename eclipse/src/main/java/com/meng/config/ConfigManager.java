@@ -65,6 +65,16 @@ public class ConfigManager {
         }
         return null;
     }
+	
+	public void addAutoAllow(long qq){
+		configJavaBean.groupAutoAllowList.add(qq);
+		saveConfig();
+	}
+	
+	public void removeAutoAllow(long qq){
+		configJavaBean.groupAutoAllowList.remove(qq);
+		saveConfig();
+	}
 
     public boolean isNotReplyGroup(long fromGroup) {
         GroupConfig groupConfig = getGroupConfig(fromGroup);

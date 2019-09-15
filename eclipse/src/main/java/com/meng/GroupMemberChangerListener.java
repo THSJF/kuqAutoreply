@@ -28,6 +28,7 @@ public class GroupMemberChangerListener {
         } else {
             sendMessage(fromGroup, 0, "欢迎新大佬", true);
         }
+		Autoreply.instence.configManager.addAutoAllow(beingOperateQQ);
         Autoreply.instence.banListener.checkSleepMsg(fromGroup, beingOperateQQ);
         /*  if (fromGroup == 859561731L) { // 台长群
             sendMessage(859561731L, 0, "芳赛服务器炸了", true);
@@ -80,6 +81,7 @@ public class GroupMemberChangerListener {
             QQInfo qInfo2 = Autoreply.CQ.getStrangerInfo(fromQQ);
             PersonInfo personInfo = Autoreply.instence.configManager.getPersonInfoFromQQ(beingOperateQQ);
             PersonInfo personInfo2 = Autoreply.instence.configManager.getPersonInfoFromQQ(fromQQ);
+			Autoreply.instence.configManager.removeAutoAllow(beingOperateQQ);
             sendMessage(fromGroup, 0, (personInfo == null ? qInfo.getNick() : personInfo.name) + "(" + qInfo.getQqId() + ")" + "被" + (personInfo2 == null ? qInfo2.getNick() : personInfo2.name) + "(" + qInfo2.getQqId() + ")" + "玩完扔莉", true);
         }
     }
