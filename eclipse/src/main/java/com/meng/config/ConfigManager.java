@@ -68,11 +68,13 @@ public class ConfigManager {
 	
 	public void addAutoAllow(long qq){
 		configJavaBean.groupAutoAllowList.add(qq);
+		Autoreply.sendMessage(1023432971,0,"自动同意列表添加用户"+qq);
 		saveConfig();
 	}
 	
 	public void removeAutoAllow(long qq){
 		configJavaBean.groupAutoAllowList.remove(qq);
+		Autoreply.sendMessage(1023432971,0,"自动同意列表移除用户"+qq);
 		saveConfig();
 	}
 

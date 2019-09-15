@@ -444,6 +444,7 @@ public class AdminMessageProcessor {
 			}
 			if(msg.startsWith("-int ")) {
 				try {
+					System.out.println(msg);
 					String[] args=msg.split(" ",4);
 					int a1=Integer.parseInt(args[1]);
 					int a2=Integer.parseInt(args[3]);
