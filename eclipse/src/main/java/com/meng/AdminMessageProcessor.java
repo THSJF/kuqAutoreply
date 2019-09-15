@@ -444,7 +444,6 @@ public class AdminMessageProcessor {
 			}
 			if(msg.startsWith("-int ")) {
 				try {
-					System.out.println(msg);
 					String[] args=msg.split(" ",4);
 					int a1=Integer.parseInt(args[1]);
 					int a2=Integer.parseInt(args[3]);
@@ -480,7 +479,7 @@ public class AdminMessageProcessor {
 						case "|":
 							resu = "result:" + (a1 | a2);
 							break;
-						case "&":
+						case "&amp;"://&
 							resu = "result:" + (a1 & a2);
 							break;
 					}
