@@ -46,6 +46,7 @@ public class GroupMsgPart2Runnable implements Runnable {
             sendMessage(fromGroup, fromQQ, "野蛮假at");
             return true;
 		  }
+		  
         if (msg.equalsIgnoreCase("loaddic")) {
             Autoreply.instence.addGroupDic();
             sendMessage(fromGroup, fromQQ, "loaded");

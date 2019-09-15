@@ -21,7 +21,7 @@ public class AdminMessageProcessor {
     private ConfigManager configManager;
 	private MyLinkedHashMap<String,String> masterPermission=new MyLinkedHashMap<>();
 	private MyLinkedHashMap<String,String> adminPermission=new MyLinkedHashMap<>();
-
+	public MyLinkedHashMap<String,String> userPermission=new MyLinkedHashMap<>();
 
     public AdminMessageProcessor (ConfigManager configManager) {
         this.configManager = configManager;
@@ -31,6 +31,7 @@ public class AdminMessageProcessor {
 		masterPermission.put("zan-now","立即启动点赞线程,尽量不要用");
 		masterPermission.put("block[艾特一人]","屏蔽列表");
 		masterPermission.put("black[艾特一人]","黑名单");
+		masterPermission.put("System.gc();","System.gc();");
 		masterPermission.put("-live.[start|stop]","开关直播(hina)");
 		masterPermission.put("-live.rename.[字符串]","直播改名(hina)");
 		masterPermission.put("blackgroup [群号]","群加入黑名单,多群用空格隔开");
@@ -49,7 +50,9 @@ public class AdminMessageProcessor {
 		masterPermission.put("精神支柱[图片]|神触[图片]","使用图片生成表情包");
 		masterPermission.put("cookie.[称呼].[cookie字符串]","设置cookie,可选值Sunny,Luna,Star,XingHuo,Hina,grzx");
 		masterPermission.put("send.[群号].[内容]","内容转发至指定群");
+		masterPermission.put("mother.[字符串]","直播间点歌问候");
 		masterPermission.put("lban.[直播间号|直播间主人].[被禁言UID|被禁言者称呼].[时间]","直播间禁言,单位为小时");
+		
 
 		adminPermission.put("findInAll:[QQ号]","查找共同群");
 		adminPermission.put("ban.[QQ号|艾特].[时间]|ban.[群号].[QQ号].[时间]","禁言,单位为秒");
@@ -59,11 +62,15 @@ public class AdminMessageProcessor {
 		adminPermission.put(".on|.off","不修改配置文件的单群开关");
 		adminPermission.put(".admin enable|.admin disable","修改配置文件的单群开关");
 		adminPermission.put(".live","不管配置文件如何,都回复直播列表");
-		adminPermission.put("-int [int] [+|-|*|/|<<|>>|>>>|%|^|&||] [int]","int运算(溢出)");
-		adminPermission.put("-uint [int]","int字节转uint");
+		
+		userPermission.put(".live","正在直播列表");
+		userPermission.put("-int [int] [+|-|*|/|<<|>>|>>>|%|^|&||] [int]","int运算(溢出)");
+		userPermission.put("-uint [int]","int字节转uint(boom)");
+		
 		masterPermission.putAll(adminPermission);
-
-	}
+		masterPermission.putAll(userPermission);
+		adminPermission.putAll(userPermission);
+		}
 
     public boolean check (final long fromGroup, final long fromQQ, String message) {
         final String msg;

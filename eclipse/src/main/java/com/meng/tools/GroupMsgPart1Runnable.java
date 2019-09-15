@@ -54,7 +54,7 @@ public class GroupMsgPart1Runnable implements Runnable {
             }
         }
 		if(msg.equals("-help")){
-		  sendMessage(fromGroup,0,"懒 没写");
+		  sendMessage(fromGroup,0,Autoreply.instence.adminMessageProcessor.userPermission.toString());
 		  return;
 		}
         if (Autoreply.instence.fph.check(fromQQ, fromGroup, msg, msgId, imageFiles)) {
