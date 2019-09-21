@@ -50,9 +50,9 @@ public class WarnMessageProcessor {
 
     public boolean check(long fromGroup, long fromQQ, String msg) {
         boolean b = false;
-        if (lastMsg.equals(msg) && (msg.contains("#") || msg.contains("﹟"))) {
+        if (lastMsg.equals(msg) && (msg.contains("~") || msg.contains("～"))) {
             b = processRepeat(fromGroup, fromQQ, msg);
-        } else if ((msg.contains("#") || msg.contains("﹟")) && isAtme(msg)) {
+        } else if ((msg.contains("~") || msg.contains("～")) && isAtme(msg)) {
             onMsgHighWarinig(fromGroup, fromQQ);
             return true;
         }

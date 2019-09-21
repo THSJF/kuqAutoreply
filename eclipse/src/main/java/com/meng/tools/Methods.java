@@ -42,7 +42,7 @@ public class Methods {
         } else {
             Member ogg = Autoreply.CQ.getGroupMemberInfoV2(fromGroup, Autoreply.instence.configManager.configJavaBean.ogg);
             if (ogg != null && ogg.getAuthority() - ban.getAuthority() > 0) {
-                Autoreply.sendMessage(1023432971, 0, "#mutegroupuser " + fromGroup + " " + (time / 60) + " " + banQQ);
+                Autoreply.sendMessage(1023432971, 0, "~mutegroupuser " + fromGroup + " " + (time / 60) + " " + banQQ);
                 Autoreply.instence.useCount.incGbanCount(Autoreply.CQ.getLoginQQ());
                 return true;
             }
@@ -77,7 +77,7 @@ public class Methods {
             }
         }
         if (!banqqs.toString().equals("")) {
-            Autoreply.sendMessage(1023432971, 0, "#mutegroupuser " + fromGroup + " " + (time / 60) + banqqs.toString());
+            Autoreply.sendMessage(1023432971, 0, "~mutegroupuser " + fromGroup + " " + (time / 60) + banqqs.toString());
         }
     }
 
