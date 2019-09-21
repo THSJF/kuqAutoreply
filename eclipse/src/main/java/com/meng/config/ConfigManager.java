@@ -68,13 +68,13 @@ public class ConfigManager {
 	
 	public void addAutoAllow(long qq){
 		configJavaBean.groupAutoAllowList.add(qq);
-		Autoreply.sendMessage(1023432971,0,"自动同意列表添加用户"+qq);
+		Autoreply.sendMessage(Autoreply.mainGroup,0,"自动同意列表添加用户"+qq);
 		saveConfig();
 	}
 	
 	public void removeAutoAllow(long qq){
 		configJavaBean.groupAutoAllowList.remove(qq);
-		Autoreply.sendMessage(1023432971,0,"自动同意列表移除用户"+qq);
+		Autoreply.sendMessage(Autoreply.mainGroup,0,"自动同意列表移除用户"+qq);
 		saveConfig();
 	}
 
@@ -161,8 +161,8 @@ public class ConfigManager {
             //    }
             }
         });
-        Autoreply.sendMessage(1023432971, 0, "已将用户" + qq + "加入黑名单");
-        Autoreply.sendMessage(1023432971, 0, "已将群" + group + "加入黑名单");
+        Autoreply.sendMessage(Autoreply.mainGroup, 0, "已将用户" + qq + "加入黑名单");
+        Autoreply.sendMessage(Autoreply.mainGroup, 0, "已将群" + group + "加入黑名单");
     }
 	
 	public void setOgg(long qqNum){

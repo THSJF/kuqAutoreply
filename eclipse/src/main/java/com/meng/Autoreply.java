@@ -100,6 +100,7 @@ public class Autoreply extends JcqAppAbstract implements ICQVer, IMsg, IRequest 
     public FanPoHaiManager fph;
     public HashSet<Long> botOff = new HashSet<>();
 
+	public static long mainGroup=1023432971l;
     /**
      * @param args 系统参数
      */
@@ -145,7 +146,7 @@ public class Autoreply extends JcqAppAbstract implements ICQVer, IMsg, IRequest 
         threadPool.execute(new Runnable() {
             @Override
             public void run() {
-                Autoreply.sendMessage(1023432971, 0, "启动中");
+                Autoreply.sendMessage(Autoreply.mainGroup, 0, "启动中");
             }
         });
         long startTime = System.currentTimeMillis();

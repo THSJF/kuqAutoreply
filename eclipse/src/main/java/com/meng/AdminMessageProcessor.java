@@ -25,6 +25,7 @@ public class AdminMessageProcessor {
 
     public AdminMessageProcessor (ConfigManager configManager) {
         this.configManager = configManager;
+		masterPermission.put("小律影专用指令:setconnect","");
 		masterPermission.put(".start|.stop","总开关");
 		masterPermission.put("find:[QQ号]","在配置文件中查找此人");
 		masterPermission.put("z.add[艾特至少一人]","点赞列表");
@@ -52,7 +53,7 @@ public class AdminMessageProcessor {
 		masterPermission.put("send.[群号].[内容]","内容转发至指定群");
 		masterPermission.put("mother.[字符串]","直播间点歌问候");
 		masterPermission.put("lban.[直播间号|直播间主人].[被禁言UID|被禁言者称呼].[时间]","直播间禁言,单位为小时");
-		
+
 
 		adminPermission.put("findInAll:[QQ号]","查找共同群");
 		adminPermission.put("ban.[QQ号|艾特].[时间]|ban.[群号].[QQ号].[时间]","禁言,单位为秒");
@@ -62,15 +63,15 @@ public class AdminMessageProcessor {
 		adminPermission.put(".on|.off","不修改配置文件的单群开关");
 		adminPermission.put(".admin enable|.admin disable","修改配置文件的单群开关");
 		adminPermission.put(".live","不管配置文件如何,都回复直播列表");
-		
+
 		userPermission.put(".live","正在直播列表");
 		userPermission.put("-int [int] [+|-|*|/|<<|>>|>>>|%|^|&||] [int]","int运算(溢出)");
 		userPermission.put("-uint [int]","int字节转uint(boom)");
-		
+
 		masterPermission.putAll(adminPermission);
 		masterPermission.putAll(userPermission);
 		adminPermission.putAll(userPermission);
-		}
+	}
 
     public boolean check (final long fromGroup, final long fromQQ, String message) {
         final String msg;
@@ -128,20 +129,30 @@ public class AdminMessageProcessor {
 			}
 			if(msg.startsWith("-live")) {
 				String[] str=msg.split("\\.");
+				PersonInfo pi=Autoreply.instence.configManager.getPersonInfoFromQQ(fromQQ);
+				String name;
+				if(pi == null) {
+					name = "" + fromQQ;
+				} else {
+					name = pi.name;
+				}
 				switch(str[1]) {
 					case "start":
 						try {
 							Autoreply.sendMessage(fromGroup,0,start(9721948,Autoreply.instence.cookieManager.cookie.Hina));
+							Autoreply.sendMessage(Autoreply.mainGroup,0,name + "开启了直播");
 						} catch(IOException e) {}
 						break;
 					case "stop":
 						try {
 							Autoreply.sendMessage(fromGroup,0,stop(9721948,Autoreply.instence.cookieManager.cookie.Hina));
+							Autoreply.sendMessage(Autoreply.mainGroup,0,name + "关闭了直播");
 						} catch(IOException e) {}
 						break;
 					case "rename":
 						try {
 							Autoreply.sendMessage(fromGroup,0,rename(9721948,Autoreply.instence.cookieManager.cookie.Hina,str[2]));
+							Autoreply.sendMessage(Autoreply.mainGroup,0,name + "为直播改了名:" + str[2]);
 						} catch(IOException e) {}
 				}	
 				return true;

@@ -271,7 +271,7 @@ public class LiveListener implements Runnable {
         if (!p.isTipLive()) {
             return;
 		  }
-        Autoreply.sendMessage(1023432971, 0, p.name + "开始直播" + p.bliveRoom, true);
+        Autoreply.sendMessage(Autoreply.mainGroup, 0, p.name + "开始直播" + p.bliveRoom, true);
         ArrayList<Long> groupList = Autoreply.instence.configManager.getPersonInfoFromName(p.name).tipIn;
         for (int i = 0, groupListSize = groupList.size(); i < groupListSize; i++) {
             long group = groupList.get(i);
@@ -283,7 +283,7 @@ public class LiveListener implements Runnable {
         if (!p.isTipLive()) {
             return;
 		  }
-        Autoreply.sendMessage(1023432971, 0, p.name + "直播结束" + p.bliveRoom, true);
+        Autoreply.sendMessage(Autoreply.mainGroup, 0, p.name + "直播结束" + p.bliveRoom, true);
         ArrayList<Long> groupList = Autoreply.instence.configManager.getPersonInfoFromName(p.name).tipIn;
         for (int i = 0, groupListSize = groupList.size(); i < groupListSize; i++) {
             long group = groupList.get(i);
