@@ -189,7 +189,7 @@ public class Methods {
 
     // 有@的时候
     public static boolean checkAt(long fromGroup, long fromQQ, String msg) {
-        if (msg.contains("#") || msg.contains("﹟")) {
+        if (msg.contains("~") || msg.contains("～")) {
             return false;
         }
         if (Autoreply.instence.CC.getAt(msg) == Autoreply.CQ.getLoginQQ()) {
