@@ -152,6 +152,9 @@ public class LiveListener implements Runnable {
 	}
 
     private void countLiveTime (PersonInfo personInfo, LivePerson livePerson) {
+		if(liveTimeMap.get(personInfo.name) == null) {
+			liveTimeMap.put(personInfo.name,0L);
+		}
         long time = liveTimeMap.get(personInfo.name);
 		time = time + (System.currentTimeMillis()  - livePerson.liveStartTimeStamp);
 		liveTimeMap.put(personInfo.name,time);
