@@ -1,17 +1,9 @@
 package com.meng.config;
 
-import java.io.DataInputStream;
-import java.io.DataOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
-import java.net.InetAddress;
-import java.net.ServerSocket;
-import java.net.Socket;
-
-import com.google.gson.Gson;
-import com.meng.config.javabeans.GroupConfig;
-import com.meng.config.javabeans.PersonInfo;
+import com.meng.*;
+import com.meng.config.javabeans.*;
+import java.io.*;
+import java.net.*;
 
 public class SocketConfigRunnable implements Runnable {
     private Socket socket = null;
@@ -57,8 +49,10 @@ public class SocketConfigRunnable implements Runnable {
 		}
         switch (NetworkType.valueOf(type)) {
             case addGroup:
-                configManager.configJavaBean.groupConfigs.add(configManager.gson.fromJson(content, GroupConfig.class));
-                break;
+				GroupConfig g1c=configManager.gson.fromJson(content, GroupConfig.class);
+                configManager.configJavaBean.groupConfigs.add(g1c);
+                Autoreply.sendMessage(Autoreply.mainGroup,0,"添加群"+g1c.groupNumber);
+				break;
             case addNotReplyUser:
                 configManager.configJavaBean.QQNotReply.add(Long.parseLong(content));
                 break;
@@ -70,9 +64,11 @@ public class SocketConfigRunnable implements Runnable {
                 break;
             case addMaster:
                 configManager.configJavaBean.masterList.add(Long.parseLong(content));
+				Autoreply.sendMessage(Autoreply.mainGroup,0,"添加master"+content);
                 break;
             case addAdmin:
                 configManager.configJavaBean.adminList.add(Long.parseLong(content));
+				Autoreply.sendMessage(Autoreply.mainGroup,0,"添加admin"+content);
                 break;
             case addGroupAllow:
 				configManager.addAutoAllow(Long.parseLong(content));
@@ -97,9 +93,11 @@ public class SocketConfigRunnable implements Runnable {
                 break;
             case removeMaster:
                 configManager.configJavaBean.masterList.remove(Long.parseLong(content));
+				Autoreply.sendMessage(Autoreply.mainGroup,0,"移除master"+content);
                 break;
             case removeAdmin:
                 configManager.configJavaBean.adminList.remove(Long.parseLong(content));
+				Autoreply.sendMessage(Autoreply.mainGroup,0,"移除admin"+content);
                 break;
             case removeGroupAllow:
                 configManager.removeAutoAllow(Long.parseLong(content));
