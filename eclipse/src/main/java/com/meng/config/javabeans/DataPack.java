@@ -23,15 +23,16 @@ public class DataPack {
 		return new DataPack(bytes);
 	  }
 /*opCode:
--1 :message
+-1 : message
 0 to 26 : configV3.json
 27 : onConnect
 28 : bilibili live
 29 : new video and artical
 30 : bilibili danmaku	
 31 : hina bilibili live room
+32 : heart beat
 */  
-	public DataPack(short opCode, byte[] toEncode) {
+	private DataPack(short opCode, byte[] toEncode) {
 		data = new byte[headLength + toEncode.length];
 		write(getBytes(data.length));
 		write(getBytes((short)10));
@@ -40,7 +41,7 @@ public class DataPack {
 		write(toEncode);
 	  }   
 
-	public DataPack(byte[] pack) {
+	private DataPack(byte[] pack) {
 		data = pack;
 	  } 
 

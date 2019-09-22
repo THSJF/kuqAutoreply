@@ -43,7 +43,10 @@ public class ConnectServer extends WebSocketServer {
 	//	System.out.println(conn + ": " + message);
 	//conn.send(message.array());
 	DataPack dp=DataPack.decode(message.array());
-	Gson gson=new Gson();
+	if(dp.getOpCode()==32){
+		conn.send(dp.getData());
+	}
+	//Gson gson=new Gson();
 		switch (dp.getOpCode()) {
        /*     case 0:
 			  configJavaBean.groupConfigs.add(gson.fromJson(dp.getString(), GroupConfig.class));
