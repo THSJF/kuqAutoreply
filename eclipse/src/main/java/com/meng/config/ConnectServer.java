@@ -45,7 +45,7 @@ public class ConnectServer extends WebSocketServer {
 	DataPack dp=DataPack.decode(message.array());
 	Gson gson=new Gson();
 		switch (dp.getOpCode()) {
-            case 0:
+       /*     case 0:
 			  configJavaBean.groupConfigs.add(gson.fromJson(dp.getString(), GroupConfig.class));
 			  break;
             case 1:
@@ -196,10 +196,10 @@ public class ConnectServer extends WebSocketServer {
 					  break;
                     }
                 }
-			  break;   
+			  break;  */ 
 		  }
 		  Autoreply.instence.configManager.saveConfig();
-		  conn.send(DataPack.encode(-1,"成功").getBodyData());
+		  conn.send(DataPack.encode(-1,"成功").getData());
 	  }
 
 

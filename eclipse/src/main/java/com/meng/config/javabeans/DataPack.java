@@ -22,7 +22,15 @@ public class DataPack {
 	public static DataPack decode(byte[] bytes) {
 		return new DataPack(bytes);
 	  }
-
+/*opCode:
+-1 :message
+0 to 26 : configV3.json
+27 : onConnect
+28 : bilibili live
+29 : new video and artical
+30 : bilibili danmaku	
+31 : hina bilibili live room
+*/  
 	public DataPack(short opCode, byte[] toEncode) {
 		data = new byte[headLength + toEncode.length];
 		write(getBytes(data.length));
@@ -48,14 +56,14 @@ public class DataPack {
 		return data;
 	  }
 
-	public byte[] getBodyData() {
+	/*public byte[] getBodyData() {
 		byte [] bts=new byte[getLength() - headLength];
 		for (int i=0;i < bts.length;++i) {
 			bts[i] = data[i + 12];
 		  }
 		return bts;
 	  }
-	  
+	*/  
 
 	public int getLength() {
 		return readInt(data, 0);

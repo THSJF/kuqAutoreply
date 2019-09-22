@@ -266,6 +266,7 @@ public class LiveListener implements Runnable {
 		}
 	}
     private void tipStart (PersonInfo p) {
+		Autoreply.instence.connectServer.broadcast(DataPack.encode(28,p.name + "开始直播" + p.bliveRoom).getData());
         if(!p.isTipLive()) {
             return;
 		}
@@ -278,6 +279,7 @@ public class LiveListener implements Runnable {
 	}
 
     private void tipFinish (PersonInfo p) {
+		Autoreply.instence.connectServer.broadcast(DataPack.encode(28,p.name + "直播结束" + p.bliveRoom).getData());
         if(!p.isTipLive()) {
             return;
 		}

@@ -141,18 +141,21 @@ public class AdminMessageProcessor {
 						try {
 							Autoreply.sendMessage(fromGroup,0,start(9721948,Autoreply.instence.cookieManager.cookie.Hina));
 							Autoreply.sendMessage(Autoreply.mainGroup,0,name + "开启了直播");
+							Autoreply.instence.connectServer.broadcast(DataPack.encode(31,name + "开启了直播").getData());
 						} catch(IOException e) {}
 						break;
 					case "stop":
 						try {
 							Autoreply.sendMessage(fromGroup,0,stop(9721948,Autoreply.instence.cookieManager.cookie.Hina));
 							Autoreply.sendMessage(Autoreply.mainGroup,0,name + "关闭了直播");
+							Autoreply.instence.connectServer.broadcast(DataPack.encode(31,name + "关闭了直播").getData());
 						} catch(IOException e) {}
 						break;
 					case "rename":
 						try {
 							Autoreply.sendMessage(fromGroup,0,rename(9721948,Autoreply.instence.cookieManager.cookie.Hina,str[2]));
 							Autoreply.sendMessage(Autoreply.mainGroup,0,name + "为直播改了名:" + str[2]);
+							Autoreply.instence.connectServer.broadcast(DataPack.encode(31,name + "为直播改了名:" + str[2]).getData());
 						} catch(IOException e) {}
 				}	
 				return true;
