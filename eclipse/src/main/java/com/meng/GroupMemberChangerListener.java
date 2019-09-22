@@ -40,12 +40,12 @@ public class GroupMemberChangerListener {
 
     public void checkDecrease(int subtype, int sendTime, final long fromGroup, final long fromQQ, long beingOperateQQ) {
         if (subtype == 1) {
-            if (beingOperateQQ == 2856986197L) {
-				if(fromGroup==Autoreply.mainGroup){
-					return;
-				}
-                Autoreply.CQ.setGroupLeave(fromGroup, false);
-            }
+          //  if (beingOperateQQ == 2856986197L) {
+			//	if(fromGroup==Autoreply.mainGroup){
+			//		return;
+			//	}
+           //     Autoreply.CQ.setGroupLeave(fromGroup, false);
+        //    }
             if (Autoreply.instence.configManager.isNotReplyGroup(fromGroup)) {
                 return;
             }
