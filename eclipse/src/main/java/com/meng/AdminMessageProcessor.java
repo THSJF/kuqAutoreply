@@ -365,10 +365,6 @@ public class AdminMessageProcessor {
                 sendMessage(fromGroup,0,Autoreply.instence.liveListener.getLiveTimeCount());
                 return true;
 			}
-            if(msg.equals("livesave")) {
-                Autoreply.instence.liveListener.saveNow();
-                return true;
-			}
             if(msg.startsWith("nai.")) {
                 String[] sarr = msg.split("\\.",3);
                 PersonInfo pInfo = configManager.getPersonInfoFromName(sarr[1]);

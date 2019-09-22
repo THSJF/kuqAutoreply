@@ -125,24 +125,8 @@ public class LiveListener implements Runnable {
 		}
 	}
 
-    public void saveNow () {
-        for(PersonInfo personInfo : Autoreply.instence.configManager.configJavaBean.personInfo) {
-            if(personInfo.bliveRoom == 0 || personInfo.bliveRoom == -1) {
-                continue;
-			}
-            LivePerson livePerson = livePersonMap.computeIfAbsent(personInfo.bid,new Function<Integer, LivePerson>() {
-				@Override
-				public LivePerson apply (Integer k) {
-					return new LivePerson();
-				}
-			});
-            countLiveTime(personInfo,livePerson);
-            livePerson.liveStartTimeStamp = System.currentTimeMillis() ;
-		}
-	}
-
     private void onStart (PersonInfo personInfo, LivePerson livePerson) {
-        livePerson.liveStartTimeStamp = System.currentTimeMillis() ;
+        livePerson.liveStartTimeStamp = System.currentTimeMillis();
         tipStart(personInfo);
 	}
 
@@ -156,7 +140,7 @@ public class LiveListener implements Runnable {
 			liveTimeMap.put(personInfo.name,0L);
 		}
         long time = liveTimeMap.get(personInfo.name);
-		time = time + (System.currentTimeMillis()  - livePerson.liveStartTimeStamp);
+		time = time + (System.currentTimeMillis() - livePerson.liveStartTimeStamp);
 		liveTimeMap.put(personInfo.name,time);
         saveLiveTime();
 	}
