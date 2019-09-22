@@ -52,7 +52,6 @@ public class BiliLinkInfo {
         }
         return false;
     }
-    // FromUriOpen@bilibili://YXY1ODI3Njg3OT9hYnRlc3Q9RSZ0cz0xNTYyNTYzNjI0JmV4cGlkPTc3MV83NjhfNjgzXzgyMiZ1dWlkPTk2MkQ1QjBELTM4NTUtMjkzRC00OEQwLUY4REQyQkQ3MkQwRTExOTE3aW5mb2M=
 
     public boolean check(long fromGroup, long fromQQ, String msg) {
         String subedUrl;
