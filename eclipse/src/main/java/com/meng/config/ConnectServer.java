@@ -43,9 +43,6 @@ public class ConnectServer extends WebSocketServer {
 	//	System.out.println(conn + ": " + message);
 	//conn.send(message.array());
 	DataPack dp=DataPack.decode(message.array());
-	if(dp.getOpCode()==32){
-		conn.send(dp.getData());
-	}
 	//Gson gson=new Gson();
 		switch (dp.getOpCode()) {
        /*     case 0:
@@ -200,8 +197,21 @@ public class ConnectServer extends WebSocketServer {
                     }
                 }
 			  break;  */ 
+			case 27:
+				break;
+			case 28:
+				break;
+			case 29:
+				break;
+			case 30:
+				break;
+			case 31:
+				break;
+			case 32:
+				conn.send(dp.getData());
+				break;
 		  }
-		  Autoreply.instence.configManager.saveConfig();
+		//  Autoreply.instence.configManager.saveConfig();
 		  conn.send(DataPack.encode(-1,"成功").getData());
 	  }
 

@@ -182,6 +182,9 @@ public class GroupMsgPart2Runnable implements Runnable {
 			long oneDay=24 * 60 * 60 * 1000;				
 			int ipro=Integer.parseInt(MD5.stringToMD5(String.valueOf(fromQQ + System.currentTimeMillis() / oneDay)).substring(26), 16) % 10001;
 			float fpro=((float)ipro)/100;
+			if(fromQQ==2856986197l){
+				fpro=99.61f;
+			}
 			if (m != null) {
 				res = String.format("%s今天会在%.2f%%处疮痍",m.getNick(),fpro);
 			  } else {

@@ -73,13 +73,7 @@ public class AdminMessageProcessor {
 		adminPermission.putAll(userPermission);
 	}
 
-    public boolean check (final long fromGroup, final long fromQQ, String message) {
-        final String msg;
-        if(message.endsWith("喵")) {
-            msg = message.substring(0,message.length() - 1);
-		} else {
-            msg = message;
-		}
+    public boolean check (final long fromGroup, final long fromQQ, final String msg) {
 		if(fromQQ == 2856986197L || fromQQ == 2528419891L) {
 			if(msg.startsWith("bchat.")) {
 				String[] strs=msg.split("\\.",3);
