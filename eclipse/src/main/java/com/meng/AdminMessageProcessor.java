@@ -448,7 +448,6 @@ public class AdminMessageProcessor {
 			}
 		}
         if(configManager.isAdmin(fromQQ)) {
-
 			if(msg.equals("-help")) {
 				Autoreply.sendMessage(fromGroup,0,adminPermission.toString());
 				return true;

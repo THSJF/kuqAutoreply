@@ -100,6 +100,7 @@ public class Autoreply extends JcqAppAbstract implements ICQVer, IMsg, IRequest 
     public FanPoHaiManager fph;
     public HashSet<Long> botOff = new HashSet<>();
 
+	public DiceImitate diceImitate=new DiceImitate();
 	public static long mainGroup=1023432971l;
     /**
      * @param args 系统参数
