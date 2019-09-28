@@ -503,8 +503,7 @@ public class AdminMessageProcessor {
 			if(msg.startsWith("-uint ")) {
 				String[] args=msg.split("\\s",2);
 				try {
-					long l=Integer.parseInt(args[1]);
-					Autoreply.sendMessage(fromGroup,0,(l & 0x00000000ffffffff) + "");
+					Autoreply.sendMessage(fromGroup,0,(Integer.parseInt(args[1]) & 0x00000000ffffffffL) + "");
 				} catch(Exception e) {
 					Autoreply.sendMessage(fromGroup,0,e.toString());
 				}
