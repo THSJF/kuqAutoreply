@@ -21,14 +21,50 @@ public class DiceImitate {
 		spells.add("「里·Extreme Winter」");
 		
 		
+		spells.add("冰符「冰袭方阵」");
+		spells.add("雅符「春之京人偶」");
+		spells.add("紫奥义「弹幕结界」");
+		spells.add("魍魉「二重黑死蝶」");
+		spells.add("「地狱的人工太阳」");
+		spells.add("「地狱的托卡马克」");
+		spells.add("超人「圣白莲」");
+
+		spells.add("铳符「月狂之枪」");
+		spells.add("「反魂蝶 -一分咲-」");
+		spells.add("「反魂蝶 -三分咲-」");
+		spells.add("「反魂蝶 -五分咲-」");
+
+		spells.add("幽曲「埋骨于弘川 -伪灵-」");
+		spells.add("幽曲「埋骨于弘川 -亡灵-」");
+		spells.add("幽曲「埋骨于弘川 -幻灵-」");
+		spells.add("幽曲「埋骨于弘川 -神灵-」");
+		
+		
+		spells.add("「掌上的纯光」");
+		spells.add("「杀意的百合」");
+		spells.add("「现代的神灵界」");
+		spells.add("「原始的神灵界」");
+		spells.add("「战栗的寒冷之星」");
+		spells.add("「纯粹的疯狂」");
+		spells.add("「溢出的暇秽」");
+		spells.add("「地上秽的纯化」");
+		spells.add("纯符「单纯的子弹地狱」");
+		spells.add("纯符「纯粹的弹幕地狱」");
+		
+		spells.add("樱符「完全墨染的樱花 -封印-」");
+		spells.add("樱符「完全墨染的樱花 -忘我-」");
+		spells.add("樱符「完全墨染的樱花 -春眠-」");
+		spells.add("樱符「完全墨染的樱花 -开花-」");
+		
+		
 	}
 	public boolean check (long fromGroup, long fromQQ, String msg) {
+		Member m=Autoreply.CQ.getGroupMemberInfo(fromGroup,fromQQ);				
+		String md5=MD5.stringToMD5(String.valueOf(fromQQ + System.currentTimeMillis() / (24 * 60 * 60 * 1000)));
+		char c=md5.charAt(0);
 		switch(msg) {
 			case ".jrrp":
-				Member m=Autoreply.CQ.getGroupMemberInfo(fromGroup,fromQQ);				
-				String md5=MD5.stringToMD5(String.valueOf(fromQQ + System.currentTimeMillis() / (24 * 60 * 60 * 1000)));
 				float fpro=0f;
-				char c=md5.charAt(0);
 				if(c == '0' || fromQQ == 2856986197l) {
 					fpro = 99.61f;
 				} else if(c == '1') {
@@ -43,19 +79,16 @@ public class DiceImitate {
 				}
 				return true;	
 			case "。jrrp":
-				Member m2=Autoreply.CQ.getGroupMemberInfo(fromGroup,fromQQ);				
-				String md52=MD5.stringToMD5(String.valueOf(fromQQ + System.currentTimeMillis() / (24 * 60 * 60 * 1000)));
-				char c2=md52.charAt(0);
 				int spell=0;
-				if(c2 == '0' || fromQQ == 2856986197l) {
+				if(c == '0' || fromQQ == 2856986197l) {
 					spell=8;
-				} else if(c2 == '1') {
+				} else if(c == '1') {
 					spell=0;
 				} else {
-				spell=Integer.parseInt(md52.substring(26),16) %  spells.size();
+				spell=Integer.parseInt(md5.substring(26),16) %  spells.size();
 				}
-				if(m2 != null) {
-					Autoreply.sendMessage(fromGroup,0,String.format("%s今天会在%s疮痍",m2.getNick(),spells.get(spell)));
+				if(m != null) {
+					Autoreply.sendMessage(fromGroup,0,String.format("%s今天会在%s疮痍",m.getNick(),spells.get(spell)));
 				} else {
 					Autoreply.sendMessage(fromGroup,0,String.format("你今天会在%s疮痍",spells.get(spell)));
 				}
