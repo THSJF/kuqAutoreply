@@ -5,7 +5,7 @@ import java.util.*;
 
 public class DiceImitate {
 	private ArrayList<String> spells=new ArrayList<String>();
-	public DiceImitate(){
+	public DiceImitate () {
 		spells.add("「红色的幻想乡」");
 		spells.add("「反魂蝶 -八分咲-」");
 		spells.add("秘术「天文密葬法」");
@@ -19,8 +19,8 @@ public class DiceImitate {
 		spells.add("「里·Perfect Summer Ice」");
 		spells.add("「里·Crazy Fall Wind」");
 		spells.add("「里·Extreme Winter」");
-		
-		
+
+
 		spells.add("冰符「冰袭方阵」");
 		spells.add("雅符「春之京人偶」");
 		spells.add("紫奥义「弹幕结界」");
@@ -38,8 +38,8 @@ public class DiceImitate {
 		spells.add("幽曲「埋骨于弘川 -亡灵-」");
 		spells.add("幽曲「埋骨于弘川 -幻灵-」");
 		spells.add("幽曲「埋骨于弘川 -神灵-」");
-		
-		
+
+
 		spells.add("「掌上的纯光」");
 		spells.add("「杀意的百合」");
 		spells.add("「现代的神灵界」");
@@ -49,14 +49,29 @@ public class DiceImitate {
 		spells.add("「溢出的暇秽」");
 		spells.add("「地上秽的纯化」");
 		spells.add("纯符「单纯的子弹地狱」");
-		spells.add("纯符「纯粹的弹幕地狱」");
-		
+		//spells.add("纯符「纯粹的弹幕地狱」");
+
 		spells.add("樱符「完全墨染的樱花 -封印-」");
 		spells.add("樱符「完全墨染的樱花 -忘我-」");
 		spells.add("樱符「完全墨染的樱花 -春眠-」");
 		spells.add("樱符「完全墨染的樱花 -开花-」");
-		
-		
+
+
+		spells.add("亡舞「生者必灭之理 -眩惑-」");
+		spells.add("亡舞「生者必灭之理 -死蝶-」");
+		spells.add("亡舞「生者必灭之理 -毒蛾-」");
+		spells.add("亡舞「生者必灭之理 -魔境-」");
+
+		spells.add("想起「二重黑死蝶」");
+		spells.add("「河童的幻想大瀑布」");
+		spells.add("「信仰之山」");
+		spells.add("「风神之神德」");
+		spells.add("天流「天水奇迹」");
+		spells.add("天龙「雨之源泉」");
+		spells.add("「无双风神」");
+		spells.add("「幻想风靡」");
+
+
 	}
 	public boolean check (long fromGroup, long fromQQ, String msg) {
 		Member m=Autoreply.CQ.getGroupMemberInfo(fromGroup,fromQQ);				
@@ -81,11 +96,11 @@ public class DiceImitate {
 			case "。jrrp":
 				int spell=0;
 				if(c == '0' || fromQQ == 2856986197l) {
-					spell=8;
+					spell = 8;
 				} else if(c == '1') {
-					spell=0;
+					spell = 0;
 				} else {
-				spell=Integer.parseInt(md5.substring(26),16) %  spells.size();
+					spell = Integer.parseInt(md5.substring(26),16) %  spells.size();
 				}
 				if(m != null) {
 					Autoreply.sendMessage(fromGroup,0,String.format("%s今天会在%s疮痍",m.getNick(),spells.get(spell)));
@@ -93,6 +108,10 @@ public class DiceImitate {
 					Autoreply.sendMessage(fromGroup,0,String.format("你今天会在%s疮痍",spells.get(spell)));
 				}
 				return true;
+		}
+		if(msg.equals(".draw spell")) {
+			Autoreply.sendMessage(fromGroup,0,spells.get(new Random().nextInt(spells.size())));
+			return true;
 		}
 		return false;
 	}
