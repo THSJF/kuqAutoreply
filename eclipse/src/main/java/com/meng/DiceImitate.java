@@ -7,6 +7,8 @@ public class DiceImitate {
 	private ArrayList<String> spells=new ArrayList<String>();
 	private ArrayList<String> neta=new ArrayList<String>();
 	private ArrayList<String> music=new ArrayList<String>();
+	private ArrayList<String> name=new ArrayList<String>();
+
 
 	public DiceImitate() {
 		spells.add("「红色的幻想乡」");
@@ -165,6 +167,69 @@ public class DiceImitate {
 		music.add("门再也进不去了");
 		music.add("秘神摩多罗 ~ Hidden Star in All Seasons.");
 
+
+		name.add("露米娅");
+		name.add("大妖精");
+		name.add("琪露诺");
+		name.add("红美铃");
+		name.add("帕秋莉诺蕾姬");
+		name.add("十六夜咲夜");
+		name.add("蕾米莉亚斯卡雷特");
+		name.add("芙兰朵露斯卡雷特");
+
+		name.add("蕾蒂");
+		name.add("橙");
+		name.add("爱丽丝玛格特罗依德");
+		name.add("梅露兰");
+		name.add("露娜萨");
+		name.add("莉莉卡");
+		name.add("魂魄妖梦");
+		name.add("西行寺幽幽子");
+		name.add("八云蓝");
+		name.add("八云紫");
+
+		name.add("莉格露");
+		name.add("萝蕾拉");
+		name.add("上白泽慧音");
+		name.add("博丽灵梦");
+		name.add("雾雨魔理沙");
+		name.add("因幡帝");
+		name.add("铃仙优昙华院因幡");
+		name.add("八意永琳");
+		name.add("蓬莱山辉夜");
+		name.add("藤原妹红");
+
+		name.add("秋静叶");
+		name.add("秋穰子");
+		name.add("键山雏");
+		name.add("河城荷取");
+		name.add("犬走椛");
+		name.add("射命丸文");
+		name.add("东风谷早苗");
+		name.add("八坂神奈子");
+		name.add("洩矢诹访子");
+
+		name.add("琪斯美");
+		name.add("黑谷山女");
+		name.add("水桥帕露西");
+		name.add("星熊勇仪");
+		name.add("古明地觉");
+		name.add("火焰猫燐");
+		name.add("灵乌路空");
+		name.add("古明地恋");
+
+		name.add("纳兹琳");
+		name.add("多多良小伞");
+		name.add("云居一轮");
+		name.add("村纱水蜜");
+		name.add("寅丸星");
+		name.add("圣白莲");
+		name.add("封兽鵺");
+
+		name.add("清兰");
+		name.add("克劳恩皮丝");
+		name.add("纯狐");
+
 	}
 	public boolean check(long fromGroup, long fromQQ, String msg) {
 		Member m=Autoreply.CQ.getGroupMemberInfo(fromGroup, fromQQ);				
@@ -187,18 +252,10 @@ public class DiceImitate {
 				}
 				return true;	
 			case "。jrrp":
-				int spell=0;
-				if (c == '0') {
-					spell = 8;
-				} else if (c == '1') {
-					spell = 0;
-				} else {
-					spell = md5Random(fromQQ) %  spells.size();
-				}
 		 		if (m != null) {
-					Autoreply.sendMessage(fromGroup, 0, String.format("%s今天会在%s疮痍", m.getNick(), spells.get(spell)));
+					Autoreply.sendMessage(fromGroup, 0, String.format("%s今天会在%s疮痍", m.getNick(), spells.get(md5Random(fromQQ) %  spells.size())));
 				} else {
-					Autoreply.sendMessage(fromGroup, 0, String.format("你今天会在%s疮痍", spells.get(spell)));
+					Autoreply.sendMessage(fromGroup, 0, String.format("你今天会在%s疮痍", spells.get(md5Random(fromQQ) %  spells.size())));
 				}
 		   		return true;
 		}
@@ -207,7 +264,7 @@ public class DiceImitate {
 			String drawcmd=msg.substring(6);
 			switch (drawcmd) {
 				case "help":
-					Autoreply.sendMessage(fromGroup, 0, "当前有:spell neta music");
+					Autoreply.sendMessage(fromGroup, 0, "当前有:spell neta music grandma");
 					return true;
 				case "spell":
 					Autoreply.sendMessage(fromGroup, 0, spells.get(new Random().nextInt(spells.size())));
@@ -217,6 +274,9 @@ public class DiceImitate {
 					return true;
 				case "music":
 					Autoreply.sendMessage(fromGroup, 0, "今天宜听" + music.get(md5Random(fromQQ) % music.size()));
+					return true;
+				case "grandma":
+					Autoreply.sendMessage(fromGroup, 0, "今天宜认" + name.get(md5Random(fromQQ) % name.size()) + "当奶奶");
 					return true;
 				default:
 					Autoreply.sendMessage(fromGroup, 0, "可用.draw help查看帮助");
