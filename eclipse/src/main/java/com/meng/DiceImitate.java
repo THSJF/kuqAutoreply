@@ -276,6 +276,10 @@ public class DiceImitate {
 					Autoreply.sendMessage(fromGroup, 0, "今天宜听" + music.get(md5Random(fromQQ) % music.size()));
 					return true;
 				case "grandma":
+					if (fromQQ == 2856986197L) {
+						Autoreply.sendMessage(fromGroup, 0, "今天宜认键山雏当奶奶");
+						return true;
+					}
 					Autoreply.sendMessage(fromGroup, 0, "今天宜认" + name.get(md5Random(fromQQ) % name.size()) + "当奶奶");
 					return true;
 				default:
