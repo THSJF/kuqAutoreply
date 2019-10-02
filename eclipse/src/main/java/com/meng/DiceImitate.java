@@ -280,6 +280,12 @@ public class DiceImitate {
 						Autoreply.sendMessage(fromGroup, 0, "今天宜认键山雏当奶奶");
 						return true;
 					}
+					String grandmaMd5=MD5.stringToMD5(String.valueOf(fromQQ + System.currentTimeMillis() / (24 * 60 * 60 * 1000)));
+					char grandmaMd5c=grandmaMd5.charAt(0);
+					if (grandmaMd5c == '0') {
+						Autoreply.sendMessage(fromGroup, 0, "今天宜认八云紫当奶奶");
+						return true;
+					}
 					Autoreply.sendMessage(fromGroup, 0, "今天宜认" + name.get(md5Random(fromQQ) % name.size()) + "当奶奶");
 					return true;
 				default:
