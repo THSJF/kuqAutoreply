@@ -66,6 +66,18 @@ public class DiceImitate {
 		spells.add("「河童的幻想大瀑布」");
 		spells.add("「信仰之山」");
 		spells.add("「风神之神德」");
+		
+		spells.add("神祭「扩展御柱」");
+		spells.add("筒粥「神の粥」");
+		spells.add("神谷「神灵之谷」");
+		spells.add("神秘「葛井之清水」");
+		spells.add("神秘「大和茅环」");
+		
+		spells.add("大奇迹「八坂之神风」");
+		
+		
+		
+		
 		spells.add("天流「天水奇迹」");
 		spells.add("天龙「雨之源泉」");
 		spells.add("「无双风神」");
@@ -110,7 +122,9 @@ public class DiceImitate {
 				return true;
 		}
 		if(msg.equals(".draw spell")) {
+			String drawcmd=msg.substring(5);
 			Autoreply.sendMessage(fromGroup,0,spells.get(new Random().nextInt(spells.size())));
+			
 			return true;
 		}
 		return false;
