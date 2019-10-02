@@ -204,7 +204,7 @@ public class DiceImitate {
 		}
 
 		if (msg.startsWith(".draw")) {
-			String drawcmd=msg.substring(5);
+			String drawcmd=msg.substring(6);
 			switch (drawcmd) {
 				case "help":
 					Autoreply.sendMessage(fromGroup, 0, "当前有:spell neta music");
