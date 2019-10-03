@@ -2,6 +2,7 @@ package com.meng;
 import com.meng.ocr.sign.*;
 import com.sobte.cqp.jcq.entity.*;
 import java.util.*;
+import com.meng.config.javabeans.*;
 
 public class DiceImitate {
 	private ArrayList<String> spells=new ArrayList<String>();
@@ -55,7 +56,7 @@ public class DiceImitate {
 		spells.add("幽曲「埋骨于弘川 -神灵-」");
 
 		spells.add("樱符「完全墨染的樱花 -封印-」");
-		spells.add("樱符「完全墨染的樱花 -忘我-」");
+		spells.add("樱符「完全墨染的樱花 -亡我-」");
 		spells.add("樱符「完全墨染的樱花 -春眠-」");
 		spells.add("樱符「完全墨染的樱花 -开花-」");
 
@@ -225,7 +226,7 @@ public class DiceImitate {
 		name.add("寅丸星");
 		name.add("圣白莲");
 		name.add("封兽鵺");
-		
+
 		name.add("鬼火");
 		name.add("幽谷响子");
 		name.add("宫古芳香");
@@ -234,7 +235,7 @@ public class DiceImitate {
 		name.add("物部布都");
 		name.add("丰聪耳神子");
 		name.add("二岩瑞藏");
-		
+
 		name.add("若鹭姬");
 		name.add("赤蛮奇");
 		name.add("今泉影狼");
@@ -259,11 +260,18 @@ public class DiceImitate {
 		name.add("尔子田里乃");
 		name.add("丁礼田舞");
 		name.add("摩多罗隐岐奈");
-		
-		
+
+		name.add("戎璎花");
+		name.add("牛崎润美");
+		name.add("庭渡久侘歌");
+		name.add("吉吊八千慧");
+		name.add("杖刀偶磨弓");
+		name.add("埴安神袿姬");
+		name.add("骊驹早鬼");
+
 	}
 	public boolean check(long fromGroup, long fromQQ, String msg) {
-		Member m=Autoreply.CQ.getGroupMemberInfo(fromGroup, fromQQ);				
+		String pname=getName(fromGroup, fromQQ);
 		String md5=MD5.stringToMD5(String.valueOf(fromQQ + System.currentTimeMillis() / (24 * 60 * 60 * 1000)));
 		char c=md5.charAt(0);
 		switch (msg) {
@@ -276,18 +284,10 @@ public class DiceImitate {
 				} else {
 					fpro = ((float)(md5Random(fromQQ) % 10001)) / 100;
 				}
-				if (m != null) {
-					Autoreply.sendMessage(fromGroup, 0, String.format("%s今天会在%.2f%%处疮痍", m.getNick(), fpro));
-				} else {
-					Autoreply.sendMessage(fromGroup, 0, String.format("你今天会在%.2f%%处疮痍", fpro));
-				}
+				Autoreply.sendMessage(fromGroup, 0, String.format("%s今天会在%.2f%%处疮痍", pname, fpro));
 				return true;	
 			case "。jrrp":
-		 		if (m != null) {
-					Autoreply.sendMessage(fromGroup, 0, String.format("%s今天会在%s疮痍", m.getNick(), spells.get(md5Random(fromQQ) %  spells.size())));
-				} else {
-					Autoreply.sendMessage(fromGroup, 0, String.format("你今天会在%s疮痍", spells.get(md5Random(fromQQ) %  spells.size())));
-				}
+				Autoreply.sendMessage(fromGroup, 0, String.format("%s今天会在%s疮痍", pname, spells.get(md5Random(fromQQ) %  spells.size())));
 		   		return true;
 		}
 
@@ -333,4 +333,15 @@ public class DiceImitate {
 		return Integer.parseInt(md5.substring(26), 16);
 	}
 
+	private String getName(long fromGroup, long fromQQ) {
+		PersonInfo personInfo=Autoreply.instence.configManager.getPersonInfoFromQQ(fromQQ);
+		Member m=Autoreply.CQ.getGroupMemberInfo(fromGroup, fromQQ);				
+		if (personInfo != null) {
+			return personInfo.name;
+		} else if (m != null) {
+			return m.getNick();
+		} else {
+			return "你";
+		}
+	}
 }
