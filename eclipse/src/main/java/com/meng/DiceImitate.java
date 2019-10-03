@@ -225,11 +225,42 @@ public class DiceImitate {
 		name.add("寅丸星");
 		name.add("圣白莲");
 		name.add("封兽鵺");
+		
+		name.add("鬼火");
+		name.add("幽谷响子");
+		name.add("宫古芳香");
+		name.add("霍青娥");
+		name.add("苏我屠自古");
+		name.add("物部布都");
+		name.add("丰聪耳神子");
+		name.add("二岩瑞藏");
+		
+		name.add("若鹭姬");
+		name.add("赤蛮奇");
+		name.add("今泉影狼");
+		name.add("九十九八桥");
+		name.add("九十九弁弁");
+		name.add("鬼人正邪");
+		name.add("少名针妙丸");
+		name.add("堀川雷鼓");
 
 		name.add("清兰");
+		name.add("铃瑚");
+		name.add("哆来咪苏伊特");
+		name.add("稀神探女");
 		name.add("克劳恩皮丝");
 		name.add("纯狐");
+		name.add("赫卡提亚拉碧斯拉祖利");
 
+		name.add("爱塔妮缇拉尔瓦");
+		name.add("坂田合欢");
+		name.add("哆来咪苏伊特");
+		name.add("稀神探女");
+		name.add("克劳恩皮丝");
+		name.add("纯狐");
+		name.add("赫卡提亚拉碧斯拉祖利");
+		
+		
 	}
 	public boolean check(long fromGroup, long fromQQ, String msg) {
 		Member m=Autoreply.CQ.getGroupMemberInfo(fromGroup, fromQQ);				
