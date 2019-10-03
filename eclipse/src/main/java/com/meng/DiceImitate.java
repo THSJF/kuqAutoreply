@@ -254,11 +254,11 @@ public class DiceImitate {
 
 		name.add("爱塔妮缇拉尔瓦");
 		name.add("坂田合欢");
-		name.add("哆来咪苏伊特");
-		name.add("稀神探女");
-		name.add("克劳恩皮丝");
-		name.add("纯狐");
-		name.add("赫卡提亚拉碧斯拉祖利");
+		name.add("高丽野阿吽");
+		name.add("矢田寺成美");
+		name.add("尔子田里乃");
+		name.add("丁礼田舞");
+		name.add("摩多罗隐岐奈");
 		
 		
 	}
