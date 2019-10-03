@@ -299,23 +299,23 @@ public class DiceImitate {
 					Autoreply.sendMessage(fromGroup, 0, spells[new Random().nextInt(spells.length)]);
 					return true;
 				case "neta":
-					Autoreply.sendMessage(fromGroup, 0, "今天宜打" + neta[md5Random(fromQQ) % neta.length]);
+					Autoreply.sendMessage(fromGroup, 0, String.format("%s今天宜打%s", pname, neta[md5Random(fromQQ) % neta.length]));
 					return true;
 				case "music":
-					Autoreply.sendMessage(fromGroup, 0, "今天宜听" + music[md5Random(fromQQ) % music.length]);
+					Autoreply.sendMessage(fromGroup, 0, String.format("%s今天宜听%s", pname, music[md5Random(fromQQ) % music.length]));
 					return true;
 				case "grandma":
 					if (fromQQ == 2856986197L) {
-						Autoreply.sendMessage(fromGroup, 0, "今天宜认键山雏当奶奶");
+						Autoreply.sendMessage(fromGroup, 0, String.format("%s今天宜认键山雏当奶奶", pname));
 						return true;
 					}
 					String grandmaMd5=MD5.stringToMD5(String.valueOf(fromQQ + System.currentTimeMillis() / (24 * 60 * 60 * 1000)));
 					char grandmaMd5c=grandmaMd5.charAt(0);
 					if (grandmaMd5c == '0') {
-						Autoreply.sendMessage(fromGroup, 0, "今天宜认八云紫当奶奶");
+						Autoreply.sendMessage(fromGroup, 0, String.format("%s今天宜认八云紫当奶奶", pname));
 						return true;
 					}
-					Autoreply.sendMessage(fromGroup, 0, "今天宜认" + name[md5Random(fromQQ) % name.length] + "当奶奶");
+					Autoreply.sendMessage(fromGroup, 0, String.format("%s今天宜认%s当奶奶", pname, name[md5Random(fromQQ) % name.length]));
 					return true;
 				default:
 					Autoreply.sendMessage(fromGroup, 0, "可用.draw help查看帮助");
