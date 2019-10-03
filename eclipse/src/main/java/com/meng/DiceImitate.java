@@ -12,262 +12,263 @@ public class DiceImitate {
 
 
 	public DiceImitate() {
-		spells.add("「红色的幻想乡」");
-		spells.add("秘术「天文密葬法」");
-		spells.add("神宝「蓬莱的玉枝　-梦色之乡-」");
-		spells.add("「地底太阳」");
-		spells.add("飞钵「传说的飞空圆盘」");	
-		spells.add("「新生的神灵」");
-		spells.add("「七个一寸法师」");
-		spells.add("「里·Breeze Cherry Blossom」");
-		spells.add("「里·Perfect Summer Ice」");
-		spells.add("「里·Crazy Fall Wind」");
-		spells.add("「里·Extreme Winter」");
+		Collections.addAll(spells, new String[]{
+							   "「红色的幻想乡」",
+							   "秘术「天文密葬法」",
+							   "神宝「蓬莱的玉枝　-梦色之乡-」",
+							   "「地底太阳」",
+							   "飞钵「传说的飞空圆盘」",	
+							   "「新生的神灵」",
+							   "「七个一寸法师」",
+							   "「里·Breeze Cherry Blossom」",
+							   "「里·Perfect Summer Ice」",
+							   "「里·Crazy Fall Wind」",
+							   "「里·Extreme Winter」",
 
-		spells.add("「Idola Diabolus」");
+							   "「Idola Diabolus」",
 
-		spells.add("「最初与最后的无名弹幕」");
-
-
-		spells.add("月「阿波罗反射镜」");
-
-		spells.add("月「月狂冲击」");
+							   "「最初与最后的无名弹幕」",
 
 
-		spells.add("雅符「春之京人偶」");
-		spells.add("紫奥义「弹幕结界」");
-		spells.add("魍魉「二重黑死蝶」");
-		spells.add("「地狱的人工太阳」");
-		spells.add("「地狱的托卡马克」");
-		spells.add("超人「圣白莲」");
+							   "月「阿波罗反射镜」",
+
+							   "月「月狂冲击」",
 
 
-		spells.add("铳符「月狂之枪」");
+							   "雅符「春之京人偶」",
+							   "紫奥义「弹幕结界」",
+							   "魍魉「二重黑死蝶」",
+							   "「地狱的人工太阳」",
+							   "「地狱的托卡马克」",
+							   "超人「圣白莲」",
 
 
-		spells.add("亡舞「生者必灭之理 -眩惑-」");
-		spells.add("亡舞「生者必灭之理 -死蝶-」");
-		spells.add("亡舞「生者必灭之理 -毒蛾-」");
-		spells.add("亡舞「生者必灭之理 -魔境-」");
-
-		spells.add("幽曲「埋骨于弘川 -伪灵-」");
-		spells.add("幽曲「埋骨于弘川 -亡灵-」");
-		spells.add("幽曲「埋骨于弘川 -幻灵-」");
-		spells.add("幽曲「埋骨于弘川 -神灵-」");
-
-		spells.add("樱符「完全墨染的樱花 -封印-」");
-		spells.add("樱符「完全墨染的樱花 -亡我-」");
-		spells.add("樱符「完全墨染的樱花 -春眠-」");
-		spells.add("樱符「完全墨染的樱花 -开花-」");
-
-		spells.add("「反魂蝶 -一分咲-」");
-		spells.add("「反魂蝶 -三分咲-」");
-		spells.add("「反魂蝶 -五分咲-」");
-		spells.add("「反魂蝶 -八分咲-」");
+							   "铳符「月狂之枪」",
 
 
-		spells.add("「掌上的纯光」");
-		spells.add("「杀意的百合」");
-		spells.add("「现代的神灵界」");
-		spells.add("「原始的神灵界」");
-		spells.add("「战栗的寒冷之星」");
-		spells.add("「纯粹的疯狂」");
-		spells.add("「溢出的暇秽」");
-		spells.add("「地上秽的纯化」");
-		spells.add("纯符「单纯的子弹地狱」");
-		spells.add("纯符「纯粹的弹幕地狱」");
+							   "亡舞「生者必灭之理 -眩惑-」",
+							   "亡舞「生者必灭之理 -死蝶-」",
+							   "亡舞「生者必灭之理 -毒蛾-」",
+							   "亡舞「生者必灭之理 -魔境-」",
+
+							   "幽曲「埋骨于弘川 -伪灵-」",
+							   "幽曲「埋骨于弘川 -亡灵-」",
+							   "幽曲「埋骨于弘川 -幻灵-」",
+							   "幽曲「埋骨于弘川 -神灵-」",
+
+							   "樱符「完全墨染的樱花 -封印-」",
+							   "樱符「完全墨染的樱花 -亡我-」",
+							   "樱符「完全墨染的樱花 -春眠-」",
+							   "樱符「完全墨染的樱花 -开花-」",
+
+							   "「反魂蝶 -一分咲-」",
+							   "「反魂蝶 -三分咲-」",
+							   "「反魂蝶 -五分咲-」",
+							   "「反魂蝶 -八分咲-」",
 
 
-		spells.add("想起「二重黑死蝶」");
-		spells.add("「河童的幻想大瀑布」");
-		spells.add("「信仰之山」");
-		spells.add("「风神之神德」");
-
-		spells.add("神祭「扩展御柱」");
-		spells.add("筒粥「神の粥」");
-		spells.add("神谷「神灵之谷」");
-		spells.add("神秘「葛井之清水」");
-		spells.add("神秘「大和茅环」");
-
-		spells.add("叶符「狂舞的落叶」");
+							   "「掌上的纯光」",
+							   "「杀意的百合」",
+							   "「现代的神灵界」",
+							   "「原始的神灵界」",
+							   "「战栗的寒冷之星」",
+							   "「纯粹的疯狂」",
+							   "「溢出的暇秽」",
+							   "「地上秽的纯化」",
+							   "纯符「单纯的子弹地狱」",
+							   "纯符「纯粹的弹幕地狱」",
 
 
-		spells.add("疵符「破裂的护符」");
-		spells.add("疵痕「损坏的护身符」");
-		spells.add("悲运「大钟婆之火」");
+							   "想起「二重黑死蝶」",
+							   "「河童的幻想大瀑布」",
+							   "「信仰之山」",
+							   "「风神之神德」",
 
-		spells.add("创符「流刑人偶」");
+							   "神祭「扩展御柱」",
+							   "筒粥「神の粥」",
+							   "神谷「神灵之谷」",
+							   "神秘「葛井之清水」",
+							   "神秘「大和茅环」",
 
-		spells.add("奇迹「神之风」");
-		spells.add("大奇迹「八坂之神风」");
-
-
-		spells.add("「星辰降落的神灵庙」");
-
-
-		spells.add("天流「天水奇迹」");
-		spells.add("天龙「雨之源泉」");
-		spells.add("「无双风神」");
-		spells.add("「幻想风靡」");
-
-		neta.add("红lnb");
-		neta.add("红lnm");
-		neta.add("妖lnm");
-		neta.add("妖lnn");
-		neta.add("永lnm");
-		neta.add("风lnm");
-		neta.add("风lnn");
-		neta.add("殿lnm");
-		neta.add("船lnm");
-		neta.add("船lnn");
-		neta.add("庙lnm");
-		neta.add("城lnm");
-		neta.add("绀lnm");
-		neta.add("璋lnn");
-
-		music.add("bad apple");
-
-		music.add("月时计");
-		music.add("献给已逝公主的七重奏");
-
-		music.add("天空的花之都");
-		music.add("幽灵乐团");
-		music.add("幽雅的绽放 墨染的樱花");
-		music.add("少女幻葬");
-		music.add("死亡幻想");
-
-		music.add("少女绮想曲");
-		music.add("恋色 master spark");
-		music.add("竹取飞翔");
-
-		music.add("眷爱众生之神");
-		music.add("众神眷恋的幻想乡");
-		music.add("少女曾见的日本原风景");
-		music.add("信仰是为了虚幻之人");
-		music.add("神圣庄严的古战场");
-
-		music.add("漫步在地狱的街道");
-		music.add("尸体旅行");
-
-		music.add("春之岸边");
-		music.add("感情的摩天轮");
-
-		music.add("古老的元神");
-		music.add("圣德传说　～ True Administrator");
-
-		music.add("幻想净琉璃");
-		music.add("辉光之针的小人族");
-
-		music.add("忘不了，那曾依籍的绿意");
-		music.add("九月的南瓜");
-		music.add("遥遥38万公里的航程");
-		music.add("星条旗的小丑");
-		music.add("Pure Furies ~ 心之所在");
-
-		music.add("被隐匿的四个季节");
-		music.add("门再也进不去了");
-		music.add("秘神摩多罗 ~ Hidden Star in All Seasons.");
+							   "叶符「狂舞的落叶」",
 
 
-		name.add("露米娅");
-		name.add("大妖精");
-		name.add("琪露诺");
-		name.add("红美铃");
-		name.add("帕秋莉诺蕾姬");
-		name.add("十六夜咲夜");
-		name.add("蕾米莉亚斯卡雷特");
-		name.add("芙兰朵露斯卡雷特");
+							   "疵符「破裂的护符」",
+							   "疵痕「损坏的护身符」",
+							   "悲运「大钟婆之火」",
 
-		name.add("蕾蒂");
-		name.add("橙");
-		name.add("爱丽丝玛格特罗依德");
-		name.add("梅露兰");
-		name.add("露娜萨");
-		name.add("莉莉卡");
-		name.add("魂魄妖梦");
-		name.add("西行寺幽幽子");
-		name.add("八云蓝");
-		name.add("八云紫");
+							   "创符「流刑人偶」",
 
-		name.add("莉格露");
-		name.add("萝蕾拉");
-		name.add("上白泽慧音");
-		name.add("博丽灵梦");
-		name.add("雾雨魔理沙");
-		name.add("因幡帝");
-		name.add("铃仙优昙华院因幡");
-		name.add("八意永琳");
-		name.add("蓬莱山辉夜");
-		name.add("藤原妹红");
+							   "奇迹「神之风」",
+							   "大奇迹「八坂之神风」",
 
-		name.add("秋静叶");
-		name.add("秋穰子");
-		name.add("键山雏");
-		name.add("河城荷取");
-		name.add("犬走椛");
-		name.add("射命丸文");
-		name.add("东风谷早苗");
-		name.add("八坂神奈子");
-		name.add("洩矢诹访子");
 
-		name.add("琪斯美");
-		name.add("黑谷山女");
-		name.add("水桥帕露西");
-		name.add("星熊勇仪");
-		name.add("古明地觉");
-		name.add("火焰猫燐");
-		name.add("灵乌路空");
-		name.add("古明地恋");
+							   "「星辰降落的神灵庙」",
 
-		name.add("纳兹琳");
-		name.add("多多良小伞");
-		name.add("云居一轮");
-		name.add("村纱水蜜");
-		name.add("寅丸星");
-		name.add("圣白莲");
-		name.add("封兽鵺");
 
-		name.add("鬼火");
-		name.add("幽谷响子");
-		name.add("宫古芳香");
-		name.add("霍青娥");
-		name.add("苏我屠自古");
-		name.add("物部布都");
-		name.add("丰聪耳神子");
-		name.add("二岩瑞藏");
+							   "天流「天水奇迹」",
+							   "天龙「雨之源泉」",
+							   "「无双风神」",
+							   "「幻想风靡」"});
+		Collections.addAll(neta, new String[]{
+							   "红lnb",
+							   "红lnm",
+							   "妖lnm",
+							   "妖lnn",
+							   "永lnm",
+							   "风lnm",
+							   "风lnn",
+							   "殿lnm",
+							   "船lnm",
+							   "船lnn",
+							   "庙lnm",
+							   "城lnm",
+							   "绀lnm",
+							   "璋lnn"});
+		Collections.addAll(music, new String[]{
+							   "bad apple",
 
-		name.add("若鹭姬");
-		name.add("赤蛮奇");
-		name.add("今泉影狼");
-		name.add("九十九八桥");
-		name.add("九十九弁弁");
-		name.add("鬼人正邪");
-		name.add("少名针妙丸");
-		name.add("堀川雷鼓");
+							   "月时计",
+							   "献给已逝公主的七重奏",
 
-		name.add("清兰");
-		name.add("铃瑚");
-		name.add("哆来咪苏伊特");
-		name.add("稀神探女");
-		name.add("克劳恩皮丝");
-		name.add("纯狐");
-		name.add("赫卡提亚拉碧斯拉祖利");
+							   "天空的花之都",
+							   "幽灵乐团",
+							   "幽雅的绽放 墨染的樱花",
+							   "少女幻葬",
+							   "死亡幻想",
 
-		name.add("爱塔妮缇拉尔瓦");
-		name.add("坂田合欢");
-		name.add("高丽野阿吽");
-		name.add("矢田寺成美");
-		name.add("尔子田里乃");
-		name.add("丁礼田舞");
-		name.add("摩多罗隐岐奈");
+							   "少女绮想曲",
+							   "恋色 master spark",
+							   "竹取飞翔",
 
-		name.add("戎璎花");
-		name.add("牛崎润美");
-		name.add("庭渡久侘歌");
-		name.add("吉吊八千慧");
-		name.add("杖刀偶磨弓");
-		name.add("埴安神袿姬");
-		name.add("骊驹早鬼");
+							   "眷爱众生之神",
+							   "众神眷恋的幻想乡",
+							   "少女曾见的日本原风景",
+							   "信仰是为了虚幻之人",
+							   "神圣庄严的古战场",
+
+							   "漫步在地狱的街道",
+							   "尸体旅行",
+
+							   "春之岸边",
+							   "感情的摩天轮",
+
+							   "古老的元神",
+							   "圣德传说　～ True Administrator",
+
+							   "幻想净琉璃",
+							   "辉光之针的小人族",
+
+							   "忘不了，那曾依籍的绿意",
+							   "九月的南瓜",
+							   "遥遥38万公里的航程",
+							   "星条旗的小丑",
+							   "Pure Furies ~ 心之所在",
+
+							   "被隐匿的四个季节",
+							   "门再也进不去了",
+							   "秘神摩多罗 ~ Hidden Star in All Seasons."});
+
+		Collections.addAll(name, new String[]{
+							   "露米娅",
+							   "大妖精",
+							   "琪露诺",
+							   "红美铃",
+							   "帕秋莉诺蕾姬",
+							   "十六夜咲夜",
+							   "蕾米莉亚斯卡雷特",
+							   "芙兰朵露斯卡雷特",
+
+							   "蕾蒂",
+							   "橙",
+							   "爱丽丝玛格特罗依德",
+							   "梅露兰",
+							   "露娜萨",
+							   "莉莉卡",
+							   "魂魄妖梦",
+							   "西行寺幽幽子",
+							   "八云蓝",
+							   "八云紫",
+
+							   "莉格露",
+							   "萝蕾拉",
+							   "上白泽慧音",
+							   "博丽灵梦",
+							   "雾雨魔理沙",
+							   "因幡帝",
+							   "铃仙优昙华院因幡",
+							   "八意永琳",
+							   "蓬莱山辉夜",
+							   "藤原妹红",
+
+							   "秋静叶",
+							   "秋穰子",
+							   "键山雏",
+							   "河城荷取",
+							   "犬走椛",
+							   "射命丸文",
+							   "东风谷早苗",
+							   "八坂神奈子",
+							   "洩矢诹访子",
+
+							   "琪斯美",
+							   "黑谷山女",
+							   "水桥帕露西",
+							   "星熊勇仪",
+							   "古明地觉",
+							   "火焰猫燐",
+							   "灵乌路空",
+							   "古明地恋",
+
+							   "纳兹琳",
+							   "多多良小伞",
+							   "云居一轮",
+							   "村纱水蜜",
+							   "寅丸星",
+							   "圣白莲",
+							   "封兽鵺",
+
+							   "鬼火",
+							   "幽谷响子",
+							   "宫古芳香",
+							   "霍青娥",
+							   "苏我屠自古",
+							   "物部布都",
+							   "丰聪耳神子",
+							   "二岩瑞藏",
+
+							   "若鹭姬",
+							   "赤蛮奇",
+							   "今泉影狼",
+							   "九十九八桥",
+							   "九十九弁弁",
+							   "鬼人正邪",
+							   "少名针妙丸",
+							   "堀川雷鼓",
+
+							   "清兰",
+							   "铃瑚",
+							   "哆来咪苏伊特",
+							   "稀神探女",
+							   "克劳恩皮丝",
+							   "纯狐",
+							   "赫卡提亚拉碧斯拉祖利",
+
+							   "爱塔妮缇拉尔瓦",
+							   "坂田合欢",
+							   "高丽野阿吽",
+							   "矢田寺成美",
+							   "尔子田里乃",
+							   "丁礼田舞",
+							   "摩多罗隐岐奈",
+
+							   "戎璎花",
+							   "牛崎润美",
+							   "庭渡久侘歌",
+							   "吉吊八千慧",
+							   "杖刀偶磨弓",
+							   "埴安神袿姬",
+							   "骊驹早鬼"});
 
 	}
 	public boolean check(long fromGroup, long fromQQ, String msg) {
@@ -335,7 +336,7 @@ public class DiceImitate {
 
 	private String getName(long fromGroup, long fromQQ) {
 		PersonInfo personInfo=Autoreply.instence.configManager.getPersonInfoFromQQ(fromQQ);
-		Member m=Autoreply.CQ.getGroupMemberInfo(fromGroup, fromQQ);				
+		Member m=Autoreply.CQ.getGroupMemberInfo(fromGroup, fromQQ);
 		if (personInfo != null) {
 			return personInfo.name;
 		} else if (m != null) {
