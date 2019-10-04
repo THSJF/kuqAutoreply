@@ -335,7 +335,7 @@ public class DiceImitate {
 					Autoreply.sendMessage(fromGroup, 0, String.format("%s今天宜认%s当奶奶", pname, md5RanStr(fromQQ, name)));
 					return true;
 				case "game":
-					int gameNo=md5Random(fromQQ) % 15 + 2;
+					int gameNo=md5Random(fromQQ) % 16 + 2;
 					String gameName = null;
 					String charaName = null;
 					switch (gameNo) {
@@ -426,7 +426,7 @@ public class DiceImitate {
 	}
 
 	private String md5RanStr(long fromQQ, String[] arr) {
-		return arr[md5Random(fromQQ)];
+		return arr[md5Random(fromQQ) % arr.length];
 	}
 
 	private String getName(long fromGroup, long fromQQ) {
