@@ -63,7 +63,6 @@ public class Autoreply extends JcqAppAbstract implements ICQVer, IMsg, IRequest 
     public GroupCounter groupCount;
     public Banner banner;
     public RepeaterManager repeatManager;
-    public RollPlane rollPlane = new RollPlane();
     public TimeTip timeTip = new TimeTip();
     public BiliLinkInfo biliLinkInfo = new BiliLinkInfo();
     public DicReplyManager dicReplyManager;

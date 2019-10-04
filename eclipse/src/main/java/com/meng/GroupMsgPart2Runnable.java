@@ -141,9 +141,9 @@ public class GroupMsgPart2Runnable implements Runnable {
         if(Autoreply.instence.timeTip.check(fromGroup,fromQQ)) {// 根据时间提醒
             return true;
 		}
-        if(groupConfig.isRoll() && Autoreply.instence.rollPlane.check(fromGroup,msg)) {// roll
-            return true;
-		}
+     //   if(groupConfig.isRoll() && Autoreply.instence.rollPlane.check(fromGroup,msg)) {// roll
+     //       return true;
+	 //   }
         if(msg.equals("提醒戒膜")) {
             sendMessage(fromGroup,0,Autoreply.instence.CC.image(new File(Autoreply.appDirectory + "pic\\jiemo.jpg")));
             return true;
