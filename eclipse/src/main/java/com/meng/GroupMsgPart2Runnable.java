@@ -42,11 +42,6 @@ public class GroupMsgPart2Runnable implements Runnable {
 	}
 
     private boolean check () {
-        if(msg.contains("@") && Autoreply.instence.CC.getAt(msg) == -1000) {
-            sendMessage(fromGroup,fromQQ,"野蛮假at");
-            return true;
-		}
-
         if(msg.equalsIgnoreCase("loaddic")) {
             Autoreply.instence.addGroupDic();
             sendMessage(fromGroup,fromQQ,"loaded");
@@ -181,6 +176,10 @@ public class GroupMsgPart2Runnable implements Runnable {
 		}
 		if(Autoreply.instence.seqManager.check(fromGroup,fromQQ,msg)) {
 			return true;
+		}
+		if(msg.contains("@") && Autoreply.instence.CC.getAt(msg) == -1000) {
+            sendMessage(fromGroup,fromQQ,"野蛮假at");
+            return true;
 		}
         return groupConfig.isDic() && Autoreply.instence.dicReplyManager.check(fromGroup,fromQQ,msg);
 	}
