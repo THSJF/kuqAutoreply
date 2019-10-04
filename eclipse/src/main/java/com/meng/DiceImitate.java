@@ -182,9 +182,36 @@ public class DiceImitate {
 			//th16
 			"被隐匿的四个季节",
 			"门再也进不去了",
-			"秘神摩多罗 ~ Hidden Star in All Seasons."};
+			"秘神摩多罗 ~ Hidden Star in All Seasons.",
+			//th17
+			"寄世界于偶像 ~ Idoratrize World",
+		};
 
 		name = new String[]{
+			//th2
+			"里香",
+			"明罗",
+			"魅魔",
+			//th3
+			"爱莲", 
+			"小兔姬", 
+			"卡娜·安娜贝拉尔",
+			"朝仓理香子", 
+			"北白河千百合", 
+			"冈崎梦美",
+			//th4
+			"奥莲姬",
+			"胡桃",
+			"艾丽",
+			"梦月",
+			"幻月",
+			//th5
+			"萨拉",
+			"露易兹",
+			"雪",
+			"舞",
+			"梦子",
+			"神绮",
 			//th6
 			"露米娅",
 			"大妖精",
@@ -205,6 +232,8 @@ public class DiceImitate {
 			"西行寺幽幽子",
 			"八云蓝",
 			"八云紫",
+			//th7.5
+			"伊吹萃香",
 			//th8
 			"莉格露",
 			"萝蕾拉",
@@ -219,6 +248,8 @@ public class DiceImitate {
 			//th9
 			"梅蒂欣梅兰可莉",
 			"风见幽香",
+			"小野冢小町",
+			"四季映姬",
 			//th10
 			"秋静叶",
 			"秋穰子",
@@ -246,6 +277,10 @@ public class DiceImitate {
 			"寅丸星",
 			"圣白莲",
 			"封兽鵺",
+			//th12.8
+			"桑尼米尔克",
+			"露娜切露德",
+			"斯塔萨菲雅",
 			//th13
 			"鬼火",
 			"幽谷响子",
@@ -255,6 +290,8 @@ public class DiceImitate {
 			"物部布都",
 			"丰聪耳神子",
 			"二岩瑞藏",
+			//th13.5
+			"秦心",
 			//th14
 			"若鹭姬",
 			"赤蛮奇",
@@ -264,6 +301,8 @@ public class DiceImitate {
 			"鬼人正邪",
 			"少名针妙丸",
 			"堀川雷鼓",
+			//th14.5
+			"宇佐见堇子",
 			//th15
 			"清兰",
 			"铃瑚",
@@ -272,6 +311,9 @@ public class DiceImitate {
 			"克劳恩皮丝",
 			"纯狐",
 			"赫卡提亚拉碧斯拉祖利",
+			//th15.5
+			"依神紫苑",
+			"依神女苑",
 			//th16
 			"爱塔妮缇拉尔瓦",
 			"坂田合欢",
@@ -390,7 +432,7 @@ public class DiceImitate {
 						case 14:
 							gameName = "辉针城";
 							charaName = md5RanStr(fromQQ, pl14);
-							Autoreply.sendMessage(fromGroup, 0, String.format("%s今天宜用%s %s打%s", pname, charaName, md5RanStr(fromQQ + 1, pl14s), gameName));
+							Autoreply.sendMessage(fromGroup, 0, String.format("%s今天宜用%s-%s打%s", pname, charaName, md5RanStr(fromQQ + 1, pl14s), gameName));
 							return true;
 						case 15:
 							gameName = "绀珠传";
@@ -399,12 +441,12 @@ public class DiceImitate {
 						case 16:
 							gameName = "天空璋";
 							charaName = md5RanStr(fromQQ, pl16);
-							Autoreply.sendMessage(fromGroup, 0, String.format("%s今天宜用%s %s打%s", pname, charaName, md5RanStr(fromQQ + 1, pl16s), gameName));
+							Autoreply.sendMessage(fromGroup, 0, String.format("%s今天宜用%s-%s打%s", pname, charaName, md5RanStr(fromQQ + 1, pl16s), gameName));
 							return true;
 						case 17:
 							gameName = "鬼形兽";
 							charaName = md5RanStr(fromQQ, pl17);
-							Autoreply.sendMessage(fromGroup, 0, String.format("%s今天宜用%s %s打%s", pname, charaName, md5RanStr(fromQQ + 1, pl17s), gameName));		
+							Autoreply.sendMessage(fromGroup, 0, String.format("%s今天宜用%s-%s打%s", pname, charaName, md5RanStr(fromQQ + 1, pl17s), gameName));		
 							return true;
 						default:
 							return true;
