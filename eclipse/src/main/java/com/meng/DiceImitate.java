@@ -276,7 +276,7 @@ public class DiceImitate {
 		switch (msg) {
 			case ".jrrp":
 				float fpro=0f;
-				if (c == '0' || fromQQ == 2856986197l) {
+				if (c == '0') {
 					fpro = 99.61f;
 				} else if (c == '1') {
 					fpro = 97.60f;
@@ -306,13 +306,8 @@ public class DiceImitate {
 					Autoreply.sendMessage(fromGroup, 0, String.format("%s今天宜听%s", pname, music[md5Random(fromQQ) % music.length]));
 					return true;
 				case "grandma":
-					if (fromQQ == 2856986197L) {
-						Autoreply.sendMessage(fromGroup, 0, String.format("%s今天宜认键山雏当奶奶", pname));
-						return true;
-					}
 					String grandmaMd5=MD5.stringToMD5(String.valueOf(fromQQ + System.currentTimeMillis() / (24 * 60 * 60 * 1000)));
-					char grandmaMd5c=grandmaMd5.charAt(0);
-					if (grandmaMd5c == '0') {
+					if (grandmaMd5.charAt(0) == '0') {
 						Autoreply.sendMessage(fromGroup, 0, String.format("%s今天宜认八云紫当奶奶", pname));
 						return true;
 					}
