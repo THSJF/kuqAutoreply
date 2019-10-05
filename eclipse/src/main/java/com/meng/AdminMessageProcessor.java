@@ -492,6 +492,9 @@ public class AdminMessageProcessor {
 						case "&amp;"://&
 							resu = "result:" + (a1 & a2);
 							break;
+						case "~":
+							resu = "result:" + (~a1);
+							break;
 					}
 					Autoreply.sendMessage(fromGroup,0,resu);
 				} catch(Exception e) {
