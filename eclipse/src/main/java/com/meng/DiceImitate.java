@@ -1249,55 +1249,55 @@ public class DiceImitate {
 		switch (gameNo) {
 			case 2:
 				gameName = "封魔录";
-				charaName = md5RanStr(fromQQ, pl02);
+				charaName = md5RanStr(fromQQ + 2, pl02);
 				break;
 			case 3:
 				gameName = "梦时空";
-				charaName = md5RanStr(fromQQ, pl03);
+				charaName = md5RanStr(fromQQ + 2, pl03);
 				break;
 			case 4:
 				gameName = "幻想乡";
-				charaName = md5RanStr(fromQQ, pl04);
+				charaName = md5RanStr(fromQQ + 2, pl04);
 				break;
 			case 5:
 				gameName = "怪绮谈";
-				charaName = md5RanStr(fromQQ, pl05);
+				charaName = md5RanStr(fromQQ + 2, pl05);
 				break;
 			case 6:
 				gameName = "红魔乡";
-				charaName = md5RanStr(fromQQ, pl06);
+				charaName = md5RanStr(fromQQ + 2, pl06);
 				break;
 			case 7:
 				gameName = "妖妖梦";
-				charaName = md5RanStr(fromQQ, pl07);
+				charaName = md5RanStr(fromQQ + 2, pl07);
 				break;
 			case 8:
 				gameName = "永夜抄";
-				charaName = md5RanStr(fromQQ, pl08);
+				charaName = md5RanStr(fromQQ + 2, pl08);
 				break;
 			case 9:
 				gameName = "花映冢";
-				charaName = md5RanStr(fromQQ, pl09);
+				charaName = md5RanStr(fromQQ + 2, pl09);
 				break;
 			case 10:
 				gameName = "风神录";
-				charaName = md5RanStr(fromQQ, pl10);
+				charaName = md5RanStr(fromQQ + 2, pl10);
 				break;
 			case 11:
 				gameName = "地灵殿";
-				charaName = md5RanStr(fromQQ, pl11);
+				charaName = md5RanStr(fromQQ + 2, pl11);
 				break;
 			case 12:
 				gameName = "星莲船";
-				charaName = md5RanStr(fromQQ, pl12);
+				charaName = md5RanStr(fromQQ + 2, pl12);
 				break;
 			case 13:
 				gameName = "神灵庙";
-				charaName = md5RanStr(fromQQ, pl13);
+				charaName = md5RanStr(fromQQ + 2, pl13);
 				break;
 			case 14:
 				gameName = "辉针城";
-				charaName = md5RanStr(fromQQ, pl14);
+				charaName = md5RanStr(fromQQ + 2, pl14);
 				if (goodAt) {
 					return String.format("%s今天宜用%s-%s打%s", pname, charaName, md5RanStr(fromQQ + 1, pl14s), gameName);
 				} else {
@@ -1305,11 +1305,11 @@ public class DiceImitate {
 				}
 			case 15:
 				gameName = "绀珠传";
-				charaName = md5RanStr(fromQQ, pl15);
+				charaName = md5RanStr(fromQQ + 2, pl15);
 				break;
 			case 16:
 				gameName = "天空璋";
-				charaName = md5RanStr(fromQQ, pl16);
+				charaName = md5RanStr(fromQQ + 2, pl16);
 				if (goodAt) {
 					return String.format("%s今天宜用%s-%s打%s", pname, charaName, md5RanStr(fromQQ + 1, pl16s), gameName);
 				} else {
@@ -1317,7 +1317,7 @@ public class DiceImitate {
 				}
 			case 17:
 				gameName = "鬼形兽";
-				charaName = md5RanStr(fromQQ, pl17);
+				charaName = md5RanStr(fromQQ + 2, pl17);
 				if (goodAt) {
 					return String.format("%s今天宜用%s-%s打%s", pname, charaName, md5RanStr(fromQQ + 1, pl17s), gameName);
 				} else {
