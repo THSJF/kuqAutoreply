@@ -1204,6 +1204,9 @@ public class DiceImitate {
 					s += randomGame(pname, fromQQ + 1, false);
 					Autoreply.sendMessage(fromGroup, 0, s);
 					return true;
+				case "jrrp":
+					Autoreply.sendMessage(fromGroup, 0, String.format("%s今天会在%s疮痍", pname, md5RanStr(fromQQ, spells)));
+					return true;
 				case "all":
 					String sss=String.format("%s今天宜打%s", pname, md5RanStr(fromQQ, neta));
 					sss += "\n";
@@ -1218,6 +1221,15 @@ public class DiceImitate {
 					sss += randomGame(pname, fromQQ, true);
 					sss += ",";
 					sss += randomGame(pname, fromQQ + 1, false);
+					float fpro=0f;
+					if (c == '0') {
+						fpro = 99.61f;
+					} else if (c == '1') {
+						fpro = 97.60f;
+					} else {
+						fpro = ((float)(md5Random(fromQQ) % 10001)) / 100;
+					}
+					sss += String.format("%s今天会在%.2f%%处疮痍", pname, fpro);
 					Autoreply.sendMessage(fromGroup, 0, sss);
 					return true;			
 				default:
