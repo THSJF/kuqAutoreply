@@ -1234,7 +1234,23 @@ public class DiceImitate {
 					Autoreply.sendMessage(fromGroup, 0, sss);
 					return true;			
 				default:
-					Autoreply.sendMessage(fromGroup, 0, "可用.draw help查看帮助");
+					if (drawcmd.startsWith("spell ")) {	
+						int i=-1;
+						try {
+							i = Integer.parseInt(drawcmd.substring(6));
+							String spellResult=pname + "抽到了:";
+							Random r=new Random();
+							for (int ii=0;ii < i;ii++) {
+								spellResult += "\n";
+								spellResult += spells[r.nextInt(spells.length)];			
+							}	
+							Autoreply.sendMessage(fromGroup, 0, spellResult);
+						} catch (NumberFormatException e) {
+							Autoreply.sendMessage(fromGroup, 0, e.toString());
+						}
+					} else {
+						Autoreply.sendMessage(fromGroup, 0, "可用.draw help查看帮助");						
+					}
 					break;
 			}	
 			return true;
