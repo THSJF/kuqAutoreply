@@ -1155,13 +1155,13 @@ public class DiceImitate {
     }
 
     private void rollStage(String[] ss, long fromGroup) {
-        HashMap<Integer, String> hMap = new HashMap<>();// 存放数据
+        HashMap<Integer, String> hMap = new HashMap<>();
         for (int i = 2; i < ss.length; i++) {
-            hMap.put(Autoreply.instence.random.nextInt(), ss[i]);// 随机key
+            hMap.put(Autoreply.instence.random.nextInt(), ss[i]);
         }
         int flag = 1;
         StringBuilder sBuilder = new StringBuilder();
-        for (Integer key : hMap.keySet()) {// 遍历
+        for (Integer key : hMap.keySet()) {
             sBuilder.append("stage").append(flag).append(":").append(hMap.get(key)).append("\n");
             flag++;
         }

@@ -35,12 +35,12 @@ public class LiveListener implements Runnable {
 				System.out.println("直播检测启动完成");
 			}
 		});
-        File liveTimeFile = new File(Autoreply.appDirectory + "liveTime2.json");
+        File liveTimeFile = new File(Autoreply.appDirectory + "liveTime.json");
         if(!liveTimeFile.exists()) {
             saveLiveTime();
 		}
         try {
-            Type token = new TypeToken<ConcurrentHashMap<String, String>>() {
+            Type token = new TypeToken<ConcurrentHashMap<String, Long>>() {
 			}.getType();
             liveTimeMap = new Gson().fromJson(Methods.readFileToString(liveTimeFile.getAbsolutePath()),token);
 		} catch(Exception e) {
@@ -307,7 +307,7 @@ public class LiveListener implements Runnable {
 
     private void saveLiveTime () {
         try {
-            File file = new File(Autoreply.appDirectory + "liveTime2.json");
+            File file = new File(Autoreply.appDirectory + "liveTime.json");
             FileOutputStream fos = new FileOutputStream(file);
             OutputStreamWriter writer = new OutputStreamWriter(fos,StandardCharsets.UTF_8);
             writer.write(new Gson().toJson(liveTimeMap));
