@@ -1180,7 +1180,7 @@ public class DiceImitate {
 			String drawcmd=msg.substring(6);
 			switch (drawcmd) {
 				case "help":
-					Autoreply.sendMessage(fromGroup, 0, "当前有:spell neta music grandma game");
+					Autoreply.sendMessage(fromGroup, 0, "当前有:spell neta music grandma game all");
 					return true;
 				case "spell":
 					Autoreply.sendMessage(fromGroup, 0, spells[new Random().nextInt(spells.length)]);
@@ -1192,8 +1192,7 @@ public class DiceImitate {
 					Autoreply.sendMessage(fromGroup, 0, String.format("%s今天宜听%s", pname, md5RanStr(fromQQ, music)));
 					return true;
 				case "grandma":
-					String grandmaMd5=MD5.stringToMD5(String.valueOf(fromQQ + System.currentTimeMillis() / (24 * 60 * 60 * 1000)));
-					if (grandmaMd5.charAt(0) == '0') {
+					if (MD5.stringToMD5(String.valueOf(fromQQ + System.currentTimeMillis() / (24 * 60 * 60 * 1000))).charAt(0) == '0') {
 						Autoreply.sendMessage(fromGroup, 0, String.format("%s今天宜认八云紫当奶奶", pname));
 						return true;
 					}
@@ -1205,6 +1204,22 @@ public class DiceImitate {
 					s += randomGame(pname, fromQQ + 1, false);
 					Autoreply.sendMessage(fromGroup, 0, s);
 					return true;
+				case "all":
+					String sss=String.format("%s今天宜打%s", pname, md5RanStr(fromQQ, neta));
+					sss += "\n";
+					sss += String.format("%s今天宜听%s", pname, md5RanStr(fromQQ, music));
+					sss += "\n";
+					if (MD5.stringToMD5(String.valueOf(fromQQ + System.currentTimeMillis() / (24 * 60 * 60 * 1000))).charAt(0) == '0') {
+						sss += String.format("%s今天宜认八云紫当奶奶", pname);
+					} else {
+						sss += String.format("%s今天宜认%s当奶奶", pname, md5RanStr(fromQQ, name));
+					}
+					sss += "\n";
+					sss += randomGame(pname, fromQQ, true);
+					sss += ",";
+					sss += randomGame(pname, fromQQ + 1, false);
+					Autoreply.sendMessage(fromGroup, 0, sss);
+					return true;			
 				default:
 					Autoreply.sendMessage(fromGroup, 0, "可用.draw help查看帮助");
 					break;
