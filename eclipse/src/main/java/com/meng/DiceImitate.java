@@ -1221,6 +1221,7 @@ public class DiceImitate {
 					sss += randomGame(pname, fromQQ, true);
 					sss += ",";
 					sss += randomGame(pname, fromQQ + 1, false);
+					sss += "\n";
 					float fpro=0f;
 					if (c == '0') {
 						fpro = 99.61f;
