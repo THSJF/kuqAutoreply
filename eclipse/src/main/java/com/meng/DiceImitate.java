@@ -1286,7 +1286,7 @@ public class DiceImitate {
 				if (goodAt) {
 					return String.format("%s今天宜用%s-%s打%s", pname, charaName, md5RanStr(fromQQ + 1, pl16s), gameName);
 				} else {
-					return String.format("忌用%s-%s打%s", charaName, md5RanStr(fromQQ + 1, pl14s), gameName);
+					return String.format("忌用%s-%s打%s", charaName, md5RanStr(fromQQ + 1, pl16s), gameName);
 				}
 			case 17:
 				gameName = "鬼形兽";
@@ -1294,7 +1294,7 @@ public class DiceImitate {
 				if (goodAt) {
 					return String.format("%s今天宜用%s-%s打%s", pname, charaName, md5RanStr(fromQQ + 1, pl17s), gameName);
 				} else {
-					return String.format("忌用%s-%s打%s", charaName, md5RanStr(fromQQ + 1, pl14s), gameName);
+					return String.format("忌用%s-%s打%s", charaName, md5RanStr(fromQQ + 1, pl17s), gameName);
 				}
 			default:
 				return "";
@@ -1302,7 +1302,7 @@ public class DiceImitate {
 		if (goodAt) {
 			return String.format("%s今天宜用%s打%s", pname, charaName, gameName);
 		} else {
-			return String.format("忌用%s打%s", charaName, md5RanStr(fromQQ + 1, pl14s), gameName);
+			return String.format("忌用%s打%s", charaName, gameName);
 		}
 	}
 
