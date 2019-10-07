@@ -1,11 +1,25 @@
 package com.meng;
+import com.google.gson.*;
+import com.google.gson.reflect.*;
+import com.meng.*;
+import com.meng.config.javabeans.*;
+import com.meng.tools.*;
+import java.io.*;
+import java.lang.reflect.*;
+import java.nio.charset.*;
 import java.util.*;
 import java.util.concurrent.*;
 
 public class SpellCollect {
 	private ConcurrentHashMap<String,HashSet<String>> chm=new ConcurrentHashMap<>();
 	public SpellCollect() {
-
+		File jsonBaseConfigFile = new File(Autoreply.appDirectory + "/properties/spells.json");
+        if (!jsonBaseConfigFile.exists()) {
+            saveConfig();
+        }
+        Type type = new TypeToken<ConcurrentHashMap<String,HashSet<String>>>() {
+        }.getType();
+        chm = new Gson().fromJson(Methods.readFileToString(Autoreply.appDirectory + "/properties/spells.json"), type);
 	}
 
 	public boolean check(long fromGroup, long fromQQ, String msg) {
@@ -34,10 +48,24 @@ public class SpellCollect {
 					sb.append(s);
 				}
 			}
+			saveConfig();
 			Autoreply.sendMessage(fromGroup, 0, "get:" + sb.toString());
 			Autoreply.sendMessage(fromGroup, 0, chm.toString());
 		}
-
 		return false;
 	}
+
+	private void saveConfig() {
+        try {
+            File file = new File(Autoreply.appDirectory + "configV3.json");
+            FileOutputStream fos = new FileOutputStream(file);
+            OutputStreamWriter writer = new OutputStreamWriter(fos, StandardCharsets.UTF_8);
+            writer.write(new Gson().toJson(chm));
+            writer.flush();
+            fos.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
 }
