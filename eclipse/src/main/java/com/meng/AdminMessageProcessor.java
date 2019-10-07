@@ -121,7 +121,7 @@ public class AdminMessageProcessor {
 					if (gc == null || !gc.reply) {
 						continue;
 					}
-					Autoreply.sendMessage(gc.groupNumber, 0, broadcast);
+					Autoreply.sendMessage(gc.groupNumber, 0, broadcast, true);
 					hs.add(g);
 					try {
 						Thread.sleep(200);
