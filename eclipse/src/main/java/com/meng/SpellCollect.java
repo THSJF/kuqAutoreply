@@ -11,12 +11,12 @@ public class SpellCollect {
 	public boolean check(long fromGroup, long fromQQ, String msg) {
 		if (msg.startsWith("#幻币转账") && fromQQ == Autoreply.instence.configManager.configJavaBean.ogg) {
 			List<Long> chan=Autoreply.instence.CC.getAts(msg);
-			if(!Autoreply.instence.configManager.isMaster(chan.get(1))){
+			if (!Autoreply.instence.configManager.isMaster(chan.get(1))) {
 				return false;
 			}
 			int coins=0;
 			try {
-				coins = Integer.parseInt(msg.substring(msg.indexOf("转账", 6) + 2, msg.indexOf("个幻币")));		
+				coins = (int)Float.parseFloat(msg.substring(msg.indexOf("转账", 6) + 2, msg.indexOf("个幻币")));		
 			} catch (NumberFormatException e) {
 				Autoreply.sendMessage(fromGroup, 0, e.toString());
 			}
