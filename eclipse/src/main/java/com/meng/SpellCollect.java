@@ -47,16 +47,17 @@ public class SpellCollect {
 				chm.put(String.valueOf(chan.get(0)), tmpSet);
 			}
 			Random r=new Random();
-			StringBuilder sb=new StringBuilder();
+			StringBuilder sb=new StringBuilder("你获得了:");
 			for (int i=0;i < coins;++i) {
 				for (int j=0;j < 3;++j) {
 					String s=Autoreply.instence.diceImitate.spells[r.nextInt(Autoreply.instence.diceImitate.spells.length)];
 					tmpSet.add(s);
+					sb.append("\n");
 					sb.append(s);
 				}
 			}
 			saveConfig();
-			Autoreply.sendMessage(fromGroup, 0, "get:" + sb.toString());
+			Autoreply.sendMessage(fromGroup, 0, sb.toString());
 		}
 		if (msg.equals("查看符卡")) {
 			StringBuilder sb=new StringBuilder();
