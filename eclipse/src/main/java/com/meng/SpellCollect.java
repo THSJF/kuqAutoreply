@@ -12,14 +12,21 @@ import java.util.concurrent.*;
 
 public class SpellCollect {
 	private ConcurrentHashMap<String,HashSet<String>> chm=new ConcurrentHashMap<>();
+	private File spellFile;
 	public SpellCollect() {
-		File jsonBaseConfigFile = new File(Autoreply.appDirectory + "/properties/spells.json");
-        if (!jsonBaseConfigFile.exists()) {
+		spellFile = new File(Autoreply.appDirectory + "/properties/spells.json");
+        if (!spellFile.exists()) {
             saveConfig();
         }
         Type type = new TypeToken<ConcurrentHashMap<String,HashSet<String>>>() {
         }.getType();
         chm = new Gson().fromJson(Methods.readFileToString(Autoreply.appDirectory + "/properties/spells.json"), type);
+		Autoreply.instence.threadPool.execute(new Runnable() {
+				@Override
+				public void run() {
+					backupData();
+				}
+			});
 	}
 
 	public boolean check(long fromGroup, long fromQQ, String msg) {
@@ -71,10 +78,24 @@ public class SpellCollect {
 		return false;
 	}
 
+	private void backupData() {
+        while (true) {
+            try {
+                Thread.sleep(86400000);
+                File backup = new File(spellFile.getAbsolutePath() + ".bak" + System.currentTimeMillis());
+                FileOutputStream fos = new FileOutputStream(backup);
+                OutputStreamWriter writer = new OutputStreamWriter(fos, StandardCharsets.UTF_8);
+                writer.write(new Gson().toJson(chm));
+                writer.flush();
+                fos.close();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+    }
 	private void saveConfig() {
         try {
-            File file = new File(Autoreply.appDirectory + "/properties/spells.json");
-            FileOutputStream fos = new FileOutputStream(file);
+            FileOutputStream fos = new FileOutputStream(spellFile);
             OutputStreamWriter writer = new OutputStreamWriter(fos, StandardCharsets.UTF_8);
             writer.write(new Gson().toJson(chm));
             writer.flush();
