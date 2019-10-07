@@ -50,14 +50,13 @@ public class SpellCollect {
 			}
 			saveConfig();
 			Autoreply.sendMessage(fromGroup, 0, "get:" + sb.toString());
-			Autoreply.sendMessage(fromGroup, 0, chm.toString());
 		}
 		return false;
 	}
 
 	private void saveConfig() {
         try {
-            File file = new File(Autoreply.appDirectory + "configV3.json");
+            File file = new File(Autoreply.appDirectory + "/properties/spells.json");
             FileOutputStream fos = new FileOutputStream(file);
             OutputStreamWriter writer = new OutputStreamWriter(fos, StandardCharsets.UTF_8);
             writer.write(new Gson().toJson(chm));
