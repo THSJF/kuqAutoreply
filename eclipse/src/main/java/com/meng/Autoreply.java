@@ -88,6 +88,7 @@ public class Autoreply extends JcqAppAbstract implements ICQVer, IMsg, IRequest 
 	public SeqManager seqManager;
 	public DanmakuListenerManager danmakuListenerManager;
 	public ConnectServer connectServer;
+	public SpellCollect spellCollect=new SpellCollect();
     public ExecutorService threadPool = Executors.newCachedThreadPool();
 
     public static String lastSend = " ";

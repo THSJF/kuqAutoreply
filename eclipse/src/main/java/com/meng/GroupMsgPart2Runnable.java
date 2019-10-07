@@ -73,6 +73,9 @@ public class GroupMsgPart2Runnable implements Runnable {
             Autoreply.sendMessage(fromGroup,fromQQ,msgSend.equals("") ? "居然没有飞机佬直播" : msgSend);
             return true;
 		}
+		if(Autoreply.instence.spellCollect.check(fromGroup,fromQQ,msg)){
+			return true;
+		}
         if(msg.startsWith("[CQ:location,lat=")) {
             sendMessage(fromGroup,0,Autoreply.instence.CC.location(35.594993,118.869838,15,"守矢神社","此生无悔入东方 来世愿生幻想乡"));
             return true;

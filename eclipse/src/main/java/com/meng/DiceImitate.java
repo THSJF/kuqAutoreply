@@ -6,7 +6,7 @@ import com.meng.config.javabeans.*;
 import com.meng.tools.*;
 
 public class DiceImitate {
-	private String[] spells;
+	public String[] spells;
 	private String[] neta;
 	private String[] music;
 	private String[] name;
