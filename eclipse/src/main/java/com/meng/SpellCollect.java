@@ -49,7 +49,7 @@ public class SpellCollect {
 			Random r=new Random();
 			StringBuilder sb=new StringBuilder();
 			for (int i=0;i < coins;++i) {
-				for (int j=0;j < 5;++j) {
+				for (int j=0;j < 3;++j) {
 					String s=Autoreply.instence.diceImitate.spells[r.nextInt(Autoreply.instence.diceImitate.spells.length)];
 					tmpSet.add(s);
 					sb.append(s);
