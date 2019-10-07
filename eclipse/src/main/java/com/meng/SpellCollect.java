@@ -51,6 +51,23 @@ public class SpellCollect {
 			saveConfig();
 			Autoreply.sendMessage(fromGroup, 0, "get:" + sb.toString());
 		}
+		if (msg.equals("查看符卡")) {
+			StringBuilder sb=new StringBuilder();
+			HashSet<String> gtdspl=chm.get(String.valueOf(fromQQ));
+			if (gtdspl == null) {
+				Autoreply.sendMessage(fromGroup, 0, "你没有参加过抽卡");
+				return true;
+			}
+			sb.append("你获得了:");
+			for (String s:Autoreply.instence.diceImitate.spells) {
+				if (gtdspl.contains(s)) {
+					sb.append("\n");
+					sb.append(s);
+				}
+			}
+			Autoreply.sendMessage(fromGroup, 0, sb.toString());
+			return true;	
+		}
 		return false;
 	}
 
