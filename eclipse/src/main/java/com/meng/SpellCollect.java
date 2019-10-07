@@ -48,15 +48,15 @@ public class SpellCollect {
 			}
 			Random r=new Random();
 			StringBuilder sb=new StringBuilder("你获得了:");
-			for (int i=0;i < coins;++i) {
-				for (int j=0;j < 3;++j) {
-					String s=Autoreply.instence.diceImitate.spells[r.nextInt(Autoreply.instence.diceImitate.spells.length)];
-					tmpSet.add(s);
-					sb.append("\n");
-					sb.append(s);
-				}
+			for (int i=0;i < coins * 3;++i) {
+				String s=Autoreply.instence.diceImitate.spells[r.nextInt(Autoreply.instence.diceImitate.spells.length)];
+				tmpSet.add(s);
+				sb.append("\n").append(s);
 			}
 			saveConfig();
+			if (isSetContains(tmpSet, Autoreply.instence.diceImitate.sp10)) {
+				Autoreply.sendMessage(fromGroup, 0, "th10 spells all got");
+			}
 			Autoreply.sendMessage(fromGroup, 0, sb.toString());
 		}
 		if (msg.equals("查看符卡")) {
@@ -69,14 +69,22 @@ public class SpellCollect {
 			sb.append("你获得了:");
 			for (String s:Autoreply.instence.diceImitate.spells) {
 				if (gtdspl.contains(s)) {
-					sb.append("\n");
-					sb.append(s);
+					sb.append("\n").append(s);
 				}
 			}
 			Autoreply.sendMessage(fromGroup, 0, sb.toString());
 			return true;	
 		}
 		return false;
+	}
+
+	public boolean isSetContains(Set<String> bigset, Set<String> smallset) {  
+		for (String s:smallset) {
+			if (!bigset.contains(s)) {
+				return false;
+			}
+		}
+		return true;  
 	}
 
 	private void backupData() {
@@ -94,6 +102,7 @@ public class SpellCollect {
             }
         }
     }
+
 	private void saveConfig() {
         try {
             FileOutputStream fos = new FileOutputStream(spellFile);

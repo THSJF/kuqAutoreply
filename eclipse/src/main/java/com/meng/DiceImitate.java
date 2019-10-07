@@ -33,6 +33,18 @@ public class DiceImitate {
     private String[] pl17s = new String[]{"[CQ:emoji,id=128059]哥", "[CQ:emoji,id=128037]哥", "[CQ:emoji,id=128054]哥"};
 	private String[] plDiff = new String[]{"easy", "normal", "hard", "lunatic"};
 
+	public HashSet<String> sp6=new HashSet<>();
+	public HashSet<String> sp7=new HashSet<>();
+	public HashSet<String> sp8=new HashSet<>();
+	public HashSet<String> sp10=new HashSet<>();
+	public HashSet<String> sp11=new HashSet<>();
+	public HashSet<String> sp12=new HashSet<>();
+	public HashSet<String> sp13=new HashSet<>();
+	public HashSet<String> sp14=new HashSet<>();
+	public HashSet<String> sp15=new HashSet<>();
+	public HashSet<String> sp16=new HashSet<>();
+	public HashSet<String> sp17=new HashSet<>();
+
 
 	public DiceImitate() {
 		spells = new String[]{
@@ -1117,7 +1129,17 @@ public class DiceImitate {
 			"杖刀偶磨弓",
 			"埴安神袿姬",
 			"骊驹早鬼"};
-
+		addArrayToSet(sp6, "月符「月光」", "QED「495年的波纹」");
+		addArrayToSet(sp7, "冰符「冰袭方阵」", "紫奥义「弹幕结界」");
+		addArrayToSet(sp8, "萤符「地上的流星」", "「蓬莱人形」");
+		addArrayToSet(sp10, "叶符「狂舞的落叶」", "祟符「洩矢大人」");
+		addArrayToSet(sp11, "怪奇「钓瓶落之怪」", "「Subterranean Rose」");
+		addArrayToSet(sp12, "棒符「忙碌探知棒」", "恨弓「源三位赖政之弓」");
+		addArrayToSet(sp13, "符牒「死蝶之舞」", "貉符「满月下的腹鼓舞」");
+		addArrayToSet(sp14, "冰符「Ultimate Blizzard」", "「Pristine beat」");
+		addArrayToSet(sp15, "凶弹「高速撞击」", "「最初与最后的无名弹幕」");
+		addArrayToSet(sp16, "蝶符「细碎鳞粉」", "「无秩序弹幕地狱」");
+		addArrayToSet(sp17, "石符「石林」", "「鬼畜生的所业」");
 	}
 	public boolean check(long fromGroup, long fromQQ, String msg) {
 		String[] ss = msg.split("\\.");
@@ -1486,6 +1508,20 @@ public class DiceImitate {
 		return arr[md5Random(fromQQ) % arr.length];
 	}
 
+	private void addArrayToSet(Set<String> set, String start, String stop) {
+		int istart=0;
+		int istop=0;
+		for (int i=0;i < spells.length;++i) {
+			if (spells[i].equals(start)) {
+				istart = i;
+			} else if (spells[i].equals(stop)) {
+				istop = i;
+			}	
+		}
+		for (int i=istart;i <= istop;++i) {
+			set.add(spells[i]);
+		}
+	}
 	private String getName(long fromGroup, long fromQQ) {
 		PersonInfo personInfo=Autoreply.instence.configManager.getPersonInfoFromQQ(fromQQ);
 		Member m=Autoreply.CQ.getGroupMemberInfo(fromGroup, fromQQ);
