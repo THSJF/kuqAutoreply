@@ -88,7 +88,7 @@ public class Autoreply extends JcqAppAbstract implements ICQVer, IMsg, IRequest 
 	public SeqManager seqManager;
 	public DanmakuListenerManager danmakuListenerManager;
 	public ConnectServer connectServer;
-	public SpellCollect spellCollect=new SpellCollect();
+	public SpellCollect spellCollect;
     public ExecutorService threadPool = Executors.newCachedThreadPool();
 
     public static String lastSend = " ";
@@ -183,7 +183,7 @@ public class Autoreply extends JcqAppAbstract implements ICQVer, IMsg, IRequest 
         FileTipManager fileTipManager = new FileTipManager();
         fileTipManager.dataMap.add(new FileTipUploader(807242547L, 1592608126L));
         //new TimeTipManager().start();
-		
+		spellCollect = new SpellCollect();
         threadPool.execute(liveListener);
         threadPool.execute(updateListener);
         threadPool.execute(fileTipManager);
