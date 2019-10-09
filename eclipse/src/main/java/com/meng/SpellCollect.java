@@ -98,6 +98,10 @@ public class SpellCollect {
 
 	private void checkArchievement(long fromGroup, long fromQQ, HashSet<String> gotSpell) {
 		ArchievementBean ab=archiMap.get(String.valueOf(fromQQ));
+		if (ab == null) {
+			ab = new ArchievementBean();
+			archiMap.put(String.valueOf(fromQQ), ab);
+		}
 		if (!ab.isArchievementGot(ArchievementBean.th6All) && checkTh06All(gotSpell)) {
 			ab.addArchievement(ArchievementBean.th6All);
 			Autoreply.sendMessage(fromGroup, fromQQ, "th06Got");
@@ -123,7 +127,7 @@ public class SpellCollect {
 
 
 	private void giveCoins(long group, long toQQ, int coins) {
-		Autoreply.sendMessage(group, 0, "~幻币转账 " + coins + " " + Autoreply.instence.CC.at(toQQ));
+		Autoreply.sendMessage(group, 0, "~转账 " + coins + " " + Autoreply.instence.CC.at(toQQ));
 	}
 	private void backupData() {
         while (true) {
