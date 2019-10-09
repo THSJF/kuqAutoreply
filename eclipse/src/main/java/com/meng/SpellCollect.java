@@ -12,6 +12,8 @@ import java.util.concurrent.*;
 
 public class SpellCollect {
 	private ConcurrentHashMap<String,HashSet<String>> chm=new ConcurrentHashMap<>();
+	private ConcurrentHashMap<String,ArchievementBean> archiMap=new ConcurrentHashMap<>();
+	private File archiFile;
 	private File spellFile;
 	public SpellCollect() {
 		spellFile = new File(Autoreply.appDirectory + "/properties/spells.json");
@@ -21,6 +23,15 @@ public class SpellCollect {
         Type type = new TypeToken<ConcurrentHashMap<String,HashSet<String>>>() {
         }.getType();
         chm = new Gson().fromJson(Methods.readFileToString(Autoreply.appDirectory + "/properties/spells.json"), type);
+
+		archiFile = new File(Autoreply.appDirectory + "/properties/archievement.json");
+        if (!archiFile.exists()) {
+            saveArchiConfig();
+        }
+        Type type2 = new TypeToken<ConcurrentHashMap<String,ArchievementBean>>() {
+        }.getType();
+        archiMap = new Gson().fromJson(Methods.readFileToString(Autoreply.appDirectory + "/properties/archievement.json"), type2);
+
 		Autoreply.instence.threadPool.execute(new Runnable() {
 				@Override
 				public void run() {
@@ -54,9 +65,7 @@ public class SpellCollect {
 				sb.append("\n").append(s);
 			}
 			saveConfig();
-			if (isSetContains(tmpSet, Autoreply.instence.diceImitate.sp10)) {
-				Autoreply.sendMessage(fromGroup, 0, "th10 spells all got");
-			}
+			checkArchievement(fromGroup, fromQQ, tmpSet);
 			Autoreply.sendMessage(fromGroup, 0, sb.toString());
 		}
 		if (msg.equals("查看符卡")) {
@@ -87,6 +96,35 @@ public class SpellCollect {
 		return true;  
 	}
 
+	private void checkArchievement(long fromGroup, long fromQQ, HashSet<String> gotSpell) {
+		ArchievementBean ab=archiMap.get(String.valueOf(fromQQ));
+		if (!ab.isArchievementGot(ArchievementBean.th6All) && checkTh06All(gotSpell)) {
+			ab.addArchievement(ArchievementBean.th6All);
+			Autoreply.sendMessage(fromGroup, fromQQ, "th06Got");
+		}
+
+		if (!ab.isArchievementGot(ArchievementBean.th10All) && checkTh10All(gotSpell)) {
+			ab.addArchievement(ArchievementBean.th10All);
+			Autoreply.sendMessage(fromGroup, fromQQ, "th10Got,coins:");
+			giveCoins(fromGroup, fromQQ, 2);
+		}
+		saveArchiConfig();
+	}
+
+	private boolean checkTh06All(HashSet<String> gotSpell) {
+		return isSetContains(gotSpell, Autoreply.instence.diceImitate.sp6);
+	}
+
+	private boolean checkTh10All(HashSet<String> gotSpell) {
+		return isSetContains(gotSpell, Autoreply.instence.diceImitate.sp10);
+	}
+
+
+
+
+	private void giveCoins(long group, long toQQ, int coins) {
+		Autoreply.sendMessage(group, 0, "~幻币转账 " + coins + " " + Autoreply.instence.CC.at(toQQ));
+	}
 	private void backupData() {
         while (true) {
             try {
@@ -108,6 +146,17 @@ public class SpellCollect {
             FileOutputStream fos = new FileOutputStream(spellFile);
             OutputStreamWriter writer = new OutputStreamWriter(fos, StandardCharsets.UTF_8);
             writer.write(new Gson().toJson(chm));
+            writer.flush();
+            fos.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+	private void saveArchiConfig() {
+        try {
+            FileOutputStream fos = new FileOutputStream(archiFile);
+            OutputStreamWriter writer = new OutputStreamWriter(fos, StandardCharsets.UTF_8);
+            writer.write(new Gson().toJson(archiMap));
             writer.flush();
             fos.close();
         } catch (IOException e) {
