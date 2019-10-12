@@ -16,6 +16,13 @@ public class ArchievementBean {
 	public static final int th17All=11;
 
 	public static final int JunkoSpells=12;
+	public static final int LilyWhite=13;
+	public static final int MountainOfFaith=14;
+	public static final int threeHits=15;
+	public static final int yoyoko=16;
+	public static final int sakura=17;
+	
+	
 	
 	public boolean isArchievementGot(int archievement) {
 		return (a1 & (1 << archievement)) != 0;

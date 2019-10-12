@@ -179,6 +179,8 @@ public class SpellCollect {
 			giveCoins(fromGroup, toQQ, Autoreply.instence.diceImitate.sp17.size());
 		}
 
+
+
 		if (!ab.isArchievementGot(ArchievementBean.JunkoSpells) &&
 			isSetContains(gotSpell, Autoreply.instence.diceImitate.JunkoSpells)) {
 			ab.addArchievement(ArchievementBean.JunkoSpells);
@@ -186,31 +188,50 @@ public class SpellCollect {
 			giveCoins(fromGroup, toQQ, 10);
 		}
 
-		if (!ab.isArchievementGot(ArchievementBean.th6All) &&
-			isSetContains(gotSpell, Autoreply.instence.diceImitate.sp6)) {
-			ab.addArchievement(ArchievementBean.th6All);
-			Autoreply.sendMessage(fromGroup, toQQ, "获得成就:东方红魔乡全符卡收集");
-			giveCoins(fromGroup, toQQ, Autoreply.instence.diceImitate.sp6.size());
+		if (!ab.isArchievementGot(ArchievementBean.yoyoko) &&
+			isSetContains(gotSpell, Autoreply.instence.diceImitate.yykSpells)) {
+			ab.addArchievement(ArchievementBean.yoyoko);
+			Autoreply.sendMessage(fromGroup, toQQ, "获得成就:Perfect Cherry Blossom");
+			giveCoins(fromGroup, toQQ, 10);
+		}
+		
+		if (!ab.isArchievementGot(ArchievementBean.sakura) &&
+			isSetContains(gotSpell, Autoreply.instence.diceImitate.sakura)) {
+			ab.addArchievement(ArchievementBean.sakura);
+			Autoreply.sendMessage(fromGroup, toQQ, "获得成就:樱花飞舞");
+			giveCoins(fromGroup, toQQ, 10);
 		}
 		
 
-
-
-		if (!ab.isArchievementGot(ArchievementBean.JunkoSpells) &&
-			checkJunko(gotSpell)) {
-			ab.addArchievement(ArchievementBean.JunkoSpells);
-			Autoreply.sendMessage(fromGroup, toQQ, "junko,coins:");
-			giveCoins(fromGroup, toQQ, 2);
+		if (!ab.isArchievementGot(ArchievementBean.LilyWhite) &&
+			gotSpell.contains("春符「惊喜之春」")) {
+			ab.addArchievement(ArchievementBean.LilyWhite);
+			Autoreply.sendMessage(fromGroup, toQQ, "获得成就:春天来了");
+			giveCoins(fromGroup, toQQ, 5);
 		}
+		
+		if (!ab.isArchievementGot(ArchievementBean.MountainOfFaith) &&
+			(gotSpell.contains("「信仰之山」") || gotSpell.contains("「风神之神德」"))) {
+			ab.addArchievement(ArchievementBean.MountainOfFaith);
+			Autoreply.sendMessage(fromGroup, toQQ, "获得成就:信仰之山");
+			giveCoins(fromGroup, toQQ, 5);
+		}
+
+		if (!ab.isArchievementGot(ArchievementBean.threeHits) &&
+			gotSpell.contains("「红色的幻想乡」") &&
+			gotSpell.contains("神光「无忤为宗」") &&
+			gotSpell.contains("「纯粹的疯狂」")) {
+			ab.addArchievement(ArchievementBean.threeHits);
+			Autoreply.sendMessage(fromGroup, toQQ, "获得成就:素质三连");
+			giveCoins(fromGroup, toQQ, 5);
+		}
+
+
+
+
 
 		saveArchiConfig();
 	}
-
-	private boolean checkJunko(HashSet<String> gotSpell) {
-		return isSetContains(gotSpell, Autoreply.instence.diceImitate.JunkoSpells);
-	}
-
-
 
 	private void giveCoins(long group, long toQQ, int coins) {
 		Autoreply.sendMessage(group, 0, "~转账 " + coins + " " + Autoreply.instence.CC.at(toQQ));

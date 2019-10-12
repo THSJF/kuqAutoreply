@@ -46,6 +46,11 @@ public class DiceImitate {
 	public HashSet<String> sp17=new HashSet<>();
 
 	public HashSet<String> JunkoSpells=new HashSet<>();
+	public HashSet<String> yykSpells=new HashSet<>();
+
+	public HashSet<String> sakura=new HashSet<>();
+
+
 
 
 	public DiceImitate() {
@@ -1143,13 +1148,32 @@ public class DiceImitate {
 		addArrayToSet(sp16, "蝶符「细碎鳞粉」", "「无秩序弹幕地狱」");
 		addArrayToSet(sp17, "石符「石林」", "「鬼畜生的所业」");
 
-		JunkoSpells.add("「掌上的纯光」");
-		JunkoSpells.add("「杀意的百合」");
-		JunkoSpells.add("「现代的神灵界」");
-		JunkoSpells.add("「战栗的寒冷之星」");
-		JunkoSpells.add("「纯粹的疯狂」");
-		JunkoSpells.add("「地上秽的纯化」");
-		JunkoSpells.add("纯符「纯粹的弹幕地狱」");
+		Collections.addAll(JunkoSpells, new String[]{	
+							   "「掌上的纯光」",
+							   "「杀意的百合」",
+							   "「现代的神灵界」",
+							   "「原始的神灵界」",
+							   "「战栗的寒冷之星」",
+							   "「纯粹的疯狂」",
+							   "「地上秽的纯化」",
+							   "纯符「纯粹的弹幕地狱」",
+						   });
+
+		Collections.addAll(yykSpells, new String[]{					  
+							   "亡乡「亡我乡 -自尽-」",					
+							   "亡舞「生者必灭之理 -魔境-」",					
+							   "华灵「蝶幻」",					
+							   "幽曲「埋骨于弘川 -神灵-」",					
+							   "樱符「完全墨染的樱花 -开花-」",
+							   "「反魂蝶 -八分咲-」"
+						   });
+
+		Collections.addAll(sakura, new String[]{
+							   "樱符「完全墨染的樱花 -封印-」",
+							   "樱符「完全墨染的樱花 -亡我-」",
+							   "樱符「完全墨染的樱花 -春眠-」",
+							   "樱符「完全墨染的樱花 -开花-」"
+						   });
 
 	}
 	public boolean check(long fromGroup, long fromQQ, String msg) {
