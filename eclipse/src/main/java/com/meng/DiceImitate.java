@@ -45,6 +45,8 @@ public class DiceImitate {
 	public HashSet<String> sp16=new HashSet<>();
 	public HashSet<String> sp17=new HashSet<>();
 
+	public HashSet<String> JunkoSpells=new HashSet<>();
+
 
 	public DiceImitate() {
 		spells = new String[]{
@@ -1140,6 +1142,15 @@ public class DiceImitate {
 		addArrayToSet(sp15, "凶弹「高速撞击」", "「最初与最后的无名弹幕」");
 		addArrayToSet(sp16, "蝶符「细碎鳞粉」", "「无秩序弹幕地狱」");
 		addArrayToSet(sp17, "石符「石林」", "「鬼畜生的所业」");
+
+		JunkoSpells.add("「掌上的纯光」");
+		JunkoSpells.add("「杀意的百合」");
+		JunkoSpells.add("「现代的神灵界」");
+		JunkoSpells.add("「战栗的寒冷之星」");
+		JunkoSpells.add("「纯粹的疯狂」");
+		JunkoSpells.add("「地上秽的纯化」");
+		JunkoSpells.add("纯符「纯粹的弹幕地狱」");
+
 	}
 	public boolean check(long fromGroup, long fromQQ, String msg) {
 		String[] ss = msg.split("\\.");

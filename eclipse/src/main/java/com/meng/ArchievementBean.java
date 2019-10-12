@@ -15,6 +15,8 @@ public class ArchievementBean {
 	public static final int th16All=10;
 	public static final int th17All=11;
 
+	public static final int JunkoSpells=12;
+	
 	public boolean isArchievementGot(int archievement) {
 		return (a1 & (1 << archievement)) != 0;
 	}

@@ -65,7 +65,7 @@ public class SpellCollect {
 				sb.append("\n").append(s);
 			}
 			saveConfig();
-			checkArchievement(fromGroup, fromQQ,chan.get(0), tmpSet);
+			checkArchievement(fromGroup, fromQQ, chan.get(0), tmpSet);
 			Autoreply.sendMessage(fromGroup, 0, sb.toString());
 		}
 		if (msg.equals("查看符卡")) {
@@ -97,21 +97,28 @@ public class SpellCollect {
 	}
 
 	private void checkArchievement(long fromGroup, long fromQQ, long toQQ, HashSet<String> gotSpell) {
-		ArchievementBean ab=archiMap.get(String.valueOf(fromQQ));
+		ArchievementBean ab=archiMap.get(String.valueOf(toQQ));
 		if (ab == null) {
 			ab = new ArchievementBean();
-			archiMap.put(String.valueOf(fromQQ), ab);
+			archiMap.put(String.valueOf(toQQ), ab);
 		}
 		if (!ab.isArchievementGot(ArchievementBean.th6All) && checkTh06All(gotSpell)) {
 			ab.addArchievement(ArchievementBean.th6All);
-			Autoreply.sendMessage(fromGroup, fromQQ, "th06Got");
+			Autoreply.sendMessage(fromGroup, toQQ, "th06Got");
 		}
 
 		if (!ab.isArchievementGot(ArchievementBean.th10All) && checkTh10All(gotSpell)) {
 			ab.addArchievement(ArchievementBean.th10All);
-			Autoreply.sendMessage(fromGroup, fromQQ, "th10Got,coins:");
+			Autoreply.sendMessage(fromGroup, toQQ, "th10Got,coins:");
 			giveCoins(fromGroup, toQQ, 2);
 		}
+		
+		if (!ab.isArchievementGot(ArchievementBean.JunkoSpells) && checkJunko(gotSpell)) {
+			ab.addArchievement(ArchievementBean.JunkoSpells);
+			Autoreply.sendMessage(fromGroup, toQQ, "junko,coins:");
+			giveCoins(fromGroup, toQQ, 2);
+		}
+		
 		saveArchiConfig();
 	}
 
@@ -123,7 +130,10 @@ public class SpellCollect {
 		return isSetContains(gotSpell, Autoreply.instence.diceImitate.sp10);
 	}
 
-
+	private boolean checkJunko(HashSet<String> gotSpell) {
+		return isSetContains(gotSpell, Autoreply.instence.diceImitate.JunkoSpells);
+	}
+	
 
 
 	private void giveCoins(long group, long toQQ, int coins) {
