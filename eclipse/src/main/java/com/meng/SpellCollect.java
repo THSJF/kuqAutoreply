@@ -65,7 +65,7 @@ public class SpellCollect {
 				sb.append("\n").append(s);
 			}
 			saveConfig();
-			checkArchievement(fromGroup, fromQQ, tmpSet);
+			checkArchievement(fromGroup, fromQQ,chan.get(0), tmpSet);
 			Autoreply.sendMessage(fromGroup, 0, sb.toString());
 		}
 		if (msg.equals("查看符卡")) {
@@ -96,7 +96,7 @@ public class SpellCollect {
 		return true;  
 	}
 
-	private void checkArchievement(long fromGroup, long fromQQ, HashSet<String> gotSpell) {
+	private void checkArchievement(long fromGroup, long fromQQ, long toQQ, HashSet<String> gotSpell) {
 		ArchievementBean ab=archiMap.get(String.valueOf(fromQQ));
 		if (ab == null) {
 			ab = new ArchievementBean();
@@ -110,7 +110,7 @@ public class SpellCollect {
 		if (!ab.isArchievementGot(ArchievementBean.th10All) && checkTh10All(gotSpell)) {
 			ab.addArchievement(ArchievementBean.th10All);
 			Autoreply.sendMessage(fromGroup, fromQQ, "th10Got,coins:");
-			giveCoins(fromGroup, fromQQ, 2);
+			giveCoins(fromGroup, toQQ, 2);
 		}
 		saveArchiConfig();
 	}
