@@ -15,6 +15,7 @@ public class SpellCollect {
 	private ConcurrentHashMap<String,ArchievementBean> archiMap=new ConcurrentHashMap<>();
 	private File archiFile;
 	private File spellFile;
+	private ArrayList<Archievement> archList=new ArrayList<>();
 	public SpellCollect() {
 		spellFile = new File(Autoreply.appDirectory + "/properties/spells.json");
         if (!spellFile.exists()) {
@@ -31,6 +32,28 @@ public class SpellCollect {
         Type type2 = new TypeToken<ConcurrentHashMap<String,ArchievementBean>>() {
         }.getType();
         archiMap = new Gson().fromJson(Methods.readFileToString(Autoreply.appDirectory + "/properties/archievement.json"), type2);
+
+		archList.add(new Archievement("东方红魔乡全符卡收集", ArchievementBean.th6All, Autoreply.instence.diceImitate.sp6.size(), Autoreply.instence.diceImitate.sp6));
+		archList.add(new Archievement("东方妖妖梦全符卡收集", ArchievementBean.th7All, Autoreply.instence.diceImitate.sp7.size(), Autoreply.instence.diceImitate.sp7));
+		archList.add(new Archievement("东方永夜抄全符卡收集", ArchievementBean.th8All, Autoreply.instence.diceImitate.sp8.size(), Autoreply.instence.diceImitate.sp8));
+		archList.add(new Archievement("东方风神录全符卡收集", ArchievementBean.th10All, Autoreply.instence.diceImitate.sp10.size(), Autoreply.instence.diceImitate.sp10));
+		archList.add(new Archievement("东方地灵殿全符卡收集", ArchievementBean.th11All, Autoreply.instence.diceImitate.sp11.size(), Autoreply.instence.diceImitate.sp11));
+		archList.add(new Archievement("东方星莲船全符卡收集", ArchievementBean.th12All, Autoreply.instence.diceImitate.sp12.size(), Autoreply.instence.diceImitate.sp12));
+		archList.add(new Archievement("东方神灵庙全符卡收集", ArchievementBean.th13All, Autoreply.instence.diceImitate.sp13.size(), Autoreply.instence.diceImitate.sp13));
+		archList.add(new Archievement("东方辉针城全符卡收集", ArchievementBean.th14All, Autoreply.instence.diceImitate.sp14.size(), Autoreply.instence.diceImitate.sp14));
+		archList.add(new Archievement("东方绀珠传全符卡收集", ArchievementBean.th15All, Autoreply.instence.diceImitate.sp15.size(), Autoreply.instence.diceImitate.sp15));
+		archList.add(new Archievement("东方天空璋全符卡收集", ArchievementBean.th16All, Autoreply.instence.diceImitate.sp16.size(), Autoreply.instence.diceImitate.sp16));
+		archList.add(new Archievement("东方鬼形兽全符卡收集", ArchievementBean.th17All, Autoreply.instence.diceImitate.sp17.size(), Autoreply.instence.diceImitate.sp17));
+		archList.add(new Archievement("纯化的神灵", ArchievementBean.JunkoSpells, 10, Autoreply.instence.diceImitate.JunkoSpells));
+		archList.add(new Archievement("Perfect Cherry Blossom", ArchievementBean.yoyoko, 10, Autoreply.instence.diceImitate.yykSpells));
+		archList.add(new Archievement("樱花飞舞", ArchievementBean.sakura, 15, Autoreply.instence.diceImitate.sakura));
+		archList.add(new Archievement("春天来了", ArchievementBean.LilyWhite, 10, "春符「惊春之喜」"));
+		archList.add(new Archievement("素质三连", ArchievementBean.threeHits, 5, "「红色的幻想乡」", "神光「无忤为宗」", "「纯粹的疯狂」"));
+		archList.add(new Archievement("信仰之山", ArchievementBean.MountainOfFaith, 5, "「信仰之山」"));
+
+
+
+
 
 		Autoreply.instence.threadPool.execute(new Runnable() {
 				@Override
@@ -84,16 +107,21 @@ public class SpellCollect {
 			Autoreply.sendMessage(fromGroup, 0, sb.toString());
 			return true;	
 		}
-		return false;
-	}
 
-	public boolean isSetContains(Set<String> bigset, Set<String> smallset) {  
-		for (String s:smallset) {
-			if (!bigset.contains(s)) {
-				return false;
+		if (msg.equals("查看成就")) {
+			StringBuilder sb=new StringBuilder();
+			ArchievementBean ab=archiMap.get(String.valueOf(fromQQ));
+			sb.append("你获得了:");
+			if (ab.isArchievementGot(ArchievementBean.th6All)) {
+				sb.append("\n");
 			}
+
+
+			Autoreply.sendMessage(fromGroup, 0, sb.toString());
+			return true;	
 		}
-		return true;  
+
+		return false;
 	}
 
 	private void checkArchievement(long fromGroup, long fromQQ, long toQQ, HashSet<String> gotSpell) {
@@ -102,150 +130,32 @@ public class SpellCollect {
 			ab = new ArchievementBean();
 			archiMap.put(String.valueOf(toQQ), ab);
 		}
-		if (!ab.isArchievementGot(ArchievementBean.th6All) &&
-			isSetContains(gotSpell, Autoreply.instence.diceImitate.sp6)) {
-			ab.addArchievement(ArchievementBean.th6All);
-			Autoreply.sendMessage(fromGroup, toQQ, "获得成就:东方红魔乡全符卡收集");
-			giveCoins(fromGroup, toQQ, Autoreply.instence.diceImitate.sp6.size());
+		for (Archievement ac:archList) {
+			if (ac.getNewArchievement(ab, gotSpell)) {
+				ab.addArchievement(ac.archNum);
+				Autoreply.sendMessage(fromGroup, toQQ, "获得成就:" + ac.name);
+				Autoreply.sendMessage(fromGroup, 0, "~转账 " + ac.coins + " " + Autoreply.instence.CC.at(toQQ));		
+			}
 		}
-
-		if (!ab.isArchievementGot(ArchievementBean.th7All) &&
-			isSetContains(gotSpell, Autoreply.instence.diceImitate.sp7)) {
-			ab.addArchievement(ArchievementBean.th7All);
-			Autoreply.sendMessage(fromGroup, toQQ, "获得成就:东方妖妖梦全符卡收集");
-			giveCoins(fromGroup, toQQ, Autoreply.instence.diceImitate.sp7.size());
-		}
-
-		if (!ab.isArchievementGot(ArchievementBean.th8All) &&
-			isSetContains(gotSpell, Autoreply.instence.diceImitate.sp8)) {
-			ab.addArchievement(ArchievementBean.th8All);
-			Autoreply.sendMessage(fromGroup, toQQ, "获得成就:东方永夜抄符卡收集");
-			giveCoins(fromGroup, toQQ, Autoreply.instence.diceImitate.sp8.size());
-		}
-
-		if (!ab.isArchievementGot(ArchievementBean.th10All) &&
-			isSetContains(gotSpell, Autoreply.instence.diceImitate.sp10)) {
-			ab.addArchievement(ArchievementBean.th10All);
-			Autoreply.sendMessage(fromGroup, toQQ, "获得成就:东方风神录全符卡收集");
-			giveCoins(fromGroup, toQQ, Autoreply.instence.diceImitate.sp10.size());
-		}
-
-		if (!ab.isArchievementGot(ArchievementBean.th11All) &&
-			isSetContains(gotSpell, Autoreply.instence.diceImitate.sp11)) {
-			ab.addArchievement(ArchievementBean.th11All);
-			Autoreply.sendMessage(fromGroup, toQQ, "获得成就:东方地灵殿全符卡收集");
-			giveCoins(fromGroup, toQQ, Autoreply.instence.diceImitate.sp11.size());
-		}
-
-		if (!ab.isArchievementGot(ArchievementBean.th12All) &&
-			isSetContains(gotSpell, Autoreply.instence.diceImitate.sp12)) {
-			ab.addArchievement(ArchievementBean.th12All);
-			Autoreply.sendMessage(fromGroup, toQQ, "获得成就:东方星莲船全符卡收集");
-			giveCoins(fromGroup, toQQ, Autoreply.instence.diceImitate.sp12.size());
-		}
-
-		if (!ab.isArchievementGot(ArchievementBean.th13All) &&
-			isSetContains(gotSpell, Autoreply.instence.diceImitate.sp13)) {
-			ab.addArchievement(ArchievementBean.th13All);
-			Autoreply.sendMessage(fromGroup, toQQ, "获得成就:东方神灵庙全符卡收集");
-			giveCoins(fromGroup, toQQ, Autoreply.instence.diceImitate.sp13.size());
-		}
-
-		if (!ab.isArchievementGot(ArchievementBean.th14All) &&
-			isSetContains(gotSpell, Autoreply.instence.diceImitate.sp14)) {
-			ab.addArchievement(ArchievementBean.th14All);
-			Autoreply.sendMessage(fromGroup, toQQ, "获得成就:东方辉针城全符卡收集");
-			giveCoins(fromGroup, toQQ, Autoreply.instence.diceImitate.sp14.size());
-		}
-
-		if (!ab.isArchievementGot(ArchievementBean.th15All) &&
-			isSetContains(gotSpell, Autoreply.instence.diceImitate.sp15)) {
-			ab.addArchievement(ArchievementBean.th15All);
-			Autoreply.sendMessage(fromGroup, toQQ, "获得成就:东方绀珠传全符卡收集");
-			giveCoins(fromGroup, toQQ, Autoreply.instence.diceImitate.sp15.size());
-		}
-
-		if (!ab.isArchievementGot(ArchievementBean.th16All) &&
-			isSetContains(gotSpell, Autoreply.instence.diceImitate.sp16)) {
-			ab.addArchievement(ArchievementBean.th16All);
-			Autoreply.sendMessage(fromGroup, toQQ, "获得成就:东方天空璋全符卡收集");
-			giveCoins(fromGroup, toQQ, Autoreply.instence.diceImitate.sp16.size());
-		}
-
-		if (!ab.isArchievementGot(ArchievementBean.th17All) &&
-			isSetContains(gotSpell, Autoreply.instence.diceImitate.sp17)) {
-			ab.addArchievement(ArchievementBean.th17All);
-			Autoreply.sendMessage(fromGroup, toQQ, "获得成就:东方鬼形兽全符卡收集");
-			giveCoins(fromGroup, toQQ, Autoreply.instence.diceImitate.sp17.size());
-		}
-
-
-
-		if (!ab.isArchievementGot(ArchievementBean.JunkoSpells) &&
-			isSetContains(gotSpell, Autoreply.instence.diceImitate.JunkoSpells)) {
-			ab.addArchievement(ArchievementBean.JunkoSpells);
-			Autoreply.sendMessage(fromGroup, toQQ, "获得成就:纯化的神灵");
-			giveCoins(fromGroup, toQQ, 10);
-		}
-
-		if (!ab.isArchievementGot(ArchievementBean.yoyoko) &&
-			isSetContains(gotSpell, Autoreply.instence.diceImitate.yykSpells)) {
-			ab.addArchievement(ArchievementBean.yoyoko);
-			Autoreply.sendMessage(fromGroup, toQQ, "获得成就:Perfect Cherry Blossom");
-			giveCoins(fromGroup, toQQ, 10);
-		}
-		
-		if (!ab.isArchievementGot(ArchievementBean.sakura) &&
-			isSetContains(gotSpell, Autoreply.instence.diceImitate.sakura)) {
-			ab.addArchievement(ArchievementBean.sakura);
-			Autoreply.sendMessage(fromGroup, toQQ, "获得成就:樱花飞舞");
-			giveCoins(fromGroup, toQQ, 10);
-		}
-		
-
-		if (!ab.isArchievementGot(ArchievementBean.LilyWhite) &&
-			gotSpell.contains("春符「惊喜之春」")) {
-			ab.addArchievement(ArchievementBean.LilyWhite);
-			Autoreply.sendMessage(fromGroup, toQQ, "获得成就:春天来了");
-			giveCoins(fromGroup, toQQ, 5);
-		}
-		
-		if (!ab.isArchievementGot(ArchievementBean.MountainOfFaith) &&
-			(gotSpell.contains("「信仰之山」") || gotSpell.contains("「风神之神德」"))) {
-			ab.addArchievement(ArchievementBean.MountainOfFaith);
-			Autoreply.sendMessage(fromGroup, toQQ, "获得成就:信仰之山");
-			giveCoins(fromGroup, toQQ, 5);
-		}
-
-		if (!ab.isArchievementGot(ArchievementBean.threeHits) &&
-			gotSpell.contains("「红色的幻想乡」") &&
-			gotSpell.contains("神光「无忤为宗」") &&
-			gotSpell.contains("「纯粹的疯狂」")) {
-			ab.addArchievement(ArchievementBean.threeHits);
-			Autoreply.sendMessage(fromGroup, toQQ, "获得成就:素质三连");
-			giveCoins(fromGroup, toQQ, 5);
-		}
-
-
-
-
-
 		saveArchiConfig();
 	}
 
-	private void giveCoins(long group, long toQQ, int coins) {
-		Autoreply.sendMessage(group, 0, "~转账 " + coins + " " + Autoreply.instence.CC.at(toQQ));
-	}
 	private void backupData() {
         while (true) {
             try {
                 Thread.sleep(86400000);
-                File backup = new File(spellFile.getAbsolutePath() + ".bak" + System.currentTimeMillis());
-                FileOutputStream fos = new FileOutputStream(backup);
+                File backup1= new File(spellFile.getAbsolutePath() + ".bak" + System.currentTimeMillis());
+                FileOutputStream fos1 = new FileOutputStream(backup1);
+                OutputStreamWriter writer1 = new OutputStreamWriter(fos1, StandardCharsets.UTF_8);
+                writer1.write(new Gson().toJson(chm));
+                writer1.flush();
+                fos1.close();			
+				File ar=new File(archiFile.getAbsolutePath() + ".bak" + System.currentTimeMillis());
+				FileOutputStream fos = new FileOutputStream(ar);
                 OutputStreamWriter writer = new OutputStreamWriter(fos, StandardCharsets.UTF_8);
-                writer.write(new Gson().toJson(chm));
+                writer.write(new Gson().toJson(archiMap));
                 writer.flush();
-                fos.close();
+                fos.close();			
             } catch (Exception e) {
                 e.printStackTrace();
             }
@@ -263,6 +173,7 @@ public class SpellCollect {
             e.printStackTrace();
         }
     }
+
 	private void saveArchiConfig() {
         try {
             FileOutputStream fos = new FileOutputStream(archiFile);
