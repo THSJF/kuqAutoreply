@@ -102,38 +102,114 @@ public class SpellCollect {
 			ab = new ArchievementBean();
 			archiMap.put(String.valueOf(toQQ), ab);
 		}
-		if (!ab.isArchievementGot(ArchievementBean.th6All) && checkTh06All(gotSpell)) {
+		if (!ab.isArchievementGot(ArchievementBean.th6All) &&
+			isSetContains(gotSpell, Autoreply.instence.diceImitate.sp6)) {
 			ab.addArchievement(ArchievementBean.th6All);
-			Autoreply.sendMessage(fromGroup, toQQ, "th06Got");
+			Autoreply.sendMessage(fromGroup, toQQ, "获得成就:东方红魔乡全符卡收集");
+			giveCoins(fromGroup, toQQ, Autoreply.instence.diceImitate.sp6.size());
 		}
 
-		if (!ab.isArchievementGot(ArchievementBean.th10All) && checkTh10All(gotSpell)) {
+		if (!ab.isArchievementGot(ArchievementBean.th7All) &&
+			isSetContains(gotSpell, Autoreply.instence.diceImitate.sp7)) {
+			ab.addArchievement(ArchievementBean.th7All);
+			Autoreply.sendMessage(fromGroup, toQQ, "获得成就:东方妖妖梦全符卡收集");
+			giveCoins(fromGroup, toQQ, Autoreply.instence.diceImitate.sp7.size());
+		}
+
+		if (!ab.isArchievementGot(ArchievementBean.th8All) &&
+			isSetContains(gotSpell, Autoreply.instence.diceImitate.sp8)) {
+			ab.addArchievement(ArchievementBean.th8All);
+			Autoreply.sendMessage(fromGroup, toQQ, "获得成就:东方永夜抄符卡收集");
+			giveCoins(fromGroup, toQQ, Autoreply.instence.diceImitate.sp8.size());
+		}
+
+		if (!ab.isArchievementGot(ArchievementBean.th10All) &&
+			isSetContains(gotSpell, Autoreply.instence.diceImitate.sp10)) {
 			ab.addArchievement(ArchievementBean.th10All);
-			Autoreply.sendMessage(fromGroup, toQQ, "th10Got,coins:");
-			giveCoins(fromGroup, toQQ, 2);
+			Autoreply.sendMessage(fromGroup, toQQ, "获得成就:东方风神录全符卡收集");
+			giveCoins(fromGroup, toQQ, Autoreply.instence.diceImitate.sp10.size());
+		}
+
+		if (!ab.isArchievementGot(ArchievementBean.th11All) &&
+			isSetContains(gotSpell, Autoreply.instence.diceImitate.sp11)) {
+			ab.addArchievement(ArchievementBean.th11All);
+			Autoreply.sendMessage(fromGroup, toQQ, "获得成就:东方地灵殿全符卡收集");
+			giveCoins(fromGroup, toQQ, Autoreply.instence.diceImitate.sp11.size());
+		}
+
+		if (!ab.isArchievementGot(ArchievementBean.th12All) &&
+			isSetContains(gotSpell, Autoreply.instence.diceImitate.sp12)) {
+			ab.addArchievement(ArchievementBean.th12All);
+			Autoreply.sendMessage(fromGroup, toQQ, "获得成就:东方星莲船全符卡收集");
+			giveCoins(fromGroup, toQQ, Autoreply.instence.diceImitate.sp12.size());
+		}
+
+		if (!ab.isArchievementGot(ArchievementBean.th13All) &&
+			isSetContains(gotSpell, Autoreply.instence.diceImitate.sp13)) {
+			ab.addArchievement(ArchievementBean.th13All);
+			Autoreply.sendMessage(fromGroup, toQQ, "获得成就:东方神灵庙全符卡收集");
+			giveCoins(fromGroup, toQQ, Autoreply.instence.diceImitate.sp13.size());
+		}
+
+		if (!ab.isArchievementGot(ArchievementBean.th14All) &&
+			isSetContains(gotSpell, Autoreply.instence.diceImitate.sp14)) {
+			ab.addArchievement(ArchievementBean.th14All);
+			Autoreply.sendMessage(fromGroup, toQQ, "获得成就:东方辉针城全符卡收集");
+			giveCoins(fromGroup, toQQ, Autoreply.instence.diceImitate.sp14.size());
+		}
+
+		if (!ab.isArchievementGot(ArchievementBean.th15All) &&
+			isSetContains(gotSpell, Autoreply.instence.diceImitate.sp15)) {
+			ab.addArchievement(ArchievementBean.th15All);
+			Autoreply.sendMessage(fromGroup, toQQ, "获得成就:东方绀珠传全符卡收集");
+			giveCoins(fromGroup, toQQ, Autoreply.instence.diceImitate.sp15.size());
+		}
+
+		if (!ab.isArchievementGot(ArchievementBean.th16All) &&
+			isSetContains(gotSpell, Autoreply.instence.diceImitate.sp16)) {
+			ab.addArchievement(ArchievementBean.th16All);
+			Autoreply.sendMessage(fromGroup, toQQ, "获得成就:东方天空璋全符卡收集");
+			giveCoins(fromGroup, toQQ, Autoreply.instence.diceImitate.sp16.size());
+		}
+
+		if (!ab.isArchievementGot(ArchievementBean.th17All) &&
+			isSetContains(gotSpell, Autoreply.instence.diceImitate.sp17)) {
+			ab.addArchievement(ArchievementBean.th17All);
+			Autoreply.sendMessage(fromGroup, toQQ, "获得成就:东方鬼形兽全符卡收集");
+			giveCoins(fromGroup, toQQ, Autoreply.instence.diceImitate.sp17.size());
+		}
+
+		if (!ab.isArchievementGot(ArchievementBean.JunkoSpells) &&
+			isSetContains(gotSpell, Autoreply.instence.diceImitate.JunkoSpells)) {
+			ab.addArchievement(ArchievementBean.JunkoSpells);
+			Autoreply.sendMessage(fromGroup, toQQ, "获得成就:纯化的神灵");
+			giveCoins(fromGroup, toQQ, 10);
+		}
+
+		if (!ab.isArchievementGot(ArchievementBean.th6All) &&
+			isSetContains(gotSpell, Autoreply.instence.diceImitate.sp6)) {
+			ab.addArchievement(ArchievementBean.th6All);
+			Autoreply.sendMessage(fromGroup, toQQ, "获得成就:东方红魔乡全符卡收集");
+			giveCoins(fromGroup, toQQ, Autoreply.instence.diceImitate.sp6.size());
 		}
 		
-		if (!ab.isArchievementGot(ArchievementBean.JunkoSpells) && checkJunko(gotSpell)) {
+
+
+
+		if (!ab.isArchievementGot(ArchievementBean.JunkoSpells) &&
+			checkJunko(gotSpell)) {
 			ab.addArchievement(ArchievementBean.JunkoSpells);
 			Autoreply.sendMessage(fromGroup, toQQ, "junko,coins:");
 			giveCoins(fromGroup, toQQ, 2);
 		}
-		
+
 		saveArchiConfig();
-	}
-
-	private boolean checkTh06All(HashSet<String> gotSpell) {
-		return isSetContains(gotSpell, Autoreply.instence.diceImitate.sp6);
-	}
-
-	private boolean checkTh10All(HashSet<String> gotSpell) {
-		return isSetContains(gotSpell, Autoreply.instence.diceImitate.sp10);
 	}
 
 	private boolean checkJunko(HashSet<String> gotSpell) {
 		return isSetContains(gotSpell, Autoreply.instence.diceImitate.JunkoSpells);
 	}
-	
+
 
 
 	private void giveCoins(long group, long toQQ, int coins) {
