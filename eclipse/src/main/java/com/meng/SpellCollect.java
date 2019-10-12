@@ -111,10 +111,12 @@ public class SpellCollect {
 			ArchievementBean ab=archiMap.get(String.valueOf(fromQQ));
 			sb.append("你获得了:");
 			if (ab.isArchievementGot(ArchievementBean.th6All)) {
-				sb.append("\n");
+				sb.append("\n东方红魔乡全符卡收集");
 			}
 
-
+			if (ab.isArchievementGot(ArchievementBean.JunkoSpells)) {
+				sb.append("\n纯化的神灵");
+			}
 			Autoreply.sendMessage(fromGroup, 0, sb.toString());
 			return true;	
 		}
@@ -131,8 +133,8 @@ public class SpellCollect {
 		for (Archievement ac:archList) {
 			if (ac.getNewArchievement(ab, gotSpell)) {
 				ab.addArchievement(ac.archNum);
-				Autoreply.sendMessage(fromGroup, toQQ, "获得成就:" + ac.name + "条件:" + ac.describe);
-				Autoreply.sendMessage(fromGroup, 0, "~转账 " + ac.coins + " " + Autoreply.instence.CC.at(toQQ));		
+				Autoreply.sendMessage(fromGroup, toQQ, "获得成就:" + ac.name + "\n条件:" + ac.describe);
+				Autoreply.sendMessage(fromGroup, 0, "~addcoins " + ac.coins + " " + Autoreply.instence.CC.at(toQQ));		
 			}
 		}
 		saveArchiConfig();
