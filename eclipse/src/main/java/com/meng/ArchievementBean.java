@@ -22,6 +22,6 @@ public class ArchievementBean {
 	}
 
 	public void addArchievement(int Archievement) {
-		a1 = a1 & (1 << Archievement);
+		a1 = a1 | (1 << Archievement);
 	}
 }
