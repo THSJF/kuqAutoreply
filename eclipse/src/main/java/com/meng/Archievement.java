@@ -4,22 +4,25 @@ import java.util.*;
 public class Archievement {
 	public String name;
 	public int archNum;
-	public HashSet<String> spellsNeed;
+	public HashSet<String> spellsNeed=new HashSet<>();
 	public int coins;
+	public String describe;
 
-	public Archievement(String name, int archNum, int coins, String... spells) {
+	public Archievement(String name, String describe, int archNum, int coins, String... spells) {
 		this.name = name;
 		this.coins = coins;
 		this.archNum = archNum;
+		this.describe = describe;
 		for (String s:spells) {
 			spellsNeed.add(s);
 		}
 	}
 
-	public Archievement(String name, int archNum, int coins, HashSet<String> spells) {
+	public Archievement(String name, String describe, int archNum, int coins, HashSet<String> spells) {
 		this.name = name;
 		this.coins = coins;
 		this.archNum = archNum;
+		this.describe = describe;
 		spellsNeed = spells;
 	}
 

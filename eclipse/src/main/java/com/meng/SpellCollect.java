@@ -33,25 +33,23 @@ public class SpellCollect {
         }.getType();
         archiMap = new Gson().fromJson(Methods.readFileToString(Autoreply.appDirectory + "/properties/archievement.json"), type2);
 
-		archList.add(new Archievement("东方红魔乡全符卡收集", ArchievementBean.th6All, Autoreply.instence.diceImitate.sp6.size(), Autoreply.instence.diceImitate.sp6));
-		archList.add(new Archievement("东方妖妖梦全符卡收集", ArchievementBean.th7All, Autoreply.instence.diceImitate.sp7.size(), Autoreply.instence.diceImitate.sp7));
-		archList.add(new Archievement("东方永夜抄全符卡收集", ArchievementBean.th8All, Autoreply.instence.diceImitate.sp8.size(), Autoreply.instence.diceImitate.sp8));
-		archList.add(new Archievement("东方风神录全符卡收集", ArchievementBean.th10All, Autoreply.instence.diceImitate.sp10.size(), Autoreply.instence.diceImitate.sp10));
-		archList.add(new Archievement("东方地灵殿全符卡收集", ArchievementBean.th11All, Autoreply.instence.diceImitate.sp11.size(), Autoreply.instence.diceImitate.sp11));
-		archList.add(new Archievement("东方星莲船全符卡收集", ArchievementBean.th12All, Autoreply.instence.diceImitate.sp12.size(), Autoreply.instence.diceImitate.sp12));
-		archList.add(new Archievement("东方神灵庙全符卡收集", ArchievementBean.th13All, Autoreply.instence.diceImitate.sp13.size(), Autoreply.instence.diceImitate.sp13));
-		archList.add(new Archievement("东方辉针城全符卡收集", ArchievementBean.th14All, Autoreply.instence.diceImitate.sp14.size(), Autoreply.instence.diceImitate.sp14));
-		archList.add(new Archievement("东方绀珠传全符卡收集", ArchievementBean.th15All, Autoreply.instence.diceImitate.sp15.size(), Autoreply.instence.diceImitate.sp15));
-		archList.add(new Archievement("东方天空璋全符卡收集", ArchievementBean.th16All, Autoreply.instence.diceImitate.sp16.size(), Autoreply.instence.diceImitate.sp16));
-		archList.add(new Archievement("东方鬼形兽全符卡收集", ArchievementBean.th17All, Autoreply.instence.diceImitate.sp17.size(), Autoreply.instence.diceImitate.sp17));
-		archList.add(new Archievement("纯化的神灵", ArchievementBean.JunkoSpells, 10, Autoreply.instence.diceImitate.JunkoSpells));
-		archList.add(new Archievement("Perfect Cherry Blossom", ArchievementBean.yoyoko, 10, Autoreply.instence.diceImitate.yykSpells));
-		archList.add(new Archievement("樱花飞舞", ArchievementBean.sakura, 15, Autoreply.instence.diceImitate.sakura));
-		archList.add(new Archievement("春天来了", ArchievementBean.LilyWhite, 10, "春符「惊春之喜」"));
-		archList.add(new Archievement("素质三连", ArchievementBean.threeHits, 5, "「红色的幻想乡」", "神光「无忤为宗」", "「纯粹的疯狂」"));
-		archList.add(new Archievement("信仰之山", ArchievementBean.MountainOfFaith, 5, "「信仰之山」"));
-
-
+		archList.add(new Archievement("东方红魔乡全符卡收集", "收集该作全部符卡", ArchievementBean.th6All, Autoreply.instence.diceImitate.sp6.size(), Autoreply.instence.diceImitate.sp6));
+		archList.add(new Archievement("东方妖妖梦全符卡收集", "收集该作全部符卡",  ArchievementBean.th7All, Autoreply.instence.diceImitate.sp7.size(), Autoreply.instence.diceImitate.sp7));
+		archList.add(new Archievement("东方永夜抄全符卡收集", "收集该作全部符卡",  ArchievementBean.th8All, Autoreply.instence.diceImitate.sp8.size(), Autoreply.instence.diceImitate.sp8));
+		archList.add(new Archievement("东方风神录全符卡收集", "收集该作全部符卡",  ArchievementBean.th10All, Autoreply.instence.diceImitate.sp10.size(), Autoreply.instence.diceImitate.sp10));
+		archList.add(new Archievement("东方地灵殿全符卡收集", "收集该作全部符卡",  ArchievementBean.th11All, Autoreply.instence.diceImitate.sp11.size(), Autoreply.instence.diceImitate.sp11));
+		archList.add(new Archievement("东方星莲船全符卡收集", "收集该作全部符卡",  ArchievementBean.th12All, Autoreply.instence.diceImitate.sp12.size(), Autoreply.instence.diceImitate.sp12));
+		archList.add(new Archievement("东方神灵庙全符卡收集", "收集该作全部符卡",  ArchievementBean.th13All, Autoreply.instence.diceImitate.sp13.size(), Autoreply.instence.diceImitate.sp13));
+		archList.add(new Archievement("东方辉针城全符卡收集", "收集该作全部符卡",  ArchievementBean.th14All, Autoreply.instence.diceImitate.sp14.size(), Autoreply.instence.diceImitate.sp14));
+		archList.add(new Archievement("东方绀珠传全符卡收集", "收集该作全部符卡",  ArchievementBean.th15All, Autoreply.instence.diceImitate.sp15.size(), Autoreply.instence.diceImitate.sp15));
+		archList.add(new Archievement("东方天空璋全符卡收集", "收集该作全部符卡",  ArchievementBean.th16All, Autoreply.instence.diceImitate.sp16.size(), Autoreply.instence.diceImitate.sp16));
+		archList.add(new Archievement("东方鬼形兽全符卡收集", "收集该作全部符卡",  ArchievementBean.th17All, Autoreply.instence.diceImitate.sp17.size(), Autoreply.instence.diceImitate.sp17));
+		archList.add(new Archievement("纯化的神灵", "收集Lunatic难度纯狐所有符卡", ArchievementBean.JunkoSpells, 10, Autoreply.instence.diceImitate.JunkoSpells));
+		archList.add(new Archievement("Perfect Cherry Blossom", "收集Lunatic难度西行寺幽幽子所有符卡", ArchievementBean.yoyoko, 10, Autoreply.instence.diceImitate.yykSpells));
+		archList.add(new Archievement("樱花飞舞", "收集樱符「完全墨染的樱花 -封印-」,樱符「完全墨染的樱花 -亡我-」,樱符「完全墨染的樱花 -春眠-」,樱符「完全墨染的樱花 -开花-」", ArchievementBean.sakura, 15, Autoreply.instence.diceImitate.sakura));
+		archList.add(new Archievement("春天来了", "获得春符「惊春之喜」", ArchievementBean.LilyWhite, 10, "春符「惊春之喜」"));
+		archList.add(new Archievement("素质三连", "收集「红色的幻想乡」,神光「无忤为宗」,「纯粹的疯狂」", ArchievementBean.threeHits, 5, "「红色的幻想乡」", "神光「无忤为宗」", "「纯粹的疯狂」"));
+		archList.add(new Archievement("信仰之山", "获得「信仰之山」" , ArchievementBean.MountainOfFaith, 5, "「信仰之山」"));
 
 
 
@@ -133,7 +131,7 @@ public class SpellCollect {
 		for (Archievement ac:archList) {
 			if (ac.getNewArchievement(ab, gotSpell)) {
 				ab.addArchievement(ac.archNum);
-				Autoreply.sendMessage(fromGroup, toQQ, "获得成就:" + ac.name);
+				Autoreply.sendMessage(fromGroup, toQQ, "获得成就:" + ac.name + "条件:" + ac.describe);
 				Autoreply.sendMessage(fromGroup, 0, "~转账 " + ac.coins + " " + Autoreply.instence.CC.at(toQQ));		
 			}
 		}
