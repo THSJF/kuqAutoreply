@@ -21,7 +21,8 @@ public class ArchievementBean {
 	public static final int threeHits=15;
 	public static final int yoyoko=16;
 	public static final int sakura=17;
-	
+	public static final int ice=18;
+	public static final int physics=19;
 	
 	
 	public boolean isArchievementGot(int archievement) {
