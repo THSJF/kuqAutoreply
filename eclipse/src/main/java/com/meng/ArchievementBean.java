@@ -39,6 +39,7 @@ public class ArchievementBean {
 	public static final int shimiyomaru=32;
 	public static final int sanae=33;
 	public static final int moon=34;
+	public static final int memory=35;
 	
 	public boolean isArchievementGot(int archievement) {
 		if (archievement <= 31){
