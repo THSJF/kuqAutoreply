@@ -50,6 +50,7 @@ public class SpellCollect {
 		archList.add(new Archievement("春天来了", "获得春符「惊春之喜」", ArchievementBean.LilyWhite, 10, "春符「惊春之喜」"));
 		archList.add(new Archievement("素质三连", "收集「红色的幻想乡」,神光「无忤为宗」,「纯粹的疯狂」", ArchievementBean.threeHits, 5, "「红色的幻想乡」", "神光「无忤为宗」", "「纯粹的疯狂」"));
 		archList.add(new Archievement("信仰之山", "获得「信仰之山」" , ArchievementBean.MountainOfFaith, 5, "「信仰之山」"));
+		archList.add(new Archievement("极冰盛宴", "获得冰符「冰瀑」,雹符「冰雹暴风」,冻符「完美冻结」,雪符「钻石风暴」,冰符「冰袭方阵」,冰符「Ultimate Blizzard」" , ArchievementBean.MountainOfFaith, 5, "冰符「冰瀑」", "雹符「冰雹暴风」", "冻符「完美冻结」", "雪符「钻石风暴」", "冰符「冰袭方阵」", "冰符「Ultimate Blizzard」"));
 
 
 

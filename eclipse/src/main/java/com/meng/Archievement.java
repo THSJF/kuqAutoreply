@@ -44,12 +44,12 @@ public class Archievement {
 	}
 
 	private boolean isContains(String[] gotSpells, Set<String> spNeed) {  
-		for (String s:spNeed) {
-			if (isContains(gotSpells, s)) {
-				return true;
+		for (String need:spNeed) {
+			if (!isContains(gotSpells, need)) {
+				return false;
 			}
 		}
-		return false;  
+		return true;  
 	}
 
 	private boolean isContains(String[] aar, String s) {
