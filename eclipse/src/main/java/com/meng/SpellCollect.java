@@ -13,6 +13,7 @@ import java.util.concurrent.*;
 public class SpellCollect {
 	private ConcurrentHashMap<String,HashSet<String>> chm=new ConcurrentHashMap<>();
 	private ConcurrentHashMap<String,ArchievementBean> archiMap=new ConcurrentHashMap<>();
+	private HashSet<Long> today=new HashSet<>();
 	private File archiFile;
 	private File spellFile;
 	private ArrayList<Archievement> archList=new ArrayList<>();
@@ -77,6 +78,23 @@ public class SpellCollect {
 					backupData();
 				}
 			});
+		Autoreply.instence.threadPool.execute(new Runnable(){
+
+				@Override
+				public void run(){
+					while (true) {
+						Calendar c = Calendar.getInstance();
+						if (c.get(Calendar.MINUTE) == 0 && c.get(Calendar.HOUR_OF_DAY) == 0) {
+							today.clear();
+						}
+						try {
+							Thread.sleep(30000);
+						} catch (InterruptedException e) {
+							e.printStackTrace();
+						}
+					}
+				}
+			});
 	}
 
 	public boolean check(long fromGroup, long fromQQ, String msg) {
@@ -104,12 +122,35 @@ public class SpellCollect {
 				sb.append("\n").append(s);
 			}
 			saveConfig();
-			checkArchievement(fromGroup, fromQQ, chan.get(0), tmpSet);
+			checkArchievement(fromGroup, chan.get(0), tmpSet);
 			if (sb.toString().length() > 100){
 				return true;
 			}
 			Autoreply.sendMessage(fromGroup, 0, sb.toString());
 		}
+
+		if (msg.equals("抽卡")){
+			if (today.contains(fromQQ)){
+				Autoreply.sendMessage(fromGroup, 0, "你今天已经抽过啦");
+				return true;
+			}
+			HashSet<String> tmpSet=chm.get(String.valueOf(fromQQ));
+			if (tmpSet == null) {
+				tmpSet = new HashSet<String>();
+				chm.put(String.valueOf(fromQQ), tmpSet);
+			}
+			Random r=new Random();
+			StringBuilder sb=new StringBuilder("你获得了:");
+			for (int i=0;i < 5;++i) {
+				String s=DiceImitate.spells[r.nextInt(DiceImitate.spells.length)];
+				tmpSet.add(s);
+				sb.append("\n").append(s);
+			}
+			saveConfig();
+			checkArchievement(fromGroup, fromQQ, tmpSet);
+			return true;
+		}
+
 		if (msg.equals("查看符卡")) {
 			StringBuilder sb=new StringBuilder();
 			HashSet<String> gtdspl=chm.get(String.valueOf(fromQQ));
@@ -135,7 +176,7 @@ public class SpellCollect {
 		}
 
 		if (msg.equals("查看成就")) {
-			StringBuilder sb=new StringBuilder();
+			StringBuilder sb=new StringBuilder("列表:");
 			ArchievementBean ab=archiMap.get(String.valueOf(fromQQ));
 			if (ab == null){
 				Autoreply.sendMessage(fromGroup, 0, "你没有获得成就");
@@ -161,7 +202,7 @@ public class SpellCollect {
 		return false;
 	}
 
-	private void checkArchievement(long fromGroup, long fromQQ, long toQQ, HashSet<String> gotSpell) {
+	private void checkArchievement(long fromGroup, long toQQ, HashSet<String> gotSpell) {
 		ArchievementBean ab=archiMap.get(String.valueOf(toQQ));
 		if (ab == null) {
 			ab = new ArchievementBean();
