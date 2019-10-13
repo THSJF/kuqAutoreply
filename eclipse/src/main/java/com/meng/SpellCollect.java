@@ -108,7 +108,7 @@ public class SpellCollect {
 				if (gtdspl.contains(s)) {
 					sb.append("\n").append(s);
 					++i;
-					if (i > 70){
+					if (i > 20){
 						Autoreply.sendMessage(0, fromQQ, sb.toString());
 						sb.setLength(0);
 						i = 0;
@@ -145,8 +145,7 @@ public class SpellCollect {
 		for (Archievement ac:archList) {
 			if (ac.getNewArchievement(ab, gotSpell)) {
 				ab.addArchievement(ac.archNum);
-				Autoreply.sendMessage(fromGroup, toQQ, "获得成就:" + ac.name + "\n条件:" + ac.describe);
-				Autoreply.sendMessage(fromGroup, 0, "~addcoins " + ac.coins + " " + Autoreply.instence.CC.at(toQQ));		
+				Autoreply.sendMessage(fromGroup, toQQ, "获得成就:" + ac.name + "\n~addcoins " + ac.coins + " " + Autoreply.instence.CC.at(toQQ) + "\n条件:" + ac.describe);	
 			}
 		}
 		saveArchiConfig();
