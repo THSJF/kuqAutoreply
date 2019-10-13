@@ -69,6 +69,8 @@ public class SpellCollect {
 		archList.add(new Archievement("信仰是为了虚幻之人", "获得东方风神录中东风谷早苗Lunatic所有符卡", ArchievementBean.sanae, 16, "秘术「一脉相传的弹幕」", "奇迹「客星辉煌之夜」", "开海「摩西之奇迹」", "准备「召请建御名方神」", "大奇迹「八坂之神风」"));
 		archList.add(new Archievement("赏月", "获得狱符「地狱之蚀」,「阿波罗捏造说」,月「月狂冲击」", ArchievementBean.moon, 8, "狱符「地狱之蚀」", "「阿波罗捏造说」", "月「月狂冲击」"));
 		archList.add(new Archievement("恐怖的回忆", "获得古明地觉所有复制卡", ArchievementBean.memory, 32, DiceImitate.memory));
+		archList.add(new Archievement(" ", "获得    所有符卡", ArchievementBean.koishi, 20, "表象「先祖托梦」", "表象「弹幕偏执症」", "本能「本我的解放」", "抑制「超我」", "反应「妖怪测谎机」", "潜意识「弹幕的墨迹测验」", "复燃「恋爱的埋火」", "深层「潜意识的基因」", "「被厌恶者的哲学」", "「Subterranean Rose」"));
+		archList.add(new Archievement("■■■", "获得■■■所有符卡", ArchievementBean.rumia, 16, "月符「月光」", "夜符「夜雀」", "暗符「境界线」"));
 
 
 
