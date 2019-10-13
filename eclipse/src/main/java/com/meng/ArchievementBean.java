@@ -33,7 +33,10 @@ public class ArchievementBean {
 	public static final int piaoyilunyi=26;
 	public static final int fourSeasons=27;
 	public static final int hiddenBugInFourSpells=28;
-	
+	public static final int _9961=29;
+	public static final int fixBulletFixMiss=30;
+	public static final int noSupport=31;
+	public static final int shimiyomaru=32;
 	public static final int sanae=33;
 	public static final int moon=34;
 	

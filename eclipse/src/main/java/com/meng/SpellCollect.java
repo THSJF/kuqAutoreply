@@ -33,17 +33,17 @@ public class SpellCollect {
         }.getType();
         archiMap = new Gson().fromJson(Methods.readFileToString(Autoreply.appDirectory + "/properties/archievement.json"), type2);
 
-		archList.add(new Archievement("东方红魔乡全符卡收集", "收集该作全部符卡", ArchievementBean.th6All, DiceImitate.sp6.size(), DiceImitate.sp6));
-		archList.add(new Archievement("东方妖妖梦全符卡收集", "收集该作全部符卡",  ArchievementBean.th7All, DiceImitate.sp7.size(), DiceImitate.sp7));
-		archList.add(new Archievement("东方永夜抄全符卡收集", "收集lastspell和lastword外全部符卡",  ArchievementBean.th8All, DiceImitate.sp8.size(), DiceImitate.sp8));
-		archList.add(new Archievement("东方风神录全符卡收集", "收集该作全部符卡",  ArchievementBean.th10All, DiceImitate.sp10.size(), DiceImitate.sp10));
-		archList.add(new Archievement("东方地灵殿全符卡收集", "收集该作全部符卡",  ArchievementBean.th11All, DiceImitate.sp11.size(), DiceImitate.sp11));
-		archList.add(new Archievement("东方星莲船全符卡收集", "收集该作全部符卡",  ArchievementBean.th12All, DiceImitate.sp12.size(), DiceImitate.sp12));
-		archList.add(new Archievement("东方神灵庙全符卡收集", "收集overdrive外全部符卡",  ArchievementBean.th13All, DiceImitate.sp13.size(), DiceImitate.sp13));
-		archList.add(new Archievement("东方辉针城全符卡收集", "收集该作全部符卡",  ArchievementBean.th14All, DiceImitate.sp14.size(), DiceImitate.sp14));
-		archList.add(new Archievement("东方绀珠传全符卡收集", "收集该作全部符卡",  ArchievementBean.th15All, DiceImitate.sp15.size(), DiceImitate.sp15));
-		archList.add(new Archievement("东方天空璋全符卡收集", "收集该作全部符卡",  ArchievementBean.th16All, DiceImitate.sp16.size(), DiceImitate.sp16));
-		archList.add(new Archievement("东方鬼形兽全符卡收集", "收集该作全部符卡",  ArchievementBean.th17All, DiceImitate.sp17.size(), DiceImitate.sp17));
+		archList.add(new Archievement("东方红魔乡全卡", "收集该作全部符卡", ArchievementBean.th6All, DiceImitate.sp6.size(), DiceImitate.sp6));
+		archList.add(new Archievement("东方妖妖梦全卡", "收集该作全部符卡",  ArchievementBean.th7All, DiceImitate.sp7.size(), DiceImitate.sp7));
+		archList.add(new Archievement("东方永夜抄全卡", "收集lastspell和lastword外全部符卡",  ArchievementBean.th8All, DiceImitate.sp8.size(), DiceImitate.sp8));
+		archList.add(new Archievement("东方风神录全卡", "收集该作全部符卡",  ArchievementBean.th10All, DiceImitate.sp10.size(), DiceImitate.sp10));
+		archList.add(new Archievement("东方地灵殿全卡", "收集该作全部符卡",  ArchievementBean.th11All, DiceImitate.sp11.size(), DiceImitate.sp11));
+		archList.add(new Archievement("东方星莲船全卡", "收集该作全部符卡",  ArchievementBean.th12All, DiceImitate.sp12.size(), DiceImitate.sp12));
+		archList.add(new Archievement("东方神灵庙全卡", "收集overdrive外全部符卡",  ArchievementBean.th13All, DiceImitate.sp13.size(), DiceImitate.sp13));
+		archList.add(new Archievement("东方辉针城全卡", "收集该作全部符卡",  ArchievementBean.th14All, DiceImitate.sp14.size(), DiceImitate.sp14));
+		archList.add(new Archievement("东方绀珠传全卡", "收集该作全部符卡",  ArchievementBean.th15All, DiceImitate.sp15.size(), DiceImitate.sp15));
+		archList.add(new Archievement("东方天空璋全卡", "收集该作全部符卡",  ArchievementBean.th16All, DiceImitate.sp16.size(), DiceImitate.sp16));
+		archList.add(new Archievement("东方鬼形兽全卡", "收集该作全部符卡",  ArchievementBean.th17All, DiceImitate.sp17.size(), DiceImitate.sp17));
 		archList.add(new Archievement("纯化的神灵", "收集Lunatic难度纯狐所有符卡", ArchievementBean.JunkoSpells, 10, "「掌上的纯光」", "「杀意的百合」", "「现代的神灵界」", "「战栗的寒冷之星」", "「纯粹的疯狂」", "「地上秽的纯化」", "纯符「纯粹的弹幕地狱」"));
 		archList.add(new Archievement("Perfect Cherry Blossom", "收集Lunatic难度西行寺幽幽子所有符卡", ArchievementBean.yoyoko, 10, "亡乡「亡我乡 -自尽-」", "亡舞「生者必灭之理 -魔境-」",  "华灵「蝶幻」", "幽曲「埋骨于弘川 -神灵-」", "樱符「完全墨染的樱花 -开花-」", "「反魂蝶 -八分咲-」"));
 		archList.add(new Archievement("樱花飞舞", "收集樱符「完全墨染的樱花 -封印-」,樱符「完全墨染的樱花 -亡我-」,樱符「完全墨染的樱花 -春眠-」,樱符「完全墨染的樱花 -开花-」", ArchievementBean.sakura, 15, "樱符「完全墨染的樱花 -封印-」", "樱符「完全墨染的樱花 -亡我-」", "樱符「完全墨染的樱花 -春眠-」", "樱符「完全墨染的樱花 -开花-」"));
@@ -61,8 +61,15 @@ public class SpellCollect {
 		archList.add(new Archievement("漂移轮椅", "获得「里·Crazy Fall Wind」", ArchievementBean.piaoyilunyi, 9, "「里·Crazy Fall Wind」"));
 		archList.add(new Archievement("四个季节", "获得「里·Breeze Cherry Blossom」,「里·Perfect Summer Ice」,「里·Crazy Fall Wind」,「里·Extreme Winter」", ArchievementBean.fourSeasons, 9, "「里·Breeze Cherry Blossom」", "「里·Perfect Summer Ice」", "「里·Crazy Fall Wind」", "「里·Extreme Winter」"));
 		archList.add(new Archievement("Hidden Bugs in Four Spells", "获得尽符「血腥的深山谋杀」,笹符「七夕星祭」,冥加「在你背后」,舞符「背后之祭」", ArchievementBean.hiddenBugInFourSpells, 16, "尽符「血腥的深山谋杀」", "笹符「七夕星祭」", "冥加「在你背后」", "舞符「背后之祭」"));
+		archList.add(new Archievement("99.61%", "获得所有6面Lunatic终符", ArchievementBean._9961, 16, "「红色的幻想乡」", "「反魂蝶 -八分咲-」", "秘术「天文密葬法」", "神宝「蓬莱的玉枝　-梦色之乡-」", "「风神之神德」", "「地底太阳」", "飞钵「传说的飞空圆盘」", "「新生的神灵」", "「七个一寸法师」", "纯符「纯粹的弹幕地狱」", "「里·Breeze Cherry Blossom」", "「里·Perfect Summer Ice」", "「里·Crazy Fall Wind」", "「里·Extreme Winter」", "「Idola Diabolus」"));
+		archList.add(new Archievement("固定弹固定撞", "获得紫奥义「弹幕结界」", ArchievementBean.fixBulletFixMiss, 4, "紫奥义「弹幕结界」"));
+		archList.add(new Archievement("无人气", "获得叶符「狂舞的落叶」", ArchievementBean.noSupport, 4, "叶符「狂舞的落叶」"));
+		archList.add(new Archievement("辉光之针的小人族", "获得少名针妙丸的所有Lunatic符卡", ArchievementBean.shimiyomaru, 16, "小弹「小人的荆棘路」", "小槌「变得更大吧」", "妖剑「辉针剑」", "小槌「你给我变大吧」", "「进击的小人」", "「一寸之壁」", "「七个一寸法师」"));
 		archList.add(new Archievement("信仰是为了虚幻之人", "获得东方风神录中东风谷早苗Lunatic所有符卡", ArchievementBean.sanae, 16, "秘术「一脉相传的弹幕」", "奇迹「客星辉煌之夜」", "开海「摩西之奇迹」", "准备「召请建御名方神」", "大奇迹「八坂之神风」"));
 		archList.add(new Archievement("赏月", "获得狱符「地狱之蚀」,「阿波罗捏造说」,月「月狂冲击」", ArchievementBean.moon, 8, "狱符「地狱之蚀」", "「阿波罗捏造说」", "月「月狂冲击」"));
+
+
+
 
 		Autoreply.instence.threadPool.execute(new Runnable() {
 				@Override
@@ -128,12 +135,27 @@ public class SpellCollect {
 		}
 
 		if (msg.equals("查看成就")) {
-			StringBuilder sb=new StringBuilder("你获得了:");
+			StringBuilder sb=new StringBuilder();
 			ArchievementBean ab=archiMap.get(String.valueOf(fromQQ));
+			if (ab == null){
+				Autoreply.sendMessage(fromGroup, 0, "你没有获得成就");
+				return true;
+			}
 			for (Archievement ac:archList){
-				sb.append("\n").append(ac.name).append(ab.isArchievementGot(ac.archNum) ?" 已获得": " 未获得");
+				sb.append("\n").append(ac.name).append(ab.isArchievementGot(ac.archNum) ?": 已获得 ": ": 未获得");//.append(" 奖励:").append(ac.coins).append("幻币");
 			}
 			Autoreply.sendMessage(fromGroup, 0, sb.toString());
+			return true;	
+		}
+
+		if (msg.startsWith("成就条件 ")) {
+			String archName=msg.substring(5);
+			for (Archievement ac:archList){
+				if (archName.equals(ac.name)){
+					Autoreply.sendMessage(fromGroup, 0, ac.describe);
+					return true;
+				}
+			}
 			return true;	
 		}
 		return false;
