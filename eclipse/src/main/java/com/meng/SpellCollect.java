@@ -130,6 +130,41 @@ public class SpellCollect {
 			Autoreply.sendMessage(fromGroup, 0, sb.toString());
 		}
 
+		if (msg.startsWith("幻币抽卡 ")){
+			try{
+				int restCoins=Autoreply.instence.coinManager.getCoinsCount(fromGroup);
+				int useCoins=Integer.parseInt(msg.substring(5));
+				if (useCoins > restCoins){
+					Autoreply.sendMessage(fromGroup, 0, "本地幻币不足");
+					return true;
+				}	
+				HashSet<String> gotSpellsSet=chm.get(String.valueOf(fromQQ));
+				if (gotSpellsSet == null) {
+					gotSpellsSet = new HashSet<String>();
+					chm.put(String.valueOf(fromQQ), gotSpellsSet);
+				}
+				Random r=new Random();
+				StringBuilder sb=new StringBuilder("你获得了:");
+				for (int i=0;i < useCoins * 3;++i) {
+					String s=DiceImitate.spells[r.nextInt(DiceImitate.spells.length)];
+					gotSpellsSet.add(s);
+					sb.append("\n").append(s);
+				}
+				saveConfig();
+				Autoreply.instence.coinManager.subCoins(fromQQ, useCoins);
+				checkArchievement(fromGroup, fromQQ, gotSpellsSet);
+				if (sb.toString().length() > 200){
+					Autoreply.sendMessage(fromGroup, fromQQ, "内容过长,不详细说明获得的符卡，但记录已保存");
+					return true;
+				}
+				Autoreply.sendMessage(fromGroup, 0, sb.toString());	
+			}catch (Exception e){
+				Autoreply.sendMessage(fromGroup, 0, e.toString());
+				return true;
+			}
+			return true;
+		}
+
 		if (msg.equals("抽卡")){
 			if (today.contains(fromQQ)){
 				Autoreply.sendMessage(fromGroup, 0, "你今天已经抽过啦");
@@ -228,7 +263,7 @@ public class SpellCollect {
 		for (Archievement ac:archList) {
 			if (ac.getNewArchievement(ab, gotSpell)) {
 				ab.addArchievement(ac.archNum);
-				Autoreply.sendMessage(fromGroup, toQQ, "获得成就:" + ac.name + "获得奖励:" + ac.coins + "\n条件:" + ac.describe);	
+				Autoreply.sendMessage(fromGroup, toQQ, "获得成就:" + ac.name + "\n获得奖励:" + ac.coins + "\n条件:" + ac.describe);	
 				Autoreply.instence.coinManager.addCoins(toQQ, ac.coins);
 			}
 		}
