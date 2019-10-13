@@ -103,12 +103,19 @@ public class SpellCollect {
 				return true;
 			}
 			sb.append("你获得了:");
+			int i=0;
 			for (String s:DiceImitate.spells) {
 				if (gtdspl.contains(s)) {
 					sb.append("\n").append(s);
+					++i;
+					if (i > 70){
+						Autoreply.sendMessage(0, fromQQ, sb.toString());
+						sb.setLength(0);
+					}
 				}
 			}
-			Autoreply.sendMessage(fromGroup, 0, sb.toString());
+			Autoreply.sendMessage(0, fromQQ, sb.toString());
+			Autoreply.sendMessage(fromGroup, 0, "已私聊发送");
 			return true;	
 		}
 
@@ -116,12 +123,10 @@ public class SpellCollect {
 			StringBuilder sb=new StringBuilder();
 			ArchievementBean ab=archiMap.get(String.valueOf(fromQQ));
 			sb.append("你获得了:");
-			if (ab.isArchievementGot(ArchievementBean.th6All)) {
-				sb.append("\n东方红魔乡全符卡收集");
-			}
-
-			if (ab.isArchievementGot(ArchievementBean.JunkoSpells)) {
-				sb.append("\n纯化的神灵");
+			for (Archievement ac:archList){
+				if (ab.isArchievementGot(ac.archNum)){
+					sb.append("\n").append(ac.name);
+				}
 			}
 			Autoreply.sendMessage(fromGroup, 0, sb.toString());
 			return true;	
