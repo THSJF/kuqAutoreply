@@ -30,7 +30,9 @@ public class ArchievementBean {
 	public static final int moshenfusong=23;
 	public static final int cat=24;
 	public static final int time=25;
-
+	public static final int piaoyilunyi=26;
+	public static final int fourSeasons=27;
+	public static final int hiddenBugInFourSpells=28;
 
 	public boolean isArchievementGot(int archievement) {
 		if (archievement <= 31){
