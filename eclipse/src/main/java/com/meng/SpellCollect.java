@@ -128,18 +128,14 @@ public class SpellCollect {
 		}
 
 		if (msg.equals("查看成就")) {
-			StringBuilder sb=new StringBuilder();
+			StringBuilder sb=new StringBuilder("你获得了:");
 			ArchievementBean ab=archiMap.get(String.valueOf(fromQQ));
-			sb.append("你获得了:");
 			for (Archievement ac:archList){
-				if (ab.isArchievementGot(ac.archNum)){
-					sb.append("\n").append(ac.name);
-				}
+				sb.append("\n").append(ac.name).append(ab.isArchievementGot(ac.archNum) ?" 已获得": " 未获得");
 			}
 			Autoreply.sendMessage(fromGroup, 0, sb.toString());
 			return true;	
 		}
-
 		return false;
 	}
 
