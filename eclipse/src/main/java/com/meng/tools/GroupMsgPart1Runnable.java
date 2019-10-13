@@ -53,9 +53,9 @@ public class GroupMsgPart1Runnable implements Runnable {
                 }
             }
         }
-		if(msg.equals("-help")){
-		  sendMessage(fromGroup,0,Autoreply.instence.adminMessageProcessor.userPermission.toString());
-		  return;
+		if (msg.equals("-help")){
+			sendMessage(fromGroup, 0, Autoreply.instence.adminMessageProcessor.userPermission.toString());
+			return;
 		}
         if (Autoreply.instence.fph.check(fromQQ, fromGroup, msg, msgId, imageFiles)) {
             return;
@@ -84,6 +84,67 @@ public class GroupMsgPart1Runnable implements Runnable {
         if (Autoreply.instence.botOff.contains(fromGroup)) {
             return;
         }
+
+		if (msg.startsWith("-int ")) {
+			try {
+				String[] args=msg.split(" ", 4);
+				int a1=Integer.parseInt(args[1]);
+				int a2=Integer.parseInt(args[3]);
+				String resu="failed";
+				switch (args[2]) {
+					case "+":
+						resu = "result:" + (a1 + a2);
+						break;
+					case "-":
+						resu = "result:" + (a1 - a2);
+						break;
+					case "*":
+						resu = "result:" + (a1 * a2);
+						break;
+					case "/":
+						resu = "result:" + (a1 / a2);
+						break;
+					case ">>":
+						resu = "result:" + (a1 >> a2);
+						break;
+					case ">>>":
+						resu = "result:" + (a1 >>> a2);
+						break;
+					case "<<":
+						resu = "result:" + (a1 << a2);
+						break;
+					case "^":
+						resu = "result:" + (a1 ^ a2);
+						break;
+					case "%":
+						resu = "result:" + (a1 % a2);
+						break;
+					case "|":
+						resu = "result:" + (a1 | a2);
+						break;
+					case "&amp;"://&
+						resu = "result:" + (a1 & a2);
+						break;
+					case "~":
+						resu = "result:" + (~a1);
+						break;
+				}
+				Autoreply.sendMessage(fromGroup, 0, resu);
+			} catch (Exception e) {
+				Autoreply.sendMessage(fromGroup, 0, e.toString());
+			}
+			return;
+		}
+		if (msg.startsWith("-uint ")) {
+			String[] args=msg.split("\\s", 2);
+			try {
+				Autoreply.sendMessage(fromGroup, 0, (Integer.parseInt(args[1]) & 0x00000000ffffffffL) + "");
+			} catch (Exception e) {
+				Autoreply.sendMessage(fromGroup, 0, e.toString());
+			}
+			return;
+		}
+
         if (Autoreply.instence.messageMap.get(fromQQ) == null) {
             Autoreply.instence.messageMap.put(fromQQ, new MessageSender(fromGroup, fromQQ, msg, System.currentTimeMillis(), msgId, imageFiles));
         }

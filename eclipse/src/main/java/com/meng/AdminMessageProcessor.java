@@ -68,6 +68,11 @@ public class AdminMessageProcessor {
 		userPermission.put(".live", "正在直播列表");
 		userPermission.put("-int [int] [+|-|*|/|<<|>>|>>>|%|^|&||] [int]", "int运算(溢出)");
 		userPermission.put("-uint [int]", "int字节转uint(boom)");
+		userPermission.put("抽卡","抽卡");
+		userPermission.put("给鬼人正邪master幻币转账","抽卡，1币3卡");
+		userPermission.put("查看成就","查看成就列表");
+		userPermission.put("查看符卡","查看已获得的符卡,会刷屏，少用");
+		userPermission.put("成就条件 [成就名]","查看获得条件");
 
 		masterPermission.putAll(adminPermission);
 		masterPermission.putAll(userPermission);
@@ -478,66 +483,6 @@ public class AdminMessageProcessor {
 				Autoreply.sendMessage(fromGroup, 0, adminPermission.toString());
 				return true;
 			}
-			if (msg.startsWith("-int ")) {
-				try {
-					String[] args=msg.split(" ", 4);
-					int a1=Integer.parseInt(args[1]);
-					int a2=Integer.parseInt(args[3]);
-					String resu="failed";
-					switch (args[2]) {
-						case "+":
-							resu = "result:" + (a1 + a2);
-							break;
-						case "-":
-							resu = "result:" + (a1 - a2);
-							break;
-						case "*":
-							resu = "result:" + (a1 * a2);
-							break;
-						case "/":
-							resu = "result:" + (a1 / a2);
-							break;
-						case ">>":
-							resu = "result:" + (a1 >> a2);
-							break;
-						case ">>>":
-							resu = "result:" + (a1 >>> a2);
-							break;
-						case "<<":
-							resu = "result:" + (a1 << a2);
-							break;
-						case "^":
-							resu = "result:" + (a1 ^ a2);
-							break;
-						case "%":
-							resu = "result:" + (a1 % a2);
-							break;
-						case "|":
-							resu = "result:" + (a1 | a2);
-							break;
-						case "&amp;"://&
-							resu = "result:" + (a1 & a2);
-							break;
-						case "~":
-							resu = "result:" + (~a1);
-							break;
-					}
-					Autoreply.sendMessage(fromGroup, 0, resu);
-				} catch (Exception e) {
-					Autoreply.sendMessage(fromGroup, 0, e.toString());
-				}
-				return true;
-			}
-			if (msg.startsWith("-uint ")) {
-				String[] args=msg.split("\\s", 2);
-				try {
-					Autoreply.sendMessage(fromGroup, 0, (Integer.parseInt(args[1]) & 0x00000000ffffffffL) + "");
-				} catch (Exception e) {
-					Autoreply.sendMessage(fromGroup, 0, e.toString());
-				}
-
-			}
-
 			if (msg.equals(".live")) {
 				String msgSend;
 				final StringBuilder stringBuilder = new StringBuilder();
