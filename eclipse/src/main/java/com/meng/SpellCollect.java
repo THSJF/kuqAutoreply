@@ -111,6 +111,7 @@ public class SpellCollect {
 					if (i > 70){
 						Autoreply.sendMessage(0, fromQQ, sb.toString());
 						sb.setLength(0);
+						i = 0;
 					}
 				}
 			}
