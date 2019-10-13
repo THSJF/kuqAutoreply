@@ -73,9 +73,10 @@ public class AdminMessageProcessor {
 		userPermission.put("查看成就", "查看成就列表");
 		userPermission.put("查看符卡", "查看已获得的符卡,会刷屏，少用");
 		userPermission.put("成就条件 [成就名]", "查看获得条件");
-		userPermission.put("幻币兑换 [整数]", "幻币兑换至小律影");
+		userPermission.put("幻币兑换 [整数]", "本地幻币兑换至小律影");
 		userPermission.put("~coins", "查看幻币数量");
-
+		userPermission.put("幻币抽卡 [整数]","使用本地幻币抽卡");
+		
 		masterPermission.putAll(adminPermission);
 		masterPermission.putAll(userPermission);
 		adminPermission.putAll(userPermission);

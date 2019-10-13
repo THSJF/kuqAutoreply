@@ -132,7 +132,7 @@ public class SpellCollect {
 
 		if (msg.startsWith("幻币抽卡 ")){
 			try{
-				int restCoins=Autoreply.instence.coinManager.getCoinsCount(fromGroup);
+				int restCoins=Autoreply.instence.coinManager.getCoinsCount(fromQQ);
 				int useCoins=Integer.parseInt(msg.substring(5));
 				if (useCoins > restCoins){
 					Autoreply.sendMessage(fromGroup, 0, "本地幻币不足");
