@@ -99,7 +99,8 @@ public class Autoreply extends JcqAppAbstract implements ICQVer, IMsg, IRequest 
 	public String userAgent="Mozilla/5.0 (Windows NT 6.1; WOW64; rv:28.0) Gecko/20100101 Firefox/28.0";
     public FanPoHaiManager fph;
     public HashSet<Long> botOff = new HashSet<>();
-
+	public CoinManager coinManager;
+	
 	public DiceImitate diceImitate=new DiceImitate();
 	public static long mainGroup=1023432971l;
     /**
@@ -189,6 +190,7 @@ public class Autoreply extends JcqAppAbstract implements ICQVer, IMsg, IRequest 
         threadPool.execute(fileTipManager);
         threadPool.execute(timeTip);
 		
+		coinManager=new CoinManager();
 		danmakuListenerManager=new DanmakuListenerManager();
         threadPool.execute(new checkMessageRunnable());
         threadPool.execute(new CleanRunnable());
