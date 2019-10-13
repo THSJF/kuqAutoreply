@@ -44,18 +44,20 @@ public class SpellCollect {
 		archList.add(new Archievement("东方绀珠传全符卡收集", "收集该作全部符卡",  ArchievementBean.th15All, DiceImitate.sp15.size(), DiceImitate.sp15));
 		archList.add(new Archievement("东方天空璋全符卡收集", "收集该作全部符卡",  ArchievementBean.th16All, DiceImitate.sp16.size(), DiceImitate.sp16));
 		archList.add(new Archievement("东方鬼形兽全符卡收集", "收集该作全部符卡",  ArchievementBean.th17All, DiceImitate.sp17.size(), DiceImitate.sp17));
-		archList.add(new Archievement("纯化的神灵", "收集Lunatic难度纯狐所有符卡", ArchievementBean.JunkoSpells, 10, DiceImitate.JunkoSpells));
-		archList.add(new Archievement("Perfect Cherry Blossom", "收集Lunatic难度西行寺幽幽子所有符卡", ArchievementBean.yoyoko, 10, DiceImitate.yykSpells));
-		archList.add(new Archievement("樱花飞舞", "收集樱符「完全墨染的樱花 -封印-」,樱符「完全墨染的樱花 -亡我-」,樱符「完全墨染的樱花 -春眠-」,樱符「完全墨染的樱花 -开花-」", ArchievementBean.sakura, 15, DiceImitate.sakura));
+		archList.add(new Archievement("纯化的神灵", "收集Lunatic难度纯狐所有符卡", ArchievementBean.JunkoSpells, 10, "「掌上的纯光」", "「杀意的百合」", "「现代的神灵界」", "「战栗的寒冷之星」", "「纯粹的疯狂」", "「地上秽的纯化」", "纯符「纯粹的弹幕地狱」"));
+		archList.add(new Archievement("Perfect Cherry Blossom", "收集Lunatic难度西行寺幽幽子所有符卡", ArchievementBean.yoyoko, 10, "亡乡「亡我乡 -自尽-」", "亡舞「生者必灭之理 -魔境-」",  "华灵「蝶幻」", "幽曲「埋骨于弘川 -神灵-」", "樱符「完全墨染的樱花 -开花-」", "「反魂蝶 -八分咲-」"));
+		archList.add(new Archievement("樱花飞舞", "收集樱符「完全墨染的樱花 -封印-」,樱符「完全墨染的樱花 -亡我-」,樱符「完全墨染的樱花 -春眠-」,樱符「完全墨染的樱花 -开花-」", ArchievementBean.sakura, 15, "樱符「完全墨染的樱花 -封印-」", "樱符「完全墨染的樱花 -亡我-」", "樱符「完全墨染的樱花 -春眠-」", "樱符「完全墨染的樱花 -开花-」"));
 		archList.add(new Archievement("春天来了", "获得春符「惊春之喜」", ArchievementBean.LilyWhite, 10, "春符「惊春之喜」"));
 		archList.add(new Archievement("素质三连", "收集「红色的幻想乡」,神光「无忤为宗」,「纯粹的疯狂」", ArchievementBean.threeHits, 8, "「红色的幻想乡」", "神光「无忤为宗」", "「纯粹的疯狂」"));
 		archList.add(new Archievement("信仰之山", "获得「信仰之山」" , ArchievementBean.MountainOfFaith, 5, "「信仰之山」"));
 		archList.add(new Archievement("极冰盛宴", "获得冰符「冰瀑」,雹符「冰雹暴风」,冻符「完美冻结」,雪符「钻石风暴」,冰符「冰袭方阵」,冰符「Ultimate Blizzard」" , ArchievementBean.ice, 25, "冰符「冰瀑」", "雹符「冰雹暴风」", "冻符「完美冻结」", "雪符「钻石风暴」", "冰符「冰袭方阵」", "冰符「Ultimate Blizzard」"));
 		archList.add(new Archievement("伪物理学家", "获得想起「波与粒的境界」" , ArchievementBean.physics, 5, "想起「波与粒的境界」"));
-		archList.add(new Archievement("城管执法", "获得博丽灵梦lastspell和lastword外所有符卡" , ArchievementBean.reimu, 20, DiceImitate.reimuSpells));
-		archList.add(new Archievement("星光爆裂", "获得雾雨魔理沙lastspell和lastword外所有符卡", ArchievementBean.marisa, 20, DiceImitate.marisaSpells));
-
-
+		archList.add(new Archievement("城管执法", "获得博丽灵梦lastspell和lastword外所有符卡" , ArchievementBean.reimu, 20, "梦符「二重结界」", "梦境「二重大结界」", "灵符「梦想封印　散」", "散灵「梦想封印　寂」", "梦符「封魔阵」", "神技「八方鬼缚阵」", "神技「八方龙杀阵」", "灵符「梦想封印　集」", "回灵「梦想封印　侘」", "境界「二重弹幕结界」", "大结界「博丽弹幕结界」"));
+		archList.add(new Archievement("星光爆裂", "获得雾雨魔理沙lastspell和lastword外所有符卡", ArchievementBean.marisa, 20, "魔符「银河」", "魔空「小行星带」", "魔符「星尘幻想」", "黑魔「黑洞边缘」", "恋符「非定向光线」", "恋风「星光台风」", "恋符「极限火花」", "恋心「二重火花」", "光符「地球光」", "光击「击月」"));
+		archList.add(new Archievement("春之岸边", "获得棒符「忙碌探知棒」", ArchievementBean.spring, 5, "棒符「忙碌探知棒」"));
+		archList.add(new Archievement("神绮的影子", "获得大魔法「魔神复诵」", ArchievementBean.moshenfusong, 5, "大魔法「魔神复诵」"));
+		archList.add(new Archievement("撸猫", "获得橙和燐的所有符卡", ArchievementBean.cat, 27, DiceImitate.cat));
+		archList.add(new Archievement("时间都去哪了", "获得十六夜咲夜的所有符卡", ArchievementBean.time, 9, "奇术「误导」", "奇术「幻惑误导」", "幻在「钟表的残骸」", "幻幽「迷幻杰克」", "幻象「月神之钟」", "幻世「世界」", "女仆秘技「操弄玩偶」", "女仆秘技「杀人玩偶」", "奇术「永恒的温柔」"));
 		Autoreply.instence.threadPool.execute(new Runnable() {
 				@Override
 				public void run() {

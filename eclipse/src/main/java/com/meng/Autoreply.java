@@ -206,7 +206,7 @@ public class Autoreply extends JcqAppAbstract implements ICQVer, IMsg, IRequest 
      */
     @Override
     public int exit() {
-
+		System.exit(0);
         return 0;
     }
 

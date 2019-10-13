@@ -45,12 +45,8 @@ public class DiceImitate {
 	public static HashSet<String> sp16=new HashSet<>();
 	public static HashSet<String> sp17=new HashSet<>();
 
-	public static HashSet<String> JunkoSpells=new HashSet<>();
-	public static HashSet<String> yykSpells=new HashSet<>();
+	public static HashSet<String> cat=new HashSet<>();
 
-	public static HashSet<String> sakura=new HashSet<>();
-	public static HashSet<String> reimuSpells=new HashSet<>();
-	public static HashSet<String> marisaSpells=new HashSet<>();
 
 
 	public DiceImitate() {
@@ -1147,35 +1143,32 @@ public class DiceImitate {
 		addArrayToSet(sp15, "凶弹「高速撞击」", "「最初与最后的无名弹幕」");
 		addArrayToSet(sp16, "蝶符「细碎鳞粉」", "「无秩序弹幕地狱」");
 		addArrayToSet(sp17, "石符「石林」", "「鬼畜生的所业」");
-		addArrayToSet(reimuSpells,"梦符「二重结界」","大结界「博丽弹幕结界」");
-		addArrayToSet(marisaSpells,	"魔符「银河」","光击「击月」");
-					  
 		
-		Collections.addAll(JunkoSpells, new String[]{	
-							   "「掌上的纯光」",
-							   "「杀意的百合」",
-							   "「现代的神灵界」",
-							   "「原始的神灵界」",
-							   "「战栗的寒冷之星」",
-							   "「纯粹的疯狂」",
-							   "「地上秽的纯化」",
-							   "纯符「纯粹的弹幕地狱」",
-						   });
-
-		Collections.addAll(yykSpells, new String[]{					  
-							   "亡乡「亡我乡 -自尽-」",					
-							   "亡舞「生者必灭之理 -魔境-」",					
-							   "华灵「蝶幻」",					
-							   "幽曲「埋骨于弘川 -神灵-」",					
-							   "樱符「完全墨染的樱花 -开花-」",
-							   "「反魂蝶 -八分咲-」"
-						   });
-
-		Collections.addAll(sakura, new String[]{
-							   "樱符「完全墨染的樱花 -封印-」",
-							   "樱符「完全墨染的樱花 -亡我-」",
-							   "樱符「完全墨染的樱花 -春眠-」",
-							   "樱符「完全墨染的樱花 -开花-」"
+		Collections.addAll(cat, new String[]{
+							   "仙符「凤凰卵」",
+							   "仙符「凤凰展翅」",
+							   "式符「飞翔晴明」",
+							   "阴阳「道满晴明」",	
+							   "阴阳「晴明大纹」",
+							   "天符「天仙鸣动」",
+							   "翔符「飞翔韦驮天」",
+							   "童符「护法天童乱舞」",
+							   "仙符「尸解永远」",
+							   "鬼符「鬼门金神」",
+							   "方符「奇门遁甲」",
+							   "鬼符「青鬼赤鬼」",
+							   "鬼神「飞翔毘沙门天」",
+							   "猫符「猫的步伐」",
+							   "猫符「怨灵猫乱步」",
+							   "咒精「僵尸妖精」",
+							   "咒精「怨灵凭依妖精」",
+							   "恨灵「脾脏蛀食者」",
+							   "尸灵「食人怨灵」",
+							   "赎罪「旧地狱的针山」",
+							   "赎罪「古时之针与痛楚的怨灵」",
+							   "「死灰复燃」",
+							   "「小恶灵复活」",
+							   "妖怪「火焰的车轮」"
 						   });
 
 	}
