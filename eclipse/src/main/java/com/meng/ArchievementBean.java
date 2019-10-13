@@ -2,6 +2,7 @@ package com.meng;
 
 public class ArchievementBean {
 	private int a1=0;
+	//private int a2=0;
 
 	public static final int th6All=1;
 	public static final int th7All=2;
@@ -23,10 +24,15 @@ public class ArchievementBean {
 	public static final int sakura=17;
 	public static final int ice=18;
 	public static final int physics=19;
-	
-	
+	public static final int reimu=20;
+	public static final int marisa=21;
+
 	public boolean isArchievementGot(int archievement) {
+		//	if(archievement<=31){
 		return (a1 & (1 << archievement)) != 0;
+		//else if(archievement<=62){
+		//	return (a1 & (1 << archievement)) != 0;
+		//}
 	}
 
 	public void addArchievement(int Archievement) {

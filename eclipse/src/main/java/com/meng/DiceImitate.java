@@ -6,51 +6,51 @@ import com.meng.config.javabeans.*;
 import com.meng.tools.*;
 
 public class DiceImitate {
-	public String[] spells;
-	private String[] neta;
-	private String[] music;
-	private String[] name;
+	public static String[] spells;
+	private static String[] neta;
+	private static String[] music;
+	private static String[] name;
 
-	private String[] pl01 = new String[]{"别打砖块了，来飞机"};
-	private String[] pl02 = new String[]{"范围重视型", "高灵击伤害 平衡型", "威力重视型"};
-    private String[] pl03 = new String[]{"博丽灵梦", "魅魔", "雾雨魔理沙", "爱莲", "小兔姬", "卡娜·安娜贝拉尔", "朝仓理香子", "北白河千百合", "冈崎梦美"};
-    private String[] pl04 = new String[]{"博丽灵梦 诱导", "博丽灵梦 大范围", "雾雨魔理沙 激光", "雾雨魔理沙 高速射击"};
-    private String[] pl05 = new String[]{"博丽灵梦", "雾雨魔理沙", "魅魔", "幽香"};
-    private String[] pl06 = new String[]{"博丽灵梦 灵符", "博丽灵梦 梦符", "雾雨魔理沙 魔符", "雾雨魔理沙 恋符"};
-    private String[] pl07 = new String[]{"博丽灵梦 灵符", "博丽灵梦 梦符", "雾雨魔理沙 魔符", "雾雨魔理沙 恋符", "十六夜咲夜 幻符", "十六夜咲夜 时符"};
-    private String[] pl08 = new String[]{"幻想的结界组", "咏唱禁咒组", "梦幻的红魔组", "幽冥之住人组", "博丽灵梦", "八云紫", "雾雨魔理沙", "爱丽丝·玛格特罗依德", "蕾米莉亚·斯卡蕾特", "十六夜咲夜", "西行寺幽幽子", "魂魄妖梦"};
-    private String[] pl09 = new String[]{"博丽灵梦", "雾雨魔理沙", "十六夜咲夜", "魂魄妖梦", "铃仙·优昙华院·因幡", "琪露诺", "莉莉卡·普莉兹姆利巴", "梅露兰·普莉兹姆利巴", "露娜萨·普莉兹姆利巴", "米斯蒂娅·萝蕾拉", "因幡帝", "射命丸文", "梅蒂欣·梅兰可莉", "风见幽香", "小野冢小町", "四季映姬·亚玛萨那度"};
-    private String[] pl10 = new String[]{"博丽灵梦 诱导装备", "博丽灵梦 前方集中装备", "博丽灵梦 封印装备", "雾雨魔理沙 高威力装备", "雾雨魔理沙 贯通装备", "雾雨魔理沙 魔法使装备"};
-    private String[] pl11 = new String[]{"博丽灵梦 八云紫", "博丽灵梦 伊吹萃香", "博丽灵梦 射命丸文", "雾雨魔理沙 爱丽丝·玛格特罗依德", "雾雨魔理沙 帕秋莉", "雾雨魔理沙 河城荷取"};
-    private String[] pl12 = new String[]{"博丽灵梦 诱导型", "博丽灵梦 威力重视型", "雾雨魔理沙 贯通型", "雾雨魔理沙 范围重视型", "东风谷早苗 诱导型", "东风谷早苗 广范围炸裂型"};
-    private String[] pl13 = new String[]{"博丽灵梦", "雾雨魔理沙", "东风谷早苗", "魂魄妖梦"};
-    private String[] pl14 = new String[]{"博丽灵梦", "雾雨魔理沙", "十六夜咲夜"};
-    private String[] pl14s = new String[]{"使用妖器", "不使用妖器"};
-    private String[] pl15 = new String[]{"博丽灵梦", "雾雨魔理沙", "东风谷早苗", "铃仙·优昙华院·因幡"};
-    private String[] pl16 = new String[]{"博丽灵梦", "琪露诺", "射命丸文", "雾雨魔理沙"};
-    private String[] pl16s = new String[]{"春", "夏", "秋", "冬"};
-    private String[] pl17 = new String[]{"博丽灵梦", "雾雨魔理沙", "魂魄妖梦"};
-    private String[] pl17s = new String[]{"[CQ:emoji,id=128059]哥", "[CQ:emoji,id=128037]哥", "[CQ:emoji,id=128054]哥"};
-	private String[] plDiff = new String[]{"easy", "normal", "hard", "lunatic"};
+	private static String[] pl01 = new String[]{"别打砖块了，来飞机"};
+	private static String[] pl02 = new String[]{"范围重视型", "高灵击伤害 平衡型", "威力重视型"};
+    private static String[] pl03 = new String[]{"博丽灵梦", "魅魔", "雾雨魔理沙", "爱莲", "小兔姬", "卡娜·安娜贝拉尔", "朝仓理香子", "北白河千百合", "冈崎梦美"};
+    private static String[] pl04 = new String[]{"博丽灵梦 诱导", "博丽灵梦 大范围", "雾雨魔理沙 激光", "雾雨魔理沙 高速射击"};
+    private static String[] pl05 = new String[]{"博丽灵梦", "雾雨魔理沙", "魅魔", "幽香"};
+    private static String[] pl06 = new String[]{"博丽灵梦 灵符", "博丽灵梦 梦符", "雾雨魔理沙 魔符", "雾雨魔理沙 恋符"};
+    private static String[] pl07 = new String[]{"博丽灵梦 灵符", "博丽灵梦 梦符", "雾雨魔理沙 魔符", "雾雨魔理沙 恋符", "十六夜咲夜 幻符", "十六夜咲夜 时符"};
+    private static String[] pl08 = new String[]{"幻想的结界组", "咏唱禁咒组", "梦幻的红魔组", "幽冥之住人组", "博丽灵梦", "八云紫", "雾雨魔理沙", "爱丽丝·玛格特罗依德", "蕾米莉亚·斯卡蕾特", "十六夜咲夜", "西行寺幽幽子", "魂魄妖梦"};
+    private static String[] pl09 = new String[]{"博丽灵梦", "雾雨魔理沙", "十六夜咲夜", "魂魄妖梦", "铃仙·优昙华院·因幡", "琪露诺", "莉莉卡·普莉兹姆利巴", "梅露兰·普莉兹姆利巴", "露娜萨·普莉兹姆利巴", "米斯蒂娅·萝蕾拉", "因幡帝", "射命丸文", "梅蒂欣·梅兰可莉", "风见幽香", "小野冢小町", "四季映姬·亚玛萨那度"};
+    private static String[] pl10 = new String[]{"博丽灵梦 诱导装备", "博丽灵梦 前方集中装备", "博丽灵梦 封印装备", "雾雨魔理沙 高威力装备", "雾雨魔理沙 贯通装备", "雾雨魔理沙 魔法使装备"};
+    private static String[] pl11 = new String[]{"博丽灵梦 八云紫", "博丽灵梦 伊吹萃香", "博丽灵梦 射命丸文", "雾雨魔理沙 爱丽丝·玛格特罗依德", "雾雨魔理沙 帕秋莉", "雾雨魔理沙 河城荷取"};
+    private static String[] pl12 = new String[]{"博丽灵梦 诱导型", "博丽灵梦 威力重视型", "雾雨魔理沙 贯通型", "雾雨魔理沙 范围重视型", "东风谷早苗 诱导型", "东风谷早苗 广范围炸裂型"};
+    private static String[] pl13 = new String[]{"博丽灵梦", "雾雨魔理沙", "东风谷早苗", "魂魄妖梦"};
+    private static String[] pl14 = new String[]{"博丽灵梦", "雾雨魔理沙", "十六夜咲夜"};
+    private static String[] pl14s = new String[]{"使用妖器", "不使用妖器"};
+    private static String[] pl15 = new String[]{"博丽灵梦", "雾雨魔理沙", "东风谷早苗", "铃仙·优昙华院·因幡"};
+    private static String[] pl16 = new String[]{"博丽灵梦", "琪露诺", "射命丸文", "雾雨魔理沙"};
+    private static String[] pl16s = new String[]{"春", "夏", "秋", "冬"};
+    private static String[] pl17 = new String[]{"博丽灵梦", "雾雨魔理沙", "魂魄妖梦"};
+    private static String[] pl17s = new String[]{"[CQ:emoji,id=128059]哥", "[CQ:emoji,id=128037]哥", "[CQ:emoji,id=128054]哥"};
+	private static String[] plDiff = new String[]{"easy", "normal", "hard", "lunatic"};
 
-	public HashSet<String> sp6=new HashSet<>();
-	public HashSet<String> sp7=new HashSet<>();
-	public HashSet<String> sp8=new HashSet<>();
-	public HashSet<String> sp10=new HashSet<>();
-	public HashSet<String> sp11=new HashSet<>();
-	public HashSet<String> sp12=new HashSet<>();
-	public HashSet<String> sp13=new HashSet<>();
-	public HashSet<String> sp14=new HashSet<>();
-	public HashSet<String> sp15=new HashSet<>();
-	public HashSet<String> sp16=new HashSet<>();
-	public HashSet<String> sp17=new HashSet<>();
+	public static HashSet<String> sp6=new HashSet<>();
+	public static HashSet<String> sp7=new HashSet<>();
+	public static HashSet<String> sp8=new HashSet<>();
+	public static HashSet<String> sp10=new HashSet<>();
+	public static HashSet<String> sp11=new HashSet<>();
+	public static HashSet<String> sp12=new HashSet<>();
+	public static HashSet<String> sp13=new HashSet<>();
+	public static HashSet<String> sp14=new HashSet<>();
+	public static HashSet<String> sp15=new HashSet<>();
+	public static HashSet<String> sp16=new HashSet<>();
+	public static HashSet<String> sp17=new HashSet<>();
 
-	public HashSet<String> JunkoSpells=new HashSet<>();
-	public HashSet<String> yykSpells=new HashSet<>();
+	public static HashSet<String> JunkoSpells=new HashSet<>();
+	public static HashSet<String> yykSpells=new HashSet<>();
 
-	public HashSet<String> sakura=new HashSet<>();
-
-
+	public static HashSet<String> sakura=new HashSet<>();
+	public static HashSet<String> reimuSpells=new HashSet<>();
+	public static HashSet<String> marisaSpells=new HashSet<>();
 
 
 	public DiceImitate() {
@@ -1147,7 +1147,10 @@ public class DiceImitate {
 		addArrayToSet(sp15, "凶弹「高速撞击」", "「最初与最后的无名弹幕」");
 		addArrayToSet(sp16, "蝶符「细碎鳞粉」", "「无秩序弹幕地狱」");
 		addArrayToSet(sp17, "石符「石林」", "「鬼畜生的所业」");
-
+		addArrayToSet(reimuSpells,"梦符「二重结界」","大结界「博丽弹幕结界」");
+		addArrayToSet(marisaSpells,	"魔符「银河」","光击「击月」");
+					  
+		
 		Collections.addAll(JunkoSpells, new String[]{	
 							   "「掌上的纯光」",
 							   "「杀意的百合」",
