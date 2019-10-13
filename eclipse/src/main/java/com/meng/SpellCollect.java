@@ -123,7 +123,8 @@ public class SpellCollect {
 			}
 			saveConfig();
 			checkArchievement(fromGroup, chan.get(0), tmpSet);
-			if (sb.toString().length() > 100){
+			if (sb.toString().length() > 200){
+				Autoreply.sendMessage(fromGroup, fromQQ, "内容过长,不详细说明获得的符卡，但记录已保存");
 				return true;
 			}
 			Autoreply.sendMessage(fromGroup, 0, sb.toString());
@@ -146,8 +147,10 @@ public class SpellCollect {
 				tmpSet.add(s);
 				sb.append("\n").append(s);
 			}
+			Autoreply.sendMessage(fromGroup, 0, sb.toString());
 			saveConfig();
 			checkArchievement(fromGroup, fromQQ, tmpSet);
+			today.add(fromQQ);
 			return true;
 		}
 
