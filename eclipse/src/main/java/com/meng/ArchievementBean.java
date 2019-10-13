@@ -33,7 +33,10 @@ public class ArchievementBean {
 	public static final int piaoyilunyi=26;
 	public static final int fourSeasons=27;
 	public static final int hiddenBugInFourSpells=28;
-
+	
+	public static final int sanae=33;
+	public static final int moon=34;
+	
 	public boolean isArchievementGot(int archievement) {
 		if (archievement <= 31){
 			return (a1 & (1 << archievement)) != 0;

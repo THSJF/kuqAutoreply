@@ -61,6 +61,8 @@ public class SpellCollect {
 		archList.add(new Archievement("漂移轮椅", "获得「里·Crazy Fall Wind」", ArchievementBean.piaoyilunyi, 9, "「里·Crazy Fall Wind」"));
 		archList.add(new Archievement("四个季节", "获得「里·Breeze Cherry Blossom」,「里·Perfect Summer Ice」,「里·Crazy Fall Wind」,「里·Extreme Winter」", ArchievementBean.fourSeasons, 9, "「里·Breeze Cherry Blossom」", "「里·Perfect Summer Ice」", "「里·Crazy Fall Wind」", "「里·Extreme Winter」"));
 		archList.add(new Archievement("Hidden Bugs in Four Spells", "获得尽符「血腥的深山谋杀」,笹符「七夕星祭」,冥加「在你背后」,舞符「背后之祭」", ArchievementBean.hiddenBugInFourSpells, 16, "尽符「血腥的深山谋杀」", "笹符「七夕星祭」", "冥加「在你背后」", "舞符「背后之祭」"));
+		archList.add(new Archievement("信仰是为了虚幻之人", "获得东方风神录中东风谷早苗Lunatic所有符卡", ArchievementBean.sanae, 16, "秘术「一脉相传的弹幕」", "奇迹「客星辉煌之夜」", "开海「摩西之奇迹」", "准备「召请建御名方神」", "大奇迹「八坂之神风」"));
+		archList.add(new Archievement("赏月", "获得狱符「地狱之蚀」,「阿波罗捏造说」,月「月狂冲击」", ArchievementBean.moon, 8, "狱符「地狱之蚀」", "「阿波罗捏造说」", "月「月狂冲击」"));
 
 		Autoreply.instence.threadPool.execute(new Runnable() {
 				@Override
