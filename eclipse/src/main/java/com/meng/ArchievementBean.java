@@ -48,20 +48,22 @@ public class ArchievementBean {
 	public static final int hideTH12Ex=41;
 	public static final int hideTH13=42;
 	public static final int shaoBing=43;
-	
-	
+	public static final int iceAndFire=44;
+	public static final int r18=45;
+
+
 	public boolean isArchievementGot(int archievement) {
-		if (archievement <= 31){
+		if (archievement <= 31) {
 			return (a1 & (1 << archievement)) != 0;
-		}else{ //if(archievement<=62){
+		} else { //if(archievement<=62){
 			return (a2 & (1 << (archievement - 31))) != 0;
 		}
 	}
 
 	public void addArchievement(int archievement) {
-		if (archievement <= 31){
+		if (archievement <= 31) {
 			a1 = a1 | (1 << archievement);
-		}else{ //if(archievement<=62){
+		} else { //if(archievement<=62){
 			a2 = a2 | (1 << (archievement - 31));
 		}
 	}

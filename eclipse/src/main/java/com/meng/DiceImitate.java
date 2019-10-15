@@ -47,6 +47,7 @@ public class DiceImitate {
 
 	public static HashSet<String> cat=new HashSet<>();
 	public static HashSet<String> memory=new HashSet<>();
+	public static HashSet<String> pachouli=new HashSet<>();
 
 
 	public DiceImitate() {
@@ -1144,6 +1145,8 @@ public class DiceImitate {
 		addArrayToSet(sp16, "蝶符「细碎鳞粉」", "「无秩序弹幕地狱」");
 		addArrayToSet(sp17, "石符「石林」", "「鬼畜生的所业」");
 		addArrayToSet(memory,"想起「二重黑死蝶」","想起「粼粼水底之心伤」");
+		addArrayToSet(pachouli,"火符「火神之光」", "土&金符「翡翠巨石」");
+		addArrayToSet(pachouli,"月符「静息的月神」", "火水木金土符「贤者之石」");
 		
 		Collections.addAll(cat, new String[]{
 							   "仙符「凤凰卵」",

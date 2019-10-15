@@ -11,6 +11,7 @@ public class Archievement {
 
 	public static final int judgeAnd=0;
 	public static final int judgeOr=1;
+	public static final int judgePachouliIceAndFire=2;
 
 	public Archievement(String name, String describe, int archNum, int coins, String... spells) {
 		this.name = name;
@@ -50,7 +51,6 @@ public class Archievement {
 	}
 
 	private boolean isContains(Set<String> gotSpells, Set<String> spNeed) {  
-
 		switch (judge) {
 			case 0:
 				for (String s:spNeed) {
@@ -58,14 +58,27 @@ public class Archievement {
 						return false;
 					}
 				}
-				return true;  
+				break; 
 			case 1:
 				for (String s:spNeed) {
 					if (gotSpells.contains(s)) {
 						return true;
 					}
 				}
-				return false;  
+				break;
+			case 2:
+				boolean pachouliSpell=false;
+				String s="";
+				for (String ss:gotSpells) {
+					s += ss;
+					if (isPachouliSpell(s)) {
+						pachouliSpell = true;
+					}
+				}
+				if (pachouliSpell && s.contains("水") && s.contains("火")) {
+					return true;
+				}
+				break;
 		}
 		return false;
 	}
@@ -93,6 +106,15 @@ public class Archievement {
 	private boolean isContains(String[] aar, String s) {
 		for (String tmp:aar) {
 			if (tmp.equals(s)) {
+				return true;
+			}
+		}
+		return false;
+	}
+
+	private boolean isPachouliSpell(String s) {
+		for (String spell:DiceImitate.pachouli) {
+			if (s.equals(spell)) {
 				return true;
 			}
 		}

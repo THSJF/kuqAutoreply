@@ -72,11 +72,14 @@ public class SpellCollect {
 		archList.add(new Archievement(" ", "获得    所有符卡", ArchievementBean.koishi, 20, "表象「先祖托梦」", "表象「弹幕偏执症」", "本能「本我的解放」", "抑制「超我」", "反应「妖怪测谎机」", "潜意识「弹幕的墨迹测验」", "复燃「恋爱的埋火」", "深层「潜意识的基因」", "「被厌恶者的哲学」", "「Subterranean Rose」"));
 		archList.add(new Archievement("■■■", "获得■■■所有符卡", ArchievementBean.rumia, 16, "月符「月光」", "夜符「夜雀」", "暗符「境界线」"));
 		archList.add(new Archievement("隐藏的弹幕:瞄准", "获得结界「生与死的境界」", ArchievementBean.hideTH7Ex, 8, "结界「生与死的境界」"));
-		archList.add(new Archievement("隐藏的弹幕:引力", "获得「地狱的人工太阳」", ArchievementBean.hideTH11, 8, Archievement.judgeOr, "「地狱的人工太阳」", "「地底太阳」"));
+		archList.add(new Archievement("隐藏的弹幕:引力", "获得「地狱的人工太阳」或「地底太阳」", ArchievementBean.hideTH11, 8, Archievement.judgeOr, "「地狱的人工太阳」", "「地底太阳」"));
 		archList.add(new Archievement("隐藏的弹幕:分裂", "获得大魔法「魔神复诵」", ArchievementBean.hideTH12, 8, "大魔法「魔神复诵」"));
 		archList.add(new Archievement("隐藏的弹幕:交叉", "获得恨弓「源三位赖政之弓」", ArchievementBean.hideTH12Ex, 8, "恨弓「源三位赖政之弓」"));
 		archList.add(new Archievement("隐藏的弹幕:高亮", "获得貉符「满月下的腹鼓舞」", ArchievementBean.hideTH13, 8, "貉符「满月下的腹鼓舞」"));
 		archList.add(new Archievement("饼符", "获得饼打过的东西", ArchievementBean.shaoBing, 24, "恨弓「源三位赖政之弓」", "纯符「纯粹的弹幕地狱」", "「里·Breeze Cherry Blossom」", "「里·Perfect Summer Ice」", "「里·Crazy Fall Wind」", "「里·Extreme Winter」"));
+		archList.add(new Archievement("元素践踏", "获得帕秋莉任意符卡，包含水火", ArchievementBean.iceAndFire, 16));
+		archList.add(new Archievement("少儿不宜", "获得厄符「厄神大人的生理节律」和龟符「龟甲地狱」", ArchievementBean.r18, 18, "厄符「厄神大人的生理节律」", "龟符「龟甲地狱」"));
+
 
 
 		Autoreply.instence.threadPool.execute(new Runnable() {
