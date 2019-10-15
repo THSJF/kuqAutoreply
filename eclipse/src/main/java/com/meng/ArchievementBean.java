@@ -42,6 +42,13 @@ public class ArchievementBean {
 	public static final int memory=35;
 	public static final int koishi=36;
 	public static final int rumia=37;
+	public static final int hideTH7Ex=38;
+	public static final int hideTH11=39;
+	public static final int hideTH12=40;
+	public static final int hideTH12Ex=41;
+	public static final int hideTH13=42;
+	public static final int shaoBing=43;
+	
 	
 	public boolean isArchievementGot(int archievement) {
 		if (archievement <= 31){
