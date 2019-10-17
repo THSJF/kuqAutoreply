@@ -11,7 +11,7 @@ public class Archievement {
 
 	public static final int judgeAnd=0;
 	public static final int judgeOr=1;
-	public static final int judgePachouliIceAndFire=2;
+	public static final int judgeNameContains=2;
 
 	public Archievement(String name, String describe, int archNum, int coins, String... spells) {
 		this.name = name;
@@ -75,10 +75,18 @@ public class Archievement {
 						pachouliSpell = true;
 					}
 				}
-				if (pachouliSpell && s.contains("水") && s.contains("火")) {
-					return true;
+				//	if (pachouliSpell && s.contains("水") && s.contains("火")) {
+				//	return true;
+				//	}
+				if (!pachouliSpell) {
+					return false;
 				}
-				break;
+				for (String spellStr:spNeed) {
+					if (!s.contains(spellStr)) {
+						return false;
+					}
+				}
+				return true;
 		}
 		return false;
 	}

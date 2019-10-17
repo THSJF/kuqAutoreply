@@ -50,6 +50,8 @@ public class ArchievementBean {
 	public static final int shaoBing=43;
 	public static final int iceAndFire=44;
 	public static final int r18=45;
+	public static final int shiningIce=46;
+	public static final int elementMaster=47;
 
 
 	public boolean isArchievementGot(int archievement) {
