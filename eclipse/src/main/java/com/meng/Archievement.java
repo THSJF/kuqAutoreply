@@ -58,14 +58,14 @@ public class Archievement {
 						return false;
 					}
 				}
-				break; 
+				return true;
 			case 1:
 				for (String s:spNeed) {
 					if (gotSpells.contains(s)) {
 						return true;
 					}
 				}
-				break;
+				return false;
 			case 2:
 				boolean pachouliSpell=false;
 				String s="";
@@ -75,9 +75,6 @@ public class Archievement {
 						pachouliSpell = true;
 					}
 				}
-				//	if (pachouliSpell && s.contains("水") && s.contains("火")) {
-				//	return true;
-				//	}
 				if (!pachouliSpell) {
 					return false;
 				}
