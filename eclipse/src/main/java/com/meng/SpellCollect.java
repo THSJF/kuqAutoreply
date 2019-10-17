@@ -81,6 +81,7 @@ public class SpellCollect {
 		archList.add(new Archievement("少儿不宜", "获得厄符「厄神大人的生理节律」和龟符「龟甲地狱」", ArchievementBean.r18, 9, "厄符「厄神大人的生理节律」", "龟符「龟甲地狱」"));
 		archList.add(new Archievement("灼眼冰晶", "获得帕秋莉任意符卡，包含水金", ArchievementBean.shiningIce, 8, Archievement.judgeNameContains, "水", "金"));
 		archList.add(new Archievement("元素之主", "获得帕秋莉任意符卡，包含水火木金土", ArchievementBean.elementMaster, 8, Archievement.judgeNameContains, "水", "火", "木", "金", "土"));
+archList.add(new Archievement("灵气符卡", "获得紫奥义「弹幕结界」", ArchievementBean.smartSpell, 8, "紫奥义「弹幕结界」"));
 
 
 

@@ -52,6 +52,7 @@ public class ArchievementBean {
 	public static final int r18=45;
 	public static final int shiningIce=46;
 	public static final int elementMaster=47;
+	public static final int smartSpell=48;
 
 
 	public boolean isArchievementGot(int archievement) {
