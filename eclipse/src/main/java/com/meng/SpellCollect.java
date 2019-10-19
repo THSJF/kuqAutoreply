@@ -53,7 +53,7 @@ public class SpellCollect {
 		archList.add(new Archievement("麻将即信仰", "获得「信仰之山」或「风神之神德」" , ArchievementBean.MountainOfFaith, 5, Archievement.judgeOr, "「信仰之山」", "「风神之神德」"));
 		archList.add(new Archievement("极冰盛宴", "获得冰符「冰瀑」,雹符「冰雹暴风」,冻符「完美冻结」,雪符「钻石风暴」,冰符「冰袭方阵」,冰符「Ultimate Blizzard」,「里·Perfect Summer Ice」" , ArchievementBean.ice, 25, "冰符「冰瀑」", "雹符「冰雹暴风」", "冻符「完美冻结」", "雪符「钻石风暴」", "冰符「冰袭方阵」", "冰符「Ultimate Blizzard」", "「里·Perfect Summer Ice」"));
 		archList.add(new Archievement("伪物理学家", "获得想起「波与粒的境界」" , ArchievementBean.physics, 5, "想起「波与粒的境界」"));
-		archList.add(new Archievement("城管执法", "获得博丽灵梦lastspell和lastword外所有符卡" , ArchievementBean.reimu, 20, "梦符「二重结界」", "梦境「二重大结界」", "灵符「梦想封印　散」", "散灵「梦想封印　寂」", "梦符「封魔阵」", "神技「八方鬼缚阵」", "神技「八方龙杀阵」", "灵符「梦想封印　集」", "回灵「梦想封印　侘」", "境界「二重弹幕结界」", "大结界「博丽弹幕结界」"));
+		archList.add(new Archievement("城管执法", "获得博丽灵梦lastspell和lastword外所有符卡" , ArchievementBean.reimu, 20, "梦符「二重结界」", "梦境「二重大结界」", "灵符「梦想封印 散」", "散灵「梦想封印 寂」", "梦符「封魔阵」", "神技「八方鬼缚阵」", "神技「八方龙杀阵」", "灵符「梦想封印 集」", "回灵「梦想封印 侘」", "境界「二重弹幕结界」", "大结界「博丽弹幕结界」"));
 		archList.add(new Archievement("星光爆裂", "获得雾雨魔理沙lastspell和lastword外所有符卡", ArchievementBean.marisa, 20, "魔符「银河」", "魔空「小行星带」", "魔符「星尘幻想」", "黑魔「黑洞边缘」", "恋符「非定向光线」", "恋风「星光台风」", "恋符「极限火花」", "恋心「二重火花」", "光符「地球光」", "光击「击月」"));
 		archList.add(new Archievement("春之岸边", "获得棒符「忙碌探知棒」", ArchievementBean.spring, 5, "棒符「忙碌探知棒」"));
 		archList.add(new Archievement("神绮的影子", "获得大魔法「魔神复诵」", ArchievementBean.moshenfusong, 5, "大魔法「魔神复诵」"));
@@ -62,7 +62,7 @@ public class SpellCollect {
 		archList.add(new Archievement("漂移轮椅", "获得「里·Crazy Fall Wind」", ArchievementBean.piaoyilunyi, 9, "「里·Crazy Fall Wind」"));
 		archList.add(new Archievement("四个季节", "获得「里·Breeze Cherry Blossom」,「里·Perfect Summer Ice」,「里·Crazy Fall Wind」,「里·Extreme Winter」", ArchievementBean.fourSeasons, 9, "「里·Breeze Cherry Blossom」", "「里·Perfect Summer Ice」", "「里·Crazy Fall Wind」", "「里·Extreme Winter」"));
 		archList.add(new Archievement("Hidden Bugs in Four Spells", "获得尽符「血腥的深山谋杀」,笹符「七夕星祭」,冥加「在你背后」,舞符「背后之祭」", ArchievementBean.hiddenBugInFourSpells, 16, "尽符「血腥的深山谋杀」", "笹符「七夕星祭」", "冥加「在你背后」", "舞符「背后之祭」"));
-		archList.add(new Archievement("99.61%", "获得所有6面Lunatic终符", ArchievementBean._9961, 16, "「红色的幻想乡」", "「反魂蝶 -八分咲-」", "秘术「天文密葬法」", "神宝「蓬莱的玉枝　-梦色之乡-」", "「风神之神德」", "「地底太阳」", "飞钵「传说的飞空圆盘」", "「新生的神灵」", "「七个一寸法师」", "纯符「纯粹的弹幕地狱」", "「里·Breeze Cherry Blossom」", "「里·Perfect Summer Ice」", "「里·Crazy Fall Wind」", "「里·Extreme Winter」", "「Idola Diabolus」"));
+		archList.add(new Archievement("99.61%", "获得所有6面Lunatic终符", ArchievementBean._9961, 16, "「红色的幻想乡」", "「反魂蝶 -八分咲-」", "秘术「天文密葬法」", "神宝「蓬莱的玉枝 -梦色之乡-」", "「风神之神德」", "「地底太阳」", "飞钵「传说的飞空圆盘」", "「新生的神灵」", "「七个一寸法师」", "纯符「纯粹的弹幕地狱」", "「里·Breeze Cherry Blossom」", "「里·Perfect Summer Ice」", "「里·Crazy Fall Wind」", "「里·Extreme Winter」", "「Idola Diabolus」"));
 		archList.add(new Archievement("固定弹固定撞", "获得紫奥义「弹幕结界」", ArchievementBean.fixBulletFixMiss, 4, "紫奥义「弹幕结界」"));
 		archList.add(new Archievement("无人气", "获得叶符「狂舞的落叶」", ArchievementBean.noSupport, 4, "叶符「狂舞的落叶」"));
 		archList.add(new Archievement("辉光之针的小人族", "获得少名针妙丸的所有Lunatic符卡", ArchievementBean.shimiyomaru, 16, "小弹「小人的荆棘路」", "小槌「变得更大吧」", "妖剑「辉针剑」", "小槌「你给我变大吧」", "「进击的小人」", "「一寸之壁」", "「七个一寸法师」"));
