@@ -53,8 +53,9 @@ public class ArchievementBean {
 	public static final int shiningIce=46;
 	public static final int elementMaster=47;
 	public static final int smartSpell=48;
-
-
+	public static final int randomSnipe=49;
+	public static final int cxk=50;
+	
 	public boolean isArchievementGot(int archievement) {
 		if (archievement <= 31) {
 			return (a1 & (1 << archievement)) != 0;
