@@ -78,7 +78,9 @@ public class Archievement {
 				if (!pachouliSpell) {
 					return false;
 				}
+				System.out.println("s:"+s);
 				for (String spellStr:spNeed) {
+					System.out.println("spellStr:"+spellStr);
 					if (!s.contains(spellStr)) {
 						return false;
 					}
