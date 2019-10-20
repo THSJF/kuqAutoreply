@@ -7,6 +7,7 @@ import com.meng.tools.*;
 
 public class DiceImitate {
 	public static String[] spells;
+	public static String[] lastword;
 	private static String[] neta;
 	private static String[] music;
 	private static String[] name;
@@ -51,6 +52,25 @@ public class DiceImitate {
 
 
 	public DiceImitate() {
+		lastword = new String[]{
+			"「不合时令的蝶雨」",
+			"「失明的夜雀」",
+			"「日出之国的天子」",
+			"「远古的骗术」",
+			"「月的红眼」",
+			"「天网蛛网捕蝶之法」",
+			"「蓬莱的树海」",
+			"「不死鸟重生」",
+			"「似有似无的净化」",
+			"「梦想天生」",
+			"「彗星」",
+			"「收缩的世界」",
+			"「待宵反射卫星斩」",
+			"「猎奇剧团的怪人」",
+			"「绯红的宿命」",
+			"「西行寺无余涅槃」",
+			"「深弹幕结界 梦幻泡影」"
+		};
 		spells = new String[]{
 			//th6
 			"月符「月光」",
