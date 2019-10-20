@@ -80,7 +80,7 @@ public class WarnMessageProcessor {
         List<Long> list = Autoreply.instence.CC.getAts(msg);
         long me = Autoreply.CQ.getLoginQQ();
         for (long l : list) {
-            if (l == me) {
+            if (l == me && !msg.contains("转账")) {
                 return true;
             }
         }
