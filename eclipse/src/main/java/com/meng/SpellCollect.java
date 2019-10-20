@@ -86,6 +86,8 @@ public class SpellCollect {
 		archList.add(new Archievement("随机的狙", "获得飞钵「飞行幻想」或飞钵「传说的飞空圆盘」", ArchievementBean.randomSnipe, 8, Archievement.judgeOr, "飞钵「飞行幻想」", "飞钵「传说的飞空圆盘」"));
 		archList.add(new Archievement("鸡你太美", "获得庭渡久侘歌的任意符卡", ArchievementBean.cxk, 8, Archievement.judgeOr, "水符「分水的试练」", "水符「分水的上级试炼」", "水符「分水的顶级试炼」", "光符「瞭望的试练」", "光符「瞭望的上级试炼」", "光符「瞭望的顶级试炼」", "鬼符「鬼渡的试练」", "鬼符「鬼渡的上级试炼」", "鬼符「鬼渡的狱级试炼」", "血战「血之分水岭」", "血战「狱界视线」", "血战「全灵鬼渡」"));
 		archList.add(new Archievement("双杀空格", "获得雅符「春之京人偶」", ArchievementBean.doubleKill, 8, "雅符「春之京人偶」"));
+		archList.add(new Archievement("结界之主", "获得东方妖妖梦中八云紫和东方永夜抄中博丽灵梦所有\"结界\"卡", ArchievementBean.wardsMaster, 32, "结界「梦境与现实的诅咒」", "结界「动与静的均衡」", "结界「光与暗的网孔」", "结界「生与死的境界」", "紫奥义「弹幕结界」", "梦符「二重结界」", "梦境「二重大结界」", "境界「二重弹幕结界」", "大结界「博丽弹幕结界」"));
+
 
 
 		Autoreply.instence.threadPool.execute(new Runnable() {

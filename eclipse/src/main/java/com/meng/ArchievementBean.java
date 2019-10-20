@@ -56,7 +56,7 @@ public class ArchievementBean {
 	public static final int randomSnipe=49;
 	public static final int cxk=50;
 	public static final int doubleKill=51;
-
+	public static final int wardsMaster=52;
 
 	public boolean isArchievementGot(int archievement) {
 		if (archievement <= 31) {
