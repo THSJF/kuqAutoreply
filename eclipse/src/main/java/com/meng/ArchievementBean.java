@@ -3,6 +3,7 @@ package com.meng;
 public class ArchievementBean {
 	private int a1=0;
 	private int a2=0;
+	private int a3=0;
 
 	public static final int th6All=1;
 	public static final int th7All=2;
@@ -56,21 +57,40 @@ public class ArchievementBean {
 	public static final int randomSnipe=49;
 	public static final int cxk=50;
 	public static final int doubleKill=51;
-	public static final int wardsMaster=52;
+	public static final int lastwordEx=52;
+	public static final int lastWordST1=53;
+	public static final int lastWordST2=54;
+	public static final int lastWordST3=55;
+	public static final int lastWordST5=56;
+	public static final int lastWordST5_2=57;
+	public static final int lastWordST6A=58;
+	public static final int lastWordST6B=59;
+	public static final int lastWordReimu=60;
+	public static final int lastWordYukari=61;
+	public static final int lastWordMarisa=62;
+	public static final int lastWordAlice=63;
+	public static final int lastWordYoyoku=64;
+	public static final int lastWordYomu=65;
+	public static final int lastWordSakuya=66;
+	public static final int lastWordRemilia=67;
 
 	public boolean isArchievementGot(int archievement) {
 		if (archievement <= 31) {
 			return (a1 & (1 << archievement)) != 0;
-		} else { //if(archievement<=62){
+		} else if (archievement <= 62) {
 			return (a2 & (1 << (archievement - 31))) != 0;
+		} else {
+			return (a3 & (1 << (archievement - 62))) != 0;	
 		}
 	}
 
 	public void addArchievement(int archievement) {
 		if (archievement <= 31) {
 			a1 = a1 | (1 << archievement);
-		} else { //if(archievement<=62){
+		} else if (archievement <= 62) {
 			a2 = a2 | (1 << (archievement - 31));
+		} else {
+			a3 = a3 | (1 << (archievement - 62));
 		}
 	}
 
@@ -80,8 +100,10 @@ public class ArchievementBean {
 		}
 		if (archievement <= 31) {
 			a1 = a1 - (1 << archievement);
-		} else { //if(archievement<=62){
+		} else if (archievement <= 62) {
 			a2 = a2 - (1 << (archievement - 31));
+		} else {
+			a3 = a3 - (1 << (archievement - 62));
 		}
 	}
 

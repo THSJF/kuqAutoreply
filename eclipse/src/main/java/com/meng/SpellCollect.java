@@ -86,9 +86,22 @@ public class SpellCollect {
 		archList.add(new Archievement("随机的狙", "获得飞钵「飞行幻想」或飞钵「传说的飞空圆盘」", ArchievementBean.randomSnipe, 8, Archievement.judgeOr, "飞钵「飞行幻想」", "飞钵「传说的飞空圆盘」"));
 		archList.add(new Archievement("鸡你太美", "获得庭渡久侘歌的任意符卡", ArchievementBean.cxk, 8, Archievement.judgeOr, "水符「分水的试练」", "水符「分水的上级试炼」", "水符「分水的顶级试炼」", "光符「瞭望的试练」", "光符「瞭望的上级试炼」", "光符「瞭望的顶级试炼」", "鬼符「鬼渡的试练」", "鬼符「鬼渡的上级试炼」", "鬼符「鬼渡的狱级试炼」", "血战「血之分水岭」", "血战「狱界视线」", "血战「全灵鬼渡」"));
 		archList.add(new Archievement("双杀空格", "获得雅符「春之京人偶」", ArchievementBean.doubleKill, 8, "雅符「春之京人偶」"));
-		archList.add(new Archievement("结界之主", "获得东方妖妖梦中八云紫和东方永夜抄中博丽灵梦所有\"结界\"卡", ArchievementBean.wardsMaster, 32, "结界「梦境与现实的诅咒」", "结界「动与静的均衡」", "结界「光与暗的网孔」", "结界「生与死的境界」", "紫奥义「弹幕结界」", "梦符「二重结界」", "梦境「二重大结界」", "境界「二重弹幕结界」", "大结界「博丽弹幕结界」"));
-
-
+		archList.add(new Archievement("复活", "获得「不死鸟重生」", ArchievementBean.lastwordEx, 28, "「不合时令的蝶雨」"));
+		archList.add(new Archievement("蝶雨", "获得「不合时令的蝶雨」", ArchievementBean.lastWordST1, 28, "「不合时令的蝶雨」"));
+		archList.add(new Archievement("护眼符卡", "获得「失明的夜雀」", ArchievementBean.lastWordST2, 28, "「失明的夜雀」"));
+		archList.add(new Archievement("瞎眼符卡", "获得「日出之国的天子」", ArchievementBean.lastWordST3, 28, "「日出之国的天子」"));
+		archList.add(new Archievement("秒杀2un", "获得「远古的骗术」", ArchievementBean.lastWordST5, 28, "「远古的骗术」"));
+		archList.add(new Archievement("幻觉", "获得「月的红眼」", ArchievementBean.lastWordST5_2, 28, "「月的红眼」"));
+		archList.add(new Archievement("封你没得跑", "获得「天网蛛网捕蝶之法」", ArchievementBean.lastWordST6A, 28, "「天网蛛网捕蝶之法」"));
+		archList.add(new Archievement("蓬莱的树海", "获得「蓬莱的树海」", ArchievementBean.lastWordST6B, 28, "「蓬莱的树海」"));
+		archList.add(new Archievement("梦想天生", "获得「梦想天生」", ArchievementBean.lastWordReimu, 28, "「梦想天生」"));
+		archList.add(new Archievement("结界之主", "获得「深弹幕结界 梦幻泡影」", ArchievementBean.lastWordYukari, 28, "「深弹幕结界 梦幻泡影」"));
+		archList.add(new Archievement("体术流", "获得「彗星」", ArchievementBean.lastWordMarisa, 28, "「彗星」"));
+		archList.add(new Archievement("控偶师", "获得「猎奇剧团的怪人」", ArchievementBean.lastWordAlice, 28, "「猎奇剧团的怪人」"));
+		archList.add(new Archievement("the world!", "获得「收缩的世界」", ArchievementBean.lastWordSakuya, 28, "「收缩的世界」"));
+		archList.add(new Archievement("微移的威严", "获得「绯红的宿命」", ArchievementBean.lastWordRemilia, 28, "「绯红的宿命」"));
+		archList.add(new Archievement("剑术大师", "获得「待宵反射卫星斩」", ArchievementBean.lastWordYomu, 28, "「待宵反射卫星斩」"));
+		archList.add(new Archievement("西行妖盛开", "获得「西行寺无余涅槃」", ArchievementBean.lastWordYoyoku, 28, "「西行寺无余涅槃」"));
 
 		Autoreply.instence.threadPool.execute(new Runnable() {
 				@Override
@@ -278,6 +291,13 @@ public class SpellCollect {
 				}
 			}
 			Autoreply.sendMessage(fromGroup, fromQQ, sb.toString());
+			sb.setLength(0);
+			for (String s:DiceImitate.lastword) {
+				if (gtdspl.contains(s)) {
+					sb.append("\n").append(s);
+				}
+			}
+			Autoreply.sendMessage(fromGroup, fromQQ, sb.toString());		
 			return true;	
 		}
 
@@ -289,7 +309,7 @@ public class SpellCollect {
 				return true;
 			}
 			for (Archievement ac:archList) {
-				sb.append("\n").append(ac.name).append(ab.isArchievementGot(ac.archNum) ?": √ ": ": x");//.append(" 奖励:").append(ac.coins).append("幻币");
+				sb.append("\n").append(ac.name).append(ab.isArchievementGot(ac.archNum) ?":√ ": ":x");//.append(" 奖励:").append(ac.coins).append("幻币");
 			}
 			Autoreply.sendMessage(fromGroup, 0, sb.toString());
 			return true;	
