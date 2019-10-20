@@ -104,7 +104,10 @@ public class SpellCollect {
 		archList.add(new Archievement("西行妖盛开", "获得「西行寺无余涅槃」", ArchievementBean.lastWordYoyoku, 28, "「西行寺无余涅槃」"));
 		archList.add(new Archievement("简单的困难", "获得所有难度纯符", ArchievementBean.easyHard, 6, "纯符「单纯的子弹地狱」", "纯符「纯粹的弹幕地狱」"));
 		archList.add(new Archievement("不可能的盛开", "获得任意难度反魂蝶", ArchievementBean.impossbleBloom, 6, Archievement.judgeOr, "「反魂蝶 -一分咲-」", "「反魂蝶 -三分咲-」", "「反魂蝶 -五分咲-」", "「反魂蝶 -八分咲-」"));
-
+		//霜舞精灵
+		//神灵界 星辰降落的神灵庙
+		//郭敬明 七个一寸法师
+		// 轻工业( 
 
 		Autoreply.instence.threadPool.execute(new Runnable() {
 				@Override
