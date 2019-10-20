@@ -11,38 +11,38 @@ public class WarnMessageProcessor {
     private String lastMsg = "  ";
     private long lastSender = 2;
     private String[] warningMsgs = new String[]{
-            "监听直播",
-            "监听更新",
-            "设置用户",
-            "reload",
-            "addsuperadmin",
-            "addsuperop",
-            "addprotect",
-            "addtipgroup",
-            "removesuperop",
-            "removeprotect",
-            "removetipgroup",
-            "下载",
-            "下载图像并发送",
-            "广播",
-            "广播审查",
-            "广播审核",
-            "审核广播",
-            "审查广播",
-            "广播图像",
-            "广播图片",
-            "addcoins",
-            "op",
-            "添加管理员",
-            "deop",
-            "移除管理员",
-            "退出本群",
-            "新增死鸽",
-            "添加死鸽",
-            "移除死鸽",
-            "删除死鸽",
-            "去除死鸽",
-            "缓刑宰鸽"
+		"监听直播",
+		"监听更新",
+		"设置用户",
+		"reload",
+		"addsuperadmin",
+		"addsuperop",
+		"addprotect",
+		"addtipgroup",
+		"removesuperop",
+		"removeprotect",
+		"removetipgroup",
+		"下载",
+		"下载图像并发送",
+		"广播",
+		"广播审查",
+		"广播审核",
+		"审核广播",
+		"审查广播",
+		"广播图像",
+		"广播图片",
+		"addcoins",
+		"op",
+		"添加管理员",
+		"deop",
+		"移除管理员",
+		"退出本群",
+		"新增死鸽",
+		"添加死鸽",
+		"移除死鸽",
+		"删除死鸽",
+		"去除死鸽",
+		"缓刑宰鸽"
     };
 
     public WarnMessageProcessor() {
@@ -52,7 +52,7 @@ public class WarnMessageProcessor {
         boolean b = false;
         if (lastMsg.equals(msg) && (msg.contains("~") || msg.contains("～"))) {
             b = processRepeat(fromGroup, fromQQ, msg);
-        } else if ((msg.contains("~") || msg.contains("～")) && isAtme(msg) && (!msg.contains("转账"))) {
+        } else if ((msg.contains("~") || msg.contains("～")) && isAtme(msg) && (!msg.contains("~转账") && !msg.contains("～转账")){
             onMsgHighWarinig(fromGroup, fromQQ);
             return true;
         }
