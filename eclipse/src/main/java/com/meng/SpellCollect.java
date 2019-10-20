@@ -232,7 +232,7 @@ public class SpellCollect {
 			StringBuilder sb=new StringBuilder("你获得了:");
 			for (int i=0;i < 5;++i) {
 				String s;
-				if (r.nextInt(30) != 20) {
+				if (r.nextInt(50) == 20) {
 					s = DiceImitate.lastword[r.nextInt(DiceImitate.lastword.length)];
 				} else {	
 					s = DiceImitate.spells[r.nextInt(DiceImitate.spells.length)];
