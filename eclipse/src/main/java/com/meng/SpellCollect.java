@@ -13,7 +13,8 @@ import java.util.concurrent.*;
 public class SpellCollect {
 	private ConcurrentHashMap<String,HashSet<String>> chm=new ConcurrentHashMap<>();
 	public ConcurrentHashMap<String,ArchievementBean> archiMap=new ConcurrentHashMap<>();
-	private HashSet<Long> today=new HashSet<>();
+	private HashSet<Long> todayCard=new HashSet<>();
+	private HashSet<Long> todaySign=new HashSet<>();
 	private File archiFile;
 	private File spellFile;
 	public ArrayList<Archievement> archList=new ArrayList<>();
@@ -100,7 +101,8 @@ public class SpellCollect {
 					while (true) {
 						Calendar c = Calendar.getInstance();
 						if (c.get(Calendar.MINUTE) == 0 && c.get(Calendar.HOUR_OF_DAY) == 0) {
-							today.clear();
+							todayCard.clear();
+							todaySign.clear();
 						}
 						try {
 							Thread.sleep(30000);
@@ -180,8 +182,19 @@ public class SpellCollect {
 			return true;
 		}
 
+		if (msg.equals("签到")) {
+			if (todaySign.contains(fromQQ)) {
+				Autoreply.sendMessage(fromGroup, 0, "你今天签到过啦");
+				return true;
+			}
+			Autoreply.sendMessage(fromGroup, 0, "签到成功,获得1幻币");
+			Autoreply.instence.coinManager.addCoins(fromGroup, 1);
+			todaySign.add(fromQQ);
+			return true;
+		}
+
 		if (msg.equals("抽卡")) {
-			if (today.contains(fromQQ)) {
+			if (todayCard.contains(fromQQ)) {
 				Autoreply.sendMessage(fromGroup, 0, "你今天已经抽过啦");
 				return true;
 			}
@@ -200,7 +213,7 @@ public class SpellCollect {
 			Autoreply.sendMessage(fromGroup, 0, sb.toString());
 			saveConfig();
 			checkArchievement(fromGroup, fromQQ, tmpSet);
-			today.add(fromQQ);
+			todayCard.add(fromQQ);
 			return true;
 		}
 
@@ -226,7 +239,7 @@ public class SpellCollect {
 			}
 			return true;
 		}
-		
+
 		if (msg.equals("查看符卡")) {
 			StringBuilder sb=new StringBuilder();
 			HashSet<String> gtdspl=chm.get(String.valueOf(fromQQ));
