@@ -204,6 +204,29 @@ public class SpellCollect {
 			return true;
 		}
 
+		if (msg.startsWith("购买符卡 ")) {
+			String spellName=msg.substring(5);
+			if (Autoreply.instence.coinManager.getCoinsCount(fromQQ) < 40) {
+				Autoreply.sendMessage(fromGroup, 0, "幻币不足,需要40幻币");
+				return true;
+			}
+			if (isCointains(spellName)) {		
+				HashSet<String> gotSpellSet=chm.get(String.valueOf(fromQQ));
+				if (gotSpellSet == null) {
+					gotSpellSet = new HashSet<String>();
+					chm.put(String.valueOf(fromQQ), gotSpellSet);
+				}
+				gotSpellSet.add(spellName);
+				Autoreply.sendMessage(fromGroup, 0, "你获得了:" + spellName);
+				saveConfig();
+				checkArchievement(fromGroup, fromQQ, gotSpellSet);	
+				Autoreply.instence.coinManager.subCoins(fromQQ, 40);
+			} else {
+				Autoreply.sendMessage(fromGroup, 0, "符卡名错误");
+			}
+			return true;
+		}
+		
 		if (msg.equals("查看符卡")) {
 			StringBuilder sb=new StringBuilder();
 			HashSet<String> gtdspl=chm.get(String.valueOf(fromQQ));
@@ -284,6 +307,16 @@ public class SpellCollect {
 		}
 		saveArchiConfig();
 	}
+
+	private boolean isCointains(String name) {
+		for (String s:DiceImitate.spells) {
+			if (s.equals(name)) {
+				return true;
+			}
+		}
+		return false;
+	}
+
 
 	private void backupData() {
         while (true) {
