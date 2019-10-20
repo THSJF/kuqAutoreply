@@ -52,7 +52,7 @@ public class WarnMessageProcessor {
         boolean b = false;
         if (lastMsg.equals(msg) && (msg.contains("~") || msg.contains("～"))) {
             b = processRepeat(fromGroup, fromQQ, msg);
-        } else if ((msg.contains("~") || msg.contains("～")) && isAtme(msg)) {
+        } else if ((msg.contains("~") || msg.contains("～")) && isAtme(msg) && (!msg.contains("转账"))) {
             onMsgHighWarinig(fromGroup, fromQQ);
             return true;
         }
@@ -80,7 +80,7 @@ public class WarnMessageProcessor {
         List<Long> list = Autoreply.instence.CC.getAts(msg);
         long me = Autoreply.CQ.getLoginQQ();
         for (long l : list) {
-            if (l == me && !msg.contains("转账")) {
+            if (l == me) {
                 return true;
             }
         }
