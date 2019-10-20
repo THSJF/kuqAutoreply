@@ -77,6 +77,7 @@ public class AdminMessageProcessor {
 		userPermission.put("幻币兑换 [整数]", "本地幻币兑换至小律影");
 		userPermission.put("~coins", "查看幻币数量");
 		userPermission.put("幻币抽卡 [整数]", "使用本地幻币抽卡");
+		userPermission.put("购买符卡 [符卡名]", "购买指定符卡");
 
 		masterPermission.putAll(adminPermission);
 		masterPermission.putAll(userPermission);

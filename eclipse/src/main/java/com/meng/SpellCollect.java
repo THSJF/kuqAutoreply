@@ -48,7 +48,7 @@ public class SpellCollect {
 		archList.add(new Archievement("纯化的神灵", "收集Lunatic难度纯狐所有符卡", ArchievementBean.JunkoSpells, 10, "「掌上的纯光」", "「杀意的百合」", "「现代的神灵界」", "「战栗的寒冷之星」", "「纯粹的疯狂」", "「地上秽的纯化」", "纯符「纯粹的弹幕地狱」"));
 		archList.add(new Archievement("Perfect Cherry Blossom", "收集Lunatic难度西行寺幽幽子所有符卡", ArchievementBean.yoyoko, 10, "亡乡「亡我乡 -自尽-」", "亡舞「生者必灭之理 -魔境-」",  "华灵「蝶幻」", "幽曲「埋骨于弘川 -神灵-」", "樱符「完全墨染的樱花 -开花-」", "「反魂蝶 -八分咲-」"));
 		archList.add(new Archievement("樱花飞舞", "收集樱符「完全墨染的樱花 -封印-」,樱符「完全墨染的樱花 -亡我-」,樱符「完全墨染的樱花 -春眠-」,樱符「完全墨染的樱花 -开花-」", ArchievementBean.sakura, 15, "樱符「完全墨染的樱花 -封印-」", "樱符「完全墨染的樱花 -亡我-」", "樱符「完全墨染的樱花 -春眠-」", "樱符「完全墨染的樱花 -开花-」"));
-		archList.add(new Archievement("春天来了", "获得春符「惊春之喜」", ArchievementBean.LilyWhite, 10, "春符「惊春之喜」"));
+		archList.add(new Archievement("春天来了", "获得春符「惊喜之春」", ArchievementBean.LilyWhite, 10, "春符「惊喜之春」"));
 		archList.add(new Archievement("素质三连", "收集「红色的幻想乡」,神光「无忤为宗」,「纯粹的疯狂」", ArchievementBean.threeHits, 8, "「红色的幻想乡」", "神光「无忤为宗」", "「纯粹的疯狂」"));
 		archList.add(new Archievement("麻将即信仰", "获得「信仰之山」或「风神之神德」" , ArchievementBean.MountainOfFaith, 5, Archievement.judgeOr, "「信仰之山」", "「风神之神德」"));
 		archList.add(new Archievement("极冰盛宴", "获得冰符「冰瀑」,雹符「冰雹暴风」,冻符「完美冻结」,雪符「钻石风暴」,冰符「冰袭方阵」,冰符「Ultimate Blizzard」,「里·Perfect Summer Ice」" , ArchievementBean.ice, 25, "冰符「冰瀑」", "雹符「冰雹暴风」", "冻符「完美冻结」", "雪符「钻石风暴」", "冰符「冰袭方阵」", "冰符「Ultimate Blizzard」", "「里·Perfect Summer Ice」"));
