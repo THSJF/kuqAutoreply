@@ -39,6 +39,9 @@ public class RepeaterBanner {
         if (warnMessageProcessor.check(fromGroup, fromQQ, msg)) {
             return true;
         }
+		if(msg.contains("转账")){
+			return true;
+		}
         boolean b = false;
         try {
             if (msg.contains("禁言") || fromGroup != groupNumber) {
