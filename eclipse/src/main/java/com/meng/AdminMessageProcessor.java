@@ -54,6 +54,7 @@ public class AdminMessageProcessor {
 		masterPermission.put("send.[群号].[内容]", "内容转发至指定群");
 		masterPermission.put("mother.[字符串]", "直播间点歌问候");
 		masterPermission.put("lban.[直播间号|直播间主人].[被禁言UID|被禁言者称呼].[时间]", "直播间禁言,单位为小时");
+		masterPermission.put("移除成就 [成就名] [艾特一人]", "移除此人的该成就");
 
 
 		adminPermission.put("findInAll:[QQ号]", "查找共同群");
@@ -75,8 +76,8 @@ public class AdminMessageProcessor {
 		userPermission.put("成就条件 [成就名]", "查看获得条件");
 		userPermission.put("幻币兑换 [整数]", "本地幻币兑换至小律影");
 		userPermission.put("~coins", "查看幻币数量");
-		userPermission.put("幻币抽卡 [整数]","使用本地幻币抽卡");
-		
+		userPermission.put("幻币抽卡 [整数]", "使用本地幻币抽卡");
+
 		masterPermission.putAll(adminPermission);
 		masterPermission.putAll(userPermission);
 		adminPermission.putAll(userPermission);
@@ -95,6 +96,24 @@ public class AdminMessageProcessor {
 				}	
 				if (!resu.equals("")) {
 					Autoreply.sendMessage(fromGroup, 0, resu);
+				}
+				return true;
+			}
+			if (msg.startsWith("移除成就 ")) {
+				String arch=msg.substring(5, msg.indexOf("[") - 1);
+				long toQQ=Autoreply.instence.CC.getAt(msg);
+				ArchievementBean ab=Autoreply.instence.spellCollect.archiMap.get(String.valueOf(toQQ));
+				if (ab == null) {
+					ab = new ArchievementBean();
+					Autoreply.instence.spellCollect.archiMap.put(String.valueOf(toQQ), ab);
+				}
+				for (Archievement ac:Autoreply.instence.spellCollect.archList) {
+					if (ac.name.equals(arch)) {
+						ab.deleteArchievment(ac.archNum);
+						Autoreply.sendMessage(fromGroup, toQQ, "为" + toQQ + "移除成就" + arch);
+						Autoreply.instence.spellCollect.saveArchiConfig();
+						return true;
+					}
 				}
 				return true;
 			}

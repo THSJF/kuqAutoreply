@@ -67,16 +67,11 @@ public class Archievement {
 				}
 				return false;
 			case 2:
-				boolean pachouliSpell=false;
 				String spellNameAll="";
 				for (String gotSpell:gotSpells) {
-					spellNameAll += gotSpell;
 					if (isPachouliSpell(gotSpell)) {
-						pachouliSpell = true;
+						spellNameAll += gotSpell;
 					}
-				}
-				if (!pachouliSpell) {
-					return false;
 				}
 				for (String spellStr:spNeed) {
 					if (!spellNameAll.contains(spellStr)) {

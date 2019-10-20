@@ -56,8 +56,8 @@ public class ArchievementBean {
 	public static final int randomSnipe=49;
 	public static final int cxk=50;
 	public static final int doubleKill=51;
-	
-	
+
+
 	public boolean isArchievementGot(int archievement) {
 		if (archievement <= 31) {
 			return (a1 & (1 << archievement)) != 0;
@@ -73,4 +73,16 @@ public class ArchievementBean {
 			a2 = a2 | (1 << (archievement - 31));
 		}
 	}
+
+	public void deleteArchievment(int archievement) {
+		if (!isArchievementGot(archievement)) {
+			return;
+		}
+		if (archievement <= 31) {
+			a1 = a1 - (1 << archievement);
+		} else { //if(archievement<=62){
+			a2 = a2 - (1 << (archievement - 31));
+		}
+	}
+
 }

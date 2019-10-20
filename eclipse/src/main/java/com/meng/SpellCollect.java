@@ -12,11 +12,11 @@ import java.util.concurrent.*;
 
 public class SpellCollect {
 	private ConcurrentHashMap<String,HashSet<String>> chm=new ConcurrentHashMap<>();
-	private ConcurrentHashMap<String,ArchievementBean> archiMap=new ConcurrentHashMap<>();
+	public ConcurrentHashMap<String,ArchievementBean> archiMap=new ConcurrentHashMap<>();
 	private HashSet<Long> today=new HashSet<>();
 	private File archiFile;
 	private File spellFile;
-	private ArrayList<Archievement> archList=new ArrayList<>();
+	public ArrayList<Archievement> archList=new ArrayList<>();
 	public SpellCollect() {
 		spellFile = new File(Autoreply.appDirectory + "/properties/spells.json");
         if (!spellFile.exists()) {
@@ -319,7 +319,7 @@ public class SpellCollect {
         }
     }
 
-	private void saveArchiConfig() {
+	public void saveArchiConfig() {
         try {
             FileOutputStream fos = new FileOutputStream(archiFile);
             OutputStreamWriter writer = new OutputStreamWriter(fos, StandardCharsets.UTF_8);
