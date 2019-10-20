@@ -99,24 +99,6 @@ public class AdminMessageProcessor {
 				}
 				return true;
 			}
-			if (msg.startsWith("移除成就 ")) {
-				String arch=msg.substring(5, msg.indexOf("[") - 1);
-				long toQQ=Autoreply.instence.CC.getAt(msg);
-				ArchievementBean ab=Autoreply.instence.spellCollect.archiMap.get(String.valueOf(toQQ));
-				if (ab == null) {
-					ab = new ArchievementBean();
-					Autoreply.instence.spellCollect.archiMap.put(String.valueOf(toQQ), ab);
-				}
-				for (Archievement ac:Autoreply.instence.spellCollect.archList) {
-					if (ac.name.equals(arch)) {
-						ab.deleteArchievment(ac.archNum);
-						Autoreply.sendMessage(fromGroup, toQQ, "为" + toQQ + "移除成就" + arch);
-						Autoreply.instence.spellCollect.saveArchiConfig();
-						return true;
-					}
-				}
-				return true;
-			}
 			if (msg.startsWith("blink.")) {
 				String[] strs=msg.split("\\.", 2);
 				PersonInfo pi=Autoreply.instence.configManager.getPersonInfoFromName(strs[1]);
@@ -137,6 +119,24 @@ public class AdminMessageProcessor {
         if (configManager.isMaster(fromQQ)) {
 			if (msg.equals("-help")) {
 				Autoreply.sendMessage(fromGroup, 0, masterPermission.toString());
+				return true;
+			}
+			if (msg.startsWith("移除成就 ")) {
+				String arch=msg.substring(5, msg.indexOf("[") - 1);
+				long toQQ=Autoreply.instence.CC.getAt(msg);
+				ArchievementBean ab=Autoreply.instence.spellCollect.archiMap.get(String.valueOf(toQQ));
+				if (ab == null) {
+					ab = new ArchievementBean();
+					Autoreply.instence.spellCollect.archiMap.put(String.valueOf(toQQ), ab);
+				}
+				for (Archievement ac:Autoreply.instence.spellCollect.archList) {
+					if (ac.name.equals(arch)) {
+						ab.deleteArchievment(ac.archNum);
+						Autoreply.sendMessage(fromGroup, toQQ, "为" + toQQ + "移除成就" + arch);
+						Autoreply.instence.spellCollect.saveArchiConfig();
+						return true;
+					}
+				}
 				return true;
 			}
 			if (msg.startsWith("群广播:")) {
