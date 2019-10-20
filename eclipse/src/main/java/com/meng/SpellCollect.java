@@ -102,6 +102,9 @@ public class SpellCollect {
 		archList.add(new Archievement("微移的威严", "获得「绯红的宿命」", ArchievementBean.lastWordRemilia, 28, "「绯红的宿命」"));
 		archList.add(new Archievement("剑术大师", "获得「待宵反射卫星斩」", ArchievementBean.lastWordYomu, 28, "「待宵反射卫星斩」"));
 		archList.add(new Archievement("西行妖盛开", "获得「西行寺无余涅槃」", ArchievementBean.lastWordYoyoku, 28, "「西行寺无余涅槃」"));
+		archList.add(new Archievement("简单的困难", "获得所有难度纯符", ArchievementBean.easyHard, 6, "纯符「单纯的子弹地狱」", "纯符「纯粹的弹幕地狱」"));
+		archList.add(new Archievement("不可能的盛开", "获得任意难度反魂蝶", ArchievementBean.impossbleBloom, 6, Archievement.judgeOr, "「反魂蝶 -一分咲-」", "「反魂蝶 -三分咲-」", "「反魂蝶 -五分咲-」", "「反魂蝶 -八分咲-」"));
+
 
 		Autoreply.instence.threadPool.execute(new Runnable() {
 				@Override

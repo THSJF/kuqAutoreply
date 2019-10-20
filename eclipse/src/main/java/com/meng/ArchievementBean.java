@@ -73,6 +73,9 @@ public class ArchievementBean {
 	public static final int lastWordYomu=65;
 	public static final int lastWordSakuya=66;
 	public static final int lastWordRemilia=67;
+	public static final int easyHard=68;
+	public static final int impossbleBloom=69;
+	
 
 	public boolean isArchievementGot(int archievement) {
 		if (archievement <= 31) {
