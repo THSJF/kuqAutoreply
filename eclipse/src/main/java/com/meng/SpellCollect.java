@@ -213,7 +213,7 @@ public class SpellCollect {
 				return true;
 			}
 			Autoreply.sendMessage(fromGroup, 0, "签到成功,获得1幻币");
-			Autoreply.instence.coinManager.addCoins(fromGroup, 1);
+			Autoreply.instence.coinManager.addCoins(fromQQ, 1);
 			todaySign.add(fromQQ);
 			return true;
 		}
