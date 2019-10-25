@@ -28,7 +28,7 @@ public class BirthdayTip {
         }
         Type type = new TypeToken<HashMap<Long,Integer>>() {
         }.getType();
-        memberMap = new Gson().fromJson(Methods.readFileToString(Autoreply.appDirectory + "/properties/birthday.json"), type);
+        memberMap = gson.fromJson(Methods.readFileToString(Autoreply.appDirectory + "/properties/birthday.json"), type);
 
 		Autoreply.instence.threadPool.execute(new Runnable(){
 
@@ -36,20 +36,22 @@ public class BirthdayTip {
 				public void run() {
 					while (true) {
 						Calendar c = Calendar.getInstance();
-						if (c.get(Calendar.HOUR_OF_DAY) == 20 && c.get(Calendar.MINUTE) == 50) {
+						if (c.get(Calendar.HOUR_OF_DAY) == 20 && c.get(Calendar.MINUTE) == 55) {
 							List<Group> groups=Autoreply.CQ.getGroupList();
 							for (Group group:groups) {
 								List<Member> members=Autoreply.CQ.getGroupMemberList(group.getId());
 								for (Member member:members) {
-									if (memberMap.get(member.getQqId()) != null) {
-										if (member.getAge() > memberMap.get(member.getQqId())) {
+									if (memberMap.get(member.getQqId()) != null && member.getAge() > memberMap.get(member.getQqId())) {
+										if (!tiped.contains(member.getQqId())) {
 											Autoreply.sendMessage(0, member.getQqId(), "生日快乐!");
+											tiped.add(member.getQqId());
 										}
 									}
 									memberMap.put(member.getQqId(), member.getAge());
 								}
 							}
 							saveConfig();
+							tiped.clear();
 						}
 
 						try {
@@ -65,10 +67,14 @@ public class BirthdayTip {
 	}
 
 	private void saveConfig() {
+		GsonBuilder gb = new GsonBuilder();
+		gb.setLongSerializationPolicy(LongSerializationPolicy.STRING);
+		Gson gson = gb.create();
+
         try {
             FileOutputStream fos = new FileOutputStream(ageFile);
             OutputStreamWriter writer = new OutputStreamWriter(fos, StandardCharsets.UTF_8);
-            writer.write(new Gson().toJson(memberMap));
+            writer.write(gson.toJson(memberMap));
             writer.flush();
             fos.close();
         } catch (IOException e) {
