@@ -156,7 +156,7 @@ public class SpellCollect {
 			StringBuilder sb=new StringBuilder("你获得了:");
 			for (int i=0;i < coins * 3;++i) {
 				String s;
-				if (r.nextInt(50) == 20) {
+				if (r.nextInt(150) == 20) {
 					s = DiceImitate.lastword[r.nextInt(DiceImitate.lastword.length)];
 				} else {
 					s = DiceImitate.spells[r.nextInt(DiceImitate.spells.length)];
@@ -190,7 +190,7 @@ public class SpellCollect {
 				StringBuilder sb=new StringBuilder("你获得了:");
 				for (int i=0;i < useCoins * 3;++i) {
 					String s;
-					if (r.nextInt(50) == 20) {
+					if (r.nextInt(150) == 20) {
 						s = DiceImitate.lastword[r.nextInt(DiceImitate.lastword.length)];
 					} else {
 						s = DiceImitate.spells[r.nextInt(DiceImitate.spells.length)];
@@ -238,7 +238,7 @@ public class SpellCollect {
 			StringBuilder sb=new StringBuilder("你获得了:");
 			for (int i=0;i < 5;++i) {
 				String s;
-				if (r.nextInt(50) == 20) {
+				if (r.nextInt(150) == 20) {
 					s = DiceImitate.lastword[r.nextInt(DiceImitate.lastword.length)];
 				} else {	
 					s = DiceImitate.spells[r.nextInt(DiceImitate.spells.length)];

@@ -36,6 +36,7 @@ import com.meng.config.*;
 import java.util.concurrent.*;
 import com.meng.bilibili.live.*;
 import com.meng.groupChat.Sequence.*;
+import com.meng.tip.*;
 
 /*
  * 本文件是JCQ插件的主类<br>
@@ -100,6 +101,7 @@ public class Autoreply extends JcqAppAbstract implements ICQVer, IMsg, IRequest 
     public FanPoHaiManager fph;
     public HashSet<Long> botOff = new HashSet<>();
 	public CoinManager coinManager;
+	public BirthdayTip birthdayTip;
 	
 	public DiceImitate diceImitate=new DiceImitate();
 	public static long mainGroup=1023432971l;
@@ -177,6 +179,7 @@ public class Autoreply extends JcqAppAbstract implements ICQVer, IMsg, IRequest 
         fph = new FanPoHaiManager();
         naiManager = new NaiManager();
 		seqManager = new SeqManager();
+		birthdayTip = new BirthdayTip();
 		try {
 			connectServer = new ConnectServer(9961);
 			connectServer.start();
