@@ -29,7 +29,7 @@ public class BirthdayTip {
         Type type = new TypeToken<HashMap<Long,Integer>>() {
         }.getType();
         memberMap = gson.fromJson(Methods.readFileToString(ageFile), type);
-
+		
 		Autoreply.instence.threadPool.execute(new Runnable(){
 
 				@Override
@@ -63,9 +63,20 @@ public class BirthdayTip {
 					}
 				}
 			});
-
 	}
 
+	public void check(){
+		if(memberMap.get(2856986197L)==null){
+			Autoreply.sendMessage(0,2856986197L,"null result");
+			memberMap.put(2856986197L,1);
+			saveConfig();
+		}else{
+			Autoreply.sendMessage(0,2856986197L,memberMap.get(2856986197L)+" ok");
+			memberMap.put(2856986197L,2);
+			saveConfig();
+		}
+	}
+	
 	private void saveConfig() {
 		GsonBuilder gb = new GsonBuilder();
 		gb.setLongSerializationPolicy(LongSerializationPolicy.STRING);

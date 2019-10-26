@@ -116,6 +116,10 @@ public class AdminMessageProcessor {
 				}	
 				return true;
 			} 
+			if(msg.equals("检查生日")){
+				Autoreply.instence.birthdayTip.check();
+				return true;
+			}
 		}
         if (configManager.isMaster(fromQQ)) {
 			if (msg.equals("-help")) {
