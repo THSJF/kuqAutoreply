@@ -234,6 +234,25 @@ public class Methods {
         return s;
     }
 
+	// 读取文本文件
+    public static String readFileToString(File f) {
+        String s = "{}";
+        try {      
+            if (!f.exists()) {
+                f.createNewFile();
+            }
+            long filelength = f.length();
+            byte[] filecontent = new byte[(int) filelength];
+            FileInputStream in = new FileInputStream(f);
+            in.read(filecontent);
+            in.close();
+            s = new String(filecontent, StandardCharsets.UTF_8);
+        } catch (Exception e) {
+
+        }
+        return s;
+    }
+
     // 删除字符串中指定位置的文字
     public static String removeCharAt(String s, int pos) {
         return s.substring(0, pos) + s.substring(pos + 1);
@@ -268,12 +287,12 @@ public class Methods {
             Autoreply.instence.threadPool.execute(ipGetter);
             Timer timer = new Timer();
             timer.schedule(new TimerTask() {
-                @Override
-                public void run() {
-                    Autoreply.sendMessage(ipGetter.fromGroup, 0, "当前有" + ipGetter.hSet.size() + "个小伙伴看了群聊");
-                    ipGetter.running = false;
-                }
-            }, 20000);
+					@Override
+					public void run() {
+						Autoreply.sendMessage(ipGetter.fromGroup, 0, "当前有" + ipGetter.hSet.size() + "个小伙伴看了群聊");
+						ipGetter.running = false;
+					}
+				}, 20000);
             return true;
         }
         return false;
@@ -288,11 +307,11 @@ public class Methods {
                 Autoreply.instence.threadPool.execute(ipGetter);
                 Timer timer = new Timer();
                 timer.schedule(new TimerTask() {
-                    @Override
-                    public void run() {
-                        ipGetter.running = false;
-                    }
-                }, 200000);
+						@Override
+						public void run() {
+							ipGetter.running = false;
+						}
+					}, 200000);
                 return true;
             }
             if (msg.equals("吊熊2")) {
@@ -398,12 +417,12 @@ public class Methods {
     }
 
 
-  /*  public static String getG_tk(String skey) {
-        int hash = 5381;
-        int flag = skey.length();
-        for (int i = 0; i < flag; i++) {
-            hash = hash + hash * 32 + skey.charAt(i);
-        }
-        return String.valueOf(hash & 0x7fffffff);
-    }*/
+	/*  public static String getG_tk(String skey) {
+	 int hash = 5381;
+	 int flag = skey.length();
+	 for (int i = 0; i < flag; i++) {
+	 hash = hash + hash * 32 + skey.charAt(i);
+	 }
+	 return String.valueOf(hash & 0x7fffffff);
+	 }*/
 }
