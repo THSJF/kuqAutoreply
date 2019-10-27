@@ -76,7 +76,7 @@ public class ThreeManager {
 		} else {
 			name = pi.name;
 		}
-		Autoreply.sendMessage(Autoreply.mainGroup,0,name + "更换了头像");
+		System.out.println(name + "更换了头像");
 	}
 
 	public boolean check(long fromGroup, long fromQQ) {
@@ -93,7 +93,8 @@ public class ThreeManager {
         try {
             url = new URL("http://q2.qlogo.cn/headimg_dl?bs=" + qq + "&dst_uin=" + qq + "&dst_uin=" + qq + "&;dst_uin=" + qq + "&spec=5&url_enc=0&referer=bu_interface&term_type=PC");
             DataInputStream dataInputStream = new DataInputStream(url.openStream());
-            FileOutputStream fileOutputStream = new FileOutputStream(headImageFile);
+			File headImageFile = new File(Autoreply.appDirectory + "user\\" + qq + ".jpg");
+			FileOutputStream fileOutputStream = new FileOutputStream(headImageFile);
             ByteArrayOutputStream output = new ByteArrayOutputStream();
             byte[] buffer = new byte[1024];
             int length;
@@ -105,7 +106,8 @@ public class ThreeManager {
             fileOutputStream.close();
         } catch (IOException e) {
             e.printStackTrace();
-        }}
+        }
+	}
 
 	public void debug() {
 		//changeMap.put(2856986197L, true);
