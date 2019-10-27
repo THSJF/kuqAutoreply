@@ -86,7 +86,7 @@ public class ThreeManager {
         try {
             url = new URL("http://q2.qlogo.cn/headimg_dl?bs=" + qq + "&dst_uin=" + qq + "&dst_uin=" + qq + "&;dst_uin=" + qq + "&spec=5&url_enc=0&referer=bu_interface&term_type=PC");
             DataInputStream dataInputStream = new DataInputStream(url.openStream());
-			headImageFile = new File(Autoreply.appDirectory + "user\\" + a + + qq + ".jpg");
+			headImageFile = new File(Autoreply.appDirectory + "user\\" + a + qq + ".jpg");
 			FileOutputStream fileOutputStream = new FileOutputStream(headImageFile);
             ByteArrayOutputStream output = new ByteArrayOutputStream();
             byte[] buffer = new byte[1024];
