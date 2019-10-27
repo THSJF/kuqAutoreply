@@ -38,6 +38,7 @@ import com.meng.bilibili.live.*;
 import com.meng.groupChat.Sequence.*;
 import com.meng.tip.*;
 import com.google.gson.*;
+import com.meng.picEdit.*;
 
 /*
  * 本文件是JCQ插件的主类<br>
@@ -103,6 +104,7 @@ public class Autoreply extends JcqAppAbstract implements ICQVer, IMsg, IRequest 
     public HashSet<Long> botOff = new HashSet<>();
 	public CoinManager coinManager;
 	public BirthdayTip birthdayTip;
+	public ThreeManager threeManager;
 	
 	public DiceImitate diceImitate=new DiceImitate();
 	public static long mainGroup=1023432971l;
@@ -185,6 +187,7 @@ public class Autoreply extends JcqAppAbstract implements ICQVer, IMsg, IRequest 
         naiManager = new NaiManager();
 		seqManager = new SeqManager();
 		birthdayTip = new BirthdayTip();
+		threeManager = new ThreeManager();
 		try {
 			connectServer = new ConnectServer(9961);
 			connectServer.start();
@@ -454,6 +457,9 @@ public class Autoreply extends JcqAppAbstract implements ICQVer, IMsg, IRequest 
         if (configManager.isNotReplyGroup(fromGroup)) {
             return MSG_IGNORE;
         }
+		if(threeManager.check(fromGroup, fromQQ)){
+			return MSG_IGNORE;
+		}
         threadPool.execute(new GroupMsgPart1Runnable(new MessageSender(fromGroup, fromQQ, msg, System.currentTimeMillis(), msgId, null)));
         // else if (System.currentTimeMillis() -
         // messageMap.get(fromQQ).getTimeStamp() > 1000) {

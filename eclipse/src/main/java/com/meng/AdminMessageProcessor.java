@@ -116,8 +116,8 @@ public class AdminMessageProcessor {
 				}	
 				return true;
 			} 
-			if (msg.equals("检查生日")) {
-				Autoreply.instence.birthdayTip.check();
+			if (msg.equals("检查头像")) {
+				Autoreply.instence.threeManager.debug();
 				return true;
 			}
 		}
