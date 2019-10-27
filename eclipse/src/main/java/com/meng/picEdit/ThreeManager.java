@@ -59,7 +59,10 @@ public class ThreeManager {
 		try {
 			URL url = new URL("http://q2.qlogo.cn/headimg_dl?bs=" + qq + "&dst_uin=" + qq + "&dst_uin=" + qq + "&;dst_uin=" + qq + "&spec=5&url_enc=0&referer=bu_interface&term_type=PC");
             DataInputStream dataInputStream = new DataInputStream(url.openStream());
-            if (dataInputStream.available() == headImageFile.length()) {
+			try {
+				Thread.sleep(200);
+			} catch (InterruptedException e) {}
+			if (dataInputStream.available() == headImageFile.length()) {
 				changeMap.put(qq, false);
 				return;
             }
