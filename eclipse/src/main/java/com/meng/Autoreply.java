@@ -37,6 +37,7 @@ import java.util.concurrent.*;
 import com.meng.bilibili.live.*;
 import com.meng.groupChat.Sequence.*;
 import com.meng.tip.*;
+import com.google.gson.*;
 
 /*
  * 本文件是JCQ插件的主类<br>
@@ -105,6 +106,7 @@ public class Autoreply extends JcqAppAbstract implements ICQVer, IMsg, IRequest 
 	
 	public DiceImitate diceImitate=new DiceImitate();
 	public static long mainGroup=1023432971l;
+	public static Gson gson;
     /**
      * @param args 系统参数
      */
@@ -143,6 +145,9 @@ public class Autoreply extends JcqAppAbstract implements ICQVer, IMsg, IRequest 
         // 获取应用数据目录(无需储存数据时，请将此行注释)
         instence = this;
         appDirectory = CQ.getAppDirectory();
+		GsonBuilder gb = new GsonBuilder();
+		gb.setLongSerializationPolicy(LongSerializationPolicy.STRING);
+		gson = gb.create();
         createdImageFolder = Autoreply.appDirectory + "createdImages/";
         // 返回如：D:\CoolQ\app\com.sobte.cqp.jcq\app\com.example.demo\
         System.out.println("开始加载");

@@ -116,7 +116,7 @@ public class AdminMessageProcessor {
 				}	
 				return true;
 			} 
-			if(msg.equals("检查生日")){
+			if (msg.equals("检查生日")) {
 				Autoreply.instence.birthdayTip.check();
 				return true;
 			}
@@ -132,7 +132,7 @@ public class AdminMessageProcessor {
 				ArchievementBean ab=Autoreply.instence.spellCollect.archiMap.get(String.valueOf(toQQ));
 				if (ab == null) {
 					ab = new ArchievementBean();
-					Autoreply.instence.spellCollect.archiMap.put(String.valueOf(toQQ), ab);
+					Autoreply.instence.spellCollect.archiMap.put(toQQ, ab);
 				}
 				for (Archievement ac:Autoreply.instence.spellCollect.archList) {
 					if (ac.name.equals(arch)) {

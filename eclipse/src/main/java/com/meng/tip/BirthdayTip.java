@@ -18,42 +18,20 @@ public class BirthdayTip {
 	private HashMap<Long,Integer> memberMap=new HashMap<>();
 	public BirthdayTip() {
 
-		GsonBuilder gb = new GsonBuilder();
-		gb.setLongSerializationPolicy(LongSerializationPolicy.STRING);
-		Gson gson = gb.create();
-
 		ageFile = new File(Autoreply.appDirectory + "/properties/birthday.json");
         if (!ageFile.exists()) {
             saveConfig();
         }
         Type type = new TypeToken<HashMap<Long,Integer>>() {
         }.getType();
-        memberMap = gson.fromJson(Methods.readFileToString(ageFile), type);
-		
+        memberMap = Autoreply.gson.fromJson(Methods.readFileToString(ageFile), type);
+
 		Autoreply.instence.threadPool.execute(new Runnable(){
 
 				@Override
 				public void run() {
 					while (true) {
-						Calendar c = Calendar.getInstance();
-						if (c.get(Calendar.HOUR_OF_DAY) == 8 && c.get(Calendar.MINUTE) == 10) {
-							List<Group> groups=Autoreply.CQ.getGroupList();
-							for (Group group:groups) {
-								List<Member> members=Autoreply.CQ.getGroupMemberList(group.getId());
-								for (Member member:members) {
-									if (memberMap.get(member.getQqId()) != null && member.getAge() > memberMap.get(member.getQqId())) {
-										if (!tiped.contains(member.getQqId())) {
-											Autoreply.sendMessage(0, member.getQqId(), "生日快乐!");
-											tiped.add(member.getQqId());
-										}
-									}
-									memberMap.put(member.getQqId(), member.getAge());
-								}
-							}
-							saveConfig();
-							tiped.clear();
-						}
-
+						check();
 						try {
 							Thread.sleep(60000);
 						} catch (InterruptedException e) {
@@ -65,27 +43,32 @@ public class BirthdayTip {
 			});
 	}
 
-	public void check(){
-		if(memberMap.get(2856986197L)==null){
-			Autoreply.sendMessage(0,2856986197L,"null result");
-			memberMap.put(2856986197L,1);
+	public void check() {
+		Calendar c = Calendar.getInstance();
+		if (c.get(Calendar.HOUR_OF_DAY) == 8 && c.get(Calendar.MINUTE) == 10) {
+			List<Group> groups=Autoreply.CQ.getGroupList();
+			for (Group group:groups) {
+				List<Member> members=Autoreply.CQ.getGroupMemberList(group.getId());
+				for (Member member:members) {
+					if (memberMap.get(member.getQqId()) != null && member.getAge() > memberMap.get(member.getQqId())) {
+						if (!tiped.contains(member.getQqId())) {
+							Autoreply.sendMessage(0, member.getQqId(), "生日快乐!");
+							tiped.add(member.getQqId());
+						}
+					}
+					memberMap.put(member.getQqId(), member.getAge());
+				}
+			}
 			saveConfig();
-		}else{
-			Autoreply.sendMessage(0,2856986197L,memberMap.get(2856986197L)+" ok");
-			memberMap.put(2856986197L,2);
-			saveConfig();
+			tiped.clear();
 		}
 	}
-	
-	private void saveConfig() {
-		GsonBuilder gb = new GsonBuilder();
-		gb.setLongSerializationPolicy(LongSerializationPolicy.STRING);
-		Gson gson = gb.create();
 
+	private void saveConfig() {
         try {
             FileOutputStream fos = new FileOutputStream(ageFile);
             OutputStreamWriter writer = new OutputStreamWriter(fos, StandardCharsets.UTF_8);
-            writer.write(gson.toJson(memberMap));
+            writer.write(Autoreply.gson.toJson(memberMap));
             writer.flush();
             fos.close();
         } catch (IOException e) {

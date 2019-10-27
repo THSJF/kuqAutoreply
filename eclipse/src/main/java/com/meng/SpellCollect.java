@@ -11,8 +11,8 @@ import java.util.*;
 import java.util.concurrent.*;
 
 public class SpellCollect {
-	private ConcurrentHashMap<String,HashSet<String>> chm=new ConcurrentHashMap<>();
-	public ConcurrentHashMap<String,ArchievementBean> archiMap=new ConcurrentHashMap<>();
+	private ConcurrentHashMap<Long,HashSet<String>> chm=new ConcurrentHashMap<>();
+	public ConcurrentHashMap<Long,ArchievementBean> archiMap=new ConcurrentHashMap<>();
 	private HashSet<Long> todayCard=new HashSet<>();
 	private HashSet<Long> todaySign=new HashSet<>();
 	private File archiFile;
@@ -23,17 +23,17 @@ public class SpellCollect {
         if (!spellFile.exists()) {
             saveConfig();
         }
-        Type type = new TypeToken<ConcurrentHashMap<String,HashSet<String>>>() {
+        Type type = new TypeToken<ConcurrentHashMap<Long,HashSet<String>>>() {
         }.getType();
-        chm = new Gson().fromJson(Methods.readFileToString(Autoreply.appDirectory + "/properties/spells.json"), type);
+        chm = Autoreply.gson.fromJson(Methods.readFileToString(Autoreply.appDirectory + "/properties/spells.json"), type);
 
 		archiFile = new File(Autoreply.appDirectory + "/properties/archievement.json");
         if (!archiFile.exists()) {
             saveArchiConfig();
         }
-        Type type2 = new TypeToken<ConcurrentHashMap<String,ArchievementBean>>() {
+        Type type2 = new TypeToken<ConcurrentHashMap<Long,ArchievementBean>>() {
         }.getType();
-        archiMap = new Gson().fromJson(Methods.readFileToString(Autoreply.appDirectory + "/properties/archievement.json"), type2);
+        archiMap = Autoreply.gson.fromJson(Methods.readFileToString(Autoreply.appDirectory + "/properties/archievement.json"), type2);
 
 		archList.add(new Archievement("恶魔领地", "收集东方红魔乡全部符卡", ArchievementBean.th6All, DiceImitate.sp6.size(), DiceImitate.sp6));
 		archList.add(new Archievement("完美樱花", "收集东方妖妖梦全部符卡",  ArchievementBean.th7All, DiceImitate.sp7.size(), DiceImitate.sp7));
@@ -150,7 +150,7 @@ public class SpellCollect {
 			HashSet<String> tmpSet=chm.get(String.valueOf(chan.get(0)));
 			if (tmpSet == null) {
 				tmpSet = new HashSet<String>();
-				chm.put(String.valueOf(chan.get(0)), tmpSet);
+				chm.put(chan.get(0), tmpSet);
 			}
 			Random r=new Random();
 			StringBuilder sb=new StringBuilder("你获得了:");
@@ -184,7 +184,7 @@ public class SpellCollect {
 				HashSet<String> gotSpellsSet=chm.get(String.valueOf(fromQQ));
 				if (gotSpellsSet == null) {
 					gotSpellsSet = new HashSet<String>();
-					chm.put(String.valueOf(fromQQ), gotSpellsSet);
+					chm.put(fromQQ, gotSpellsSet);
 				}
 				Random r=new Random();
 				StringBuilder sb=new StringBuilder("你获得了:");
@@ -232,7 +232,7 @@ public class SpellCollect {
 			HashSet<String> tmpSet=chm.get(String.valueOf(fromQQ));
 			if (tmpSet == null) {
 				tmpSet = new HashSet<String>();
-				chm.put(String.valueOf(fromQQ), tmpSet);
+				chm.put(fromQQ, tmpSet);
 			}
 			Random r=new Random();
 			StringBuilder sb=new StringBuilder("你获得了:");
@@ -263,7 +263,7 @@ public class SpellCollect {
 				HashSet<String> gotSpellSet=chm.get(String.valueOf(fromQQ));
 				if (gotSpellSet == null) {
 					gotSpellSet = new HashSet<String>();
-					chm.put(String.valueOf(fromQQ), gotSpellSet);
+					chm.put(fromQQ, gotSpellSet);
 				}
 				gotSpellSet.add(spellName);
 				Autoreply.sendMessage(fromGroup, 0, "你获得了:" + spellName);
@@ -352,7 +352,7 @@ public class SpellCollect {
 		ArchievementBean ab=archiMap.get(String.valueOf(toQQ));
 		if (ab == null) {
 			ab = new ArchievementBean();
-			archiMap.put(String.valueOf(toQQ), ab);
+			archiMap.put(toQQ, ab);
 		}
 		for (Archievement ac:archList) {
 			if (ac.getNewArchievement(ab, gotSpell)) {
