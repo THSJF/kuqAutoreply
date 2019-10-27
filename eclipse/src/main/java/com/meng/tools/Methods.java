@@ -251,31 +251,6 @@ public class Methods {
         return s;
     }
 
-    // 删除字符串中指定位置的文字
-    public static String removeCharAt(String s, int pos) {
-        return s.substring(0, pos) + s.substring(pos + 1);
-    }
-
-    // 获取字符串中指定位置的文字
-    public static String getStringBetween(String str, String start, String end, int index) {
-        int flagA = str.indexOf(start, index);
-        int flagB = str.indexOf(end, flagA + 1);
-        if (flagA < 0 || flagB < 0) {
-            return null;
-        }
-        flagA = flagA + start.length();
-        if (flagA < 0) {
-            return null;
-        }
-        return str.substring(flagA, flagB);
-    }
-
-    // 删除字符串两端
-    public static String removeCharAtStartAndEnd(String s) {
-        String tmp = removeCharAt(s, 0);
-        return removeCharAt(tmp, tmp.length() - 1);
-    }
-
     // 窥屏检测
     public static boolean checkLook(long fromGroup, String msg) {
         if (msg.equals("有人吗") || msg.equalsIgnoreCase("testip") || msg.equalsIgnoreCase("窥屏检测")) {

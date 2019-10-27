@@ -381,13 +381,13 @@ public class SpellCollect {
                 File backup1= new File(spellFile.getAbsolutePath() + ".bak" + System.currentTimeMillis());
                 FileOutputStream fos1 = new FileOutputStream(backup1);
                 OutputStreamWriter writer1 = new OutputStreamWriter(fos1, StandardCharsets.UTF_8);
-                writer1.write(new Gson().toJson(chm));
+                writer1.write(Autoreply.gson.toJson(chm));
                 writer1.flush();
                 fos1.close();			
 				File ar=new File(archiFile.getAbsolutePath() + ".bak" + System.currentTimeMillis());
 				FileOutputStream fos = new FileOutputStream(ar);
                 OutputStreamWriter writer = new OutputStreamWriter(fos, StandardCharsets.UTF_8);
-                writer.write(new Gson().toJson(archiMap));
+                writer.write(Autoreply.gson.toJson(archiMap));
                 writer.flush();
                 fos.close();			
             } catch (Exception e) {
@@ -400,7 +400,7 @@ public class SpellCollect {
         try {
             FileOutputStream fos = new FileOutputStream(spellFile);
             OutputStreamWriter writer = new OutputStreamWriter(fos, StandardCharsets.UTF_8);
-            writer.write(new Gson().toJson(chm));
+            writer.write(Autoreply.gson.toJson(chm));
             writer.flush();
             fos.close();
         } catch (IOException e) {
@@ -412,7 +412,7 @@ public class SpellCollect {
         try {
             FileOutputStream fos = new FileOutputStream(archiFile);
             OutputStreamWriter writer = new OutputStreamWriter(fos, StandardCharsets.UTF_8);
-            writer.write(new Gson().toJson(archiMap));
+            writer.write(Autoreply.gson.toJson(archiMap));
             writer.flush();
             fos.close();
         } catch (IOException e) {

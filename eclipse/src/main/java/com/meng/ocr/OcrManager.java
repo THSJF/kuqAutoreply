@@ -18,8 +18,7 @@ public class OcrManager {
     public static final String SECRET_KEY = "71hGdBXfZIG1wWSLNI2YtCJrz62rIe8t";
     public static final String USER_ID = "2856986197"; // qq号
     public Youtu faceYoutu = new Youtu(APP_ID, SECRET_ID, SECRET_KEY, Youtu.API_YOUTU_END_POINT, USER_ID);
-    public Gson gson = new Gson();
-
+    
     public boolean checkOcr(long fromGroup, long fromQQ, String msg, File[] imageFiles) {
         JSONObject response;
         try {

@@ -60,7 +60,7 @@ public class OggInterface {
             return true;
         }
         if (msg.startsWith("直播状态bid:")) {
-            SpaceToLiveJavaBean sjb = new Gson().fromJson(Methods.getSourceCode("https://api.live.bilibili.com/room/v1/Room/getRoomInfoOld?mid=" + msg.substring(8)), SpaceToLiveJavaBean.class);
+            SpaceToLiveJavaBean sjb = Autoreply.gson.fromJson(Methods.getSourceCode("https://api.live.bilibili.com/room/v1/Room/getRoomInfoOld?mid=" + msg.substring(8)), SpaceToLiveJavaBean.class);
             sendPrivateMessage(fromQQ, sjb.data.liveStatus == 1 ? "true" : "false");
             return true;
         }
@@ -71,7 +71,7 @@ public class OggInterface {
         if (msg.startsWith("add{")) {
             PersonInfo personInfo;
             try {
-                personInfo = new Gson().fromJson(msg.substring(3), PersonInfo.class);
+                personInfo = Autoreply.gson.fromJson(msg.substring(3), PersonInfo.class);
             } catch (Exception e) {
                 sendPrivateMessage(fromQQ, e.toString());
                 return true;
@@ -88,7 +88,7 @@ public class OggInterface {
         if (msg.startsWith("del{")) {
             PersonInfo p;
             try {
-                p = new Gson().fromJson(msg.substring(3), PersonInfo.class);
+                p = Autoreply.gson.fromJson(msg.substring(3), PersonInfo.class);
             } catch (Exception e) {
                 sendPrivateMessage(fromQQ, e.toString());
                 return true;
@@ -119,7 +119,7 @@ public class OggInterface {
                     hashSet.add(personInfo);
                 }
             }
-            sendPrivateMessage(fromQQ, new Gson().toJson(hashSet));
+            sendPrivateMessage(fromQQ, Autoreply.gson.toJson(hashSet));
             return true;
         }
         return false;

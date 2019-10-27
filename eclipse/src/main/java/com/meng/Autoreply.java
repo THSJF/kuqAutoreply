@@ -77,7 +77,7 @@ public class Autoreply extends JcqAppAbstract implements ICQVer, IMsg, IRequest 
     public NaiManager naiManager;
     public OcrManager ocrManager = new OcrManager();
     public ConcurrentHashMap<Long, MessageSender> messageMap = new ConcurrentHashMap<>();
-    private FileInfoManager fileInfoManager = new FileInfoManager();
+    //private FileInfoManager fileInfoManager = new FileInfoManager();
     public PicEditManager picEditManager = new PicEditManager();
     public BanListener banListener;
     public ZanManager zanManager;

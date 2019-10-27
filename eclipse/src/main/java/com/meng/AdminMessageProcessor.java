@@ -315,7 +315,7 @@ public class AdminMessageProcessor {
                 return true;
 			}
             if (msg.startsWith("直播状态bid:")) {
-                SpaceToLiveJavaBean sjb = new Gson().fromJson(Methods.getSourceCode("https://api.live.bilibili.com/room/v1/Room/getRoomInfoOld?mid=" + msg.substring(8)), SpaceToLiveJavaBean.class);
+                SpaceToLiveJavaBean sjb = Autoreply.gson.fromJson(Methods.getSourceCode("https://api.live.bilibili.com/room/v1/Room/getRoomInfoOld?mid=" + msg.substring(8)), SpaceToLiveJavaBean.class);
                 Autoreply.sendMessage(fromGroup, fromQQ, sjb.data.liveStatus == 1 ? "true" : "false");
                 return true;
 			}
@@ -326,7 +326,7 @@ public class AdminMessageProcessor {
             if (msg.startsWith("add{")) {
                 PersonInfo personInfo;
                 try {
-                    personInfo = new Gson().fromJson(msg.substring(3), PersonInfo.class);
+                    personInfo = Autoreply.gson.fromJson(msg.substring(3), PersonInfo.class);
 				} catch (Exception e) {
                     Autoreply.sendMessage(fromGroup, fromQQ, e.toString());
                     return true;
@@ -346,7 +346,7 @@ public class AdminMessageProcessor {
             if (msg.startsWith("del{")) {
                 PersonInfo p;
                 try {
-                    p = new Gson().fromJson(msg.substring(3), PersonInfo.class);
+                    p = Autoreply.gson.fromJson(msg.substring(3), PersonInfo.class);
 				} catch (Exception e) {
                     Autoreply.sendMessage(fromGroup, fromQQ, e.toString());
                     return true;
@@ -377,7 +377,7 @@ public class AdminMessageProcessor {
                         hashSet.add(personInfo);
 					}
 				}
-                Autoreply.sendMessage(fromGroup, fromQQ, new Gson().toJson(hashSet));
+                Autoreply.sendMessage(fromGroup, fromQQ, Autoreply.gson.toJson(hashSet));
                 return true;
 			}
             if (msg.equals("saveconfig")) {

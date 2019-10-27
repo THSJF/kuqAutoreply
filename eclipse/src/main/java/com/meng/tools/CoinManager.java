@@ -73,7 +73,7 @@ public class CoinManager {
 		try {
 			FileOutputStream fos = new FileOutputStream(file);
 			OutputStreamWriter writer = new OutputStreamWriter(fos, StandardCharsets.UTF_8);
-			writer.write(new Gson().toJson(countMap));
+			writer.write(Autoreply.gson.toJson(countMap));
 			writer.flush();
 			fos.close();
 		} catch (Exception e) {
@@ -88,7 +88,7 @@ public class CoinManager {
 				File backup = new File(file.getAbsolutePath() + ".bak" + System.currentTimeMillis());
 				FileOutputStream fos = new FileOutputStream(backup);
 				OutputStreamWriter writer = new OutputStreamWriter(fos, StandardCharsets.UTF_8);
-				writer.write(new Gson().toJson(countMap));
+				writer.write(Autoreply.gson.toJson(countMap));
 				writer.flush();
 				fos.close();
 			} catch (Exception e) {

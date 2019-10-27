@@ -11,7 +11,6 @@ import java.nio.charset.*;
 
 public class CookieManager {
 
-	public Gson gson = new Gson();
     public Cookie cookie=new Cookie();
 
 	public CookieManager() {
@@ -21,7 +20,7 @@ public class CookieManager {
 		  }
         Type type = new TypeToken<Cookie>() {
 		  }.getType();
-        cookie = gson.fromJson(Methods.readFileToString(Autoreply.appDirectory + "cookie.json"), type);
+        cookie = Autoreply.gson.fromJson(Methods.readFileToString(Autoreply.appDirectory + "cookie.json"), type);
 	  }
 
 	public void saveConfig() {
@@ -29,7 +28,7 @@ public class CookieManager {
             File file = new File(Autoreply.appDirectory + "cookie.json");
             FileOutputStream fos = new FileOutputStream(file);
             OutputStreamWriter writer = new OutputStreamWriter(fos, StandardCharsets.UTF_8);
-            writer.write(gson.toJson(cookie));
+            writer.write(Autoreply.gson.toJson(cookie));
             writer.flush();
             fos.close();
 		  } catch (IOException e) {

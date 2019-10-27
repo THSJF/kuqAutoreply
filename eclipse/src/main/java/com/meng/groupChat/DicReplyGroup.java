@@ -32,7 +32,7 @@ public class DicReplyGroup {
         }
         Type type = new TypeToken<HashMap<String, HashSet<String>>>() {
         }.getType();
-        dic = new Gson().fromJson(Methods.readFileToString(dicFile.getAbsolutePath()), type);
+        dic = Autoreply.gson.fromJson(Methods.readFileToString(dicFile.getAbsolutePath()), type);
     }
 
     public boolean checkMsg(long group, long qq, String msg) {
