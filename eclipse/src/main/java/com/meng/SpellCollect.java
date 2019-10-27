@@ -147,7 +147,7 @@ public class SpellCollect {
 			} catch (NumberFormatException e) {
 				Autoreply.sendMessage(fromGroup, 0, e.toString());
 			}
-			HashSet<String> tmpSet=chm.get(String.valueOf(chan.get(0)));
+			HashSet<String> tmpSet=chm.get(chan.get(0));
 			if (tmpSet == null) {
 				tmpSet = new HashSet<String>();
 				chm.put(chan.get(0), tmpSet);
@@ -181,7 +181,7 @@ public class SpellCollect {
 					Autoreply.sendMessage(fromGroup, 0, "本地幻币不足");
 					return true;
 				}	
-				HashSet<String> gotSpellsSet=chm.get(String.valueOf(fromQQ));
+				HashSet<String> gotSpellsSet=chm.get(fromQQ);
 				if (gotSpellsSet == null) {
 					gotSpellsSet = new HashSet<String>();
 					chm.put(fromQQ, gotSpellsSet);
@@ -229,7 +229,7 @@ public class SpellCollect {
 				Autoreply.sendMessage(fromGroup, 0, "你今天已经抽过啦");
 				return true;
 			}
-			HashSet<String> tmpSet=chm.get(String.valueOf(fromQQ));
+			HashSet<String> tmpSet=chm.get(fromQQ);
 			if (tmpSet == null) {
 				tmpSet = new HashSet<String>();
 				chm.put(fromQQ, tmpSet);
@@ -260,7 +260,7 @@ public class SpellCollect {
 				return true;
 			}
 			if (isCointains(spellName)) {		
-				HashSet<String> gotSpellSet=chm.get(String.valueOf(fromQQ));
+				HashSet<String> gotSpellSet=chm.get(fromQQ);
 				if (gotSpellSet == null) {
 					gotSpellSet = new HashSet<String>();
 					chm.put(fromQQ, gotSpellSet);
@@ -278,7 +278,7 @@ public class SpellCollect {
 
 		if (msg.equals("查看符卡")) {
 			StringBuilder sb=new StringBuilder();
-			HashSet<String> gtdspl=chm.get(String.valueOf(fromQQ));
+			HashSet<String> gtdspl=chm.get(fromQQ);
 			if (gtdspl == null) {
 				Autoreply.sendMessage(fromGroup, 0, "你没有参加过抽卡");
 				return true;
@@ -309,7 +309,7 @@ public class SpellCollect {
 
 		if (msg.equals("查看成就")) {
 			StringBuilder sb=new StringBuilder("列表:");
-			ArchievementBean ab=archiMap.get(String.valueOf(fromQQ));
+			ArchievementBean ab=archiMap.get(fromQQ);
 			if (ab == null) {
 				Autoreply.sendMessage(fromGroup, 0, "你没有获得成就");
 				return true;
@@ -349,7 +349,7 @@ public class SpellCollect {
 	}
 
 	private void checkArchievement(long fromGroup, long toQQ, HashSet<String> gotSpell) {
-		ArchievementBean ab=archiMap.get(String.valueOf(toQQ));
+		ArchievementBean ab=archiMap.get(toQQ);
 		if (ab == null) {
 			ab = new ArchievementBean();
 			archiMap.put(toQQ, ab);

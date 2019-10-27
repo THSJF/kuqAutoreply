@@ -26,9 +26,7 @@ import com.meng.lookGroup.IPGetter;
 import com.meng.diaoXiongJiHua.XiongIPGetter;
 
 public class Methods {
-    private static String motmp = "";
-    private static String meng2tmp = "";
-
+    
     public static boolean ban(long fromGroup, long banQQ, int time) {
         if (banQQ == 2558395159L || Autoreply.instence.configManager.isAdmin(banQQ)) {
             return false;

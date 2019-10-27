@@ -9,7 +9,7 @@ import java.nio.charset.*;
 import java.util.*;
 
 public class CoinManager {
-	private HashMap<String, Integer> countMap = new HashMap<>();
+	private HashMap<Long, Integer> countMap = new HashMap<>();
 	private File file;
 
 	public CoinManager() {
@@ -17,9 +17,9 @@ public class CoinManager {
 		if (!file.exists()) {
 			saveData();
 		}
-		Type type = new TypeToken<HashMap<String, Integer>>() {
+		Type type = new TypeToken<HashMap<Long, Integer>>() {
 		}.getType();
-		countMap = new Gson().fromJson(Methods.readFileToString(file.getAbsolutePath()), type);
+		countMap = Autoreply.gson.fromJson(Methods.readFileToString(file.getAbsolutePath()), type);
 		Autoreply.instence.threadPool.execute(new Runnable() {
 				@Override
 				public void run() {
@@ -28,43 +28,43 @@ public class CoinManager {
 			});
 	}
 
-	public void addCoins(long fromQQ, int coins){
-		if (countMap.get(String.valueOf(fromQQ)) != null){
-			int qqCoin=countMap.get(String.valueOf(fromQQ));
+	public void addCoins(long fromQQ, int coins) {
+		if (countMap.get(fromQQ) != null) {
+			int qqCoin=countMap.get(fromQQ);
 			qqCoin += coins;
-			countMap.put(String.valueOf(fromQQ), qqCoin);
-		}else{
-			countMap.put(String.valueOf(fromQQ), coins);
+			countMap.put(fromQQ, qqCoin);
+		} else {
+			countMap.put(fromQQ, coins);
 		}
 		saveData();
 	}
 
 	public boolean subCoins(long fromQQ, int coins) {
-		if (countMap.get(String.valueOf(fromQQ)) != null){
-			int qqCoin=countMap.get(String.valueOf(fromQQ));
-			if (qqCoin < coins){
+		if (countMap.get(fromQQ) != null) {
+			int qqCoin=countMap.get(fromQQ);
+			if (qqCoin < coins) {
 				return false;
 			}
 			qqCoin -= coins;
-			countMap.put(String.valueOf(fromQQ), qqCoin);
+			countMap.put(fromQQ, qqCoin);
 			saveData();
 			return true;
 		}
 		return false;
 	}
 
-	public int getCoinsCount(long fromQQ){
-		if (countMap.get(String.valueOf(fromQQ)) == null){
+	public int getCoinsCount(long fromQQ) {
+		if (countMap.get(fromQQ) == null) {
 			return 0;
 		}
-		return countMap.get(String.valueOf(fromQQ));
+		return countMap.get(fromQQ);
 	}
 
-	public void exchangeCoins(long fromGroup, long fromQQ, int coins){
-		if (subCoins(fromQQ, coins)){
+	public void exchangeCoins(long fromGroup, long fromQQ, int coins) {
+		if (subCoins(fromQQ, coins)) {
 			Autoreply.sendMessage(1023432971L, 0, "~addcoins " + coins + " " + fromQQ);
 			Autoreply.sendMessage(fromGroup, 0, "兑换" + coins + "个幻币至小律影");
-		}else{
+		} else {
 			Autoreply.sendMessage(fromGroup, 0, "兑换失败");
 		}
 	}
