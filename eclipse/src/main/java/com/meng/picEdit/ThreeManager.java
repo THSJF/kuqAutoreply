@@ -52,25 +52,14 @@ public class ThreeManager {
         }
 		File headImageFile = new File(Autoreply.appDirectory + "user\\" + qq + ".jpg");
 		if (!headImageFile.exists()) {
-			downloadHead(qq);
+			downloadHead(qq, "");
 			changeMap.put(qq, false);
 			return;
 		}
-		try {
-			URL url = new URL("http://q2.qlogo.cn/headimg_dl?bs=" + qq + "&dst_uin=" + qq + "&dst_uin=" + qq + "&;dst_uin=" + qq + "&spec=5&url_enc=0&referer=bu_interface&term_type=PC");
-            DataInputStream dataInputStream = new DataInputStream(url.openStream());
-			try {
-				Thread.sleep(200);
-			} catch (InterruptedException e) {}
-			if (dataInputStream.available() == headImageFile.length()) {
-				changeMap.put(qq, false);
-				return;
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
+		if (downloadHead(qq, "a").length() == headImageFile.length()) {
 			changeMap.put(qq, false);
 			return;
-        }
+		}
 		changeMap.put(qq, true);
 		PersonInfo pi=Autoreply.instence.configManager.getPersonInfoFromQQ(qq);
 		String name;
@@ -91,12 +80,13 @@ public class ThreeManager {
 		return false;
 	}
 
-	private void downloadHead(long qq) {
+	private File downloadHead(long qq, String a) {
         URL url;
+		File headImageFile;
         try {
             url = new URL("http://q2.qlogo.cn/headimg_dl?bs=" + qq + "&dst_uin=" + qq + "&dst_uin=" + qq + "&;dst_uin=" + qq + "&spec=5&url_enc=0&referer=bu_interface&term_type=PC");
             DataInputStream dataInputStream = new DataInputStream(url.openStream());
-			File headImageFile = new File(Autoreply.appDirectory + "user\\" + qq + ".jpg");
+			headImageFile = new File(Autoreply.appDirectory + "user\\" + a + + qq + ".jpg");
 			FileOutputStream fileOutputStream = new FileOutputStream(headImageFile);
             ByteArrayOutputStream output = new ByteArrayOutputStream();
             byte[] buffer = new byte[1024];
@@ -109,7 +99,9 @@ public class ThreeManager {
             fileOutputStream.close();
         } catch (IOException e) {
             e.printStackTrace();
+			return null;
         }
+		return headImageFile;
 	}
 
 	public void debug() {
