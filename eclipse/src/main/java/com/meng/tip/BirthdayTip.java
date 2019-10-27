@@ -36,7 +36,7 @@ public class BirthdayTip {
 				public void run() {
 					while (true) {
 						Calendar c = Calendar.getInstance();
-						if (c.get(Calendar.HOUR_OF_DAY) == 21 && c.get(Calendar.MINUTE) == 0) {
+						if (c.get(Calendar.HOUR_OF_DAY) == 8 && c.get(Calendar.MINUTE) == 10) {
 							List<Group> groups=Autoreply.CQ.getGroupList();
 							for (Group group:groups) {
 								List<Member> members=Autoreply.CQ.getGroupMemberList(group.getId());
