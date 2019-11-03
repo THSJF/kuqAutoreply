@@ -9,6 +9,8 @@ import org.java_websocket.server.*;
 import com.meng.*;
 import com.meng.config.javabeans.*;
 import com.google.gson.*;
+import java.util.*;
+import com.meng.bilibili.live.*;
 
 public class ConnectServer extends WebSocketServer {
 
@@ -47,20 +49,27 @@ public class ConnectServer extends WebSocketServer {
 		}
 	}
 
-	private void oggProcess(DataPack dp) {
-		switch (dp.getOpCode()) {
+	private void oggProcess(DataPack dataPack) {
+		DataPack dp=null;
+		switch (dataPack.getOpCode()) {
 			case DataPack._0notification:
 				break;
 			case DataPack._1verify:
 				break;
 			case DataPack._2getLiveList:
+				HashSet<PersonInfo> hashSet=new HashSet<>();
+				for(long bid:Autoreply.instence.liveListener.livePersonMap.keySet()){
+					hashSet.add(Autoreply.instence.configManager.getPersonInfoFromBid(bid));
+				}
+				dp=DataPack.encode(DataPack._3returnLiveList,dataPack.getTimeStamp());
+				dp.write(Autoreply.gson.toJson(hashSet));
 				break;
 			case DataPack._3returnLiveList:
 				break;
 			case DataPack._4liveStart:
 				break;
 			case DataPack._5liveStop:
-				break;	
+				break;
 			case DataPack._6speakInLiveRoom:
 				break;
 			case DataPack._7newVideo:
@@ -68,6 +77,13 @@ public class ConnectServer extends WebSocketServer {
 			case DataPack._8newArtical:
 				break;
 			case DataPack._9getPersonInfoByName:
+				HashSet<PersonInfo> hs9=new HashSet<>();
+				PersonInfo pi=Autoreply.instence.configManager.getPersonInfoFromName(dp.readString());
+				if(pi!=null){
+					hs9.add(pi);
+				}
+				dp=DataPack.encode(DataPack._13returnPersonInfo,dp.getTimeStamp());
+				dp.write(Autoreply.gson.toJson(hs9));
 				break;
 			case DataPack._10getPersonInfoByQQ:
 				break;
@@ -85,10 +101,14 @@ public class ConnectServer extends WebSocketServer {
 				break;
 			case DataPack._17heartBeat:
 				break;
+			default:
+			dp=DataPack.encode((short)0,dataPack.getTimeStamp());
+			dp.write("操作类型错误");
 		} 
-		DataPack ndp=DataPack.encode(DataPack._0notification, dp.getTimeStamp());
-		ndp.write("成功");
-		oggConnect.send(ndp.getData());
+		oggConnect.send(dp.getData());
+	//	DataPack ndp=DataPack.encode(DataPack._0notification, dataPack.getTimeStamp());
+	//	ndp.write("成功");
+	//	oggConnect.send(ndp.getData());
 	}
 
 //	public static void main(String[] args) throws InterruptedException , IOException {

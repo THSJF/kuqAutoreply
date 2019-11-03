@@ -63,14 +63,6 @@ public class DataPack {
 		data = pack;
 	} 
 
-	public String getString() {
-		try {
-			return new String(data, headLength, getLength() - headLength, "utf-8");
-		} catch (UnsupportedEncodingException e) {
-			return null;
-		}
-	}
-
 	public byte[] getData() {
 		byte[] retData=new byte[readPointer];
 		for (int i=0;i < readPointer;++i) {
@@ -172,15 +164,15 @@ public class DataPack {
 		return bs;	
 	}
 
-	public short readShort(byte[] data, int pos) {
+	private short readShort(byte[] data, int pos) {
         return (short) ((data[pos] & 0xff) << 0 | (data[pos + 1] & 0xff) << 8);
 	}
 
-	public int readInt(byte[] data, int pos) {
+	private int readInt(byte[] data, int pos) {
         return (data[pos] & 0xff) << 0 | (data[pos + 1] & 0xff) << 8 | (data[pos + 2] & 0xff) << 16 | (data[pos + 3] & 0xff) << 24;
 	}
 
-	public long readLong(byte[] data, int pos) {
+	private long readLong(byte[] data, int pos) {
         return ((data[pos] & 0xffL) << 0) | (data[pos + 1] & 0xffL) << 8 | (data[pos + 2] & 0xffL) << 16 | (data[pos + 3] & 0xffL) << 24 | (data[pos + 4] & 0xffL) << 32 | (data[pos + 5] & 0xffL) << 40 | (data[pos + 6] & 0xffL) << 48 | (data[pos + 7] & 0xffL) << 56;
 	}
 }
