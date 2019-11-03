@@ -9,11 +9,12 @@ public class DataPack {
 
 	private byte[] data;
 	private final short headLength=18;
-	private JsonObject jsonObject=new JsonObject();
+	private RitsukageBean ritsukageBean=null;
+	private HashSet<PersonInfo> ritsukageSet=null;
+	private PersonInfo ritsukagePersonInfo=null;
 	private Gson gson;
 	private int writePointer=0;
-	private int longPointer=1;
-	private int stringPointer=1;
+
 	/*
 	 数据包中所有数字都是long型，除了数据包头中的数字和标记字符串长度的数字
 	 数据包中字符串的放置方式是先放置一个字符串在数据包中的字节数，数字为int，后面接着是字符串的数组，所有字符串都是utf-8
@@ -71,17 +72,26 @@ public class DataPack {
 	private DataPack(byte[] pack) {
 		gson = Autoreply.gson;
 		data = pack;
-		jsonObject = gson.fromJson(new String(pack, headLength, getLength() - headLength), JsonObject.class);
+		String s=new String(pack, headLength, getLength() - headLength);
+		Autoreply.sendMessage(Autoreply.mainGroup, 0, s);
+		ritsukageBean = gson.fromJson(s, RitsukageBean.class);
 	} 
 
 	public byte[] getData() {
-		byte[] retData=new byte[headLength + gson.toJson(jsonObject).length()];
+		byte[] retData=null;
+		if (ritsukageSet != null) {
+			retData = new byte[headLength + gson.toJson(ritsukageSet).length()];	
+		} else if (ritsukagePersonInfo != null) {
+			retData = new byte[headLength + gson.toJson(ritsukagePersonInfo).length()];
+		} else {
+			retData = new byte[headLength + gson.toJson(ritsukageBean).length()];
+		}
 		for (int i=0;i < headLength;++i) {
 			retData[i] = data[i];
 		}
 		byte[] bs=null;
 		try {
-			bs = gson.toJson(jsonObject).getBytes("utf-8");
+			bs = gson.toJson(ritsukageBean).getBytes("utf-8");
 		} catch (UnsupportedEncodingException e) {
 			e.printStackTrace();
 			return null;
@@ -118,33 +128,51 @@ public class DataPack {
 	}
 
 	public void write(PersonInfo pi) {
-		jsonObject = gson.fromJson(gson.toJson(pi), JsonObject.class);
+		ritsukagePersonInfo = pi;
 	}
 
 	public void write(HashSet<PersonInfo> hs) {
-		jsonObject = gson.fromJson(gson.toJson(hs), JsonObject.class);
+		ritsukageSet = hs;
 	}
 
-	public void write(long l) {
-		jsonObject.addProperty("n" + longPointer, l);
-		++longPointer;
+	public void write1(long l) {
+		ritsukageBean.n1 = l;
 	}
 
-	public void write(String s) {
-		jsonObject.addProperty("s" + stringPointer, s);
-		++stringPointer;
+	public void write2(long l) {
+		ritsukageBean.n2 = l;
 	}
 
-	public long readNum() {
-		long l= jsonObject.get("n" + longPointer).getAsLong();
-		++longPointer;
-		return l;
+	public void write3(long l) {
+		ritsukageBean.n3 = l;
 	}
 
-	public String readString() {
-		String s= jsonObject.get("s" + stringPointer).getAsString();
-		++stringPointer;
-		return s;
+	public void write1(String s) {
+		ritsukageBean.s1 = s;
+	}
+
+	public void write2(String s) {
+		ritsukageBean.s2 = s;
+	}
+
+	public long readNum1() {
+		return ritsukageBean.n1;
+	}
+
+	public long readNum2() {
+		return ritsukageBean.n2;
+	}
+
+	public long readNum3() {
+		return ritsukageBean.n3;
+	}
+
+	public String readString1() {
+		return ritsukageBean.s1;
+	}
+
+	public String readString2() {
+		return ritsukageBean.s2;
 	}
 
 	private void write(byte[] bs) {

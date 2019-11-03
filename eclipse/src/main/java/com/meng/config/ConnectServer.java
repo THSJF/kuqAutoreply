@@ -39,9 +39,9 @@ public class ConnectServer extends WebSocketServer {
 	@Override
 	public void onMessage(WebSocket conn, ByteBuffer message) {
 		DataPack dp=DataPack.decode(message.array());
-		Autoreply.sendMessage(Autoreply.mainGroup,0,new String(message.array(),18,message.array().length-18));
+		Autoreply.sendMessage(Autoreply.mainGroup, 0, new String(message.array(), 18, message.array().length - 18));
 		if (dp.getOpCode() == DataPack._1verify) {
-			if (dp.readNum() == configJavaBean.ogg) {
+			if (dp.readNum1() == configJavaBean.ogg) {
 				oggConnect = conn;
 			}
 		}
@@ -63,7 +63,7 @@ public class ConnectServer extends WebSocketServer {
 					hashSet.add(Autoreply.instence.configManager.getPersonInfoFromBid(bid));
 				}
 				dp = DataPack.encode(DataPack._3returnLiveList, dataPack.getTimeStamp());
-				dp.write(Autoreply.gson.toJson(hashSet));
+				dp.write(hashSet);
 				break;
 			case DataPack._3returnLiveList:
 				break;
@@ -78,28 +78,28 @@ public class ConnectServer extends WebSocketServer {
 			case DataPack._8newArtical:
 				break;
 			case DataPack._9getPersonInfoByName:
-				PersonInfo pi=Autoreply.instence.configManager.getPersonInfoFromName(dp.readString());
+				PersonInfo pi=Autoreply.instence.configManager.getPersonInfoFromName(dp.readString1());
 				if (pi != null) {
 					dp = DataPack.encode(DataPack._13returnPersonInfo, dp.getTimeStamp());
 					dp.write(pi);
 				}
 				break;
 			case DataPack._10getPersonInfoByQQ:
-				PersonInfo pi10=Autoreply.instence.configManager.getPersonInfoFromQQ(dp.readNum());
+				PersonInfo pi10=Autoreply.instence.configManager.getPersonInfoFromQQ(dp.readNum1());
 				if (pi10 != null) {
 					dp = DataPack.encode(DataPack._13returnPersonInfo, dp.getTimeStamp());
 					dp.write(pi10);
 				}
 				break;
 			case DataPack._11getPersonInfoByBid:
-				PersonInfo pi11=Autoreply.instence.configManager.getPersonInfoFromBid(dp.readNum());
+				PersonInfo pi11=Autoreply.instence.configManager.getPersonInfoFromBid(dp.readNum1());
 				if (pi11 != null) {
 					dp = DataPack.encode(DataPack._13returnPersonInfo, dp.getTimeStamp());
 					dp.write(pi11);
 				}
 				break;
 			case DataPack._12getPersonInfoByBiliLive:
-				PersonInfo pi12=Autoreply.instence.configManager.getPersonInfoFromQQ(dp.readNum());
+				PersonInfo pi12=Autoreply.instence.configManager.getPersonInfoFromQQ(dp.readNum1());
 				if (pi12 != null) {
 					dp = DataPack.encode(DataPack._13returnPersonInfo, dp.getTimeStamp());
 					dp.write(pi12);
@@ -112,16 +112,16 @@ public class ConnectServer extends WebSocketServer {
 				//dp.write(
 				break;
 			case DataPack._15groupBan:
-				Autoreply.CQ.setGroupBan(dataPack.readNum(), dataPack.readNum(), dataPack.readNum());
+				Autoreply.CQ.setGroupBan(dataPack.readNum1(), dataPack.readNum2(), dataPack.readNum3());
 				break;
 			case DataPack._16groupKick:
-				Autoreply.CQ.setGroupKick(dataPack.readNum(), dataPack.readNum(), dataPack.readNum() == 1);
+				Autoreply.CQ.setGroupKick(dataPack.readNum1(), dataPack.readNum2(), dataPack.readNum3() == 1);
 				break;
 			case DataPack._17heartBeat:
 				break;
 			default:
 				dp = DataPack.encode((short)0, dataPack.getTimeStamp());
-				dp.write("操作类型错误");
+				dp.write1("操作类型错误");
 		} 
 		oggConnect.send(dp.getData());
 		//	DataPack ndp=DataPack.encode(DataPack._0notification, dataPack.getTimeStamp());
