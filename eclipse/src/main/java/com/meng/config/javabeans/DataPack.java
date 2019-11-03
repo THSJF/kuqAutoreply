@@ -9,7 +9,7 @@ public class DataPack {
 
 	private byte[] data;
 	private final short headLength=18;
-	private JsonObject jsonObject;
+	private JsonObject jsonObject=new JsonObject();
 	private Gson gson;
 	private int writePointer=0;
 	private int longPointer=1;
@@ -116,29 +116,35 @@ public class DataPack {
 	public short getOpCode() {
 		return readShort(data, 16);
 	}
-	
-	public void write(PersonInfo pi){
-		jsonObject=gson.fromJson(gson.toJson(pi),JsonObject.class);
+
+	public void write(PersonInfo pi) {
+		jsonObject = gson.fromJson(gson.toJson(pi), JsonObject.class);
 	}
-	
-	public void write(HashSet<PersonInfo> hs){
-		jsonObject=gson.fromJson(gson.toJson(hs),JsonObject.class);
+
+	public void write(HashSet<PersonInfo> hs) {
+		jsonObject = gson.fromJson(gson.toJson(hs), JsonObject.class);
 	}
 
 	public void write(long l) {
 		jsonObject.addProperty("n" + longPointer, l);
+		++longPointer;
 	}
 
 	public void write(String s) {
 		jsonObject.addProperty("s" + stringPointer, s);
+		++stringPointer;
 	}
 
 	public long readNum() {
-		return jsonObject.get("n" + longPointer).getAsLong();
+		long l= jsonObject.get("n" + longPointer).getAsLong();
+		++longPointer;
+		return l;
 	}
 
 	public String readString() {
-		return jsonObject.get("s" + stringPointer).getAsString();
+		String s= jsonObject.get("s" + stringPointer).getAsString();
+		++stringPointer;
+		return s;
 	}
 
 	private void write(byte[] bs) {
