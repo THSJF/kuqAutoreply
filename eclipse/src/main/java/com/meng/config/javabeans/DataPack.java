@@ -97,8 +97,8 @@ public class DataPack {
 			e.printStackTrace();
 			return null;
 		}
-		for (int i=headLength;i < bs.length;++i) {
-			retData[i] = bs[i];
+		for (int i=0;i < bs.length;++i) {
+			retData[i + headLength] = bs[i];
 		}
 		byte[] len=getBytes(retData.length);
 		retData[0] = len[0];

@@ -7,9 +7,10 @@ public class DataPack {
 
 	private byte[] data;
 	private final short headLength=18;
-	private RitsukageBean ritsukageBean=null;
+	public RitsukageBean ritsukageBean=null;
 	private Gson gson;
 	private int writePointer=0;
+	public String sss;
 
 	/*
 	 数据包中所有数字都是long型，除了数据包头中的数字和标记字符串长度的数字
@@ -69,8 +70,9 @@ public class DataPack {
 	private DataPack(byte[] pack) {
 		gson = new Gson();
 		data = pack;
-		String s=new String(pack, headLength, getLength() - headLength);
-		ritsukageBean = gson.fromJson(s, RitsukageBean.class);
+		String s=new String(pack, headLength-1, getLength() - headLength);
+		sss=s;
+		//ritsukageBean = gson.fromJson(s, RitsukageBean.class);
 	} 
 
 	public byte[] getData() {
@@ -86,8 +88,8 @@ public class DataPack {
 			e.printStackTrace();
 			return null;
 		}
-		for (int i=headLength;i < bs.length;++i) {
-			retData[i] = bs[i];
+		for (int i=0;i < bs.length;++i) {
+			retData[i+headLength] = bs[i];
 		}
 		byte[] len=getBytes(retData.length);
 		retData[0] = len[0];

@@ -11,6 +11,7 @@ import org.java_websocket.client.*;
 import org.java_websocket.handshake.*;
 import android.view.View.*;
 import android.view.*;
+import com.google.gson.*;
 
 public class MainActivity extends Activity {
 	Button connect,send;
@@ -45,10 +46,24 @@ public class MainActivity extends Activity {
 						DataPack dp=DataPack.encode(DataPack._1verify,System.currentTimeMillis());
 						dp.write1(2057480282L);
 						danmakuListener.send(dp.getData());
+						showToast(new Gson().toJson(dp.ritsukageBean));
 					}
-					DataPack dp=DataPack.encode(DataPack._10getPersonInfoByQQ,System.currentTimeMillis());
+					final DataPack dp=DataPack.encode(DataPack._10getPersonInfoByQQ,System.currentTimeMillis());
 					dp.write1(2856986197L);
 					danmakuListener.send(dp.getData());
+				/*	runOnUiThread(new Runnable(){
+
+							@Override
+							public void run() {
+								byte[] bss=dp.getData();
+								for(int i=0;i<bss.length;++i){
+									result.setText(result.getText().toString()+" "+bss[i]);
+								}
+								DataPack dp2=DataPack.decode(dp.getData());
+								//showToast(new Gson().toJson( dp2.ritsukageBean));
+								showToast(dp2.sss);
+							}
+						});*/
 				}
 			});
     }
