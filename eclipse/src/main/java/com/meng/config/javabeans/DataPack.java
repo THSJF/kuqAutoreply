@@ -21,7 +21,6 @@ public class DataPack {
 	 正邪→小律影  鬼人正邪发送 小律影接收
 	 小律影↔正邪  都可以发送和接收
 	 */
-	public static final short _heart=-1;					//心跳，不需要body
 	public static final short _0notification=0;				//小律影↔正邪    |包头|字符串|   以下注释中省略"包头"说明
 	public static final short _1verify=1;					//小律影→正邪    |qq号(setConnect中设置的qq号)|
 	public static final short _2getLiveList=2;				//小律影→正邪    不需要body
@@ -39,7 +38,8 @@ public class DataPack {
 	public static final short _14coinsExchange=14;			//正邪→小律影    |幻币数量|
 	public static final short _15groupBan=15; 				//小律影↔正邪    |群号|QQ号|时间(秒)
 	public static final short _16groupKick=16;				//小律影↔正邪    |群号|QQ号|是否永久拒绝 0为否 1为是
-
+	public static final short _17heartBeat=17;				//心跳，不需要body
+	
 	public static DataPack encode(short opCode, long timeStamp) {
 		return new DataPack(opCode, timeStamp);
 	}
@@ -131,7 +131,7 @@ public class DataPack {
 
 	private void write(byte[] bs) {
 		if (data.length - readPointer - 1 < bs.length) {
-			byte[] newData=new byte[data.length << 1];
+			byte[] newData=new byte[(data.length << 1) + bs.length];
 			for (int i=0;i < readPointer;++i) {
 				newData[i] = data[i];
 			}
