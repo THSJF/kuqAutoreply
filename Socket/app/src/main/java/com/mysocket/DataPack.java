@@ -70,7 +70,7 @@ public class DataPack {
 	private DataPack(byte[] pack) {
 		gson = new Gson();
 		data = pack;
-		String s=new String(pack, headLength-1, getLength() - headLength);
+		String s=new String(pack, headLength-1, getLength() - headLength + 1);
 		sss=s;
 		//ritsukageBean = gson.fromJson(s, RitsukageBean.class);
 	} 
