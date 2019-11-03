@@ -17,49 +17,49 @@ public class DanmakuListener extends WebSocketClient {
 	public ConcurrentHashMap<Long,Long> peopleMap=new ConcurrentHashMap<>();
 	public Repeater repeater;
 
-	public DanmakuListener (URI uri, PersonInfo roomMaster) {
+	public DanmakuListener(URI uri, PersonInfo roomMaster) {
 		super(uri);
 		this.roomMaster = roomMaster;
 		repeater = new Repeater();
 	}
 
 	@Override
-	public void onMessage (String p1) {
+	public void onMessage(String p1) {
 		// TODO: Implement this method
 	}
 
 	@Override
-	public void onOpen (ServerHandshake serverHandshake) {
-		send(encode(7,"{\"platform\": \"web\",\"protover\": 1,\"roomid\": " + roomMaster.bliveRoom + ",\"uid\": 0,\"type\": 2}").data);
+	public void onOpen(ServerHandshake serverHandshake) {
+		send(encode(7, "{\"platform\": \"web\",\"protover\": 1,\"roomid\": " + roomMaster.bliveRoom + ",\"uid\": 0,\"type\": 2}").data);
 		new Thread(new Runnable(){
 
-			@Override
-			public void run () {
-				while(true) {
-					send(encode(2,"").data);
-					try {
-						Thread.sleep(30000);
-					} catch(InterruptedException e) {}
+				@Override
+				public void run() {
+					while (true) {
+						send(encode(2, "").data);
+						try {
+							Thread.sleep(30000);
+						} catch (InterruptedException e) {}
+					}
 				}
-			}
-		}).start();
+			}).start();
 	}
 
 	@Override
-	public void onMessage (ByteBuffer bs) {	
+	public void onMessage(ByteBuffer bs) {	
 		Iterator it=peopleMap.entrySet().iterator();
-		while(it.hasNext()) {
+		while (it.hasNext()) {
 			Map.Entry<Long,Long> entry= (Map.Entry<Long, Long>) it.next();
-			if(System.currentTimeMillis() - entry.getValue() > 60 * 60 * 1000) {
+			if (System.currentTimeMillis() - entry.getValue() > 60 * 60 * 1000) {
 				it.remove(); 
 			}
 		}
 		byte[] bytes=bs.array();
 		int offset=0;  
 		do{
-			DataPackage dp=decode(bytes,offset);
+			DataPackage dp=decode(bytes, offset);
 			offset += dp.length;
-			switch(dp.op) {
+			switch (dp.op) {
 				case 2:
 					break;
 				case 3:
@@ -76,10 +76,10 @@ public class DanmakuListener extends WebSocketClient {
 
 	}
 
-	private void onDanmaku (DataPackage dp) {
+	private void onDanmaku(DataPackage dp) {
 		try {
 			JsonObject jobj=new JsonParser().parse(dp.body).getAsJsonObject();
-			if(jobj.get("cmd").getAsString().equals("DANMU_MSG")) {
+			if (jobj.get("cmd").getAsString().equals("DANMU_MSG")) {
 				JsonArray jaar=jobj.get("info").getAsJsonArray();
 				JsonArray jaar2=jaar.get(2).getAsJsonArray();
 				String text=jaar.get(1).getAsString();
@@ -89,74 +89,73 @@ public class DanmakuListener extends WebSocketClient {
 				PersonInfo pi1=Autoreply.instence.configManager.getPersonInfoFromBid(uid);
 				PersonInfo pi2=Autoreply.instence.configManager.getPersonInfoFromLiveId(roomMaster.bliveRoom);
 				String n1=pi1 == null ?name: pi1.name;
-				if(peopleMap.get(uid) == null) {
+				if (peopleMap.get(uid) == null) {
 					//	Autoreply.instence.sendMessage(Autoreply.mainGroup, 0, n1 + "出现在" + pi2.name + "的直播间" + roomMaster.bliveRoom);
 				}
-				peopleMap.put(uid,System.currentTimeMillis());
-				Autoreply.instence.connectServer.broadcast(DataPack.encode(30,pi2.name + roomMaster.bliveRoom + " " + n1 + ":" + text).getData());
+				peopleMap.put(uid, System.currentTimeMillis());
 				//	Autoreply.instence.sendMessage(666247478, 0,  pi2.name + roomMaster.bliveRoom + " " + n1 + ":" + text);
-				if(Autoreply.instence.danmakuListenerManager.containsMother(text) && text.startsWith("点歌")) {
+				if (Autoreply.instence.danmakuListenerManager.containsMother(text) && text.startsWith("点歌")) {
 					try {
-						Autoreply.instence.naiManager.sendDanmaku(roomMaster.bliveRoom + "",Autoreply.instence.cookieManager.cookie.Sunny,"您点您妈呢");
-						Autoreply.instence.naiManager.sendDanmaku(roomMaster.bliveRoom + "",Autoreply.instence.cookieManager.cookie.Luna,"您点您妈呢");
-						Autoreply.instence.naiManager.sendDanmaku(roomMaster.bliveRoom + "",Autoreply.instence.cookieManager.cookie.Star,"您点您妈呢");				
-					} catch(Exception e) {
+						Autoreply.instence.naiManager.sendDanmaku(roomMaster.bliveRoom + "", Autoreply.instence.cookieManager.cookie.Sunny, "您点您妈呢");
+						Autoreply.instence.naiManager.sendDanmaku(roomMaster.bliveRoom + "", Autoreply.instence.cookieManager.cookie.Luna, "您点您妈呢");
+						Autoreply.instence.naiManager.sendDanmaku(roomMaster.bliveRoom + "", Autoreply.instence.cookieManager.cookie.Star, "您点您妈呢");				
+					} catch (Exception e) {
 
 					}
 					return;
 				}
-				if(uid == 64483321 && text.startsWith("ban.")) {
+				if (uid == 64483321 && text.startsWith("ban.")) {
 					String ss[]=text.split("\\.");
 					String blockid=ss[1];
 					PersonInfo pi=Autoreply.instence.configManager.getPersonInfoFromName(blockid);
-					if(pi != null) {
+					if (pi != null) {
 						blockid = pi.bid + "";
 					}
-					Autoreply.instence.liveListener.setBan(Autoreply.mainGroup,roomMaster.bliveRoom + "",blockid,ss[2]);
+					Autoreply.instence.liveListener.setBan(Autoreply.mainGroup, roomMaster.bliveRoom + "", blockid, ss[2]);
 					return;
 				}
-				String s=dealMsg(roomMaster.bliveRoom,uid,text);
-				if(s != null) {
-					Autoreply.instence.naiManager.grzxMsg(roomMaster.bliveRoom + "",s);
+				String s=dealMsg(roomMaster.bliveRoom, uid, text);
+				if (s != null) {
+					Autoreply.instence.naiManager.grzxMsg(roomMaster.bliveRoom + "", s);
 				}
 			} 
-		} catch(JsonSyntaxException je) {
+		} catch (JsonSyntaxException je) {
 			System.out.println(dp.body);
 		}
 	}
 
 
 	@Override
-	public void onClose (int i, String s, boolean b) {
+	public void onClose(int i, String s, boolean b) {
 
 	}
 
 	@Override
-	public void onError (Exception e) {
+	public void onError(Exception e) {
 		e.printStackTrace();
 	}
 
-	public DataPackage encode (int op, String body) {
-		return new DataPackage(op,body);
+	public DataPackage encode(int op, String body) {
+		return new DataPackage(op, body);
 	}
 
-	public DataPackage decode (byte[] pack, int pos) {
-		return new DataPackage(pack,pos);
+	public DataPackage decode(byte[] pack, int pos) {
+		return new DataPackage(pack, pos);
 	}
 
 	@Override
-	public void close () {
+	public void close() {
 		Autoreply.instence.danmakuListenerManager.listener.remove(this);
 		super.close();
 	}
 
-	private String dealMsg (long fromRoom, long fromUser, String msg) {
+	private String dealMsg(long fromRoom, long fromUser, String msg) {
 		String r=repeater.dealMsg(msg);
-		if(r != null) {
+		if (r != null) {
 			return r;
 		}
-		String r1=Autoreply.instence.seqManager.dealMsg(0,0,msg);
-		if(r1 != null) {
+		String r1=Autoreply.instence.seqManager.dealMsg(0, 0, msg);
+		if (r1 != null) {
 			return r1;
 		}
 		return null;

@@ -22,7 +22,7 @@ public class ConnectServer extends WebSocketServer {
 	@Override
 	public void onOpen(WebSocket conn, ClientHandshake handshake) {
 	//	conn.send("Welcome to the server!"); //This method sends a message to the new client
-		conn.send(DataPack.encode(27,Autoreply.gson.toJson(configJavaBean)).getData());
+	//	conn.send(DataPack.encode(27,Autoreply.gson.toJson(configJavaBean)).getData());
 		//	broadcast("new connection: " + handshake.getResourceDescriptor()); //This method sends a message to all clients connected
 	//	System.out.println(conn.getRemoteSocketAddress().getAddress().getHostAddress() + " entered the room!");
 	  }
@@ -213,7 +213,7 @@ public class ConnectServer extends WebSocketServer {
 				break;
 		  }
 		//  Autoreply.instence.configManager.saveConfig();
-		  conn.send(DataPack.encode(-1,"成功").getData());
+		//  conn.send(DataPack.encode(-1,"成功").getData());
 	  }
 
 

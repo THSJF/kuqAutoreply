@@ -85,8 +85,7 @@ public class UpdateListener implements Runnable {
     }
 
     private void tip(String updater, String msg) {
-		Autoreply.instence.connectServer.broadcast(DataPack.encode(29,msg).getData());
-        if (Autoreply.instence.configManager.getPersonInfoFromBid(Integer.parseInt(updater)).isTipVidoe()) {
+		if (Autoreply.instence.configManager.getPersonInfoFromBid(Integer.parseInt(updater)).isTipVidoe()) {
             Autoreply.sendMessage(Autoreply.mainGroup, 0, msg, true);
             ArrayList<Long> groupList = Autoreply.instence.configManager.getPersonInfoFromBid(Long.parseLong(updater)).tipIn;
             if (groupList != null) {
