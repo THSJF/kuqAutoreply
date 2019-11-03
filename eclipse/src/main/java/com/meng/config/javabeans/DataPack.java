@@ -45,7 +45,7 @@ public class DataPack {
 	public static final short _11getPersonInfoByBid=11;		//小律影→正邪    n1:BID
 	public static final short _12getPersonInfoByBiliLive=12;//小律影→正邪    n1:直播间号
 	public static final short _13returnPersonInfo=13;		//正邪→小律影    json数组  例:[{"name":"闲者","qq":"877247145","bid":12007285,"bliveRoom":1954885,"tipIn":[],"tip":[true,true,false]},{"name":"懒瘦","qq":"496276037","bid":15272850,"bliveRoom":3144622,"tipIn":[],"tip":[true,true,false]}]
-	public static final short _14coinsAdd=14;				//正邪→小律影    n1:幻币数量 n2目标qq号
+	public static final short _14coinsAdd=14;				//正邪→小律影    n1:幻币数量 n2:目标qq号
 	public static final short _15groupBan=15; 				//小律影↔正邪    n1:群号 n2:QQ号 n3:时间(秒)
 	public static final short _16groupKick=16;				//小律影↔正邪    n1:群号 n2:QQ号 n3:是否永久拒绝 0为否 1为是
 	public static final short _17heartBeat=17;				//小律影→正邪    心跳，不需要body
@@ -115,6 +115,14 @@ public class DataPack {
 
 	public short getOpCode() {
 		return readShort(data, 16);
+	}
+	
+	public void write(PersonInfo pi){
+		jsonObject=gson.fromJson(gson.toJson(pi),JsonObject.class);
+	}
+	
+	public void write(HashSet<PersonInfo> hs){
+		jsonObject=gson.fromJson(gson.toJson(hs),JsonObject.class);
 	}
 
 	public void write(long l) {
