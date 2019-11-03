@@ -73,8 +73,8 @@ public class DataPack {
 	private DataPack(byte[] pack) {
 		gson = Autoreply.gson;
 		data = pack;
-		String s=new String(pack, headLength - 1, getLength() - headLength + 1);
-		Autoreply.sendMessage(Autoreply.mainGroup, 0, s);
+		String s=new String(pack, headLength, getLength() - headLength);
+		System.out.println(s);
 		ritsukageBean = gson.fromJson(s, RitsukageBean.class);
 	} 
 

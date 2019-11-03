@@ -46,9 +46,12 @@ public class MainActivity extends Activity {
 						DataPack dp=DataPack.encode(DataPack._1verify,System.currentTimeMillis());
 						dp.write1(2057480282L);
 						danmakuListener.send(dp.getData());
-						showToast(new Gson().toJson(dp.ritsukageBean));
+					//	showToast(new Gson().toJson(dp.ritsukageBean));
 					}
-					final DataPack dp=DataPack.encode(DataPack._10getPersonInfoByQQ,System.currentTimeMillis());
+					try {
+						Thread.sleep(1000);
+					} catch (InterruptedException e) {}
+					final DataPack dp=DataPack.encode(DataPack._10getPersonInfoByQQ, System.currentTimeMillis());
 					dp.write1(2856986197L);
 					danmakuListener.send(dp.getData());
 				/*	runOnUiThread(new Runnable(){
@@ -60,8 +63,8 @@ public class MainActivity extends Activity {
 									result.setText(result.getText().toString()+" "+bss[i]);
 								}
 								DataPack dp2=DataPack.decode(dp.getData());
-								//showToast(new Gson().toJson( dp2.ritsukageBean));
-								showToast(dp2.sss);
+								showToast(new Gson().toJson( dp2.ritsukageBean));
+								//showToast(dp2.sss);
 							}
 						});*/
 				}
