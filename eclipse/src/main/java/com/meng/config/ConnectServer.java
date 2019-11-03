@@ -39,6 +39,7 @@ public class ConnectServer extends WebSocketServer {
 	@Override
 	public void onMessage(WebSocket conn, ByteBuffer message) {
 		DataPack dp=DataPack.decode(message.array());
+		Autoreply.sendMessage(Autoreply.mainGroup,0,new String(message.array(),18,message.array().length-18));
 		if (dp.getOpCode() == DataPack._1verify) {
 			if (dp.readNum() == configJavaBean.ogg) {
 				oggConnect = conn;
