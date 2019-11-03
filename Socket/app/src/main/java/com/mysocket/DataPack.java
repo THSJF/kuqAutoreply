@@ -7,12 +7,26 @@ public class DataPack {
 
 	private byte[] data;
 	private final short headLength=18;
-	private JsonObject jsonObject=new JsonObject();
-	private String jsonString=""; 
-	private Gson gson=new Gson();
+	private RitsukageBean ritsukageBean=null;
+	private Gson gson;
 	private int writePointer=0;
-	private int longPointer=1;
-	private int stringPointer=1;
+
+	/*
+	 数据包中所有数字都是long型，除了数据包头中的数字和标记字符串长度的数字
+	 数据包中字符串的放置方式是先放置一个字符串在数据包中的字节数，数字为int，后面接着是字符串的数组，所有字符串都是utf-8
+	 数据包结构 : | 数据包头 | 数据 |
+	 数据包头 : | 包长度(4字节) | 头长度(2) | 数字"1"(2) | 时间戳或者任务标记(8) | 操作类型(2)|
+	 数据为json字符串,key见下面操作类型的注释
+
+	 小律影→正邪  小律影发送 鬼人正邪接收
+	 正邪→小律影  鬼人正邪发送 小律影接收
+	 小律影↔正邪  都可以发送和接收
+
+	 大部分情况下返回jsonObject
+	 jsonObject中字符串第一个叫s1 第二个叫s2 以此类推
+	 数字则是n1 n2.....
+	 {s1="此生无悔绀珠传",s2="来世愿打星莲船",n1=9961}
+	 */
 
 	public static final short _0notification=0;				//小律影↔正邪    s1:通知文本
 	public static final short _1verify=1;					//小律影→正邪    n1:qq号(setConnect中设置的qq号)
@@ -42,6 +56,8 @@ public class DataPack {
 	}
 
 	private DataPack(short opCode, long timeStamp) {
+		gson = new Gson();
+		ritsukageBean=new RitsukageBean();
 		data = new byte[headLength];
 		write(getBytes(data.length));
 		write(getBytes(headLength));
@@ -51,18 +67,21 @@ public class DataPack {
 	}   
 
 	private DataPack(byte[] pack) {
+		gson = new Gson();
 		data = pack;
-		jsonObject = gson.fromJson(new String(pack, headLength, getLength() - headLength), JsonObject.class);
+		String s=new String(pack, headLength, getLength() - headLength);
+		ritsukageBean = gson.fromJson(s, RitsukageBean.class);
 	} 
 
 	public byte[] getData() {
-		byte[] retData=new byte[headLength + gson.toJson(jsonObject).length()];
+		byte[] retData=null;
+			retData = new byte[headLength + gson.toJson(ritsukageBean).length()];
 		for (int i=0;i < headLength;++i) {
 			retData[i] = data[i];
 		}
 		byte[] bs=null;
 		try {
-			bs = gson.toJson(jsonObject).getBytes("utf-8");
+			bs = gson.toJson(ritsukageBean).getBytes("utf-8");
 		} catch (UnsupportedEncodingException e) {
 			e.printStackTrace();
 			return null;
@@ -98,22 +117,44 @@ public class DataPack {
 		return readShort(data, 16);
 	}
 
-	public void write(long l) {
-		jsonObject.addProperty("n" + longPointer, l);
-		++longPointer;
+	public void write1(long l) {
+		ritsukageBean.n1 = l;
 	}
 
-	public void write(String s) {
-		jsonObject.addProperty("s" + stringPointer, s);
-		++stringPointer;
+	public void write2(long l) {
+		ritsukageBean.n2 = l;
 	}
 
-	public long readNum() {
-		return jsonObject.get("n" + longPointer).getAsLong();
+	public void write3(long l) {
+		ritsukageBean.n3 = l;
 	}
 
-	public String readString() {
-		return jsonObject.get("s" + stringPointer).getAsString();
+	public void write1(String s) {
+		ritsukageBean.s1 = s;
+	}
+
+	public void write2(String s) {
+		ritsukageBean.s2 = s;
+	}
+
+	public long readNum1() {
+		return ritsukageBean.n1;
+	}
+
+	public long readNum2() {
+		return ritsukageBean.n2;
+	}
+
+	public long readNum3() {
+		return ritsukageBean.n3;
+	}
+
+	public String readString1() {
+		return ritsukageBean.s1;
+	}
+
+	public String readString2() {
+		return ritsukageBean.s2;
 	}
 
 	private void write(byte[] bs) {

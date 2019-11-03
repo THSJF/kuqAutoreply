@@ -43,11 +43,11 @@ public class MainActivity extends Activity {
 				public void onClick(View p1) {
 					{
 						DataPack dp=DataPack.encode(DataPack._1verify,System.currentTimeMillis());
-						dp.write(2057480282L);
+						dp.write1(2057480282L);
 						danmakuListener.send(dp.getData());
 					}
 					DataPack dp=DataPack.encode(DataPack._10getPersonInfoByQQ,System.currentTimeMillis());
-					dp.write(2856986197L);
+					dp.write1(2856986197L);
 					danmakuListener.send(dp.getData());
 				}
 			});
