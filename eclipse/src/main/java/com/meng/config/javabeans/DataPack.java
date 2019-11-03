@@ -7,6 +7,32 @@ public class DataPack {
 	private byte[] data;
 	private int pos=0;
 	private final short headLength=18;
+	private int dataPointer;
+
+	/*数据包中所有数字都是long型，除了数据包头中的数字和标记字符串长度的数字*/
+	/*数据包中字符串的放置方式是先放置一个字符串在数据包中的字节数，数字为int，后面接着是字符串的数组，所有字符串都是utf-8
+	/*数据包结构 : | 数据包头 | 数据 |
+	/*数据包头 : | 包长度(4字节) | 头长度(2) | 数字"1"(2) | 时间戳或者任务标记(8) | 操作类型(2)| */
+	/*数据中的结构见下面操作类型的注释*/
+
+	public static final short _0notification=0; //|包头|字符串|   以下注释中省略"包头"说明
+	public static final short _1verify=1; //|qq号(setConnect中设置的qq号)|
+	public static final short _2getLiveList=2; //不需要body
+	public static final short _3returnLiveList=3;//包头|json字符串|  例:[{"name":"闲者","qq":"877247145","bid":12007285,"bliveRoom":1954885,"tipIn":[],"tip":[true,true,false]},{"name":"懒瘦","qq":"496276037","bid":15272850,"bliveRoom":3144622,"tipIn":[],"tip":[true,true,false]}]
+	public static final short _4liveStart=4;// |直播间号|主播称呼|
+	public static final short _5liveStop=5;// |直播间号|主播称呼|
+	public static final short _6speakInLiveRoom=6;// |直播间号|主播称呼|说话者称呼,如果配置文件中没有就是用户名|说话者BID|说话内容
+	public static final short _7newVideo=7;// |用户名|视频名|AV号
+	public static final short _8newArtical=8;// |用户名|专栏名|CV号
+	public static final short _9getPersonInfoByName=9;// |称呼|
+	public static final short _10getPersonInfoByQQ=10;// |qq号|
+	public static final short _11getPersonInfoByBid=11;// |BID|
+	public static final short _12getPersonInfoByBiliLive=12;// |直播间号|
+	public static final short _13returnPersonInfo=13;//|json字符串|    例:[{"name":"闲者","qq":"877247145","bid":12007285,"bliveRoom":1954885,"tipIn":[],"tip":[true,true,false]},{"name":"懒瘦","qq":"496276037","bid":15272850,"bliveRoom":3144622,"tipIn":[],"tip":[true,true,false]}]
+	public static final short _14coinsExchange=14;// |幻币数量|
+	public static final short _15groupBan=15; // |群号|QQ号|时间(秒)
+	public static final short _16groupKick=16;// |群号|QQ号|是否永久拒绝 0为否 1为是
+
 	public static DataPack encode(int opCode, byte[] data) {
 		return new DataPack((short)opCode, System.currentTimeMillis(), data);
 	}
@@ -47,6 +73,7 @@ public class DataPack {
 	}   
 
 	private DataPack(byte[] pack) {
+		dataPointer = headLength;
 		data = pack;
 	} 
 
@@ -89,6 +116,36 @@ public class DataPack {
 
 	public short getOpCode() {
 		return readShort(data, 16);
+	}
+
+	private void write(long l) {
+		write(getBytes(l));
+	}
+
+	private void write(String s) {
+		try {
+			write(s.getBytes("utf-8"));
+		} catch (UnsupportedEncodingException e) {
+			e.printStackTrace();
+			write("UnsupportedEncodingException".getBytes());
+		}
+	}
+
+	private long readNum() {
+		long l= readLong(data, dataPointer);
+		dataPointer += 8;
+		return l;
+	}
+
+	private String readString() {
+		int length=readInt(data, dataPointer);
+		dataPointer += 4;
+		String s=null;
+		try {                
+			s = new String(data, dataPointer, length, "utf-8");
+		} catch (UnsupportedEncodingException e) {}
+		dataPointer += length;
+		return s;
 	}
 
 	private void write(byte[] bs) {
@@ -135,6 +192,6 @@ public class DataPack {
 	}
 
 	public long readLong(byte[] data, int pos) {
-        return 0L | ((data[pos] & 0xff) << 0) | (data[pos + 1] & 0xff) << 8 | (data[pos + 2] & 0xff) << 16 | (data[pos + 3] & 0xff) << 24 | (data[pos + 4] & 0xff) << 32 | (data[pos + 5] & 0xff) << 40 | (data[pos + 6] & 0xff) << 48 | (data[pos + 7] & 0xff) << 56;
+        return ((data[pos] & 0xffL) << 0) | (data[pos + 1] & 0xffL) << 8 | (data[pos + 2] & 0xffL) << 16 | (data[pos + 3] & 0xffL) << 24 | (data[pos + 4] & 0xffL) << 32 | (data[pos + 5] & 0xffL) << 40 | (data[pos + 6] & 0xffL) << 48 | (data[pos + 7] & 0xffL) << 56;
 	}
 }

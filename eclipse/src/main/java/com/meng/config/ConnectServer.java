@@ -13,6 +13,7 @@ import com.google.gson.*;
 public class ConnectServer extends WebSocketServer {
 
   private ConfigJavaBean configJavaBean;
+  private WebSocket oggConnect;
 	public ConnectServer(int port) throws UnknownHostException {
 		super(new InetSocketAddress(port));
 		configJavaBean=Autoreply.instence.configManager.configJavaBean;
