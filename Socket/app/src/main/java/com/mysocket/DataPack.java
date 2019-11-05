@@ -6,17 +6,16 @@ import java.util.*;
 public class DataPack {
 
 	private byte[] data;
-	private final short headLength=18;
-	public RitsukageBean ritsukageBean=null;
-	private Gson gson;
+	public static final short headLength=26;
+	private RitsukageBean ritsukageBean=null;
+	private Gson gson=new Gson();
 	private int writePointer=0;
-	public String sss;
 
 	/*
 	 数据包中所有数字都是long型，除了数据包头中的数字和标记字符串长度的数字
 	 数据包中字符串的放置方式是先放置一个字符串在数据包中的字节数，数字为int，后面接着是字符串的数组，所有字符串都是utf-8
 	 数据包结构 : | 数据包头 | 数据 |
-	 数据包头 : | 包长度(4字节) | 头长度(2) | 数字"1"(2) | 时间戳或者任务标记(8) | 操作类型(2)|
+	 数据包头 : | 包长度(4字节) | 头长度(2) | 数字"1"(2) | 时间戳或者任务标记(8) | 发送目标,如果是给小律影发送的数据就是setConnect中设置的qq号(8) | 操作类型(2)|
 	 数据为json字符串,key见下面操作类型的注释
 
 	 小律影→正邪  小律影发送 鬼人正邪接收
@@ -57,27 +56,26 @@ public class DataPack {
 	}
 
 	private DataPack(short opCode, long timeStamp) {
-		gson = new Gson();
-		ritsukageBean=new RitsukageBean();
 		data = new byte[headLength];
+		ritsukageBean = new RitsukageBean();
 		write(getBytes(data.length));
 		write(getBytes(headLength));
 		write(getBytes((short)1));
 		write(getBytes(timeStamp));
+		write(getBytes(2057480282L));
 		write(getBytes(opCode));
 	}   
 
 	private DataPack(byte[] pack) {
-		gson = new Gson();
 		data = pack;
-		String s=new String(pack, headLength, getLength() - headLength );
-		sss=s;
+		String s=new String(pack, headLength, getLength() - headLength);
+		System.out.println(s);
 		ritsukageBean = gson.fromJson(s, RitsukageBean.class);
 	} 
 
 	public byte[] getData() {
 		byte[] retData=null;
-			retData = new byte[headLength + gson.toJson(ritsukageBean).length()];
+		retData = new byte[headLength + gson.toJson(ritsukageBean).length()];
 		for (int i=0;i < headLength;++i) {
 			retData[i] = data[i];
 		}
@@ -89,7 +87,7 @@ public class DataPack {
 			return null;
 		}
 		for (int i=0;i < bs.length;++i) {
-			retData[i+headLength] = bs[i];
+			retData[i + headLength] = bs[i];
 		}
 		byte[] len=getBytes(retData.length);
 		retData[0] = len[0];
@@ -107,16 +105,21 @@ public class DataPack {
 		return readShort(data, 4);
 	}
 
-	public long getTimeStamp() {
-		return readLong(data, 6);
+	public short getVersion() {
+		return readShort(data, 6);
 	}
 
-	public short getVersion() {
-		return readShort(data, 14);
+	public long getTimeStamp() {
+		return readLong(data, 8);
 	}
+
+	public long getTarget() {
+		return readLong(data, 16);
+	}
+
 
 	public short getOpCode() {
-		return readShort(data, 16);
+		return readShort(data, 24);
 	}
 
 	public void write1(long l) {

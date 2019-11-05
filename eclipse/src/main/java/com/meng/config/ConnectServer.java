@@ -15,7 +15,6 @@ import com.meng.bilibili.live.*;
 public class ConnectServer extends WebSocketServer {
 
 	private ConfigJavaBean configJavaBean;
-	private WebSocket oggConnect=null;
 
 	public ConnectServer(int port) throws UnknownHostException {
 		super(new InetSocketAddress(port));
@@ -40,17 +39,20 @@ public class ConnectServer extends WebSocketServer {
 	public void onMessage(WebSocket conn, ByteBuffer message) {
 		DataPack dp=DataPack.decode(message.array());
 		//Autoreply.sendMessage(Autoreply.mainGroup, 0, new String(message.array(), 18, message.array().length - 18));
-		if (dp.getOpCode() == DataPack._1verify) {
-			if (dp.readNum1() == configJavaBean.ogg) {
-				oggConnect = conn;
-			}
-		}
-		if (oggConnect != null) {
-			oggProcess(dp);
+		/*if (dp.getOpCode() == DataPack._1verify) {
+		 if (dp.readNum1() == configJavaBean.ogg) {
+		 oggConnect = conn;
+		 }
+		 }
+		 if (oggConnect != null) {
+		 oggProcess(dp);
+		 }*/
+		if (dp.getTarget() == Autoreply.instence.configManager.configJavaBean.ogg) {
+			oggProcess(conn, dp);
 		}
 	}
 
-	private void oggProcess(DataPack dataPack) {
+	private void oggProcess(WebSocket ogg, DataPack dataPack) {
 		DataPack dp=null;
 		switch (dataPack.getOpCode()) {
 			case DataPack._0notification:
@@ -123,7 +125,7 @@ public class ConnectServer extends WebSocketServer {
 				dp = DataPack.encode((short)0, dataPack.getTimeStamp());
 				dp.write1("操作类型错误");
 		} 
-		oggConnect.send(dp.getData());
+		ogg.send(dp.getData());
 		//	DataPack ndp=DataPack.encode(DataPack._0notification, dataPack.getTimeStamp());
 		//	ndp.write("成功");
 		//	oggConnect.send(ndp.getData());

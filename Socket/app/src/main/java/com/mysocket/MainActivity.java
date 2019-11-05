@@ -42,15 +42,6 @@ public class MainActivity extends Activity {
 
 				@Override
 				public void onClick(View p1) {
-					{
-						DataPack dp=DataPack.encode(DataPack._1verify,System.currentTimeMillis());
-						dp.write1(2057480282L);
-						danmakuListener.send(dp.getData());
-					//	showToast(new Gson().toJson(dp.ritsukageBean));
-					}
-					try {
-						Thread.sleep(1000);
-					} catch (InterruptedException e) {}
 					final DataPack dp=DataPack.encode(DataPack._10getPersonInfoByQQ, System.currentTimeMillis());
 					dp.write1(2856986197L);
 					danmakuListener.send(dp.getData());
@@ -89,7 +80,7 @@ public class MainActivity extends Activity {
 
 		@Override
 		public void onMessage(ByteBuffer bs) {	
-		showToast(new String(bs.array(),18,bs.array().length-18));
+		showToast(new String(bs.array(),DataPack.headLength,bs.array().length-DataPack.headLength));
 		}
 
 		@Override
