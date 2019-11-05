@@ -54,8 +54,9 @@ public class MainActivity extends Activity {
 									result.setText(result.getText().toString()+" "+bss[i]);
 								}
 								DataPack dp2=DataPack.decode(dp.getData());
-								showToast(new Gson().toJson( dp2.ritsukageBean));
+								showToast(new Gson().toJson(dp.ritsukageBean));
 								//showToast(dp2.sss);
+								result.setText(dp2.sss+" len:"+dp2.sss.length());
 							}
 						});*/
 				}
@@ -70,7 +71,7 @@ public class MainActivity extends Activity {
 
 		@Override
 		public void onMessage(String p1) {
-			// TODO: Implement this method
+			showToast("stringMsg:"+p1);
 		}
 
 		@Override
@@ -80,7 +81,7 @@ public class MainActivity extends Activity {
 
 		@Override
 		public void onMessage(ByteBuffer bs) {	
-		showToast(new String(bs.array(),DataPack.headLength,bs.array().length-DataPack.headLength));
+			System.out.println(new String(bs.array(),DataPack.headLength,bs.array().length-DataPack.headLength));
 		}
 
 		@Override

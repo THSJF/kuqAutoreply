@@ -38,15 +38,7 @@ public class ConnectServer extends WebSocketServer {
 	@Override
 	public void onMessage(WebSocket conn, ByteBuffer message) {
 		DataPack dp=DataPack.decode(message.array());
-		//Autoreply.sendMessage(Autoreply.mainGroup, 0, new String(message.array(), 18, message.array().length - 18));
-		/*if (dp.getOpCode() == DataPack._1verify) {
-		 if (dp.readNum1() == configJavaBean.ogg) {
-		 oggConnect = conn;
-		 }
-		 }
-		 if (oggConnect != null) {
-		 oggProcess(dp);
-		 }*/
+		System.out.println("isOgg:" + (dp.getTarget() == Autoreply.instence.configManager.configJavaBean.ogg));
 		if (dp.getTarget() == Autoreply.instence.configManager.configJavaBean.ogg) {
 			oggProcess(conn, dp);
 		}

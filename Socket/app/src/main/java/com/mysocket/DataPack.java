@@ -7,10 +7,10 @@ public class DataPack {
 
 	private byte[] data;
 	public static final short headLength=26;
-	private RitsukageBean ritsukageBean=null;
+	public RitsukageBean ritsukageBean=null;
 	private Gson gson=new Gson();
 	private int writePointer=0;
-
+	public String sss;
 	/*
 	 数据包中所有数字都是long型，除了数据包头中的数字和标记字符串长度的数字
 	 数据包中字符串的放置方式是先放置一个字符串在数据包中的字节数，数字为int，后面接着是字符串的数组，所有字符串都是utf-8
@@ -70,6 +70,7 @@ public class DataPack {
 		data = pack;
 		String s=new String(pack, headLength, getLength() - headLength);
 		System.out.println(s);
+		sss=s;
 		ritsukageBean = gson.fromJson(s, RitsukageBean.class);
 	} 
 
