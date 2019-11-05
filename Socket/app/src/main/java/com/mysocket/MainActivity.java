@@ -42,8 +42,10 @@ public class MainActivity extends Activity {
 
 				@Override
 				public void onClick(View p1) {
-					final DataPack dp=DataPack.encode(DataPack._10getPersonInfoByQQ, System.currentTimeMillis());
-					dp.write1(2856986197L);
+					final DataPack dp=DataPack.encode(DataPack._12getPersonInfoByBiliLive, System.currentTimeMillis());
+					dp.write1(1023432971L);
+					dp.write2(2856986197L);
+					dp.write3(60);
 					danmakuListener.send(dp.getData());
 				/*	runOnUiThread(new Runnable(){
 

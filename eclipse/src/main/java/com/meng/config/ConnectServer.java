@@ -11,6 +11,7 @@ import com.meng.config.javabeans.*;
 import com.google.gson.*;
 import java.util.*;
 import com.meng.bilibili.live.*;
+import com.meng.tools.*;
 
 public class ConnectServer extends WebSocketServer {
 
@@ -106,10 +107,14 @@ public class ConnectServer extends WebSocketServer {
 				//dp.write(
 				break;
 			case DataPack._15groupBan:
-				Autoreply.CQ.setGroupBan(dataPack.readNum1(), dataPack.readNum2(), dataPack.readNum3());
+				Methods.ban(dataPack.readNum1(), dataPack.readNum2(), (int)dataPack.readNum3());
+				dp = DataPack.encode((short)0, dataPack.getTimeStamp());
+				dp.write1("禁言成功");
 				break;
 			case DataPack._16groupKick:
 				Autoreply.CQ.setGroupKick(dataPack.readNum1(), dataPack.readNum2(), dataPack.readNum3() == 1);
+				dp = DataPack.encode((short)0, dataPack.getTimeStamp());
+				dp.write1("踢出群成功");
 				break;
 			case DataPack._17heartBeat:
 				break;
