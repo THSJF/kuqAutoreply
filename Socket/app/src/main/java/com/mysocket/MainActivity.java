@@ -25,46 +25,51 @@ public class MainActivity extends Activity {
 		send = (Button) findViewById(R.id.mainButtonSend);
 		input = (EditText) findViewById(R.id.mainEditText);
 		result = (EditText) findViewById(R.id.mainEditTextResult);
-		connect.setOnClickListener(new OnClickListener(){
+		connect.setOnClickListener(onClick);
+		send.setOnClickListener(onClick);
+    }
 
-				@Override
-				public void onClick(View p1) {
-				//	showToast("开始连接");
+	OnClickListener onClick=new OnClickListener(){
+
+		@Override
+		public void onClick(View p1) {
+			switch (p1.getId()) {
+				case R.id.mainButtonConnect:
+					//	showToast("开始连接");
 					try {
 						danmakuListener = new DanmakuListener(new URI("ws://123.207.65.93:9961"));
 						danmakuListener.connect();
 					} catch (URISyntaxException e) {
 						showToast(e.toString());
 					}
-				}
-			});
-		send.setOnClickListener(new OnClickListener(){
-
-				@Override
-				public void onClick(View p1) {
+					break;
+				case R.id.mainButtonSend:
 					final DataPack dp=DataPack.encode(DataPack._15groupBan, System.currentTimeMillis());
 					dp.write1(1023432971L);
 					dp.write2(2856986197L);
 					dp.write3(360);
 					danmakuListener.send(dp.getData());
-				/*	runOnUiThread(new Runnable(){
+					/*	runOnUiThread(new Runnable(){
 
-							@Override
-							public void run() {
-								byte[] bss=dp.getData();
-								for(int i=0;i<bss.length;++i){
-									result.setText(result.getText().toString()+" "+bss[i]);
-								}
-								DataPack dp2=DataPack.decode(dp.getData());
-								showToast(new Gson().toJson(dp.ritsukageBean));
-								//showToast(dp2.sss);
-								result.setText(dp2.sss+" len:"+dp2.sss.length());
-							}
-						});*/
-				}
-			});
-    }
-	
+					 @Override
+					 public void run() {
+					 byte[] bss=dp.getData();
+					 for(int i=0;i<bss.length;++i){
+					 result.setText(result.getText().toString()+" "+bss[i]);
+					 }
+					 DataPack dp2=DataPack.decode(dp.getData());
+					 showToast(new Gson().toJson(dp.ritsukageBean));
+					 //showToast(dp2.sss);
+					 result.setText(dp2.sss+" len:"+dp2.sss.length());
+					 }
+					 });*/
+					break;
+			}
+		}
+
+
+	};
+
 	public class DanmakuListener extends WebSocketClient {
 
 		public DanmakuListener(URI uri) {
@@ -73,7 +78,7 @@ public class MainActivity extends Activity {
 
 		@Override
 		public void onMessage(String p1) {
-			showToast("stringMsg:"+p1);
+			showToast("stringMsg:" + p1);
 		}
 
 		@Override
@@ -83,7 +88,7 @@ public class MainActivity extends Activity {
 
 		@Override
 		public void onMessage(ByteBuffer bs) {	
-			System.out.println(new String(bs.array(),DataPack.headLength,bs.array().length-DataPack.headLength));
+			System.out.println(new String(bs.array(), DataPack.headLength, bs.array().length - DataPack.headLength));
 		}
 
 		@Override
@@ -96,12 +101,12 @@ public class MainActivity extends Activity {
 			showToast(e.toString());
 		}
 	}
-	private void showToast(final String s){
+	private void showToast(final String s) {
 		runOnUiThread(new Runnable(){
 
 				@Override
 				public void run() {
-					Toast.makeText(MainActivity.this,s,Toast.LENGTH_SHORT).show();
+					Toast.makeText(MainActivity.this, s, Toast.LENGTH_SHORT).show();
 				}
 			});
 	}
