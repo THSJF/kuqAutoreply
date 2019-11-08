@@ -104,7 +104,7 @@ public class ConnectServer extends WebSocketServer {
 				}
 				break;
 			case DataPack._12getPersonInfoByBiliLive:
-				PersonInfo pi12=Autoreply.instence.configManager.getPersonInfoFromQQ(recievedDataPack.readNum(1));
+				PersonInfo pi12=Autoreply.instence.configManager.getPersonInfoFromLiveId(recievedDataPack.readNum(1));
 				if (pi12 != null) {
 					dataToSend = DataPack.encode(DataPack._13returnPersonInfo, recievedDataPack.getTimeStamp());
 					dataToSend.write(pi12);

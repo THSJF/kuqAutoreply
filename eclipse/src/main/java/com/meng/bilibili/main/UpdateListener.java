@@ -57,7 +57,16 @@ public class UpdateListener implements Runnable {
                     if (articles != null) {
                         if (articles.publish_time > updater.lastArtical) {
                             if (updater.needTipArtical) {
-                                tip(String.valueOf(updater.bid), updater.name + "发布新文章" + articles.id + ":" + articles.title);
+								try {
+									DataPack dp=DataPack.encode(DataPack._8newArtical, System.currentTimeMillis());
+									dp.write(1, updater.name);
+									dp.write(2, articles.title);
+									dp.write(1, articles.id);
+									Autoreply.instence.connectServer.broadcast(dp.getData());						
+								} catch (Exception e) {
+									Autoreply.sendMessage(Autoreply.mainGroup, 0, e.toString());
+								}
+								tip(String.valueOf(updater.bid), updater.name + "发布新文章" + articles.id + ":" + articles.title);
                             } else {
                                 updater.needTipArtical = true;
                             }
@@ -67,6 +76,15 @@ public class UpdateListener implements Runnable {
                     if (vlist != null) {
                         if (vlist.created > updater.lastVideo) {
                             if (updater.needTipVideo) {
+								try {
+									DataPack dp=DataPack.encode(DataPack._7newVideo, System.currentTimeMillis());
+									dp.write(1, updater.name);
+									dp.write(2, vlist.title);
+									dp.write(1, vlist.aid);
+									Autoreply.instence.connectServer.broadcast(dp.getData());
+								} catch (Exception e) {
+									Autoreply.sendMessage(Autoreply.mainGroup, 0, e.toString());
+								}
                                 tip(String.valueOf(updater.bid), updater.name + "发布新视频" + vlist.aid + ":" + vlist.title);
                             } else {
                                 updater.needTipVideo = true;

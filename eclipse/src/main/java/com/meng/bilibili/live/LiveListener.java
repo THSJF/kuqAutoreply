@@ -250,6 +250,10 @@ public class LiveListener implements Runnable {
 		}
 	}
     private void tipStart(PersonInfo p) {
+		DataPack dp=DataPack.encode(DataPack._4liveStart, System.currentTimeMillis());
+		dp.write(1, p.bliveRoom);
+		dp.write(1, p.name);
+		Autoreply.instence.connectServer.broadcast(dp.getData());
 		if (!p.isTipLive()) {
             return;
 		}
@@ -262,6 +266,10 @@ public class LiveListener implements Runnable {
 	}
 
     private void tipFinish(PersonInfo p) {
+		DataPack dp=DataPack.encode(DataPack._5liveStop, System.currentTimeMillis());
+		dp.write(1, p.bliveRoom);
+		dp.write(1, p.name);
+		Autoreply.instence.connectServer.broadcast(dp.getData());
 		if (!p.isTipLive()) {
             return;
 		}
