@@ -90,33 +90,41 @@ public class DataPack {
 		byte[] retData=null;
 		byte[] dataArray=null;
 		if (ritsukageSet != null) {
-			retData = new byte[headLength + gson.toJson(ritsukageSet).length()];	
 			try {
 				dataArray = gson.toJson(ritsukageSet).getBytes("utf-8");
+				retData = new byte[headLength + dataArray.length];
 			} catch (UnsupportedEncodingException e) {
 				e.printStackTrace();
 				return null;
 			}
 		} else if (ritsukagePersonInfo != null) {	
-			retData = new byte[headLength + gson.toJson(ritsukagePersonInfo).length()];
 			try {
 				dataArray = gson.toJson(ritsukagePersonInfo).getBytes("utf-8");
+				retData = new byte[headLength + dataArray.length];
 			} catch (UnsupportedEncodingException e) {
 				e.printStackTrace();
 				return null;
 			}
 		} else if (ritsuaheLongSet != null) {
-			retData = new byte[headLength + gson.toJson(ritsuaheLongSet).length()];
 			try {
 				dataArray = gson.toJson(ritsuaheLongSet).getBytes("utf-8");
+				retData = new byte[headLength + dataArray.length];
+			} catch (UnsupportedEncodingException e) {
+				e.printStackTrace();
+				return null;
+			}
+		} else if (ritsukageBean != null) {
+			try {		
+				dataArray = gson.toJson(ritsukageBean).getBytes("utf-8");
+				retData = new byte[headLength + dataArray.length];
 			} catch (UnsupportedEncodingException e) {
 				e.printStackTrace();
 				return null;
 			}
 		} else {
-			retData = new byte[headLength + gson.toJson(ritsukageBean).length()];
-			try {
-				dataArray = gson.toJson(ritsukageBean).getBytes("utf-8");
+			try {		
+				dataArray = "".getBytes("utf-8");
+				retData = new byte[headLength + dataArray.length];
 			} catch (UnsupportedEncodingException e) {
 				e.printStackTrace();
 				return null;
@@ -156,7 +164,6 @@ public class DataPack {
 		return readLong(data, 16);
 	}
 
-
 	public short getOpCode() {
 		return readShort(data, 24);
 	}
@@ -172,45 +179,52 @@ public class DataPack {
 	public void writeLongSet(HashSet<Long> hs) {
 		ritsuaheLongSet = hs;
 	}
-
-	public void write1(long l) {
-		ritsukageBean.n1 = l;
+	public void write(int argNum, long l) {
+		switch (argNum) {
+			case 1:
+				ritsukageBean.n1 = l;
+				break;
+			case 2:
+				ritsukageBean.n2 = l;
+				break;
+			case 3:
+				ritsukageBean.n3 = l;
+				break;
+		}
 	}
 
-	public void write2(long l) {
-		ritsukageBean.n2 = l;
+	public void write(int argNum, String s) {
+		switch (argNum) {
+			case 1:
+				ritsukageBean.s1 = s;
+				break;
+			case 2:
+				ritsukageBean.s2 = s;
+				break;
+		}
 	}
 
-	public void write3(long l) {
-		ritsukageBean.n3 = l;
+	public long readNum(int argNum) {
+		switch (argNum) {
+			case 1:
+				return ritsukageBean.n1;
+			case 2:
+				return ritsukageBean.n2;	
+			case 3:
+				return ritsukageBean.n3;
+		}
+		return 0;
 	}
 
-	public void write1(String s) {
-		ritsukageBean.s1 = s;
-	}
 
-	public void write2(String s) {
-		ritsukageBean.s2 = s;
-	}
-
-	public long readNum1() {
-		return ritsukageBean.n1;
-	}
-
-	public long readNum2() {
-		return ritsukageBean.n2;
-	}
-
-	public long readNum3() {
-		return ritsukageBean.n3;
-	}
-
-	public String readString1() {
-		return ritsukageBean.s1;
-	}
-
-	public String readString2() {
-		return ritsukageBean.s2;
+	public String readString(int argNum) {
+		switch (argNum) {
+			case 1:
+				return ritsukageBean.s1;
+			case 2:
+				return ritsukageBean.s2;
+		}
+		return null;
 	}
 
 	private void write(byte[] bs) {

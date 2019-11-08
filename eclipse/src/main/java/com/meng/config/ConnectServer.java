@@ -74,31 +74,43 @@ public class ConnectServer extends WebSocketServer {
 			case DataPack._8newArtical:
 				break;
 			case DataPack._9getPersonInfoByName:
-				PersonInfo pi=Autoreply.instence.configManager.getPersonInfoFromName(recievedDataPack.readString1());
+				PersonInfo pi=Autoreply.instence.configManager.getPersonInfoFromName(recievedDataPack.readString(1));
 				if (pi != null) {
 					dataToSend = DataPack.encode(DataPack._13returnPersonInfo, recievedDataPack.getTimeStamp());
 					dataToSend.write(pi);
+				} else {
+					dataToSend = DataPack.encode(DataPack._0notification, recievedDataPack.getTimeStamp());
+					dataToSend.write(1, "");
 				}
 				break;
 			case DataPack._10getPersonInfoByQQ:
-				PersonInfo pi10=Autoreply.instence.configManager.getPersonInfoFromQQ(recievedDataPack.readNum1());
+				PersonInfo pi10=Autoreply.instence.configManager.getPersonInfoFromQQ(recievedDataPack.readNum(1));
 				if (pi10 != null) {
 					dataToSend = DataPack.encode(DataPack._13returnPersonInfo, recievedDataPack.getTimeStamp());
 					dataToSend.write(pi10);
+				} else {
+					dataToSend = DataPack.encode(DataPack._0notification, recievedDataPack.getTimeStamp());
+					dataToSend.write(1, "");
 				}
 				break;
 			case DataPack._11getPersonInfoByBid:
-				PersonInfo pi11=Autoreply.instence.configManager.getPersonInfoFromBid(recievedDataPack.readNum1());
+				PersonInfo pi11=Autoreply.instence.configManager.getPersonInfoFromBid(recievedDataPack.readNum(1));
 				if (pi11 != null) {
 					dataToSend = DataPack.encode(DataPack._13returnPersonInfo, recievedDataPack.getTimeStamp());
 					dataToSend.write(pi11);
+				} else {
+					dataToSend = DataPack.encode(DataPack._0notification, recievedDataPack.getTimeStamp());
+					dataToSend.write(1, "");
 				}
 				break;
 			case DataPack._12getPersonInfoByBiliLive:
-				PersonInfo pi12=Autoreply.instence.configManager.getPersonInfoFromQQ(recievedDataPack.readNum1());
+				PersonInfo pi12=Autoreply.instence.configManager.getPersonInfoFromQQ(recievedDataPack.readNum(1));
 				if (pi12 != null) {
 					dataToSend = DataPack.encode(DataPack._13returnPersonInfo, recievedDataPack.getTimeStamp());
 					dataToSend.write(pi12);
+				} else {
+					dataToSend = DataPack.encode(DataPack._0notification, recievedDataPack.getTimeStamp());
+					dataToSend.write(1, "");
 				}
 				break;
 			case DataPack._13returnPersonInfo:
@@ -108,19 +120,20 @@ public class ConnectServer extends WebSocketServer {
 				//dp.write(
 				break;
 			case DataPack._15groupBan:
-				Methods.ban(recievedDataPack.readNum1(), recievedDataPack.readNum2(), (int)recievedDataPack.readNum3());
+				Methods.ban(recievedDataPack.readNum(1), recievedDataPack.readNum(2), (int)recievedDataPack.readNum(3));
 				dataToSend = DataPack.encode((short)0, recievedDataPack.getTimeStamp());
-				dataToSend.write1("禁言成功");
+				dataToSend.write(1, "禁言成功");
 				break;
 			case DataPack._16groupKick:
-				Autoreply.CQ.setGroupKick(recievedDataPack.readNum1(), recievedDataPack.readNum2(), recievedDataPack.readNum3() == 1);
+				Autoreply.CQ.setGroupKick(recievedDataPack.readNum(1), recievedDataPack.readNum(2), recievedDataPack.readNum(3) == 1);
 				dataToSend = DataPack.encode(DataPack._0notification, recievedDataPack.getTimeStamp());
-				dataToSend.write1("踢出群成功");
+				dataToSend.write(1, "踢出群成功");
 				break;
 			case DataPack._17heartBeat:
 				break;
 			case DataPack._18FindInAll:		
-				long findqq=recievedDataPack.readNum1();
+				long findqq=recievedDataPack.readNum(1);
+				dataToSend = DataPack.encode(DataPack._19returnFind, recievedDataPack.getTimeStamp());
 				List<Group> joinedGroups = Autoreply.CQ.getGroupList();
 				HashSet<Long> qqInThis = new HashSet<>();
 				for (Group group : joinedGroups) {
@@ -141,7 +154,7 @@ public class ConnectServer extends WebSocketServer {
 				break;
 			default:
 				dataToSend = DataPack.encode((short)0, recievedDataPack.getTimeStamp());
-				dataToSend.write1("操作类型错误");
+				dataToSend.write(1, "操作类型错误");
 		} 
 		ogg.send(dataToSend.getData());
 		//	DataPack ndp=DataPack.encode(DataPack._0notification, dataPack.getTimeStamp());
