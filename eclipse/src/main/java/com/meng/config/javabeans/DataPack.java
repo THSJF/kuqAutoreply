@@ -88,11 +88,11 @@ public class DataPack {
 
 	public byte[] getData() {
 		byte[] retData=null;
-		byte[] bs=null;
+		byte[] dataArray=null;
 		if (ritsukageSet != null) {
 			retData = new byte[headLength + gson.toJson(ritsukageSet).length()];	
 			try {
-				bs = gson.toJson(ritsukageSet).getBytes("utf-8");
+				dataArray = gson.toJson(ritsukageSet).getBytes("utf-8");
 			} catch (UnsupportedEncodingException e) {
 				e.printStackTrace();
 				return null;
@@ -100,7 +100,7 @@ public class DataPack {
 		} else if (ritsukagePersonInfo != null) {	
 			retData = new byte[headLength + gson.toJson(ritsukagePersonInfo).length()];
 			try {
-				bs = gson.toJson(ritsukagePersonInfo).getBytes("utf-8");
+				dataArray = gson.toJson(ritsukagePersonInfo).getBytes("utf-8");
 			} catch (UnsupportedEncodingException e) {
 				e.printStackTrace();
 				return null;
@@ -108,7 +108,7 @@ public class DataPack {
 		} else if (ritsuaheLongSet != null) {
 			retData = new byte[headLength + gson.toJson(ritsuaheLongSet).length()];
 			try {
-				bs = gson.toJson(ritsuaheLongSet).getBytes("utf-8");
+				dataArray = gson.toJson(ritsuaheLongSet).getBytes("utf-8");
 			} catch (UnsupportedEncodingException e) {
 				e.printStackTrace();
 				return null;
@@ -116,7 +116,7 @@ public class DataPack {
 		} else {
 			retData = new byte[headLength + gson.toJson(ritsukageBean).length()];
 			try {
-				bs = gson.toJson(ritsukageBean).getBytes("utf-8");
+				dataArray = gson.toJson(ritsukageBean).getBytes("utf-8");
 			} catch (UnsupportedEncodingException e) {
 				e.printStackTrace();
 				return null;
@@ -125,8 +125,8 @@ public class DataPack {
 		for (int i=0;i < headLength;++i) {
 			retData[i] = data[i];
 		}
-		for (int i=0;i < bs.length;++i) {
-			retData[i + headLength] = bs[i];
+		for (int i=0;i < dataArray.length;++i) {
+			retData[i + headLength] = dataArray[i];
 		}
 		byte[] len=getBytes(retData.length);
 		retData[0] = len[0];
@@ -165,11 +165,11 @@ public class DataPack {
 		ritsukagePersonInfo = pi;
 	}
 
-	public void write(HashSet<PersonInfo> hs) {
+	public void writePersonSet(HashSet<PersonInfo> hs) {
 		ritsukageSet = hs;
 	}
 
-	public void write(HashSet<Long> hs) {
+	public void writeLongSet(HashSet<Long> hs) {
 		ritsuaheLongSet = hs;
 	}
 

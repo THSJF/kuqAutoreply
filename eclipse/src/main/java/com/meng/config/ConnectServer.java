@@ -59,7 +59,7 @@ public class ConnectServer extends WebSocketServer {
 					hashSet.add(Autoreply.instence.configManager.getPersonInfoFromBid(bid));
 				}
 				dataToSend = DataPack.encode(DataPack._3returnLiveList, recievedDataPack.getTimeStamp());
-				dataToSend.write(hashSet);
+				dataToSend.writePersonSet(hashSet);
 				break;
 			case DataPack._3returnLiveList:
 				break;
@@ -135,7 +135,7 @@ public class ConnectServer extends WebSocketServer {
 						}
 					}
 				}
-				dataToSend.write(qqInThis);
+				dataToSend.writeLongSet(qqInThis);
 				break;
 			case DataPack._19returnFind:
 				break;
