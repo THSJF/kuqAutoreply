@@ -12,6 +12,7 @@ import com.google.gson.*;
 import java.util.*;
 import com.meng.bilibili.live.*;
 import com.meng.tools.*;
+import com.sobte.cqp.jcq.entity.*;
 
 public class ConnectServer extends WebSocketServer {
 
@@ -45,9 +46,9 @@ public class ConnectServer extends WebSocketServer {
 		}
 	}
 
-	private void oggProcess(WebSocket ogg, DataPack dataPack) {
-		DataPack dp=null;
-		switch (dataPack.getOpCode()) {
+	private void oggProcess(WebSocket ogg, DataPack recievedDataPack) {
+		DataPack dataToSend=null;
+		switch (recievedDataPack.getOpCode()) {
 			case DataPack._0notification:
 				break;
 			case DataPack._1verify:
@@ -57,8 +58,8 @@ public class ConnectServer extends WebSocketServer {
 				for (long bid:Autoreply.instence.liveListener.livePersonMap.keySet()) {
 					hashSet.add(Autoreply.instence.configManager.getPersonInfoFromBid(bid));
 				}
-				dp = DataPack.encode(DataPack._3returnLiveList, dataPack.getTimeStamp());
-				dp.write(hashSet);
+				dataToSend = DataPack.encode(DataPack._3returnLiveList, recievedDataPack.getTimeStamp());
+				dataToSend.write(hashSet);
 				break;
 			case DataPack._3returnLiveList:
 				break;
@@ -73,31 +74,31 @@ public class ConnectServer extends WebSocketServer {
 			case DataPack._8newArtical:
 				break;
 			case DataPack._9getPersonInfoByName:
-				PersonInfo pi=Autoreply.instence.configManager.getPersonInfoFromName(dp.readString1());
+				PersonInfo pi=Autoreply.instence.configManager.getPersonInfoFromName(recievedDataPack.readString1());
 				if (pi != null) {
-					dp = DataPack.encode(DataPack._13returnPersonInfo, dp.getTimeStamp());
-					dp.write(pi);
+					dataToSend = DataPack.encode(DataPack._13returnPersonInfo, recievedDataPack.getTimeStamp());
+					dataToSend.write(pi);
 				}
 				break;
 			case DataPack._10getPersonInfoByQQ:
-				PersonInfo pi10=Autoreply.instence.configManager.getPersonInfoFromQQ(dp.readNum1());
+				PersonInfo pi10=Autoreply.instence.configManager.getPersonInfoFromQQ(recievedDataPack.readNum1());
 				if (pi10 != null) {
-					dp = DataPack.encode(DataPack._13returnPersonInfo, dp.getTimeStamp());
-					dp.write(pi10);
+					dataToSend = DataPack.encode(DataPack._13returnPersonInfo, recievedDataPack.getTimeStamp());
+					dataToSend.write(pi10);
 				}
 				break;
 			case DataPack._11getPersonInfoByBid:
-				PersonInfo pi11=Autoreply.instence.configManager.getPersonInfoFromBid(dp.readNum1());
+				PersonInfo pi11=Autoreply.instence.configManager.getPersonInfoFromBid(recievedDataPack.readNum1());
 				if (pi11 != null) {
-					dp = DataPack.encode(DataPack._13returnPersonInfo, dp.getTimeStamp());
-					dp.write(pi11);
+					dataToSend = DataPack.encode(DataPack._13returnPersonInfo, recievedDataPack.getTimeStamp());
+					dataToSend.write(pi11);
 				}
 				break;
 			case DataPack._12getPersonInfoByBiliLive:
-				PersonInfo pi12=Autoreply.instence.configManager.getPersonInfoFromQQ(dp.readNum1());
+				PersonInfo pi12=Autoreply.instence.configManager.getPersonInfoFromQQ(recievedDataPack.readNum1());
 				if (pi12 != null) {
-					dp = DataPack.encode(DataPack._13returnPersonInfo, dp.getTimeStamp());
-					dp.write(pi12);
+					dataToSend = DataPack.encode(DataPack._13returnPersonInfo, recievedDataPack.getTimeStamp());
+					dataToSend.write(pi12);
 				}
 				break;
 			case DataPack._13returnPersonInfo:
@@ -107,22 +108,42 @@ public class ConnectServer extends WebSocketServer {
 				//dp.write(
 				break;
 			case DataPack._15groupBan:
-				Methods.ban(dataPack.readNum1(), dataPack.readNum2(), (int)dataPack.readNum3());
-				dp = DataPack.encode((short)0, dataPack.getTimeStamp());
-				dp.write1("禁言成功");
+				Methods.ban(recievedDataPack.readNum1(), recievedDataPack.readNum2(), (int)recievedDataPack.readNum3());
+				dataToSend = DataPack.encode((short)0, recievedDataPack.getTimeStamp());
+				dataToSend.write1("禁言成功");
 				break;
 			case DataPack._16groupKick:
-				Autoreply.CQ.setGroupKick(dataPack.readNum1(), dataPack.readNum2(), dataPack.readNum3() == 1);
-				dp = DataPack.encode((short)0, dataPack.getTimeStamp());
-				dp.write1("踢出群成功");
+				Autoreply.CQ.setGroupKick(recievedDataPack.readNum1(), recievedDataPack.readNum2(), recievedDataPack.readNum3() == 1);
+				dataToSend = DataPack.encode(DataPack._0notification, recievedDataPack.getTimeStamp());
+				dataToSend.write1("踢出群成功");
 				break;
 			case DataPack._17heartBeat:
 				break;
+			case DataPack._18FindInAll:		
+				long findqq=recievedDataPack.readNum1();
+				List<Group> joinedGroups = Autoreply.CQ.getGroupList();
+				HashSet<Long> qqInThis = new HashSet<>();
+				for (Group group : joinedGroups) {
+					if (group.getId() == 959615179L || group.getId() == 666247478L) {
+						continue;
+					}
+					ArrayList<Member> members = (ArrayList<Member>) Autoreply.CQ.getGroupMemberList(group.getId());
+					for (Member member : members) {
+						if (member.getQqId() == findqq) {
+							qqInThis.add(group.getId());
+							break;
+						}
+					}
+				}
+				dataToSend.write(qqInThis);
+				break;
+			case DataPack._19returnFind:
+				break;
 			default:
-				dp = DataPack.encode((short)0, dataPack.getTimeStamp());
-				dp.write1("操作类型错误");
+				dataToSend = DataPack.encode((short)0, recievedDataPack.getTimeStamp());
+				dataToSend.write1("操作类型错误");
 		} 
-		ogg.send(dp.getData());
+		ogg.send(dataToSend.getData());
 		//	DataPack ndp=DataPack.encode(DataPack._0notification, dataPack.getTimeStamp());
 		//	ndp.write("成功");
 		//	oggConnect.send(ndp.getData());
