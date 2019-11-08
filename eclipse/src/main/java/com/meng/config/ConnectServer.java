@@ -130,6 +130,8 @@ public class ConnectServer extends WebSocketServer {
 				dataToSend.write(1, "踢出群成功");
 				break;
 			case DataPack._17heartBeat:
+				dataToSend = DataPack.encode(DataPack._0notification, recievedDataPack.getTimeStamp());
+				dataToSend.write(1, "心跳收到");
 				break;
 			case DataPack._18FindInAll:		
 				long findqq=recievedDataPack.readNum(1);

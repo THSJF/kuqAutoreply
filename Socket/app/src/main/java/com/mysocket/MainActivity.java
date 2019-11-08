@@ -82,6 +82,20 @@ public class MainActivity extends Activity {
 		@Override
 		public void onOpen(ServerHandshake serverHandshake) {
 			showToast("connected");
+			new Thread(new Runnable(){
+
+					@Override
+					public void run() {
+						while(true){
+							final DataPack dp=DataPack.encode(DataPack._17heartBeat, System.currentTimeMillis());
+							dp.write1(2856986197L);
+							danmakuListener.send(dp.getData());	
+							try {
+								Thread.sleep(30000);
+							} catch (InterruptedException e) {}
+						}
+					}
+				}).start();
 		}
 
 		@Override
