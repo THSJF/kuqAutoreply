@@ -81,9 +81,7 @@ public class GroupMemberChangerListener {
             }
             QQInfo qInfo = Autoreply.CQ.getStrangerInfo(beingOperateQQ);
             QQInfo qInfo2 = Autoreply.CQ.getStrangerInfo(fromQQ);
-            PersonInfo personInfo = Autoreply.instence.configManager.getPersonInfoFromQQ(beingOperateQQ);
-            PersonInfo personInfo2 = Autoreply.instence.configManager.getPersonInfoFromQQ(fromQQ);
-			Autoreply.instence.configManager.removeAutoAllow(beingOperateQQ);
+            Autoreply.instence.configManager.removeAutoAllow(beingOperateQQ);
             sendMessage(fromGroup, 0, Autoreply.instence.configManager.getNickName(beingOperateQQ) + "(" + qInfo.getQqId() + ")" + "被" + Autoreply.instence.configManager.getNickName(fromQQ) + "(" + qInfo2.getQqId() + ")" + "玩完扔莉", true);
         }
     }
