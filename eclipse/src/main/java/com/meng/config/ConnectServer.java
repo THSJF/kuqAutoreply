@@ -194,9 +194,44 @@ public class ConnectServer extends WebSocketServer {
 			case DataPack._24MD5Random:
 				dataToSend = DataPack.encode(DataPack._25returnMD5Random, recievedDataPack.getTimeStamp());
 				String md5=MD5.stringToMD5(String.valueOf(recievedDataPack.readNum(1) + System.currentTimeMillis() / (24 * 60 * 60 * 1000)));
-				dataToSend.write(1, Integer.parseInt(md5.substring(26), 16) % 10001);
+				char c=md5.charAt(0);
+				if (c == '0') {
+					dataToSend.write(1, 9961);
+				} else if (c == '1') {
+					dataToSend.write(1, 9760);
+				} else {
+					dataToSend.write(1, Integer.parseInt(md5.substring(26), 16) % 10001);
+				}
 				break;
 			case DataPack._25returnMD5Random:
+				break;
+			case DataPack._26MD5neta:
+				dataToSend = DataPack.encode(DataPack._27returnMD5neta, recievedDataPack.getTimeStamp());
+				dataToSend.write(1, Autoreply.instence.diceImitate.md5RanStr(recievedDataPack.readNum(1), DiceImitate.neta));
+				break;
+			case DataPack._27returnMD5neta:
+				break;
+			case DataPack._28MD5music:
+				dataToSend = DataPack.encode(DataPack._29returnMD5music, recievedDataPack.getTimeStamp());
+				dataToSend.write(1, Autoreply.instence.diceImitate.md5RanStr(recievedDataPack.readNum(1), DiceImitate.music));
+				break;
+			case DataPack._29returnMD5music:
+				break;
+			case DataPack._30MD5grandma:
+				dataToSend = DataPack.encode(DataPack._31returnMD5grandma, recievedDataPack.getTimeStamp());
+				if (MD5.stringToMD5(String.valueOf(recievedDataPack.readNum(1) + System.currentTimeMillis() / (24 * 60 * 60 * 1000))).charAt(0) == '0') {
+					dataToSend.write(1, "八云紫");
+				} else {
+					dataToSend.write(1, Autoreply.instence.diceImitate.md5RanStr(recievedDataPack.readNum(1), DiceImitate.name));
+				}
+				break;
+			case DataPack._31returnMD5grandma:
+				break;
+			case DataPack._32MD5overSpell:
+				dataToSend = DataPack.encode(DataPack._33returnMD5overSpell, recievedDataPack.getTimeStamp());
+				dataToSend.write(1, Autoreply.instence.diceImitate.md5RanStr(recievedDataPack.readNum(1), DiceImitate.spells));
+				break;
+			case DataPack._33returnMD5overSpell:
 				break;
 			default:
 				dataToSend = DataPack.encode(DataPack._0notification, recievedDataPack.getTimeStamp());
@@ -208,26 +243,6 @@ public class ConnectServer extends WebSocketServer {
 		//	oggConnect.send(ndp.getData());
 	}
 
-//	public static void main(String[] args) throws InterruptedException , IOException {
-//		int port = 8887; // 843 flash policy port
-//		try {
-//			port = Integer.parseInt(args[0]);
-//		  } catch ( Exception ex ) {
-//		  }
-//		ConnectServer s = new ConnectServer(port);
-//		s.start();
-//		System.out.println("ChatServer started on port: " + s.getPort());
-//
-//		BufferedReader sysin = new BufferedReader(new InputStreamReader(System.in));
-//		while (true) {
-//			String in = sysin.readLine();
-//			s.broadcast(in);
-//			if (in.equals("exit")) {
-//				s.stop(1000);
-//				break;
-//			  }
-//		  }
-//	  }
 	@Override
 	public void onError(WebSocket conn, Exception ex) {
 		ex.printStackTrace();

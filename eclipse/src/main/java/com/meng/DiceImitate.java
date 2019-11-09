@@ -9,9 +9,9 @@ public class DiceImitate {
 	public static String[] spells;
 	public static String[] lastword;
 	public static String[] overdrive;
-	private static String[] neta;
-	private static String[] music;
-	private static String[] name;
+	public static String[] neta;
+	public static String[] music;
+	public static String[] name;
 
 	private static String[] pl01 = new String[]{"别打砖块了，来飞机"};
 	private static String[] pl02 = new String[]{"范围重视型", "高灵击伤害 平衡型", "威力重视型"};
@@ -1570,7 +1570,7 @@ public class DiceImitate {
 		return Integer.parseInt(md5.substring(26), 16);
 	}
 
-	private String md5RanStr(long fromQQ, String[] arr) {
+	public String md5RanStr(long fromQQ, String[] arr) {
 		return arr[md5Random(fromQQ) % arr.length];
 	}
 
