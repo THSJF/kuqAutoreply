@@ -153,7 +153,9 @@ public class SpellCollect {
 				chm.put(chan.get(0), tmpSet);
 			}
 			Random r=new Random();
-			StringBuilder sb=new StringBuilder("你获得了:");
+			StringBuilder sb=new StringBuilder();
+			sb.append(Autoreply.instence.configManager.getNickName(fromQQ));
+			sb.append("获得了:");
 			for (int i=0;i < coins * 3;++i) {
 				String s;
 				if (r.nextInt(150) == 20) {
@@ -187,7 +189,9 @@ public class SpellCollect {
 					chm.put(fromQQ, gotSpellsSet);
 				}
 				Random r=new Random();
-				StringBuilder sb=new StringBuilder("你获得了:");
+				StringBuilder sb=new StringBuilder();
+				sb.append(Autoreply.instence.configManager.getNickName(fromQQ));
+				sb.append("获得了:");
 				for (int i=0;i < useCoins * 3;++i) {
 					String s;
 					if (r.nextInt(150) == 20) {
@@ -235,7 +239,9 @@ public class SpellCollect {
 				chm.put(fromQQ, tmpSet);
 			}
 			Random r=new Random();
-			StringBuilder sb=new StringBuilder("你获得了:");
+			StringBuilder sb=new StringBuilder();
+			sb.append(Autoreply.instence.configManager.getNickName(fromQQ));
+			sb.append("获得了:");
 			for (int i=0;i < 5;++i) {
 				String s;
 				if (r.nextInt(150) == 20) {
@@ -266,7 +272,7 @@ public class SpellCollect {
 					chm.put(fromQQ, gotSpellSet);
 				}
 				gotSpellSet.add(spellName);
-				Autoreply.sendMessage(fromGroup, 0, "你获得了:" + spellName);
+				Autoreply.sendMessage(fromGroup, 0, Autoreply.instence.configManager.getNickName(fromQQ) + "获得了:" + spellName);
 				saveConfig();
 				checkArchievement(fromGroup, fromQQ, gotSpellSet);	
 				Autoreply.instence.coinManager.subCoins(fromQQ, 40);
@@ -283,7 +289,8 @@ public class SpellCollect {
 				Autoreply.sendMessage(fromGroup, 0, "你没有参加过抽卡");
 				return true;
 			}
-			sb.append("你获得了:");
+			sb.append(Autoreply.instence.configManager.getNickName(fromQQ));
+			sb.append("获得了:");
 			int i=0;
 			for (String s:DiceImitate.spells) {
 				if (gtdspl.contains(s)) {
