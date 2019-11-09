@@ -9,6 +9,7 @@ public class DataPack {
 
 	private byte[] data;
 	private final short headLength=26;
+	private byte[] arrayData=null;
 	private RitsukageBean ritsukageBean=null;
 	private HashSet<PersonInfo> ritsukageSet=null;
 	private HashSet<Long> ritsuaheLongSet=null;
@@ -59,7 +60,7 @@ public class DataPack {
 	public static final short _19returnFind=19;				//正邪→小律影    返回18的结果(群号json数组)  例[296376859,251059118]
 	public static final short _20pic=20;					//小律影→正邪    n1:qq号
 	public static final short _21returnPic=21;				//正邪→小律影    直接返回文件的字节数组
-	
+
 	public static DataPack encode(short opCode, long timeStamp) {
 		return new DataPack(opCode, timeStamp);
 	}
@@ -90,43 +91,46 @@ public class DataPack {
 
 	public byte[] getData() {
 		byte[] retData=null;
-		byte[] dataArray=null;
-		if (ritsukageSet != null) {
+		byte[] byteArray=null;
+		if (arrayData != null) {
+			byteArray = arrayData;
+			retData = new byte[headLength + byteArray.length];	
+		} else if (ritsukageSet != null) {
 			try {
-				dataArray = gson.toJson(ritsukageSet).getBytes("utf-8");
-				retData = new byte[headLength + dataArray.length];
+				byteArray = gson.toJson(ritsukageSet).getBytes("utf-8");
+				retData = new byte[headLength + byteArray.length];
 			} catch (UnsupportedEncodingException e) {
 				e.printStackTrace();
 				return null;
 			}
 		} else if (ritsukagePersonInfo != null) {	
 			try {
-				dataArray = gson.toJson(ritsukagePersonInfo).getBytes("utf-8");
-				retData = new byte[headLength + dataArray.length];
+				byteArray = gson.toJson(ritsukagePersonInfo).getBytes("utf-8");
+				retData = new byte[headLength + byteArray.length];
 			} catch (UnsupportedEncodingException e) {
 				e.printStackTrace();
 				return null;
 			}
 		} else if (ritsuaheLongSet != null) {
 			try {
-				dataArray = gson.toJson(ritsuaheLongSet).getBytes("utf-8");
-				retData = new byte[headLength + dataArray.length];
+				byteArray = gson.toJson(ritsuaheLongSet).getBytes("utf-8");
+				retData = new byte[headLength + byteArray.length];
 			} catch (UnsupportedEncodingException e) {
 				e.printStackTrace();
 				return null;
 			}
 		} else if (ritsukageBean != null) {
 			try {		
-				dataArray = gson.toJson(ritsukageBean).getBytes("utf-8");
-				retData = new byte[headLength + dataArray.length];
+				byteArray = gson.toJson(ritsukageBean).getBytes("utf-8");
+				retData = new byte[headLength + byteArray.length];
 			} catch (UnsupportedEncodingException e) {
 				e.printStackTrace();
 				return null;
 			}
 		} else {
 			try {		
-				dataArray = "".getBytes("utf-8");
-				retData = new byte[headLength + dataArray.length];
+				byteArray = "".getBytes("utf-8");
+				retData = new byte[headLength + byteArray.length];
 			} catch (UnsupportedEncodingException e) {
 				e.printStackTrace();
 				return null;
@@ -135,8 +139,8 @@ public class DataPack {
 		for (int i=0;i < headLength;++i) {
 			retData[i] = data[i];
 		}
-		for (int i=0;i < dataArray.length;++i) {
-			retData[i + headLength] = dataArray[i];
+		for (int i=0;i < byteArray.length;++i) {
+			retData[i + headLength] = byteArray[i];
 		}
 		byte[] len=getBytes(retData.length);
 		retData[0] = len[0];
@@ -220,7 +224,10 @@ public class DataPack {
 		return 0;
 	}
 
-
+	public void writeData(byte[] bs) {
+		arrayData = bs;
+	}
+	
 	public String readString(int argNum) {
 		switch (argNum) {
 			case 1:

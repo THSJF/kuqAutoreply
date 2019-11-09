@@ -13,6 +13,7 @@ import java.util.*;
 import com.meng.bilibili.live.*;
 import com.meng.tools.*;
 import com.sobte.cqp.jcq.entity.*;
+import com.meng.picEdit.*;
 
 public class ConnectServer extends WebSocketServer {
 
@@ -155,8 +156,25 @@ public class ConnectServer extends WebSocketServer {
 				break;
 			case DataPack._19returnFind:
 				break;
+			case DataPack._20pic:
+				new JingShenZhiZhuQQManager(-1, -1, Autoreply.instence.CC.at(recievedDataPack.readNum(1)));
+				dataToSend = DataPack.encode(DataPack._21returnPic, recievedDataPack.getTimeStamp());
+				try { 
+					File jpg=new File(Autoreply.appDirectory + "jingshenzhizhu\\" + recievedDataPack.readNum(1));
+					long filelength = jpg.length();
+					byte[] filecontent = new byte[(int) filelength];
+					FileInputStream in = new FileInputStream(jpg);
+					in.read(filecontent);
+					in.close();
+					dataToSend.writeData(filecontent);
+				} catch (Exception e) {
+
+				}
+				break;
+			case DataPack._21returnPic:
+				break;
 			default:
-				dataToSend = DataPack.encode((short)0, recievedDataPack.getTimeStamp());
+				dataToSend = DataPack.encode(DataPack._0notification, recievedDataPack.getTimeStamp());
 				dataToSend.write(1, "操作类型错误");
 		} 
 		ogg.send(dataToSend.getData());

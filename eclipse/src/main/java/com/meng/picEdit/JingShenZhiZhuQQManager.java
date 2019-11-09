@@ -31,11 +31,14 @@ public class JingShenZhiZhuQQManager {
         resultImageFile = new File(Autoreply.appDirectory + "jingshenzhizhu\\" + id + ".jpg");
         headImageFile = new File(Autoreply.appDirectory + "user\\" + id + ".jpg");
         boolean needRecreate = downloadPicture("http://q2.qlogo.cn/headimg_dl?bs=" + id + "&dst_uin=" + id + "&dst_uin="
-                + id + "&;dst_uin=" + id + "&spec=5&url_enc=0&referer=bu_interface&term_type=PC")
-                | !resultImageFile.exists();
+											   + id + "&;dst_uin=" + id + "&spec=5&url_enc=0&referer=bu_interface&term_type=PC")
+			| !resultImageFile.exists();
         if (needRecreate) {
             start(headImageFile);
         } else {
+			if (fromGroup == -1) {
+				return;
+			}
             Autoreply.sendMessage(fromGroup, 0, Autoreply.instence.CC.image(resultImageFile));
         }
     }
@@ -47,10 +50,13 @@ public class JingShenZhiZhuQQManager {
             BufferedImage des1 = chgPic(rotateImage(headImage, 346), 190);
             Image baseImage = ImageIO.read(new File(Autoreply.appDirectory + "pic\\jingshenzhizhuback.png"));
             BufferedImage b = new BufferedImage(baseImage.getWidth(null), baseImage.getHeight(null),
-                    BufferedImage.TYPE_INT_ARGB);
+												BufferedImage.TYPE_INT_ARGB);
             b.getGraphics().drawImage(baseImage, 0, 0, null);
             b.getGraphics().drawImage(des1, -29, 30, null);
             ImageIO.write(b, "png", resultImageFile);
+			if (fromGroup == -1) {
+				return;
+			}
             Autoreply.sendMessage(fromGroup, 0, Autoreply.instence.CC.image(resultImageFile));
         } catch (Exception e) {
         }

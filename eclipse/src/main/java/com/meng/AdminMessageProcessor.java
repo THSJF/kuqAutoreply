@@ -67,6 +67,7 @@ public class AdminMessageProcessor {
 		adminPermission.put(".live", "不管配置文件如何,都回复直播列表");
 
 		userPermission.put(".live", "正在直播列表");
+		userPermission.put(".nn [名字]", "设置鬼人正邪对你的称呼,如果不设置则恢复默认称呼");
 		userPermission.put("-int [int] [+|-|*|/|<<|>>|>>>|%|^|&||] [int]", "int运算(溢出)");
 		userPermission.put("-uint [int]", "int字节转uint(boom)");
 		userPermission.put("抽卡", "抽卡");
@@ -145,6 +146,10 @@ public class AdminMessageProcessor {
 				return true;
 			}
 			if (msg.startsWith("群广播:")) {
+				if (msg.contains("~") || msg.contains("～")) {
+					Autoreply.sendMessage(fromGroup, 0, "包含屏蔽的字符");
+					return true;
+				}
 				String broadcast=msg.substring(4);
 				HashSet<Group> hs=new HashSet<>();
 				List<Group> glist=Autoreply.CQ.getGroupList();
@@ -449,6 +454,10 @@ public class AdminMessageProcessor {
 			}
             String[] strings = msg.split("\\.", 3);
             if (strings[0].equals("send")) {
+				if (msg.contains("~") || msg.contains("～")) {
+					Autoreply.sendMessage(fromGroup, 0, "包含屏蔽的字符");
+					return true;
+				}
                 switch (strings[2]) {
                     case "喵":
 						Autoreply.instence.threadPool.execute(new DeleteMessageRunnable(sendMessage(Long.parseLong(strings[1]), 0, Autoreply.instence.CC.record("miao.mp3"))));
