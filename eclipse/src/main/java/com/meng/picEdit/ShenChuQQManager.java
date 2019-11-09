@@ -36,10 +36,13 @@ public class ShenChuQQManager {
         resultImageFile = new File(Autoreply.appDirectory + "shenchu\\" + id + ".jpg");
         headImageFile = new File(Autoreply.appDirectory + "user\\" + id + ".jpg");
         boolean needRecreate = downloadPicture("http://q2.qlogo.cn/headimg_dl?bs=" + id + "&dst_uin=" + id + "&dst_uin=" + id + "&;dst_uin=" + id + "&spec=5&url_enc=0&referer=bu_interface&term_type=PC")
-                | !resultImageFile.exists();
+			| !resultImageFile.exists();
         if (needRecreate) {
             start(headImageFile);
         } else {
+			if (fromGroup == -1) {
+				return;
+			}
             Autoreply.sendMessage(fromGroup, 0, Autoreply.instence.CC.image(resultImageFile));
         }
     }
@@ -55,6 +58,9 @@ public class ShenChuQQManager {
             b.getGraphics().drawImage(im, 0, 0, null);
             b.getGraphics().drawImage(des1, 216, -20, null);
             ImageIO.write(b, "png", resultImageFile);
+			if (fromGroup == -1) {
+				return;
+			}
             Autoreply.sendMessage(fromGroup, 0, Autoreply.instence.CC.image(resultImageFile));
         } catch (Exception e) {
         }

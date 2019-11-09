@@ -14,6 +14,7 @@ import com.meng.bilibili.live.*;
 import com.meng.tools.*;
 import com.sobte.cqp.jcq.entity.*;
 import com.meng.picEdit.*;
+import com.meng.ocr.sign.*;
 
 public class ConnectServer extends WebSocketServer {
 
@@ -172,6 +173,30 @@ public class ConnectServer extends WebSocketServer {
 				}
 				break;
 			case DataPack._21returnPic:
+				break;
+			case DataPack._22pic2:
+				new ShenChuQQManager(-1, -1, Autoreply.instence.CC.at(recievedDataPack.readNum(1)));
+				dataToSend = DataPack.encode(DataPack._21returnPic, recievedDataPack.getTimeStamp());
+				try { 
+					File jpg=new File(Autoreply.appDirectory + "shenchu\\" + recievedDataPack.readNum(1) + ".jpg");
+					long filelength = jpg.length();
+					byte[] filecontent = new byte[(int) filelength];
+					FileInputStream in = new FileInputStream(jpg);
+					in.read(filecontent);
+					in.close();
+					dataToSend.writeData(filecontent);
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+				break;
+			case DataPack._23returnPic2:
+				break;
+			case DataPack._24MD5Random:
+				dataToSend = DataPack.encode(DataPack._25returnMD5Random, recievedDataPack.getTimeStamp());
+				String md5=MD5.stringToMD5(String.valueOf(recievedDataPack.readNum(1) + System.currentTimeMillis() / (24 * 60 * 60 * 1000)));
+				dataToSend.write(1, Integer.parseInt(md5.substring(26), 16) % 10001);
+				break;
+			case DataPack._25returnMD5Random:
 				break;
 			default:
 				dataToSend = DataPack.encode(DataPack._0notification, recievedDataPack.getTimeStamp());

@@ -86,7 +86,17 @@ public class DataPack {
 	public static final short _20pic=20;
 	//小律影→正邪  获得"精神支柱"表情包  n1:qq号
 	public static final short _21returnPic=21;
-	//正邪→小律影  返回生成的jpg文件 数据部分直接保存到磁盘即可
+	//正邪→小律影  返回_20生成的jpg文件 数据部分直接保存到磁盘即可
+	public static final short _22pic2=22;
+	//小律影→正邪  获得"神触"表情包  n1:qq号
+	public static final short _23returnPic2=23;
+	//正邪→小律影  返回_22生成的jpg文件 数据部分直接保存到磁盘即可
+	public static final short _24MD5Random=24;
+	//小律影→正邪  获得鬼人正邪".jrrp"中的计算结果  n1:qq号
+	public static final short _25returnMD5Random=25;
+	//正邪→小律影  返回_24的结果 n1:计算结果   (0-10000的整数)
+	
+	
 
 	public static DataPack encode(short opCode, long timeStamp) {
 		return new DataPack(opCode, timeStamp);
