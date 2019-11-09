@@ -13,6 +13,6 @@ public class ConfigJavaBean {
     public HashSet<Long> masterList = new HashSet<>();
     public HashSet<Long> adminList = new HashSet<>();
     public HashSet<Long> groupAutoAllowList = new HashSet<>();
-	public HashMap<Long,String> nickname = new HashMap<>();
+	public HashMap<Long,String> nicknameMap = new HashMap<>();
 	public long ogg = 0;
 }

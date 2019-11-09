@@ -1244,7 +1244,7 @@ public class DiceImitate {
                 return true;
             }
         }
-		String pname=getName(fromGroup, fromQQ);
+		String pname=Autoreply.instence.configManager.getNickName(fromGroup, fromQQ);
 		String md5=MD5.stringToMD5(String.valueOf(fromQQ + System.currentTimeMillis() / (24 * 60 * 60 * 1000)));
 		char c=md5.charAt(0);
 		switch (msg) {
@@ -1586,17 +1586,6 @@ public class DiceImitate {
 		}
 		for (int i=istart;i <= istop;++i) {
 			set.add(spells[i]);
-		}
-	}
-	private String getName(long fromGroup, long fromQQ) {
-		PersonInfo personInfo=Autoreply.instence.configManager.getPersonInfoFromQQ(fromQQ);
-		Member m=Autoreply.CQ.getGroupMemberInfo(fromGroup, fromQQ);
-		if (personInfo != null) {
-			return personInfo.name;
-		} else if (m != null) {
-			return m.getNick();
-		} else {
-			return "你";
 		}
 	}
 }

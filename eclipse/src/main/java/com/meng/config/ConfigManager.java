@@ -17,6 +17,7 @@ import com.meng.config.javabeans.GroupConfig;
 import com.meng.config.javabeans.PersonInfo;
 import com.meng.config.javabeans.PortConfig;
 import com.sobte.cqp.jcq.entity.Group;
+import com.sobte.cqp.jcq.entity.*;
 
 public class ConfigManager {
     public ConfigJavaBean configJavaBean = new ConfigJavaBean();
@@ -45,13 +46,36 @@ public class ConfigManager {
 		return false;
 	}
 
+	public void setNickName(long qq, String nickname) {
+		if (nickname != null) {
+			configJavaBean.nicknameMap.put(qq, nickname);
+		} else {
+			configJavaBean.nicknameMap.remove(qq);
+		}
+		saveConfig();
+	}
+
 	public String getNickName(long qq) {
 		String nick=null;
-		nick = configJavaBean.nickname.get(qq);
+		nick = configJavaBean.nicknameMap.get(qq);
 		if (nick == null) {
 			PersonInfo pi=getPersonInfoFromQQ(qq);
 			if (pi == null) {
 				nick = Autoreply.CQ.getStrangerInfo(qq).getNick();
+			} else {
+				nick = pi.name;
+			}
+		}
+		return nick;
+	}
+
+	public String getNickName(long group, long qq) {
+		String nick=null;
+		nick = configJavaBean.nicknameMap.get(qq);
+		if (nick == null) {
+			PersonInfo pi=getPersonInfoFromQQ(qq);
+			if (pi == null) {
+				nick = Autoreply.CQ.getGroupMemberInfo(group, qq).getNick();
 			} else {
 				nick = pi.name;
 			}
