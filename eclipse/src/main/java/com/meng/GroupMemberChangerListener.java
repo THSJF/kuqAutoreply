@@ -12,7 +12,7 @@ public class GroupMemberChangerListener {
     }
 
     public void checkIncrease(int subtype, int sendTime, long fromGroup, long fromQQ, long beingOperateQQ) {
-        if (Autoreply.instence.configManager.isBlackQQ(fromQQ)) {
+        if (Autoreply.instence.configManager.isBlackQQ(beingOperateQQ)) {
             Methods.ban(fromGroup, fromQQ, 300);
         }
         PersonInfo personInfo = Autoreply.instence.configManager.getPersonInfoFromQQ(beingOperateQQ);
@@ -24,28 +24,28 @@ public class GroupMemberChangerListener {
             return;
         }
         if (personInfo != null) {
-            sendMessage(fromGroup, 0, "欢迎" + personInfo.name, true);
+            sendMessage(fromGroup, 0, "欢迎" + Autoreply.instence.configManager.getNickName(beingOperateQQ), true);
         } else {
             sendMessage(fromGroup, 0, "欢迎新大佬", true);
         }
 		Autoreply.instence.configManager.addAutoAllow(beingOperateQQ);
         Autoreply.instence.banListener.checkSleepMsg(fromGroup, beingOperateQQ);
         /*  if (fromGroup == 859561731L) { // 台长群
-            sendMessage(859561731L, 0, "芳赛服务器炸了", true);
-              try { sendMessage(859561731L, 0, CC.image(new File(appDirectory +
-              "pic/sjf9961.jpg"))); } catch (IOException e) {
-              e.printStackTrace(); }
-        } */
+		 sendMessage(859561731L, 0, "芳赛服务器炸了", true);
+		 try { sendMessage(859561731L, 0, CC.image(new File(appDirectory +
+		 "pic/sjf9961.jpg"))); } catch (IOException e) {
+		 e.printStackTrace(); }
+		 } */
     }
 
     public void checkDecrease(int subtype, int sendTime, final long fromGroup, final long fromQQ, long beingOperateQQ) {
         if (subtype == 1) {
-          //  if (beingOperateQQ == 2856986197L) {
+			//  if (beingOperateQQ == 2856986197L) {
 			//	if(fromGroup==Autoreply.mainGroup){
 			//		return;
 			//	}
-           //     Autoreply.CQ.setGroupLeave(fromGroup, false);
-        //    }
+			//     Autoreply.CQ.setGroupLeave(fromGroup, false);
+			//    }
             if (Autoreply.instence.configManager.isNotReplyGroup(fromGroup)) {
                 return;
             }
@@ -53,17 +53,16 @@ public class GroupMemberChangerListener {
                 return;
             }
             QQInfo qInfo = Autoreply.CQ.getStrangerInfo(beingOperateQQ);
-            PersonInfo personInfo = Autoreply.instence.configManager.getPersonInfoFromQQ(beingOperateQQ);
-            sendMessage(fromGroup, 0, (personInfo == null ? qInfo.getNick() : personInfo.name) + "(" + qInfo.getQqId() + ")" + "跑莉", true);
+            sendMessage(fromGroup, 0, Autoreply.instence.configManager.getNickName(fromGroup, beingOperateQQ)  + "(" + qInfo.getQqId() + ")" + "跑莉", true);
         } else if (subtype == 2) {
             if (beingOperateQQ == 2856986197L) {
                 Autoreply.instence.threadPool.execute(new Runnable() {
-                    @Override
-                    public void run() {
-                        Autoreply.instence.configManager.addBlack(fromGroup, fromQQ);
-                        Autoreply.CQ.setGroupLeave(fromGroup, false);
-                    }
-                });
+						@Override
+						public void run() {
+							Autoreply.instence.configManager.addBlack(fromGroup, fromQQ);
+							Autoreply.CQ.setGroupLeave(fromGroup, false);
+						}
+					});
                 return;
             }
             if (beingOperateQQ == 2558395159L) {
@@ -85,7 +84,7 @@ public class GroupMemberChangerListener {
             PersonInfo personInfo = Autoreply.instence.configManager.getPersonInfoFromQQ(beingOperateQQ);
             PersonInfo personInfo2 = Autoreply.instence.configManager.getPersonInfoFromQQ(fromQQ);
 			Autoreply.instence.configManager.removeAutoAllow(beingOperateQQ);
-            sendMessage(fromGroup, 0, (personInfo == null ? qInfo.getNick() : personInfo.name) + "(" + qInfo.getQqId() + ")" + "被" + (personInfo2 == null ? qInfo2.getNick() : personInfo2.name) + "(" + qInfo2.getQqId() + ")" + "玩完扔莉", true);
+            sendMessage(fromGroup, 0, Autoreply.instence.configManager.getNickName(beingOperateQQ) + "(" + qInfo.getQqId() + ")" + "被" + Autoreply.instence.configManager.getNickName(fromQQ) + "(" + qInfo2.getQqId() + ")" + "玩完扔莉", true);
         }
     }
 
