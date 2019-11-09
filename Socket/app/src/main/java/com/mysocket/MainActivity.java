@@ -2,16 +2,15 @@ package com.mysocket;
 
 import android.app.*;
 import android.os.*;
+import android.view.*;
+import android.view.View.*;
 import android.widget.*;
+import java.io.*;
 import java.net.*;
 import java.nio.*;
-import java.util.*;
-import java.util.concurrent.*;
+import java.nio.charset.*;
 import org.java_websocket.client.*;
 import org.java_websocket.handshake.*;
-import android.view.View.*;
-import android.view.*;
-import com.google.gson.*;
 
 public class MainActivity extends Activity {
 	Button connect,send;
@@ -44,7 +43,7 @@ public class MainActivity extends Activity {
 					}
 					break;
 				case R.id.mainButtonSend:
-					final DataPack dp=DataPack.encode(DataPack._2getLiveList , System.currentTimeMillis());
+					final DataPack dp=DataPack.encode((short)20 , System.currentTimeMillis());
 					dp.write1(2856986197L);
 					danmakuListener.send(dp.getData());
 					/*	runOnUiThread(new Runnable(){
@@ -86,7 +85,7 @@ public class MainActivity extends Activity {
 
 					@Override
 					public void run() {
-						while(true){
+						while (true) {
 							final DataPack dp=DataPack.encode(DataPack._17heartBeat, System.currentTimeMillis());
 							dp.write1(2856986197L);
 							danmakuListener.send(dp.getData());	
@@ -100,7 +99,12 @@ public class MainActivity extends Activity {
 
 		@Override
 		public void onMessage(ByteBuffer bs) {	
-			result.setText(new String(bs.array(), DataPack.headLength, bs.array().length - DataPack.headLength));
+			DataPack dp=DataPack.decode(bs.array());
+			if (dp.getOpCode() == 21) {
+				saveFile(dp.getTimeStamp() + "", bs.array());
+			} else {
+				result.setText(new String(bs.array(), DataPack.headLength, bs.array().length - DataPack.headLength));
+			}
 		}
 
 		@Override
@@ -113,6 +117,7 @@ public class MainActivity extends Activity {
 			showToast(e.toString());
 		}
 	}
+
 	private void showToast(final String s) {
 		runOnUiThread(new Runnable(){
 
@@ -122,4 +127,15 @@ public class MainActivity extends Activity {
 				}
 			});
 	}
+
+	public void saveFile(String name, byte[] bytes) {
+        try {
+            File file = new File(Environment.getExternalStorageDirectory() + "/1/" + name + ".jpg");
+            FileOutputStream fos = new FileOutputStream(file);
+            fos.write(bytes, DataPack.headLength, bytes.length - DataPack.headLength);
+            fos.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
 }

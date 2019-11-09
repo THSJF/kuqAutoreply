@@ -160,7 +160,7 @@ public class ConnectServer extends WebSocketServer {
 				new JingShenZhiZhuQQManager(-1, -1, Autoreply.instence.CC.at(recievedDataPack.readNum(1)));
 				dataToSend = DataPack.encode(DataPack._21returnPic, recievedDataPack.getTimeStamp());
 				try { 
-					File jpg=new File(Autoreply.appDirectory + "jingshenzhizhu\\" + recievedDataPack.readNum(1));
+					File jpg=new File(Autoreply.appDirectory + "jingshenzhizhu\\" + recievedDataPack.readNum(1) + ".jpg");
 					long filelength = jpg.length();
 					byte[] filecontent = new byte[(int) filelength];
 					FileInputStream in = new FileInputStream(jpg);
@@ -168,7 +168,7 @@ public class ConnectServer extends WebSocketServer {
 					in.close();
 					dataToSend.writeData(filecontent);
 				} catch (Exception e) {
-
+					e.printStackTrace();
 				}
 				break;
 			case DataPack._21returnPic:
