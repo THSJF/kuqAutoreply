@@ -141,7 +141,7 @@ public class DataPack {
 		String s=new String(pack, headLength, getLength() - headLength);
 		System.out.println(s);
 		switch (getOpCode()) {
-			case DataPack._0notification:
+		/*	case DataPack._0notification:
 			case DataPack._1verify:
 			case DataPack._2getLiveList:
 			case DataPack._4liveStart:
@@ -159,8 +159,8 @@ public class DataPack {
 			case DataPack._17heartBeat:
 			case DataPack._18FindInAll:
 			case DataPack._20pic:
-				ritsukageBean = gson.fromJson(s, RitsukageBean.class);
 				break;
+	*/
 			case DataPack._3returnLiveList:
 				Type ritsucageSetType = new TypeToken<HashSet<PersonInfo>>() {
 				}.getType();
@@ -178,6 +178,7 @@ public class DataPack {
 				//saveFile(System.currentTimeMillis() + "", data);
 				break;
 			default:
+				ritsukageBean = gson.fromJson(s, RitsukageBean.class);
 				break;
 		}
 	} 

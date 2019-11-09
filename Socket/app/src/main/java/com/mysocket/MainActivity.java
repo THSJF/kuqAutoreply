@@ -75,7 +75,7 @@ public class MainActivity extends Activity {
 						dp.write(3, Long.parseLong(etn3.getText().toString()));
 					}	 
 					danmakuListener.send(dp.getData());
-					send.setText(new Gson().toJson(dp.ritsukageBean));
+					send.setText("发送内容"+new Gson().toJson(dp.ritsukageBean));
 					break;
 			}
 		}
