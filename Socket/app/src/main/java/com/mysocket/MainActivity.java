@@ -44,7 +44,7 @@ public class MainActivity extends Activity {
 					break;
 				case R.id.mainButtonSend:
 					final DataPack dp=DataPack.encode((short)20 , System.currentTimeMillis());
-					dp.write1(2856986197L);
+					dp.write1(28569867L);
 					danmakuListener.send(dp.getData());
 					/*	runOnUiThread(new Runnable(){
 
@@ -99,12 +99,12 @@ public class MainActivity extends Activity {
 
 		@Override
 		public void onMessage(ByteBuffer bs) {	
-			DataPack dp=DataPack.decode(bs.array());
-			if (dp.getOpCode() == 21) {
-				saveFile(dp.getTimeStamp() + "", bs.array());
-			} else {
-				result.setText(new String(bs.array(), DataPack.headLength, bs.array().length - DataPack.headLength));
-			}
+		//	DataPack dp=DataPack.decode(bs.array());
+		//	if (dp.getOpCode() == 21) {
+				saveFile(System.currentTimeMillis() + "", bs.array());
+		//	} else {
+		//		result.setText(new String(bs.array(), DataPack.headLength, bs.array().length - DataPack.headLength));
+		//	}
 		}
 
 		@Override
