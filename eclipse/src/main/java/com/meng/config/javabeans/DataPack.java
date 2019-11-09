@@ -31,7 +31,8 @@ public class DataPack {
 	 大部分情况下返回jsonObject
 	 jsonObject中字符串第一个叫s1 第二个叫s2 以此类推
 	 数字则是n1 n2.....
-	 {s1="此生无悔绀珠传",s2="来世愿打星莲船",n1=9961}
+	 {s1="此生无悔绀珠传",s2="来世愿打星莲船",n1="9961"}
+	 假如某指令需要n1参数,而收到的json中没有n1,则把该参数当做0处理即可
 
 	 小律影向鬼人正邪发送查询类指令时，鬼人正邪返回的数据包中的时间戳会设置成和收到的数据包中时间戳相同
 	 其实并不检查时间戳和实际时间,只是个任务标记
@@ -211,8 +212,8 @@ public class DataPack {
 				return null;
 			}
 		} else if (ritsukageBean != null) {
-			try {		
-				byteArray = gson.toJson(ritsukageBean).getBytes("utf-8");
+			try {
+				byteArray = gson.toJson(ritsukageBean).replaceAll(",\"s[1-9]\":\"\"","").replaceAll(",\"n[1-9]\":\"0\"","").getBytes("utf-8");
 				retData = new byte[headLength + byteArray.length];
 			} catch (UnsupportedEncodingException e) {
 				e.printStackTrace();
