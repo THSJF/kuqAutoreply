@@ -98,19 +98,19 @@ public class DataPack {
 	public static final short _25returnMD5Random=25;
 	//小律影→正邪  获得鬼人正邪".draw neta"中的计算结果  n1:qq号
 	public static final short _26MD5neta=26;
-	//正邪→小律影  返回_24的结果 s1:计算结果
+	//正邪→小律影  返回_26的结果 s1:计算结果
 	public static final short _27returnMD5neta=27;
 	//小律影→正邪  获得鬼人正邪".draw music"中的计算结果  n1:qq号
 	public static final short _28MD5music=28;
-	//正邪→小律影  返回_24的结果 s1:计算结果
+	//正邪→小律影  返回_28的结果 s1:计算结果
 	public static final short _29returnMD5music=29;
 	//小律影→正邪  获得鬼人正邪".draw grandma"中的计算结果  n1:qq号
 	public static final short _30MD5grandma=30;
-	//正邪→小律影  返回_24的结果 s1:计算结果
+	//正邪→小律影  返回_30的结果 s1:计算结果
 	public static final short _31returnMD5grandma=31;
 	//小律影→正邪  获得鬼人正邪"。jrrp"中的计算结果  n1:qq号
 	public static final short _32MD5overSpell=32;
-	//正邪→小律影  返回_24的结果 s1:计算结果
+	//正邪→小律影  返回_32的结果 s1:计算结果
 	public static final short _33returnMD5overSpell=33;
 	
 	

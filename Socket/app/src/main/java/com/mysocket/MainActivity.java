@@ -11,10 +11,11 @@ import java.nio.*;
 import java.nio.charset.*;
 import org.java_websocket.client.*;
 import org.java_websocket.handshake.*;
+import com.google.gson.*;
 
 public class MainActivity extends Activity {
 	Button connect,send;
-	EditText input,result;
+	EditText op,ets1,ets2,ets3,etn1,etn2,etn3,result;
 	DanmakuListener danmakuListener;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -22,8 +23,19 @@ public class MainActivity extends Activity {
         setContentView(R.layout.main);
 		connect = (Button) findViewById(R.id.mainButtonConnect);
 		send = (Button) findViewById(R.id.mainButtonSend);
-		input = (EditText) findViewById(R.id.mainEditText);
-		result = (EditText) findViewById(R.id.mainEditTextResult);
+
+		op = (EditText)findViewById(R.id.opCode);
+
+		ets1 = (EditText)findViewById(R.id.ets1);
+		ets2 = (EditText)findViewById(R.id.ets2);
+		ets3 = (EditText)findViewById(R.id.ets3);
+
+		etn1 = (EditText)findViewById(R.id.etn1);
+		etn2 = (EditText)findViewById(R.id.etn2);
+		etn3 = (EditText)findViewById(R.id.etn3);
+
+		result = (EditText)findViewById(R.id.mainEditTextResult);
+
 		connect.setOnClickListener(onClick);
 		send.setOnClickListener(onClick);
     }
@@ -43,28 +55,30 @@ public class MainActivity extends Activity {
 					}
 					break;
 				case R.id.mainButtonSend:
-					final DataPack dp=DataPack.encode((short)20 , System.currentTimeMillis());
-					dp.write1(28569867L);
+					DataPack dp=DataPack.encode((short)Integer.parseInt(op.getText().toString()) , System.currentTimeMillis());
+					if (!ets1.getText().toString().equals("")) {
+						dp.write(1, ets1.getText().toString());
+					}
+					if (!ets2.getText().toString().equals("")) {
+						dp.write(2, ets2.getText().toString());
+					}
+					if (!ets3.getText().toString().equals("")) {
+						dp.write(3, ets3.getText().toString());
+					}
+					if (!etn1.getText().toString().equals("")) {
+						dp.write(1, Long.parseLong(etn1.getText().toString()));
+					}
+					if (!etn2.getText().toString().equals("")) {
+						dp.write(2, Long.parseLong(etn2.getText().toString()));
+					}
+					if (!etn3.getText().toString().equals("")) {
+						dp.write(3, Long.parseLong(etn3.getText().toString()));
+					}	 
 					danmakuListener.send(dp.getData());
-					/*	runOnUiThread(new Runnable(){
-
-					 @Override
-					 public void run() {
-					 byte[] bss=dp.getData();
-					 for(int i=0;i<bss.length;++i){
-					 result.setText(result.getText().toString()+" "+bss[i]);
-					 }
-					 DataPack dp2=DataPack.decode(dp.getData());
-					 showToast(new Gson().toJson(dp.ritsukageBean));
-					 //showToast(dp2.sss);
-					 result.setText(dp2.sss+" len:"+dp2.sss.length());
-					 }
-					 });*/
+					send.setText(new Gson().toJson(dp.ritsukageBean));
 					break;
 			}
 		}
-
-
 	};
 
 	public class DanmakuListener extends WebSocketClient {
@@ -86,8 +100,7 @@ public class MainActivity extends Activity {
 					@Override
 					public void run() {
 						while (true) {
-							final DataPack dp=DataPack.encode(DataPack._17heartBeat, System.currentTimeMillis());
-							dp.write1(2856986197L);
+							DataPack dp=DataPack.encode(DataPack._17heartBeat, System.currentTimeMillis());
 							danmakuListener.send(dp.getData());	
 							try {
 								Thread.sleep(30000);
@@ -99,12 +112,12 @@ public class MainActivity extends Activity {
 
 		@Override
 		public void onMessage(ByteBuffer bs) {	
-		//	DataPack dp=DataPack.decode(bs.array());
-		//	if (dp.getOpCode() == 21) {
+			DataPack dp=DataPack.decode(bs.array());
+			if (dp.getOpCode() == 21) {
 				saveFile(System.currentTimeMillis() + "", bs.array());
-		//	} else {
-		//		result.setText(new String(bs.array(), DataPack.headLength, bs.array().length - DataPack.headLength));
-		//	}
+			} else {
+				result.setText(new String(bs.array(), DataPack.headLength, bs.array().length - DataPack.headLength));
+			}
 		}
 
 		@Override
