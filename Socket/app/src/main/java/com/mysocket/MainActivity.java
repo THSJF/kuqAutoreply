@@ -44,7 +44,7 @@ public class MainActivity extends Activity {
 					}
 					break;
 				case R.id.mainButtonSend:
-					final DataPack dp=DataPack.encode((short)18, System.currentTimeMillis());
+					final DataPack dp=DataPack.encode(DataPack._2getLiveList , System.currentTimeMillis());
 					dp.write1(2856986197L);
 					danmakuListener.send(dp.getData());
 					/*	runOnUiThread(new Runnable(){
