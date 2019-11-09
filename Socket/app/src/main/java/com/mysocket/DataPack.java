@@ -142,26 +142,6 @@ public class DataPack {
 		String s=new String(pack, headLength, getLength() - headLength);
 		System.out.println(s);
 		switch (getOpCode()) {
-			case DataPack._0notification:
-			case DataPack._1verify:
-			case DataPack._2getLiveList:
-			case DataPack._4liveStart:
-			case DataPack._5liveStop:
-			case DataPack._6speakInLiveRoom:
-			case DataPack._7newVideo:
-			case DataPack._8newArtical:
-			case DataPack._9getPersonInfoByName:	
-			case DataPack._10getPersonInfoByQQ:
-			case DataPack._11getPersonInfoByBid:
-			case DataPack._12getPersonInfoByBiliLive:
-			case DataPack._14coinsAdd:
-			case DataPack._15groupBan:
-			case DataPack._16groupKick:
-			case DataPack._17heartBeat:
-			case DataPack._18FindInAll:
-			case DataPack._20pic:
-				ritsukageBean = gson.fromJson(s, RitsukageBean.class);
-				break;
 			case DataPack._19returnFind:
 				Type ritsucageLongSetType = new TypeToken<HashSet<Long>>() {
 				}.getType();
@@ -171,6 +151,8 @@ public class DataPack {
 				//saveFile(System.currentTimeMillis() + "", data);
 				break;
 			default:
+				ritsukageBean = gson.fromJson(s, RitsukageBean.class);
+				
 				break;
 		}
 	} 
@@ -191,7 +173,7 @@ public class DataPack {
 			}
 		} else if (ritsukageBean != null) {
 			try {
-				byteArray = gson.toJson(ritsukageBean).replaceAll(",\"s[1-9]\":\"\"","").replaceAll(",\"n[1-9]\":\"0\"","").getBytes("utf-8");
+				byteArray = gson.toJson(ritsukageBean).replaceAll(",\"s[1-9]\":\"\"","").replaceAll(",\"n[1-9]\":0","").getBytes("utf-8");
 				retData = new byte[headLength + byteArray.length];
 			} catch (UnsupportedEncodingException e) {
 				e.printStackTrace();

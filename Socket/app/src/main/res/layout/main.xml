@@ -1,64 +1,84 @@
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+	xmlns:android="http://schemas.android.com/apk/res/android"
+	android:layout_width="match_parent"
+	android:layout_height="match_parent"
 	android:orientation="vertical"
-    android:gravity="top|center">
+	android:gravity="top|center">
 
-    <Button
-        android:text="连接"
-		android:id="@+id/mainButtonConnect"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content" />
-	<LinearLayout 
+	<LinearLayout
+		android:orientation="horizontal"
 		android:layout_width="fill_parent"
-        android:layout_height="wrap_content" 
-		android:orientation="vertical"
-		>
-		<EditText
-			android:id="@+id/opCode"
-			android:hint="操作类型"
+		android:layout_height="fill_parent">
+
+		<LinearLayout
+			android:layout_weight="5"
 			android:layout_width="fill_parent"
-			android:layout_height="wrap_content" />
-		<EditText
-			android:id="@+id/ets1"
-			android:hint="s1"
+			android:layout_height="wrap_content"
+			android:orientation="vertical">
+
+			<EditText
+				android:id="@+id/opCode"
+				android:hint="操作类型"
+				android:layout_width="fill_parent"
+				android:layout_height="wrap_content"/>
+
+			<EditText
+				android:id="@+id/ets1"
+				android:hint="s1"
+				android:layout_width="fill_parent"
+				android:layout_height="wrap_content"/>
+
+			<EditText
+				android:id="@+id/ets2"
+				android:hint="s2"
+				android:layout_width="fill_parent"
+				android:layout_height="wrap_content"/>
+
+			<EditText
+				android:id="@+id/ets3"
+				android:hint="s3"
+				android:layout_width="fill_parent"
+				android:layout_height="wrap_content"/>
+
+			<EditText
+				android:id="@+id/etn1"
+				android:hint="n1"
+				android:layout_width="fill_parent"
+				android:layout_height="wrap_content"/>
+
+			<EditText
+				android:id="@+id/etn2"
+				android:hint="n2"
+				android:layout_width="fill_parent"
+				android:layout_height="wrap_content"/>
+
+			<EditText
+				android:id="@+id/etn3"
+				android:hint="n3"
+				android:layout_width="fill_parent"
+				android:layout_height="wrap_content"/>
+
+			<Button
+				android:id="@+id/mainButtonSend"
+				android:text="发送"
+				android:layout_width="fill_parent"
+				android:layout_height="wrap_content"/>
+
+			<TextView
+				android:id="@+id/mainEditTextResult"
+				android:text=""
+				android:layout_width="fill_parent"
+				android:layout_height="wrap_content"/>
+
+		</LinearLayout>
+		<ListView
+			android:layout_weight="3"
 			android:layout_width="fill_parent"
-			android:layout_height="wrap_content" />
-		<EditText
-			android:id="@+id/ets2"
-			android:hint="s2"
-			android:layout_width="fill_parent"
-			android:layout_height="wrap_content" />
-		<EditText
-			android:id="@+id/ets3"
-			android:hint="s3"
-			android:layout_width="fill_parent"
-			android:layout_height="wrap_content" />
-		<EditText
-			android:id="@+id/etn1"
-			android:hint="n1"
-			android:layout_width="fill_parent"
-			android:layout_height="wrap_content" />
-		<EditText
-			android:id="@+id/etn2"
-			android:hint="n2"
-			android:layout_width="fill_parent"
-			android:layout_height="wrap_content" />
-		<EditText
-			android:id="@+id/etn3"
-			android:hint="n3"
-			android:layout_width="fill_parent"
-			android:layout_height="wrap_content" />	
+			android:layout_height="fill_parent"
+			android:id="@+id/mainListView"/>
+
 	</LinearLayout>
-	<Button
-		android:id="@+id/mainButtonSend"
-        android:text="发送"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content" />
-	
-	<EditText
-		android:id="@+id/mainEditTextResult"
-        android:text="string"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content" />
+
 </LinearLayout>
+

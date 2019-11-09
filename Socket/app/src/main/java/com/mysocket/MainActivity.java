@@ -12,48 +12,60 @@ import java.nio.charset.*;
 import org.java_websocket.client.*;
 import org.java_websocket.handshake.*;
 import com.google.gson.*;
+import java.util.*;
+import android.widget.AdapterView.*;
+import android.content.*;
 
 public class MainActivity extends Activity {
-	Button connect,send;
-	EditText op,ets1,ets2,ets3,etn1,etn2,etn3,result;
+	Button send;
+	EditText op,ets1,ets2,ets3,etn1,etn2,etn3;
+	TextView result;
+	ListView lv;
 	DanmakuListener danmakuListener;
+	ArrayList<String> recieved=new ArrayList<>();
+	ArrayAdapter<String> adp;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main);
-		connect = (Button) findViewById(R.id.mainButtonConnect);
 		send = (Button) findViewById(R.id.mainButtonSend);
-
 		op = (EditText)findViewById(R.id.opCode);
-
 		ets1 = (EditText)findViewById(R.id.ets1);
 		ets2 = (EditText)findViewById(R.id.ets2);
 		ets3 = (EditText)findViewById(R.id.ets3);
-
 		etn1 = (EditText)findViewById(R.id.etn1);
 		etn2 = (EditText)findViewById(R.id.etn2);
 		etn3 = (EditText)findViewById(R.id.etn3);
-
-		result = (EditText)findViewById(R.id.mainEditTextResult);
-
-		connect.setOnClickListener(onClick);
+		result = (TextView)findViewById(R.id.mainEditTextResult);
+		lv = (ListView)findViewById(R.id.mainListView);
 		send.setOnClickListener(onClick);
+		adp = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, recieved);
+		lv.setAdapter(adp);
+		lv.setOnItemClickListener(new OnItemClickListener(){
+
+				@Override
+				public void onItemClick(AdapterView<?> p1, View p2, int p3, long p4) {
+					String s=(String) p1.getItemAtPosition(p3);
+					Intent inte=new Intent(MainActivity.this, Activity2.class);
+					inte.putExtra("content", s);
+					startActivity(inte);
+				}
+			});
+		try {
+			danmakuListener = new DanmakuListener(new URI("ws://123.207.65.93:9961"));
+			danmakuListener.connect();
+		} catch (URISyntaxException e) {
+			showToast(e.toString());
+		}
     }
+
+
 
 	OnClickListener onClick=new OnClickListener(){
 
 		@Override
 		public void onClick(View p1) {
 			switch (p1.getId()) {
-				case R.id.mainButtonConnect:
-					//	showToast("开始连接");
-					try {
-						danmakuListener = new DanmakuListener(new URI("ws://123.207.65.93:9961"));
-						danmakuListener.connect();
-					} catch (URISyntaxException e) {
-						showToast(e.toString());
-					}
-					break;
 				case R.id.mainButtonSend:
 					DataPack dp=DataPack.encode((short)Integer.parseInt(op.getText().toString()) , System.currentTimeMillis());
 					if (!ets1.getText().toString().equals("")) {
@@ -75,7 +87,7 @@ public class MainActivity extends Activity {
 						dp.write(3, Long.parseLong(etn3.getText().toString()));
 					}	 
 					danmakuListener.send(dp.getData());
-					send.setText("发送内容"+new Gson().toJson(dp.ritsukageBean));
+					result.setText("发送内容:\n" + new Gson().toJson(dp.ritsukageBean).replaceAll(",\"s[1-9]\":\"\"", "").replaceAll(",\"n[1-9]\":0", ""));
 					break;
 			}
 		}
@@ -115,8 +127,16 @@ public class MainActivity extends Activity {
 			DataPack dp=DataPack.decode(bs.array());
 			if (dp.getOpCode() == 21) {
 				saveFile(System.currentTimeMillis() + "", bs.array());
-			} else {
-				result.setText(new String(bs.array(), DataPack.headLength, bs.array().length - DataPack.headLength));
+			} else if (dp.getOpCode() != 17) {
+				//	result.setText(new String(bs.array(), DataPack.headLength, bs.array().length - DataPack.headLength));
+				recieved.add(0, "opCode:" + dp.getOpCode() + " json:" + new String(bs.array(), DataPack.headLength, bs.array().length - DataPack.headLength).replaceAll(",\"s[1-9]\":\"\"", "").replaceAll(",\"n[1-9]\":0", ""));
+				runOnUiThread(new Runnable(){
+
+						@Override
+						public void run() {
+							adp.notifyDataSetChanged();
+						}
+					});
 			}
 		}
 
