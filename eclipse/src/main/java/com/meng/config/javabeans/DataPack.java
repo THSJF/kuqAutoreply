@@ -57,7 +57,9 @@ public class DataPack {
 	public static final short _17heartBeat=17;				//小律影→正邪    心跳，不需要body
 	public static final short _18FindInAll=18;				//小律影→正邪    n1:qq号
 	public static final short _19returnFind=19;				//正邪→小律影    返回18的结果(群号json数组)  例[296376859,251059118]
-
+	public static final short _20pic=20;					//小律影→正邪    n1:qq号
+	public static final short _21returnPic=21;				//正邪→小律影    直接返回文件的字节数组
+	
 	public static DataPack encode(short opCode, long timeStamp) {
 		return new DataPack(opCode, timeStamp);
 	}
@@ -201,6 +203,8 @@ public class DataPack {
 			case 2:
 				ritsukageBean.s2 = s;
 				break;
+			case 3:
+				ritsukageBean.s3 = s;
 		}
 	}
 

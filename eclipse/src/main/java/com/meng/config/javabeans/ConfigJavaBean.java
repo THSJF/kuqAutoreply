@@ -1,6 +1,7 @@
 package com.meng.config.javabeans;
 
 import java.util.HashSet;
+import java.util.*;
 
 public class ConfigJavaBean {
     public HashSet<GroupConfig> groupConfigs = new HashSet<>();
@@ -12,5 +13,6 @@ public class ConfigJavaBean {
     public HashSet<Long> masterList = new HashSet<>();
     public HashSet<Long> adminList = new HashSet<>();
     public HashSet<Long> groupAutoAllowList = new HashSet<>();
-    public long ogg = 0;
+	public HashMap<Long,String> nickname = new HashMap<>();
+	public long ogg = 0;
 }

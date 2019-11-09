@@ -40,7 +40,6 @@ public class ConnectServer extends WebSocketServer {
 	@Override
 	public void onMessage(WebSocket conn, ByteBuffer message) {
 		DataPack dp=DataPack.decode(message.array());
-		System.out.println("isOgg:" + (dp.getTarget() == Autoreply.instence.configManager.configJavaBean.ogg));
 		if (dp.getTarget() == Autoreply.instence.configManager.configJavaBean.ogg) {
 			oggProcess(conn, dp);
 		}
@@ -55,8 +54,10 @@ public class ConnectServer extends WebSocketServer {
 				break;
 			case DataPack._2getLiveList:
 				HashSet<PersonInfo> hashSet=new HashSet<>();
-				for (long bid:Autoreply.instence.liveListener.livePersonMap.keySet()) {
-					hashSet.add(Autoreply.instence.configManager.getPersonInfoFromBid(bid));
+				for (LivePerson lp:Autoreply.instence.liveListener.livePersonMap.values()) {
+					if (lp.lastStatus) {
+						hashSet.add(Autoreply.instence.configManager.getPersonInfoFromLiveId(Long.parseLong(lp.roomID)));
+					}		
 				}
 				dataToSend = DataPack.encode(DataPack._3returnLiveList, recievedDataPack.getTimeStamp());
 				dataToSend.writePersonSet(hashSet);

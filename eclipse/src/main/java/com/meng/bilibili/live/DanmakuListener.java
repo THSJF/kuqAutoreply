@@ -16,7 +16,7 @@ public class DanmakuListener extends WebSocketClient {
 	public PersonInfo roomMaster;
 	public ConcurrentHashMap<Long,Long> peopleMap=new ConcurrentHashMap<>();
 	public Repeater repeater;
-
+	
 	public DanmakuListener(URI uri, PersonInfo roomMaster) {
 		super(uri);
 		this.roomMaster = roomMaster;
@@ -82,19 +82,22 @@ public class DanmakuListener extends WebSocketClient {
 			if (jobj.get("cmd").getAsString().equals("DANMU_MSG")) {
 				JsonArray jaar=jobj.get("info").getAsJsonArray();
 				JsonArray jaar2=jaar.get(2).getAsJsonArray();
-				String text=jaar.get(1).getAsString();
-				String name=jaar2.get(1).getAsString();
-				long uid=jaar2.get(0).getAsLong();
-				//	System.out.println("uid:" + uid + " name:" + name + " text:" + text);
-				PersonInfo pi1=Autoreply.instence.configManager.getPersonInfoFromBid(uid);
-				PersonInfo pi2=Autoreply.instence.configManager.getPersonInfoFromLiveId(roomMaster.bliveRoom);
-				String n1=pi1 == null ?name: pi1.name;
-				if (peopleMap.get(uid) == null) {
-					//	Autoreply.instence.sendMessage(Autoreply.mainGroup, 0, n1 + "出现在" + pi2.name + "的直播间" + roomMaster.bliveRoom);
-				}
-				peopleMap.put(uid, System.currentTimeMillis());
+				String danmakuText=jaar.get(1).getAsString();
+				String speakerName=jaar2.get(1).getAsString();
+				long speakerUid=jaar2.get(0).getAsLong();
+				PersonInfo speakerPersonInfo=Autoreply.instence.configManager.getPersonInfoFromBid(speakerUid);
+				PersonInfo roomMasterPersonInfo=Autoreply.instence.configManager.getPersonInfoFromLiveId(roomMaster.bliveRoom);
+				String finallySpeakerName=speakerPersonInfo == null ?speakerName: speakerPersonInfo.name;
+				peopleMap.put(speakerUid, System.currentTimeMillis());
 				//	Autoreply.instence.sendMessage(666247478, 0,  pi2.name + roomMaster.bliveRoom + " " + n1 + ":" + text);
-				if (Autoreply.instence.danmakuListenerManager.containsMother(text) && text.startsWith("点歌")) {
+				DataPack dataToSend=DataPack.encode(DataPack._6speakInLiveRoom, System.currentTimeMillis());
+				dataToSend.write(1, roomMaster.bliveRoom);
+				dataToSend.write(1, roomMaster.name);
+				dataToSend.write(2, finallySpeakerName);
+				dataToSend.write(2, speakerUid);
+				dataToSend.write(3, danmakuText);
+				Autoreply.instence.connectServer.broadcast(dataToSend.getData());
+				if (Autoreply.instence.danmakuListenerManager.containsMother(danmakuText) && danmakuText.startsWith("点歌")) {
 					try {
 						Autoreply.instence.naiManager.sendDanmaku(roomMaster.bliveRoom + "", Autoreply.instence.cookieManager.cookie.Sunny, "您点您妈呢");
 						Autoreply.instence.naiManager.sendDanmaku(roomMaster.bliveRoom + "", Autoreply.instence.cookieManager.cookie.Luna, "您点您妈呢");
@@ -104,8 +107,8 @@ public class DanmakuListener extends WebSocketClient {
 					}
 					return;
 				}
-				if (uid == 64483321 && text.startsWith("ban.")) {
-					String ss[]=text.split("\\.");
+				if (speakerUid == 64483321 && danmakuText.startsWith("ban.")) {
+					String ss[]=danmakuText.split("\\.");
 					String blockid=ss[1];
 					PersonInfo pi=Autoreply.instence.configManager.getPersonInfoFromName(blockid);
 					if (pi != null) {
@@ -114,7 +117,7 @@ public class DanmakuListener extends WebSocketClient {
 					Autoreply.instence.liveListener.setBan(Autoreply.mainGroup, roomMaster.bliveRoom + "", blockid, ss[2]);
 					return;
 				}
-				String s=dealMsg(roomMaster.bliveRoom, uid, text);
+				String s=dealMsg(roomMaster.bliveRoom, speakerUid, danmakuText);
 				if (s != null) {
 					Autoreply.instence.naiManager.grzxMsg(roomMaster.bliveRoom + "", s);
 				}

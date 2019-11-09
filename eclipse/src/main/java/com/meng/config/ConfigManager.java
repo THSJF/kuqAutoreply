@@ -35,14 +35,28 @@ public class ConfigManager {
         Autoreply.instence.threadPool.execute(new SocketConfigManager(this));
         Autoreply.instence.threadPool.execute(new SocketDicManager(this));
     }
-	
-	public boolean containsGroup(long group){
-		for(GroupConfig gf:configJavaBean.groupConfigs){
-			if(gf.groupNumber==group){
+
+	public boolean containsGroup(long group) {
+		for (GroupConfig gf:configJavaBean.groupConfigs) {
+			if (gf.groupNumber == group) {
 				return true;
 			}
 		}
 		return false;
+	}
+
+	public String getNickName(long qq) {
+		String nick=null;
+		nick = configJavaBean.nickname.get(qq);
+		if (nick == null) {
+			PersonInfo pi=getPersonInfoFromQQ(qq);
+			if (pi == null) {
+				nick = Autoreply.CQ.getStrangerInfo(qq).getNick();
+			} else {
+				nick = pi.name;
+			}
+		}
+		return nick;
 	}
 
     public boolean isMaster(long fromQQ) {
@@ -65,16 +79,16 @@ public class ConfigManager {
         }
         return null;
     }
-	
-	public void addAutoAllow(long qq){
+
+	public void addAutoAllow(long qq) {
 		configJavaBean.groupAutoAllowList.add(qq);
-		Autoreply.sendMessage(Autoreply.mainGroup,0,"自动同意列表添加用户"+qq);
+		Autoreply.sendMessage(Autoreply.mainGroup, 0, "自动同意列表添加用户" + qq);
 		saveConfig();
 	}
-	
-	public void removeAutoAllow(long qq){
+
+	public void removeAutoAllow(long qq) {
 		configJavaBean.groupAutoAllowList.remove(qq);
-		Autoreply.sendMessage(Autoreply.mainGroup,0,"自动同意列表移除用户"+qq);
+		Autoreply.sendMessage(Autoreply.mainGroup, 0, "自动同意列表移除用户" + qq);
 		saveConfig();
 	}
 
@@ -130,15 +144,15 @@ public class ConfigManager {
         }
         return null;
     }
-	
+
 	public PersonInfo getPersonInfoFromLiveId(long lid) {
         for (PersonInfo pi : configJavaBean.personInfo) {
             if (pi.bliveRoom == lid) {
                 return pi;
-			  }
-		  }
+			}
+		}
         return null;
-	  }
+	}
 
     public void addBlack(long group, final long qq) {
         configJavaBean.blackListQQ.add(qq);
@@ -151,23 +165,23 @@ public class ConfigManager {
         }
         saveConfig();
         Autoreply.instence.threadPool.execute(new Runnable() {
-            @Override
-            public void run() {
-            //    HashSet<Group> groups = Methods.findQQInAllGroup(qq);
-             //   for (Group g : groups) {
+				@Override
+				public void run() {
+					//    HashSet<Group> groups = Methods.findQQInAllGroup(qq);
+					//   for (Group g : groups) {
                     // if (Methods.ban(g.getId(), qq, 300)) {
                     //    sendMessage(g.getId(), 0, "不要问为什么你会进黑名单，你干了什么自己知道");
                     //   }
-            //    }
-            }
-        });
+					//    }
+				}
+			});
         Autoreply.sendMessage(Autoreply.mainGroup, 0, "已将用户" + qq + "加入黑名单");
         Autoreply.sendMessage(Autoreply.mainGroup, 0, "已将群" + group + "加入黑名单");
     }
-	
-	public void setOgg(long qqNum){
-	  configJavaBean.ogg=qqNum;
-	  saveConfig();
+
+	public void setOgg(long qqNum) {
+		configJavaBean.ogg = qqNum;
+		saveConfig();
 	}
 
     public void saveConfig() {
