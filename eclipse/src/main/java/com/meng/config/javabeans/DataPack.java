@@ -40,63 +40,63 @@ public class DataPack {
 	 正邪→小律影  鬼人正邪发送 小律影接收 (其实是广播方式发送,所有连接的客户端都可以收到)
 	 小律影↔正邪  都可以发送和接收
 	 
-	 双斜杠的注释好像要写在变量上面才对，，懒，就写在下面了
 	 */
-
-	public static final short _0notification=0;
+	 
 	//小律影↔正邪  普通通知,大部分情况下没什么用   s1:通知文本
-	public static final short _1verify=1;
+	public static final short _0notification=0;
 	//小律影→正邪  用于身份验证，暂未使用    n1:qq号(setConnect中设置的qq号)
-	public static final short _2getLiveList=2;
+	public static final short _1verify=1;
 	//小律影→正邪  获取正在直播列表  不需要body
-	public static final short _3returnLiveList=3;
+	public static final short _2getLiveList=2;
 	//正邪→小律影  返回2的查询结果  json数组  例:[{"name":"闲者","qq":"877247145","bid":12007285,"bliveRoom":1954885,"tipIn":[],"tip":[true,true,false]},{"name":"懒瘦","qq":"496276037","bid":15272850,"bliveRoom":3144622,"tipIn":[],"tip":[true,true,false]}]
-	public static final short _4liveStart=4;
+	public static final short _3returnLiveList=3;
 	//正邪→小律影  主播开始直播   n1:直播间号 s1:主播称呼
-	public static final short _5liveStop=5;
+	public static final short _4liveStart=4;
 	//正邪→小律影  主播停止直播   n1:直播间号 s1:主播称呼
-	public static final short _6speakInLiveRoom=6;
+	public static final short _5liveStop=5;
 	//正邪→小律影  直播观看者在直播间发送的弹幕   n1:直播间号 s1:主播称呼 n2:说话者BID s2:说话者称呼,如果配置文件中没有就是用户名 s3:说话内容
-	public static final short _7newVideo=7;
+	public static final short _6speakInLiveRoom=6;
 	//正邪→小律影  up主发布新视频  s1:用户名 s2:视频名 n1:AV号
-	public static final short _8newArtical=8;
+	public static final short _7newVideo=7;
 	//正邪→小律影  up主发布新专栏  s1:用户名 s2:专栏名 n1:CV号
-	public static final short _9getPersonInfoByName=9;
+	public static final short _8newArtical=8;
 	//小律影→正邪  从称呼获得人员信息(完全匹配方式查找)  s1:称呼
-	public static final short _10getPersonInfoByQQ=10;
+	public static final short _9getPersonInfoByName=9;
 	//小律影→正邪  从qq获得人员信息(完全匹配方式查找)  n1:qq号
-	public static final short _11getPersonInfoByBid=11;
+	public static final short _10getPersonInfoByQQ=10;
 	//小律影→正邪  从bid获得人员信息(完全匹配方式查找)  n1:BID
-	public static final short _12getPersonInfoByBiliLive=12;
+	public static final short _11getPersonInfoByBid=11;
 	//小律影→正邪  从直播间号获得人员信息(完全匹配方式查找)  n1:直播间号
-	public static final short _13returnPersonInfo=13;
+	public static final short _12getPersonInfoByBiliLive=12;
 	//正邪→小律影  返回 _9 _10 _11 _12的查询结果  返回结果例:{"name":"闲者","qq":"877247145","bid":12007285,"bliveRoom":1954885,"tipIn":[],"tip":[true,true,false]}
-	public static final short _14coinsAdd=14;
+	public static final short _13returnPersonInfo=13;
 	//正邪→小律影  给指定qq号添加幻币  n1:幻币数量 n2:目标qq号
-	public static final short _15groupBan=15;
+	public static final short _14coinsAdd=14;
 	//小律影↔正邪  qq群中禁言  n1:群号 n2:QQ号 n3:时间(秒)
-	public static final short _16groupKick=16;
+	public static final short _15groupBan=15;
 	//小律影↔正邪  踢出qq群  n1:群号 n2:QQ号 n3:是否永久拒绝 0为否 1为是
-	public static final short _17heartBeat=17;
+	public static final short _16groupKick=16;
 	//小律影→正邪  心跳，不需要body 返回一个操作类型为0的通知
-	public static final short _18FindInAll=18;
+	public static final short _17heartBeat=17;
 	//小律影→正邪  同在QQ中的"findInAll"指令  n1:qq号
-	public static final short _19returnFind=19;
+	public static final short _18FindInAll=18;
 	//正邪→小律影  返回18的结果   返回结果例[296376859,251059118]
-	public static final short _20pic=20;
+	public static final short _19returnFind=19;
 	//小律影→正邪  获得"精神支柱"表情包  n1:qq号
-	public static final short _21returnPic=21;
+	public static final short _20pic=20;
 	//正邪→小律影  返回_20生成的jpg文件 数据部分直接保存到磁盘即可
-	public static final short _22pic2=22;
+	public static final short _21returnPic=21;
 	//小律影→正邪  获得"神触"表情包  n1:qq号
-	public static final short _23returnPic2=23;
+	public static final short _22pic2=22;
 	//正邪→小律影  返回_22生成的jpg文件 数据部分直接保存到磁盘即可
-	public static final short _24MD5Random=24;
+	public static final short _23returnPic2=23;
 	//小律影→正邪  获得鬼人正邪".jrrp"中的计算结果  n1:qq号
-	public static final short _25returnMD5Random=25;
+	public static final short _24MD5Random=24;
 	//正邪→小律影  返回_24的结果 n1:计算结果   (0-10000的整数)
-	
-	
+	public static final short _25returnMD5Random=25;
+
+
+
 
 	public static DataPack encode(short opCode, long timeStamp) {
 		return new DataPack(opCode, timeStamp);
