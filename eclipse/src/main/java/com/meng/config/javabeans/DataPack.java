@@ -4,6 +4,8 @@ import java.io.*;
 import java.util.*;
 import com.google.gson.*;
 import com.meng.*;
+import java.lang.reflect.*;
+import com.google.gson.reflect.*;
 
 public class DataPack {
 
@@ -86,7 +88,46 @@ public class DataPack {
 		data = pack;
 		String s=new String(pack, headLength, getLength() - headLength);
 		System.out.println(s);
-		ritsukageBean = gson.fromJson(s, RitsukageBean.class);
+		switch (getOpCode()) {
+			case DataPack._0notification:
+			case DataPack._1verify:
+			case DataPack._2getLiveList:
+			case DataPack._4liveStart:
+			case DataPack._5liveStop:
+			case DataPack._6speakInLiveRoom:
+			case DataPack._7newVideo:
+			case DataPack._8newArtical:
+			case DataPack._9getPersonInfoByName:	
+			case DataPack._10getPersonInfoByQQ:
+			case DataPack._11getPersonInfoByBid:
+			case DataPack._12getPersonInfoByBiliLive:
+			case DataPack._14coinsAdd:
+			case DataPack._15groupBan:
+			case DataPack._16groupKick:
+			case DataPack._17heartBeat:
+			case DataPack._18FindInAll:
+			case DataPack._20pic:
+				ritsukageBean = gson.fromJson(s, RitsukageBean.class);
+				break;
+			case DataPack._3returnLiveList:
+				Type ritsucageSetType = new TypeToken<HashSet<PersonInfo>>() {
+				}.getType();
+				ritsukageSet = gson.fromJson(s, ritsucageSetType);
+				break;
+			case DataPack._13returnPersonInfo:
+				ritsukagePersonInfo = gson.fromJson(s, PersonInfo.class);
+				break;
+			case DataPack._19returnFind:
+				Type ritsucageLongSetType = new TypeToken<HashSet<Long>>() {
+				}.getType();
+				ritsuaheLongSet = gson.fromJson(s, ritsucageLongSetType);
+				break;
+			case DataPack._21returnPic:
+				//saveFile(System.currentTimeMillis() + "", data);
+				break;
+			default:
+				break;
+		}
 	} 
 
 	public byte[] getData() {
@@ -227,7 +268,7 @@ public class DataPack {
 	public void writeData(byte[] bs) {
 		arrayData = bs;
 	}
-	
+
 	public String readString(int argNum) {
 		switch (argNum) {
 			case 1:
@@ -242,6 +283,17 @@ public class DataPack {
 		for (int i=0;i < bs.length;++i) {
 			data[writePointer++] = bs[i];
 		}
+	}
+
+	private void saveFile(String name, byte[] bytes) {
+        try {
+            File file = new File(Autoreply.appDirectory + "jingshenzhizhu\\" + name + ".jpg");
+            FileOutputStream fos = new FileOutputStream(file);
+            fos.write(bytes, headLength, bytes.length - headLength);
+            fos.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
 	}
 
 	private byte[] getBytes(int i) {
