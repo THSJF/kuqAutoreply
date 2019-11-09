@@ -48,6 +48,9 @@ public class GroupMsgPart2Runnable implements Runnable {
             return true;
 		}
 		if (msg.startsWith(".nn ")) {
+			if(msg.contains("~") || msg.contains("～")){
+				return true;
+			}
 			String name=msg.substring(4);
 			if (name.length() > 20) {
 				Autoreply.sendMessage(fromGroup, 0, "太长了,记不住");
