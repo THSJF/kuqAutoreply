@@ -41,9 +41,9 @@ public class DataPack {
 	 小律影→正邪  小律影发送 鬼人正邪接收
 	 正邪→小律影  鬼人正邪发送 小律影接收 (其实是广播方式发送,所有连接的客户端都可以收到)
 	 小律影↔正邪  都可以发送和接收
-	 
+
 	 */
-	 
+
 	//小律影↔正邪  普通通知,大部分情况下没什么用   s1:通知文本
 	public static final short _0notification=0;
 	//小律影→正邪  用于身份验证，暂未使用    n1:qq号(setConnect中设置的qq号)
@@ -112,9 +112,10 @@ public class DataPack {
 	public static final short _32MD5overSpell=32;
 	//正邪→小律影  返回_32的结果 s1:计算结果
 	public static final short _33returnMD5overSpell=33;
-	
-	
-	
+	//小律影→正邪  发送直播间弹幕 s1:弹幕内容 s2:屑站账号cookie n1:直播间号
+	public static final short _34sendDanmaku=34;
+
+
 	public static DataPack encode(short opCode, long timeStamp) {
 		return new DataPack(opCode, timeStamp);
 	}
@@ -141,26 +142,26 @@ public class DataPack {
 		String s=new String(pack, headLength, getLength() - headLength);
 		System.out.println(s);
 		switch (getOpCode()) {
-		/*	case DataPack._0notification:
-			case DataPack._1verify:
-			case DataPack._2getLiveList:
-			case DataPack._4liveStart:
-			case DataPack._5liveStop:
-			case DataPack._6speakInLiveRoom:
-			case DataPack._7newVideo:
-			case DataPack._8newArtical:
-			case DataPack._9getPersonInfoByName:	
-			case DataPack._10getPersonInfoByQQ:
-			case DataPack._11getPersonInfoByBid:
-			case DataPack._12getPersonInfoByBiliLive:
-			case DataPack._14coinsAdd:
-			case DataPack._15groupBan:
-			case DataPack._16groupKick:
-			case DataPack._17heartBeat:
-			case DataPack._18FindInAll:
-			case DataPack._20pic:
-				break;
-	*/
+				/*	case DataPack._0notification:
+				 case DataPack._1verify:
+				 case DataPack._2getLiveList:
+				 case DataPack._4liveStart:
+				 case DataPack._5liveStop:
+				 case DataPack._6speakInLiveRoom:
+				 case DataPack._7newVideo:
+				 case DataPack._8newArtical:
+				 case DataPack._9getPersonInfoByName:	
+				 case DataPack._10getPersonInfoByQQ:
+				 case DataPack._11getPersonInfoByBid:
+				 case DataPack._12getPersonInfoByBiliLive:
+				 case DataPack._14coinsAdd:
+				 case DataPack._15groupBan:
+				 case DataPack._16groupKick:
+				 case DataPack._17heartBeat:
+				 case DataPack._18FindInAll:
+				 case DataPack._20pic:
+				 break;
+				 */
 			case DataPack._3returnLiveList:
 				Type ritsucageSetType = new TypeToken<HashSet<PersonInfo>>() {
 				}.getType();
@@ -215,7 +216,7 @@ public class DataPack {
 			}
 		} else if (ritsukageBean != null) {
 			try {
-				byteArray = gson.toJson(ritsukageBean).replaceAll(",\"s[1-9]\":\"\"","").replaceAll(",\"n[1-9]\":\"0\"","").getBytes("utf-8");
+				byteArray = gson.toJson(ritsukageBean).replaceAll(",\"s[1-9]\":\"\"", "").replaceAll(",\"n[1-9]\":\"0\"", "").getBytes("utf-8");
 				retData = new byte[headLength + byteArray.length];
 			} catch (UnsupportedEncodingException e) {
 				e.printStackTrace();

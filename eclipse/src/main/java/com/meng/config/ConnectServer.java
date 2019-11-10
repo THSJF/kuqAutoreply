@@ -233,6 +233,16 @@ public class ConnectServer extends WebSocketServer {
 				break;
 			case DataPack._33returnMD5overSpell:
 				break;
+			case DataPack._34sendDanmaku:
+				try {
+					Autoreply.instence.naiManager.sendDanmaku(recievedDataPack.readNum(1) + "", recievedDataPack.readString(2), recievedDataPack.readString(1));
+					dataToSend = DataPack.encode(DataPack._0notification, recievedDataPack.getTimeStamp());
+					dataToSend.write(1, "发送完成");
+				} catch (IOException e) {
+					dataToSend = DataPack.encode(DataPack._0notification, recievedDataPack.getTimeStamp());
+					dataToSend.write(1, e.toString());
+				}
+				break;
 			default:
 				dataToSend = DataPack.encode(DataPack._0notification, recievedDataPack.getTimeStamp());
 				dataToSend.write(1, "操作类型错误");
