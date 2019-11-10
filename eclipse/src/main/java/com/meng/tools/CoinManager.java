@@ -29,6 +29,9 @@ public class CoinManager {
 	}
 
 	public void addCoins(long fromQQ, int coins) {
+		if (coins < 0) {
+			return;
+		}
 		if (countMap.get(fromQQ) != null) {
 			int qqCoin=countMap.get(fromQQ);
 			qqCoin += coins;
@@ -40,6 +43,9 @@ public class CoinManager {
 	}
 
 	public boolean subCoins(long fromQQ, int coins) {
+		if (coins < 0) {
+			return false;
+		}
 		if (countMap.get(fromQQ) != null) {
 			int qqCoin=countMap.get(fromQQ);
 			if (qqCoin < coins) {
