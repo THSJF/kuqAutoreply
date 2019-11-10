@@ -147,8 +147,8 @@ public class AdminMessageProcessor {
 				return true;
 			}
 			if (msg.startsWith("&#91;接收到新的加群申请&#93")) {
-				String num=msg.substring(msg.indexOf("申请编号：") + 5, msg.indexOf("已注册快捷") - 1);
-				long qqNum=Long.parseLong(msg.substring(msg.indexOf("用户：") + 3, msg.indexOf("验证消息") - 1));
+				String num=msg.substring(msg.indexOf("申请编号：") + 5, msg.indexOf("已注册快捷") - 2);
+				long qqNum=Long.parseLong(msg.substring(msg.indexOf("用户：") + 3, msg.indexOf("验证消息") - 2));
 				PersonInfo pi=Autoreply.instence.configManager.getPersonInfoFromQQ(qqNum);
 				if (pi != null) {
 					Autoreply.sendMessage(Autoreply.mainGroup, 0, "~申请审核 " + num + " True");
