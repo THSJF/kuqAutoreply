@@ -147,20 +147,18 @@ public class AdminMessageProcessor {
 				return true;
 			}
 			if (msg.startsWith("[接收到新的加群申请]")) {
-				String qqstr=msg.substring(msg.indexOf("\n用户：") + 4, msg.indexOf("\n验证消息"));
-				String allow=msg.substring(msg.indexOf("\n允许入群：\n") + 7, msg.indexOf("\n拒绝入群"));
-				String notAllow=msg.substring(msg.indexOf("\n拒绝入群：\n") + 7, msg.indexOf("理由"));
-				long qqNum=Long.parseLong(qqstr);
+				String num=msg.substring(msg.indexOf("申请编号：") + 5, msg.indexOf("已注册快捷"));
+				long qqNum=Long.parseLong(msg.substring(msg.indexOf("用户：") + 3, msg.indexOf("验证消息")));
 				PersonInfo pi=Autoreply.instence.configManager.getPersonInfoFromQQ(qqNum);
 				if (pi != null) {
-					Autoreply.sendMessage(Autoreply.mainGroup, 0, allow);
+					Autoreply.sendMessage(Autoreply.mainGroup, 0, "~申请审核 " + num + " True");
 					Autoreply.sendMessage(fromGroup, 0, "欢迎" + Autoreply.instence.configManager.getNickName(qqNum));
 				} else if (Autoreply.instence.configManager.isGroupAutoAllow(qqNum)) {
-					Autoreply.sendMessage(Autoreply.mainGroup, 0, allow);
+					Autoreply.sendMessage(Autoreply.mainGroup, 0,  "~申请审核 " + num + " True");
 					Autoreply.sendMessage(fromGroup, 0, "此账号在自动同意列表中，已同意进群");
 					Autoreply.sendMessage(fromGroup, 0, "欢迎" + Autoreply.instence.configManager.getNickName(qqNum));
 				} else if (Autoreply.instence.configManager.isBlackQQ(qqNum)) {
-					Autoreply.sendMessage(fromGroup, 0, notAllow + " 黑名单用户");
+					Autoreply.sendMessage(fromGroup, 0, "~申请审核 " + num + " False 黑名单用户");
 				}
 				return true;
 			}
