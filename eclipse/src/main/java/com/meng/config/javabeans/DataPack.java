@@ -139,7 +139,10 @@ public class DataPack {
 	private DataPack(byte[] pack) {
 		gson = Autoreply.gson;
 		data = pack;
-		String s=new String(pack, headLength, getLength() - headLength);
+		String s="";
+		try {
+			s = new String(pack, headLength, getLength() - headLength , "utf-8");
+		} catch (UnsupportedEncodingException e) {}
 		System.out.println(s);
 		switch (getOpCode()) {
 				/*	case DataPack._0notification:

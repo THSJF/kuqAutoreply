@@ -17,6 +17,12 @@
 			android:layout_height="wrap_content"
 			android:orientation="vertical">
 
+			<Button
+				android:id="@+id/mainButtonSend"
+				android:text="发送"
+				android:layout_width="fill_parent"
+				android:layout_height="wrap_content"/>
+			
 			<EditText
 				android:id="@+id/opCode"
 				android:hint="操作类型"
@@ -56,12 +62,6 @@
 			<EditText
 				android:id="@+id/etn3"
 				android:hint="n3"
-				android:layout_width="fill_parent"
-				android:layout_height="wrap_content"/>
-
-			<Button
-				android:id="@+id/mainButtonSend"
-				android:text="发送"
 				android:layout_width="fill_parent"
 				android:layout_height="wrap_content"/>
 
