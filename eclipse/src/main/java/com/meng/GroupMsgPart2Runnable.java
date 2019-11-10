@@ -52,7 +52,7 @@ public class GroupMsgPart2Runnable implements Runnable {
 				return true;
 			}
 			String name=msg.substring(4);
-			if (name.length() > 20) {
+			if (name.length() > 30) {
 				Autoreply.sendMessage(fromGroup, 0, "太长了,记不住");
 				return true;
 			}

@@ -160,6 +160,8 @@ public class SpellCollect {
 				String s;
 				if (r.nextInt(150) == 20) {
 					s = DiceImitate.lastword[r.nextInt(DiceImitate.lastword.length)];
+				} else if (r.nextInt(300) == 25) {
+					s = DiceImitate.overdrive[r.nextInt(DiceImitate.overdrive.length)];
 				} else {
 					s = DiceImitate.spells[r.nextInt(DiceImitate.spells.length)];
 				}
@@ -196,7 +198,9 @@ public class SpellCollect {
 					String s;
 					if (r.nextInt(150) == 20) {
 						s = DiceImitate.lastword[r.nextInt(DiceImitate.lastword.length)];
-					} else {
+					} else if (r.nextInt(300) == 25) {
+						s = DiceImitate.overdrive[r.nextInt(DiceImitate.overdrive.length)];
+					} else  {
 						s = DiceImitate.spells[r.nextInt(DiceImitate.spells.length)];
 					}
 					gotSpellsSet.add(s);
@@ -246,6 +250,8 @@ public class SpellCollect {
 				String s;
 				if (r.nextInt(150) == 20) {
 					s = DiceImitate.lastword[r.nextInt(DiceImitate.lastword.length)];
+				} else if (r.nextInt(300) == 25) {
+					s = DiceImitate.overdrive[r.nextInt(DiceImitate.overdrive.length)];
 				} else {	
 					s = DiceImitate.spells[r.nextInt(DiceImitate.spells.length)];
 				}
@@ -284,8 +290,8 @@ public class SpellCollect {
 
 		if (msg.equals("查看符卡")) {
 			StringBuilder sb=new StringBuilder();
-			HashSet<String> gtdspl=chm.get(fromQQ);
-			if (gtdspl == null) {
+			HashSet<String> gotSpells=chm.get(fromQQ);
+			if (gotSpells == null) {
 				Autoreply.sendMessage(fromGroup, 0, "你没有参加过抽卡");
 				return true;
 			}
@@ -293,7 +299,7 @@ public class SpellCollect {
 			sb.append("获得了:");
 			int i=0;
 			for (String s:DiceImitate.spells) {
-				if (gtdspl.contains(s)) {
+				if (gotSpells.contains(s)) {
 					sb.append("\n").append(s);
 					++i;
 					if (i > 40) {
@@ -305,12 +311,29 @@ public class SpellCollect {
 			}
 			Autoreply.sendMessage(fromGroup, fromQQ, sb.toString());
 			sb.setLength(0);
+			sb.append("lastword:");
+			boolean hasLastword=false;
 			for (String s:DiceImitate.lastword) {
-				if (gtdspl.contains(s)) {
+				if (gotSpells.contains(s)) {
 					sb.append("\n").append(s);
+					hasLastword = true;
 				}
 			}
-			Autoreply.sendMessage(fromGroup, fromQQ, sb.toString());		
+			if (hasLastword) {
+				Autoreply.sendMessage(fromGroup, fromQQ, sb.toString());
+			}
+			sb.setLength(0);
+			boolean hasOverdrive=false;
+			sb.append("overdrive:");
+			for (String s:DiceImitate.overdrive) {
+				if (gotSpells.contains(s)) {
+					sb.append("\n").append(s);
+					hasOverdrive = true;
+				}
+			}
+			if (hasOverdrive) {
+				Autoreply.sendMessage(fromGroup, fromQQ, sb.toString());
+			}
 			return true;	
 		}
 
