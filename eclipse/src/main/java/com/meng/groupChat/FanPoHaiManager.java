@@ -17,24 +17,24 @@ public class FanPoHaiManager {
     private int alpohai = Autoreply.instence.random.nextInt(5) + 2;// 收到的消息包含迫害二字的次数到达此值也会触发反迫害
 
     public FanPoHaiManager() {
-        System.out.println("反迫害启动");
-        Autoreply.instence.threadPool.execute(new Runnable() {
-            @Override
-            public void run() {
-                File[] pohaitu = new File(Autoreply.appDirectory + "fan\\").listFiles();
-                if (pohaitu != null) {
-                    for (File file : pohaitu) {
-                        try {
-                            fingerPrints.add(new FingerPrint(ImageIO.read(file)));
-                        } catch (Exception e) {
-                            System.out.println(file.getAbsolutePath());
-                        }
-                    }
-                }
-                System.out.println("反迫害启动完成");
-                Autoreply.sleeping = false;
-            }
-        });
+		Autoreply.instence.threadPool.execute(new Runnable() {
+				@Override
+				public void run() {
+					File[] pohaitu = new File(Autoreply.appDirectory + "fan\\").listFiles();
+					if (pohaitu != null) {
+						for (File file : pohaitu) {
+							try {
+								fingerPrints.add(new FingerPrint(ImageIO.read(file)));
+							} catch (Exception e) {
+								System.out.println(file.getAbsolutePath());
+							}
+						}
+					}
+					System.out.println("反迫害启动完成");
+					Autoreply.sleeping = false;
+					Autoreply.sendMessage(Autoreply.mainGroup, 0, "~reconnect");
+				}
+			});
     }
 
     public boolean check(long fromQQ, long fromGroup, String msg, long msgID, File[] imageFiles) {

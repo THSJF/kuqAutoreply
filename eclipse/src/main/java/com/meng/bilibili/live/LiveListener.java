@@ -24,15 +24,13 @@ public class LiveListener implements Runnable {
     private ConcurrentHashMap<String, Long> liveTimeMap = new ConcurrentHashMap<>();
 
     public LiveListener(final ConfigManager configManager) {
-        System.out.println("直播检测启动中");
-        Autoreply.instence.threadPool.execute(new Runnable() {
+		Autoreply.instence.threadPool.execute(new Runnable() {
 				@Override
 				public void run() {
 					for (PersonInfo cb : configManager.configJavaBean.personInfo) {
 						checkPerson(cb);
 					}
 					loadFinish = true;
-					System.out.println("直播检测启动完成");
 				}
 			});
         File liveTimeFile = new File(Autoreply.appDirectory + "liveTime.json");

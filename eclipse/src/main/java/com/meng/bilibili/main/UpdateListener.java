@@ -23,11 +23,9 @@ public class UpdateListener implements Runnable {
     private ArrayList<UpdatePerson> updatePerson = new ArrayList<>();
 
     public UpdateListener(ConfigManager configManager) {
-        System.out.println("更新检测启动中");
         for (PersonInfo cb : configManager.configJavaBean.personInfo) {
             addPerson(cb);
         }
-        System.out.println("更新检测启动完成");
     }
 
     private void addPerson(PersonInfo personInfo) {
