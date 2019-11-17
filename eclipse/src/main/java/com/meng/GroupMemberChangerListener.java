@@ -53,7 +53,7 @@ public class GroupMemberChangerListener {
                 return;
             }
             QQInfo qInfo = Autoreply.CQ.getStrangerInfo(beingOperateQQ);
-            sendMessage(fromGroup, 0, Autoreply.instence.configManager.getNickName(fromGroup, beingOperateQQ)  + "(" + qInfo.getQqId() + ")" + "跑莉", true);
+            sendMessage(fromGroup, 0, Autoreply.instence.configManager.getNickName(beingOperateQQ)  + "(" + qInfo.getQqId() + ")" + "跑莉", true);
         } else if (subtype == 2) {
             if (beingOperateQQ == 2856986197L) {
                 Autoreply.instence.threadPool.execute(new Runnable() {
