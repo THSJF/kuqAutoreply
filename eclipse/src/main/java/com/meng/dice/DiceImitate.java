@@ -1,7 +1,9 @@
-package com.meng;
+package com.meng.dice;
 import com.meng.ocr.sign.*;
 import com.sobte.cqp.jcq.entity.*;
 import java.util.*;
+
+import com.meng.Autoreply;
 import com.meng.config.javabeans.*;
 import com.meng.tools.*;
 

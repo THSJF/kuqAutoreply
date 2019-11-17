@@ -1,5 +1,7 @@
-package com.meng;
+package com.meng.messageProcess;
 
+import com.meng.Autoreply;
+import com.meng.MessageSender;
 import com.meng.bilibili.live.LivePerson;
 import com.meng.config.javabeans.GroupConfig;
 import com.meng.tools.Methods;

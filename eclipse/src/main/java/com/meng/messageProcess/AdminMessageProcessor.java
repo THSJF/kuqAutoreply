@@ -1,10 +1,13 @@
-package com.meng;
+package com.meng.messageProcess;
 
 import com.google.gson.*;
+import com.meng.Autoreply;
 import com.meng.bilibili.live.*;
 import com.meng.bilibili.main.*;
 import com.meng.config.*;
 import com.meng.config.javabeans.*;
+import com.meng.dice.Archievement;
+import com.meng.dice.ArchievementBean;
 import com.meng.picEdit.*;
 import com.meng.tools.*;
 import com.meng.tools.override.*;

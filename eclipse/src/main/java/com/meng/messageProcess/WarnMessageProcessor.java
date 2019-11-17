@@ -1,5 +1,6 @@
-package com.meng;
+package com.meng.messageProcess;
 
+import com.meng.Autoreply;
 import com.meng.tools.Methods;
 import com.sobte.cqp.jcq.entity.Member;
 

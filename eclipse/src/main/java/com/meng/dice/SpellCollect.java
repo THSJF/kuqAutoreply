@@ -1,4 +1,4 @@
-package com.meng;
+package com.meng.dice;
 import com.google.gson.*;
 import com.google.gson.reflect.*;
 import com.meng.*;

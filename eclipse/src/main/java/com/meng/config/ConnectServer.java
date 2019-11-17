@@ -8,6 +8,7 @@ import org.java_websocket.handshake.*;
 import org.java_websocket.server.*;
 import com.meng.*;
 import com.meng.config.javabeans.*;
+import com.meng.dice.DiceImitate;
 import com.google.gson.*;
 import java.util.*;
 import com.meng.bilibili.live.*;

@@ -1,5 +1,7 @@
-package com.meng;
+package com.meng.messageProcess;
 
+import com.meng.Autoreply;
+import com.meng.MessageSender;
 import com.meng.bilibili.live.LivePerson;
 import com.meng.tools.Methods;
 import com.sobte.cqp.jcq.entity.CQImage;
@@ -22,7 +24,7 @@ public class PrivateMsgRunnable implements Runnable {
     private int font = 0;
     private long timeStamp = 0;
 
-    PrivateMsgRunnable(MessageSender ms) {
+    public PrivateMsgRunnable(MessageSender ms) {
         font = ms.font;
         fromGroup = ms.fromGroup;
         fromQQ = ms.fromQQ;

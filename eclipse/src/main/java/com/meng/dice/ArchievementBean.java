@@ -1,4 +1,4 @@
-package com.meng;
+package com.meng.dice;
 
 public class ArchievementBean {
 	private int a1=0;

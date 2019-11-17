@@ -2,8 +2,8 @@ package com.meng.groupChat;
 
 
 import com.meng.Autoreply;
-import com.meng.WarnMessageProcessor;
 import com.meng.config.javabeans.GroupConfig;
+import com.meng.messageProcess.WarnMessageProcessor;
 import com.meng.tools.FingerPrint;
 import com.meng.tools.Methods;
 import com.meng.tools.gifHelper.AnimatedGifEncoder;

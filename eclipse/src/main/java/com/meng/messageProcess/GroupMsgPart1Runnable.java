@@ -1,4 +1,4 @@
-package com.meng.tools;
+package com.meng.messageProcess;
 
 import com.meng.Autoreply;
 import com.meng.MessageSender;
