@@ -42,20 +42,22 @@ public class WarnMessageProcessor {
 		"移除死鸽",
 		"删除死鸽",
 		"去除死鸽",
-		"缓刑宰鸽"
+		"缓刑宰鸽",
+		"thunder"
     };
+
+	private String[] exceptMessages=new String[]{
+		"转账"
+	};
 
     public WarnMessageProcessor() {
     }
 
     public boolean check(long fromGroup, long fromQQ, String msg) {
         boolean b = false;
-        if (lastMsg.equals(msg) && (msg.contains("~") || msg.contains("～"))) {
+        if (lastMsg.equals(msg) && isConmandMessage(msg)) {
             b = processRepeat(fromGroup, fromQQ, msg);
-        } else if ((msg.contains("~") || msg.contains("～")) && isAtme(msg)){
-        	if(msg.contains("~转账") || msg.contains("～转账")){
-				return false;
-			}
+        } else if (isConmandMessage(msg) && !isExceptMsg(msg) && isAtme(msg)) {
 			onMsgHighWarinig(fromGroup, fromQQ);
             return true;
         }
@@ -122,4 +124,17 @@ public class WarnMessageProcessor {
         }
         return false;
     }
+
+	private boolean isExceptMsg(String msg) {
+        for (String s : exceptMessages) {
+            if (msg.contains(s)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+	private boolean isConmandMessage(String msg) {
+		return msg.contains("~") || msg.contains("～");
+	}
 }
