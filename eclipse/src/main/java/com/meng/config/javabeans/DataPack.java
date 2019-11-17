@@ -14,7 +14,8 @@ public class DataPack {
 	private byte[] arrayData=null;
 	private RitsukageBean ritsukageBean=null;
 	private HashSet<PersonInfo> ritsukageSet=null;
-	private HashSet<Long> ritsuaheLongSet=null;
+	private HashSet<Long> ritsukageLongSet=null;
+	private HashSet<String> ritsukageStringSet=null;
 	private PersonInfo ritsukagePersonInfo=null;
 	private Gson gson;
 	private int writePointer=0;
@@ -114,6 +115,18 @@ public class DataPack {
 	public static final short _33returnMD5overSpell=33;
 	//小律影→正邪  发送直播间弹幕 s1:弹幕内容 s2:屑站账号cookie n1:直播间号
 	public static final short _34sendDanmaku=34;
+	//小律影→正邪  设置群名片 n1:群号 n2:目标qq号 s1:名片内容
+	public static final short _37setGroupName=37;
+	//小律影→正邪  设置群头衔  n1:群号 n2:目标qq号 n3:有效时间，单位为秒，无限期写-1 s1:头衔内容
+	public static final short _38setSpecialTitle=38;
+
+
+	/*******    希望小律影提供的    *******/
+	//小律影→正邪  加群审核 n1:加群申请id n2:群号 n3:qq号
+	public static final short _35groupAdd=35;
+	//正邪→小律影  回复加群审核 n1:加群申请id n2:是否同意(0拒绝 1同意) s1:同意或拒绝的理由 s2:此人的称呼(如果有)(优先使用.nn设置的称呼)
+	public static final short _36returnGroupAdd=36;
+
 
 
 	public static DataPack encode(short opCode, long timeStamp) {
@@ -176,7 +189,7 @@ public class DataPack {
 			case DataPack._19returnFind:
 				Type ritsucageLongSetType = new TypeToken<HashSet<Long>>() {
 				}.getType();
-				ritsuaheLongSet = gson.fromJson(s, ritsucageLongSetType);
+				ritsukageLongSet = gson.fromJson(s, ritsucageLongSetType);
 				break;
 			case DataPack._21returnPic:
 				//saveFile(System.currentTimeMillis() + "", data);
@@ -209,9 +222,17 @@ public class DataPack {
 				e.printStackTrace();
 				return null;
 			}
-		} else if (ritsuaheLongSet != null) {
+		} else if (ritsukageLongSet != null) {
 			try {
-				byteArray = gson.toJson(ritsuaheLongSet).getBytes("utf-8");
+				byteArray = gson.toJson(ritsukageLongSet).getBytes("utf-8");
+				retData = new byte[headLength + byteArray.length];
+			} catch (UnsupportedEncodingException e) {
+				e.printStackTrace();
+				return null;
+			}
+		} else if (ritsukageStringSet != null) {
+			try {
+				byteArray = gson.toJson(ritsukageStringSet).getBytes("utf-8");
 				retData = new byte[headLength + byteArray.length];
 			} catch (UnsupportedEncodingException e) {
 				e.printStackTrace();
@@ -280,8 +301,12 @@ public class DataPack {
 		ritsukageSet = hs;
 	}
 
+	public void writeStringSet(HashSet<String> hs) {
+		ritsukageStringSet = hs;
+	}
+
 	public void writeLongSet(HashSet<Long> hs) {
-		ritsuaheLongSet = hs;
+		ritsukageLongSet = hs;
 	}
 	public void write(int argNum, long l) {
 		switch (argNum) {

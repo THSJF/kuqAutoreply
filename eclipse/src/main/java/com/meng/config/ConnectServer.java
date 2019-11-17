@@ -243,6 +243,48 @@ public class ConnectServer extends WebSocketServer {
 					dataToSend.write(1, e.toString());
 				}
 				break;
+			case DataPack._35groupAdd:
+				PersonInfo pi35=Autoreply.instence.configManager.getPersonInfoFromQQ(recievedDataPack.readNum(3));
+				long addId=recievedDataPack.readNum(1);
+				long addgroup=recievedDataPack.readNum(2);
+				long addQq=recievedDataPack.readNum(3);
+				if (pi35 != null) {
+					dataToSend = DataPack.encode(DataPack._36returnGroupAdd, recievedDataPack.getTimeStamp());
+					dataToSend.write(1, addId);
+					dataToSend.write(2, 1);
+					dataToSend.write(1, "此帐号为飞机佬账号");
+					dataToSend.write(2, Autoreply.instence.configManager.getNickName(addQq));
+				} else if (Autoreply.instence.configManager.isGroupAutoAllow(addQq)) {
+					dataToSend = DataPack.encode(DataPack._36returnGroupAdd, recievedDataPack.getTimeStamp());
+					dataToSend.write(1, addId);
+					dataToSend.write(2, 1);
+					dataToSend.write(1, "此帐号在自动同意列表中");
+					dataToSend.write(2, Autoreply.instence.configManager.getNickName(addQq));
+				} else if (Autoreply.instence.configManager.isBlackQQ(addQq)) {
+					dataToSend = DataPack.encode(DataPack._36returnGroupAdd, recievedDataPack.getTimeStamp());
+					dataToSend.write(1, addId);
+					dataToSend.write(2, 0);
+					dataToSend.write(1, "黑名单用户");
+					dataToSend.write(2, Autoreply.instence.configManager.getNickName(addQq));	
+				}	
+				break;
+			case DataPack._37setGroupName:
+				long group37=recievedDataPack.readNum(1);
+				long qq37=recievedDataPack.readNum(2);
+				String name37=recievedDataPack.readString(1);
+				Autoreply.CQ.setGroupCard(group37, qq37, name37);
+				dataToSend = DataPack.encode((short)0, recievedDataPack.getTimeStamp());
+				dataToSend.write(1, "操作完成");
+				break;
+			case DataPack._38setSpecialTitle:
+				long group38=recievedDataPack.readNum(1);
+				long qq38=recievedDataPack.readNum(2);
+				long time38=recievedDataPack.readNum(3);
+				String name38=recievedDataPack.readString(1);
+				Autoreply.CQ.setGroupSpecialTitle(group38, qq38, name38, time38);
+				dataToSend = DataPack.encode((short)0, recievedDataPack.getTimeStamp());
+				dataToSend.write(1, "操作完成");
+				break;
 			default:
 				dataToSend = DataPack.encode(DataPack._0notification, recievedDataPack.getTimeStamp());
 				dataToSend.write(1, "操作类型错误");
