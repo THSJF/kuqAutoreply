@@ -44,7 +44,25 @@ public class WarnMessageProcessor {
 		"删除死鸽",
 		"去除死鸽",
 		"缓刑宰鸽",
-		"thunder"
+		"thunder",
+		"welcome",
+		"申请提醒",
+		"mute",
+		"gag",
+		"禁言",
+		"mutegroupuser",
+		"kick",
+		"踢 ",
+		"ag",
+		"ban",
+		"unban",
+		"rpk",
+		"rmk",
+		"zan",
+		"dezan",
+		"转账",
+		"幻币商城",
+		"商城"
     };
 
 	private String[] exceptMessages=new String[]{

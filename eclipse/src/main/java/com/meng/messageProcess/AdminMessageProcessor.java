@@ -19,6 +19,7 @@ import java.util.function.BiConsumer;
 
 import static com.meng.Autoreply.sendMessage;
 import org.jsoup.*;
+import com.meng.musicProcess.*;
 
 public class AdminMessageProcessor {
     private ConfigManager configManager;
@@ -129,6 +130,12 @@ public class AdminMessageProcessor {
         if (configManager.isMaster(fromQQ)) {
 			if (msg.equals("-help")) {
 				Autoreply.sendMessage(fromGroup, 0, masterPermission.toString());
+				return true;
+			}
+			if(msg.equals("原曲片段")){
+				MusicManager musicManager=new MusicManager();
+				File f=musicManager.createMusicCut(16,"th10",5);
+				Autoreply.sendMessage(fromGroup,0,Autoreply.instence.CC.record(f.getName()));
 				return true;
 			}
 			if (msg.startsWith("移除成就 ")) {
