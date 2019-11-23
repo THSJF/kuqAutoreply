@@ -134,7 +134,7 @@ public class AdminMessageProcessor {
 			}
 			if(msg.equals("原曲片段")){
 				MusicManager musicManager=new MusicManager();
-				File f=musicManager.createMusicCut(16,"th10",5);
+				File f=musicManager.createMusicCut(new Random().nextInt(16),"th10",5);
 				Autoreply.sendMessage(fromGroup,0,Autoreply.instence.CC.record(f.getName()));
 				return true;
 			}
