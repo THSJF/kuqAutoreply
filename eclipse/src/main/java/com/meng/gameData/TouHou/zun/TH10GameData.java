@@ -1,6 +1,6 @@
 package com.meng.gameData.TouHou.zun;
 
-public class TH10
+public class TH10GameData
 {
 	public static final String gameName="东方风神录 ~ Mountain of Faith.";
 	public static final String gameNameCN="东方风神录";

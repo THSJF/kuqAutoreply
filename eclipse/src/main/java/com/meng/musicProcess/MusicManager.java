@@ -55,7 +55,7 @@ public class MusicManager {
 					new File(newFileName).delete();
 				}
 			});
-		resultMap.put(fromQQ, TH10.musicName[musicNum]);
+		resultMap.put(fromQQ, TH10GameData.musicName[musicNum]);
 		return resultFile;
 	}
 
