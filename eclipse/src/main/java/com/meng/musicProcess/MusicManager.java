@@ -31,7 +31,7 @@ public class MusicManager {
 		}
 		final String newFileName="C://Users/Administrator/Desktop/酷Q Pro/data/record/" + System.currentTimeMillis() + ".wav";
 		try {
-			resultFile = new File(musicFolder + newFileName);
+			resultFile = new File(newFileName);
 			if (resultFile.exists()) {
 				resultFile.delete();
 			}
@@ -49,7 +49,7 @@ public class MusicManager {
 					try {
 						Thread.sleep(60000);
 					} catch (InterruptedException e) {}
-					new File(musicFolder + newFileName).delete();
+					new File(newFileName).delete();
 				}
 			});
 		return resultFile;
