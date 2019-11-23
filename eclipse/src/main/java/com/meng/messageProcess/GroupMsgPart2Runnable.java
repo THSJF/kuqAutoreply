@@ -50,7 +50,7 @@ public class GroupMsgPart2Runnable implements Runnable {
             return true;
 		}
 		if (msg.startsWith(".nn ")) {
-			if(msg.contains("~") || msg.contains("～")){
+			if (msg.contains("~") || msg.contains("～")) {
 				return true;
 			}
 			String name=msg.substring(4);
@@ -60,6 +60,15 @@ public class GroupMsgPart2Runnable implements Runnable {
 			}
 			Autoreply.instence.configManager.setNickName(fromQQ, name);
 			Autoreply.sendMessage(fromGroup, 0, "我以后会称呼你为" + name);
+			return true;
+		}
+		if (msg.equals("原曲认知")) {
+			File musicFragment=Autoreply.instence.musicManager.createMusicCut(new Random().nextInt(16), "th10", 10, fromQQ);
+			Autoreply.sendMessage(fromGroup, 0, Autoreply.instence.CC.record(musicFragment.getName()));	
+			return true;
+		}
+		if(msg.startsWith("原曲认知回答 ")){
+			Autoreply.instence.musicManager.judgeAnswer(fromGroup,fromQQ,msg.substring(7));
 			return true;
 		}
 		if (msg.equals(".nn")) {

@@ -45,6 +45,7 @@ import com.meng.groupChat.Sequence.*;
 import com.meng.tip.*;
 import com.google.gson.*;
 import com.meng.picEdit.*;
+import com.meng.musicProcess.*;
 
 /*
  * 本文件是JCQ插件的主类<br>
@@ -111,6 +112,7 @@ public class Autoreply extends JcqAppAbstract implements ICQVer, IMsg, IRequest 
 	public CoinManager coinManager;
 	public BirthdayTip birthdayTip;
 	public ThreeManager threeManager;
+	public MusicManager musicManager;
 	
 	public DiceImitate diceImitate=new DiceImitate();
 	public static long mainGroup=1023432971l;
@@ -188,6 +190,7 @@ public class Autoreply extends JcqAppAbstract implements ICQVer, IMsg, IRequest 
 		seqManager = new SeqManager();
 		birthdayTip = new BirthdayTip();
 		threeManager = new ThreeManager();
+		musicManager = new MusicManager();
 		try {
 			connectServer = new ConnectServer(9961);
 			connectServer.start();

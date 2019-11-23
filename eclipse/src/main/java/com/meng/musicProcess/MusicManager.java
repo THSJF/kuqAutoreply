@@ -1,16 +1,19 @@
 package com.meng.musicProcess;
 
+import com.meng.*;
 import java.io.*;
 import java.util.*;
-import com.meng.*;
+import java.util.regex.*;
+import com.meng.gameData.TouHou.zun.*;
 
 public class MusicManager {
 	public static String musicFolder="";
+	private HashMap<Long,String> resultMap=new HashMap<>();
 	public MusicManager() {
 		musicFolder = "C://thbgm/";
 	}
 
-	public File createMusicCut(int musicNum, String gameName, int needSeconeds) {
+	public File createMusicCut(int musicNum, String gameName, int needSeconeds, long fromQQ) {
 		File fmtFile = new File(musicFolder + gameName + "/thbgm.fmt");
 		File resultFile=null;
 		THfmt thfmt = new THfmt(fmtFile);
@@ -52,8 +55,42 @@ public class MusicManager {
 					new File(newFileName).delete();
 				}
 			});
+		resultMap.put(fromQQ, TH10.musicName[musicNum]);
 		return resultFile;
 	}
+
+	public void judgeAnswer(long fromGroup, long fromQQ, String msg) {
+		if(resultMap.get(fromQQ)==null){
+			return;
+		}
+		if (isContainChinese(msg)) {
+			String userAnswer=msg.replaceAll("[^\u4e00-\u9fa5]", "");
+			String answer=resultMap.get(fromQQ).replaceAll("[^\u4e00-\u9fa5]", "");
+			if (userAnswer.equals(answer)) {
+				Autoreply.sendMessage(fromGroup, fromQQ, "回答正确");
+			} else {
+				Autoreply.sendMessage(fromGroup, fromQQ, "回答错误,答案是:" + resultMap.get(fromQQ) + ",你也可以回答:" + resultMap.get(fromQQ).replaceAll("[^\u4e00-\u9fa5]", ""));
+			}		
+		} else {
+			String userAnswer=msg.replaceAll("[^a-zA-Z\\s]", "");
+			String answer=resultMap.get(fromQQ).replaceAll("[^a-zA-Z\\s]", "");
+			if (userAnswer.equals(answer)) {
+				Autoreply.sendMessage(fromGroup, fromQQ, "回答正确");
+			} else {
+				Autoreply.sendMessage(fromGroup, fromQQ, "回答错误,答案是:" + resultMap.get(fromQQ) + ",你也可以回答:" + resultMap.get(fromQQ).replaceAll("[^\u4e00-\u9fa5]", ""));
+			}
+		}
+		resultMap.remove(fromQQ);
+	}
+
+	public static boolean isContainChinese(String str) {
+        Pattern p = Pattern.compile("[\u4e00-\u9fa5]");
+        Matcher m = p.matcher(str);
+        if (m.find()) {
+            return true;
+        }
+        return false;
+    }
 
 	public int getStartBytes(int musicNum, THfmt thfmt, int needSeconeds) {
 		MusicInfo muiscInfo=thfmt.musicInfos[musicNum];
