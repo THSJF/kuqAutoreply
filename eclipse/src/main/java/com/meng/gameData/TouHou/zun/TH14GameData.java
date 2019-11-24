@@ -1,9 +1,9 @@
 package com.meng.gameData.TouHou.zun;
 
 public class TH14GameData {
-	public static final String gameName="东方";
-	public static final String gameNameCN="东方";
-	public static final String gameNameAbbr="touhou";
+	public static final String gameName="东方辉针城 ~ Double Dealing Character.";
+	public static final String gameNameCN="东方辉针城";
+	public static final String gameNameAbbr="DDC";
 	public static String[] players = new String[]{"博丽灵梦", "雾雨魔理沙", "十六夜咲夜"};
     public static String[] playerSub = new String[]{"使用妖器", "不使用妖器"};
 	public static String[] charaName=new String[]{
@@ -17,23 +17,23 @@ public class TH14GameData {
 		"堀川雷鼓"
 	};
 	public static String[] musicName=new String[]{
-		"11111",
-		"11111",
-		"11111",
-		"11111",
-		"11111",
-		"11111",
-		"11111",
-		"11111",
-		"11111",
-		"11111",
-		"11111",
-		"11111",
-		"11111",
-		"11111",
-		"11111",
-		"11111",
-		"11111",
+		"不可思议的驱魔棒",
+		"Mist Lake",
+		"秘境的人鱼",
+		"往来于运河的人与妖",
+		"柳树下的杜拉罕",
+		"满月的竹林",
+		"孤独的狼人",
+		"Magical Storm",
+		"幻想净琉璃",
+		"沉向空中的辉针城",
+		"Reverse Ideology",
+		"针小棒大的天守阁",
+		"辉光之针的小人族 ~ Little Princess",
+		"魔力的雷云",
+		"原初的节拍 ~ Pristine Beat",
+		"小槌的魔力",
+		"非常非常神奇的道具们",
 		"Player's Score"	
 	};
 	public static String[] spells=new String[]{
