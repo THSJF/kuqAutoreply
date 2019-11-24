@@ -6,6 +6,7 @@ import com.google.gson.*;
 import com.meng.*;
 import java.lang.reflect.*;
 import com.google.gson.reflect.*;
+import com.meng.tools.*;
 
 public class DataPack {
 
@@ -209,7 +210,6 @@ public class DataPack {
 		} else if (ritsukageSet != null) {
 			try {
 				byteArray = gson.toJson(ritsukageSet).getBytes("utf-8");
-				retData = new byte[headLength + byteArray.length];
 			} catch (UnsupportedEncodingException e) {
 				e.printStackTrace();
 				return null;
@@ -217,7 +217,6 @@ public class DataPack {
 		} else if (ritsukagePersonInfo != null) {	
 			try {
 				byteArray = gson.toJson(ritsukagePersonInfo).getBytes("utf-8");
-				retData = new byte[headLength + byteArray.length];
 			} catch (UnsupportedEncodingException e) {
 				e.printStackTrace();
 				return null;
@@ -225,7 +224,6 @@ public class DataPack {
 		} else if (ritsukageLongSet != null) {
 			try {
 				byteArray = gson.toJson(ritsukageLongSet).getBytes("utf-8");
-				retData = new byte[headLength + byteArray.length];
 			} catch (UnsupportedEncodingException e) {
 				e.printStackTrace();
 				return null;
@@ -233,7 +231,6 @@ public class DataPack {
 		} else if (ritsukageStringSet != null) {
 			try {
 				byteArray = gson.toJson(ritsukageStringSet).getBytes("utf-8");
-				retData = new byte[headLength + byteArray.length];
 			} catch (UnsupportedEncodingException e) {
 				e.printStackTrace();
 				return null;
@@ -241,7 +238,6 @@ public class DataPack {
 		} else if (ritsukageBean != null) {
 			try {
 				byteArray = gson.toJson(ritsukageBean).replaceAll(",\"s[1-9]\":\"\"", "").replaceAll(",\"n[1-9]\":\"0\"", "").getBytes("utf-8");
-				retData = new byte[headLength + byteArray.length];
 			} catch (UnsupportedEncodingException e) {
 				e.printStackTrace();
 				return null;
@@ -249,18 +245,12 @@ public class DataPack {
 		} else {
 			try {		
 				byteArray = "".getBytes("utf-8");
-				retData = new byte[headLength + byteArray.length];
 			} catch (UnsupportedEncodingException e) {
 				e.printStackTrace();
 				return null;
 			}
 		}
-		for (int i=0;i < headLength;++i) {
-			retData[i] = data[i];
-		}
-		for (int i=0;i < byteArray.length;++i) {
-			retData[i + headLength] = byteArray[i];
-		}
+		retData = Methods.mergeArray(data, byteArray);
 		byte[] len=getBytes(retData.length);
 		retData[0] = len[0];
 		retData[1] = len[1];
