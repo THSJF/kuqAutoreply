@@ -26,7 +26,7 @@ import com.meng.lookGroup.IPGetter;
 import com.meng.diaoXiongJiHua.XiongIPGetter;
 
 public class Methods {
-    
+
     public static boolean ban(long fromGroup, long banQQ, int time) {
         if (banQQ == 2558395159L || Autoreply.instence.configManager.isAdmin(banQQ)) {
             return false;
@@ -389,6 +389,20 @@ public class Methods {
         return hashSet;
     }
 
+	public static byte[] mergeArray(byte[]... arrays) {
+		int allLen=0;
+		for (byte[] bs:arrays) {
+			allLen += bs.length;
+		}
+		byte[] finalArray=new byte[allLen];
+		int flag=0;
+		for (byte[] byteArray:arrays) {
+			for (int i=0;i < byteArray.length;++flag,++i) {
+				finalArray[flag] = byteArray[i];
+			}
+		}
+		return finalArray;
+	}
 
 	/*  public static String getG_tk(String skey) {
 	 int hash = 5381;

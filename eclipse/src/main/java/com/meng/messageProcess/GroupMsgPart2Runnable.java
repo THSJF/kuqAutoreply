@@ -63,13 +63,41 @@ public class GroupMsgPart2Runnable implements Runnable {
 			return true;
 		}
 		if (msg.equals("原曲认知")) {
-			File musicFragment=Autoreply.instence.musicManager.createMusicCut(new Random().nextInt(16), "th10", 10, fromQQ);
+			File musicFragment=Autoreply.instence.musicManager.createMusicCut(new Random().nextInt(16), 10, fromQQ);
 			Autoreply.sendMessage(fromGroup, 0, Autoreply.instence.CC.record(musicFragment.getName()));	
 			return true;
 		}
-		if(msg.startsWith("原曲认知回答 ")){
-			Autoreply.instence.musicManager.judgeAnswer(fromGroup,fromQQ,msg.substring(7));
+		if (msg.startsWith("原曲认知回答 ")) {
+			Autoreply.instence.musicManager.judgeAnswer(fromGroup, fromQQ, msg.substring(7));
 			return true;
+		}
+		if (msg.startsWith("原曲认知 ")) {
+			switch (msg) {
+				case "原曲认知 E":
+				case "原曲认知 e":
+				case "原曲认知 easy":
+				case "原曲认知 Easy":
+					Autoreply.sendMessage(fromGroup, 0, Autoreply.instence.CC.record(Autoreply.instence.musicManager.createMusicCut(new Random().nextInt(16), 10, fromQQ).getName()));	
+					break;
+				case "原曲认知 N":
+				case "原曲认知 n":
+				case "原曲认知 normal":
+				case "原曲认知 Normal":
+					Autoreply.sendMessage(fromGroup, 0, Autoreply.instence.CC.record(Autoreply.instence.musicManager.createMusicCut(new Random().nextInt(16), 6, fromQQ).getName()));
+					break;
+				case "原曲认知 H":
+				case "原曲认知 h":
+				case "原曲认知 hard":
+				case "原曲认知 Hard":
+					Autoreply.sendMessage(fromGroup, 0, Autoreply.instence.CC.record(Autoreply.instence.musicManager.createMusicCut(new Random().nextInt(16), 3, fromQQ).getName()));
+					break;
+				case "原曲认知 L":
+				case "原曲认知 l":
+				case "原曲认知 lunatic":
+				case "原曲认知 Lunatic":
+					Autoreply.sendMessage(fromGroup, 0, Autoreply.instence.CC.record(Autoreply.instence.musicManager.createMusicCut(new Random().nextInt(16), 1, fromQQ).getName()));
+					break;		
+			}
 		}
 		if (msg.equals(".nn")) {
 			Autoreply.instence.configManager.setNickName(fromQQ, null);

@@ -83,6 +83,7 @@ public class AdminMessageProcessor {
 		userPermission.put("~coins", "查看幻币数量");
 		userPermission.put("幻币抽卡 [整数]", "使用本地幻币抽卡");
 		userPermission.put("购买符卡 [符卡名]", "购买指定符卡,除lastword");
+		userPermission.put("原曲认知 [E|N|H|L]", "原曲认知测试,回答时用\"原曲认知回答 答案\"进行回答，只能回答自己的问题");
 
 		masterPermission.putAll(adminPermission);
 		masterPermission.putAll(userPermission);
@@ -130,12 +131,6 @@ public class AdminMessageProcessor {
         if (configManager.isMaster(fromQQ)) {
 			if (msg.equals("-help")) {
 				Autoreply.sendMessage(fromGroup, 0, masterPermission.toString());
-				return true;
-			}
-			if(msg.equals("原曲片段")){
-				MusicManager musicManager=new MusicManager();
-				File f=musicManager.createMusicCut(new Random().nextInt(16),"th10",5,fromQQ);
-				Autoreply.sendMessage(fromGroup,0,Autoreply.instence.CC.record(f.getName()));
 				return true;
 			}
 			if (msg.startsWith("移除成就 ")) {

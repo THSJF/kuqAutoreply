@@ -35,10 +35,6 @@ public class WavHeader {
 		}
 	}
 
-	private void write(char c) {
-		header[writePointer++] = (byte) c;
-	}
-
 	private void write(int i) {
 		byte[] bs=new byte[4];
 		bs[0] = (byte) ((i >> 0) & 0xff);
@@ -54,5 +50,4 @@ public class WavHeader {
 		bs[1] = (byte) ((s >> 8) & 0xff);
 		write(bs);
 	}
-
 }

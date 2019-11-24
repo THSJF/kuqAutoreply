@@ -5,6 +5,7 @@ import java.io.*;
 import java.util.*;
 import java.util.regex.*;
 import com.meng.gameData.TouHou.zun.*;
+import com.meng.tools.*;
 
 public class MusicManager {
 	public static String musicFolder="";
@@ -13,25 +14,18 @@ public class MusicManager {
 		musicFolder = "C://thbgm/";
 	}
 
-	public File createMusicCut(int musicNum, String gameName, int needSeconeds, long fromQQ) {
-		File fmtFile = new File(musicFolder + gameName + "/thbgm.fmt");
+	public File createMusicCut(int musicNum, int needSeconeds, long fromQQ) {
+		File[] games=new File(musicFolder).listFiles();
+		int game=new Random().nextInt(games.length);
+		File fmtFile = new File(musicFolder + games[game].getName() + "/thbgm.fmt");
 		File resultFile=null;
 		THfmt thfmt = new THfmt(fmtFile);
         thfmt.load();
 		MusicInfo muiscInfo=thfmt.musicInfos[musicNum];
-		int oneSecBytes=muiscInfo.bitsPerSample * muiscInfo.channels * muiscInfo.rate / 8;
-		byte[] music=new byte[needSeconeds * oneSecBytes];
-		readFile(music, getStartBytes(musicNum, thfmt, needSeconeds), "th10");
+		byte[] music=new byte[needSeconeds * muiscInfo.bitsPerSample * muiscInfo.channels * muiscInfo.rate / 8];
+		readFile(music, getStartBytes(musicNum, thfmt, needSeconeds), games[game].getName());
 		WavHeader wavHeader=new WavHeader();
-		byte[] header=wavHeader.getWavHeader(musicNum, thfmt, needSeconeds);
-		byte[] finalFile=new byte[music.length + header.length];
-		int flag=0;
-		for (;flag < header.length;++flag) {
-			finalFile[flag] = header[flag];
-		}
-		for (;flag < music.length;++flag) {
-			finalFile[flag] = music[flag];
-		}
+		byte[] finalFile=Methods.mergeArray(wavHeader.getWavHeader(musicNum, thfmt, needSeconeds), music);
 		final String newFileName="C://Users/Administrator/Desktop/酷Q Pro/data/record/" + System.currentTimeMillis() + ".wav";
 		try {
 			resultFile = new File(newFileName);
@@ -55,12 +49,20 @@ public class MusicManager {
 					new File(newFileName).delete();
 				}
 			});
-		resultMap.put(fromQQ, TH10GameData.musicName[musicNum]);
+			switch(games[game].getName()){
+				case "th10":
+					resultMap.put(fromQQ, TH10GameData.musicName[musicNum]);
+					break;
+				case "th15":
+					resultMap.put(fromQQ, TH15GameData.musicName[musicNum]);
+					break;
+			}
+		
 		return resultFile;
 	}
 
 	public void judgeAnswer(long fromGroup, long fromQQ, String msg) {
-		if(resultMap.get(fromQQ)==null){
+		if (resultMap.get(fromQQ) == null) {
 			return;
 		}
 		if (isContainChinese(msg)) {
@@ -69,15 +71,27 @@ public class MusicManager {
 			if (userAnswer.equals(answer)) {
 				Autoreply.sendMessage(fromGroup, fromQQ, "回答正确");
 			} else {
-				Autoreply.sendMessage(fromGroup, fromQQ, "回答错误,答案是:" + resultMap.get(fromQQ) + ",你也可以回答:" + resultMap.get(fromQQ).replaceAll("[^\u4e00-\u9fa5]", ""));
+				String orignal=resultMap.get(fromQQ);
+				String replaced=orignal.replaceAll("[^\u4e00-\u9fa5]", "");
+				if (orignal.equals(replaced)) {
+					Autoreply.sendMessage(fromGroup, fromQQ, "回答错误,答案是:" + resultMap.get(fromQQ));			
+				} else {
+					Autoreply.sendMessage(fromGroup, fromQQ, "回答错误,答案是:" + orignal + ",你也可以回答:" + replaced);
+				}
 			}		
 		} else {
 			String userAnswer=msg.replaceAll("[^a-zA-Z\\s]", "");
 			String answer=resultMap.get(fromQQ).replaceAll("[^a-zA-Z\\s]", "");
-			if (userAnswer.equals(answer)) {
+			if (userAnswer.equalsIgnoreCase(answer)) {
 				Autoreply.sendMessage(fromGroup, fromQQ, "回答正确");
 			} else {
-				Autoreply.sendMessage(fromGroup, fromQQ, "回答错误,答案是:" + resultMap.get(fromQQ) + ",你也可以回答:" + resultMap.get(fromQQ).replaceAll("[^\u4e00-\u9fa5]", ""));
+				String orignal=resultMap.get(fromQQ);
+				String replaced=orignal.replaceAll("[^\u4e00-\u9fa5]", "");
+				if (orignal.equalsIgnoreCase(replaced)) {
+					Autoreply.sendMessage(fromGroup, fromQQ, "回答错误,答案是:" + resultMap.get(fromQQ));			
+				} else {
+					Autoreply.sendMessage(fromGroup, fromQQ, "回答错误,答案是:" + orignal + ",你也可以回答:" + replaced);
+				}
 			}
 		}
 		resultMap.remove(fromQQ);
