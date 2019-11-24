@@ -4,7 +4,8 @@ public class TH17GameData {
 	public static final String gameName="东方";
 	public static final String gameNameCN="东方";
 	public static final String gameNameAbbr="touhou";
-	public static String[] players = new String[]{ };
+	public static String[] players = new String[]{"博丽灵梦", "雾雨魔理沙", "魂魄妖梦"};
+    public static String[] playerSub = new String[]{"[CQ:emoji,id=128059]哥", "[CQ:emoji,id=128037]哥", "[CQ:emoji,id=128054]哥"};
 	public static String[] charaName=new String[]{
 		"戎璎花",
 		"牛崎润美",

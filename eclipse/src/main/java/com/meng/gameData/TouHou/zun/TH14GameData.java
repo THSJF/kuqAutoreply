@@ -4,7 +4,8 @@ public class TH14GameData {
 	public static final String gameName="东方";
 	public static final String gameNameCN="东方";
 	public static final String gameNameAbbr="touhou";
-	public static String[] players = new String[]{ };
+	public static String[] players = new String[]{"博丽灵梦", "雾雨魔理沙", "十六夜咲夜"};
+    public static String[] playerSub = new String[]{"使用妖器", "不使用妖器"};
 	public static String[] charaName=new String[]{
 		"若鹭姬",
 		"赤蛮奇",

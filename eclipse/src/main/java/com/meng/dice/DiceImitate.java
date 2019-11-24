@@ -10,8 +10,6 @@ import com.meng.gameData.TouHou.zun.*;
 
 public class DiceImitate {
 	public static String[] spells;
-	public static String[] lastword;
-	public static String[] overdrive;
 	public static String[] neta;
 	public static String[] music;
 	public static String[] name;
@@ -21,18 +19,8 @@ public class DiceImitate {
     private static String[] pl03 = new String[]{"博丽灵梦", "魅魔", "雾雨魔理沙", "爱莲", "小兔姬", "卡娜·安娜贝拉尔", "朝仓理香子", "北白河千百合", "冈崎梦美"};
     private static String[] pl04 = new String[]{"博丽灵梦 诱导", "博丽灵梦 大范围", "雾雨魔理沙 激光", "雾雨魔理沙 高速射击"};
     private static String[] pl05 = new String[]{"博丽灵梦", "雾雨魔理沙", "魅魔", "幽香"};
-    private static String[] pl06 = new String[]{"博丽灵梦 灵符", "博丽灵梦 梦符", "雾雨魔理沙 魔符", "雾雨魔理沙 恋符"};
-    private static String[] pl07 = new String[]{"博丽灵梦 灵符", "博丽灵梦 梦符", "雾雨魔理沙 魔符", "雾雨魔理沙 恋符", "十六夜咲夜 幻符", "十六夜咲夜 时符"};
-    private static String[] pl08 = new String[]{"幻想的结界组", "咏唱禁咒组", "梦幻的红魔组", "幽冥之住人组", "博丽灵梦", "八云紫", "雾雨魔理沙", "爱丽丝·玛格特罗依德", "蕾米莉亚·斯卡蕾特", "十六夜咲夜", "西行寺幽幽子", "魂魄妖梦"};
     private static String[] pl09 = new String[]{"博丽灵梦", "雾雨魔理沙", "十六夜咲夜", "魂魄妖梦", "铃仙·优昙华院·因幡", "琪露诺", "莉莉卡·普莉兹姆利巴", "梅露兰·普莉兹姆利巴", "露娜萨·普莉兹姆利巴", "米斯蒂娅·萝蕾拉", "因幡帝", "射命丸文", "梅蒂欣·梅兰可莉", "风见幽香", "小野冢小町", "四季映姬·亚玛萨那度"};
-    private static String[] pl11 = new String[]{"博丽灵梦 八云紫", "博丽灵梦 伊吹萃香", "博丽灵梦 射命丸文", "雾雨魔理沙 爱丽丝·玛格特罗依德", "雾雨魔理沙 帕秋莉", "雾雨魔理沙 河城荷取"};
-    private static String[] pl12 = new String[]{"博丽灵梦 诱导型", "博丽灵梦 威力重视型", "雾雨魔理沙 贯通型", "雾雨魔理沙 范围重视型", "东风谷早苗 诱导型", "东风谷早苗 广范围炸裂型"};
-    private static String[] pl13 = new String[]{"博丽灵梦", "雾雨魔理沙", "东风谷早苗", "魂魄妖梦"};
-    private static String[] pl14 = new String[]{"博丽灵梦", "雾雨魔理沙", "十六夜咲夜"};
-    private static String[] pl14s = new String[]{"使用妖器", "不使用妖器"};
-    private static String[] pl17 = new String[]{"博丽灵梦", "雾雨魔理沙", "魂魄妖梦"};
-    private static String[] pl17s = new String[]{"[CQ:emoji,id=128059]哥", "[CQ:emoji,id=128037]哥", "[CQ:emoji,id=128054]哥"};
-	private static String[] plDiff = new String[]{"easy", "normal", "hard", "lunatic"};
+ 	private static String[] plDiff = new String[]{"easy", "normal", "hard", "lunatic"};
 
 	public static HashSet<String> cat=new HashSet<>();
 	public static HashSet<String> memory=new HashSet<>();
@@ -40,35 +28,6 @@ public class DiceImitate {
 
 
 	public DiceImitate() {
-		lastword = new String[]{
-			"「不合时令的蝶雨」",
-			"「失明的夜雀」",
-			"「日出之国的天子」",
-			"「远古的骗术」",
-			"「月的红眼」",
-			"「天网蛛网捕蝶之法」",
-			"「蓬莱的树海」",
-			"「不死鸟重生」",
-			"「似有似无的净化」",
-			"「梦想天生」",
-			"「彗星」",
-			"「收缩的世界」",
-			"「待宵反射卫星斩」",
-			"「猎奇剧团的怪人」",
-			"「绯红的宿命」",
-			"「西行寺无余涅槃」",
-			"「深弹幕结界 梦幻泡影」"
-		};
-		overdrive = new String[]{
-			"樱符「樱吹雪地狱」",
-			"山彦「山彦的发挥本领之回音」",
-			"毒爪「不死的杀人鬼」",
-			"道符「道胎动 ~道~」",
-			"怨灵「入鹿之雷」",
-			"圣童女「太阳神的贡品」",
-			"「神灵大宇宙」",
-			"「Wild Carpet」"
-		};
 		spells = new String[]{};
 		spells = Methods.mergeArray(spells, TH06GameData.spells);
 		spells = Methods.mergeArray(spells, TH07GameData.spells);
@@ -189,7 +148,7 @@ public class DiceImitate {
 									  "依神女苑"});
 		name = Methods.mergeArray(name, TH16GameData.charaName);
 		name = Methods.mergeArray(name, TH17GameData.charaName);
-		
+
 		addArrayToSet(memory, "想起「二重黑死蝶」", "想起「粼粼水底之心伤」");
 		addArrayToSet(pachouli, "火符「火神之光」", "土&金符「翡翠巨石」");
 		addArrayToSet(pachouli, "月符「静息的月神」", "火水木金土符「贤者之石」");
@@ -385,15 +344,15 @@ public class DiceImitate {
 				break;
 			case 6:
 				gameName = "红魔乡";
-				charaName = md5RanStr(fromQQ + 2, pl06);
+				charaName = md5RanStr(fromQQ + 2, TH06GameData.players);
 				break;
 			case 7:
 				gameName = "妖妖梦";
-				charaName = md5RanStr(fromQQ + 2, pl07);
+				charaName = md5RanStr(fromQQ + 2, TH07GameData.players);
 				break;
 			case 8:
 				gameName = "永夜抄";
-				charaName = md5RanStr(fromQQ + 2, pl08);
+				charaName = md5RanStr(fromQQ + 2, TH08GameData.players);
 				break;
 			case 9:
 				gameName = "花映冢";
@@ -405,23 +364,23 @@ public class DiceImitate {
 				break;
 			case 11:
 				gameName = "地灵殿";
-				charaName = md5RanStr(fromQQ + 2, pl11);
+				charaName = md5RanStr(fromQQ + 2, TH11GameData.players);
 				break;
 			case 12:
 				gameName = "星莲船";
-				charaName = md5RanStr(fromQQ + 2, pl12);
+				charaName = md5RanStr(fromQQ + 2, TH12GameData.players);
 				break;
 			case 13:
 				gameName = "神灵庙";
-				charaName = md5RanStr(fromQQ + 2, pl13);
+				charaName = md5RanStr(fromQQ + 2, TH13GameData.players);
 				break;
 			case 14:
 				gameName = "辉针城";
-				charaName = md5RanStr(fromQQ + 2, pl14);
+				charaName = md5RanStr(fromQQ + 2, TH14GameData.players);
 				if (goodAt) {
-					return String.format("%s今天宜用%s-%s打%s", pname, charaName, md5RanStr(fromQQ + 1, pl14s), gameName);
+					return String.format("%s今天宜用%s-%s打%s", pname, charaName, md5RanStr(fromQQ + 1, TH14GameData.playerSub), gameName);
 				} else {
-					return String.format("忌用%s-%s打%s", charaName, md5RanStr(fromQQ + 1, pl14s), gameName);
+					return String.format("忌用%s-%s打%s", charaName, md5RanStr(fromQQ + 1, TH14GameData.playerSub), gameName);
 				}
 			case 15:
 				gameName = "绀珠传";
@@ -437,11 +396,11 @@ public class DiceImitate {
 				}
 			case 17:
 				gameName = "鬼形兽";
-				charaName = md5RanStr(fromQQ + 2, pl17);
+				charaName = md5RanStr(fromQQ + 2, TH17GameData.players);
 				if (goodAt) {
-					return String.format("%s今天宜用%s-%s打%s", pname, charaName, md5RanStr(fromQQ + 1, pl17s), gameName);
+					return String.format("%s今天宜用%s-%s打%s", pname, charaName, md5RanStr(fromQQ + 1, TH17GameData.playerSub), gameName);
 				} else {
-					return String.format("忌用%s-%s打%s", charaName, md5RanStr(fromQQ + 1, pl17s), gameName);
+					return String.format("忌用%s-%s打%s", charaName, md5RanStr(fromQQ + 1, TH17GameData.playerSub), gameName);
 				}
 			default:
 				return "";
@@ -484,19 +443,19 @@ public class DiceImitate {
             case "th6":
             case "th06":
             case "tEoSD":
-                Autoreply.sendMessage(fromGroup, 0, (String) Methods.rfa(pl06));
+                Autoreply.sendMessage(fromGroup, 0, (String) Methods.rfa(TH06GameData.players));
                 break;
             case "东方妖妖梦":
             case "th7":
             case "th07":
             case "PCB":
-                Autoreply.sendMessage(fromGroup, 0, (String) Methods.rfa(pl07));
+                Autoreply.sendMessage(fromGroup, 0, (String) Methods.rfa(TH07GameData.players));
                 break;
             case "东方永夜抄":
             case "th8":
             case "th08":
             case "IN":
-                Autoreply.sendMessage(fromGroup, 0, (String) Methods.rfa(pl08));
+                Autoreply.sendMessage(fromGroup, 0, (String) Methods.rfa(TH08GameData.players));
                 break;
             case "东方花映冢":
             case "th9":
@@ -511,22 +470,22 @@ public class DiceImitate {
                 break;
             case "东方地灵殿":
             case "th11":
-                Autoreply.sendMessage(fromGroup, 0, (String) Methods.rfa(pl11));
+                Autoreply.sendMessage(fromGroup, 0, (String) Methods.rfa(TH11GameData.players));
                 break;
             case "东方星莲船":
             case "th12":
             case "UFO":
-                Autoreply.sendMessage(fromGroup, 0, (String) Methods.rfa(pl12));
+                Autoreply.sendMessage(fromGroup, 0, (String) Methods.rfa(TH12GameData.players));
                 break;
             case "东方神灵庙":
             case "th13":
             case "TD":
-                Autoreply.sendMessage(fromGroup, 0, (String) Methods.rfa(pl13));
+                Autoreply.sendMessage(fromGroup, 0, (String) Methods.rfa(TH13GameData.players));
                 break;
             case "东方辉针城":
             case "th14":
             case "DDC":
-                Autoreply.sendMessage(fromGroup, 0, Methods.rfa(pl14) + " " + Methods.rfa(pl14s));
+                Autoreply.sendMessage(fromGroup, 0, Methods.rfa(TH14GameData.players) + " " + Methods.rfa(TH14GameData.playerSub));
                 break;
             case "东方绀珠传":
             case "th15":
@@ -541,7 +500,7 @@ public class DiceImitate {
             case "东方鬼形兽":
             case "th17":
             case "WBaWC":
-                Autoreply.sendMessage(fromGroup, 0, Methods.rfa(pl17) + "+" + Methods.rfa(pl17s));
+                Autoreply.sendMessage(fromGroup, 0, Methods.rfa(TH17GameData.players) + "+" + Methods.rfa(TH17GameData.playerSub));
                 break;
 
             case "东方文花帖":

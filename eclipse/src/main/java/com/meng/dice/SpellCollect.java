@@ -160,9 +160,9 @@ public class SpellCollect {
 			for (int i=0;i < coins * 3;++i) {
 				String s;
 				if (r.nextInt(150) == 20) {
-					s = DiceImitate.lastword[r.nextInt(DiceImitate.lastword.length)];
+					s = TH08GameData.lastword[r.nextInt(TH08GameData.lastword.length)];
 				} else if (r.nextInt(300) == 25) {
-					s = DiceImitate.overdrive[r.nextInt(DiceImitate.overdrive.length)];
+					s = TH13GameData.overdrive[r.nextInt(TH13GameData.overdrive.length)];
 				} else {
 					s = DiceImitate.spells[r.nextInt(DiceImitate.spells.length)];
 				}
@@ -198,9 +198,9 @@ public class SpellCollect {
 				for (int i=0;i < useCoins * 3;++i) {
 					String s;
 					if (r.nextInt(150) == 20) {
-						s = DiceImitate.lastword[r.nextInt(DiceImitate.lastword.length)];
+						s = TH08GameData.lastword[r.nextInt(TH08GameData.lastword.length)];
 					} else if (r.nextInt(300) == 25) {
-						s = DiceImitate.overdrive[r.nextInt(DiceImitate.overdrive.length)];
+						s = TH13GameData.overdrive[r.nextInt(TH13GameData.overdrive.length)];
 					} else  {
 						s = DiceImitate.spells[r.nextInt(DiceImitate.spells.length)];
 					}
@@ -250,9 +250,9 @@ public class SpellCollect {
 			for (int i=0;i < 5;++i) {
 				String s;
 				if (r.nextInt(150) == 20) {
-					s = DiceImitate.lastword[r.nextInt(DiceImitate.lastword.length)];
+					s = TH08GameData.lastword[r.nextInt(TH08GameData.lastword.length)];
 				} else if (r.nextInt(300) == 25) {
-					s = DiceImitate.overdrive[r.nextInt(DiceImitate.overdrive.length)];
+					s = TH13GameData.overdrive[r.nextInt(TH13GameData.overdrive.length)];
 				} else {	
 					s = DiceImitate.spells[r.nextInt(DiceImitate.spells.length)];
 				}
@@ -314,7 +314,7 @@ public class SpellCollect {
 			sb.setLength(0);
 			sb.append("lastword:");
 			boolean hasLastword=false;
-			for (String s:DiceImitate.lastword) {
+			for (String s:TH08GameData.lastword) {
 				if (gotSpells.contains(s)) {
 					sb.append("\n").append(s);
 					hasLastword = true;
@@ -326,7 +326,7 @@ public class SpellCollect {
 			sb.setLength(0);
 			boolean hasOverdrive=false;
 			sb.append("overdrive:");
-			for (String s:DiceImitate.overdrive) {
+			for (String s:TH13GameData.overdrive) {
 				if (gotSpells.contains(s)) {
 					sb.append("\n").append(s);
 					hasOverdrive = true;

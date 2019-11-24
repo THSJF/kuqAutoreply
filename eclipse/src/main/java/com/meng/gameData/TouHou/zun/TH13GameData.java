@@ -37,6 +37,16 @@ public class TH13GameData {
 		"11111",
 		"Player's Score"	
 	};
+	public static String[] overdrive = new String[]{
+		"樱符「樱吹雪地狱」",
+		"山彦「山彦的发挥本领之回音」",
+		"毒爪「不死的杀人鬼」",
+		"道符「道胎动 ~道~」",
+		"怨灵「入鹿之雷」",
+		"圣童女「太阳神的贡品」",
+		"「神灵大宇宙」",
+		"「Wild Carpet」"
+	};
 	public static String[] spells=new String[]{
 		"符牒「死蝶之舞」",
 		"符牒「死蝶之舞 -樱花-」",

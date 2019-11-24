@@ -4,7 +4,7 @@ public class TH12GameData {
 	public static final String gameName="东方";
 	public static final String gameNameCN="东方";
 	public static final String gameNameAbbr="touhou";
-	public static String[] players = new String[]{ };
+	public static String[] players = new String[]{"博丽灵梦 诱导型", "博丽灵梦 威力重视型", "雾雨魔理沙 贯通型", "雾雨魔理沙 范围重视型", "东风谷早苗 诱导型", "东风谷早苗 广范围炸裂型"};
 	public static String[] charaName=new String[]{
 		"纳兹琳",
 		"多多良小伞",

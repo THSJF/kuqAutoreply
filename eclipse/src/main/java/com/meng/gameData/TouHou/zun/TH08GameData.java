@@ -4,7 +4,7 @@ public class TH08GameData {
 	public static final String gameName="东方";
 	public static final String gameNameCN="东方";
 	public static final String gameNameAbbr="touhou";
-	public static String[] players = new String[]{ };
+	public static String[] players = new String[]{"幻想的结界组", "咏唱禁咒组", "梦幻的红魔组", "幽冥之住人组", "博丽灵梦", "八云紫", "雾雨魔理沙", "爱丽丝·玛格特罗依德", "蕾米莉亚·斯卡蕾特", "十六夜咲夜", "西行寺幽幽子", "魂魄妖梦"};
 	public static String[] charaName=new String[]{
 		"莉格露",
 		"米斯蒂娅·萝蕾拉",
@@ -36,6 +36,25 @@ public class TH08GameData {
 		"11111",
 		"11111",
 		"Player's Score"	
+	};
+	public static String[] lastword=new String[]{
+		"「不合时令的蝶雨」",
+		"「失明的夜雀」",
+		"「日出之国的天子」",
+		"「远古的骗术」",
+		"「月的红眼」",
+		"「天网蛛网捕蝶之法」",
+		"「蓬莱的树海」",
+		"「不死鸟重生」",
+		"「似有似无的净化」",
+		"「梦想天生」",
+		"「彗星」",
+		"「收缩的世界」",
+		"「待宵反射卫星斩」",
+		"「猎奇剧团的怪人」",
+		"「绯红的宿命」",
+		"「西行寺无余涅槃」",
+		"「深弹幕结界 梦幻泡影」"
 	};
 	public static String[] spells=new String[]{
 		"萤符「地上的流星」",
