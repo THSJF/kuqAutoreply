@@ -404,6 +404,21 @@ public class Methods {
 		return finalArray;
 	}
 
+	public static String[] mergeArray(String[]... arrays) {
+		int allLen=0;
+		for (String[] bs:arrays) {
+			allLen += bs.length;
+		}
+		String[] finalArray=new String[allLen];
+		int flag=0;
+		for (String[] byteArray:arrays) {
+			for (int i=0;i < byteArray.length;++flag,++i) {
+				finalArray[flag] = byteArray[i];
+			}
+		}
+		return finalArray;
+	}
+
 	/*  public static String getG_tk(String skey) {
 	 int hash = 5381;
 	 int flag = skey.length();
