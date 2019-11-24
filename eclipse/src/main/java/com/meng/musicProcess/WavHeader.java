@@ -50,4 +50,9 @@ public class WavHeader {
 		bs[1] = (byte) ((s >> 8) & 0xff);
 		write(bs);
 	}
+
+	private void write(char c) {
+		header[writePointer++] = (byte) c;
+	}
+	
 }
