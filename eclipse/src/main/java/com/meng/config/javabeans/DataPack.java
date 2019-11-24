@@ -120,8 +120,11 @@ public class DataPack {
 	public static final short _37setGroupName=37;
 	//小律影→正邪  设置群头衔  n1:群号 n2:目标qq号 n3:有效时间，单位为秒，无限期写-1 s1:头衔内容
 	public static final short _38setSpecialTitle=38;
-
-
+	/*
+	//小律影→正邪  获得原曲认知问题 n1:需要的秒数
+	public static final short _39getMusicQueation=39;
+	//正邪→小律影 
+*/
 	/*******    希望小律影提供的    *******/
 	//小律影→正邪  加群审核 n1:加群申请id n2:群号 n3:qq号
 	public static final short _35groupAdd=35;
