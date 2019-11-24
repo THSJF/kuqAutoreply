@@ -1,13 +1,9 @@
 package com.meng.bilibili;
 
-import com.google.gson.Gson;
-import com.google.gson.JsonObject;
-import com.google.gson.JsonParser;
-import com.meng.Autoreply;
-import com.meng.bilibili.main.ArticleInfoBean;
-import com.meng.bilibili.main.VideoInfoBean;
-import com.meng.config.Base64;
-import com.meng.tools.Methods;
+import com.google.gson.*;
+import com.meng.*;
+import com.meng.bilibili.main.*;
+import com.meng.tools.*;
 
 public class BiliLinkInfo {
 
@@ -32,7 +28,7 @@ public class BiliLinkInfo {
         if (msg.startsWith("FromUriOpen@bilibili://")) {
             String subedString = null;
             try {
-                subedString = new String(Base64.decryptBASE64(msg.substring(23)));
+                subedString = new String(Methods.decryptBASE64(msg.substring(23)));
             } catch (Exception e) {
                 e.printStackTrace();
             }
@@ -58,7 +54,7 @@ public class BiliLinkInfo {
         if (msg.startsWith("FromUriOpen@bilibili://")) {
             String subedString = null;
             try {
-                subedString = new String(Base64.decryptBASE64(msg.substring(23)));
+                subedString = new String(Methods.decryptBASE64(msg.substring(23)));
             } catch (Exception e) {
                 e.printStackTrace();
             }
@@ -176,7 +172,7 @@ public class BiliLinkInfo {
 
     public static String encodeBilibiliURL(long id, boolean av) {
         try {
-            return "FromUriOpen@bilibili://" + Base64.encryptBASE64(((av ? "av:" : "cv") + id).getBytes());
+            return "FromUriOpen@bilibili://" + Methods.encryptBASE64(((av ? "av:" : "cv") + id).getBytes());
         } catch (Exception e) {
             e.printStackTrace();
         }

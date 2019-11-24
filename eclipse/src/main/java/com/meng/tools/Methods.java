@@ -1,29 +1,16 @@
 package com.meng.tools;
 
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.UnsupportedEncodingException;
-import java.net.URL;
-import java.net.URLConnection;
-import java.nio.charset.StandardCharsets;
+import Decoder.*;
+import com.meng.*;
+import com.meng.diaoXiongJiHua.*;
+import com.meng.lookGroup.*;
+import com.meng.picEdit.*;
+import com.sobte.cqp.jcq.entity.*;
+import java.io.*;
+import java.net.*;
+import java.nio.charset.*;
 import java.util.*;
-
-import com.meng.Autoreply;
-import com.meng.config.javabeans.PersonInfo;
-import com.meng.picEdit.JingShenZhiZhuQQManager;
-import com.meng.picEdit.ShenChuQQManager;
-import com.sobte.cqp.jcq.entity.Group;
-import com.sobte.cqp.jcq.entity.Member;
-import org.jsoup.Connection;
-import org.jsoup.Jsoup;
-
-import com.meng.bilibili.live.LiveListener;
-import com.meng.lookGroup.IPGetter;
-
-import com.meng.diaoXiongJiHua.XiongIPGetter;
+import org.jsoup.*;
 
 public class Methods {
 
@@ -417,6 +404,14 @@ public class Methods {
 			}
 		}
 		return finalArray;
+	}
+	
+	public static byte[] decryptBASE64(String key) throws Exception {
+		return (new BASE64Decoder()).decodeBuffer(key);
+	}
+
+	public static String encryptBASE64(byte[] key) throws Exception {
+		return (new BASE64Encoder()).encodeBuffer(key);
 	}
 
 	/*  public static String getG_tk(String skey) {
