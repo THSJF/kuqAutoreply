@@ -6,7 +6,16 @@ public class TH08GameData {
 	public static final String gameNameAbbr="touhou";
 	public static String[] players = new String[]{ };
 	public static String[] charaName=new String[]{
-
+		"莉格露",
+		"米斯蒂娅·萝蕾拉",
+		"上白泽慧音",
+		"博丽灵梦",
+		"雾雨魔理沙",
+		"因幡帝",
+		"铃仙·优昙华院·因幡",
+		"八意永琳",
+		"蓬莱山辉夜",
+		"藤原妹红"
 	};
 	public static String[] musicName=new String[]{
 		"11111",

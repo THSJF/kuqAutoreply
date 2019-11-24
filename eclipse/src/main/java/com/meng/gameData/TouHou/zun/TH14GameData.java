@@ -6,7 +6,14 @@ public class TH14GameData {
 	public static final String gameNameAbbr="touhou";
 	public static String[] players = new String[]{ };
 	public static String[] charaName=new String[]{
-		
+		"若鹭姬",
+		"赤蛮奇",
+		"今泉影狼",
+		"九十九八桥",
+		"九十九弁弁",
+		"鬼人正邪",
+		"少名针妙丸",
+		"堀川雷鼓"
 	};
 	public static String[] musicName=new String[]{
 		"11111",

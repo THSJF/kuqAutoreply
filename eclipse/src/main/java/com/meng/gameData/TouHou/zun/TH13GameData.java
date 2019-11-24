@@ -8,11 +8,13 @@ public class TH13GameData {
 	public static String[] charaName=new String[]{
 		"西行寺幽幽子",
 		"幽谷响子",
+		"多多良小伞",
 		"宫古芳香",
 		"霍青娥",
 		"苏我屠自古",
 		"物部布都",
 		"丰聪耳神子",
+		"封兽鵺",
 		"二岩瑞藏",
 	};
 	public static String[] musicName=new String[]{

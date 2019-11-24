@@ -34,15 +34,6 @@ public class DiceImitate {
     private static String[] pl17s = new String[]{"[CQ:emoji,id=128059]哥", "[CQ:emoji,id=128037]哥", "[CQ:emoji,id=128054]哥"};
 	private static String[] plDiff = new String[]{"easy", "normal", "hard", "lunatic"};
 
-	public static HashSet<String> sp6=new HashSet<>();
-	public static HashSet<String> sp7=new HashSet<>();
-	public static HashSet<String> sp8=new HashSet<>();
-	public static HashSet<String> sp11=new HashSet<>();
-	public static HashSet<String> sp12=new HashSet<>();
-	public static HashSet<String> sp13=new HashSet<>();
-	public static HashSet<String> sp14=new HashSet<>();
-	public static HashSet<String> sp17=new HashSet<>();
-
 	public static HashSet<String> cat=new HashSet<>();
 	public static HashSet<String> memory=new HashSet<>();
 	public static HashSet<String> pachouli=new HashSet<>();
@@ -165,89 +156,30 @@ public class DiceImitate {
 			"雪",
 			"舞",
 			"梦子",
-			"神绮",
-			//th6
-			"露米娅",
-			"大妖精",
-			"琪露诺",
-			"红美铃",
-			"帕秋莉·诺蕾姬",
-			"十六夜咲夜",
-			"蕾米莉亚·斯卡雷特",
-			"芙兰朵露·斯卡雷特",
-			//th7
-			"蕾蒂",
-			"橙",
-			"爱丽丝·玛格特罗依德",
-			"莉莉白",
-			"莉莉卡·普莉兹姆利巴", 
-			"梅露兰·普莉兹姆利巴",
-			"露娜萨·普莉兹姆利巴",
-			"魂魄妖梦",
-			"西行寺幽幽子",
-			"八云蓝",
-			"八云紫",
-			//th7.5
-			"伊吹萃香",
-			//th8
-			"莉格露",
-			"米斯蒂娅·萝蕾拉",
-			"上白泽慧音",
-			"博丽灵梦",
-			"雾雨魔理沙",
-			"因幡帝",
-			"铃仙·优昙华院·因幡",
-			"八意永琳",
-			"蓬莱山辉夜",
-			"藤原妹红",
-			//th9
-			"梅蒂欣·梅兰可莉",
-			"风见幽香",
-			"小野冢小町",
-			"四季映姬"};
-		name = Methods.mergeArray(name, TH10GameData.charaName);
+			"神绮"};
+		name = Methods.mergeArray(name, TH06GameData.charaName);
+		name = Methods.mergeArray(name, TH07GameData.charaName);
+		name = Methods.mergeArray(name, TH08GameData.charaName);
 		name = Methods.mergeArray(name, new String[]{
-									  //th11
-									  "琪斯美",
-									  "黑谷山女",
-									  "水桥帕露西",
-									  "星熊勇仪",
-									  "古明地觉",
-									  "火焰猫燐",
-									  "灵乌路空",
-									  "古明地恋",
-									  //th12
-									  "纳兹琳",
-									  "多多良小伞",
-									  "云居一轮",
-									  "村纱水蜜",
-									  "寅丸星",
-									  "圣白莲",
-									  "封兽鵺",
+									  //th9
+									  "梅蒂欣·梅兰可莉",
+									  "风见幽香",
+									  "小野冢小町",
+									  "四季映姬"});
+		name = Methods.mergeArray(name, TH10GameData.charaName);
+		name = Methods.mergeArray(name, TH11GameData.charaName);
+		name = Methods.mergeArray(name, TH12GameData.charaName);
+		name = Methods.mergeArray(name, new String[]{
 									  //th12.8
 									  "桑尼·米尔克",
 									  "露娜·切露德",
-									  "斯塔·萨菲雅",
-									  //th13
-									  "鬼火",
-									  "幽谷响子",
-									  "宫古芳香",
-									  "霍青娥",
-									  "苏我屠自古",
-									  "物部布都",
-									  "丰聪耳神子",
-									  "二岩瑞藏",
+									  "斯塔·萨菲雅"});
+		name = Methods.mergeArray(name, TH13GameData.charaName);
+		name = Methods.mergeArray(name, new String[]{
 									  //th13.5
-									  "秦心",
-									  //th14
-									  "若鹭姬",
-									  "赤蛮奇",
-									  "今泉影狼",
-									  "九十九八桥",
-									  "九十九弁弁",
-									  "鬼人正邪",
-									  "少名针妙丸",
-									  "堀川雷鼓",
+									  "秦心"});
+		name = Methods.mergeArray(name, TH14GameData.charaName);
+		name = Methods.mergeArray(name, new String[]{
 									  //th14.5
 									  "宇佐见堇子"});
 		name = Methods.mergeArray(name, TH15GameData.charaName);
@@ -256,23 +188,8 @@ public class DiceImitate {
 									  "依神紫苑",
 									  "依神女苑"});
 		name = Methods.mergeArray(name, TH16GameData.charaName);
-		name = Methods.mergeArray(name, new String[]{
-									  //th17
-									  "戎璎花",
-									  "牛崎润美",
-									  "庭渡久侘歌",
-									  "吉吊八千慧",
-									  "杖刀偶磨弓",
-									  "埴安神袿姬",
-									  "骊驹早鬼"});
-		addArrayToSet(sp6, "月符「月光」", "QED「495年的波纹」");
-		addArrayToSet(sp7, "冰符「冰袭方阵」", "紫奥义「弹幕结界」");
-		addArrayToSet(sp8, "萤符「地上的流星」", "「蓬莱人形」");
-		addArrayToSet(sp11, "怪奇「钓瓶落之怪」", "「Subterranean Rose」");
-		addArrayToSet(sp12, "棒符「忙碌探知棒」", "恨弓「源三位赖政之弓」");
-		addArrayToSet(sp13, "符牒「死蝶之舞」", "貉符「满月下的腹鼓舞」");
-		addArrayToSet(sp14, "冰符「Ultimate Blizzard」", "「Pristine beat」");
-		addArrayToSet(sp17, "石符「石林」", "「鬼畜生的所业」");
+		name = Methods.mergeArray(name, TH17GameData.charaName);
+		
 		addArrayToSet(memory, "想起「二重黑死蝶」", "想起「粼粼水底之心伤」");
 		addArrayToSet(pachouli, "火符「火神之光」", "土&金符「翡翠巨石」");
 		addArrayToSet(pachouli, "月符「静息的月神」", "火水木金土符「贤者之石」");
