@@ -4,7 +4,7 @@ public class TH15GameData {
 	public static final String gameName="东方绀珠传 ~ Legacy of Lunatic Kingdom.";
 	public static final String gameNameCN="东方绀珠传";
 	public static final String gameNameAbbr="LoLK";
-	public static String[] pl15 = new String[]{"博丽灵梦", "雾雨魔理沙", "东风谷早苗", "铃仙·优昙华院·因幡"};
+	public static String[] players = new String[]{"博丽灵梦", "雾雨魔理沙", "东风谷早苗", "铃仙·优昙华院·因幡"};
 	public static String[] musicName=new String[]{
 		"宇宙巫女现身",
 		"忘不了,那曾依藉的绿意",

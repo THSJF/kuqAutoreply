@@ -5,7 +5,7 @@ public class TH10GameData
 	public static final String gameName="东方风神录 ~ Mountain of Faith.";
 	public static final String gameNameCN="东方风神录";
 	public static final String gameNameAbbr="MoF";
-	public static String[] pl10 = new String[]{"博丽灵梦 诱导装备", "博丽灵梦 前方集中装备", "博丽灵梦 封印装备", "雾雨魔理沙 高威力装备", "雾雨魔理沙 贯通装备", "雾雨魔理沙 魔法使装备"};
+	public static String[] players = new String[]{"博丽灵梦 诱导装备", "博丽灵梦 前方集中装备", "博丽灵梦 封印装备", "雾雨魔理沙 高威力装备", "雾雨魔理沙 贯通装备", "雾雨魔理沙 魔法使装备"};
 	public static String[] musicName=new String[]{
 		"被封印的众神",
 		"眷爱众生之神 ~ Romantic Fall",

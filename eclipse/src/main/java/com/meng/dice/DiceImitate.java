@@ -6,6 +6,7 @@ import java.util.*;
 import com.meng.Autoreply;
 import com.meng.config.javabeans.*;
 import com.meng.tools.*;
+import com.meng.gameData.TouHou.zun.*;
 
 public class DiceImitate {
 	public static String[] spells;
@@ -24,15 +25,11 @@ public class DiceImitate {
     private static String[] pl07 = new String[]{"博丽灵梦 灵符", "博丽灵梦 梦符", "雾雨魔理沙 魔符", "雾雨魔理沙 恋符", "十六夜咲夜 幻符", "十六夜咲夜 时符"};
     private static String[] pl08 = new String[]{"幻想的结界组", "咏唱禁咒组", "梦幻的红魔组", "幽冥之住人组", "博丽灵梦", "八云紫", "雾雨魔理沙", "爱丽丝·玛格特罗依德", "蕾米莉亚·斯卡蕾特", "十六夜咲夜", "西行寺幽幽子", "魂魄妖梦"};
     private static String[] pl09 = new String[]{"博丽灵梦", "雾雨魔理沙", "十六夜咲夜", "魂魄妖梦", "铃仙·优昙华院·因幡", "琪露诺", "莉莉卡·普莉兹姆利巴", "梅露兰·普莉兹姆利巴", "露娜萨·普莉兹姆利巴", "米斯蒂娅·萝蕾拉", "因幡帝", "射命丸文", "梅蒂欣·梅兰可莉", "风见幽香", "小野冢小町", "四季映姬·亚玛萨那度"};
-    private static String[] pl10 = new String[]{"博丽灵梦 诱导装备", "博丽灵梦 前方集中装备", "博丽灵梦 封印装备", "雾雨魔理沙 高威力装备", "雾雨魔理沙 贯通装备", "雾雨魔理沙 魔法使装备"};
     private static String[] pl11 = new String[]{"博丽灵梦 八云紫", "博丽灵梦 伊吹萃香", "博丽灵梦 射命丸文", "雾雨魔理沙 爱丽丝·玛格特罗依德", "雾雨魔理沙 帕秋莉", "雾雨魔理沙 河城荷取"};
     private static String[] pl12 = new String[]{"博丽灵梦 诱导型", "博丽灵梦 威力重视型", "雾雨魔理沙 贯通型", "雾雨魔理沙 范围重视型", "东风谷早苗 诱导型", "东风谷早苗 广范围炸裂型"};
     private static String[] pl13 = new String[]{"博丽灵梦", "雾雨魔理沙", "东风谷早苗", "魂魄妖梦"};
     private static String[] pl14 = new String[]{"博丽灵梦", "雾雨魔理沙", "十六夜咲夜"};
     private static String[] pl14s = new String[]{"使用妖器", "不使用妖器"};
-    private static String[] pl15 = new String[]{"博丽灵梦", "雾雨魔理沙", "东风谷早苗", "铃仙·优昙华院·因幡"};
-    private static String[] pl16 = new String[]{"博丽灵梦", "琪露诺", "射命丸文", "雾雨魔理沙"};
-    private static String[] pl16s = new String[]{"春", "夏", "秋", "冬"};
     private static String[] pl17 = new String[]{"博丽灵梦", "雾雨魔理沙", "魂魄妖梦"};
     private static String[] pl17s = new String[]{"[CQ:emoji,id=128059]哥", "[CQ:emoji,id=128037]哥", "[CQ:emoji,id=128054]哥"};
 	private static String[] plDiff = new String[]{"easy", "normal", "hard", "lunatic"};
@@ -40,13 +37,10 @@ public class DiceImitate {
 	public static HashSet<String> sp6=new HashSet<>();
 	public static HashSet<String> sp7=new HashSet<>();
 	public static HashSet<String> sp8=new HashSet<>();
-	public static HashSet<String> sp10=new HashSet<>();
 	public static HashSet<String> sp11=new HashSet<>();
 	public static HashSet<String> sp12=new HashSet<>();
 	public static HashSet<String> sp13=new HashSet<>();
 	public static HashSet<String> sp14=new HashSet<>();
-	public static HashSet<String> sp15=new HashSet<>();
-	public static HashSet<String> sp16=new HashSet<>();
 	public static HashSet<String> sp17=new HashSet<>();
 
 	public static HashSet<String> cat=new HashSet<>();
@@ -1169,13 +1163,10 @@ public class DiceImitate {
 		addArrayToSet(sp6, "月符「月光」", "QED「495年的波纹」");
 		addArrayToSet(sp7, "冰符「冰袭方阵」", "紫奥义「弹幕结界」");
 		addArrayToSet(sp8, "萤符「地上的流星」", "「蓬莱人形」");
-		addArrayToSet(sp10, "叶符「狂舞的落叶」", "祟符「洩矢大人」");
 		addArrayToSet(sp11, "怪奇「钓瓶落之怪」", "「Subterranean Rose」");
 		addArrayToSet(sp12, "棒符「忙碌探知棒」", "恨弓「源三位赖政之弓」");
 		addArrayToSet(sp13, "符牒「死蝶之舞」", "貉符「满月下的腹鼓舞」");
 		addArrayToSet(sp14, "冰符「Ultimate Blizzard」", "「Pristine beat」");
-		addArrayToSet(sp15, "凶弹「高速撞击」", "「最初与最后的无名弹幕」");
-		addArrayToSet(sp16, "蝶符「细碎鳞粉」", "「无秩序弹幕地狱」");
 		addArrayToSet(sp17, "石符「石林」", "「鬼畜生的所业」");
 		addArrayToSet(memory, "想起「二重黑死蝶」", "想起「粼粼水底之心伤」");
 		addArrayToSet(pachouli, "火符「火神之光」", "土&金符「翡翠巨石」");
@@ -1388,7 +1379,7 @@ public class DiceImitate {
 				break;
 			case 10:
 				gameName = "风神录";
-				charaName = md5RanStr(fromQQ + 2, pl10);
+				charaName = md5RanStr(fromQQ + 2, TH10GameData.players);
 				break;
 			case 11:
 				gameName = "地灵殿";
@@ -1412,15 +1403,15 @@ public class DiceImitate {
 				}
 			case 15:
 				gameName = "绀珠传";
-				charaName = md5RanStr(fromQQ + 2, pl15);
+				charaName = md5RanStr(fromQQ + 2, TH15GameData.players);
 				break;
 			case 16:
 				gameName = "天空璋";
-				charaName = md5RanStr(fromQQ + 2, pl16);
+				charaName = md5RanStr(fromQQ + 2, TH16GameData.players);
 				if (goodAt) {
-					return String.format("%s今天宜用%s-%s打%s", pname, charaName, md5RanStr(fromQQ + 1, pl16s), gameName);
+					return String.format("%s今天宜用%s-%s打%s", pname, charaName, md5RanStr(fromQQ + 1, TH16GameData.playerSub), gameName);
 				} else {
-					return String.format("忌用%s-%s打%s", charaName, md5RanStr(fromQQ + 1, pl16s), gameName);
+					return String.format("忌用%s-%s打%s", charaName, md5RanStr(fromQQ + 1, TH16GameData.playerSub), gameName);
 				}
 			case 17:
 				gameName = "鬼形兽";
@@ -1494,7 +1485,7 @@ public class DiceImitate {
             case "东方风神录":
             case "th10":
             case "MoF":
-                Autoreply.sendMessage(fromGroup, 0, (String) Methods.rfa(pl10));
+                Autoreply.sendMessage(fromGroup, 0, (String) Methods.rfa(TH10GameData.players));
                 break;
             case "东方地灵殿":
             case "th11":
@@ -1518,12 +1509,12 @@ public class DiceImitate {
             case "东方绀珠传":
             case "th15":
             case "LoLK":
-                Autoreply.sendMessage(fromGroup, 0, (String) Methods.rfa(pl15));
+                Autoreply.sendMessage(fromGroup, 0, (String) Methods.rfa(TH15GameData.players));
                 break;
             case "东方天空璋":
             case "th16":
             case "HSiFS":
-                Autoreply.sendMessage(fromGroup, 0, Methods.rfa(pl16) + " " + Methods.rfa(pl16s));
+                Autoreply.sendMessage(fromGroup, 0, Methods.rfa(TH16GameData.players) + " " + Methods.rfa(TH16GameData.playerSub));
                 break;
             case "东方鬼形兽":
             case "th17":

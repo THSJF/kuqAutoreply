@@ -4,8 +4,9 @@ public class TH16GameData {
 	public static final String gameName="东方天空璋 ~ Hidden Star in Four Seasons.";
 	public static final String gameNameCN="东方天空璋";
 	public static final String gameNameAbbr="HSiFS";
-	public static String[] pl16 = new String[]{"博丽灵梦", "琪露诺", "射命丸文", "雾雨魔理沙"};
-    public static String[] musicName=new String[]{
+	public static String[] players = new String[]{"博丽灵梦", "琪露诺", "射命丸文", "雾雨魔理沙"};
+    public static String[] playerSub = new String[]{"春", "夏", "秋", "冬"};
+	public static String[] musicName=new String[]{
 		"樱花舞落的天空",
 		"希望之星直升青霄",
 		"仲夏的妖精梦",
