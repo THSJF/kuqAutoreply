@@ -1,9 +1,9 @@
 package com.meng.gameData.TouHou.zun;
 
 public class TH13GameData {
-	public static final String gameName="东方天空璋 ~ Hidden Star in Four Seasons.";
-	public static final String gameNameCN="东方天空璋";
-	public static final String gameNameAbbr="HSiFS";
+	public static final String gameName="东方";
+	public static final String gameNameCN="东方";
+	public static final String gameNameAbbr="touhou";
 	public static String[] players = new String[]{"博丽灵梦", "雾雨魔理沙", "东风谷早苗", "魂魄妖梦"};
 	public static String[] charaName=new String[]{
 		"西行寺幽幽子",
@@ -18,23 +18,23 @@ public class TH13GameData {
 		"二岩瑞藏",
 	};
 	public static String[] musicName=new String[]{
-		"11111",
-		"11111",
-		"11111",
-		"11111",
-		"11111",
-		"11111",
-		"11111",
-		"11111",
-		"11111",
-		"11111",
-		"11111",
-		"11111",
-		"11111",
-		"11111",
-		"11111",
-		"11111",
-		"11111",
+		"欲望深重的灵魂",
+		"死灵的夜樱",
+		"Ghost Lead",
+		"欢迎来到妖怪寺",
+		"门前的妖怪小姑娘",
+		"在美妙的墓地里住下吧",
+		"Rigid Paradise",
+		"Desire Drive",
+		"古老的元神",
+		"梦殿大祀庙",
+		"大神神话传",
+		"小小欲望的星空",
+		"圣德传说　～ True Administrator",
+		"后院的妖怪参拜道",
+		"佐渡的二岩",
+		"神社的新风",
+		"Desire Dream",
 		"Player's Score"	
 	};
 	public static String[] overdrive = new String[]{
