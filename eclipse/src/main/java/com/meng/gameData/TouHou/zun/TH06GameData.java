@@ -1,9 +1,9 @@
 package com.meng.gameData.TouHou.zun;
 
 public class TH06GameData {
-	public static final String gameName="东方";
-	public static final String gameNameCN="东方";
-	public static final String gameNameAbbr="touhou";
+	public static final String gameName="东方红魔乡 ~ the Embodiment of Scarlet Devil.";
+	public static final String gameNameCN="东方红魔乡";
+	public static final String gameNameAbbr="EoSD";
 	public static String[] players = new String[]{"博丽灵梦 灵符", "博丽灵梦 梦符", "雾雨魔理沙 魔符", "雾雨魔理沙 恋符"};
 	public static String[] charaName=new String[]{
 		"露米娅",
@@ -21,18 +21,18 @@ public class TH06GameData {
 		"妖魔夜行",
 		"Lunate Elf",
 		"活泼的纯情小姑娘",
-		"上海红茶馆　～ Chinese Tea",
+		"上海红茶馆 ~ Chinese Tea",
 		"明治十七年的上海爱丽丝",
 		"巴瓦鲁魔法图书馆",
-		"Locked Girl　～ 少女密室",
+		"Locked Girl ~ 少女密室",
 		"女仆与血之怀表",
-		"月时计　～ Luna Dial",
+		"月时计 ~ Luna Dial",
 		"特佩斯的年幼末裔",
 		"献给已逝公主的七重奏",
 		"魔法少女们的百年祭",
 		"U.N.OWEN就是她吗？",
 		"比红色更虚无的永远",
-		"红楼　～ Eastern Dream...",
+		"红楼 ~ Eastern Dream...",
 	};
 	public static String[] spells=new String[]{
 		"月符「月光」",

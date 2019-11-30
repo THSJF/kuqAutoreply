@@ -1,9 +1,9 @@
 package com.meng.gameData.TouHou.zun;
 
 public class TH13GameData {
-	public static final String gameName="东方";
-	public static final String gameNameCN="东方";
-	public static final String gameNameAbbr="touhou";
+	public static final String gameName="东方神灵庙 ~ Ten Desires.";
+	public static final String gameNameCN="东方神灵庙";
+	public static final String gameNameAbbr="TD";
 	public static String[] players = new String[]{"博丽灵梦", "雾雨魔理沙", "东风谷早苗", "魂魄妖梦"};
 	public static String[] charaName=new String[]{
 		"西行寺幽幽子",
@@ -30,7 +30,7 @@ public class TH13GameData {
 		"梦殿大祀庙",
 		"大神神话传",
 		"小小欲望的星空",
-		"圣德传说　～ True Administrator",
+		"圣德传说 ~ True Administrator",
 		"后院的妖怪参拜道",
 		"佐渡的二岩",
 		"神社的新风",

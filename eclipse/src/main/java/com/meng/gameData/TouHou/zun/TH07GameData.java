@@ -1,9 +1,9 @@
 package com.meng.gameData.TouHou.zun;
 
 public class TH07GameData {
-	public static final String gameName="东方";
-	public static final String gameNameCN="东方";
-	public static final String gameNameAbbr="touhou";
+	public static final String gameName="东方妖妖梦 ~ Perfect Cherry Blossom.";
+	public static final String gameNameCN="东方妖妖梦";
+	public static final String gameNameAbbr="PCB";
 	public static String[] players = new String[]{"博丽灵梦 灵符", "博丽灵梦 梦符", "雾雨魔理沙 魔符", "雾雨魔理沙 恋符", "十六夜咲夜 幻符", "十六夜咲夜 时符"};
 	public static String[] charaName=new String[]{
 		"蕾蒂",
@@ -19,26 +19,26 @@ public class TH07GameData {
 		"八云紫"
 	};
 	public static String[] musicName=new String[]{
-		"妖妖梦　～ Snow or Cherry Petal",
-		"无何有之乡　～ Deep Mountain",
+		"妖妖梦 ~ Snow or Cherry Petal",
+		"无何有之乡 ~ Deep Mountain",
 		"Crystallize Silver",
 		"远野幻想物语",
 		"凋叶棕（withered leaf）",
 		"布加勒斯特的人偶师",
-		"人偶裁判　～ 玩弄人形的少女",
+		"人偶裁判 ~ 玩弄人形的少女",
 		"天空的花都",
-		"幽灵乐团　～ Phantom Ensemble",
-		"东方妖妖梦　～ Ancient Temple",
-		"广有射怪鸟事　～ Till When?",
+		"幽灵乐团 ~ Phantom Ensemble",
+		"东方妖妖梦 ~ Ancient Temple",
+		"广有射怪鸟事 ~ Till When?",
 		"Ultimate Truth",
-		"幽雅地绽放吧，墨染的樱花　～ Border of Life",
+		"幽雅地绽放吧，墨染的樱花 ~ Border of Life",
 		"Border of Life",
 		"妖妖跋扈",
-		"少女幻葬　～ Necro-Fantasy",
-		"妖妖跋扈　～ Who done it!",
+		"少女幻葬 ~ Necro-Fantasy",
+		"妖妖跋扈 ~ Who done it!",
 		"Necro-Fantasia",	
 		"春风之梦",
-		"樱花樱花　～ Japanize Dream..."
+		"樱花樱花 ~ Japanize Dream..."
 	};
 	public static String[] spells=new String[]{
 		"冰符「冰袭方阵」",

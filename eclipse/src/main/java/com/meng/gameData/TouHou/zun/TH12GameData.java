@@ -1,9 +1,9 @@
 package com.meng.gameData.TouHou.zun;
 
 public class TH12GameData {
-	public static final String gameName="东方";
-	public static final String gameNameCN="东方";
-	public static final String gameNameAbbr="touhou";
+	public static final String gameName="东方星莲船 ~ Undefined Fantastic Object.";
+	public static final String gameNameCN="东方星莲船";
+	public static final String gameNameAbbr="UFO";
 	public static String[] players = new String[]{"博丽灵梦 诱导型", "博丽灵梦 威力重视型", "雾雨魔理沙 贯通型", "雾雨魔理沙 范围重视型", "东风谷早苗 诱导型", "东风谷早苗 广范围炸裂型"};
 	public static String[] charaName=new String[]{
 		"纳兹琳",
@@ -27,11 +27,11 @@ public class TH12GameData {
 		"魔界地方都市秘境",
 		"虎纹的毘沙门天",
 		"法界之火",
-		"感情的摩天楼　～ Cosmic Mind",
+		"感情的摩天楼 ~ Cosmic Mind",
 		"夜空中的UFO恋曲",
 		"平安时代的外星人",
 		"妖怪寺",
-		"空中的归路　～ Sky Dream",
+		"空中的归路 ~ Sky Dream",
 		"Player's Score"	
 	};
 	public static String[] spells=new String[]{

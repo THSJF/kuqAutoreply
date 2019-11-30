@@ -1,9 +1,9 @@
 package com.meng.gameData.TouHou.zun;
 
 public class TH11GameData {
-	public static final String gameName="东方";
-	public static final String gameNameCN="东方";
-	public static final String gameNameAbbr="touhou";
+	public static final String gameName="东方地灵殿 ~ Subterranean Animism.";
+	public static final String gameNameCN="东方地灵殿";
+	public static final String gameNameAbbr="SA";
 	public static String[] players = new String[]{"博丽灵梦 八云紫", "博丽灵梦 伊吹萃香", "博丽灵梦 射命丸文", "雾雨魔理沙 爱丽丝·玛格特罗依德", "雾雨魔理沙 帕秋莉", "雾雨魔理沙 河城荷取"};
 	public static String[] charaName=new String[]{
 		"琪斯美",
@@ -18,21 +18,21 @@ public class TH11GameData {
 	public static String[] musicName=new String[]{
 		"地灵们的起床",
 		"昏暗的风穴",
-		"被封印的妖怪　～ Lost Place",
+		"被封印的妖怪 ~ Lost Place",
 		"阻绝人迹之桥",
 		"绿眼的嫉妒",
 		"漫游旧地狱街道",
 		"大江山的花之酒宴",
 		"Heartfelt Fancy",
-		"少女觉　～ 3rd eye",
+		"少女觉 ~ 3rd eye",
 		"废狱摇篮曲",
-		"尸体旅行　～ Be of good cheer!",
+		"尸体旅行 ~ Be of good cheer!",
 		"业火地幔",
-		"灵知的太阳信仰　～ Nuclear Fusion",
+		"灵知的太阳信仰 ~ Nuclear Fusion",
 		"Last Remote",
 		"哈德曼的妖怪少女",
 		"地灵们的归家",
-		"能源黎明　～ Future Dream...",
+		"能源黎明 ~ Future Dream...",
 		"Player's Score"	
 	};
 	public static String[] spells=new String[]{

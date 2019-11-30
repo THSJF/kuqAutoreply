@@ -1,9 +1,9 @@
 package com.meng.gameData.TouHou.zun;
 
 public class TH08GameData {
-	public static final String gameName="东方";
-	public static final String gameNameCN="东方";
-	public static final String gameNameAbbr="touhou";
+	public static final String gameName="东方永夜抄 ~ Imperishable Night.";
+	public static final String gameNameCN="东方永夜抄";
+	public static final String gameNameAbbr="IN";
 	public static String[] players = new String[]{"幻想的结界组", "咏唱禁咒组", "梦幻的红魔组", "幽冥之住人组", "博丽灵梦", "八云紫", "雾雨魔理沙", "爱丽丝·玛格特罗依德", "蕾米莉亚·斯卡蕾特", "十六夜咲夜", "西行寺幽幽子", "魂魄妖梦"};
 	public static String[] charaName=new String[]{
 		"莉格露",
@@ -18,26 +18,26 @@ public class TH08GameData {
 		"藤原妹红"
 	};
 	public static String[] musicName=new String[]{
-		"永夜抄　～ Eastern Night.",
-		"幻视之夜　～ Ghostly Eyes",
-		"蠢蠢的秋月　～ Mooned Insect",
-		"夜雀的歌声　～ Night Bird",
+		"永夜抄 ~ Eastern Night.",
+		"幻视之夜 ~ Ghostly Eyes",
+		"蠢蠢的秋月 ~ Mooned Insect",
+		"夜雀的歌声 ~ Night Bird",
 		"已经只能听见歌声了",
-		"令人怀念的东方之血　～ Old World",
+		"令人怀念的东方之血 ~ Old World",
 		"Plain Asia",
-		"永夜的报应　～ Imperishable Night",
-		"少女绮想曲　～ Dream Battle",
+		"永夜的报应 ~ Imperishable Night",
+		"少女绮想曲 ~ Dream Battle",
 		"恋色Master spark",
-		"灰姑娘的笼子　～ Kagome-Kagome",
-		"狂气之瞳　～ Invisible Full Moon",
-		"Voyage1969",
-		"千年幻想乡　～ History of the Moon",
-		"竹取飞翔　～ Lunatic Princess",
-		"Voyage1970",
-		"Extend Ash　～ 蓬莱人",
+		"灰姑娘的笼子 ~ Kagome-Kagome",
+		"狂气之瞳 ~ Invisible Full Moon",
+		"旅人1969",
+		"千年幻想乡 ~ History of the Moon",
+		"竹取飞翔 ~ Lunatic Princess",
+		"旅人1970",
+		"Extend Ash ~ 蓬莱人",
 		"飘上月球，不死之烟",
 		"月见草",
-		"Eternal Dream　～ 幽玄的枫树",
+		"Eternal Dream ~ 幽玄的枫树",
 		"东方妖怪小町"	
 	};
 	public static String[] lastword=new String[]{
