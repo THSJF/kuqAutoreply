@@ -1,7 +1,6 @@
 package com.meng.groupChat;
 
-import java.io.File;
-import java.util.HashMap;
+import java.util.*;
 
 public class RepeaterManager {
 
@@ -16,12 +15,12 @@ public class RepeaterManager {
     }
 
     // 遍历集合查看是否需要复读
-    public boolean check(long group, long qq, String msg, File[] imageFiles) {
+    public boolean check(long group, long qq, String msg) {
         RepeaterBanner repeaterBanner = repeaters.get(group);
         if (repeaterBanner == null) {
             repeaterBanner = new RepeaterBanner(group);
             addData(repeaterBanner);
         }
-        return repeaterBanner.check(group, qq, msg, imageFiles);
+        return repeaterBanner.check(group, qq, msg);
     }
 }

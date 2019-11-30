@@ -60,21 +60,6 @@ public class PrivateMsgRunnable implements Runnable {
             Autoreply.sendMessage(fromGroup, fromQQ, msgSend.equals("") ? "居然没有飞机佬直播" : msgSend);
             return true;
         }
-        if (Methods.isPohaitu(fromGroup, fromQQ, msg)) {
-            return true;
-        }
-        if (Methods.isSetu(fromGroup, fromQQ, msg)) {
-            return true;
-        }
-        if (Autoreply.instence.barcodeManager.check(fromGroup, fromQQ, msg, imageFiles)) {// 二维码
-            return true;
-        }
-        if (Autoreply.instence.picSearchManager.check(fromGroup, fromQQ, msg, imageFiles)) {// 搜索图片
-            return true;
-        }
-      //  if (Autoreply.instence.rollPlane.check(fromGroup, msg)) {// roll
-      //      return true;
-      //  }
         if (msg.equals("查看统计")) {
             sendMessage(fromGroup, fromQQ, Autoreply.instence.useCount.getMyCount(fromQQ));
             return true;

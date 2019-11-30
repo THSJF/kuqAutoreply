@@ -1,8 +1,8 @@
 package com.meng;
 
-import com.meng.config.javabeans.PersonInfo;
-import com.meng.tools.Methods;
-import com.sobte.cqp.jcq.entity.QQInfo;
+import com.meng.config.javabeans.*;
+import com.meng.tools.*;
+import com.sobte.cqp.jcq.entity.*;
 
 import static com.meng.Autoreply.sendMessage;
 

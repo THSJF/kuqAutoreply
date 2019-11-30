@@ -18,7 +18,6 @@ public class GroupMsgPart2Runnable implements Runnable {
     private String msg = "";
     private int font = 0;
     private long timeStamp = 0;
-    private File[] imageFiles = null;
 
     public GroupMsgPart2Runnable(MessageSender ms) {
         font = ms.font;
@@ -28,7 +27,6 @@ public class GroupMsgPart2Runnable implements Runnable {
         msgId = ms.msgId;
         subType = ms.subType;
         timeStamp = ms.timeStamp;
-        imageFiles = ms.imageFiles;
 	}
 
     @Override
@@ -105,7 +103,7 @@ public class GroupMsgPart2Runnable implements Runnable {
             return true;
 		}
         GroupConfig groupConfig = Autoreply.instence.configManager.getGroupConfig(fromGroup);
-        if (groupConfig.isRepeat() && Autoreply.instence.repeatManager.check(fromGroup, fromQQ, msg, imageFiles)) {// 复读
+        if (groupConfig.isRepeat() && Autoreply.instence.repeatManager.check(fromGroup, fromQQ, msg)) {// 复读
             return true;
 		}
         if (msg.equals(".live")) {
@@ -127,55 +125,6 @@ public class GroupMsgPart2Runnable implements Runnable {
             sendMessage(fromGroup, 0, Autoreply.instence.CC.location(35.594993, 118.869838, 15, "守矢神社", "此生无悔入东方 来世愿生幻想乡"));
             return true;
 		}
-        if (msg.contains("大膜法")) {
-            if (!groupConfig.isMoshenfusong()) {
-                return true;
-			}
-            switch (msg) {
-                case "大膜法 膜神复诵":
-					Autoreply.instence.threadPool.execute(new MoShenFuSong(fromGroup, fromQQ, new Random().nextInt(4)));
-					break;
-                case "大膜法 膜神复诵 Easy":
-					Autoreply.instence.threadPool.execute(new MoShenFuSong(fromGroup, fromQQ, 0));
-					break;
-                case "大膜法 膜神复诵 Normal":
-					Autoreply.instence.threadPool.execute(new MoShenFuSong(fromGroup, fromQQ, 1));
-					break;
-                case "大膜法 膜神复诵 Hard":
-					Autoreply.instence.threadPool.execute(new MoShenFuSong(fromGroup, fromQQ, 2));
-					break;
-                case "大膜法 膜神复诵 Lunatic":
-					Autoreply.instence.threadPool.execute(new MoShenFuSong(fromGroup, fromQQ, 3));
-					break;
-                case "大膜法 膜神复诵 Overdrive":
-					Autoreply.instence.threadPool.execute(new MoShenFuSong(fromGroup, fromQQ, 4));
-					break;
-                case "大膜法 c568连":
-					Autoreply.instence.threadPool.execute(new MoShenFuSong(fromGroup, fromQQ, 5));
-					break;
-                default:
-					break;
-			}
-            return true;
-		}
-        if (groupConfig.isPohai() && Methods.isPohaitu(fromGroup, fromQQ, msg)) {
-            return true;
-		}
-        if (groupConfig.isSetu() && Methods.isSetu(fromGroup, fromQQ, msg)) {
-            return true;
-		}
-        if (groupConfig.isNvZhuang() && Methods.isNvZhuang(fromGroup, fromQQ, msg)) {
-            return true;
-		}
-        if (groupConfig.isBarcode() && Autoreply.instence.barcodeManager.check(fromGroup, fromQQ, msg, imageFiles)) {// 二维码
-            return true;
-		}
-        if (groupConfig.isSearchPic() && Autoreply.instence.picSearchManager.check(fromGroup, fromQQ, msg, imageFiles)) {// 搜索图片
-            return true;
-		}
-        //   if (groupConfig.isKuiping() && Methods.checkLook(fromGroup, msg)) {// 窥屏检测
-        //       return true;
-        //    }
         if (groupConfig.isBilibiliCheck() && Autoreply.instence.biliLinkInfo.check(fromGroup, fromQQ, msg)) {// 比利比利链接详情
             return true;
 		}
@@ -189,13 +138,6 @@ public class GroupMsgPart2Runnable implements Runnable {
             return true;
 		}
         if (Autoreply.instence.timeTip.check(fromGroup, fromQQ)) {// 根据时间提醒
-            return true;
-		}
-		//   if(groupConfig.isRoll() && Autoreply.instence.rollPlane.check(fromGroup,msg)) {// roll
-		//       return true;
-		//   }
-        if (msg.equals("提醒戒膜")) {
-            sendMessage(fromGroup, 0, Autoreply.instence.CC.image(new File(Autoreply.appDirectory + "pic\\jiemo.jpg")));
             return true;
 		}
         if (msg.equals("查看统计")) {
@@ -216,9 +158,6 @@ public class GroupMsgPart2Runnable implements Runnable {
 		}
         if (msg.equals("查看活跃数据")) {
             sendMessage(fromGroup, fromQQ, "https://qqweb.qq.com/m/qun/activedata/active.html?gc=" + fromGroup);
-            return true;
-		}
-        if (Autoreply.instence.picEditManager.check(fromGroup, fromQQ, msg)) {
             return true;
 		}
 		if (Autoreply.instence.diceImitate.check(fromGroup, fromQQ, msg)) {

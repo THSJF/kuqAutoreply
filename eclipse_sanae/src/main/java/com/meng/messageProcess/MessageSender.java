@@ -1,6 +1,4 @@
-package com.meng;
-
-import java.io.File;
+package com.meng.messageProcess;
 
 public class MessageSender {
     public int subType = 0;
@@ -10,14 +8,12 @@ public class MessageSender {
     public long fromQQ = 0;
     public String msg = "";
     public long timeStamp = 0;
-    public File[] imageFiles;
 
-    public MessageSender(long fromGroup, long fromQQ, String msg, long timeStamp, int msgId, File[] imageFiles) {
+    public MessageSender(long fromGroup, long fromQQ, String msg, long timeStamp, int msgId) {
         this.fromGroup = fromGroup;
         this.fromQQ = fromQQ;
         this.msg = msg;
         this.timeStamp = timeStamp;
         this.msgId = msgId;
-        this.imageFiles = imageFiles;
     }
 }

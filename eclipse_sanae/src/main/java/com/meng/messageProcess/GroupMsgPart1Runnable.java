@@ -1,14 +1,6 @@
 package com.meng.messageProcess;
 
-import com.meng.Autoreply;
-import com.meng.MessageSender;
-import com.meng.groupChat.FanPoHaiManager;
-import com.sobte.cqp.jcq.entity.CQImage;
-
-import java.io.File;
-import java.io.IOException;
-import java.util.HashSet;
-import java.util.List;
+import com.meng.*;
 
 import static com.meng.Autoreply.sendMessage;
 
@@ -21,7 +13,6 @@ public class GroupMsgPart1Runnable implements Runnable {
     private String msg = "";
     private int font = 0;
     private long timeStamp = 0;
-    private File[] imageFiles = null;
 
     public GroupMsgPart1Runnable(MessageSender ms) {
         font = ms.font;
@@ -39,27 +30,10 @@ public class GroupMsgPart1Runnable implements Runnable {
     }
 
     private void check() {
-        List<CQImage> images = Autoreply.instence.CC.getCQImages(msg);
-        if (images.size() != 0) {
-            imageFiles = new File[images.size()];
-            for (int i = 0, imagesSize = images.size(); i < imagesSize; i++) {
-                Autoreply.instence.useCount.incPic(fromQQ);
-                Autoreply.instence.groupCount.incPic(fromGroup);
-                CQImage image = images.get(i);
-                try {
-                    imageFiles[i] = Autoreply.instence.fileTypeUtil.checkFormat(image.download(Autoreply.appDirectory + "downloadImages/", image.getMd5()));
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-            }
-        }
-		if (msg.equals("-help")){
+		if (msg.equals("-help")) {
 			sendMessage(fromGroup, 0, Autoreply.instence.adminMessageProcessor.userPermission.toString());
 			return;
 		}
-        if (Autoreply.instence.fph.check(fromQQ, fromGroup, msg, msgId, imageFiles)) {
-            return;
-        }
         if (msg.equals(".on") && (Autoreply.CQ.getGroupMemberInfoV2(fromGroup, fromQQ).getAuthority() > 1 || Autoreply.instence.configManager.isAdmin(fromQQ))) {
             if (Autoreply.instence.botOff.contains(fromGroup)) {
                 Autoreply.instence.botOff.remove(fromGroup);
@@ -71,11 +45,6 @@ public class GroupMsgPart1Runnable implements Runnable {
             Autoreply.instence.botOff.add(fromGroup);
             sendMessage(fromGroup, 0, "已停用");
             return;
-        }
-        if (Autoreply.instence.configManager.isAdmin(fromQQ) && msg.startsWith("ocr")) {
-            if (Autoreply.instence.ocrManager.checkOcr(fromGroup, fromQQ, msg, imageFiles)) {
-                return;
-            }
         }
         if (msg.equals("权限检查")) {
             Autoreply.sendMessage(fromGroup, fromQQ, String.valueOf(Autoreply.CQ.getGroupMemberInfoV2(fromGroup, fromQQ).getAuthority()));
@@ -146,7 +115,7 @@ public class GroupMsgPart1Runnable implements Runnable {
 		}
 
         if (Autoreply.instence.messageMap.get(fromQQ) == null) {
-            Autoreply.instence.messageMap.put(fromQQ, new MessageSender(fromGroup, fromQQ, msg, System.currentTimeMillis(), msgId, imageFiles));
+            Autoreply.instence.messageMap.put(fromQQ, new MessageSender(fromGroup, fromQQ, msg, System.currentTimeMillis(), msgId));
         }
     }
 }

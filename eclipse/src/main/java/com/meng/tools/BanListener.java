@@ -1,22 +1,17 @@
 package com.meng.tools;
 
-import com.google.gson.Gson;
-import com.google.gson.reflect.TypeToken;
-import com.meng.Autoreply;
-import com.meng.config.javabeans.GroupConfig;
-import com.meng.groupChat.BanType;
-import com.sobte.cqp.jcq.entity.Member;
+import com.google.gson.*;
+import com.google.gson.reflect.*;
+import com.meng.*;
+import com.meng.config.javabeans.*;
+import com.meng.groupChat.*;
+import com.sobte.cqp.jcq.entity.*;
+import java.io.*;
+import java.lang.reflect.*;
+import java.nio.charset.*;
+import java.util.*;
 
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.OutputStreamWriter;
-import java.lang.reflect.Type;
-import java.nio.charset.StandardCharsets;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Map;
-import java.util.function.Function;
+import com.sobte.cqp.jcq.entity.Member;
 
 public class BanListener {
 
@@ -199,7 +194,7 @@ public class BanListener {
         if (msg.startsWith("夏眠结束[CQ:at,qq=")) {
             HashMap<Long, BanType> targetQQAndType =Autoreply.instence.banner.banMap.get(fromGroup);
 			if (targetQQAndType == null) {
-				targetQQAndType = new HashMap();
+				targetQQAndType = new HashMap<>();
 			}
 			BanType lastOp = targetQQAndType.get(targetQQ);
 			if (lastOp == null) {
@@ -229,7 +224,7 @@ public class BanListener {
     public void addSummerSleep(long fromGroup, long fromQQ, long targetQQ) {
         HashMap<Long, BanType> targetQQAndType =Autoreply.instence.banner.banMap.get(fromGroup);
 		if (targetQQAndType == null) {
-			targetQQAndType = new HashMap();
+			targetQQAndType = new HashMap<>();
 		}
 		BanType lastOp = targetQQAndType.get(targetQQ);
 		if (lastOp == null) {
