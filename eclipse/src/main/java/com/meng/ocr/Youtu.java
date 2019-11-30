@@ -1,34 +1,15 @@
 package com.meng.ocr;
 
-import java.io.*;
-import java.net.HttpURLConnection;
-import java.net.URL;
-import java.nio.charset.StandardCharsets;
-import java.util.ArrayList;
-import java.util.List;
-
-import org.json.JSONException;
-import org.json.JSONObject;
-
-import com.meng.ocr.sign.Base64Util;
-import com.meng.ocr.sign.YoutuSign;
-
-import java.io.IOException;
-import java.io.DataOutputStream;
-
-import java.io.InputStream;
-import java.security.KeyManagementException;
-import java.security.NoSuchAlgorithmException;
-import java.security.cert.CertificateException;
-import java.security.cert.X509Certificate;
-
-import javax.net.ssl.HostnameVerifier;
-import javax.net.ssl.HttpsURLConnection;
-import javax.net.ssl.SSLContext;
-import javax.net.ssl.SSLSession;
-import javax.net.ssl.TrustManager;
-import javax.net.ssl.X509TrustManager;
+import com.meng.ocr.sign.*;
 import com.meng.tools.*;
+import java.io.*;
+import java.net.*;
+import java.nio.charset.*;
+import java.security.*;
+import java.security.cert.*;
+import java.util.*;
+import javax.net.ssl.*;
+import org.json.*;
 
 /**
  * @author tyronetao

@@ -1,6 +1,5 @@
 package com.meng.tools;
 
-import Decoder.*;
 import com.meng.*;
 import com.meng.diaoXiongJiHua.*;
 import com.meng.lookGroup.*;
@@ -9,9 +8,9 @@ import com.sobte.cqp.jcq.entity.*;
 import java.io.*;
 import java.net.*;
 import java.nio.charset.*;
+import java.security.*;
 import java.util.*;
 import org.jsoup.*;
-import java.security.*;
 
 public class Methods {
 
