@@ -131,9 +131,6 @@ public class GroupMsgPart2Runnable implements Runnable {
         if (groupConfig.isCqCode() && Autoreply.instence.CQcodeManager.check(fromGroup, msg)) {// 特殊信息(签到分享等)
             return true;
 		}
-        if (Autoreply.instence.banner.checkBan(fromQQ, fromGroup, msg)) {// 禁言
-            return true;
-		}
         if (groupConfig.isCuigeng() && Autoreply.instence.updateManager.check(fromGroup, msg)) {
             return true;
 		}

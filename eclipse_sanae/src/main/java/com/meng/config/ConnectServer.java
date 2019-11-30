@@ -121,14 +121,8 @@ public class ConnectServer extends WebSocketServer {
 				//dp.write(
 				break;
 			case DataPack._15groupBan:
-				Methods.ban(recievedDataPack.readNum(1), recievedDataPack.readNum(2), (int)recievedDataPack.readNum(3));
-				dataToSend = DataPack.encode((short)0, recievedDataPack.getTimeStamp());
-				dataToSend.write(1, "禁言成功");
 				break;
 			case DataPack._16groupKick:
-				Autoreply.CQ.setGroupKick(recievedDataPack.readNum(1), recievedDataPack.readNum(2), recievedDataPack.readNum(3) == 1);
-				dataToSend = DataPack.encode(DataPack._0notification, recievedDataPack.getTimeStamp());
-				dataToSend.write(1, "踢出群成功");
 				break;
 			case DataPack._17heartBeat:
 				dataToSend = DataPack.encode(DataPack._0notification, recievedDataPack.getTimeStamp());

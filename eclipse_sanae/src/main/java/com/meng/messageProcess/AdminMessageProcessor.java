@@ -391,13 +391,6 @@ public class AdminMessageProcessor {
 				Autoreply.sendMessage(fromGroup, fromQQ, msgSend.equals("") ? "居然没有飞机佬直播" : msgSend);
 				return true;
 			}
-			if (msg.startsWith("ban")) {
-                String[] arr = msg.split("\\.");
-                if (arr.length == 3 || arr.length == 4) {
-                    Autoreply.instence.banner.checkBan(fromGroup, fromQQ, msg);
-				}
-                return true;
-			}
             if (msg.equals("鬼人正邪统计")) {
                 sendMessage(fromGroup, fromQQ, Autoreply.instence.useCount.getMyCount(Autoreply.CQ.getLoginQQ()));
                 return true;

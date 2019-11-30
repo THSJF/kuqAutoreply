@@ -4,11 +4,8 @@ package com.meng.groupChat;
 import com.meng.*;
 import com.meng.config.javabeans.*;
 import com.meng.messageProcess.*;
-import com.meng.tools.*;
 
 public class RepeaterBanner {
-    private int repeatCount = 0;
-    private int banCount = 6;
     private String lastMessageRecieved = "";
     private boolean lastStatus = false;
     long groupNumber = 0;
@@ -27,44 +24,9 @@ public class RepeaterBanner {
         if (warnMessageProcessor.check(fromGroup, fromQQ, msg)) {
             return true;
         }
-		if (msg.contains("~转账") || msg.contains("～转账")) {
-			return true;
-		}
-        boolean b = false;
-        try {
-            if (msg.contains("禁言") || fromGroup != groupNumber) {
-                return true;
-            }
-            switch (groupConfig.repeatMode) {
-                case 0:
-
-                    break;
-                case 1:
-                    if (lastMessageRecieved.equals(msg)) {
-                        if (Autoreply.instence.random.nextInt() % banCount == 0) {
-                            int time = Autoreply.instence.random.nextInt(60) + 1;
-                            banCount = 6;
-                            if (Methods.ban(fromGroup, fromQQ, time)) {
-                                Autoreply.sendMessage(0, fromQQ, "你从“群复读轮盘”中获得了" + time + "秒禁言套餐");
-                            }
-                        }
-                    }
-                    break;
-                case 2:
-                    if (lastMessageRecieved.equals(msg)) {
-                        int time = Autoreply.instence.random.nextInt(60) + 1;
-                        if (Methods.ban(fromGroup, fromQQ, time)) {
-                            Autoreply.sendMessage(0, fromQQ, "你因复读获得了" + time + "秒禁言套餐");
-                        }
-                    }
-                    lastMessageRecieved = msg;
-                    return true;
-            }
-            b = checkRepeatStatu(fromGroup, fromQQ, msg);
-            lastMessageRecieved = msg;
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+        boolean b = false; 
+		b = checkRepeatStatu(fromGroup, fromQQ, msg);
+		lastMessageRecieved = msg;
         return b;
     }
 
@@ -93,44 +55,14 @@ public class RepeaterBanner {
     private boolean repeatRunning(long group, long qq, String msg) {
         Autoreply.instence.useCount.incFudu(qq);
         Autoreply.instence.groupCount.incFudu(group);
-        banCount--;
         return false;
     }
 
     private boolean repeatStart(long group,  long qq,  String msg) {
-        banCount = 6;
         Autoreply.instence.useCount.incFudujiguanjia(qq);
         Autoreply.instence.groupCount.incFudu(group);
-		reply(group, qq, msg);
+		Autoreply.sendMessage(group, 0, msg);
         Autoreply.instence.useCount.incFudu(Autoreply.CQ.getLoginQQ());
         return true;
-    }
-
-    // 回复
-    private boolean reply(long group, long qq, String msg) {
-        if (msg.contains("蓝") || msg.contains("藍")) {
-            return true;
-        }
-		replyText(group, qq, msg);
-        return true;
-    }
-
-    // 如果是文本复读
-    private void replyText(Long group, long qq, String msg) {
-    	if (msg.contains("此生无悔入东方")) {
-    		Autoreply.sendMessage(group, 0, msg);
-    		return;
-    	}
-        if (repeatCount < 3) {
-            Autoreply.sendMessage(group, 0, msg);
-            repeatCount++;
-        } else if (repeatCount == 3) {
-            Autoreply.sendMessage(group, 0, "你群天天复读");
-            repeatCount++;
-        } else {
-            String newmsg = new StringBuilder(msg).reverse().toString();
-            Autoreply.sendMessage(group, 0, newmsg.equals(msg) ? newmsg + " " : newmsg);
-            repeatCount = 0;
-        }
     }
 }

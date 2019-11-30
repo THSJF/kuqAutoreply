@@ -39,11 +39,10 @@ import java.util.concurrent.*;
 public class Autoreply extends JcqAppAbstract implements ICQVer, IMsg, IRequest {
 
     public static Autoreply instence;
-    public MRandom random = new MRandom();
+    public Random random = new Random();
     public CQCodeCC CC = new CQCodeCC();
     public UserCounter useCount;
     public GroupCounter groupCount;
-    public Banner banner;
     public RepeaterManager repeatManager;
     public TimeTip timeTip = new TimeTip();
     public BiliLinkInfo biliLinkInfo = new BiliLinkInfo();
@@ -132,7 +131,6 @@ public class Autoreply extends JcqAppAbstract implements ICQVer, IMsg, IRequest 
         banListener = new BanListener();
         zanManager = new ZanManager();
         messageMap.clear();
-        banner = new Banner(configManager);
         dicReplyManager = new DicReplyManager();
         repeatManager = new RepeaterManager();
         for (GroupConfig groupConfig : configManager.configJavaBean.groupConfigs) {
@@ -299,13 +297,6 @@ public class Autoreply extends JcqAppAbstract implements ICQVer, IMsg, IRequest 
 
         //  System.out.println(msg);
         // 指定不回复的项目
-        if (Autoreply.instence.configManager.isBlackQQ(fromQQ)) {
-            System.out.println("black:" + fromQQ);
-            if (Methods.ban(fromGroup, fromQQ, 300)) {
-                sendMessage(fromGroup, fromQQ, "嘘 别说话");
-            }
-        }
-
         if (msg.equals(".admin enable") && Autoreply.instence.configManager.isAdmin(fromQQ)) {
             GroupConfig groupConfig = Autoreply.instence.configManager.getGroupConfig(fromGroup);
             if (groupConfig == null) {
@@ -357,33 +348,6 @@ public class Autoreply extends JcqAppAbstract implements ICQVer, IMsg, IRequest 
             }
             return MSG_IGNORE;
         }
-		if (fromQQ == 1033317031L) {
-			String[] strings = msg.split("\\.", 3);
-			if (strings[0].equals("cookie")) {
-				switch (strings[1]) {
-					case "XingHuo":
-						Autoreply.instence.cookieManager.setCookie("XingHuo", strings[2]);
-						break;
-					default:
-						Autoreply.sendMessage(fromGroup, 0, "名称不存在");
-						return MSG_IGNORE;
-				}
-				Autoreply.sendMessage(fromGroup, 0, "已为" + strings[1] + "设置cookie");
-				return MSG_IGNORE;
-			}
-		}
-		if (fromQQ == 2856986197L || fromQQ == 2565128043L) {
-			if (msg.contains("setConnect")) {
-				try {
-					configManager.setOgg(CC.getAt(msg));
-					sendMessage(fromGroup, 0, "设置连接" + CC.getAt(msg));
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-				return MSG_IGNORE;
-			}
-		}
-
         if (adminMessageProcessor.check(fromGroup, fromQQ, msg)) {
             return MSG_IGNORE;
         }
@@ -581,18 +545,14 @@ public class Autoreply extends JcqAppAbstract implements ICQVer, IMsg, IRequest 
          * REQUEST_ADOPT 通过 REQUEST_REFUSE 拒绝 REQUEST_GROUP_ADD 群添加
          * REQUEST_GROUP_INVITE 群邀请
          */
-        System.out.println("groupAdd");
         if (subtype == 1) {
             if (configManager.isBlackQQ(fromQQ)) {
-                CQ.setGroupAddRequest(responseFlag, REQUEST_GROUP_ADD, REQUEST_ADOPT, null);
-                Methods.ban(fromGroup, fromQQ, 2592000);
-                sendMessage(fromGroup, fromQQ, "不要问为什么你会进黑名单，你干了什么自己知道");
+                CQ.setGroupAddRequest(responseFlag, REQUEST_GROUP_ADD, REQUEST_REFUSE, "黑名单用户");
                 return MSG_IGNORE;
             }
             PersonInfo personInfo = configManager.getPersonInfoFromQQ(fromQQ);
             if (personInfo != null) {
                 CQ.setGroupAddRequest(responseFlag, REQUEST_GROUP_ADD, REQUEST_ADOPT, null);
-                //        sendMessage(fromGroup, 0, "欢迎" + personInfo.name);
             } else if (configManager.isGroupAutoAllow(fromQQ)) {
                 CQ.setGroupAddRequest(responseFlag, REQUEST_GROUP_ADD, REQUEST_ADOPT, null);
                 sendMessage(fromGroup, 0, "此账号在自动允许列表中，已同意进群");

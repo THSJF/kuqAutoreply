@@ -11,86 +11,15 @@ import org.jsoup.*;
 
 public class Methods {
 
-    public static boolean ban(long fromGroup, long banQQ, int time) {
-        if (banQQ == 2558395159L || Autoreply.instence.configManager.isAdmin(banQQ)) {
-            return false;
-        }
-        Member me = Autoreply.CQ.getGroupMemberInfoV2(fromGroup, Autoreply.CQ.getLoginQQ());
-        Member ban = Autoreply.CQ.getGroupMemberInfoV2(fromGroup, banQQ);
-        if (me.getAuthority() - ban.getAuthority() > 0) {
-            Autoreply.CQ.setGroupBan(fromGroup, banQQ, time);
-            Autoreply.instence.useCount.incGbanCount(Autoreply.CQ.getLoginQQ());
-            return true;
-        } else {
-            Member ogg = Autoreply.CQ.getGroupMemberInfoV2(fromGroup, Autoreply.instence.configManager.configJavaBean.ogg);
-            if (ogg != null && ogg.getAuthority() - ban.getAuthority() > 0) {
-                Autoreply.sendMessage(Autoreply.mainGroup, 0, "~mutegroupuser " + fromGroup + " " + (time / 60) + " " + banQQ);
-                Autoreply.instence.useCount.incGbanCount(Autoreply.CQ.getLoginQQ());
-                return true;
-            }
-        }
-        return false;
-    }
-
-    public static void ban(long fromGroup, HashSet<Long> banQQs, int time) {
-        long[] qqs = new long[banQQs.size()];
-        int i = 0;
-        for (long qq : banQQs) {
-            qqs[i++] = qq;
-        }
-        ban(fromGroup, qqs, time);
-    }
-
-    public static void ban(long fromGroup, long[] banQQs, float time) {
-        Member me = Autoreply.CQ.getGroupMemberInfoV2(fromGroup, Autoreply.CQ.getLoginQQ());
-        Member ogg = Autoreply.CQ.getGroupMemberInfoV2(fromGroup, Autoreply.instence.configManager.configJavaBean.ogg);
-        StringBuilder banqqs = new StringBuilder("");
-        for (long banQQ : banQQs) {
-            if (banQQ == 2558395159L) {
-                continue;
-            }
-            Member ban = Autoreply.CQ.getGroupMemberInfoV2(fromGroup, banQQ);
-            if (me.getAuthority() - ban.getAuthority() > 0) {
-                Autoreply.CQ.setGroupBan(fromGroup, banQQ, (int)time);
-                Autoreply.instence.useCount.incGbanCount(Autoreply.CQ.getLoginQQ());
-            } else if (ogg != null && ogg.getAuthority() - ban.getAuthority() > 0) {
-                banqqs.append(" ").append(banQQ);
-                Autoreply.instence.useCount.incGbanCount(Autoreply.CQ.getLoginQQ());
-            }
-        }
-        if (!banqqs.toString().equals("")) {
-            Autoreply.sendMessage(Autoreply.mainGroup, 0, "~mutegroupuser " + fromGroup + " " + (time / 60) + banqqs.toString());
-        }
-    }
-
-    public static String executeCmd(String command) throws IOException {
-        Runtime runtime = Runtime.getRuntime();
-        Process process = runtime.exec("cmd /c " + command);
-        BufferedReader br = new BufferedReader(new InputStreamReader(process.getInputStream(), StandardCharsets.UTF_8));
-        String line = null;
-        StringBuilder build = new StringBuilder();
-        while ((line = br.readLine()) != null) {
-            build.append(line);
-        }
-        return build.toString();
-    }
-
-    // randomFromArray 随机返回数组中的一项
     public static Object rfa(Object[] array) {
-        return array[Autoreply.instence.random.nextInt(2147483647) % array.length];
+        return array[Autoreply.instence.random.nextInt(array.length)];
     }
 
     // 有@的时候
     public static boolean checkAt(long fromGroup, long fromQQ, String msg) {
-        if (msg.contains("~") || msg.contains("～")) {
-            return false;
-        }
         if (Autoreply.instence.CC.getAt(msg) == Autoreply.CQ.getLoginQQ()) {      
             // 过滤特定的文字
             // @消息发送者并复读内容
-            if (fromQQ == 2558395159L || fromQQ == 1281911569L || fromQQ == Autoreply.instence.configManager.configJavaBean.ogg) {
-                return true;
-            }
             Autoreply.sendMessage(fromGroup, 0, msg.replace("[CQ:at,qq=" + Autoreply.CQ.getLoginQQ() + "]", "[CQ:at,qq=" + fromQQ + "]"));
             return true;
         }
@@ -99,22 +28,7 @@ public class Methods {
 
     // 读取文本文件
     public static String readFileToString(String fileName) {
-        String s = "{}";
-        try {
-            File file = new File(fileName);
-            if (!file.exists()) {
-                file.createNewFile();
-            }
-            long filelength = file.length();
-            byte[] filecontent = new byte[(int) filelength];
-            FileInputStream in = new FileInputStream(file);
-            in.read(filecontent);
-            in.close();
-            s = new String(filecontent, StandardCharsets.UTF_8);
-        } catch (Exception e) {
-
-        }
-        return s;
+        return readFileToString(new File(fileName));
     }
 
 	// 读取文本文件
@@ -135,7 +49,7 @@ public class Methods {
         }
         return s;
     }
-	
+
     public static Map<String, String> cookieToMap(String value) {
         Map<String, String> map = new HashMap<>();
         String[] values = value.split("; ");

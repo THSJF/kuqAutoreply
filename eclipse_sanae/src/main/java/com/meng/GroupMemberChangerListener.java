@@ -12,9 +12,7 @@ public class GroupMemberChangerListener {
     }
 
     public void checkIncrease(int subtype, int sendTime, long fromGroup, long fromQQ, long beingOperateQQ) {
-        if (Autoreply.instence.configManager.isBlackQQ(beingOperateQQ)) {
-            Methods.ban(fromGroup, fromQQ, 300);
-        }
+        
         PersonInfo personInfo = Autoreply.instence.configManager.getPersonInfoFromQQ(beingOperateQQ);
         if (personInfo != null && personInfo.name.equals("熊哥")) {
             sendMessage(959615179L, 0, Autoreply.instence.CC.at(-1) + "熊加入了群" + fromGroup, true);
@@ -29,13 +27,6 @@ public class GroupMemberChangerListener {
             sendMessage(fromGroup, 0, "欢迎新大佬", true);
         }
 		Autoreply.instence.configManager.addAutoAllow(beingOperateQQ);
-        Autoreply.instence.banListener.checkSleepMsg(fromGroup, beingOperateQQ);
-        /*  if (fromGroup == 859561731L) { // 台长群
-		 sendMessage(859561731L, 0, "芳赛服务器炸了", true);
-		 try { sendMessage(859561731L, 0, CC.image(new File(appDirectory +
-		 "pic/sjf9961.jpg"))); } catch (IOException e) {
-		 e.printStackTrace(); }
-		 } */
     }
 
     public void checkDecrease(int subtype, int sendTime, final long fromGroup, final long fromQQ, long beingOperateQQ) {
