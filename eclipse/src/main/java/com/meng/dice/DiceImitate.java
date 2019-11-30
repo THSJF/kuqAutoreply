@@ -198,7 +198,7 @@ public class DiceImitate {
             }
         }
 		String pname=Autoreply.instence.configManager.getNickName(fromGroup, fromQQ);
-		String md5=MD5.stringToMD5(String.valueOf(fromQQ + System.currentTimeMillis() / (24 * 60 * 60 * 1000)));
+		String md5=Methods.stringToMD5(String.valueOf(fromQQ + System.currentTimeMillis() / (24 * 60 * 60 * 1000)));
 		char c=md5.charAt(0);
 		switch (msg) {
 			case ".jrrp":
@@ -233,7 +233,7 @@ public class DiceImitate {
 					Autoreply.sendMessage(fromGroup, 0, String.format("%s今天宜听%s", pname, md5RanStr(fromQQ, music)));
 					return true;
 				case "grandma":
-					if (MD5.stringToMD5(String.valueOf(fromQQ + System.currentTimeMillis() / (24 * 60 * 60 * 1000))).charAt(0) == '0') {
+					if (Methods.stringToMD5(String.valueOf(fromQQ + System.currentTimeMillis() / (24 * 60 * 60 * 1000))).charAt(0) == '0') {
 						Autoreply.sendMessage(fromGroup, 0, String.format("%s今天宜认八云紫当奶奶", pname));
 						return true;
 					}
@@ -253,7 +253,7 @@ public class DiceImitate {
 					sss += "\n";
 					sss += String.format("%s今天宜听%s", pname, md5RanStr(fromQQ, music));
 					sss += "\n";
-					if (MD5.stringToMD5(String.valueOf(fromQQ + System.currentTimeMillis() / (24 * 60 * 60 * 1000))).charAt(0) == '0') {
+					if (Methods.stringToMD5(String.valueOf(fromQQ + System.currentTimeMillis() / (24 * 60 * 60 * 1000))).charAt(0) == '0') {
 						sss += String.format("%s今天宜认八云紫当奶奶", pname);
 					} else {
 						sss += String.format("%s今天宜认%s当奶奶", pname, md5RanStr(fromQQ, name));
@@ -519,7 +519,7 @@ public class DiceImitate {
     }
 
 	private int md5Random(long fromQQ) {
-		String md5=MD5.stringToMD5(String.valueOf(fromQQ + System.currentTimeMillis() / (24 * 60 * 60 * 1000)));
+		String md5=Methods.stringToMD5(String.valueOf(fromQQ + System.currentTimeMillis() / (24 * 60 * 60 * 1000)));
 		return Integer.parseInt(md5.substring(26), 16);
 	}
 

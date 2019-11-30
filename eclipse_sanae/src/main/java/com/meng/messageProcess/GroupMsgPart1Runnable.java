@@ -1,9 +1,14 @@
 package com.meng.messageProcess;
 
-import com.meng.*;
-import com.sobte.cqp.jcq.entity.*;
-import java.io.*;
-import java.util.*;
+import com.meng.Autoreply;
+import com.meng.MessageSender;
+import com.meng.groupChat.FanPoHaiManager;
+import com.sobte.cqp.jcq.entity.CQImage;
+
+import java.io.File;
+import java.io.IOException;
+import java.util.HashSet;
+import java.util.List;
 
 import static com.meng.Autoreply.sendMessage;
 
@@ -48,10 +53,13 @@ public class GroupMsgPart1Runnable implements Runnable {
                 }
             }
         }
-		if (msg.equals("-help")) {
+		if (msg.equals("-help")){
 			sendMessage(fromGroup, 0, Autoreply.instence.adminMessageProcessor.userPermission.toString());
 			return;
 		}
+        if (Autoreply.instence.fph.check(fromQQ, fromGroup, msg, msgId, imageFiles)) {
+            return;
+        }
         if (msg.equals(".on") && (Autoreply.CQ.getGroupMemberInfoV2(fromGroup, fromQQ).getAuthority() > 1 || Autoreply.instence.configManager.isAdmin(fromQQ))) {
             if (Autoreply.instence.botOff.contains(fromGroup)) {
                 Autoreply.instence.botOff.remove(fromGroup);
@@ -64,6 +72,11 @@ public class GroupMsgPart1Runnable implements Runnable {
             sendMessage(fromGroup, 0, "已停用");
             return;
         }
+        if (Autoreply.instence.configManager.isAdmin(fromQQ) && msg.startsWith("ocr")) {
+            if (Autoreply.instence.ocrManager.checkOcr(fromGroup, fromQQ, msg, imageFiles)) {
+                return;
+            }
+        }
         if (msg.equals("权限检查")) {
             Autoreply.sendMessage(fromGroup, fromQQ, String.valueOf(Autoreply.CQ.getGroupMemberInfoV2(fromGroup, fromQQ).getAuthority()));
             return;
@@ -71,6 +84,7 @@ public class GroupMsgPart1Runnable implements Runnable {
         if (Autoreply.instence.botOff.contains(fromGroup)) {
             return;
         }
+
 		if (msg.startsWith("-int ")) {
 			try {
 				String[] args=msg.split(" ", 4);
@@ -130,6 +144,7 @@ public class GroupMsgPart1Runnable implements Runnable {
 			}
 			return;
 		}
+
         if (Autoreply.instence.messageMap.get(fromQQ) == null) {
             Autoreply.instence.messageMap.put(fromQQ, new MessageSender(fromGroup, fromQQ, msg, System.currentTimeMillis(), msgId, imageFiles));
         }

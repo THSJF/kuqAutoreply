@@ -37,11 +37,11 @@ public class DataPack {
 	 假如某指令需要n1参数,而收到的json中没有n1,则把该参数当做0处理即可
 	 字符串则是视为空字符串
 
-	 小律影向早苗发送查询类指令时，早苗返回的数据包中的时间戳会设置成和收到的数据包中时间戳相同
+	 小律影向鬼人正邪发送查询类指令时，鬼人正邪返回的数据包中的时间戳会设置成和收到的数据包中时间戳相同
 	 其实并不检查时间戳和实际时间,只是个任务标记
 
-	 小律影→正邪  小律影发送 早苗接收
-	 正邪→小律影  早苗发送 小律影接收 (其实是广播方式发送,所有连接的客户端都可以收到)
+	 小律影→正邪  小律影发送 鬼人正邪接收
+	 正邪→小律影  鬼人正邪发送 小律影接收 (其实是广播方式发送,所有连接的客户端都可以收到)
 	 小律影↔正邪  都可以发送和接收
 
 	 */
@@ -94,23 +94,23 @@ public class DataPack {
 	public static final short _22pic2=22;
 	//正邪→小律影  返回_22生成的jpg文件 数据部分直接保存到磁盘即可
 	public static final short _23returnPic2=23;
-	//小律影→正邪  获得早苗".jrrp"中的计算结果  n1:qq号
+	//小律影→正邪  获得鬼人正邪".jrrp"中的计算结果  n1:qq号
 	public static final short _24MD5Random=24;
 	//正邪→小律影  返回_24的结果 n1:计算结果   (0-10000的整数)
 	public static final short _25returnMD5Random=25;
-	//小律影→正邪  获得早苗".draw neta"中的计算结果  n1:qq号
+	//小律影→正邪  获得鬼人正邪".draw neta"中的计算结果  n1:qq号
 	public static final short _26MD5neta=26;
 	//正邪→小律影  返回_26的结果 s1:计算结果
 	public static final short _27returnMD5neta=27;
-	//小律影→正邪  获得早苗".draw music"中的计算结果  n1:qq号
+	//小律影→正邪  获得鬼人正邪".draw music"中的计算结果  n1:qq号
 	public static final short _28MD5music=28;
 	//正邪→小律影  返回_28的结果 s1:计算结果
 	public static final short _29returnMD5music=29;
-	//小律影→正邪  获得早苗".draw grandma"中的计算结果  n1:qq号
+	//小律影→正邪  获得鬼人正邪".draw grandma"中的计算结果  n1:qq号
 	public static final short _30MD5grandma=30;
 	//正邪→小律影  返回_30的结果 s1:计算结果
 	public static final short _31returnMD5grandma=31;
-	//小律影→正邪  获得早苗"。jrrp"中的计算结果  n1:qq号
+	//小律影→正邪  获得鬼人正邪"。jrrp"中的计算结果  n1:qq号
 	public static final short _32MD5overSpell=32;
 	//正邪→小律影  返回_32的结果 s1:计算结果
 	public static final short _33returnMD5overSpell=33;
@@ -120,8 +120,11 @@ public class DataPack {
 	public static final short _37setGroupName=37;
 	//小律影→正邪  设置群头衔  n1:群号 n2:目标qq号 n3:有效时间，单位为秒，无限期写-1 s1:头衔内容
 	public static final short _38setSpecialTitle=38;
-
-
+	/*
+	//小律影→正邪  获得原曲认知问题 n1:需要的秒数
+	public static final short _39getMusicQueation=39;
+	//正邪→小律影 
+*/
 	/*******    希望小律影提供的    *******/
 	//小律影→正邪  加群审核 n1:加群申请id n2:群号 n3:qq号
 	public static final short _35groupAdd=35;

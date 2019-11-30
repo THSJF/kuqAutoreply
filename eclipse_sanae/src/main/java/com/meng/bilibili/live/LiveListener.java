@@ -14,6 +14,7 @@ import java.nio.charset.*;
 import java.util.*;
 import java.util.Map.*;
 import java.util.concurrent.*;
+import java.util.function.Function;
 import org.jsoup.*;
 
 public class LiveListener implements Runnable {
@@ -95,10 +96,12 @@ public class LiveListener implements Runnable {
 							dl.close();
 						} 
 					}
-                    LivePerson livePerson = livePersonMap.get(personInfo.bid);
-					if (livePerson == null) {
-						livePerson = new LivePerson();
-					}
+                    LivePerson livePerson = livePersonMap.computeIfAbsent(personInfo.bid, new Function<Integer, LivePerson>() {
+							@Override
+							public LivePerson apply(Integer k) {
+								return new LivePerson();
+							}
+						});
 					livePerson.liveStartTimeStamp = System.currentTimeMillis();
                     livePerson.liveUrl = sjb.data.url;
 					livePerson.roomID = sjb.data.roomid + "";

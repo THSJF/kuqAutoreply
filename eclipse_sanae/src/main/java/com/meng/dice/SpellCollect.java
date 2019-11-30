@@ -9,6 +9,7 @@ import java.lang.reflect.*;
 import java.nio.charset.*;
 import java.util.*;
 import java.util.concurrent.*;
+import com.meng.gameData.TouHou.zun.*;
 
 public class SpellCollect {
 	private ConcurrentHashMap<Long,HashSet<String>> chm=new ConcurrentHashMap<>();
@@ -35,17 +36,17 @@ public class SpellCollect {
         }.getType();
         archiMap = Autoreply.gson.fromJson(Methods.readFileToString(Autoreply.appDirectory + "/properties/archievement.json"), type2);
 
-		archList.add(new Archievement("恶魔领地", "收集东方红魔乡全部符卡", ArchievementBean.th6All, DiceImitate.sp6.size(), DiceImitate.sp6));
-		archList.add(new Archievement("完美樱花", "收集东方妖妖梦全部符卡",  ArchievementBean.th7All, DiceImitate.sp7.size(), DiceImitate.sp7));
-		archList.add(new Archievement("永恒之夜", "收集东方永夜抄lastspell和lastword外全部符卡",  ArchievementBean.th8All, DiceImitate.sp8.size(), DiceImitate.sp8));
-		archList.add(new Archievement("信仰之山", "收集东方风神录全部符卡",  ArchievementBean.th10All, DiceImitate.sp10.size(), DiceImitate.sp10));
-		archList.add(new Archievement("地底之灵", "收集东方地灵殿全部符卡",  ArchievementBean.th11All, DiceImitate.sp11.size(), DiceImitate.sp11));
-		archList.add(new Archievement("未知物体", "收集东方星莲船全部符卡",  ArchievementBean.th12All, DiceImitate.sp12.size(), DiceImitate.sp12));
-		archList.add(new Archievement("十个欲望", "收集东方神灵庙overdrive外全部符卡",  ArchievementBean.th13All, DiceImitate.sp13.size(), DiceImitate.sp13));
-		archList.add(new Archievement("两个选择", "收集东方辉针城全部符卡",  ArchievementBean.th14All, DiceImitate.sp14.size(), DiceImitate.sp14));
-		archList.add(new Archievement("疯狂国度", "收集东方绀珠传全部符卡",  ArchievementBean.th15All, DiceImitate.sp15.size(), DiceImitate.sp15));
-		archList.add(new Archievement("四季之星", "收集东方天空璋全部符卡",  ArchievementBean.th16All, DiceImitate.sp16.size(), DiceImitate.sp16));
-		archList.add(new Archievement("狡猾之兽", "收集东方鬼形兽全部符卡",  ArchievementBean.th17All, DiceImitate.sp17.size(), DiceImitate.sp17));
+		archList.add(new Archievement("恶魔领地", "收集东方红魔乡全部符卡", ArchievementBean.th6All, TH06GameData.spells.length, TH06GameData.spells));
+		archList.add(new Archievement("完美樱花", "收集东方妖妖梦全部符卡",  ArchievementBean.th7All, TH07GameData.spells.length, TH07GameData.spells));
+		archList.add(new Archievement("永恒之夜", "收集东方永夜抄lastspell和lastword外全部符卡",  ArchievementBean.th8All, TH08GameData.spells.length, TH08GameData.spells));
+		archList.add(new Archievement("信仰之山", "收集东方风神录全部符卡",  ArchievementBean.th10All, TH10GameData.spells.length, TH10GameData.spells));
+		archList.add(new Archievement("地底之灵", "收集东方地灵殿全部符卡",  ArchievementBean.th11All, TH11GameData.spells.length, TH11GameData.spells));
+		archList.add(new Archievement("未知物体", "收集东方星莲船全部符卡",  ArchievementBean.th12All, TH12GameData.spells.length, TH12GameData.spells));
+		archList.add(new Archievement("十个欲望", "收集东方神灵庙overdrive外全部符卡",  ArchievementBean.th13All, TH13GameData.spells.length, TH13GameData.spells));
+		archList.add(new Archievement("两个选择", "收集东方辉针城全部符卡",  ArchievementBean.th14All, TH14GameData.spells.length, TH14GameData.spells));
+		archList.add(new Archievement("疯狂国度", "收集东方绀珠传全部符卡",  ArchievementBean.th15All, TH15GameData.spells.length, TH15GameData.spells));
+		archList.add(new Archievement("四季之星", "收集东方天空璋全部符卡",  ArchievementBean.th16All, TH16GameData.spells.length, TH16GameData.spells));
+		archList.add(new Archievement("狡猾之兽", "收集东方鬼形兽全部符卡",  ArchievementBean.th17All, TH17GameData.spells.length, TH17GameData.spells));
 		archList.add(new Archievement("纯化的神灵", "收集Lunatic难度纯狐所有符卡", ArchievementBean.JunkoSpells, 10, "「掌上的纯光」", "「杀意的百合」", "「现代的神灵界」", "「战栗的寒冷之星」", "「纯粹的疯狂」", "「地上秽的纯化」", "纯符「纯粹的弹幕地狱」"));
 		archList.add(new Archievement("Perfect Cherry Blossom", "收集Lunatic难度西行寺幽幽子所有符卡", ArchievementBean.yoyoko, 10, "亡乡「亡我乡 -自尽-」", "亡舞「生者必灭之理 -魔境-」",  "华灵「蝶幻」", "幽曲「埋骨于弘川 -神灵-」", "樱符「完全墨染的樱花 -开花-」", "「反魂蝶 -八分咲-」"));
 		archList.add(new Archievement("樱花飞舞", "收集樱符「完全墨染的樱花 -封印-」,樱符「完全墨染的樱花 -亡我-」,樱符「完全墨染的樱花 -春眠-」,樱符「完全墨染的樱花 -开花-」", ArchievementBean.sakura, 15, "樱符「完全墨染的樱花 -封印-」", "樱符「完全墨染的樱花 -亡我-」", "樱符「完全墨染的樱花 -春眠-」", "樱符「完全墨染的樱花 -开花-」"));
@@ -136,6 +137,47 @@ public class SpellCollect {
 	}
 
 	public boolean check(long fromGroup, long fromQQ, String msg) {
+		if (msg.startsWith("#幻币转账") && fromQQ == Autoreply.instence.configManager.configJavaBean.ogg) {
+			List<Long> chan=Autoreply.instence.CC.getAts(msg);
+			if (!Autoreply.instence.configManager.isMaster(chan.get(1))) {
+				return false;
+			}
+			int coins=0;
+			try {
+				coins = (int)Float.parseFloat(msg.substring(msg.indexOf("转账", 6) + 2, msg.indexOf("个幻币")));		
+			} catch (NumberFormatException e) {
+				Autoreply.sendMessage(fromGroup, 0, e.toString());
+			}
+			HashSet<String> tmpSet=chm.get(chan.get(0));
+			if (tmpSet == null) {
+				tmpSet = new HashSet<String>();
+				chm.put(chan.get(0), tmpSet);
+			}
+			Random r=new Random();
+			StringBuilder sb=new StringBuilder();
+			sb.append(Autoreply.instence.configManager.getNickName(fromQQ));
+			sb.append("获得了:");
+			for (int i=0;i < coins * 3;++i) {
+				String s;
+				if (r.nextInt(150) == 20) {
+					s = TH08GameData.lastword[r.nextInt(TH08GameData.lastword.length)];
+				} else if (r.nextInt(300) == 25) {
+					s = TH13GameData.overdrive[r.nextInt(TH13GameData.overdrive.length)];
+				} else {
+					s = DiceImitate.spells[r.nextInt(DiceImitate.spells.length)];
+				}
+				tmpSet.add(s);
+				sb.append("\n").append(s);
+			}
+			saveConfig();
+			checkArchievement(fromGroup, chan.get(0), tmpSet);
+			if (sb.toString().length() > 200) {
+				Autoreply.sendMessage(fromGroup, fromQQ, "内容过长,不详细说明获得的符卡，但记录已保存");
+				return true;
+			}
+			Autoreply.sendMessage(fromGroup, 0, sb.toString());
+		}
+
 		if (msg.startsWith("幻币抽卡 ")) {
 			try {
 				int restCoins=Autoreply.instence.coinManager.getCoinsCount(fromQQ);
@@ -156,9 +198,9 @@ public class SpellCollect {
 				for (int i=0;i < useCoins * 3;++i) {
 					String s;
 					if (r.nextInt(150) == 20) {
-						s = DiceImitate.lastword[r.nextInt(DiceImitate.lastword.length)];
+						s = TH08GameData.lastword[r.nextInt(TH08GameData.lastword.length)];
 					} else if (r.nextInt(300) == 25) {
-						s = DiceImitate.overdrive[r.nextInt(DiceImitate.overdrive.length)];
+						s = TH13GameData.overdrive[r.nextInt(TH13GameData.overdrive.length)];
 					} else  {
 						s = DiceImitate.spells[r.nextInt(DiceImitate.spells.length)];
 					}
@@ -208,9 +250,9 @@ public class SpellCollect {
 			for (int i=0;i < 5;++i) {
 				String s;
 				if (r.nextInt(150) == 20) {
-					s = DiceImitate.lastword[r.nextInt(DiceImitate.lastword.length)];
+					s = TH08GameData.lastword[r.nextInt(TH08GameData.lastword.length)];
 				} else if (r.nextInt(300) == 25) {
-					s = DiceImitate.overdrive[r.nextInt(DiceImitate.overdrive.length)];
+					s = TH13GameData.overdrive[r.nextInt(TH13GameData.overdrive.length)];
 				} else {	
 					s = DiceImitate.spells[r.nextInt(DiceImitate.spells.length)];
 				}
@@ -272,7 +314,7 @@ public class SpellCollect {
 			sb.setLength(0);
 			sb.append("lastword:");
 			boolean hasLastword=false;
-			for (String s:DiceImitate.lastword) {
+			for (String s:TH08GameData.lastword) {
 				if (gotSpells.contains(s)) {
 					sb.append("\n").append(s);
 					hasLastword = true;
@@ -284,7 +326,7 @@ public class SpellCollect {
 			sb.setLength(0);
 			boolean hasOverdrive=false;
 			sb.append("overdrive:");
-			for (String s:DiceImitate.overdrive) {
+			for (String s:TH13GameData.overdrive) {
 				if (gotSpells.contains(s)) {
 					sb.append("\n").append(s);
 					hasOverdrive = true;
@@ -317,6 +359,15 @@ public class SpellCollect {
 					Autoreply.sendMessage(fromGroup, 0, ac.describe);
 					return true;
 				}
+			}
+			return true;	
+		}
+
+		if (msg.startsWith("幻币兑换 ")) {
+			try {
+				Autoreply.instence.coinManager.exchangeCoins(fromGroup, fromQQ, Integer.parseInt(msg.substring(5)));
+			} catch (Exception e) {
+				Autoreply.sendMessage(fromGroup, 0, e.toString());
 			}
 			return true;	
 		}

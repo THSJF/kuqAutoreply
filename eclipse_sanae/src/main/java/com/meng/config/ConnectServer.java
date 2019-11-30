@@ -1,18 +1,21 @@
 package com.meng.config;
 
-import com.meng.*;
-import com.meng.bilibili.live.*;
-import com.meng.config.javabeans.*;
-import com.meng.dice.*;
-import com.meng.tools.*;
-import com.sobte.cqp.jcq.entity.*;
 import java.io.*;
 import java.net.*;
 import java.nio.*;
-import java.util.*;
 import org.java_websocket.*;
 import org.java_websocket.handshake.*;
 import org.java_websocket.server.*;
+import com.meng.*;
+import com.meng.config.javabeans.*;
+import com.meng.dice.DiceImitate;
+import com.google.gson.*;
+import java.util.*;
+import com.meng.bilibili.live.*;
+import com.meng.tools.*;
+import com.sobte.cqp.jcq.entity.*;
+import com.meng.picEdit.*;
+import com.meng.ocr.sign.*;
 
 public class ConnectServer extends WebSocketServer {
 
@@ -156,16 +159,42 @@ public class ConnectServer extends WebSocketServer {
 			case DataPack._19returnFind:
 				break;
 			case DataPack._20pic:
+				new JingShenZhiZhuQQManager(-1, -1, Autoreply.instence.CC.at(recievedDataPack.readNum(1)));
+				dataToSend = DataPack.encode(DataPack._21returnPic, recievedDataPack.getTimeStamp());
+				try { 
+					File jpg=new File(Autoreply.appDirectory + "jingshenzhizhu\\" + recievedDataPack.readNum(1) + ".jpg");
+					long filelength = jpg.length();
+					byte[] filecontent = new byte[(int) filelength];
+					FileInputStream in = new FileInputStream(jpg);
+					in.read(filecontent);
+					in.close();
+					dataToSend.writeData(filecontent);
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
 				break;
 			case DataPack._21returnPic:
 				break;
 			case DataPack._22pic2:
+				new ShenChuQQManager(-1, -1, Autoreply.instence.CC.at(recievedDataPack.readNum(1)));
+				dataToSend = DataPack.encode(DataPack._21returnPic, recievedDataPack.getTimeStamp());
+				try { 
+					File jpg=new File(Autoreply.appDirectory + "shenchu\\" + recievedDataPack.readNum(1) + ".jpg");
+					long filelength = jpg.length();
+					byte[] filecontent = new byte[(int) filelength];
+					FileInputStream in = new FileInputStream(jpg);
+					in.read(filecontent);
+					in.close();
+					dataToSend.writeData(filecontent);
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
 				break;
 			case DataPack._23returnPic2:
 				break;
 			case DataPack._24MD5Random:
 				dataToSend = DataPack.encode(DataPack._25returnMD5Random, recievedDataPack.getTimeStamp());
-				String md5=Methods.stringToMD5(String.valueOf(recievedDataPack.readNum(1) + System.currentTimeMillis() / (24 * 60 * 60 * 1000)));
+				String md5=MD5.stringToMD5(String.valueOf(recievedDataPack.readNum(1) + System.currentTimeMillis() / (24 * 60 * 60 * 1000)));
 				char c=md5.charAt(0);
 				if (c == '0') {
 					dataToSend.write(1, 9961);
@@ -191,7 +220,7 @@ public class ConnectServer extends WebSocketServer {
 				break;
 			case DataPack._30MD5grandma:
 				dataToSend = DataPack.encode(DataPack._31returnMD5grandma, recievedDataPack.getTimeStamp());
-				if (Methods.stringToMD5(String.valueOf(recievedDataPack.readNum(1) + System.currentTimeMillis() / (24 * 60 * 60 * 1000))).charAt(0) == '0') {
+				if (MD5.stringToMD5(String.valueOf(recievedDataPack.readNum(1) + System.currentTimeMillis() / (24 * 60 * 60 * 1000))).charAt(0) == '0') {
 					dataToSend.write(1, "八云紫");
 				} else {
 					dataToSend.write(1, Autoreply.instence.diceImitate.md5RanStr(recievedDataPack.readNum(1), DiceImitate.name));

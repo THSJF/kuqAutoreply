@@ -194,7 +194,7 @@ public class ConnectServer extends WebSocketServer {
 				break;
 			case DataPack._24MD5Random:
 				dataToSend = DataPack.encode(DataPack._25returnMD5Random, recievedDataPack.getTimeStamp());
-				String md5=MD5.stringToMD5(String.valueOf(recievedDataPack.readNum(1) + System.currentTimeMillis() / (24 * 60 * 60 * 1000)));
+				String md5=Methods.stringToMD5(String.valueOf(recievedDataPack.readNum(1) + System.currentTimeMillis() / (24 * 60 * 60 * 1000)));
 				char c=md5.charAt(0);
 				if (c == '0') {
 					dataToSend.write(1, 9961);
@@ -220,7 +220,7 @@ public class ConnectServer extends WebSocketServer {
 				break;
 			case DataPack._30MD5grandma:
 				dataToSend = DataPack.encode(DataPack._31returnMD5grandma, recievedDataPack.getTimeStamp());
-				if (MD5.stringToMD5(String.valueOf(recievedDataPack.readNum(1) + System.currentTimeMillis() / (24 * 60 * 60 * 1000))).charAt(0) == '0') {
+				if (Methods.stringToMD5(String.valueOf(recievedDataPack.readNum(1) + System.currentTimeMillis() / (24 * 60 * 60 * 1000))).charAt(0) == '0') {
 					dataToSend.write(1, "八云紫");
 				} else {
 					dataToSend.write(1, Autoreply.instence.diceImitate.md5RanStr(recievedDataPack.readNum(1), DiceImitate.name));

@@ -12,36 +12,94 @@ public class BiliLinkInfo {
     public BiliLinkInfo() {
     }
 
+    public boolean checkOgg(long fromGroup, long fromQQ, String msg) {
+        if (msg.startsWith("bav:")) {
+            Autoreply.sendMessage(fromGroup, fromQQ, processVideo(msg.substring(4)));
+            return true;
+        }
+        if (msg.startsWith("bcv:")) {
+            Autoreply.sendMessage(fromGroup, fromQQ, processArtical(msg.substring(4)));
+            return true;
+        }
+        if (msg.startsWith("blv:")) {
+            Autoreply.sendMessage(fromGroup, fromQQ, processLive(msg.substring(4)));
+            return true;
+        }
+        if (msg.startsWith("FromUriOpen@bilibili://")) {
+            String subedString = null;
+            try {
+                subedString = new String(Methods.decryptBASE64(msg.substring(23)));
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+            String result = null;
+            if (subedString == null) {
+                return false;
+            }
+            if (subedString.startsWith("av")) {
+                result = "av" + getVideoId(subedString);
+            } else if (subedString.startsWith("cv")) {
+                result = "cv" + getArticalId(subedString);
+            }
+            if (result != null) {
+                Autoreply.sendMessage(0, fromQQ, result);
+                return true;
+            }
+        }
+        return false;
+    }
+
     public boolean check(long fromGroup, long fromQQ, String msg) {
-		if (!msg.contains(liveUrl)) {
-			return false;
-		}
         String subedUrl;
-		int ind = msg.indexOf("http");
-		int ind1 = msg.indexOf(",text=");
-		int ind2 = msg.indexOf(",title=");
-		if (ind != -1 && ind1 != -1) {
-			subedUrl = msg.substring(ind, ind1);
-		} else if (ind != -1 && ind2 != -1) {
-			subedUrl = msg.substring(ind, ind2);
-		} else {
-			subedUrl = msg;
-		}
-		String result = null;
-		if (subedUrl.contains("www.bilibili.com/video/") || subedUrl.contains("b23.tv/av")) {
-			result = processVideo(getVideoId(subedUrl));
-		} else if (subedUrl.contains("www.bilibili.com/read/")) {
-			result = processArtical(getArticalId(subedUrl));
-		} else if (subedUrl.contains(liveUrl)) {
-			result = processLive(getLiveId(subedUrl));
-		}
-		if (result != null) {
-			Autoreply.instence.useCount.incBilibiliLink(fromQQ);
-			Autoreply.instence.groupCount.incBilibiliLink(fromGroup);
-			Autoreply.sendMessage(fromGroup, 0, result);
-			// 如果不是分享链接就拦截消息
-			return !msg.contains("[CQ:share,url=");
-		}
+        if (msg.startsWith("FromUriOpen@bilibili://")) {
+            String subedString = null;
+            try {
+                subedString = new String(Methods.decryptBASE64(msg.substring(23)));
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+            String result = "";
+            if (subedString == null) {
+                return false;
+            }
+            if (subedString.startsWith("av")) {
+                result += "av" + getVideoId(subedString) + "\n";
+                result += processVideo(getVideoId(subedString));
+            } else if (subedString.startsWith("cv")) {
+                result += "cv" + getArticalId(subedString) + "\n";
+                result += processArtical(getArticalId(subedString));
+            }
+            Autoreply.instence.useCount.incBilibiliLink(fromQQ);
+            Autoreply.instence.groupCount.incBilibiliLink(fromGroup);
+            Autoreply.sendMessage(fromGroup, 0, result);
+            return !msg.contains("[CQ:share,url=");
+        } else {
+            int ind = msg.indexOf("http");
+            int ind1 = msg.indexOf(",text=");
+            int ind2 = msg.indexOf(",title=");
+            if (ind != -1 && ind1 != -1) {
+                subedUrl = msg.substring(ind, ind1);
+            } else if (ind != -1 && ind2 != -1) {
+                subedUrl = msg.substring(ind, ind2);
+            } else {
+                subedUrl = msg;
+            }
+            String result = null;
+            if (subedUrl.contains("www.bilibili.com/video/") || subedUrl.contains("b23.tv/av")) {
+                result = processVideo(getVideoId(subedUrl));
+            } else if (subedUrl.contains("www.bilibili.com/read/")) {
+                result = processArtical(getArticalId(subedUrl));
+            } else if (subedUrl.contains(liveUrl)) {
+                result = processLive(getLiveId(subedUrl));
+            }
+            if (result != null) {
+                Autoreply.instence.useCount.incBilibiliLink(fromQQ);
+                Autoreply.instence.groupCount.incBilibiliLink(fromGroup);
+                Autoreply.sendMessage(fromGroup, 0, result);
+                // 如果不是分享链接就拦截消息
+                return !msg.contains("[CQ:share,url=");
+            }
+        }
         return false;
     }
 
@@ -72,8 +130,8 @@ public class BiliLinkInfo {
         String jsonInHtml = html.substring(html.indexOf("{\"roomInitRes\":"), html.lastIndexOf("}") + 1);
         JsonObject data = new JsonParser().parse(jsonInHtml).getAsJsonObject().get("baseInfoRes").getAsJsonObject().get("data").getAsJsonObject();
         return "房间号:" + id + "\n主播:" + userName + "\n房间标题:" + data.get("title").getAsString() +
-			"\n分区:" + data.get("parent_area_name").getAsString() + "-" + data.get("area_name").getAsString() +
-			"\n标签:" + data.get("tags").getAsString();
+                "\n分区:" + data.get("parent_area_name").getAsString() + "-" + data.get("area_name").getAsString() +
+                "\n标签:" + data.get("tags").getAsString();
     }
 
     private String getVideoId(String url) {
@@ -110,5 +168,14 @@ public class BiliLinkInfo {
             }
         }
         return stringBuilder.toString();
+    }
+
+    public static String encodeBilibiliURL(long id, boolean av) {
+        try {
+            return "FromUriOpen@bilibili://" + Methods.encryptBASE64(((av ? "av:" : "cv") + id).getBytes());
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
     }
 }

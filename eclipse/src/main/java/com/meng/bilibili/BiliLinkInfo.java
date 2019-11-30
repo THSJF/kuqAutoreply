@@ -28,7 +28,7 @@ public class BiliLinkInfo {
         if (msg.startsWith("FromUriOpen@bilibili://")) {
             String subedString = null;
             try {
-                subedString = new String(Methods.decryptBASE64(msg.substring(23)));
+                subedString = new String(Base64.decode(msg.substring(23)));
             } catch (Exception e) {
                 e.printStackTrace();
             }
@@ -54,7 +54,7 @@ public class BiliLinkInfo {
         if (msg.startsWith("FromUriOpen@bilibili://")) {
             String subedString = null;
             try {
-                subedString = new String(Methods.decryptBASE64(msg.substring(23)));
+                subedString = new String(Base64.decode(msg.substring(23)));
             } catch (Exception e) {
                 e.printStackTrace();
             }
@@ -172,7 +172,7 @@ public class BiliLinkInfo {
 
     public static String encodeBilibiliURL(long id, boolean av) {
         try {
-            return "FromUriOpen@bilibili://" + Methods.encryptBASE64(((av ? "av:" : "cv") + id).getBytes());
+            return "FromUriOpen@bilibili://" + Base64.encode(((av ? "av:" : "cv") + id).getBytes());
         } catch (Exception e) {
             e.printStackTrace();
         }

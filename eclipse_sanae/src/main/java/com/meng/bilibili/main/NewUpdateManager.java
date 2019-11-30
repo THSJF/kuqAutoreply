@@ -58,6 +58,7 @@ public class NewUpdateManager {
     private void tipVideo(long fromGroup, String msg, long videoUpdateTime, NewVideoBean.Data.Vlist vlist) {
         if (System.currentTimeMillis() - videoUpdateTime < 86400000) {
             Autoreply.sendMessage(fromGroup, 0, "更新莉,,,https://www.bilibili.com/video/av" + vlist.aid);
+            Autoreply.sendMessage(fromGroup, 0, BiliLinkInfo.encodeBilibiliURL(vlist.aid, true));
         } else {
             Autoreply.sendMessage(fromGroup, 0, Autoreply.instence.CC.at(getUpQQ(msg.substring(0, msg.indexOf("今天更了吗")))) + Methods.rfa(words));
             int days = (int) ((System.currentTimeMillis() - videoUpdateTime) / 86400000);
@@ -72,6 +73,7 @@ public class NewUpdateManager {
     private void tipArticle(long fromGroup, String msg, long articalUpdateTime, NewArticleBean.Data.Articles articles) {
         if (System.currentTimeMillis() - articalUpdateTime < 86400000) {
             Autoreply.sendMessage(fromGroup, 0, "更新莉,,,https://www.bilibili.com/read/cv" + articles.id);
+            Autoreply.sendMessage(fromGroup, 0, BiliLinkInfo.encodeBilibiliURL(articles.id, false));
         } else {
             Autoreply.sendMessage(fromGroup, 0, Autoreply.instence.CC.at(getUpQQ(msg.substring(0, msg.indexOf("今天更了吗")))) + Methods.rfa(words));
             int days = (int) ((System.currentTimeMillis() - articalUpdateTime) / 86400000);

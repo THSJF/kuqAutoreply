@@ -1,17 +1,22 @@
 package com.meng.tools;
 
-import com.google.gson.*;
-import com.google.gson.reflect.*;
-import com.meng.*;
-import com.meng.config.javabeans.*;
-import com.meng.groupChat.*;
-import com.sobte.cqp.jcq.entity.*;
-import java.io.*;
-import java.lang.reflect.*;
-import java.nio.charset.*;
-import java.util.*;
-
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
+import com.meng.Autoreply;
+import com.meng.config.javabeans.GroupConfig;
+import com.meng.groupChat.BanType;
 import com.sobte.cqp.jcq.entity.Member;
+
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.OutputStreamWriter;
+import java.lang.reflect.Type;
+import java.nio.charset.StandardCharsets;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Map;
+import java.util.function.Function;
 
 public class BanListener {
 
@@ -230,21 +235,21 @@ public class BanListener {
 		if (lastOp == null) {
 			lastOp = BanType.ByUser;
 		}
-        BanType thisOp = Autoreply.instence.banner.getType(fromGroup, fromQQ);
-        if (thisOp.getPermission() - lastOp.getPermission() < 0) {
-            Autoreply.sendMessage(fromGroup, fromQQ, "你无法修改等级比你高的人进行的操作");
+		BanType thisOp = Autoreply.instence.banner.getType(fromGroup, fromQQ);
+		if (thisOp.getPermission() - lastOp.getPermission() < 0) {
+			Autoreply.sendMessage(fromGroup, fromQQ, "你无法修改等级比你高的人进行的操作");
             return;
         }
         targetQQAndType.put(targetQQ, thisOp);
-        HashSet<Long> hs = sleepSet.get(String.valueOf(fromGroup));
+		HashSet<Long> hs = sleepSet.get(String.valueOf(fromGroup));
 		if (hs == null) {
 			hs = new HashSet<>();
 		}
         hs.add(targetQQ);
 		sleepSet.put(String.valueOf(fromGroup), hs);
-        Methods.ban(fromGroup, targetQQ, 2592000);
-        saveConfig();
-    }
+		Methods.ban(fromGroup, targetQQ, 2592000);
+		saveConfig();
+	}
 
     private void saveConfig() {
         try {
