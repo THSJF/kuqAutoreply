@@ -58,39 +58,18 @@ public class DiceImitate {
 		music = new String[]{
 			//th4
 			"bad apple",
-			//th6
-			"月时计",
-			"献给已逝公主的七重奏",
-			//th7
-			"天空的花之都",
-			"幽灵乐团",
-			"幽雅的绽放 墨染的樱花",
-			"少女幻葬",
-			"死亡幻想",
-			//th8
-			"少女绮想曲",
-			"恋色 master spark",
-			"竹取飞翔"};
+		};
+		music = Methods.mergeArray(music, TH06GameData.musicName);
+		music = Methods.mergeArray(music, TH07GameData.musicName);
+		music = Methods.mergeArray(music, TH08GameData.musicName);
 		music = Methods.mergeArray(music, TH10GameData.musicName);
-		music = Methods.mergeArray(music, new String[]{
-									   //th11
-									   "漫步在地狱的街道",
-									   "尸体旅行",
-									   //th12
-									   "春之岸边",
-									   "感情的摩天轮",
-									   //th13
-									   "古老的元神",
-									   "圣德传说 ~ True Administrator",
-									   //th14
-									   "幻想净琉璃",
-									   "辉光之针的小人族"});
+		music = Methods.mergeArray(music, TH11GameData.musicName);
+		music = Methods.mergeArray(music, TH12GameData.musicName);
+		music = Methods.mergeArray(music, TH13GameData.musicName);
+		music = Methods.mergeArray(music, TH14GameData.musicName);
 		music = Methods.mergeArray(music, TH15GameData.musicName);
 		music = Methods.mergeArray(music, TH16GameData.musicName);
-		music = Methods.mergeArray(music, new String[]{
-									   //th17
-									   "寄世界于偶像 ~ Idoratrize World"
-								   });
+		music = Methods.mergeArray(music, TH17GameData.musicName);
 		name = new String[]{
 			//th2
 			"里香",
