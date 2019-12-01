@@ -29,7 +29,6 @@ public class AdminMessageProcessor {
 		masterPermission.put("send.[群号].[内容]", "内容转发至指定群");
 		masterPermission.put("移除成就 [成就名] [艾特一人]", "移除此人的该成就");
 
-		adminPermission.put("findInAll:[QQ号]", "查找共同群");
 		adminPermission.put("线程数", "线程池信息");
 		adminPermission.put(".on|.off", "不修改配置文件的单群开关");
 		adminPermission.put(".admin enable|.admin disable", "修改配置文件的单群开关");
@@ -185,17 +184,7 @@ public class AdminMessageProcessor {
 			}
             String[] strings = msg.split("\\.", 3);
             if (strings[0].equals("send")) {
-                switch (strings[2]) {
-                    case "喵":
-						Autoreply.instence.threadPool.execute(new DeleteMessageRunnable(sendMessage(Long.parseLong(strings[1]), 0, Autoreply.instence.CC.record("miao.mp3"))));
-						break;
-                    case "娇喘":
-						Autoreply.instence.threadPool.execute(new DeleteMessageRunnable(sendMessage(Long.parseLong(strings[1]), 0, Autoreply.instence.CC.record("mmm.mp3"))));
-						break;
-                    default:
 						sendMessage(Long.parseLong(strings[1]), 0, strings[2]);
-						break;
-				}
                 return true;
 			}
 		}
@@ -206,15 +195,6 @@ public class AdminMessageProcessor {
 			}
             if (msg.equals("鬼人正邪统计")) {
                 sendMessage(fromGroup, fromQQ, Autoreply.instence.useCount.getMyCount(Autoreply.CQ.getLoginQQ()));
-                return true;
-			}
-            if (msg.startsWith("findInAll:")) {
-                Autoreply.instence.threadPool.execute(new Runnable() {
-						@Override
-						public void run() {
-							Methods.findQQInAllGroup(fromGroup, fromQQ, msg);
-						}
-					});
                 return true;
 			}
 		}

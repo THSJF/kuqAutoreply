@@ -1,40 +1,101 @@
 package com.meng.config;
 
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.OutputStreamWriter;
-import java.lang.reflect.Type;
-import java.nio.charset.StandardCharsets;
-import java.util.HashSet;
+import com.google.gson.*;
+import com.google.gson.reflect.*;
+import com.meng.*;
+import com.meng.config.javabeans.*;
+import java.lang.reflect.*;
+import java.net.*;
+import java.nio.*;
+import org.java_websocket.client.*;
+import org.java_websocket.handshake.*;
+import org.java_websocket.exceptions.*;
 
-import com.google.gson.Gson;
-import com.google.gson.reflect.TypeToken;
-import com.meng.Autoreply;
-import com.meng.tools.Methods;
-import com.meng.config.javabeans.ConfigJavaBean;
-import com.meng.config.javabeans.GroupConfig;
-import com.meng.config.javabeans.PersonInfo;
-import com.meng.config.javabeans.PortConfig;
-import com.sobte.cqp.jcq.entity.Group;
-import com.sobte.cqp.jcq.entity.*;
-
-public class ConfigManager {
+public class ConfigManager extends WebSocketClient {
     public ConfigJavaBean configJavaBean = new ConfigJavaBean();
     public Gson gson = new Gson();
-    public PortConfig portConfig = new PortConfig();
 
-    public ConfigManager() {
-        portConfig = gson.fromJson(Methods.readFileToString(Autoreply.appDirectory + "grzxEditConfig.json"), PortConfig.class);
-        File jsonBaseConfigFile = new File(Autoreply.appDirectory + "configV3.json");
-        if (!jsonBaseConfigFile.exists()) {
-            saveConfig();
-        }
-        Type type = new TypeToken<ConfigJavaBean>() {
-        }.getType();
-        configJavaBean = gson.fromJson(Methods.readFileToString(Autoreply.appDirectory + "configV3.json"), type);
-        Autoreply.instence.threadPool.execute(new SocketConfigManager(this));
-     }
+	public ConfigManager(URI uri) {
+		super(uri);		
+	}
+
+	@Override
+	public void onMessage(String p1) {
+
+	}
+
+	@Override
+	public void onOpen(ServerHandshake serverHandshake) {
+		DataPack dp=DataPack.encode(DataPack._1getConfig, System.currentTimeMillis());
+		send(dp.getData());
+		Autoreply.sendMessage(807242547L, 0, "连接到鬼人正邪");
+	}
+
+	@Override
+	public void onMessage(ByteBuffer bs) {	
+		DataPack dataPackRecieved=DataPack.decode(bs.array());
+		DataPack dataToSend=null;
+		long group=0;
+		long qq=0;
+		switch (dataPackRecieved.getOpCode()) {
+			case DataPack._2retConfig:
+				Type type = new TypeToken<ConfigJavaBean>() {
+				}.getType();
+				configJavaBean = gson.fromJson(dataPackRecieved.readString(), type);	
+				break;
+			case DataPack._4retOverSpell:
+				group = dataPackRecieved.readLong();
+				qq = dataPackRecieved.readLong();
+				String spell=dataPackRecieved.readString();
+				break;
+			case DataPack._6retOverPersent:
+				group = dataPackRecieved.readLong();
+				qq = dataPackRecieved.readLong();
+				int persent=dataPackRecieved.readInt();//0-10000
+				break;
+			case DataPack._8retGrandma:
+				group = dataPackRecieved.readLong();
+				qq = dataPackRecieved.readLong();
+				String grandma=dataPackRecieved.readString();
+				break;
+			case DataPack._10retMusicName:
+				group = dataPackRecieved.readLong();
+				qq = dataPackRecieved.readLong();
+				String musicName=dataPackRecieved.readString();
+				break;
+			case DataPack._12retGotSpells:
+				group = dataPackRecieved.readLong();
+				qq = dataPackRecieved.readLong();
+				String jsonStr=dataPackRecieved.readString();
+				break;
+			case DataPack._14retNeta:
+				group = dataPackRecieved.readLong();
+				qq = dataPackRecieved.readLong();
+				String neta=dataPackRecieved.readString();
+				break;
+			default:
+				dataToSend = DataPack.encode(DataPack._0notification, dataPackRecieved);
+				dataToSend.writeString("操作类型错误");
+		}
+		if (dataToSend != null) {
+			try{
+			send(dataToSend.getData());
+			}catch(WebsocketNotConnectedException e){
+				Autoreply.sendMessage(807242547L, 0, "和鬼人正邪的连接已断开");
+				reconnect();
+			}
+		}
+	}
+
+	@Override
+	public void onClose(int i, String s, boolean b) {
+
+	}
+
+	@Override
+	public void onError(Exception e) {
+
+	}
 
 	public boolean containsGroup(long group) {
 		for (GroupConfig gf:configJavaBean.groupConfigs) {
@@ -51,7 +112,6 @@ public class ConfigManager {
 		} else {
 			configJavaBean.nicknameMap.remove(qq);
 		}
-		saveConfig();
 	}
 
 	public String getNickName(long qq) {
@@ -102,18 +162,6 @@ public class ConfigManager {
         }
         return null;
     }
-
-	public void addAutoAllow(long qq) {
-		configJavaBean.groupAutoAllowList.add(qq);
-		Autoreply.sendMessage(Autoreply.mainGroup, 0, "自动同意列表添加用户" + qq);
-		saveConfig();
-	}
-
-	public void removeAutoAllow(long qq) {
-		configJavaBean.groupAutoAllowList.remove(qq);
-		Autoreply.sendMessage(Autoreply.mainGroup, 0, "自动同意列表移除用户" + qq);
-		saveConfig();
-	}
 
     public boolean isNotReplyGroup(long fromGroup) {
         GroupConfig groupConfig = getGroupConfig(fromGroup);
@@ -186,7 +234,7 @@ public class ConfigManager {
                 break;
             }
         }
-        saveConfig();
+
         Autoreply.instence.threadPool.execute(new Runnable() {
 				@Override
 				public void run() {
@@ -202,21 +250,4 @@ public class ConfigManager {
         Autoreply.sendMessage(Autoreply.mainGroup, 0, "已将群" + group + "加入黑名单");
     }
 
-	public void setOgg(long qqNum) {
-		configJavaBean.ogg = qqNum;
-		saveConfig();
-	}
-
-    public void saveConfig() {
-        try {
-            File file = new File(Autoreply.appDirectory + "configV3.json");
-            FileOutputStream fos = new FileOutputStream(file);
-            OutputStreamWriter writer = new OutputStreamWriter(fos, StandardCharsets.UTF_8);
-            writer.write(gson.toJson(configJavaBean));
-            writer.flush();
-            fos.close();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
 }

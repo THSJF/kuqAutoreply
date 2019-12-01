@@ -363,15 +363,6 @@ public class SpellCollect {
 			return true;	
 		}
 
-		if (msg.startsWith("幻币兑换 ")) {
-			try {
-				Autoreply.instence.coinManager.exchangeCoins(fromGroup, fromQQ, Integer.parseInt(msg.substring(5)));
-			} catch (Exception e) {
-				Autoreply.sendMessage(fromGroup, 0, e.toString());
-			}
-			return true;	
-		}
-
 		if (msg.equals("~coins")) {
 			Autoreply.sendMessage(fromGroup, 0, "你有" + Autoreply.instence.coinManager.getCoinsCount(fromQQ) + "个幻币");
 			return true;

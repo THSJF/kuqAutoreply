@@ -36,7 +36,7 @@ public class GroupMsgPart2Runnable implements Runnable {
 
     private boolean check() {
         if (msg.equalsIgnoreCase("loaddic")) {
-            Autoreply.instence.addGroupDic();
+            Autoreply.instence.loadGroupDic();
             sendMessage(fromGroup, fromQQ, "loaded");
             return true;
 		}
@@ -52,43 +52,6 @@ public class GroupMsgPart2Runnable implements Runnable {
 			Autoreply.instence.configManager.setNickName(fromQQ, name);
 			Autoreply.sendMessage(fromGroup, 0, "我以后会称呼你为" + name);
 			return true;
-		}
-		if (msg.equals("原曲认知")) {
-			File musicFragment=Autoreply.instence.musicManager.createMusicCut(new Random().nextInt(16), 10, fromQQ);
-			Autoreply.sendMessage(fromGroup, 0, Autoreply.instence.CC.record(musicFragment.getName()));	
-			return true;
-		}
-		if (msg.startsWith("原曲认知回答 ")) {
-			Autoreply.instence.musicManager.judgeAnswer(fromGroup, fromQQ, msg.substring(7));
-			return true;
-		}
-		if (msg.startsWith("原曲认知 ")) {
-			switch (msg) {
-				case "原曲认知 E":
-				case "原曲认知 e":
-				case "原曲认知 easy":
-				case "原曲认知 Easy":
-					Autoreply.sendMessage(fromGroup, 0, Autoreply.instence.CC.record(Autoreply.instence.musicManager.createMusicCut(new Random().nextInt(16), 10, fromQQ).getName()));	
-					break;
-				case "原曲认知 N":
-				case "原曲认知 n":
-				case "原曲认知 normal":
-				case "原曲认知 Normal":
-					Autoreply.sendMessage(fromGroup, 0, Autoreply.instence.CC.record(Autoreply.instence.musicManager.createMusicCut(new Random().nextInt(16), 6, fromQQ).getName()));
-					break;
-				case "原曲认知 H":
-				case "原曲认知 h":
-				case "原曲认知 hard":
-				case "原曲认知 Hard":
-					Autoreply.sendMessage(fromGroup, 0, Autoreply.instence.CC.record(Autoreply.instence.musicManager.createMusicCut(new Random().nextInt(16), 3, fromQQ).getName()));
-					break;
-				case "原曲认知 L":
-				case "原曲认知 l":
-				case "原曲认知 lunatic":
-				case "原曲认知 Lunatic":
-					Autoreply.sendMessage(fromGroup, 0, Autoreply.instence.CC.record(Autoreply.instence.musicManager.createMusicCut(new Random().nextInt(16), 1, fromQQ).getName()));
-					break;		
-			}
 		}
 		if (msg.equals(".nn")) {
 			Autoreply.instence.configManager.setNickName(fromQQ, null);
@@ -116,25 +79,6 @@ public class GroupMsgPart2Runnable implements Runnable {
         if (groupConfig.isCqCode() && Autoreply.instence.CQcodeManager.check(fromGroup, msg)) {// 特殊信息(签到分享等)
             return true;
 		}
-        if (groupConfig.isCuigeng() && Autoreply.instence.updateManager.check(fromGroup, msg)) {
-            return true;
-		}
-        if (msg.equals("查看统计")) {
-            sendMessage(fromGroup, fromQQ, Autoreply.instence.useCount.getMyCount(fromQQ));
-            return true;
-		}
-        if (msg.equals("查看排行")) {
-            sendMessage(fromGroup, fromQQ, Autoreply.instence.useCount.getTheFirst());
-            return true;
-		}
-        if (msg.equals("查看群统计")) {
-            sendMessage(fromGroup, fromQQ, Autoreply.instence.groupCount.getMyCount(fromGroup));
-            return true;
-		}
-        if (msg.equals("查看群排行")) {
-            sendMessage(fromGroup, fromQQ, Autoreply.instence.groupCount.getTheFirst());
-            return true;
-		}
         if (msg.equals("查看活跃数据")) {
             sendMessage(fromGroup, fromQQ, "https://qqweb.qq.com/m/qun/activedata/active.html?gc=" + fromGroup);
             return true;
@@ -144,10 +88,6 @@ public class GroupMsgPart2Runnable implements Runnable {
 		}
 		if (Autoreply.instence.seqManager.check(fromGroup, fromQQ, msg)) {
 			return true;
-		}
-		if (msg.contains("@") && Autoreply.instence.CC.getAt(msg) == -1000) {
-            sendMessage(fromGroup, fromQQ, "野蛮假at");
-            return true;
 		}
         return groupConfig.isDic() && Autoreply.instence.dicReplyManager.check(fromGroup, fromQQ, msg);
 	}

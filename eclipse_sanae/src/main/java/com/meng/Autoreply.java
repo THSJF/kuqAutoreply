@@ -7,7 +7,6 @@ import com.meng.dice.*;
 import com.meng.groupChat.*;
 import com.meng.groupChat.Sequence.*;
 import com.meng.messageProcess.*;
-import com.meng.musicProcess.*;
 import com.meng.tip.*;
 import com.meng.tools.*;
 import com.sobte.cqp.jcq.entity.*;
@@ -45,7 +44,6 @@ public class Autoreply extends JcqAppAbstract implements ICQVer, IMsg, IRequest 
 	public AdminMessageProcessor adminMessageProcessor;
     public GroupMemberChangerListener groupMemberChangerListener;
     public SeqManager seqManager;
-	public ConnectServer connectServer;
 	public SpellCollect spellCollect;
     public ExecutorService threadPool = Executors.newCachedThreadPool();
 
@@ -58,7 +56,6 @@ public class Autoreply extends JcqAppAbstract implements ICQVer, IMsg, IRequest 
     public HashSet<Long> botOff = new HashSet<>();
 	public CoinManager coinManager;
 	public BirthdayTip birthdayTip;
-	public MusicManager musicManager;
 
 	public DiceImitate diceImitate=new DiceImitate();
 	public static long mainGroup=1023432971l;
@@ -123,11 +120,6 @@ public class Autoreply extends JcqAppAbstract implements ICQVer, IMsg, IRequest 
         }
 		seqManager = new SeqManager();
 		birthdayTip = new BirthdayTip();
-		musicManager = new MusicManager();
-		try {
-			connectServer = new ConnectServer(9760);
-			connectServer.start();
-		} catch (java.net.UnknownHostException e) {}
 		spellCollect = new SpellCollect();
 		threadPool.execute(timeTip);
 		coinManager = new CoinManager();
@@ -602,7 +594,7 @@ public class Autoreply extends JcqAppAbstract implements ICQVer, IMsg, IRequest 
         return -1;
     }
 
-    public void addGroupDic() {
+    public void loadGroupDic() {
         dicReplyManager.clear();
         for (GroupConfig groupConfig : configManager.configJavaBean.groupConfigs) {
             if (groupConfig.isDic()) {
