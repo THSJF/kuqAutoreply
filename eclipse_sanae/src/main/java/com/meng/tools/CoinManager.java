@@ -1,6 +1,5 @@
 package com.meng.tools;
 
-import com.google.gson.*;
 import com.google.gson.reflect.*;
 import com.meng.*;
 import java.io.*;
@@ -9,7 +8,7 @@ import java.nio.charset.*;
 import java.util.*;
 
 public class CoinManager {
-	private HashMap<Long, Integer> countMap = new HashMap<>();
+	private HashMap<Long, Integer> coinsMap = new HashMap<>();
 	private File file;
 
 	public CoinManager() {
@@ -19,7 +18,7 @@ public class CoinManager {
 		}
 		Type type = new TypeToken<HashMap<Long, Integer>>() {
 		}.getType();
-		countMap = Autoreply.gson.fromJson(Methods.readFileToString(file.getAbsolutePath()), type);
+		coinsMap = Autoreply.gson.fromJson(Methods.readFileToString(file.getAbsolutePath()), type);
 		Autoreply.instence.threadPool.execute(new Runnable() {
 				@Override
 				public void run() {
@@ -32,12 +31,12 @@ public class CoinManager {
 		if (coins < 0) {
 			return;
 		}
-		if (countMap.get(fromQQ) != null) {
-			int qqCoin=countMap.get(fromQQ);
+		if (coinsMap.get(fromQQ) != null) {
+			int qqCoin=coinsMap.get(fromQQ);
 			qqCoin += coins;
-			countMap.put(fromQQ, qqCoin);
+			coinsMap.put(fromQQ, qqCoin);
 		} else {
-			countMap.put(fromQQ, coins);
+			coinsMap.put(fromQQ, coins);
 		}
 		saveData();
 	}
@@ -46,13 +45,13 @@ public class CoinManager {
 		if (coins < 0) {
 			return false;
 		}
-		if (countMap.get(fromQQ) != null) {
-			int qqCoin=countMap.get(fromQQ);
+		if (coinsMap.get(fromQQ) != null) {
+			int qqCoin=coinsMap.get(fromQQ);
 			if (qqCoin < coins) {
 				return false;
 			}
 			qqCoin -= coins;
-			countMap.put(fromQQ, qqCoin);
+			coinsMap.put(fromQQ, qqCoin);
 			saveData();
 			return true;
 		}
@@ -60,26 +59,17 @@ public class CoinManager {
 	}
 
 	public int getCoinsCount(long fromQQ) {
-		if (countMap.get(fromQQ) == null) {
+		if (coinsMap.get(fromQQ) == null) {
 			return 0;
 		}
-		return countMap.get(fromQQ);
+		return coinsMap.get(fromQQ);
 	}
-
-	public void exchangeCoins(long fromGroup, long fromQQ, int coins) {
-		if (subCoins(fromQQ, coins)) {
-			Autoreply.sendMessage(1023432971L, 0, "~addcoins " + coins + " " + fromQQ);
-			Autoreply.sendMessage(fromGroup, 0, "兑换" + coins + "个幻币至小律影");
-		} else {
-			Autoreply.sendMessage(fromGroup, 0, "兑换失败");
-		}
-	}
-
+	
 	private void saveData() {
 		try {
 			FileOutputStream fos = new FileOutputStream(file);
 			OutputStreamWriter writer = new OutputStreamWriter(fos, StandardCharsets.UTF_8);
-			writer.write(Autoreply.gson.toJson(countMap));
+			writer.write(Autoreply.gson.toJson(coinsMap));
 			writer.flush();
 			fos.close();
 		} catch (Exception e) {
@@ -94,7 +84,7 @@ public class CoinManager {
 				File backup = new File(file.getAbsolutePath() + ".bak" + System.currentTimeMillis());
 				FileOutputStream fos = new FileOutputStream(backup);
 				OutputStreamWriter writer = new OutputStreamWriter(fos, StandardCharsets.UTF_8);
-				writer.write(Autoreply.gson.toJson(countMap));
+				writer.write(Autoreply.gson.toJson(coinsMap));
 				writer.flush();
 				fos.close();
 			} catch (Exception e) {

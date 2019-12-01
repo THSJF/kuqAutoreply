@@ -5,13 +5,13 @@ import com.meng.*;
 import com.meng.config.javabeans.*;
 import com.meng.messageProcess.*;
 
-public class RepeaterBanner {
+public class Repeater {
     private String lastMessageRecieved = "";
     private boolean lastStatus = false;
     long groupNumber = 0;
     private WarnMessageProcessor warnMessageProcessor;
 
-    public RepeaterBanner(long groupNumber) {
+    public Repeater(long groupNumber) {
         this.groupNumber = groupNumber;
         warnMessageProcessor = new WarnMessageProcessor();
     }
