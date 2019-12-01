@@ -34,8 +34,7 @@ public class ConfigManager {
         }.getType();
         configJavaBean = gson.fromJson(Methods.readFileToString(Autoreply.appDirectory + "configV3.json"), type);
         Autoreply.instence.threadPool.execute(new SocketConfigManager(this));
-        Autoreply.instence.threadPool.execute(new SocketDicManager(this));
-    }
+     }
 
 	public boolean containsGroup(long group) {
 		for (GroupConfig gf:configJavaBean.groupConfigs) {

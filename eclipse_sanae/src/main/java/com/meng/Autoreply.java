@@ -1,9 +1,6 @@
 package com.meng;
 
 import com.google.gson.*;
-import com.meng.bilibili.*;
-import com.meng.bilibili.live.*;
-import com.meng.bilibili.main.*;
 import com.meng.config.*;
 import com.meng.config.javabeans.*;
 import com.meng.dice.*;
@@ -13,7 +10,6 @@ import com.meng.messageProcess.*;
 import com.meng.musicProcess.*;
 import com.meng.tip.*;
 import com.meng.tools.*;
-import com.meng.tools.override.*;
 import com.sobte.cqp.jcq.entity.*;
 import com.sobte.cqp.jcq.event.*;
 import java.io.*;
@@ -40,16 +36,16 @@ public class Autoreply extends JcqAppAbstract implements ICQVer, IMsg, IRequest 
 
     public static Autoreply instence;
     public Random random = new Random();
-        public RepeaterManager repeatManager;
+	public RepeaterManager repeatManager;
     public TimeTip timeTip = new TimeTip();
-       public DicReplyManager dicReplyManager;
+	public DicReplyManager dicReplyManager;
     public CQCodeManager CQcodeManager = new CQCodeManager();
-        public ConfigManager configManager;
-       public ConcurrentHashMap<Long, MessageSender> messageMap = new ConcurrentHashMap<>();
-             public AdminMessageProcessor adminMessageProcessor;
+	public ConfigManager configManager;
+	public ConcurrentHashMap<Long, MessageSender> messageMap = new ConcurrentHashMap<>();
+	public AdminMessageProcessor adminMessageProcessor;
     public GroupMemberChangerListener groupMemberChangerListener;
     public SeqManager seqManager;
-		public ConnectServer connectServer;
+	public ConnectServer connectServer;
 	public SpellCollect spellCollect;
     public ExecutorService threadPool = Executors.newCachedThreadPool();
 
@@ -110,11 +106,11 @@ public class Autoreply extends JcqAppAbstract implements ICQVer, IMsg, IRequest 
 		gson = gb.create();
         // 返回如：D:\CoolQ\app\com.sobte.cqp.jcq\app\com.example.demo\
         System.out.println("开始加载");
-		     long startTime = System.currentTimeMillis();
+		long startTime = System.currentTimeMillis();
         configManager = new ConfigManager();
         groupMemberChangerListener = new GroupMemberChangerListener();
         adminMessageProcessor = new AdminMessageProcessor(configManager);
-             messageMap.clear();
+		messageMap.clear();
         dicReplyManager = new DicReplyManager();
         repeatManager = new RepeaterManager();
         for (GroupConfig groupConfig : configManager.configJavaBean.groupConfigs) {
@@ -125,7 +121,7 @@ public class Autoreply extends JcqAppAbstract implements ICQVer, IMsg, IRequest 
                 repeatManager.addData(new com.meng.groupChat.Repeater(groupConfig.groupNumber));
             }
         }
-                   seqManager = new SeqManager();
+		seqManager = new SeqManager();
 		birthdayTip = new BirthdayTip();
 		musicManager = new MusicManager();
 		try {
@@ -133,9 +129,9 @@ public class Autoreply extends JcqAppAbstract implements ICQVer, IMsg, IRequest 
 			connectServer.start();
 		} catch (java.net.UnknownHostException e) {}
 		spellCollect = new SpellCollect();
-               threadPool.execute(timeTip);
-coinManager = new CoinManager();
-	   threadPool.execute(new checkMessageRunnable());
+		threadPool.execute(timeTip);
+		coinManager = new CoinManager();
+		threadPool.execute(new checkMessageRunnable());
         threadPool.execute(new CleanRunnable());
 
         System.out.println("加载完成,用时" + (System.currentTimeMillis() - startTime));
@@ -562,16 +558,16 @@ coinManager = new CoinManager();
             String[] stri = msg.split(":");
             switch (stri[0]) {
                 case "image":
-                            return CQ.sendGroupMsg(fromGroup, stri[2].replace("--image--", instence.CC.image(new File(appDirectory + stri[1]))));
+					return CQ.sendGroupMsg(fromGroup, stri[2].replace("--image--", instence.CC.image(new File(appDirectory + stri[1]))));
                 case "atFromQQ":
-                              return CQ.sendGroupMsg(fromGroup, instence.CC.at(fromQQ) + stri[1]);
+					return CQ.sendGroupMsg(fromGroup, instence.CC.at(fromQQ) + stri[1]);
                 case "atQQ":
-                         return CQ.sendGroupMsg(fromGroup, instence.CC.at(Long.parseLong(stri[1])) + stri[2]);
+					return CQ.sendGroupMsg(fromGroup, instence.CC.at(Long.parseLong(stri[1])) + stri[2]);
                 case "imageFolder":
-                                 File[] files = (new File(appDirectory + stri[1])).listFiles();
+					File[] files = (new File(appDirectory + stri[1])).listFiles();
                     return CQ.sendGroupMsg(fromGroup, stri[2].replace("--image--", instence.CC.image((File) Methods.rfa(files))));
                 default:
-                           return CQ.sendGroupMsg(fromGroup, msg);
+					return CQ.sendGroupMsg(fromGroup, msg);
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -598,7 +594,7 @@ coinManager = new CoinManager();
 						return CQ.sendPrivateMsg(fromQQ, stri[2].replace("--image--", instence.CC.image((File) Methods.rfa(files))));
 					} catch (IOException e) {}
                 }
-				
+
                 break;
             default:
                 return CQ.sendPrivateMsg(fromQQ, msg);

@@ -47,22 +47,18 @@ public class Repeater {
     }
 
     private boolean repeatEnd(long group, long qq, String msg) {
-        Autoreply.instence.useCount.incRepeatBreaker(qq);
-        Autoreply.instence.groupCount.incRepeatBreaker(group);
+		
         return false;
     }
 
     private boolean repeatRunning(long group, long qq, String msg) {
-        Autoreply.instence.useCount.incFudu(qq);
-        Autoreply.instence.groupCount.incFudu(group);
+        
         return false;
     }
 
     private boolean repeatStart(long group,  long qq,  String msg) {
-        Autoreply.instence.useCount.incFudujiguanjia(qq);
-        Autoreply.instence.groupCount.incFudu(group);
+        
 		Autoreply.sendMessage(group, 0, msg);
-        Autoreply.instence.useCount.incFudu(Autoreply.CQ.getLoginQQ());
         return true;
     }
 }

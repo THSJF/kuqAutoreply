@@ -10,95 +10,103 @@ import com.meng.tools.*;
 
 public class DataPack {
 
-	private byte[] data;
+	private ArrayList<Byte> data=new ArrayList<>();
+	private byte[] dataArray;
 	private final short headLength=26;
-	private byte[] arrayData=null;
-	private PersonInfo ritsukagePersonInfo=null;
-	private int writePointer=0;
+	private int dataPointer=0;
 
-	//小律影↔正邪  普通通知,大部分情况下没什么用   s1:通知文本
+	private final byte typeByte=0;
+	private final byte typeShort=1;
+	private final byte typeInt=2;
+	private final byte typeLong=3;
+	private final byte typeFloat=4;
+	private final byte typeDouble=5;
+	private final byte typeString=6;
+
+
+	//  普通通知,大部分情况下没什么用   s1:通知文本
 	public static final short _0notification=0;
-	//小律影→正邪  用于身份验证，暂未使用    n1:qq号(setConnect中设置的qq号)
+	//  用于身份验证，暂未使用    n1:qq号(setConnect中设置的qq号)
 	public static final short _1verify=1;
-	//小律影→正邪  获取正在直播列表  不需要body
+	//  获取正在直播列表  不需要body
 	public static final short _2getLiveList=2;
-	//正邪→小律影  返回2的查询结果  json数组  例:[{"name":"闲者","qq":"877247145","bid":12007285,"bliveRoom":1954885,"tipIn":[],"tip":[true,true,false]},{"name":"懒瘦","qq":"496276037","bid":15272850,"bliveRoom":3144622,"tipIn":[],"tip":[true,true,false]}]
+	//  返回2的查询结果  json数组  例:[{"name":"闲者","qq":"877247145","bid":12007285,"bliveRoom":1954885,"tipIn":[],"tip":[true,true,false]},{"name":"懒瘦","qq":"496276037","bid":15272850,"bliveRoom":3144622,"tipIn":[],"tip":[true,true,false]}]
 	public static final short _3returnLiveList=3;
-	//正邪→小律影  主播开始直播   n1:直播间号 s1:主播称呼
+	//  主播开始直播   n1:直播间号 s1:主播称呼
 	public static final short _4liveStart=4;
-	//正邪→小律影  主播停止直播   n1:直播间号 s1:主播称呼
+	//  主播停止直播   n1:直播间号 s1:主播称呼
 	public static final short _5liveStop=5;
-	//正邪→小律影  直播观看者在直播间发送的弹幕   n1:直播间号 s1:主播称呼 n2:说话者BID s2:说话者称呼,如果配置文件中没有就是用户名 s3:说话内容
+	//  直播观看者在直播间发送的弹幕   n1:直播间号 s1:主播称呼 n2:说话者BID s2:说话者称呼,如果配置文件中没有就是用户名 s3:说话内容
 	public static final short _6speakInLiveRoom=6;
-	//正邪→小律影  up主发布新视频  s1:用户名 s2:视频名 n1:AV号
+	//  up主发布新视频  s1:用户名 s2:视频名 n1:AV号
 	public static final short _7newVideo=7;
-	//正邪→小律影  up主发布新专栏  s1:用户名 s2:专栏名 n1:CV号
+	//  up主发布新专栏  s1:用户名 s2:专栏名 n1:CV号
 	public static final short _8newArtical=8;
-	//小律影→正邪  从称呼获得人员信息(完全匹配方式查找)  s1:称呼
+	//  从称呼获得人员信息(完全匹配方式查找)  s1:称呼
 	public static final short _9getPersonInfoByName=9;
-	//小律影→正邪  从qq获得人员信息(完全匹配方式查找)  n1:qq号
+	//  从qq获得人员信息(完全匹配方式查找)  n1:qq号
 	public static final short _10getPersonInfoByQQ=10;
-	//小律影→正邪  从bid获得人员信息(完全匹配方式查找)  n1:BID
+	//  从bid获得人员信息(完全匹配方式查找)  n1:BID
 	public static final short _11getPersonInfoByBid=11;
-	//小律影→正邪  从直播间号获得人员信息(完全匹配方式查找)  n1:直播间号
+	//  从直播间号获得人员信息(完全匹配方式查找)  n1:直播间号
 	public static final short _12getPersonInfoByBiliLive=12;
-	//正邪→小律影  返回 _9 _10 _11 _12的查询结果  返回结果例:{"name":"闲者","qq":"877247145","bid":12007285,"bliveRoom":1954885,"tipIn":[],"tip":[true,true,false]}
+	//  返回 _9 _10 _11 _12的查询结果  返回结果例:{"name":"闲者","qq":"877247145","bid":12007285,"bliveRoom":1954885,"tipIn":[],"tip":[true,true,false]}
 	public static final short _13returnPersonInfo=13;
-	//正邪→小律影  给指定qq号添加幻币  n1:幻币数量 n2:目标qq号
+	//  给指定qq号添加幻币  n1:幻币数量 n2:目标qq号
 	public static final short _14coinsAdd=14;
-	//小律影↔正邪  qq群中禁言  n1:群号 n2:QQ号 n3:时间(秒)
+	//  qq群中禁言  n1:群号 n2:QQ号 n3:时间(秒)
 	public static final short _15groupBan=15;
-	//小律影↔正邪  踢出qq群  n1:群号 n2:QQ号 n3:是否永久拒绝 0为否 1为是
+	//  踢出qq群  n1:群号 n2:QQ号 n3:是否永久拒绝 0为否 1为是
 	public static final short _16groupKick=16;
-	//小律影→正邪  心跳，不需要body 返回一个操作类型为0的通知
+	//  心跳，不需要body 返回一个操作类型为0的通知
 	public static final short _17heartBeat=17;
-	//小律影→正邪  同在QQ中的"findInAll"指令  n1:qq号
+	//  同在QQ中的"findInAll"指令  n1:qq号
 	public static final short _18FindInAll=18;
-	//正邪→小律影  返回18的结果   返回结果例[296376859,251059118]
+	//  返回18的结果   返回结果例[296376859,251059118]
 	public static final short _19returnFind=19;
-	//小律影→正邪  获得"精神支柱"表情包  n1:qq号
+	//  获得"精神支柱"表情包  n1:qq号
 	public static final short _20pic=20;
-	//正邪→小律影  返回_20生成的jpg文件 数据部分直接保存到磁盘即可
+	//  返回_20生成的jpg文件 数据部分直接保存到磁盘即可
 	public static final short _21returnPic=21;
-	//小律影→正邪  获得"神触"表情包  n1:qq号
+	//  获得"神触"表情包  n1:qq号
 	public static final short _22pic2=22;
-	//正邪→小律影  返回_22生成的jpg文件 数据部分直接保存到磁盘即可
+	//  返回_22生成的jpg文件 数据部分直接保存到磁盘即可
 	public static final short _23returnPic2=23;
-	//小律影→正邪  获得鬼人正邪".jrrp"中的计算结果  n1:qq号
+	//  获得鬼人正邪".jrrp"中的计算结果  n1:qq号
 	public static final short _24MD5Random=24;
-	//正邪→小律影  返回_24的结果 n1:计算结果   (0-10000的整数)
+	//  返回_24的结果 n1:计算结果   (0-10000的整数)
 	public static final short _25returnMD5Random=25;
-	//小律影→正邪  获得鬼人正邪".draw neta"中的计算结果  n1:qq号
+	//  获得鬼人正邪".draw neta"中的计算结果  n1:qq号
 	public static final short _26MD5neta=26;
-	//正邪→小律影  返回_26的结果 s1:计算结果
+	//  返回_26的结果 s1:计算结果
 	public static final short _27returnMD5neta=27;
-	//小律影→正邪  获得鬼人正邪".draw music"中的计算结果  n1:qq号
+	//  获得鬼人正邪".draw music"中的计算结果  n1:qq号
 	public static final short _28MD5music=28;
-	//正邪→小律影  返回_28的结果 s1:计算结果
+	//  返回_28的结果 s1:计算结果
 	public static final short _29returnMD5music=29;
-	//小律影→正邪  获得鬼人正邪".draw grandma"中的计算结果  n1:qq号
+	//  获得鬼人正邪".draw grandma"中的计算结果  n1:qq号
 	public static final short _30MD5grandma=30;
-	//正邪→小律影  返回_30的结果 s1:计算结果
+	//  返回_30的结果 s1:计算结果
 	public static final short _31returnMD5grandma=31;
-	//小律影→正邪  获得鬼人正邪"。jrrp"中的计算结果  n1:qq号
+	//  获得鬼人正邪"。jrrp"中的计算结果  n1:qq号
 	public static final short _32MD5overSpell=32;
-	//正邪→小律影  返回_32的结果 s1:计算结果
+	//  返回_32的结果 s1:计算结果
 	public static final short _33returnMD5overSpell=33;
-	//小律影→正邪  发送直播间弹幕 s1:弹幕内容 s2:屑站账号cookie n1:直播间号
+	//  发送直播间弹幕 s1:弹幕内容 s2:屑站账号cookie n1:直播间号
 	public static final short _34sendDanmaku=34;
-	//小律影→正邪  设置群名片 n1:群号 n2:目标qq号 s1:名片内容
+	//  设置群名片 n1:群号 n2:目标qq号 s1:名片内容
 	public static final short _37setGroupName=37;
-	//小律影→正邪  设置群头衔  n1:群号 n2:目标qq号 n3:有效时间，单位为秒，无限期写-1 s1:头衔内容
+	//  设置群头衔  n1:群号 n2:目标qq号 n3:有效时间，单位为秒，无限期写-1 s1:头衔内容
 	public static final short _38setSpecialTitle=38;
 	/*
-	//小律影→正邪  获得原曲认知问题 n1:需要的秒数
-	public static final short _39getMusicQueation=39;
-	//正邪→小律影 
-*/
+	 //  获得原曲认知问题 n1:需要的秒数
+	 public static final short _39getMusicQueation=39;
+	 // 
+	 */
 	/*******    希望小律影提供的    *******/
-	//小律影→正邪  加群审核 n1:加群申请id n2:群号 n3:qq号
+	//  加群审核 n1:加群申请id n2:群号 n3:qq号
 	public static final short _35groupAdd=35;
-	//正邪→小律影  回复加群审核 n1:加群申请id n2:是否同意(0拒绝 1同意) s1:同意或拒绝的理由 s2:此人的称呼(如果有)(优先使用.nn设置的称呼)
+	//  回复加群审核 n1:加群申请id n2:是否同意(0拒绝 1同意) s1:同意或拒绝的理由 s2:此人的称呼(如果有)(优先使用.nn设置的称呼)
 	public static final short _36returnGroupAdd=36;
 
 
@@ -112,273 +120,207 @@ public class DataPack {
 	}
 
 	private DataPack(short opCode, long timeStamp) {
-		gson = Autoreply.gson;
-		data = new byte[headLength];
-		ritsukageBean = new RitsukageBean();
-		write(getBytes(data.length));
-		write(getBytes(headLength));
-		write(getBytes((short)1));
-		write(getBytes(timeStamp));
-		write(getBytes(Autoreply.instence.configManager.configJavaBean.ogg));
-		write(getBytes(opCode));
+		write(BitConverter.getBytes(0));
+		write(BitConverter.getBytes(headLength));
+		write(BitConverter.getBytes((short)1));
+		write(BitConverter.getBytes(timeStamp));
+		write(BitConverter.getBytes(0));
+		write(BitConverter.getBytes(opCode));
 	}   
 
 	private DataPack(byte[] pack) {
-		gson = Autoreply.gson;
-		data = pack;
-		String s="";
-		try {
-			s = new String(pack, headLength, getLength() - headLength , "utf-8");
-		} catch (UnsupportedEncodingException e) {}
-		System.out.println(s);
+		dataArray = pack;
 		switch (getOpCode()) {
-				/*	case DataPack._0notification:
-				 case DataPack._1verify:
-				 case DataPack._2getLiveList:
-				 case DataPack._4liveStart:
-				 case DataPack._5liveStop:
-				 case DataPack._6speakInLiveRoom:
-				 case DataPack._7newVideo:
-				 case DataPack._8newArtical:
-				 case DataPack._9getPersonInfoByName:	
-				 case DataPack._10getPersonInfoByQQ:
-				 case DataPack._11getPersonInfoByBid:
-				 case DataPack._12getPersonInfoByBiliLive:
-				 case DataPack._14coinsAdd:
-				 case DataPack._15groupBan:
-				 case DataPack._16groupKick:
-				 case DataPack._17heartBeat:
-				 case DataPack._18FindInAll:
-				 case DataPack._20pic:
-				 break;
-				 */
+			case DataPack._0notification:
+				break;
+			case DataPack._1verify:
+				break; 
+			case DataPack._2getLiveList:
+				break;
 			case DataPack._3returnLiveList:
-				Type ritsucageSetType = new TypeToken<HashSet<PersonInfo>>() {
-				}.getType();
-				ritsukageSet = gson.fromJson(s, ritsucageSetType);
+				break;
+			case DataPack._4liveStart:
+				break; 
+			case DataPack._5liveStop:
+				break;
+			case DataPack._6speakInLiveRoom:
+				break; 
+			case DataPack._7newVideo:
+				break;
+			case DataPack._8newArtical:
+				break;
+			case DataPack._9getPersonInfoByName:	
+				break;
+			case DataPack._10getPersonInfoByQQ:
+				break;
+			case DataPack._11getPersonInfoByBid:
+				break;
+			case DataPack._12getPersonInfoByBiliLive:
 				break;
 			case DataPack._13returnPersonInfo:
-				ritsukagePersonInfo = gson.fromJson(s, PersonInfo.class);
 				break;
+			case DataPack._14coinsAdd:
+				break;
+			case DataPack._15groupBan:
+				break;
+			case DataPack._16groupKick:
+				break; 
+			case DataPack._17heartBeat:
+				break;
+			case DataPack._18FindInAll:
+				break; 
 			case DataPack._19returnFind:
-				Type ritsucageLongSetType = new TypeToken<HashSet<Long>>() {
-				}.getType();
-				ritsukageLongSet = gson.fromJson(s, ritsucageLongSetType);
+				break;
+			case DataPack._20pic:
 				break;
 			case DataPack._21returnPic:
-				//saveFile(System.currentTimeMillis() + "", data);
-				break;
+				break;	
 			default:
-				ritsukageBean = gson.fromJson(s, RitsukageBean.class);
 				break;
 		}
 	} 
 
 	public byte[] getData() {
-		byte[] retData=null;
-		byte[] byteArray=null;
-		if (arrayData != null) {
-			byteArray = arrayData;
-			retData = new byte[headLength + byteArray.length];	
-		} else if (ritsukageSet != null) {
-			try {
-				byteArray = gson.toJson(ritsukageSet).getBytes("utf-8");
-			} catch (UnsupportedEncodingException e) {
-				e.printStackTrace();
-				return null;
-			}
-		} else if (ritsukagePersonInfo != null) {	
-			try {
-				byteArray = gson.toJson(ritsukagePersonInfo).getBytes("utf-8");
-			} catch (UnsupportedEncodingException e) {
-				e.printStackTrace();
-				return null;
-			}
-		} else if (ritsukageLongSet != null) {
-			try {
-				byteArray = gson.toJson(ritsukageLongSet).getBytes("utf-8");
-			} catch (UnsupportedEncodingException e) {
-				e.printStackTrace();
-				return null;
-			}
-		} else if (ritsukageStringSet != null) {
-			try {
-				byteArray = gson.toJson(ritsukageStringSet).getBytes("utf-8");
-			} catch (UnsupportedEncodingException e) {
-				e.printStackTrace();
-				return null;
-			}
-		} else if (ritsukageBean != null) {
-			try {
-				byteArray = gson.toJson(ritsukageBean).replaceAll(",\"s[1-9]\":\"\"", "").replaceAll(",\"n[1-9]\":\"0\"", "").getBytes("utf-8");
-			} catch (UnsupportedEncodingException e) {
-				e.printStackTrace();
-				return null;
-			}
-		} else {
-			try {		
-				byteArray = "".getBytes("utf-8");
-			} catch (UnsupportedEncodingException e) {
-				e.printStackTrace();
-				return null;
-			}
+		byte[] retData=new byte[data.size()];
+		for (int i=0;i < data.size();++i) {
+			retData[i] = data.get(i);
 		}
-		retData = Methods.mergeArray(data, byteArray);
-		byte[] len=getBytes(retData.length);
+		byte[] len=BitConverter.getBytes(retData.length);
 		retData[0] = len[0];
 		retData[1] = len[1];
 		retData[2] = len[2];
 		retData[3] = len[3];
+		dataArray = retData;
 		return retData;
 	}
 
 	public int getLength() {
-		return readInt(data, 0);
+		return BitConverter.toInt(dataArray, 0);
 	}  
 
 	public short getHeadLength() {
-		return readShort(data, 4);
+		return BitConverter.toShort(dataArray, 4);
 	}
 
 	public short getVersion() {
-		return readShort(data, 6);
+		return BitConverter.toShort(dataArray, 6);
 	}
 
 	public long getTimeStamp() {
-		return readLong(data, 8);
+		return BitConverter.toLong(dataArray, 8);
 	}
 
 	public long getTarget() {
-		return readLong(data, 16);
+		return BitConverter.toLong(dataArray, 16);
 	}
 
 	public short getOpCode() {
-		return readShort(data, 24);
+		return BitConverter.toShort(dataArray, 24);
 	}
 
-	public void write(PersonInfo pi) {
-		ritsukagePersonInfo = pi;
-	}
-
-	public void writePersonSet(HashSet<PersonInfo> hs) {
-		ritsukageSet = hs;
-	}
-
-	public void writeStringSet(HashSet<String> hs) {
-		ritsukageStringSet = hs;
-	}
-
-	public void writeLongSet(HashSet<Long> hs) {
-		ritsukageLongSet = hs;
-	}
-	public void write(int argNum, long l) {
-		switch (argNum) {
-			case 1:
-				ritsukageBean.n1 = l;
-				break;
-			case 2:
-				ritsukageBean.n2 = l;
-				break;
-			case 3:
-				ritsukageBean.n3 = l;
-				break;
+	private void write(byte... bs) {
+		for (byte b:bs) {
+			data.add(b);
+			++dataPointer;
 		}
 	}
 
-	public void write(int argNum, String s) {
-		switch (argNum) {
-			case 1:
-				ritsukageBean.s1 = s;
-				break;
-			case 2:
-				ritsukageBean.s2 = s;
-				break;
-			case 3:
-				ritsukageBean.s3 = s;
+	private void writeByte(byte b) {
+		write(typeByte);
+		write(b);
+	}
+
+	private void writeShort(short s) {
+		write(typeShort);
+		write(BitConverter.getBytes(s));
+	}
+
+	private void writeInt(int i) {
+		write(typeInt);
+		write(BitConverter.getBytes(i));
+	}
+
+	private void writeLong(long l) {
+		write(typeLong);
+		write(BitConverter.getBytes(l));
+	}
+
+	private void writeFloat(float f) {
+		write(typeFloat);
+		write(BitConverter.getBytes(f));
+	}
+
+	private void writeDouble(double d) {
+		write(typeDouble);
+		write(BitConverter.getBytes(d));
+	}
+
+	private void writeString(String s) {
+		write(typeString);
+		writeInt(s.length());
+		write(BitConverter.getBytes(s));
+	}
+
+	private byte readByte() {
+		if (dataArray[dataPointer++] == typeByte) {
+			return dataArray[dataPointer++];
 		}
+		throw new NumberFormatException("not a byte number");
 	}
 
-	public long readNum(int argNum) {
-		switch (argNum) {
-			case 1:
-				return ritsukageBean.n1;
-			case 2:
-				return ritsukageBean.n2;	
-			case 3:
-				return ritsukageBean.n3;
+	private short readShort() {
+		if (dataArray[dataPointer++] == typeShort) {
+			short s = BitConverter.toShort(dataArray, dataPointer);
+			dataPointer += 2;
+			return s;
 		}
-		return 0;
+		throw new NumberFormatException("not a int number");
 	}
 
-	public void writeData(byte[] bs) {
-		arrayData = bs;
-	}
-
-	public String readString(int argNum) {
-		switch (argNum) {
-			case 1:
-				return ritsukageBean.s1;
-			case 2:
-				return ritsukageBean.s2;
+	private int readInt() {
+		if (dataArray[dataPointer++] == typeInt) {
+			int i= BitConverter.toInt(dataArray, dataPointer);
+			dataPointer += 4;
+			return i;
 		}
-		return null;
+		throw new NumberFormatException("not a int number");
 	}
 
-	private void write(byte[] bs) {
-		for (int i=0;i < bs.length;++i) {
-			data[writePointer++] = bs[i];
+	private long readLong() {
+		if (dataArray[dataPointer++] == typeLong) {
+			long l= BitConverter.toLong(dataArray, dataPointer);
+			dataPointer += 8;
+			return l;
 		}
+		throw new NumberFormatException("not a long number");
 	}
 
-	private void saveFile(String name, byte[] bytes) {
-        try {
-            File file = new File(Autoreply.appDirectory + "jingshenzhizhu\\" + name + ".jpg");
-            FileOutputStream fos = new FileOutputStream(file);
-            fos.write(bytes, headLength, bytes.length - headLength);
-            fos.close();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+	private float readFloat() {
+		if (dataArray[dataPointer++] == typeFloat) {
+			float f = BitConverter.toFloat(dataArray, dataPointer);
+			dataPointer += 4;
+			return f;
+		}
+		throw new NumberFormatException("not a int number");
 	}
 
-	private byte[] getBytes(int i) {
-		byte[] bs=new byte[4];
-		bs[0] = (byte) ((i >> 0) & 0xff);
-		bs[1] = (byte) ((i >> 8) & 0xff);
-		bs[2] = (byte) ((i >> 16) & 0xff);
-		bs[3] = (byte) ((i >> 24) & 0xff);
-		return bs;	
+	private double readDouble() {
+		if (dataArray[dataPointer++] == typeDouble) {
+			double d = BitConverter.toDouble(dataArray, dataPointer);
+			dataPointer += 8;
+			return d;
+		}
+		throw new NumberFormatException("not a long number");
 	}
 
-	private byte[] getBytes(long l) {
-		byte[] bs=new byte[8];
-		bs[0] = (byte) ((l >> 0) & 0xff);
-		bs[1] = (byte) ((l >> 8) & 0xff);
-		bs[2] = (byte) ((l >> 16) & 0xff);
-		bs[3] = (byte) ((l >> 24) & 0xff);
-		bs[4] = (byte) ((l >> 32) & 0xff);
-		bs[5] = (byte) ((l >> 40) & 0xff);
-		bs[6] = (byte) ((l >> 48) & 0xff);
-		bs[7] = (byte) ((l >> 56) & 0xff);
-		return bs;	
+	private String readString() {
+		if (dataArray[dataPointer++] == typeString) {
+			int len = readInt();
+			String s = BitConverter.toString(dataArray, dataPointer, len);
+			dataPointer += len;
+			return s;
+		}
+		throw new NumberFormatException("not a string");
 	}
 
-	private byte[] getBytes(short s) {
-		byte[] bs=new byte[2];
-		bs[0] = (byte) ((s >> 0) & 0xff);
-		bs[1] = (byte) ((s >> 8) & 0xff) ;
-		return bs;	
-	}
-
-	private short readShort(byte[] data, int pos) {
-        return (short) ((data[pos] & 0xff) << 0 | (data[pos + 1] & 0xff) << 8);
-	}
-
-	private int readInt(byte[] data, int pos) {
-        return (data[pos] & 0xff) << 0 | (data[pos + 1] & 0xff) << 8 | (data[pos + 2] & 0xff) << 16 | (data[pos + 3] & 0xff) << 24;
-	}
-
-	private long readLong(byte[] data, int pos) {
-        return ((data[pos] & 0xffL) << 0) | (data[pos + 1] & 0xffL) << 8 | (data[pos + 2] & 0xffL) << 16 | (data[pos + 3] & 0xffL) << 24 | (data[pos + 4] & 0xffL) << 32 | (data[pos + 5] & 0xffL) << 40 | (data[pos + 6] & 0xffL) << 48 | (data[pos + 7] & 0xffL) << 56;
-	}
 }

@@ -106,18 +106,6 @@ public class GroupMsgPart2Runnable implements Runnable {
         if (groupConfig.isRepeat() && Autoreply.instence.repeatManager.check(fromGroup, fromQQ, msg)) {// 复读
             return true;
 		}
-        if (msg.equals(".live")) {
-            String msgSend;
-            StringBuilder stringBuilder = new StringBuilder();
-            for (Map.Entry<Integer,LivePerson> entry:Autoreply.instence.liveListener.livePersonMap.entrySet()) {	
-				if (entry.getValue().lastStatus) {
-					stringBuilder.append(Autoreply.instence.configManager.getPersonInfoFromBid(entry.getKey()).name).append("正在直播").append(entry.getValue().liveUrl).append("\n");
-				}
-			}
-            msgSend = stringBuilder.toString();
-            Autoreply.sendMessage(fromGroup, fromQQ, msgSend.equals("") ? "居然没有飞机佬直播" : msgSend);
-            return true;
-		}
 		if (Autoreply.instence.spellCollect.check(fromGroup, fromQQ, msg)) {
 			return true;
 		}
@@ -125,16 +113,10 @@ public class GroupMsgPart2Runnable implements Runnable {
             sendMessage(fromGroup, 0, Autoreply.instence.CC.location(35.594993, 118.869838, 15, "守矢神社", "此生无悔入东方 来世愿生幻想乡"));
             return true;
 		}
-        if (groupConfig.isBilibiliCheck() && Autoreply.instence.biliLinkInfo.check(fromGroup, fromQQ, msg)) {// 比利比利链接详情
-            return true;
-		}
         if (groupConfig.isCqCode() && Autoreply.instence.CQcodeManager.check(fromGroup, msg)) {// 特殊信息(签到分享等)
             return true;
 		}
         if (groupConfig.isCuigeng() && Autoreply.instence.updateManager.check(fromGroup, msg)) {
-            return true;
-		}
-        if (Autoreply.instence.timeTip.check(fromGroup, fromQQ)) {// 根据时间提醒
             return true;
 		}
         if (msg.equals("查看统计")) {
