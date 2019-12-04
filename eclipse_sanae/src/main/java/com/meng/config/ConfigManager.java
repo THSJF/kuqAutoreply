@@ -43,23 +43,22 @@ public class ConfigManager extends WebSocketClient {
 				configJavaBean = Autoreply.gson.fromJson(dataPackRecieved.readString(), type);	
 				break;
 			case DataPack._4retOverSpell:
-				TaskResult tr_4=new TaskResult(BitConverter.getBytes(dataPackRecieved.readString()));
-				resultMap.put(DataPack._4retOverSpell, tr_4);
+				resultMap.put(DataPack._4retOverSpell, new TaskResult(dataPackRecieved.readString()));
 				break;
 			case DataPack._6retOverPersent:
-				int persent=dataPackRecieved.readInt();//0-10000
+				resultMap.put(DataPack._6retOverPersent, new TaskResult(dataPackRecieved.readInt()));
 				break;
 			case DataPack._8retGrandma:
-				String grandma=dataPackRecieved.readString();
+				resultMap.put(DataPack._8retGrandma, new TaskResult(dataPackRecieved.readString()));
 				break;
 			case DataPack._10retMusicName:
-				String musicName=dataPackRecieved.readString();
+				resultMap.put(DataPack._10retMusicName, new TaskResult(dataPackRecieved.readString()));
 				break;
 			case DataPack._12retGotSpells:
-				String jsonStr=dataPackRecieved.readString();
+				resultMap.put(DataPack._12retGotSpells, new TaskResult(dataPackRecieved.readString()));
 				break;
 			case DataPack._14retNeta:
-				String neta=dataPackRecieved.readString();
+				resultMap.put(DataPack._14retNeta, new TaskResult(dataPackRecieved.readString()));
 				break;
 			default:
 				dataToSend = DataPack.encode(DataPack._0notification, dataPackRecieved);
