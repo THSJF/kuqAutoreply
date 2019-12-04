@@ -1,12 +1,7 @@
-package com.meng.config.javabeans;
+package com.meng.config;
 
-import java.io.*;
-import java.util.*;
-import com.google.gson.*;
-import com.meng.*;
-import java.lang.reflect.*;
-import com.google.gson.reflect.*;
 import com.meng.tools.*;
+import java.util.*;
 
 public class DataPack {
 
@@ -48,7 +43,7 @@ public class DataPack {
 	public static final int _22decTime=22;//减少时间
 	public static final int _23grass=23;//增加种草次数
 	public static final int _24heartBeat=24;//心跳
-	
+
 	/*获取直播列表
 	 返回直播列表
 	 主播开播
@@ -71,7 +66,7 @@ public class DataPack {
 	public static DataPack encode(int opCode, DataPack dataPack) {
 		return new DataPack(opCode, dataPack);
 	}
-	
+
 	public static DataPack decode(byte[] bytes) {
 		return new DataPack(bytes);
 	}
@@ -95,7 +90,7 @@ public class DataPack {
 		write(BitConverter.getBytes(dataPack.getTarget()));
 		write(BitConverter.getBytes(opCode));
 	}   
-	
+
 	public DataPack(byte[] pack) {
 		dataArray = pack;
 		dataPointer = headLength;
@@ -232,8 +227,9 @@ public class DataPack {
 
 	public void writeString(String s) {
 		write(typeString);
-		writeInt(s.length());
-		write(BitConverter.getBytes(s));
+		byte[] stringBytes = BitConverter.getBytes(s);
+		writeInt(stringBytes.length);
+		write(stringBytes);
 	}
 
 	public byte readByte() {

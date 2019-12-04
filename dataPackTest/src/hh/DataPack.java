@@ -226,8 +226,9 @@ public class DataPack {
 
 	public void writeString(String s) {
 		write(typeString);
-		writeInt(s.length());
-		write(BitConverter.getBytes(s));
+		byte[] bs=BitConverter.getBytes(s);
+		writeInt(bs.length);
+		write(bs);
 	}
 
 	public byte readByte() {

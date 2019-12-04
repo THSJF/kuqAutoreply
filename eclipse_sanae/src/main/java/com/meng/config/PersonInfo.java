@@ -1,6 +1,6 @@
-package com.meng.config.javabeans;
+package com.meng.config;
 
-import java.util.ArrayList;
+import java.util.*;
 
 public class PersonInfo extends Object {
     public String name = "";

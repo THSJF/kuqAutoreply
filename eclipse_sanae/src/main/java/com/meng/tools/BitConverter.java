@@ -74,4 +74,12 @@ public class BitConverter {
 			return null;
 		}
 	}
+
+	public static String toString(byte[] data) {
+		try {
+			return new String(data, "utf-8");
+		} catch (UnsupportedEncodingException e) {
+			return null;
+		}
+	}
 }

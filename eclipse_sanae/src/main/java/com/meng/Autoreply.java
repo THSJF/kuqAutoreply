@@ -2,7 +2,6 @@ package com.meng;
 
 import com.google.gson.*;
 import com.meng.config.*;
-import com.meng.config.javabeans.*;
 import com.meng.dice.*;
 import com.meng.groupChat.*;
 import com.meng.groupChat.Sequence.*;
@@ -12,6 +11,7 @@ import com.meng.tools.*;
 import com.sobte.cqp.jcq.entity.*;
 import com.sobte.cqp.jcq.event.*;
 import java.io.*;
+import java.net.*;
 import java.util.*;
 import java.util.concurrent.*;
 
@@ -104,7 +104,11 @@ public class Autoreply extends JcqAppAbstract implements ICQVer, IMsg, IRequest 
         // 返回如：D:\CoolQ\app\com.sobte.cqp.jcq\app\com.example.demo\
         System.out.println("开始加载");
 		long startTime = System.currentTimeMillis();
-        configManager = new ConfigManager();
+        try {
+			configManager = new ConfigManager(new URI("ws://123.207.65.93:9760"));
+		} catch (URISyntaxException e) {
+			e.printStackTrace();
+		}
         groupMemberChangerListener = new GroupMemberChangerListener();
         adminMessageProcessor = new AdminMessageProcessor(configManager);
 		messageMap.clear();

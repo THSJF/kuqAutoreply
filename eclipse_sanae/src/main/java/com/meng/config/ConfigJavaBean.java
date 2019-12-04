@@ -1,12 +1,11 @@
-package com.meng.config.javabeans;
+package com.meng.config;
 
-import java.util.HashSet;
 import java.util.*;
 
 public class ConfigJavaBean {
-    public HashSet<GroupConfig> groupConfigs = new HashSet<>();
+	public HashSet<GroupConfig> groupConfigs = new HashSet<>();
     public HashSet<Long> QQNotReply = new HashSet<>();
-    public HashSet<Long> blackListQQ = new HashSet<>();
+	public HashSet<Long> blackListQQ = new HashSet<>();
     public HashSet<Long> blackListGroup = new HashSet<>();
     public HashSet<String> wordNotReply = new HashSet<>();
     public HashSet<PersonInfo> personInfo = new HashSet<>();

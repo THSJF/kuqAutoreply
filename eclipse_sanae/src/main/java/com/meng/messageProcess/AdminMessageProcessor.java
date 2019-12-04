@@ -2,9 +2,7 @@ package com.meng.messageProcess;
 
 import com.meng.*;
 import com.meng.config.*;
-import com.meng.config.javabeans.*;
 import com.meng.dice.*;
-import com.meng.tools.*;
 import com.meng.tools.override.*;
 import com.sobte.cqp.jcq.entity.*;
 import java.util.*;

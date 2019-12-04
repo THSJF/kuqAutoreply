@@ -1,22 +1,23 @@
 package com.meng.config;
 
-import com.google.gson.*;
 import com.google.gson.reflect.*;
 import com.meng.*;
-import com.meng.config.javabeans.*;
 import java.lang.reflect.*;
 import java.net.*;
 import java.nio.*;
+import java.util.concurrent.*;
 import org.java_websocket.client.*;
-import org.java_websocket.handshake.*;
 import org.java_websocket.exceptions.*;
+import org.java_websocket.handshake.*;
+import com.meng.tools.*;
 
 public class ConfigManager extends WebSocketClient {
     public ConfigJavaBean configJavaBean = new ConfigJavaBean();
-    public Gson gson = new Gson();
+
+	private ConcurrentHashMap<Integer,TaskResult> resultMap=new ConcurrentHashMap<>();
 
 	public ConfigManager(URI uri) {
-		super(uri);		
+		super(uri);
 	}
 
 	@Override
@@ -35,42 +36,29 @@ public class ConfigManager extends WebSocketClient {
 	public void onMessage(ByteBuffer bs) {	
 		DataPack dataPackRecieved=DataPack.decode(bs.array());
 		DataPack dataToSend=null;
-		long group=0;
-		long qq=0;
 		switch (dataPackRecieved.getOpCode()) {
 			case DataPack._2retConfig:
 				Type type = new TypeToken<ConfigJavaBean>() {
 				}.getType();
-				configJavaBean = gson.fromJson(dataPackRecieved.readString(), type);	
+				configJavaBean = Autoreply.gson.fromJson(dataPackRecieved.readString(), type);	
 				break;
 			case DataPack._4retOverSpell:
-				group = dataPackRecieved.readLong();
-				qq = dataPackRecieved.readLong();
-				String spell=dataPackRecieved.readString();
+				TaskResult tr_4=new TaskResult(BitConverter.getBytes(dataPackRecieved.readString()));
+				resultMap.put(DataPack._4retOverSpell, tr_4);
 				break;
 			case DataPack._6retOverPersent:
-				group = dataPackRecieved.readLong();
-				qq = dataPackRecieved.readLong();
 				int persent=dataPackRecieved.readInt();//0-10000
 				break;
 			case DataPack._8retGrandma:
-				group = dataPackRecieved.readLong();
-				qq = dataPackRecieved.readLong();
 				String grandma=dataPackRecieved.readString();
 				break;
 			case DataPack._10retMusicName:
-				group = dataPackRecieved.readLong();
-				qq = dataPackRecieved.readLong();
 				String musicName=dataPackRecieved.readString();
 				break;
 			case DataPack._12retGotSpells:
-				group = dataPackRecieved.readLong();
-				qq = dataPackRecieved.readLong();
 				String jsonStr=dataPackRecieved.readString();
 				break;
 			case DataPack._14retNeta:
-				group = dataPackRecieved.readLong();
-				qq = dataPackRecieved.readLong();
 				String neta=dataPackRecieved.readString();
 				break;
 			default:
@@ -78,9 +66,9 @@ public class ConfigManager extends WebSocketClient {
 				dataToSend.writeString("操作类型错误");
 		}
 		if (dataToSend != null) {
-			try{
-			send(dataToSend.getData());
-			}catch(WebsocketNotConnectedException e){
+			try {
+				send(dataToSend.getData());
+			} catch (WebsocketNotConnectedException e) {
 				Autoreply.sendMessage(807242547L, 0, "和鬼人正邪的连接已断开");
 				reconnect();
 			}
@@ -104,6 +92,20 @@ public class ConfigManager extends WebSocketClient {
 			}
 		}
 		return false;
+	}
+
+	public String getOverSpell(long fromQQ) {
+		DataPack dp = DataPack.encode(DataPack._3getOverSpell, System.currentTimeMillis());
+		dp.writeLong(fromQQ);
+		send(dp.getData());
+		while (resultMap.get(DataPack._3getOverSpell) == null) {
+			try {
+				Thread.sleep(1);
+			} catch (InterruptedException e) {}
+		}
+		TaskResult tr=resultMap.get(DataPack._3getOverSpell);
+		resultMap.remove(DataPack._3getOverSpell);
+		return BitConverter.toString(tr.data);
 	}
 
 	public void setNickName(long qq, String nickname) {
@@ -234,18 +236,6 @@ public class ConfigManager extends WebSocketClient {
                 break;
             }
         }
-
-        Autoreply.instence.threadPool.execute(new Runnable() {
-				@Override
-				public void run() {
-					//    HashSet<Group> groups = Methods.findQQInAllGroup(qq);
-					//   for (Group g : groups) {
-                    // if (Methods.ban(g.getId(), qq, 300)) {
-                    //    sendMessage(g.getId(), 0, "不要问为什么你会进黑名单，你干了什么自己知道");
-                    //   }
-					//    }
-				}
-			});
         Autoreply.sendMessage(Autoreply.mainGroup, 0, "已将用户" + qq + "加入黑名单");
         Autoreply.sendMessage(Autoreply.mainGroup, 0, "已将群" + group + "加入黑名单");
     }
