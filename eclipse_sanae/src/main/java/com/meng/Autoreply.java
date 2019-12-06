@@ -60,6 +60,7 @@ public class Autoreply extends JcqAppAbstract implements ICQVer, IMsg, IRequest 
 	public DiceImitate diceImitate=new DiceImitate();
 	public static long mainGroup=1023432971l;
 	public static Gson gson;
+	public MessageTooManyManager messageTooManyManager;
     /**
      * @param args 系统参数
      */
@@ -129,7 +130,7 @@ public class Autoreply extends JcqAppAbstract implements ICQVer, IMsg, IRequest 
 		coinManager = new CoinManager();
 		threadPool.execute(new checkMessageRunnable());
         threadPool.execute(new CleanRunnable());
-
+		messageTooManyManager = new MessageTooManyManager();
         System.out.println("加载完成,用时" + (System.currentTimeMillis() - startTime));
         return 0;
     }
@@ -236,6 +237,9 @@ public class Autoreply extends JcqAppAbstract implements ICQVer, IMsg, IRequest 
     public int groupMsg(int subType, int msgId, long fromGroup, long fromQQ, String fromAnonymous, String msg, int font) {
 		// if (fromGroup != 1023432971L)
 		//return MSG_IGNORE;
+		if(messageTooManyManager.checkMsgTooMany(fromGroup,fromQQ,msg)){
+			return MSG_IGNORE;
+		}
         if (msg.equals(".admin enable") && Autoreply.instence.configManager.isAdmin(fromQQ)) {
             GroupConfig groupConfig = Autoreply.instence.configManager.getGroupConfig(fromGroup);
             if (groupConfig == null) {
