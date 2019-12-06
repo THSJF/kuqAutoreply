@@ -26,12 +26,6 @@ public class PrivateMsgRunnable implements Runnable {
 
     @Override
     public synchronized void run() {
-        if (msg.equals("查看统计")) {
-            sendMessage(fromGroup, fromQQ, Autoreply.instence.useCount.getMyCount(fromQQ));
-            return;
-        } else if (msg.equals("查看排行")) {
-            sendMessage(fromGroup, fromQQ, Autoreply.instence.useCount.getTheFirst());
-            return ;
-        }
+        
     }
 }

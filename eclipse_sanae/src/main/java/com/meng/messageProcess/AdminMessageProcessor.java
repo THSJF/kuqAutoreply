@@ -117,7 +117,6 @@ public class AdminMessageProcessor {
                     sb.append(qq).append(" ");
 				}
                 configManager.configJavaBean.QQNotReply.addAll(qqs);
-                configManager.saveConfig();
                 Autoreply.sendMessage(fromGroup, fromQQ, sb.toString());
                 return true;
 			}
@@ -130,7 +129,6 @@ public class AdminMessageProcessor {
                     sb.append(qq).append(" ");
 				}
                 configManager.configJavaBean.blackListQQ.addAll(qqs);
-                configManager.saveConfig();
                 Autoreply.sendMessage(fromGroup, fromQQ, sb.toString());
                 return true;
 			}
@@ -143,7 +141,6 @@ public class AdminMessageProcessor {
                     sb.append(groups[i]).append(" ");
                     configManager.configJavaBean.blackListGroup.add(Long.parseLong(groups[i]));
 				}
-                configManager.saveConfig();
                 Autoreply.sendMessage(fromGroup, fromQQ, sb.toString());
                 return true;
 			}
@@ -190,10 +187,6 @@ public class AdminMessageProcessor {
 			if (msg.equals("-help")) {
 				Autoreply.sendMessage(fromGroup, 0, adminPermission.toString());
 				return true;
-			}
-            if (msg.equals("鬼人正邪统计")) {
-                sendMessage(fromGroup, fromQQ, Autoreply.instence.useCount.getMyCount(Autoreply.CQ.getLoginQQ()));
-                return true;
 			}
 		}
         return false;

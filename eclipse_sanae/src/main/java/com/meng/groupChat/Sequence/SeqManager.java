@@ -49,11 +49,11 @@ public class SeqManager {
 				sb.pos = 0;
 			  }
 			if (sb.flag == 1) {
-				Autoreply.instence.useCount.decLife(fromQQ);
-				Autoreply.instence.groupCount.decLife(fromGroup);
+			//	Autoreply.instence.useCount.decLife(fromQQ);
+			//	Autoreply.instence.groupCount.decLife(fromGroup);
 			  } else if (sb.flag == 2) {
-				Autoreply.instence.useCount.incMengEr(fromQQ);
-				Autoreply.instence.groupCount.incMengEr(fromGroup);
+			//	Autoreply.instence.useCount.incMengEr(fromQQ);
+			//	Autoreply.instence.groupCount.incMengEr(fromGroup);
 			  }
 			if (msg.equals(sb.content[sb.pos])) {
 				++sb.pos;			

@@ -1,23 +1,12 @@
 package com.meng.groupChat;
 
-import com.google.gson.*;
-import com.google.gson.reflect.TypeToken;
-import com.meng.Autoreply;
-import com.meng.tools.Methods;
-import com.meng.tools.UserCounter;
-
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.OutputStreamWriter;
-import java.lang.reflect.Type;
-import java.nio.charset.StandardCharsets;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.Map.Entry;
-import java.util.regex.Pattern;
+import com.google.gson.reflect.*;
+import com.meng.*;
+import com.meng.tools.*;
+import java.io.*;
+import java.lang.reflect.*;
+import java.util.*;
+import java.util.regex.*;
 
 public class DicReplyGroup {
 

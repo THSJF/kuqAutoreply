@@ -234,35 +234,8 @@ public class Autoreply extends JcqAppAbstract implements ICQVer, IMsg, IRequest 
      */
     @Override
     public int groupMsg(int subType, int msgId, long fromGroup, long fromQQ, String fromAnonymous, String msg, int font) {
-        // if (fromGroup != 312342896L)
-        // return MSG_IGNORE;
 		// if (fromGroup != 1023432971L)
 		//return MSG_IGNORE;
-        // if (fromGroup != 617745343L)
-        // return MSG_IGNORE;
-        // 如果消息来自匿名者
-        if (fromQQ == 80000000L && !fromAnonymous.equals("")) {
-            // 将匿名用户信息放到 anonymous 变量中
-            // Anonymous anonymous = CQ.getAnonymous(fromAnonymous);
-            // CQ.setGroupBan(fromGroup, anonymous.getAid(), 60);
-        }
-
-        // 解析CQ码案例 如：[CQ:at,qq=100000]
-        // 解析CQ码 常用变量为 CC(CQCode) 此变量专为CQ码这种特定格式做了解析和封装
-        // CC.analysis();// 此方法将CQ码解析为可直接读取的对象
-        // 解析消息中的QQID
-        // long qqId = CC.getAt(msg);// 此方法为简便方法，获取第一个CQ:at里的QQ号，错误时为：-1000
-        // List<Long> qqIds = CC.getAts(msg); // 此方法为获取消息中所有的CQ码对象，错误时返回 已解析的数据
-        // 解析消息中的图片
-        // CQImage image = CC.getCQImage(msg);//
-        // 此方法为简便方法，获取第一个CQ:image里的图片数据，错误时打印异常到控制台，返回 null
-        // List<CQImage> images = CC.getCQImages(msg);//
-        // 此方法为获取消息中所有的CQ图片数据，错误时打印异常到控制台，返回 已解析的数据
-
-        // 这里处理消息
-
-        //  System.out.println(msg);
-        // 指定不回复的项目
         if (msg.equals(".admin enable") && Autoreply.instence.configManager.isAdmin(fromQQ)) {
             GroupConfig groupConfig = Autoreply.instence.configManager.getGroupConfig(fromGroup);
             if (groupConfig == null) {
@@ -271,8 +244,7 @@ public class Autoreply extends JcqAppAbstract implements ICQVer, IMsg, IRequest 
             }
             groupConfig.reply = true;
             Autoreply.sendMessage(fromGroup, fromQQ, "已由admin启用");
-            Autoreply.instence.configManager.saveConfig();
-            return MSG_IGNORE;
+			return MSG_IGNORE;
         }
 
         if (msg.equals(".admin disable") && Autoreply.instence.configManager.isAdmin(fromQQ)) {
@@ -283,8 +255,7 @@ public class Autoreply extends JcqAppAbstract implements ICQVer, IMsg, IRequest 
             }
             groupConfig.reply = false;
             Autoreply.sendMessage(fromGroup, fromQQ, "已由admin停用");
-            Autoreply.instence.configManager.saveConfig();
-            return MSG_IGNORE;
+			return MSG_IGNORE;
         }
 
         if (configManager.isNotReplyQQ(fromQQ)) {

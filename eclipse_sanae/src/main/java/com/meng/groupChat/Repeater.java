@@ -1,8 +1,7 @@
 package com.meng.groupChat;
 
-
 import com.meng.*;
-import com.meng.config.javabeans.*;
+import com.meng.config.*;
 import com.meng.messageProcess.*;
 
 public class Repeater {

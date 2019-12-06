@@ -1,7 +1,6 @@
 package com.meng;
 
-import com.meng.config.javabeans.*;
-import com.meng.tools.*;
+import com.meng.config.*;
 import com.sobte.cqp.jcq.entity.*;
 
 import static com.meng.Autoreply.sendMessage;
@@ -12,7 +11,7 @@ public class GroupMemberChangerListener {
     }
 
     public void checkIncrease(int subtype, int sendTime, long fromGroup, long fromQQ, long beingOperateQQ) {
-        
+
         PersonInfo personInfo = Autoreply.instence.configManager.getPersonInfoFromQQ(beingOperateQQ);
         if (personInfo != null && personInfo.name.equals("熊哥")) {
             sendMessage(959615179L, 0, Autoreply.instence.CC.at(-1) + "熊加入了群" + fromGroup, true);
@@ -26,8 +25,7 @@ public class GroupMemberChangerListener {
         } else {
             sendMessage(fromGroup, 0, "欢迎新大佬", true);
         }
-		Autoreply.instence.configManager.addAutoAllow(beingOperateQQ);
-    }
+	}
 
     public void checkDecrease(int subtype, int sendTime, final long fromGroup, final long fromQQ, long beingOperateQQ) {
         if (subtype == 1) {
@@ -72,8 +70,7 @@ public class GroupMemberChangerListener {
             }
             QQInfo qInfo = Autoreply.CQ.getStrangerInfo(beingOperateQQ);
             QQInfo qInfo2 = Autoreply.CQ.getStrangerInfo(fromQQ);
-            Autoreply.instence.configManager.removeAutoAllow(beingOperateQQ);
-            sendMessage(fromGroup, 0, Autoreply.instence.configManager.getNickName(beingOperateQQ) + "(" + qInfo.getQqId() + ")" + "被" + Autoreply.instence.configManager.getNickName(fromQQ) + "(" + qInfo2.getQqId() + ")" + "玩完扔莉", true);
+			sendMessage(fromGroup, 0, Autoreply.instence.configManager.getNickName(beingOperateQQ) + "(" + qInfo.getQqId() + ")" + "被" + Autoreply.instence.configManager.getNickName(fromQQ) + "(" + qInfo2.getQqId() + ")" + "玩完扔莉", true);
         }
     }
 

@@ -1,7 +1,7 @@
 package com.meng.tip;
 
 import com.meng.*;
-import com.meng.config.javabeans.*;
+import com.meng.config.*;
 import java.util.*;
 
 public class TimeTip implements Runnable {

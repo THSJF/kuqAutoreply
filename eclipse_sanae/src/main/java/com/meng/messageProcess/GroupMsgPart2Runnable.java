@@ -1,11 +1,8 @@
 package com.meng.messageProcess;
 
 import com.meng.*;
-import com.meng.bilibili.live.*;
-import com.meng.config.javabeans.*;
+import com.meng.config.*;
 import com.meng.tools.*;
-import java.io.*;
-import java.util.*;
 
 import static com.meng.Autoreply.sendMessage;
 
@@ -57,10 +54,6 @@ public class GroupMsgPart2Runnable implements Runnable {
 			Autoreply.instence.configManager.setNickName(fromQQ, null);
 			Autoreply.sendMessage(fromGroup, 0, "我以后会用你的QQ昵称称呼你");
 			return true;
-		}
-        if (msg.equals("椰叶查询")) {
-            sendMessage(fromGroup, fromQQ, "查询结果：" + Autoreply.instence.CC.at(fromQQ));
-            return true;
 		}
         if (Methods.checkAt(fromGroup, fromQQ, msg)) {//@
             return true;
