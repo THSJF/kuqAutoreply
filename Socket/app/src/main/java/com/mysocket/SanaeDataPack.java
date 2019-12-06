@@ -1,7 +1,5 @@
-package com.meng.config.sanae;
+package com.mysocket;
 
-import com.meng.config.sanae.*;
-import com.meng.tools.*;
 import java.util.*;
 
 public class SanaeDataPack {

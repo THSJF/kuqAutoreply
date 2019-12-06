@@ -1,4 +1,5 @@
-package com.meng.tools;
+package com.mysocket;
+
 import java.io.*;
 
 public class BitConverter {

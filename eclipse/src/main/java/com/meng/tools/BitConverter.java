@@ -3,6 +3,7 @@ package com.meng.tools;
 import java.io.*;
 
 public class BitConverter {
+
 	public static byte[] getBytes(short s) {
 		byte[] bs=new byte[2];
 		bs[0] = (byte) ((s >> 0) & 0xff);
@@ -52,20 +53,40 @@ public class BitConverter {
         return (short) ((data[pos] & 0xff) << 0 | (data[pos + 1] & 0xff) << 8);
 	}
 
+	public static short toShort(byte[] data) {
+        return toShort(data , 0);
+	}
+
 	public static int toInt(byte[] data, int pos) {
         return (data[pos] & 0xff) << 0 | (data[pos + 1] & 0xff) << 8 | (data[pos + 2] & 0xff) << 16 | (data[pos + 3] & 0xff) << 24;
+	}
+
+	public static int toInt(byte[] data) {
+		return toInt(data, 0);
 	}
 
 	public static long toLong(byte[] data, int pos) {
         return ((data[pos] & 0xffL) << 0) | (data[pos + 1] & 0xffL) << 8 | (data[pos + 2] & 0xffL) << 16 | (data[pos + 3] & 0xffL) << 24 | (data[pos + 4] & 0xffL) << 32 | (data[pos + 5] & 0xffL) << 40 | (data[pos + 6] & 0xffL) << 48 | (data[pos + 7] & 0xffL) << 56;
 	}
 
+	public static long toLong(byte[] data) {
+        return toLong(data , 0);
+	}
+
 	public static float toFloat(byte[] data, int pos) {
 		return Float.intBitsToFloat(toInt(data, pos));
 	}
 
+	public static float toFloat(byte[] data) {
+		return toFloat(data , 0);
+	}
+
 	public static double toDouble(byte[] data, int pos) {
 		return Double.longBitsToDouble(toLong(data, pos));
+	}
+
+	public static double toDouble(byte[] data) {
+		return toDouble(data , 0);
 	}
 
 	public static String toString(byte[] data, int pos, int byteCount) {

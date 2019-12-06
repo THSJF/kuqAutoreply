@@ -21,7 +21,7 @@ public class SanaeDataPack {
 	public static final int _0notification=0;//通知  string
 	public static final int _1getConfig=1;  //获取配置文件
 	public static final int _2retConfig=2;//接收配置文件  string(json)
-	public static final int _3getOverSpell=3;//获取疮痍符卡  long(qq)
+	public static final int _3getOverSpell=3;//获取疮痍符卡 long(qq)
 	public static final int _4retOverSpell=4;//接收疮痍符卡 string
 	public static final int _5getOverPersent=5;//获取疮痍进度 long(qq)
 	public static final int _6retOverPersent=6;//接收疮痍进度 int(0-10000)
@@ -33,20 +33,20 @@ public class SanaeDataPack {
 	public static final int _12retGotSpells=12;//接收符卡列表 string(json)
 	public static final int _13getNeta=13;//获取neta long(qq)
 	public static final int _14retNeta=14;//接收neta string
-	public static final int _15incSpeak=15;//增加发言次数 long(qq)
+	public static final int _15incSpeak=15;//增加发言次数  long(group) long(qq)
 	public static final int _16incPic=16;//增加图片次数 long (qq) 
-	public static final int _17incBilibili=17;//增加哔哩哔哩链接次数
-	public static final int _18incRepeat=18;//增加复读次数
-	public static final int _19incRepeatStart=19;//增加带领复读
-	public static final int _20incRepeatBreak=20;//增加打断复读
-	public static final int _21incBan=21;//增加被禁言次数
-	public static final int _22decTime=22;//减少时间
-	public static final int _23grass=23;//增加种草次数
+	public static final int _17incBilibili=17;//增加哔哩哔哩链接次数  long(group) long(qq)
+	public static final int _18incRepeat=18;//增加复读次数 long (qq)
+	public static final int _19incRepeatStart=19;//增加带领复读  long(group) long(qq)
+	public static final int _20incRepeatBreak=20;//增加打断复读  long(group) long(qq)
+	public static final int _21incBan=21;//增加被禁言次数  long(group) long(qq)
+	public static final int _22decTime=22;//减少时间  long(group) long(qq)
+	public static final int _23grass=23;//增加种草次数  long(group) long(qq)
 	public static final int _24heartBeat=24;//心跳
-
+	public static final int _25setNick=25;//设置nickname long(qq)
+	public static final int _26addBlack=26;//添加黑名单
 	/*
-	 设置nickname
-	 添加黑名单
+	 
 	 获取直播列表
 	 返回直播列表
 	 主播开播
@@ -97,60 +97,6 @@ public class SanaeDataPack {
 	private SanaeDataPack(byte[] pack) {
 		dataArray = pack;
 		dataPointer = headLength;
-		switch (getOpCode()) {
-			case _0notification:
-				break;
-			case _1getConfig:
-				break; 
-			case _2retConfig:
-				break;
-			case _3getOverSpell:
-				break;
-			case _4retOverSpell:
-				break; 
-			case _5getOverPersent:
-				break;
-			case _6retOverPersent:
-				break; 
-			case _7getGrandma:
-				break;
-			case _8retGrandma:
-				break;
-			case _9getMusicName:	
-				break;
-			case _10retMusicName:
-				break;
-			case _11getGotSpells:
-				break;
-			case _12retGotSpells:
-				break;
-			case _13getNeta:
-				break;
-			case _14retNeta:
-				break;
-			case _15incSpeak:
-				break;
-			case _16incPic:
-				break; 
-			case _17incBilibili:
-				break;
-			case _18incRepeat:
-				break; 
-			case _19incRepeatStart:
-				break;
-			case _20incRepeatBreak:
-				break;
-			case _21incBan:
-				break;	
-			case _22decTime:
-				break;
-			case _23grass:
-				break;
-			case _24heartBeat:
-				break;	
-			default:
-				break;
-		}
 	} 
 
 	public byte[] getData() {

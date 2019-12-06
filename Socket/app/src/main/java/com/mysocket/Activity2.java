@@ -9,12 +9,12 @@ public class Activity2 extends Activity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.main2);
-		String s=getIntent().getStringExtra("content");
+		String s = getIntent().getStringExtra("content");
 		if (s == null) {
 			finish();
 			return;
 		}
-		TextView tv=(TextView) findViewById(R.id.main2TextView);
+		TextView tv = (TextView) findViewById(R.id.main2TextView);
 		tv.setText(s);
 	}
 

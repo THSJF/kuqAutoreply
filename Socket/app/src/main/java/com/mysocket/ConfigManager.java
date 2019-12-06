@@ -1,7 +1,7 @@
-package com.meng.config;
+package com.mysocket;
 
+import com.google.gson.*;
 import com.google.gson.reflect.*;
-import com.meng.*;
 import java.lang.reflect.*;
 import java.net.*;
 import java.nio.*;
@@ -9,7 +9,6 @@ import java.util.concurrent.*;
 import org.java_websocket.client.*;
 import org.java_websocket.exceptions.*;
 import org.java_websocket.handshake.*;
-import com.meng.tools.*;
 
 public class ConfigManager extends WebSocketClient {
     public ConfigJavaBean configJavaBean = new ConfigJavaBean();
@@ -28,8 +27,8 @@ public class ConfigManager extends WebSocketClient {
 	@Override
 	public void onOpen(ServerHandshake serverHandshake) {
 		SanaeDataPack dp=SanaeDataPack.encode(SanaeDataPack._1getConfig, System.currentTimeMillis());
-		send(dp.getData());
-		Autoreply.sendMessage(807242547L, 0, "连接到鬼人正邪");
+	//	send(dp.getData());
+		MainActivity.instence.showToast("连接到鬼人正邪");
 	}
 
 	@Override
@@ -40,7 +39,9 @@ public class ConfigManager extends WebSocketClient {
 			case SanaeDataPack._2retConfig:
 				Type type = new TypeToken<ConfigJavaBean>() {
 				}.getType();
-				configJavaBean = Autoreply.gson.fromJson(dataPackRecieved.readString(), type);	
+				String s=dataPackRecieved.readString();
+				configJavaBean = new Gson().fromJson(s, type);	
+				MainActivity.instence.recieved.add(s);
 				break;
 			case SanaeDataPack._4retOverSpell:
 				resultMap.put(dataPackRecieved.getOpCode(), new TaskResult(dataPackRecieved.readString()));
@@ -59,27 +60,7 @@ public class ConfigManager extends WebSocketClient {
 				break;
 			case SanaeDataPack._14retNeta:
 				resultMap.put(dataPackRecieved.getOpCode(), new TaskResult(dataPackRecieved.readString()));
-				break;			
-				/*			
-				 case SanaeDataPack._15incSpeak:
-				 break;
-				 case SanaeDataPack._16incPic:
-				 break; 
-				 case SanaeDataPack._17incBilibili:
-				 break;
-				 case SanaeDataPack._18incRepeat:
-				 break; 
-				 case SanaeDataPack._19incRepeatStart:
-				 break;
-				 case SanaeDataPack._20incRepeatBreak:
-				 break;
-				 case SanaeDataPack._21incBan:
-				 break;	
-				 case SanaeDataPack._22decTime:
-				 break;
-				 case SanaeDataPack._23grass:
-				 break;
-				 */		
+				break;
 			default:
 				dataToSend = SanaeDataPack.encode(SanaeDataPack._0notification, dataPackRecieved);
 				dataToSend.write("操作类型错误");
@@ -88,10 +69,17 @@ public class ConfigManager extends WebSocketClient {
 			try {
 				send(dataToSend.getData());
 			} catch (WebsocketNotConnectedException e) {
-				Autoreply.sendMessage(807242547L, 0, "和鬼人正邪的连接已断开");
+				MainActivity.instence.showToast("和鬼人正邪的连接已断开");
 				reconnect();
 			}
 		}
+		MainActivity.instence.runOnUiThread(new Runnable(){
+
+				@Override
+				public void run() {
+					MainActivity.instence.adp.notifyDataSetChanged();
+				}	
+			});
 	}
 
 	@Override
@@ -108,53 +96,14 @@ public class ConfigManager extends WebSocketClient {
 		SanaeDataPack dp = SanaeDataPack.encode(SanaeDataPack._3getOverSpell, System.currentTimeMillis());
 		dp.write(fromQQ);
 		send(dp.getData());
-		return BitConverter.toString(getTaskResult(SanaeDataPack._4retOverSpell).data);
-	}
-
-	public int getOverPersent(long fromQQ) {
-		SanaeDataPack dp = SanaeDataPack.encode(SanaeDataPack._5getOverPersent, System.currentTimeMillis());
-		dp.write(fromQQ);
-		send(dp.getData());
-		return BitConverter.toInt(getTaskResult(SanaeDataPack._6retOverPersent).data);
-	}
-
-	public String getGrandma(long fromQQ) {
-		SanaeDataPack dp = SanaeDataPack.encode(SanaeDataPack._7getGrandma, System.currentTimeMillis());
-		dp.write(fromQQ);
-		send(dp.getData());
-		return BitConverter.toString(getTaskResult(SanaeDataPack._8retGrandma).data);
-	}
-
-	public String getMusicName(long fromQQ) {
-		SanaeDataPack dp = SanaeDataPack.encode(SanaeDataPack._9getMusicName, System.currentTimeMillis());
-		dp.write(fromQQ);
-		send(dp.getData());
-		return BitConverter.toString(getTaskResult(SanaeDataPack._10retMusicName).data);
-	}
-
-	public String getSpells(long fromQQ) {
-		SanaeDataPack dp = SanaeDataPack.encode(SanaeDataPack._11getGotSpells, System.currentTimeMillis());
-		dp.write(fromQQ);
-		send(dp.getData());
-		return BitConverter.toString(getTaskResult(SanaeDataPack._12retGotSpells).data);
-	}
-
-	public String getNeta(long fromQQ) {
-		SanaeDataPack dp = SanaeDataPack.encode(SanaeDataPack._13getNeta, System.currentTimeMillis());
-		dp.write(fromQQ);
-		send(dp.getData());
-		return BitConverter.toString(getTaskResult(SanaeDataPack._14retNeta).data);
-	}
-
-	private TaskResult getTaskResult(int opCode) {
-		while (resultMap.get(opCode) == null) {
+		while (resultMap.get(SanaeDataPack._4retOverSpell) == null) {
 			try {
 				Thread.sleep(1);
 			} catch (InterruptedException e) {}
 		}
-		TaskResult tr=resultMap.get(opCode);
-		resultMap.remove(opCode);
-		return tr;
+		TaskResult tr=resultMap.get(SanaeDataPack._4retOverSpell);
+		resultMap.remove(SanaeDataPack._4retOverSpell);
+		return BitConverter.toString(tr.data);
 	}
 
 	public boolean containsGroup(long group) {
@@ -172,34 +121,6 @@ public class ConfigManager extends WebSocketClient {
 		} else {
 			configJavaBean.nicknameMap.remove(qq);
 		}
-	}
-
-	public String getNickName(long qq) {
-		String nick=null;
-		nick = configJavaBean.nicknameMap.get(qq);
-		if (nick == null) {
-			PersonInfo pi=getPersonInfoFromQQ(qq);
-			if (pi == null) {
-				nick = Autoreply.CQ.getStrangerInfo(qq).getNick();
-			} else {
-				nick = pi.name;
-			}
-		}
-		return nick;
-	}
-
-	public String getNickName(long group, long qq) {
-		String nick=null;
-		nick = configJavaBean.nicknameMap.get(qq);
-		if (nick == null) {
-			PersonInfo pi=getPersonInfoFromQQ(qq);
-			if (pi == null) {
-				nick = Autoreply.CQ.getGroupMemberInfo(group, qq).getNick();
-			} else {
-				nick = pi.name;
-			}
-		}
-		return nick;
 	}
 
     public boolean isMaster(long fromQQ) {
@@ -284,18 +205,4 @@ public class ConfigManager extends WebSocketClient {
 		}
         return null;
 	}
-
-    public void addBlack(long group, final long qq) {
-        configJavaBean.blackListQQ.add(qq);
-        configJavaBean.blackListGroup.add(group);
-        for (GroupConfig groupConfig : configJavaBean.groupConfigs) {
-            if (groupConfig.groupNumber == group) {
-                configJavaBean.groupConfigs.remove(groupConfig);
-                break;
-            }
-        }
-        Autoreply.sendMessage(Autoreply.mainGroup, 0, "已将用户" + qq + "加入黑名单");
-        Autoreply.sendMessage(Autoreply.mainGroup, 0, "已将群" + group + "加入黑名单");
-    }
-
 }
