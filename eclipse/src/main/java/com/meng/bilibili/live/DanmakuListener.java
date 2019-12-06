@@ -90,7 +90,7 @@ public class DanmakuListener extends WebSocketClient {
 				String finallySpeakerName=speakerPersonInfo == null ?speakerName: speakerPersonInfo.name;
 				peopleMap.put(speakerUid, System.currentTimeMillis());
 				//	Autoreply.instence.sendMessage(666247478, 0,  pi2.name + roomMaster.bliveRoom + " " + n1 + ":" + text);
-				DataPack dataToSend=DataPack.encode(DataPack._6speakInLiveRoom, System.currentTimeMillis());
+				RitsukageDataPack dataToSend=RitsukageDataPack.encode(RitsukageDataPack._6speakInLiveRoom, System.currentTimeMillis());
 				dataToSend.write(1, roomMaster.bliveRoom);
 				dataToSend.write(1, roomMaster.name);
 				dataToSend.write(2, finallySpeakerName);

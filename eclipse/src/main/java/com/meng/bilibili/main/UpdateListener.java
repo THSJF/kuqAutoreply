@@ -56,7 +56,7 @@ public class UpdateListener implements Runnable {
                         if (articles.publish_time > updater.lastArtical) {
                             if (updater.needTipArtical) {
 								try {
-									DataPack dp=DataPack.encode(DataPack._8newArtical, System.currentTimeMillis());
+									RitsukageDataPack dp=RitsukageDataPack.encode(RitsukageDataPack._8newArtical, System.currentTimeMillis());
 									dp.write(1, updater.name);
 									dp.write(2, articles.title);
 									dp.write(1, articles.id);
@@ -75,7 +75,7 @@ public class UpdateListener implements Runnable {
                         if (vlist.created > updater.lastVideo) {
                             if (updater.needTipVideo) {
 								try {
-									DataPack dp=DataPack.encode(DataPack._7newVideo, System.currentTimeMillis());
+									RitsukageDataPack dp=RitsukageDataPack.encode(RitsukageDataPack._7newVideo, System.currentTimeMillis());
 									dp.write(1, updater.name);
 									dp.write(2, vlist.title);
 									dp.write(1, vlist.aid);

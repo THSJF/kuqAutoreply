@@ -27,42 +27,42 @@ public class ConfigManager extends WebSocketClient {
 
 	@Override
 	public void onOpen(ServerHandshake serverHandshake) {
-		DataPack dp=DataPack.encode(DataPack._1getConfig, System.currentTimeMillis());
+		SanaeDataPack dp=SanaeDataPack.encode(SanaeDataPack._1getConfig, System.currentTimeMillis());
 		send(dp.getData());
 		Autoreply.sendMessage(807242547L, 0, "连接到鬼人正邪");
 	}
 
 	@Override
 	public void onMessage(ByteBuffer bs) {	
-		DataPack dataPackRecieved=DataPack.decode(bs.array());
-		DataPack dataToSend=null;
+		SanaeDataPack dataPackRecieved=SanaeDataPack.decode(bs.array());
+		SanaeDataPack dataToSend=null;
 		switch (dataPackRecieved.getOpCode()) {
-			case DataPack._2retConfig:
+			case SanaeDataPack._2retConfig:
 				Type type = new TypeToken<ConfigJavaBean>() {
 				}.getType();
 				configJavaBean = Autoreply.gson.fromJson(dataPackRecieved.readString(), type);	
 				break;
-			case DataPack._4retOverSpell:
+			case SanaeDataPack._4retOverSpell:
 				resultMap.put(dataPackRecieved.getOpCode(), new TaskResult(dataPackRecieved.readString()));
 				break;
-			case DataPack._6retOverPersent:
+			case SanaeDataPack._6retOverPersent:
 				resultMap.put(dataPackRecieved.getOpCode(), new TaskResult(dataPackRecieved.readInt()));
 				break;
-			case DataPack._8retGrandma:
+			case SanaeDataPack._8retGrandma:
 				resultMap.put(dataPackRecieved.getOpCode(), new TaskResult(dataPackRecieved.readString()));
 				break;
-			case DataPack._10retMusicName:
+			case SanaeDataPack._10retMusicName:
 				resultMap.put(dataPackRecieved.getOpCode(), new TaskResult(dataPackRecieved.readString()));
 				break;
-			case DataPack._12retGotSpells:
+			case SanaeDataPack._12retGotSpells:
 				resultMap.put(dataPackRecieved.getOpCode(), new TaskResult(dataPackRecieved.readString()));
 				break;
-			case DataPack._14retNeta:
+			case SanaeDataPack._14retNeta:
 				resultMap.put(dataPackRecieved.getOpCode(), new TaskResult(dataPackRecieved.readString()));
 				break;
 			default:
-				dataToSend = DataPack.encode(DataPack._0notification, dataPackRecieved);
-				dataToSend.writeString("操作类型错误");
+				dataToSend = SanaeDataPack.encode(SanaeDataPack._0notification, dataPackRecieved);
+				dataToSend.write("操作类型错误");
 		}
 		if (dataToSend != null) {
 			try {
@@ -85,16 +85,16 @@ public class ConfigManager extends WebSocketClient {
 	}
 
 	public String getOverSpell(long fromQQ) {
-		DataPack dp = DataPack.encode(DataPack._3getOverSpell, System.currentTimeMillis());
-		dp.writeLong(fromQQ);
+		SanaeDataPack dp = SanaeDataPack.encode(SanaeDataPack._3getOverSpell, System.currentTimeMillis());
+		dp.write(fromQQ);
 		send(dp.getData());
-		while (resultMap.get(DataPack._3getOverSpell) == null) {
+		while (resultMap.get(SanaeDataPack._3getOverSpell) == null) {
 			try {
 				Thread.sleep(1);
 			} catch (InterruptedException e) {}
 		}
-		TaskResult tr=resultMap.get(DataPack._3getOverSpell);
-		resultMap.remove(DataPack._3getOverSpell);
+		TaskResult tr=resultMap.get(SanaeDataPack._3getOverSpell);
+		resultMap.remove(SanaeDataPack._3getOverSpell);
 		return BitConverter.toString(tr.data);
 	}
 	

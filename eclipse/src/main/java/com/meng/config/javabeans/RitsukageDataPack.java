@@ -8,7 +8,7 @@ import java.lang.reflect.*;
 import com.google.gson.reflect.*;
 import com.meng.tools.*;
 
-public class DataPack {
+public class RitsukageDataPack {
 
 	private byte[] data;
 	private final short headLength=26;
@@ -133,15 +133,15 @@ public class DataPack {
 
 
 
-	public static DataPack encode(short opCode, long timeStamp) {
-		return new DataPack(opCode, timeStamp);
+	public static RitsukageDataPack encode(short opCode, long timeStamp) {
+		return new RitsukageDataPack(opCode, timeStamp);
 	}
 
-	public static DataPack decode(byte[] bytes) {
-		return new DataPack(bytes);
+	public static RitsukageDataPack decode(byte[] bytes) {
+		return new RitsukageDataPack(bytes);
 	}
 
-	private DataPack(short opCode, long timeStamp) {
+	private RitsukageDataPack(short opCode, long timeStamp) {
 		gson = Autoreply.gson;
 		data = new byte[headLength];
 		ritsukageBean = new RitsukageBean();
@@ -153,7 +153,7 @@ public class DataPack {
 		write(getBytes(opCode));
 	}   
 
-	private DataPack(byte[] pack) {
+	private RitsukageDataPack(byte[] pack) {
 		gson = Autoreply.gson;
 		data = pack;
 		String s="";
@@ -182,20 +182,20 @@ public class DataPack {
 				 case DataPack._20pic:
 				 break;
 				 */
-			case DataPack._3returnLiveList:
+			case RitsukageDataPack._3returnLiveList:
 				Type ritsucageSetType = new TypeToken<HashSet<PersonInfo>>() {
 				}.getType();
 				ritsukageSet = gson.fromJson(s, ritsucageSetType);
 				break;
-			case DataPack._13returnPersonInfo:
+			case RitsukageDataPack._13returnPersonInfo:
 				ritsukagePersonInfo = gson.fromJson(s, PersonInfo.class);
 				break;
-			case DataPack._19returnFind:
+			case RitsukageDataPack._19returnFind:
 				Type ritsucageLongSetType = new TypeToken<HashSet<Long>>() {
 				}.getType();
 				ritsukageLongSet = gson.fromJson(s, ritsucageLongSetType);
 				break;
-			case DataPack._21returnPic:
+			case RitsukageDataPack._21returnPic:
 				//saveFile(System.currentTimeMillis() + "", data);
 				break;
 			default:

@@ -46,6 +46,7 @@ import com.meng.tip.*;
 import com.google.gson.*;
 import com.meng.picEdit.*;
 import com.meng.musicProcess.*;
+import com.meng.config.sanae.*;
 
 /*
  * 本文件是JCQ插件的主类<br>
@@ -98,6 +99,7 @@ public class Autoreply extends JcqAppAbstract implements ICQVer, IMsg, IRequest 
 	public SeqManager seqManager;
 	public DanmakuListenerManager danmakuListenerManager;
 	public ConnectServer connectServer;
+	public SanaeServer sanaeServer;
 	public SpellCollect spellCollect;
     public ExecutorService threadPool = Executors.newCachedThreadPool();
 
@@ -195,6 +197,10 @@ public class Autoreply extends JcqAppAbstract implements ICQVer, IMsg, IRequest 
 			connectServer = new ConnectServer(9961);
 			connectServer.start();
 		  } catch (java.net.UnknownHostException e) {}
+		try {
+			sanaeServer = new SanaeServer(9760);
+			sanaeServer.start();
+		} catch (java.net.UnknownHostException e) {}
         FileTipManager fileTipManager = new FileTipManager();
         fileTipManager.dataMap.add(new FileTipUploader(807242547L, 1592608126L));
         //new TimeTipManager().start();

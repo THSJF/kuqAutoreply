@@ -3,7 +3,7 @@ package com.meng.config;
 import com.meng.tools.*;
 import java.util.*;
 
-public class DataPack {
+public class SanaeDataPack {
 
 	public ArrayList<Byte> data=new ArrayList<>();
 	public byte[] dataArray;
@@ -45,9 +45,9 @@ public class DataPack {
 	public static final int _24heartBeat=24;//心跳
 
 	/*
-	设置nickname
-	添加黑名单
-	获取直播列表
+	 设置nickname
+	 添加黑名单
+	 获取直播列表
 	 返回直播列表
 	 主播开播
 	 主播下播
@@ -62,39 +62,39 @@ public class DataPack {
 	 */
 
 
-	public static DataPack encode(int opCode, long timeStamp) {
-		return new DataPack(opCode, timeStamp);
+	public static SanaeDataPack encode(int opCode, long timeStamp) {
+		return new SanaeDataPack(opCode, timeStamp);
 	}
 
-	public static DataPack encode(int opCode, DataPack dataPack) {
-		return new DataPack(opCode, dataPack);
+	public static SanaeDataPack encode(int opCode, SanaeDataPack dataPack) {
+		return new SanaeDataPack(opCode, dataPack);
 	}
 
-	public static DataPack decode(byte[] bytes) {
-		return new DataPack(bytes);
+	public static SanaeDataPack decode(byte[] bytes) {
+		return new SanaeDataPack(bytes);
 	}
 
-	public DataPack(int opCode, long timeStamp) {
+	private SanaeDataPack(int opCode, long timeStamp) {
 		//length(4) headLength(2) version(2) time(8) target/from(8) opCode(4)
-		write(BitConverter.getBytes(0));
-		write(BitConverter.getBytes(headLength));
-		write(BitConverter.getBytes((short)1));
-		write(BitConverter.getBytes(timeStamp));
-		write(BitConverter.getBytes(0L));
-		write(BitConverter.getBytes(opCode));
+		writeByteDataIntoArray(BitConverter.getBytes(0));
+		writeByteDataIntoArray(BitConverter.getBytes(headLength));
+		writeByteDataIntoArray(BitConverter.getBytes((short)1));
+		writeByteDataIntoArray(BitConverter.getBytes(timeStamp));
+		writeByteDataIntoArray(BitConverter.getBytes(0L));
+		writeByteDataIntoArray(BitConverter.getBytes(opCode));
 	}   
 
-	public DataPack(int opCode, DataPack dataPack) {
+	private SanaeDataPack(int opCode, SanaeDataPack dataPack) {
 		//length(4) headLength(2) version(2) time(8) target/from(8) opCode(4)
-		write(BitConverter.getBytes(0));
-		write(BitConverter.getBytes(headLength));
-		write(BitConverter.getBytes(dataPack.getVersion()));
-		write(BitConverter.getBytes(dataPack.getTimeStamp()));
-		write(BitConverter.getBytes(dataPack.getTarget()));
-		write(BitConverter.getBytes(opCode));
+		writeByteDataIntoArray(BitConverter.getBytes(0));
+		writeByteDataIntoArray(BitConverter.getBytes(headLength));
+		writeByteDataIntoArray(BitConverter.getBytes(dataPack.getVersion()));
+		writeByteDataIntoArray(BitConverter.getBytes(dataPack.getTimeStamp()));
+		writeByteDataIntoArray(BitConverter.getBytes(dataPack.getTarget()));
+		writeByteDataIntoArray(BitConverter.getBytes(opCode));
 	}   
 
-	public DataPack(byte[] pack) {
+	private SanaeDataPack(byte[] pack) {
 		dataArray = pack;
 		dataPointer = headLength;
 		switch (getOpCode()) {
@@ -191,48 +191,48 @@ public class DataPack {
 		return BitConverter.toShort(dataArray, 24);
 	}
 
-	public void write(byte... bs) {
+	public void writeByteDataIntoArray(byte... bs) {
 		for (byte b:bs) {
 			data.add(b);
 			++dataPointer;
 		}
 	}
 
-	public void writeByte(byte b) {
-		write(typeByte);
-		write(b);
+	public void write(byte b) {
+		writeByteDataIntoArray(typeByte);
+		writeByteDataIntoArray(b);
 	}
 
-	public void writeShort(short s) {
-		write(typeShort);
-		write(BitConverter.getBytes(s));
+	public void write(short s) {
+		writeByteDataIntoArray(typeShort);
+		writeByteDataIntoArray(BitConverter.getBytes(s));
 	}
 
-	public void writeInt(int i) {
-		write(typeInt);
-		write(BitConverter.getBytes(i));
+	public void write(int i) {
+		writeByteDataIntoArray(typeInt);
+		writeByteDataIntoArray(BitConverter.getBytes(i));
 	}
 
-	public void writeLong(long l) {
-		write(typeLong);
-		write(BitConverter.getBytes(l));
+	public void write(long l) {
+		writeByteDataIntoArray(typeLong);
+		writeByteDataIntoArray(BitConverter.getBytes(l));
 	}
 
-	public void writeFloat(float f) {
-		write(typeFloat);
-		write(BitConverter.getBytes(f));
+	public void write(float f) {
+		writeByteDataIntoArray(typeFloat);
+		writeByteDataIntoArray(BitConverter.getBytes(f));
 	}
 
-	public void writeDouble(double d) {
-		write(typeDouble);
-		write(BitConverter.getBytes(d));
+	public void write(double d) {
+		writeByteDataIntoArray(typeDouble);
+		writeByteDataIntoArray(BitConverter.getBytes(d));
 	}
 
-	public void writeString(String s) {
-		write(typeString);
+	public void write(String s) {
+		writeByteDataIntoArray(typeString);
 		byte[] stringBytes = BitConverter.getBytes(s);
-		writeInt(stringBytes.length);
-		write(stringBytes);
+		write(stringBytes.length);
+		writeByteDataIntoArray(stringBytes);
 	}
 
 	public byte readByte() {
