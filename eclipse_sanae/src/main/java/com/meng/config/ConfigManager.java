@@ -43,22 +43,22 @@ public class ConfigManager extends WebSocketClient {
 				configJavaBean = Autoreply.gson.fromJson(dataPackRecieved.readString(), type);	
 				break;
 			case DataPack._4retOverSpell:
-				resultMap.put(DataPack._4retOverSpell, new TaskResult(dataPackRecieved.readString()));
+				resultMap.put(dataPackRecieved.getOpCode(), new TaskResult(dataPackRecieved.readString()));
 				break;
 			case DataPack._6retOverPersent:
-				resultMap.put(DataPack._6retOverPersent, new TaskResult(dataPackRecieved.readInt()));
+				resultMap.put(dataPackRecieved.getOpCode(), new TaskResult(dataPackRecieved.readInt()));
 				break;
 			case DataPack._8retGrandma:
-				resultMap.put(DataPack._8retGrandma, new TaskResult(dataPackRecieved.readString()));
+				resultMap.put(dataPackRecieved.getOpCode(), new TaskResult(dataPackRecieved.readString()));
 				break;
 			case DataPack._10retMusicName:
-				resultMap.put(DataPack._10retMusicName, new TaskResult(dataPackRecieved.readString()));
+				resultMap.put(dataPackRecieved.getOpCode(), new TaskResult(dataPackRecieved.readString()));
 				break;
 			case DataPack._12retGotSpells:
-				resultMap.put(DataPack._12retGotSpells, new TaskResult(dataPackRecieved.readString()));
+				resultMap.put(dataPackRecieved.getOpCode(), new TaskResult(dataPackRecieved.readString()));
 				break;
 			case DataPack._14retNeta:
-				resultMap.put(DataPack._14retNeta, new TaskResult(dataPackRecieved.readString()));
+				resultMap.put(dataPackRecieved.getOpCode(), new TaskResult(dataPackRecieved.readString()));
 				break;
 			default:
 				dataToSend = DataPack.encode(DataPack._0notification, dataPackRecieved);
@@ -84,15 +84,6 @@ public class ConfigManager extends WebSocketClient {
 
 	}
 
-	public boolean containsGroup(long group) {
-		for (GroupConfig gf:configJavaBean.groupConfigs) {
-			if (gf.groupNumber == group) {
-				return true;
-			}
-		}
-		return false;
-	}
-
 	public String getOverSpell(long fromQQ) {
 		DataPack dp = DataPack.encode(DataPack._3getOverSpell, System.currentTimeMillis());
 		dp.writeLong(fromQQ);
@@ -105,6 +96,15 @@ public class ConfigManager extends WebSocketClient {
 		TaskResult tr=resultMap.get(DataPack._3getOverSpell);
 		resultMap.remove(DataPack._3getOverSpell);
 		return BitConverter.toString(tr.data);
+	}
+	
+	public boolean containsGroup(long group) {
+		for (GroupConfig gf:configJavaBean.groupConfigs) {
+			if (gf.groupNumber == group) {
+				return true;
+			}
+		}
+		return false;
 	}
 
 	public void setNickName(long qq, String nickname) {

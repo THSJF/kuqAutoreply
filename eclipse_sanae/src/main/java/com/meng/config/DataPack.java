@@ -18,23 +18,23 @@ public class DataPack {
 	public final byte typeDouble=5;
 	public final byte typeString=6;
 
-	public static final int _0notification=0;//通知
+	public static final int _0notification=0;//通知  string
 	public static final int _1getConfig=1;  //获取配置文件
-	public static final int _2retConfig=2;//接收配置文件
-	public static final int _3getOverSpell=3;//获取疮痍符卡
-	public static final int _4retOverSpell=4;//接收疮痍
-	public static final int _5getOverPersent=5;//获取疮痍进度
-	public static final int _6retOverPersent=6;//接收疮痍进度
-	public static final int _7getGrandma=7;//获取draw grandma
-	public static final int _8retGrandma=8;//接收grandma
-	public static final int _9getMusicName=9;//获取音乐名
-	public static final int _10retMusicName=10;//接收音乐名
-	public static final int _11getGotSpells=11;//获取符卡列表
-	public static final int _12retGotSpells=12;//接收符卡列表
-	public static final int _13getNeta=13;//获取neta
-	public static final int _14retNeta=14;//接收neta
-	public static final int _15incSpeak=15;//增加发言次数
-	public static final int _16incPic=16;//增加图片次数
+	public static final int _2retConfig=2;//接收配置文件  string(json)
+	public static final int _3getOverSpell=3;//获取疮痍符卡  long(qq)
+	public static final int _4retOverSpell=4;//接收疮痍符卡 string
+	public static final int _5getOverPersent=5;//获取疮痍进度 long(qq)
+	public static final int _6retOverPersent=6;//接收疮痍进度 int(0-10000)
+	public static final int _7getGrandma=7;//获取draw grandma long(qq)
+	public static final int _8retGrandma=8;//接收grandma string
+	public static final int _9getMusicName=9;//获取音乐名 long(qq)
+	public static final int _10retMusicName=10;//接收音乐名 string
+	public static final int _11getGotSpells=11;//获取符卡列表 long(qq)
+	public static final int _12retGotSpells=12;//接收符卡列表 string(json)
+	public static final int _13getNeta=13;//获取neta long(qq)
+	public static final int _14retNeta=14;//接收neta string
+	public static final int _15incSpeak=15;//增加发言次数 long(qq)
+	public static final int _16incPic=16;//增加图片次数 long (qq) 
 	public static final int _17incBilibili=17;//增加哔哩哔哩链接次数
 	public static final int _18incRepeat=18;//增加复读次数
 	public static final int _19incRepeatStart=19;//增加带领复读
@@ -44,7 +44,10 @@ public class DataPack {
 	public static final int _23grass=23;//增加种草次数
 	public static final int _24heartBeat=24;//心跳
 
-	/*获取直播列表
+	/*
+	设置nickname
+	添加黑名单
+	获取直播列表
 	 返回直播列表
 	 主播开播
 	 主播下播
