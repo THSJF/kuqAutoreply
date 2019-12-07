@@ -43,7 +43,7 @@ public class ConfigManager extends WebSocketClient {
 	public void onOpen(ServerHandshake serverHandshake) {
 		SanaeDataPack dp=SanaeDataPack.encode(SanaeDataPack._1getConfig);
 		send(dp.getData());
-		Autoreply.sendMessage(807242547L, 0, "连接到鬼人正邪");
+		System.out.println("连接到鬼人正邪");
 		Autoreply.instence.seqManager.load();
 	}
 

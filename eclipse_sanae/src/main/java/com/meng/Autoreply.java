@@ -15,22 +15,6 @@ import java.net.*;
 import java.util.*;
 import java.util.concurrent.*;
 
-/*
- * 本文件是JCQ插件的主类<br>
- * <br>
- * <p>
- * 注意修改json中的class来加载主类，如不设置则利用appid加载，最后一个单词自动大写查找<br>
- * 例：appid(com.example.demo) 则加载类 com.example.Demo<br>
- * 文档地址： https://gitee.com/Sobte/JCQ-CoolQ <br>
- * 帖子：https://cqp.cc/t/37318 <br>
- * 辅助开发变量: {@link JcqAppAbstract#CQ CQ}({@link com.sobte.cqp.jcq.entity.CoolQ
- * 酷Q核心操作类}), {@link JcqAppAbstract#CC CC}(
- * {@link com.sobte.cqp.jcq.message.CQCode 酷Q码操作类}), 具体功能可以查看文档
- */
-
-/**
- * @author Administrator
- */
 public class Autoreply extends JcqAppAbstract implements ICQVer, IMsg, IRequest {
 
     public static Autoreply instence;
@@ -84,12 +68,7 @@ public class Autoreply extends JcqAppAbstract implements ICQVer, IMsg, IRequest 
         // 返回如：D:\CoolQ\app\com.sobte.cqp.jcq\app\com.example.demo\
         System.out.println("开始加载");
 		long startTime = System.currentTimeMillis();
-        try {
-			configManager = new ConfigManager(new URI("ws://123.207.65.93:9760"));
-			configManager.connect();
-		} catch (URISyntaxException e) {
-			e.printStackTrace();
-		}
+        
         groupMemberChangerListener = new GroupMemberChangerListener();
         adminMessageProcessor = new AdminMessageProcessor(configManager);
         dicReplyManager = new DicReplyManager();
@@ -109,17 +88,16 @@ public class Autoreply extends JcqAppAbstract implements ICQVer, IMsg, IRequest 
 		coinManager = new CoinManager();
         threadPool.execute(new CleanRunnable());
 		messageTooManyManager = new MessageTooManyManager();
+		try {
+			configManager = new ConfigManager(new URI("ws://123.207.65.93:9760"));
+			configManager.connect();
+		} catch (URISyntaxException e) {
+			e.printStackTrace();
+		}
         System.out.println("加载完成,用时" + (System.currentTimeMillis() - startTime));
         return 0;
     }
 
-    /**
-     * 酷Q退出 (Type=1002)<br>
-     * 本方法会在酷Q【主线程】中被调用。<br>
-     * 无论本应用是否被启用，本函数都会在酷Q退出前执行一次，请在这里执行插件关闭代码。
-     *
-     * @return 请固定返回0，返回后酷Q将很快关闭，请不要再通过线程等方式执行其他代码。
-     */
     @Override
     public int exit() {
 		threadPool.shutdownNow();
@@ -127,29 +105,12 @@ public class Autoreply extends JcqAppAbstract implements ICQVer, IMsg, IRequest 
         return 0;
     }
 
-    /**
-     * 应用已被启用 (Type=1003)<br>
-     * 当应用被启用后，将收到此事件。<br>
-     * 如果酷Q载入时应用已被启用，则在 {@link #startup startup}(Type=1001,酷Q启动)
-     * 被调用后，本函数也将被调用一次。<br>
-     * 如非必要，不建议在这里加载窗口。
-     *
-     * @return 请固定返回0。
-     */
     @Override
     public int enable() {
         enable = true;
         return 0;
     }
 
-    /**
-     * 应用将被停用 (Type=1004)<br>
-     * 当应用被停用前，将收到此事件。<br>
-     * 如果酷Q载入时应用已被停用，则本函数【不会】被调用。<br>
-     * 无论本应用是否被启用，酷Q关闭前本函数都【不会】被调用。
-     *
-     * @return 请固定返回0。
-     */
     @Override
     public int disable() {
         enable = false;
