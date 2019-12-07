@@ -21,9 +21,13 @@ public class MessageTooManyManager {
 				}
 			});
 	}
-	
+
 	public boolean checkMsgTooMany(long fromGroup, long fromQQ, String msg) {
 		MessageTooManyBean mtmb=msgMap.get(fromQQ);
+		if (mtmb == null) {
+			mtmb = new MessageTooManyBean();
+			msgMap.put(fromQQ, mtmb);
+		}
 		//发言间隔过短
 		if (System.currentTimeMillis() - mtmb.lastSpeakTimeStamp < 500) {
 			++mtmb.timeSubLowTimes;
