@@ -34,7 +34,6 @@ public class ConfigManager extends WebSocketClient {
 	public void onOpen(ServerHandshake serverHandshake) {
 		send(SanaeDataPack.encode(SanaeDataPack._1getConfig));
 		System.out.println("连接到鬼人正邪");
-		Autoreply.instence.seqManager.load();
 		Autoreply.instence.threadPool.execute(new Runnable(){
 
 				@Override
@@ -70,7 +69,6 @@ public class ConfigManager extends WebSocketClient {
 				Autoreply.instence.adminMessageProcessor = new AdminMessageProcessor();
 				Autoreply.instence.dicReplyManager = new DicReplyManager();
 				Autoreply.instence.repeatManager = new RepeaterManager();
-				Autoreply.instence.seqManager = new SeqManager();
 				Autoreply.instence.birthdayTip = new BirthdayTip();
 				Autoreply.instence.spellCollect = new SpellCollect();
 				Autoreply.instence.threadPool.execute(Autoreply.instence.timeTip);
@@ -84,6 +82,14 @@ public class ConfigManager extends WebSocketClient {
 						Autoreply.instence.repeatManager.addData(new Repeater(groupConfig.groupNumber));
 					}
 				}
+				Autoreply.instence.threadPool.execute(new Runnable(){
+
+						@Override
+						public void run() {
+							Autoreply.instence.seqManager.load();
+							Autoreply.instence.sleeping = false;
+						}
+					});
 				System.out.println("load success");
 				break;
 			case SanaeDataPack._4retOverSpell:

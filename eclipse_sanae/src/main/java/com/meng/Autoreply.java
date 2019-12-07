@@ -161,7 +161,7 @@ public class Autoreply extends JcqAppAbstract implements ICQVer, IMsg, IRequest 
 		if (messageTooManyManager.checkMsgTooMany(fromGroup, fromQQ, msg)) {
 			return MSG_IGNORE;
 		}
-        if (msg.equals(".admin enable") && Autoreply.instence.configManager.isAdmin(fromQQ)) {
+        if (msg.equals(".admin enable")) {
             GroupConfig groupConfig = Autoreply.instence.configManager.getGroupConfig(fromGroup);
             if (groupConfig == null) {
                 Autoreply.sendMessage(fromGroup, fromQQ, "本群没有默认配置");
@@ -172,7 +172,7 @@ public class Autoreply extends JcqAppAbstract implements ICQVer, IMsg, IRequest 
 			return MSG_IGNORE;
         }
 
-        if (msg.equals(".admin disable") && Autoreply.instence.configManager.isAdmin(fromQQ)) {
+        if (msg.equals(".admin disable")) {
             GroupConfig groupConfig = Autoreply.instence.configManager.getGroupConfig(fromGroup);
             if (groupConfig == null) {
                 Autoreply.sendMessage(fromGroup, fromQQ, "本群没有默认配置");
