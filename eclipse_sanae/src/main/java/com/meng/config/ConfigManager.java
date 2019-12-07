@@ -4,7 +4,6 @@ import com.google.gson.reflect.*;
 import com.meng.*;
 import com.meng.dice.*;
 import com.meng.groupChat.*;
-import com.meng.groupChat.Sequence.*;
 import com.meng.messageProcess.*;
 import com.meng.tip.*;
 import com.meng.tools.*;
@@ -52,14 +51,12 @@ public class ConfigManager extends WebSocketClient {
 					}
 				}
 			});
-
 	}
 
 	@Override
 	public void onMessage(ByteBuffer bs) {	
 		SanaeDataPack dataPackRecieved=SanaeDataPack.decode(bs.array());
 		SanaeDataPack dataToSend=null;
-		System.out.println("datapack:code" + dataPackRecieved.getOpCode());
 		switch (dataPackRecieved.getOpCode()) {
 			case SanaeDataPack._2retConfig:
 				Type type = new TypeToken<ConfigJavaBean>() {
@@ -86,8 +83,8 @@ public class ConfigManager extends WebSocketClient {
 
 						@Override
 						public void run() {
+							Autoreply.sleeping = false;
 							Autoreply.instence.seqManager.load();
-							Autoreply.instence.sleeping = false;
 						}
 					});
 				System.out.println("load success");
@@ -110,28 +107,30 @@ public class ConfigManager extends WebSocketClient {
 			case SanaeDataPack._14retNeta:
 				resultMap.put(dataPackRecieved.getOpCode(), new TaskResult(dataPackRecieved.readString()));
 				break;			
-				/*			
-				 case SanaeDataPack._15incSpeak:
-				 break;
-				 case SanaeDataPack._16incPic:
-				 break; 
-				 case SanaeDataPack._17incBilibili:
-				 break;
-				 case SanaeDataPack._18incRepeat:
-				 break; 
-				 case SanaeDataPack._19incRepeatStart:
-				 break;
-				 case SanaeDataPack._20incRepeatBreak:
-				 break;
-				 case SanaeDataPack._21incBan:
-				 break;	
-				 case SanaeDataPack._22decTime:
-				 break;
-				 case SanaeDataPack._23grass:
-				 break;
-				 */
 			case SanaeDataPack._29retSeqContent:
 				resultMap.put(dataPackRecieved.getOpCode(), new TaskResult(dataPackRecieved.readString()));
+				break;
+			case SanaeDataPack._30sendMsg:
+				Autoreply.sendMessage(dataPackRecieved.readLong(), dataPackRecieved.readLong(), dataPackRecieved.readString());
+				break;
+			case SanaeDataPack._32retLiveList:
+				StringBuilder sb=new StringBuilder();
+				while (dataPackRecieved.hasNext()) {
+					sb.append(dataPackRecieved.readString()).append("正在直播:").append(dataPackRecieved.readLong()).append("\n");
+				}
+				Autoreply.sendMessage(Autoreply.mainGroup, 0, sb.toString());
+				break;
+			case SanaeDataPack._33liveStart:
+				Autoreply.sendMessage(Autoreply.mainGroup, 0, dataPackRecieved.readString() + "开始直播" + dataPackRecieved.readLong());
+				break; 
+			case SanaeDataPack._34liveStop:
+				Autoreply.sendMessage(Autoreply.mainGroup, 0, dataPackRecieved.readString() + "停止直播" + dataPackRecieved.readLong());
+				break;
+			case SanaeDataPack._35speakInliveRoom:
+				break; 
+			case SanaeDataPack._36newVideo:
+				break;
+			case SanaeDataPack._37newArtical:
 				break;
 			default:
 				dataToSend = SanaeDataPack.encode(SanaeDataPack._0notification, dataPackRecieved);
