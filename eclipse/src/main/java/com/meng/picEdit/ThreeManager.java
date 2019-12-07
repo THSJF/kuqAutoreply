@@ -20,6 +20,11 @@ public class ThreeManager {
 		checkSet.add(1033317031L);
 		checkSet.addAll(Autoreply.instence.configManager.configJavaBean.adminList);
 		checkSet.addAll(Autoreply.instence.configManager.configJavaBean.masterList);
+		for (PersonInfo pi:Autoreply.instence.configManager.configJavaBean.personInfo) {
+			if (pi.qq != 0) {
+				checkSet.add(pi.qq);
+			}
+		}
 
         Autoreply.instence.threadPool.execute(new Runnable(){
 
@@ -61,14 +66,6 @@ public class ThreeManager {
 			return;
 		}
 		changeMap.put(qq, true);
-		PersonInfo pi=Autoreply.instence.configManager.getPersonInfoFromQQ(qq);
-		String name;
-		if (pi == null) {
-			name = qq + "";
-		} else {
-			name = pi.name;
-		}
-		System.out.println(name + "更换了头像");
 	}
 
 	public boolean check(long fromGroup, long fromQQ) {
