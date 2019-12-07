@@ -207,7 +207,7 @@ public class Autoreply extends JcqAppAbstract implements ICQVer, IMsg, IRequest 
 		spellCollect = new SpellCollect();
         threadPool.execute(liveListener);
         threadPool.execute(updateListener);
-        threadPool.execute(fileTipManager);
+     //   threadPool.execute(fileTipManager);
         threadPool.execute(timeTip);
 		
 		coinManager=new CoinManager();
