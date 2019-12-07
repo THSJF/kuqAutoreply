@@ -66,15 +66,6 @@ public class ConfigManager extends WebSocketClient {
 				Type type = new TypeToken<ConfigJavaBean>() {
 				}.getType();
 				configJavaBean = Autoreply.gson.fromJson(dataPackRecieved.readString(), type);
-
-				for (GroupConfig groupConfig : configJavaBean.groupConfigs) {
-					if (groupConfig.isDic()) {
-						Autoreply.instence.dicReplyManager.addData(new DicReplyGroup(groupConfig.groupNumber));
-					}
-					if (groupConfig.isRepeat()) {
-						Autoreply.instence.repeatManager.addData(new Repeater(groupConfig.groupNumber));
-					}
-				}
 				Autoreply.instence.groupMemberChangerListener = new GroupMemberChangerListener();
 				Autoreply.instence.adminMessageProcessor = new AdminMessageProcessor();
 				Autoreply.instence.dicReplyManager = new DicReplyManager();
@@ -85,6 +76,14 @@ public class ConfigManager extends WebSocketClient {
 				Autoreply.instence.threadPool.execute(Autoreply.instence.timeTip);
 				Autoreply.instence.coinManager = new CoinManager();
 				Autoreply.instence.messageTooManyManager = new MessageTooManyManager();
+				for (GroupConfig groupConfig : configJavaBean.groupConfigs) {
+					if (groupConfig.isDic()) {
+						Autoreply.instence.dicReplyManager.addData(new DicReplyGroup(groupConfig.groupNumber));
+					}
+					if (groupConfig.isRepeat()) {
+						Autoreply.instence.repeatManager.addData(new Repeater(groupConfig.groupNumber));
+					}
+				}
 				System.out.println("load success");
 				break;
 			case SanaeDataPack._4retOverSpell:
@@ -149,7 +148,7 @@ public class ConfigManager extends WebSocketClient {
 
 	@Override
 	public void onError(Exception e) {
-
+		e.printStackTrace();
 	}
 
 	public String getOverSpell(long fromQQ) {
@@ -343,7 +342,13 @@ public class ConfigManager extends WebSocketClient {
         Autoreply.sendMessage(Autoreply.mainGroup, 0, "已将群" + group + "加入黑名单");
     }
 
-	public void send(SanaeDataPack sdp)  {
-		send(sdp.getData());
+	public void send(final SanaeDataPack sdp) {
+		Autoreply.instence.threadPool.execute(new Runnable(){
+
+				@Override
+				public void run() {
+					send(sdp.getData());
+				}
+			});
 	}
 }
