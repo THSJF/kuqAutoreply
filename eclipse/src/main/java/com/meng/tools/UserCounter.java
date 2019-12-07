@@ -156,8 +156,8 @@ public class UserCounter {
         }
 		if (qq == 1620628713 || qq == 2089693971) {
 
-			UserInfo userInfo = countMap.get("2089693971");
-			UserInfo userInfo2=countMap.get("1620628713");
+			UserInfo userInfo = countMap.get(2089693971);
+			UserInfo userInfo2 = countMap.get(1620628713);
 			StringBuilder stringBuilder = new StringBuilder();
 			if (qq != Autoreply.CQ.getLoginQQ()) {
 				stringBuilder.append("你共");
