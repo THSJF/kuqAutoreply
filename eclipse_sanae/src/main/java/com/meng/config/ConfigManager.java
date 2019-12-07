@@ -23,9 +23,13 @@ public class ConfigManager extends WebSocketClient {
 				@Override
 				public void run() {
 					try {
-						Thread.sleep(30);
+						Thread.sleep(30000);
 					} catch (InterruptedException e) {}
-					send(SanaeDataPack.encode(SanaeDataPack._24heartBeat).getData());
+					try{
+						send(SanaeDataPack.encode(SanaeDataPack._24heartBeat).getData());
+					}catch(WebsocketNotConnectedException e){
+						reconnect();
+					}
 				}
 			});
 	}
@@ -40,6 +44,7 @@ public class ConfigManager extends WebSocketClient {
 		SanaeDataPack dp=SanaeDataPack.encode(SanaeDataPack._1getConfig);
 		send(dp.getData());
 		Autoreply.sendMessage(807242547L, 0, "连接到鬼人正邪");
+		Autoreply.instence.seqManager.load();
 	}
 
 	@Override

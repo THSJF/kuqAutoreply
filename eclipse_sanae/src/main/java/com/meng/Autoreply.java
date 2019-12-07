@@ -57,42 +57,22 @@ public class Autoreply extends JcqAppAbstract implements ICQVer, IMsg, IRequest 
 	public BirthdayTip birthdayTip;
 
 	public DiceImitate diceImitate=new DiceImitate();
-	public static long mainGroup=1023432971l;
+	public static final long mainGroup=807242547L;
 	public static Gson gson;
 	public MessageTooManyManager messageTooManyManager;
-    /**
-     * @param args 系统参数
-     */
+    
     public static void main(String[] args) {
-        // CQ此变量为特殊变量，在JCQ启动时实例化赋值给每个插件，而在测试中可以用CQDebug类来代替他
-        CQ = new CoolQ(1000);// new CQDebug("应用目录","应用名称") 可以用此构造器初始化应用的目录
-        CQ.logInfo("[JCQ] TEST Demo", "测试启动");// 现在就可以用CQ变量来执行任何想要的操作了
-        // 要测试主类就先实例化一个主类对象
+        CQ = new CoolQ(1000);
         Autoreply demo = new Autoreply();
-        // 下面对主类进行各方法测试,按照JCQ运行过程，模拟实际情况
-        demo.startup();// 程序运行开始 调用应用初始化方法
-        demo.enable();// 程序初始化完成后，启用应用，让应用正常工作
-        /*
-         * 以下是收尾触发函数 // demo.disable();// 实际过程中程序结束不会触发disable，只有用户关闭了此插件才会触发
-         * demo.exit();// 最后程序运行结束，调用exit方法
-         */
+        demo.startup();
+        demo.enable();
     }
 
     @Override
     public String appInfo() {
-        // 应用AppID,规则见 http://d.cqp.me/Pro/开发/基础信息#appid
-        String AppID = "com.meng.autoreply";// 记住编译后的文件和json也要使用appid做文件名
-        return CQAPIVER + "," + AppID;
+        return CQAPIVER + "," + "com.meng.autoreply";
     }
 
-    /**
-     * 酷Q启动 (Type=1001)<br>
-     * 本方法会在酷Q【主线程】中被调用。<br>
-     * 请在这里执行插件初始化代码。<br>
-     * 请务必尽快返回本子程序，否则会卡住其他插件以及主程序的加载。
-     *
-     * @return 请固定返回0
-     */
     @Override
     public int startup() {
         // 获取应用数据目录(无需储存数据时，请将此行注释)
@@ -106,6 +86,7 @@ public class Autoreply extends JcqAppAbstract implements ICQVer, IMsg, IRequest 
 		long startTime = System.currentTimeMillis();
         try {
 			configManager = new ConfigManager(new URI("ws://123.207.65.93:9760"));
+			configManager.connect();
 		} catch (URISyntaxException e) {
 			e.printStackTrace();
 		}
@@ -122,7 +103,6 @@ public class Autoreply extends JcqAppAbstract implements ICQVer, IMsg, IRequest 
             }
         }
 		seqManager = new SeqManager();
-		seqManager.load();
 		birthdayTip = new BirthdayTip();
 		spellCollect = new SpellCollect();
 		threadPool.execute(timeTip);
