@@ -55,7 +55,7 @@ public class SanaeDataPack {
 	public static final int _33liveStart=33;//开始直播 string(name) long(blid)
 	public static final int _34liveStop=34;//停止直播 string(name) long(blid)
 	public static final int _35speakInliveRoom=35;//直播间说话 string(主播称呼) long(blid) string(说话者称呼) long(说话者bid)
-	public static final int _36newVideo=36;
+	public static final int _36newVideo=36;//新视频 string(up) string(vname) long(aid)
 	public static final int _37newArtical=37;
 	public static final int _38groupBan=38;
 	public static final int _39groupKick=39;

@@ -17,6 +17,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
 import com.meng.config.javabeans.*;
+import com.meng.config.sanae.*;
 
 public class UpdateListener implements Runnable {
 
@@ -65,6 +66,7 @@ public class UpdateListener implements Runnable {
 									Autoreply.sendMessage(Autoreply.mainGroup, 0, e.toString());
 								}
 								tip(String.valueOf(updater.bid), updater.name + "发布新文章" + articles.id + ":" + articles.title);
+								Autoreply.instence.sanaeServer.send(SanaeDataPack.encode(SanaeDataPack._37newArtical).write(updater.name).write(articles.title).write(articles.id));
                             } else {
                                 updater.needTipArtical = true;
                             }

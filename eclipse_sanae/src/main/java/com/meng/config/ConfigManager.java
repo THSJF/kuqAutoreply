@@ -55,13 +55,13 @@ public class ConfigManager extends WebSocketClient {
 
 	@Override
 	public void onMessage(ByteBuffer bs) {	
-		SanaeDataPack dataPackRecieved=SanaeDataPack.decode(bs.array());
+		SanaeDataPack dataRec=SanaeDataPack.decode(bs.array());
 		SanaeDataPack dataToSend=null;
-		switch (dataPackRecieved.getOpCode()) {
+		switch (dataRec.getOpCode()) {
 			case SanaeDataPack._2retConfig:
 				Type type = new TypeToken<ConfigJavaBean>() {
 				}.getType();
-				configJavaBean = Autoreply.gson.fromJson(dataPackRecieved.readString(), type);
+				configJavaBean = Autoreply.gson.fromJson(dataRec.readString(), type);
 				Autoreply.instence.groupMemberChangerListener = new GroupMemberChangerListener();
 				Autoreply.instence.adminMessageProcessor = new AdminMessageProcessor();
 				Autoreply.instence.dicReplyManager = new DicReplyManager();
@@ -90,50 +90,53 @@ public class ConfigManager extends WebSocketClient {
 				System.out.println("load success");
 				break;
 			case SanaeDataPack._4retOverSpell:
-				resultMap.put(dataPackRecieved.getOpCode(), new TaskResult(dataPackRecieved.readString()));
+				resultMap.put(dataRec.getOpCode(), new TaskResult(dataRec.readString()));
 				break;
 			case SanaeDataPack._6retOverPersent:
-				resultMap.put(dataPackRecieved.getOpCode(), new TaskResult(dataPackRecieved.readInt()));
+				resultMap.put(dataRec.getOpCode(), new TaskResult(dataRec.readInt()));
 				break;
 			case SanaeDataPack._8retGrandma:
-				resultMap.put(dataPackRecieved.getOpCode(), new TaskResult(dataPackRecieved.readString()));
+				resultMap.put(dataRec.getOpCode(), new TaskResult(dataRec.readString()));
 				break;
 			case SanaeDataPack._10retMusicName:
-				resultMap.put(dataPackRecieved.getOpCode(), new TaskResult(dataPackRecieved.readString()));
+				resultMap.put(dataRec.getOpCode(), new TaskResult(dataRec.readString()));
 				break;
 			case SanaeDataPack._12retGotSpells:
-				resultMap.put(dataPackRecieved.getOpCode(), new TaskResult(dataPackRecieved.readString()));
+				resultMap.put(dataRec.getOpCode(), new TaskResult(dataRec.readString()));
 				break;
 			case SanaeDataPack._14retNeta:
-				resultMap.put(dataPackRecieved.getOpCode(), new TaskResult(dataPackRecieved.readString()));
+				resultMap.put(dataRec.getOpCode(), new TaskResult(dataRec.readString()));
 				break;			
 			case SanaeDataPack._29retSeqContent:
-				resultMap.put(dataPackRecieved.getOpCode(), new TaskResult(dataPackRecieved.readString()));
+				resultMap.put(dataRec.getOpCode(), new TaskResult(dataRec.readString()));
 				break;
 			case SanaeDataPack._30sendMsg:
-				Autoreply.sendMessage(dataPackRecieved.readLong(), dataPackRecieved.readLong(), dataPackRecieved.readString());
+				Autoreply.sendMessage(dataRec.readLong(), dataRec.readLong(), dataRec.readString());
 				break;
 			case SanaeDataPack._32retLiveList:
 				StringBuilder sb=new StringBuilder();
-				while (dataPackRecieved.hasNext()) {
-					sb.append(dataPackRecieved.readString()).append("正在直播:").append(dataPackRecieved.readLong()).append("\n");
+				while (dataRec.hasNext()) {
+					sb.append(dataRec.readString()).append("正在直播:").append(dataRec.readLong()).append("\n");
 				}
 				Autoreply.sendMessage(Autoreply.mainGroup, 0, sb.toString());
 				break;
 			case SanaeDataPack._33liveStart:
-				Autoreply.sendMessage(Autoreply.mainGroup, 0, dataPackRecieved.readString() + "开始直播" + dataPackRecieved.readLong());
+				Autoreply.sendMessage(Autoreply.mainGroup, 0, dataRec.readString() + "开始直播" + dataRec.readLong());
 				break; 
 			case SanaeDataPack._34liveStop:
-				Autoreply.sendMessage(Autoreply.mainGroup, 0, dataPackRecieved.readString() + "停止直播" + dataPackRecieved.readLong());
+				Autoreply.sendMessage(Autoreply.mainGroup, 0, dataRec.readString() + "停止直播" + dataRec.readLong());
 				break;
 			case SanaeDataPack._35speakInliveRoom:
+				//直播间说话 string(主播称呼) long(blid) string(说话者称呼) long(说话者bid)
 				break; 
 			case SanaeDataPack._36newVideo:
+				Autoreply.sendMessage(Autoreply.mainGroup, 0, dataRec.readString() + "发布新视频:" + dataRec.readString() + "(av" + dataRec.readLong() + ")");
 				break;
 			case SanaeDataPack._37newArtical:
+				Autoreply.sendMessage(Autoreply.mainGroup, 0, dataRec.readString() + "发布新专栏:" + dataRec.readString() + "(cv" + dataRec.readLong() + ")");
 				break;
 			default:
-				dataToSend = SanaeDataPack.encode(SanaeDataPack._0notification, dataPackRecieved);
+				dataToSend = SanaeDataPack.encode(SanaeDataPack._0notification, dataRec);
 				dataToSend.write("操作类型错误");
 		}
 		if (dataToSend != null) {

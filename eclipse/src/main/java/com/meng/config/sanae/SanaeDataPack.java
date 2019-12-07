@@ -50,26 +50,19 @@ public class SanaeDataPack {
 	public static final int _27incMengEr=27;//萌二发言
 	public static final int _28getSeqContent=28;//获得接龙内容
 	public static final int _29retSeqContent=29;//返回接龙内容
-	public static final int _30getBirthday=30;
-	public static final int _31retBirthday=31;
-
-
-
+	public static final int _30sendMsg=30;//向指定目标发送消息long group long qq string msg
+	public static final int _31getLiveList=31;//获取直播列表
+	public static final int _32retLiveList=32;//返回直播列表 string(name) long(blid)
+	public static final int _33liveStart=33;//开始直播 string(name) long(blid)
+	public static final int _34liveStop=34;//停止直播 string(name) long(blid)
+	public static final int _35speakInliveRoom=35;//直播间说话 string(主播称呼) long(blid) string(说话者称呼) long(说话者bid)
+	public static final int _36newVideo=36;//新视频 string(up) string(vname) long(aid)
+	public static final int _37newArtical=37;
+	public static final int _38groupBan=38;
+	public static final int _39groupKick=39;
 
 	/*
 
-	 获取直播列表
-	 返回直播列表
-	 主播开播
-	 主播下播
-	 有人在直播间说话
-	 新视频
-	 新专栏
-	 从称呼获取personInfo
-	 从qq号获取personInfo
-	 从bid获取personInfo
-	 从blid获取personInfo
-	 返回personInfo
 	 */
 
 
