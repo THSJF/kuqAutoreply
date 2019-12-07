@@ -122,6 +122,7 @@ public class Autoreply extends JcqAppAbstract implements ICQVer, IMsg, IRequest 
             }
         }
 		seqManager = new SeqManager();
+		seqManager.load();
 		birthdayTip = new BirthdayTip();
 		spellCollect = new SpellCollect();
 		threadPool.execute(timeTip);
@@ -231,6 +232,7 @@ public class Autoreply extends JcqAppAbstract implements ICQVer, IMsg, IRequest 
     public int groupMsg(int subType, int msgId, long fromGroup, long fromQQ, String fromAnonymous, String msg, int font) {
 		// if (fromGroup != 1023432971L)
 		//return MSG_IGNORE;
+		configManager.send(SanaeDataPack.encode(SanaeDataPack._15incSpeak).write(fromGroup).write(fromQQ));
 		if (messageTooManyManager.checkMsgTooMany(fromGroup, fromQQ, msg)) {
 			return MSG_IGNORE;
 		}

@@ -18,6 +18,16 @@ public class ConfigManager extends WebSocketClient {
 
 	public ConfigManager(URI uri) {
 		super(uri);
+		Autoreply.instence.threadPool.execute(new Runnable(){
+
+				@Override
+				public void run() {
+					try {
+						Thread.sleep(30);
+					} catch (InterruptedException e) {}
+					send(SanaeDataPack.encode(SanaeDataPack._24heartBeat).getData());
+				}
+			});
 	}
 
 	@Override
@@ -27,7 +37,7 @@ public class ConfigManager extends WebSocketClient {
 
 	@Override
 	public void onOpen(ServerHandshake serverHandshake) {
-		SanaeDataPack dp=SanaeDataPack.encode(SanaeDataPack._1getConfig, System.currentTimeMillis());
+		SanaeDataPack dp=SanaeDataPack.encode(SanaeDataPack._1getConfig);
 		send(dp.getData());
 		Autoreply.sendMessage(807242547L, 0, "连接到鬼人正邪");
 	}
@@ -105,45 +115,38 @@ public class ConfigManager extends WebSocketClient {
 	}
 
 	public String getOverSpell(long fromQQ) {
-		SanaeDataPack dp = SanaeDataPack.encode(SanaeDataPack._3getOverSpell, System.currentTimeMillis());
-		dp.write(fromQQ);
-		send(dp.getData());
+		send(SanaeDataPack.encode(SanaeDataPack._3getOverSpell).write(fromQQ));
 		return BitConverter.toString(getTaskResult(SanaeDataPack._4retOverSpell).data);
 	}
 
 	public int getOverPersent(long fromQQ) {
-		SanaeDataPack dp = SanaeDataPack.encode(SanaeDataPack._5getOverPersent, System.currentTimeMillis());
-		dp.write(fromQQ);
-		send(dp.getData());
+		send(SanaeDataPack.encode(SanaeDataPack._5getOverPersent).write(fromQQ));
 		return BitConverter.toInt(getTaskResult(SanaeDataPack._6retOverPersent).data);
 	}
 
 	public String getGrandma(long fromQQ) {
-		SanaeDataPack dp = SanaeDataPack.encode(SanaeDataPack._7getGrandma, System.currentTimeMillis());
-		dp.write(fromQQ);
-		send(dp.getData());
+		send(SanaeDataPack.encode(SanaeDataPack._7getGrandma).write(fromQQ));
 		return BitConverter.toString(getTaskResult(SanaeDataPack._8retGrandma).data);
 	}
 
 	public String getMusicName(long fromQQ) {
-		SanaeDataPack dp = SanaeDataPack.encode(SanaeDataPack._9getMusicName, System.currentTimeMillis());
-		dp.write(fromQQ);
-		send(dp.getData());
+		send(SanaeDataPack.encode(SanaeDataPack._9getMusicName).write(fromQQ));
 		return BitConverter.toString(getTaskResult(SanaeDataPack._10retMusicName).data);
 	}
 
 	public String getSpells(long fromQQ) {
-		SanaeDataPack dp = SanaeDataPack.encode(SanaeDataPack._11getGotSpells, System.currentTimeMillis());
-		dp.write(fromQQ);
-		send(dp.getData());
+		send(SanaeDataPack.encode(SanaeDataPack._11getGotSpells).write(fromQQ));
 		return BitConverter.toString(getTaskResult(SanaeDataPack._12retGotSpells).data);
 	}
 
 	public String getNeta(long fromQQ) {
-		SanaeDataPack dp = SanaeDataPack.encode(SanaeDataPack._13getNeta, System.currentTimeMillis());
-		dp.write(fromQQ);
-		send(dp.getData());
+		send(SanaeDataPack.encode(SanaeDataPack._13getNeta).write(fromQQ));
 		return BitConverter.toString(getTaskResult(SanaeDataPack._14retNeta).data);
+	}
+
+	public String getSeq() {
+		send(SanaeDataPack.encode(SanaeDataPack._28getSeqContent));
+		return BitConverter.toString(getTaskResult(SanaeDataPack._29retSeqContent).data);
 	}
 
 	private TaskResult getTaskResult(int opCode) {
@@ -169,8 +172,10 @@ public class ConfigManager extends WebSocketClient {
 	public void setNickName(long qq, String nickname) {
 		if (nickname != null) {
 			configJavaBean.nicknameMap.put(qq, nickname);
+			send(SanaeDataPack.encode(SanaeDataPack._25setNick).write(qq).write(nickname));
 		} else {
 			configJavaBean.nicknameMap.remove(qq);
+			send(SanaeDataPack.encode(SanaeDataPack._25setNick).write(qq));
 		}
 	}
 
@@ -294,8 +299,12 @@ public class ConfigManager extends WebSocketClient {
                 break;
             }
         }
+		send(SanaeDataPack.encode(SanaeDataPack._26addBlack).write(group).write(qq));
         Autoreply.sendMessage(Autoreply.mainGroup, 0, "已将用户" + qq + "加入黑名单");
         Autoreply.sendMessage(Autoreply.mainGroup, 0, "已将群" + group + "加入黑名单");
     }
 
+	public void send(SanaeDataPack sdp)  {
+		send(sdp.getData());
+	}
 }

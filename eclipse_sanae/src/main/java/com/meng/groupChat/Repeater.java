@@ -8,20 +8,15 @@ public class Repeater {
     private String lastMessageRecieved = "";
     private boolean lastStatus = false;
     long groupNumber = 0;
-    private WarnMessageProcessor warnMessageProcessor;
 
     public Repeater(long groupNumber) {
         this.groupNumber = groupNumber;
-        warnMessageProcessor = new WarnMessageProcessor();
-    }
+	}
 
     public boolean check(long fromGroup, long fromQQ, String msg) {
         GroupConfig groupConfig = Autoreply.instence.configManager.getGroupConfig(fromGroup);
         if (groupConfig == null) {
             return false;
-        }
-        if (warnMessageProcessor.check(fromGroup, fromQQ, msg)) {
-            return true;
         }
         boolean b = false; 
 		b = checkRepeatStatu(fromGroup, fromQQ, msg);
@@ -46,17 +41,17 @@ public class Repeater {
     }
 
     private boolean repeatEnd(long group, long qq, String msg) {
-		
+		Autoreply.instence.configManager.send(SanaeDataPack.encode(SanaeDataPack._20incRepeatBreak).write(group).write(qq));
         return false;
     }
 
     private boolean repeatRunning(long group, long qq, String msg) {
-        
+		Autoreply.instence.configManager.send(SanaeDataPack.encode(SanaeDataPack._18incRepeat).write(group).write(qq));
         return false;
     }
 
     private boolean repeatStart(long group,  long qq,  String msg) {
-        
+		Autoreply.instence.configManager.send(SanaeDataPack.encode(SanaeDataPack._19incRepeatStart).write(group).write(qq));
 		Autoreply.sendMessage(group, 0, msg);
         return true;
     }
