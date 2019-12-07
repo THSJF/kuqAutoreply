@@ -2,7 +2,11 @@ package com.meng.config;
 
 import com.google.gson.reflect.*;
 import com.meng.*;
+import com.meng.dice.*;
 import com.meng.groupChat.*;
+import com.meng.groupChat.Sequence.*;
+import com.meng.messageProcess.*;
+import com.meng.tip.*;
 import com.meng.tools.*;
 import java.lang.reflect.*;
 import java.net.*;
@@ -41,7 +45,7 @@ public class ConfigManager extends WebSocketClient {
 						e.printStackTrace();
 					}
 					try {
-						send(SanaeDataPack.encode(SanaeDataPack._24heartBeat).getData());
+						send(SanaeDataPack.encode(SanaeDataPack._24heartBeat));
 					} catch (WebsocketNotConnectedException e) {
 						System.out.println("和鬼人正邪的连接已断开");
 						e.printStackTrace();
@@ -49,6 +53,7 @@ public class ConfigManager extends WebSocketClient {
 					}
 				}
 			});
+
 	}
 
 	@Override
@@ -70,6 +75,17 @@ public class ConfigManager extends WebSocketClient {
 						Autoreply.instence.repeatManager.addData(new Repeater(groupConfig.groupNumber));
 					}
 				}
+				Autoreply.instence.groupMemberChangerListener = new GroupMemberChangerListener();
+				Autoreply.instence.adminMessageProcessor = new AdminMessageProcessor();
+				Autoreply.instence.dicReplyManager = new DicReplyManager();
+				Autoreply.instence.repeatManager = new RepeaterManager();
+				Autoreply.instence.seqManager = new SeqManager();
+				Autoreply.instence.birthdayTip = new BirthdayTip();
+				Autoreply.instence.spellCollect = new SpellCollect();
+				Autoreply.instence.threadPool.execute(Autoreply.instence.timeTip);
+				Autoreply.instence.coinManager = new CoinManager();
+				Autoreply.instence.messageTooManyManager = new MessageTooManyManager();
+				System.out.println("load success");
 				break;
 			case SanaeDataPack._4retOverSpell:
 				resultMap.put(dataPackRecieved.getOpCode(), new TaskResult(dataPackRecieved.readString()));
@@ -108,7 +124,10 @@ public class ConfigManager extends WebSocketClient {
 				 break;
 				 case SanaeDataPack._23grass:
 				 break;
-				 */		
+				 */
+			case SanaeDataPack._29retSeqContent:
+				resultMap.put(dataPackRecieved.getOpCode(), new TaskResult(dataPackRecieved.readString()));
+				break;
 			default:
 				dataToSend = SanaeDataPack.encode(SanaeDataPack._0notification, dataPackRecieved);
 				dataToSend.write("操作类型错误");
@@ -169,7 +188,8 @@ public class ConfigManager extends WebSocketClient {
 	}
 
 	private TaskResult getTaskResult(int opCode) {
-		while (resultMap.get(opCode) == null) {
+		int time=3000;
+		while (resultMap.get(opCode) == null && time-- > 0) {
 			try {
 				Thread.sleep(1);
 			} catch (InterruptedException e) {}

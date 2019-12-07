@@ -45,6 +45,7 @@ public class BitConverter {
 		try {
 			return s.getBytes("utf-8");
 		} catch (UnsupportedEncodingException e) {
+			e.printStackTrace();
 			return null;
 		}
 	}
@@ -93,15 +94,12 @@ public class BitConverter {
 		try {
 			return new String(data, pos, byteCount, "utf-8");
 		} catch (UnsupportedEncodingException e) {
+			e.printStackTrace();
 			return null;
 		}
 	}
 
 	public static String toString(byte[] data) {
-		try {
-			return new String(data, "utf-8");
-		} catch (UnsupportedEncodingException e) {
-			return null;
-		}
+		return toString(data, 0, data.length);
 	}
 }

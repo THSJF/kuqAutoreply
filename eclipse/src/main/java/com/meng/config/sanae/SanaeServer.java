@@ -23,12 +23,12 @@ public class SanaeServer extends WebSocketServer {
 
 	@Override
 	public void onOpen(WebSocket conn, ClientHandshake handshake) {
-		Autoreply.sendMessage(Autoreply.mainGroup,0,"websocket连接");
+		Autoreply.sendMessage(Autoreply.mainGroup, 0, "websocket连接");
 	}
 
 	@Override
 	public void onClose(WebSocket conn, int code, String reason, boolean remote) {
-		Autoreply.sendMessage(Autoreply.mainGroup,0,"websocket断开");
+		Autoreply.sendMessage(Autoreply.mainGroup, 0, "websocket断开");
 	}
 
 	@Override
@@ -62,10 +62,9 @@ public class SanaeServer extends WebSocketServer {
 				break;
 			case SanaeDataPack._28getSeqContent:
 				sdp = SanaeDataPack.encode(SanaeDataPack._29retSeqContent, rsdp);
-				sdp.write(Autoreply.instence.diceImitate.md5RanStr(rsdp.readLong(), DiceImitate.spells));
+				File jsonFile = new File(Autoreply.appDirectory + "seq.json");
+				sdp.write(Methods.readFileToString(jsonFile.getAbsolutePath()));
 				break;
-
-
 		}
 		if (sdp != null) {
 			conn.send(sdp.getData());
