@@ -2,6 +2,8 @@ package com.meng.config;
 
 import com.google.gson.reflect.*;
 import com.meng.*;
+import com.meng.groupChat.*;
+import com.meng.tools.*;
 import java.lang.reflect.*;
 import java.net.*;
 import java.nio.*;
@@ -9,7 +11,6 @@ import java.util.concurrent.*;
 import org.java_websocket.client.*;
 import org.java_websocket.exceptions.*;
 import org.java_websocket.handshake.*;
-import com.meng.tools.*;
 
 public class ConfigManager extends WebSocketClient {
     public ConfigJavaBean configJavaBean = new ConfigJavaBean();
@@ -22,11 +23,10 @@ public class ConfigManager extends WebSocketClient {
 
 	@Override
 	public void onMessage(String p1) {
-
+		System.out.println("strMsg:" + p1);
 	}
 
-	@Override
-	public void onOpen(ServerHandshake serverHandshake) {
+	public void load() {
 		send(SanaeDataPack.encode(SanaeDataPack._1getConfig));
 		System.out.println("连接到鬼人正邪");
 		Autoreply.instence.seqManager.load();
@@ -36,10 +36,14 @@ public class ConfigManager extends WebSocketClient {
 				public void run() {
 					try {
 						Thread.sleep(30000);
-					} catch (InterruptedException e) {}
-					try{
+					} catch (InterruptedException e) {
+						e.printStackTrace();
+					}
+					try {
 						send(SanaeDataPack.encode(SanaeDataPack._24heartBeat).getData());
-					}catch(WebsocketNotConnectedException e){
+					} catch (WebsocketNotConnectedException e) {
+						System.out.println("和鬼人正邪的连接已断开");
+						e.printStackTrace();
 						reconnect();
 					}
 				}
@@ -47,15 +51,29 @@ public class ConfigManager extends WebSocketClient {
 	}
 
 	@Override
+	public void onOpen(ServerHandshake serverHandshake) {
+
+	}
+
+	@Override
 	public void onMessage(ByteBuffer bs) {	
 		SanaeDataPack dataPackRecieved=SanaeDataPack.decode(bs.array());
 		SanaeDataPack dataToSend=null;
-		System.out.println("datapack:code"+dataPackRecieved.getOpCode());
+		System.out.println("datapack:code" + dataPackRecieved.getOpCode());
 		switch (dataPackRecieved.getOpCode()) {
 			case SanaeDataPack._2retConfig:
 				Type type = new TypeToken<ConfigJavaBean>() {
 				}.getType();
 				configJavaBean = Autoreply.gson.fromJson(dataPackRecieved.readString(), type);
+
+				for (GroupConfig groupConfig : configJavaBean.groupConfigs) {
+					if (groupConfig.isDic()) {
+						Autoreply.instence.dicReplyManager.addData(new DicReplyGroup(groupConfig.groupNumber));
+					}
+					if (groupConfig.isRepeat()) {
+						Autoreply.instence.repeatManager.addData(new Repeater(groupConfig.groupNumber));
+					}
+				}
 				break;
 			case SanaeDataPack._4retOverSpell:
 				resultMap.put(dataPackRecieved.getOpCode(), new TaskResult(dataPackRecieved.readString()));
@@ -101,9 +119,9 @@ public class ConfigManager extends WebSocketClient {
 		}
 		if (dataToSend != null) {
 			try {
-				send(dataToSend.getData());
+				send(dataToSend);
 			} catch (WebsocketNotConnectedException e) {
-				Autoreply.sendMessage(807242547L, 0, "和鬼人正邪的连接已断开");
+				e.printStackTrace();
 				reconnect();
 			}
 		}

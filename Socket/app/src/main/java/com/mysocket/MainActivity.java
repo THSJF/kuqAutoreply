@@ -101,9 +101,9 @@ public class MainActivity extends Activity {
 						s += etn3.getText().toString();
 						s += " ";
 					}	 
-				//	configManager.send(sdp.getData());
+				configManager.send(sdp.getData());
 					result.setText("发送内容:\n" + s);
-					recieved.add(configManager.getOverSpell(2856986197L));
+					//recieved.add(configManager.getOverSpell(2856986197L));
 					adp.notifyDataSetChanged();
 					break;
 					}

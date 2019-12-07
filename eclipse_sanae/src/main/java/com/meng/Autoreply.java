@@ -68,7 +68,6 @@ public class Autoreply extends JcqAppAbstract implements ICQVer, IMsg, IRequest 
         // 返回如：D:\CoolQ\app\com.sobte.cqp.jcq\app\com.example.demo\
         System.out.println("开始加载");
 		long startTime = System.currentTimeMillis();
-        
         groupMemberChangerListener = new GroupMemberChangerListener();
         adminMessageProcessor = new AdminMessageProcessor(configManager);
         dicReplyManager = new DicReplyManager();
@@ -78,7 +77,6 @@ public class Autoreply extends JcqAppAbstract implements ICQVer, IMsg, IRequest 
 		spellCollect = new SpellCollect();
 		threadPool.execute(timeTip);
 		coinManager = new CoinManager();
-        threadPool.execute(new CleanRunnable());
 		messageTooManyManager = new MessageTooManyManager();
 		try {
 			configManager = new ConfigManager(new URI("ws://123.207.65.93:9760"));
@@ -86,14 +84,7 @@ public class Autoreply extends JcqAppAbstract implements ICQVer, IMsg, IRequest 
 		} catch (URISyntaxException e) {
 			e.printStackTrace();
 		}
-        for (GroupConfig groupConfig : configManager.configJavaBean.groupConfigs) {
-            if (groupConfig.isDic()) {
-                dicReplyManager.addData(new DicReplyGroup(groupConfig.groupNumber));
-            }
-            if (groupConfig.isRepeat()) {
-                repeatManager.addData(new com.meng.groupChat.Repeater(groupConfig.groupNumber));
-            }
-        }
+		configManager.load();
         System.out.println("加载完成,用时" + (System.currentTimeMillis() - startTime));
         return 0;
     }
