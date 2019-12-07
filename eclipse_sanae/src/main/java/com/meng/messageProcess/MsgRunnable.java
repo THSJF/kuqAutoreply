@@ -1,27 +1,22 @@
 package com.meng.messageProcess;
 
 import com.meng.*;
+import com.meng.config.*;
+import com.meng.tools.*;
 
 import static com.meng.Autoreply.sendMessage;
 
-public class GroupMsgPart1Runnable implements Runnable {
-    private int subType = 0;
+public class MsgRunnable implements Runnable {
     private int msgId = 0;
     private long fromGroup = 0;
     private long fromQQ = 0;
-    private String fromAnonymous = "";
     private String msg = "";
-    private int font = 0;
-    private long timeStamp = 0;
 
-    public GroupMsgPart1Runnable(MessageSender ms) {
-        font = ms.font;
-        fromGroup = ms.fromGroup;
-        fromQQ = ms.fromQQ;
-        msg = ms.msg;
-        msgId = ms.msgId;
-        subType = ms.subType;
-        timeStamp = ms.timeStamp;
+    public MsgRunnable(long fromGroup, long fromQQ, String msg, int msgId) {
+        this.fromGroup = fromGroup;
+        this.fromQQ = fromQQ;
+        this.msg = msg;
+        this.msgId = msgId;
     }
 
     @Override
@@ -113,9 +108,58 @@ public class GroupMsgPart1Runnable implements Runnable {
 			}
 			return;
 		}
-
-        if (Autoreply.instence.messageMap.get(fromQQ) == null) {
-            Autoreply.instence.messageMap.put(fromQQ, new MessageSender(fromGroup, fromQQ, msg, System.currentTimeMillis(), msgId));
-        }
-    }
+		if (msg.equalsIgnoreCase("loaddic")) {
+			Autoreply.instence.loadGroupDic();
+			sendMessage(fromGroup, fromQQ, "loaded");
+			return;
+		}
+		if (msg.startsWith(".nn ")) {
+			if (msg.contains("~") || msg.contains("～")) {
+				return;
+			}
+			String name=msg.substring(4);
+			if (name.length() > 30) {
+				Autoreply.sendMessage(fromGroup, 0, "太长了,记不住");
+				return;
+			}
+			Autoreply.instence.configManager.setNickName(fromQQ, name);
+			Autoreply.sendMessage(fromGroup, 0, "我以后会称呼你为" + name);
+			return;
+		}
+		if (msg.equals(".nn")) {
+			Autoreply.instence.configManager.setNickName(fromQQ, null);
+			Autoreply.sendMessage(fromGroup, 0, "我以后会用你的QQ昵称称呼你");
+			return;
+		}
+		if (Methods.checkAt(fromGroup, fromQQ, msg)) {//@
+			return;
+		}
+		GroupConfig groupConfig = Autoreply.instence.configManager.getGroupConfig(fromGroup);
+		if (groupConfig.isRepeat() && Autoreply.instence.repeatManager.check(fromGroup, fromQQ, msg)) {// 复读
+			return;
+		}
+		if (Autoreply.instence.spellCollect.check(fromGroup, fromQQ, msg)) {
+			return;
+		}
+		if (msg.startsWith("[CQ:location,lat=")) {
+			sendMessage(fromGroup, 0, Autoreply.instence.CC.location(35.594993, 118.869838, 15, "守矢神社", "此生无悔入东方 来世愿生幻想乡"));
+			return;
+		}
+		if (groupConfig.isCqCode() && Autoreply.instence.CQcodeManager.check(fromGroup, msg)) {// 特殊信息(签到分享等)
+			return;
+		}
+		if (msg.equals("查看活跃数据")) {
+			sendMessage(fromGroup, fromQQ, "https://qqweb.qq.com/m/qun/activedata/active.html?gc=" + fromGroup);
+			return;
+		}
+		if (Autoreply.instence.diceImitate.check(fromGroup, fromQQ, msg)) {
+			return;
+		}
+		if (Autoreply.instence.seqManager.check(fromGroup, fromQQ, msg)) {
+			return;
+		}
+		if (groupConfig.isDic() && Autoreply.instence.dicReplyManager.check(fromGroup, fromQQ, msg)) {
+			return;
+		}
+	}
 }

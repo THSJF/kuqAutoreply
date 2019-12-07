@@ -40,7 +40,6 @@ public class Autoreply extends JcqAppAbstract implements ICQVer, IMsg, IRequest 
 	public DicReplyManager dicReplyManager;
     public CQCodeManager CQcodeManager = new CQCodeManager();
 	public ConfigManager configManager;
-	public ConcurrentHashMap<Long, MessageSender> messageMap = new ConcurrentHashMap<>();
 	public AdminMessageProcessor adminMessageProcessor;
     public GroupMemberChangerListener groupMemberChangerListener;
     public SeqManager seqManager;
@@ -112,7 +111,6 @@ public class Autoreply extends JcqAppAbstract implements ICQVer, IMsg, IRequest 
 		}
         groupMemberChangerListener = new GroupMemberChangerListener();
         adminMessageProcessor = new AdminMessageProcessor(configManager);
-		messageMap.clear();
         dicReplyManager = new DicReplyManager();
         repeatManager = new RepeaterManager();
         for (GroupConfig groupConfig : configManager.configJavaBean.groupConfigs) {
@@ -128,7 +126,6 @@ public class Autoreply extends JcqAppAbstract implements ICQVer, IMsg, IRequest 
 		spellCollect = new SpellCollect();
 		threadPool.execute(timeTip);
 		coinManager = new CoinManager();
-		threadPool.execute(new checkMessageRunnable());
         threadPool.execute(new CleanRunnable());
 		messageTooManyManager = new MessageTooManyManager();
         System.out.println("加载完成,用时" + (System.currentTimeMillis() - startTime));
@@ -212,9 +209,6 @@ public class Autoreply extends JcqAppAbstract implements ICQVer, IMsg, IRequest 
 							return;
 						}
 					}
-					if (messageMap.get(fromQQ) == null) {
-						messageMap.put(fromQQ, new MessageSender(0, fromQQ, msg, System.currentTimeMillis(), msgId));
-					}
 				}
 			});
         return MSG_IGNORE;
@@ -237,7 +231,7 @@ public class Autoreply extends JcqAppAbstract implements ICQVer, IMsg, IRequest 
     public int groupMsg(int subType, int msgId, long fromGroup, long fromQQ, String fromAnonymous, String msg, int font) {
 		// if (fromGroup != 1023432971L)
 		//return MSG_IGNORE;
-		if(messageTooManyManager.checkMsgTooMany(fromGroup,fromQQ,msg)){
+		if (messageTooManyManager.checkMsgTooMany(fromGroup, fromQQ, msg)) {
 			return MSG_IGNORE;
 		}
         if (msg.equals(".admin enable") && Autoreply.instence.configManager.isAdmin(fromQQ)) {
@@ -274,7 +268,7 @@ public class Autoreply extends JcqAppAbstract implements ICQVer, IMsg, IRequest 
         if (configManager.isNotReplyGroup(fromGroup)) {
             return MSG_IGNORE;
         }
-        threadPool.execute(new GroupMsgPart1Runnable(new MessageSender(fromGroup, fromQQ, msg, System.currentTimeMillis(), msgId)));
+        threadPool.execute(new MsgRunnable(fromGroup, fromQQ, msg, msgId));
         return MSG_IGNORE;
     }
 
@@ -519,11 +513,6 @@ public class Autoreply extends JcqAppAbstract implements ICQVer, IMsg, IRequest 
         // 处理词库中为特殊消息做的标记
         try {
             if (msg.startsWith("red:")) {
-                msg = msg.substring(4);
-                if (dicReplyManager.check(fromGroup, fromQQ, msg)) {
-                    return -1;
-                }
-                messageMap.put(fromQQ, new MessageSender(fromGroup, fromQQ, msg, System.currentTimeMillis() + 999, -11));
                 return -1;
             }
             String[] stri = msg.split(":");
@@ -608,28 +597,5 @@ public class Autoreply extends JcqAppAbstract implements ICQVer, IMsg, IRequest 
             }
         }
         return value;
-    }
-
-    private class checkMessageRunnable implements Runnable {
-        @Override
-        public void run() {
-			while (true) {
-                for (MessageSender value : messageMap.values()) {
-                    if (System.currentTimeMillis() - value.timeStamp > 1000) {
-                        if (value.fromGroup != 0) {
-                            threadPool.execute(new GroupMsgPart2Runnable(value));
-                        } else {
-                            threadPool.execute(new PrivateMsgRunnable(value));
-						}
-						messageMap.remove(value.fromQQ);
-                    }
-                }
-                try {
-                    Thread.sleep(10);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
-            }
-        }
     }
 }
