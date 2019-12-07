@@ -23,12 +23,12 @@ public class SanaeServer extends WebSocketServer {
 
 	@Override
 	public void onOpen(WebSocket conn, ClientHandshake handshake) {
-		//	conn.send("Welcome to the server!"); //This method sends a message to the new client
+		Autoreply.sendMessage(Autoreply.mainGroup,0,"websocket连接");
 	}
 
 	@Override
 	public void onClose(WebSocket conn, int code, String reason, boolean remote) {
-		//	broadcast(conn + " has left the room!");
+		Autoreply.sendMessage(Autoreply.mainGroup,0,"websocket断开");
 	}
 
 	@Override
@@ -60,6 +60,11 @@ public class SanaeServer extends WebSocketServer {
 					sdp.write(Integer.parseInt(md5.substring(26), 16) % 10001);
 				}
 				break;
+			case SanaeDataPack._28getSeqContent:
+				sdp = SanaeDataPack.encode(SanaeDataPack._29retSeqContent, rsdp);
+				sdp.write(Autoreply.instence.diceImitate.md5RanStr(rsdp.readLong(), DiceImitate.spells));
+				break;
+
 
 		}
 		if (sdp != null) {
