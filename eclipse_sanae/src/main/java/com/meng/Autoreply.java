@@ -69,7 +69,7 @@ public class Autoreply extends JcqAppAbstract implements ICQVer, IMsg, IRequest 
         System.out.println("开始加载");
 		long startTime = System.currentTimeMillis();
         groupMemberChangerListener = new GroupMemberChangerListener();
-        adminMessageProcessor = new AdminMessageProcessor(configManager);
+        adminMessageProcessor = new AdminMessageProcessor();
         dicReplyManager = new DicReplyManager();
         repeatManager = new RepeaterManager();
 		seqManager = new SeqManager();
@@ -84,7 +84,6 @@ public class Autoreply extends JcqAppAbstract implements ICQVer, IMsg, IRequest 
 		} catch (URISyntaxException e) {
 			e.printStackTrace();
 		}
-		configManager.load();
         System.out.println("加载完成,用时" + (System.currentTimeMillis() - startTime));
         return 0;
     }
@@ -165,6 +164,9 @@ public class Autoreply extends JcqAppAbstract implements ICQVer, IMsg, IRequest 
     public int groupMsg(int subType, int msgId, long fromGroup, long fromQQ, String fromAnonymous, String msg, int font) {
 		if (fromGroup != 807242547L)
 		return MSG_IGNORE;
+		if(msg.equals("s1")){
+			configManager.send(SanaeDataPack.encode(SanaeDataPack._1getConfig).write(fromQQ));
+		}
 		configManager.send(SanaeDataPack.encode(SanaeDataPack._15incSpeak).write(fromGroup).write(fromQQ));
 		if (messageTooManyManager.checkMsgTooMany(fromGroup, fromQQ, msg)) {
 			return MSG_IGNORE;

@@ -11,13 +11,11 @@ import java.util.concurrent.*;
 import static com.meng.Autoreply.sendMessage;
 
 public class AdminMessageProcessor {
-    private ConfigManager configManager;
 	private MyLinkedHashMap<String,String> masterPermission=new MyLinkedHashMap<>();
 	private MyLinkedHashMap<String,String> adminPermission=new MyLinkedHashMap<>();
 	public MyLinkedHashMap<String,String> userPermission=new MyLinkedHashMap<>();
 
-    public AdminMessageProcessor(ConfigManager configManager) {
-        this.configManager = configManager;
+    public AdminMessageProcessor() {
 		masterPermission.put(".start|.stop", "总开关");
 		masterPermission.put("find:[QQ号]", "在配置文件中查找此人");
 		masterPermission.put("block[艾特一人]", "屏蔽列表");
@@ -50,7 +48,7 @@ public class AdminMessageProcessor {
 	}
 
     public boolean check(final long fromGroup, final long fromQQ, final String msg) {
-        if (configManager.isMaster(fromQQ)) {
+		if (Autoreply.instence.configManager.isMaster(fromQQ)) {
 			if (msg.equals("-help")) {
 				Autoreply.sendMessage(fromGroup, 0, masterPermission.toString());
 				return true;
@@ -116,7 +114,7 @@ public class AdminMessageProcessor {
                     long qq = qqs.get(i);
                     sb.append(qq).append(" ");
 				}
-                configManager.configJavaBean.QQNotReply.addAll(qqs);
+                Autoreply.instence.configManager.configJavaBean.QQNotReply.addAll(qqs);
                 Autoreply.sendMessage(fromGroup, fromQQ, sb.toString());
                 return true;
 			}
@@ -128,7 +126,7 @@ public class AdminMessageProcessor {
                     long qq = qqs.get(i);
                     sb.append(qq).append(" ");
 				}
-                configManager.configJavaBean.blackListQQ.addAll(qqs);
+                Autoreply.instence.configManager.configJavaBean.blackListQQ.addAll(qqs);
                 Autoreply.sendMessage(fromGroup, fromQQ, sb.toString());
                 return true;
 			}
@@ -139,7 +137,7 @@ public class AdminMessageProcessor {
                 int le = groups.length;
                 for (int i = 1; i < le; ++i) {
                     sb.append(groups[i]).append(" ");
-                    configManager.configJavaBean.blackListGroup.add(Long.parseLong(groups[i]));
+                    Autoreply.instence.configManager.configJavaBean.blackListGroup.add(Long.parseLong(groups[i]));
 				}
                 Autoreply.sendMessage(fromGroup, fromQQ, sb.toString());
                 return true;
@@ -183,7 +181,7 @@ public class AdminMessageProcessor {
                 return true;
 			}
 		}
-        if (configManager.isAdmin(fromQQ)) {
+        if (Autoreply.instence.configManager.isAdmin(fromQQ)) {
 			if (msg.equals("-help")) {
 				Autoreply.sendMessage(fromGroup, 0, adminPermission.toString());
 				return true;

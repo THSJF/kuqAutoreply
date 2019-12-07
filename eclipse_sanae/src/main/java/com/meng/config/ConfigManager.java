@@ -26,7 +26,8 @@ public class ConfigManager extends WebSocketClient {
 		System.out.println("strMsg:" + p1);
 	}
 
-	public void load() {
+	@Override
+	public void onOpen(ServerHandshake serverHandshake) {
 		send(SanaeDataPack.encode(SanaeDataPack._1getConfig));
 		System.out.println("连接到鬼人正邪");
 		Autoreply.instence.seqManager.load();
@@ -48,11 +49,6 @@ public class ConfigManager extends WebSocketClient {
 					}
 				}
 			});
-	}
-
-	@Override
-	public void onOpen(ServerHandshake serverHandshake) {
-
 	}
 
 	@Override

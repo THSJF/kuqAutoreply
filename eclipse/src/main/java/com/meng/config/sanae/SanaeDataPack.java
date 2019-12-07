@@ -18,6 +18,7 @@ public class SanaeDataPack {
 	public final byte typeFloat=4;
 	public final byte typeDouble=5;
 	public final byte typeString=6;
+	public final byte typeBoolean=7;
 
 	public static final int _0notification=0;//通知  string
 	public static final int _1getConfig=1;  //获取配置文件
@@ -46,6 +47,15 @@ public class SanaeDataPack {
 	public static final int _24heartBeat=24;//心跳
 	public static final int _25setNick=25;//设置nickname long(qq)
 	public static final int _26addBlack=26;//添加黑名单
+	public static final int _27incMengEr=27;//萌二发言
+	public static final int _28getSeqContent=28;//获得接龙内容
+	public static final int _29retSeqContent=29;//返回接龙内容
+	public static final int _30getBirthday=30;
+	public static final int _31retBirthday=31;
+
+
+
+
 	/*
 
 	 获取直播列表
@@ -63,8 +73,8 @@ public class SanaeDataPack {
 	 */
 
 
-	public static SanaeDataPack encode(int opCode, long timeStamp) {
-		return new SanaeDataPack(opCode, timeStamp);
+	public static SanaeDataPack encode(int opCode) {
+		return new SanaeDataPack(opCode, System.currentTimeMillis());
 	}
 
 	public static SanaeDataPack encode(int opCode, SanaeDataPack dataPack) {
@@ -138,48 +148,62 @@ public class SanaeDataPack {
 		return BitConverter.toShort(dataArray, 24);
 	}
 
-	public void writeByteDataIntoArray(byte... bs) {
+	private SanaeDataPack writeByteDataIntoArray(byte... bs) {
 		for (byte b:bs) {
 			data.add(b);
 			++dataPointer;
 		}
+		return this;
 	}
 
-	public void write(byte b) {
+	public SanaeDataPack write(byte b) {
 		writeByteDataIntoArray(typeByte);
 		writeByteDataIntoArray(b);
+		return this;
 	}
 
-	public void write(short s) {
+	public SanaeDataPack write(short s) {
 		writeByteDataIntoArray(typeShort);
 		writeByteDataIntoArray(BitConverter.getBytes(s));
+		return this;
 	}
 
-	public void write(int i) {
+	public SanaeDataPack write(int i) {
 		writeByteDataIntoArray(typeInt);
 		writeByteDataIntoArray(BitConverter.getBytes(i));
+		return this;
 	}
 
-	public void write(long l) {
+	public SanaeDataPack write(long l) {
 		writeByteDataIntoArray(typeLong);
 		writeByteDataIntoArray(BitConverter.getBytes(l));
+		return this;
 	}
 
-	public void write(float f) {
+	public SanaeDataPack write(float f) {
 		writeByteDataIntoArray(typeFloat);
 		writeByteDataIntoArray(BitConverter.getBytes(f));
+		return this;
 	}
 
-	public void write(double d) {
+	public SanaeDataPack write(double d) {
 		writeByteDataIntoArray(typeDouble);
 		writeByteDataIntoArray(BitConverter.getBytes(d));
+		return this;
 	}
 
-	public void write(String s) {
+	public SanaeDataPack write(String s) {
 		writeByteDataIntoArray(typeString);
 		byte[] stringBytes = BitConverter.getBytes(s);
 		write(stringBytes.length);
 		writeByteDataIntoArray(stringBytes);
+		return this;
+	}
+
+	public SanaeDataPack write(boolean b) {
+		writeByteDataIntoArray(typeBoolean);
+		writeByteDataIntoArray(b ?(byte)1: (byte)0);
+		return this;
 	}
 
 	public byte readByte() {
@@ -195,7 +219,7 @@ public class SanaeDataPack {
 			dataPointer += 2;
 			return s;
 		}
-		throw new NumberFormatException("not a int number");
+		throw new NumberFormatException("not a short number");
 	}
 
 	public int readInt() {
@@ -222,7 +246,7 @@ public class SanaeDataPack {
 			dataPointer += 4;
 			return f;
 		}
-		throw new NumberFormatException("not a int number");
+		throw new NumberFormatException("not a float number");
 	}
 
 	public double readDouble() {
@@ -231,17 +255,31 @@ public class SanaeDataPack {
 			dataPointer += 8;
 			return d;
 		}
-		throw new NumberFormatException("not a long number");
+		throw new NumberFormatException("not a double number");
 	}
 
 	public String readString() {
-		if (dataArray[dataPointer++] == typeString) {
-			int len = readInt();
-			String s = BitConverter.toString(dataArray, dataPointer, len);
-			dataPointer += len;
-			return s;
+		try {
+			if (dataArray[dataPointer++] == typeString) {
+				int len = readInt();
+				String s = BitConverter.toString(dataArray, dataPointer, len);
+				dataPointer += len;
+				return s;
+			}
+		} catch (ArrayIndexOutOfBoundsException e) {
+			return null;
 		}
-		throw new NumberFormatException("not a string");
+		return null;
 	}
 
+	public boolean readBoolean() {
+		if (dataArray[dataPointer++] == typeBoolean) {
+			return dataArray[dataPointer++] == 1;
+		}
+		throw new NumberFormatException("not a boolean value");
+	}
+
+	public boolean hasNext() {
+		return dataPointer != dataArray.length;
+	}
 }
