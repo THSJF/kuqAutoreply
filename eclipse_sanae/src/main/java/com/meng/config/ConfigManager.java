@@ -18,6 +18,18 @@ public class ConfigManager extends WebSocketClient {
 
 	public ConfigManager(URI uri) {
 		super(uri);
+	}
+
+	@Override
+	public void onMessage(String p1) {
+
+	}
+
+	@Override
+	public void onOpen(ServerHandshake serverHandshake) {
+		send(SanaeDataPack.encode(SanaeDataPack._1getConfig));
+		System.out.println("连接到鬼人正邪");
+		Autoreply.instence.seqManager.load();
 		Autoreply.instence.threadPool.execute(new Runnable(){
 
 				@Override
@@ -35,27 +47,15 @@ public class ConfigManager extends WebSocketClient {
 	}
 
 	@Override
-	public void onMessage(String p1) {
-
-	}
-
-	@Override
-	public void onOpen(ServerHandshake serverHandshake) {
-		SanaeDataPack dp=SanaeDataPack.encode(SanaeDataPack._1getConfig);
-		send(dp.getData());
-		System.out.println("连接到鬼人正邪");
-		Autoreply.instence.seqManager.load();
-	}
-
-	@Override
 	public void onMessage(ByteBuffer bs) {	
 		SanaeDataPack dataPackRecieved=SanaeDataPack.decode(bs.array());
 		SanaeDataPack dataToSend=null;
+		System.out.println("datapack:code"+dataPackRecieved.getOpCode());
 		switch (dataPackRecieved.getOpCode()) {
 			case SanaeDataPack._2retConfig:
 				Type type = new TypeToken<ConfigJavaBean>() {
 				}.getType();
-				configJavaBean = Autoreply.gson.fromJson(dataPackRecieved.readString(), type);	
+				configJavaBean = Autoreply.gson.fromJson(dataPackRecieved.readString(), type);
 				break;
 			case SanaeDataPack._4retOverSpell:
 				resultMap.put(dataPackRecieved.getOpCode(), new TaskResult(dataPackRecieved.readString()));

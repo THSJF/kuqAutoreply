@@ -73,14 +73,6 @@ public class Autoreply extends JcqAppAbstract implements ICQVer, IMsg, IRequest 
         adminMessageProcessor = new AdminMessageProcessor(configManager);
         dicReplyManager = new DicReplyManager();
         repeatManager = new RepeaterManager();
-        for (GroupConfig groupConfig : configManager.configJavaBean.groupConfigs) {
-            if (groupConfig.isDic()) {
-                dicReplyManager.addData(new DicReplyGroup(groupConfig.groupNumber));
-            }
-            if (groupConfig.isRepeat()) {
-                repeatManager.addData(new com.meng.groupChat.Repeater(groupConfig.groupNumber));
-            }
-        }
 		seqManager = new SeqManager();
 		birthdayTip = new BirthdayTip();
 		spellCollect = new SpellCollect();
@@ -94,6 +86,14 @@ public class Autoreply extends JcqAppAbstract implements ICQVer, IMsg, IRequest 
 		} catch (URISyntaxException e) {
 			e.printStackTrace();
 		}
+        for (GroupConfig groupConfig : configManager.configJavaBean.groupConfigs) {
+            if (groupConfig.isDic()) {
+                dicReplyManager.addData(new DicReplyGroup(groupConfig.groupNumber));
+            }
+            if (groupConfig.isRepeat()) {
+                repeatManager.addData(new com.meng.groupChat.Repeater(groupConfig.groupNumber));
+            }
+        }
         System.out.println("加载完成,用时" + (System.currentTimeMillis() - startTime));
         return 0;
     }
