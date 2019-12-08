@@ -28,6 +28,7 @@ public class AdminMessageProcessor {
 		userPermission.put(".nn [名字]", "设置早苗对你的称呼,如果不设置则恢复默认称呼");
 		userPermission.put("-int [int] [+|-|*|/|<<|>>|>>>|%|^|&||] [int]", "int运算(溢出)");
 		userPermission.put("-uint [int]", "int字节转uint(boom)");
+		userPermission.put(".dissmiss 2528419891", "让早苗退出此群");
 
 		masterPermission.putAll(adminPermission);
 		masterPermission.putAll(userPermission);
@@ -135,6 +136,19 @@ public class AdminMessageProcessor {
 			Autoreply.instence.botOff.add(fromGroup);
 			sendMessage(fromGroup, 0, "好吧");
 			return true;
+		}
+		if (msg.equals(".dissmiss 2528419891") && (Autoreply.CQ.getGroupMemberInfoV2(fromGroup, fromQQ).getAuthority() > 1 || Autoreply.instence.configManager.isAdmin(fromQQ))) {
+			Autoreply.instence.threadPool.execute(new Runnable(){
+
+					@Override
+					public void run() {
+						Autoreply.sendMessage(fromGroup, 0, "我很快就会离开这里");
+						try {
+							Thread.sleep(2000);
+						} catch (InterruptedException e) {}
+						Autoreply.CQ.setGroupLeave(fromGroup, false);
+					}
+				});
 		}
         return false;
 	}
