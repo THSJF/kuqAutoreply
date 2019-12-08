@@ -12,7 +12,6 @@ import com.meng.config.javabeans.PersonInfo;
 import com.meng.dice.DiceImitate;
 import com.meng.dice.SpellCollect;
 import com.meng.groupChat.*;
-import com.meng.groupFile.FileInfoManager;
 import com.meng.messageProcess.AdminMessageProcessor;
 import com.meng.messageProcess.GroupMsgPart1Runnable;
 import com.meng.messageProcess.GroupMsgPart2Runnable;

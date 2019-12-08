@@ -1,4 +1,4 @@
-package com.meng.diaoXiongJiHua;
+package com.meng;
 
 import com.meng.*;
 import java.io.*;

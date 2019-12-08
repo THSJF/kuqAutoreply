@@ -1,4 +1,4 @@
-package com.meng.lookGroup;
+package com.meng;
 
 import com.meng.*;
 import java.io.*;

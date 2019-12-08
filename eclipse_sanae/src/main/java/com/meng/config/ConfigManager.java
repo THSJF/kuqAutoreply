@@ -83,7 +83,7 @@ public class ConfigManager extends WebSocketClient {
 							for (Group g:groupList) {
 								List<com.sobte.cqp.jcq.entity.Member> mlist=Autoreply.CQ.getGroupMemberList(g.getId());
 								for (com.sobte.cqp.jcq.entity.Member m:mlist) {
-									if (m.getQqId() == 1620628713L) {
+									if (m.getQqId() == 2089693971L) {
 										Autoreply.instence.SeijiaInThis.add(g.getId());
 										break;
 									}

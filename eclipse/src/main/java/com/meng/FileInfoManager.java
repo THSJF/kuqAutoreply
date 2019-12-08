@@ -1,4 +1,4 @@
-package com.meng.groupFile;
+package com.meng;
 
 import com.google.gson.*;
 import com.google.gson.annotations.*;

@@ -1,6 +1,5 @@
 package com.meng.config.sanae;
 
-import com.meng.config.sanae.*;
 import com.meng.tools.*;
 import java.util.*;
 

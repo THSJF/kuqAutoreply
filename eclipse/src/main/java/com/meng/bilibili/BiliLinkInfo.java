@@ -3,6 +3,8 @@ package com.meng.bilibili;
 import com.google.gson.*;
 import com.meng.*;
 import com.meng.tools.*;
+import com.meng.tools.Base64;
+
 import java.util.*;
 
 public class BiliLinkInfo {
