@@ -1,13 +1,12 @@
 package com.meng.groupChat.Sequence;
 import com.google.gson.*;
-import com.google.gson.internal.*;
+import com.google.gson.reflect.*;
 import com.meng.*;
 import com.meng.tools.*;
 import java.io.*;
+import java.lang.reflect.*;
 import java.nio.charset.*;
 import java.util.*;
-import java.lang.reflect.*;
-import com.google.gson.reflect.*;
 
 public class SeqManager {
     private ArrayList<SeqBean> seqs=new ArrayList<>();
@@ -17,9 +16,9 @@ public class SeqManager {
 		File jsonFile = new File(Autoreply.appDirectory + "seq.json");
         if (!jsonFile.exists()) {
             saveData();
-		  }
+		}
 		Type type = new TypeToken<HashMap<String, ArrayList<String>>>() {
-		  }.getType();
+		}.getType();
         jsonData = new Gson().fromJson(Methods.readFileToString(jsonFile.getAbsolutePath()), type);
    		for (String key : jsonData.keySet()) {
 			ArrayList<String> al=jsonData.get(key);
@@ -27,52 +26,52 @@ public class SeqManager {
 			int flag=0;
 			if (key.startsWith("time")) {
 				flag = 1;
-			  } else if (key.startsWith("menger")) {
+			} else if (key.startsWith("menger")) {
 				flag = 2;
-			  }
+			}
 			seqs.add(new SeqBean(content, flag));
-		  }
-	  }
+		}
+	}
 
 	public boolean check(long fromGroup, long fromQQ, String msg) {
 		String s=null;
 		s = dealMsg(fromGroup, fromQQ, msg);
 		if (s != null) {
 			Autoreply.sendMessage(fromGroup, 0, s);
-		  }
+		}
 		return false;
-	  }
+	}
 
 	public String dealMsg(long fromGroup, long fromQQ, String msg) {
 		for (SeqBean sb:seqs) {
 			if (msg.equals(sb.content[0])) {
 				sb.pos = 0;
-			  }
+			}
 			if (sb.flag == 1) {
 				Autoreply.instence.useCount.decLife(fromQQ);
 				Autoreply.instence.groupCount.decLife(fromGroup);
-			  } else if (sb.flag == 2) {
+			} else if (sb.flag == 2) {
 				Autoreply.instence.useCount.incMengEr(fromQQ);
 				Autoreply.instence.groupCount.incMengEr(fromGroup);
-			  }
+			}
 			if (msg.equals(sb.content[sb.pos])) {
 				++sb.pos;			
 				if (sb.pos < sb.content.length) {
 					++sb.pos;
 					if (sb.pos >= sb.content.length - 1) {
 						sb.pos = 0;
-					  }
+					}
 					if (sb.pos == 0) {
 						return sb.content[sb.content.length - 1];
-					  } else {
+					} else {
 						return sb.content[sb.pos - 1];
-					  }
-				  }
+					}
+				}
 				break;
-			  }
-		  }
+			}
+		}
 		return null;
-	  }
+	}
 
 	private void saveData() {
         try {
@@ -82,8 +81,18 @@ public class SeqManager {
             writer.write(new Gson().toJson(jsonData));
             writer.flush();
             fos.close();
-		  } catch (IOException e) {
+		} catch (IOException e) {
             e.printStackTrace();
-		  }
-	  }
-  }
+		}
+	}
+	
+	class SeqBean {
+		public String[] content;
+		public int pos=0;
+		public int flag=0;
+		public SeqBean(String[] array, int flag) {
+			content = array;
+			this.flag = flag;
+		}
+	} 
+}

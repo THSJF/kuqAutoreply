@@ -2,8 +2,8 @@ package com.meng.bilibili;
 
 import com.google.gson.*;
 import com.meng.*;
-import com.meng.bilibili.main.*;
 import com.meng.tools.*;
+import java.util.*;
 
 public class BiliLinkInfo {
 
@@ -130,8 +130,8 @@ public class BiliLinkInfo {
         String jsonInHtml = html.substring(html.indexOf("{\"roomInitRes\":"), html.lastIndexOf("}") + 1);
         JsonObject data = new JsonParser().parse(jsonInHtml).getAsJsonObject().get("baseInfoRes").getAsJsonObject().get("data").getAsJsonObject();
         return "房间号:" + id + "\n主播:" + userName + "\n房间标题:" + data.get("title").getAsString() +
-                "\n分区:" + data.get("parent_area_name").getAsString() + "-" + data.get("area_name").getAsString() +
-                "\n标签:" + data.get("tags").getAsString();
+			"\n分区:" + data.get("parent_area_name").getAsString() + "-" + data.get("area_name").getAsString() +
+			"\n标签:" + data.get("tags").getAsString();
     }
 
     private String getVideoId(String url) {
@@ -178,4 +178,93 @@ public class BiliLinkInfo {
         }
         return null;
     }
+
+	class ArticleInfoBean {
+		public String code;
+		public String message;
+		public String ttl;
+		public Data data;
+
+		@Override
+		public String toString() {
+			return data.toString();
+		}
+
+		public class Data {
+			public String like;
+			public String attention;
+			public String favorite;
+			public String coin;
+			public Stats stats;
+			public String title;
+			public String banner_url;
+			public String mid;
+			public String author_name;
+			public String is_author;
+			public List<String> image_urls;
+			public List<String> origin_image_urls;
+			public String shareable;
+			public String show_later_watch;
+			public String show_small_window;
+			public String in_list;
+			public String pre;
+			public String next;
+
+			@Override
+			public String toString() {
+				return "标题：" + title + "\n作者：" + author_name + "\n" + stats.toString();
+			}
+
+			public class Stats {
+				public String view;
+				public String favorite;
+				public String like;
+				public String dislike;
+				public String reply;
+				public String share;
+				public String coin;
+				public String dynamic;
+
+				@Override
+				public String toString() {
+					return view + "次阅读," + reply + "条评论," + coin + "个硬币," + share + "次分享," + favorite + "人收藏," + like
+                        + "人赞," + dislike + "人踩";
+				}
+			}
+		}
+	}
+	
+	public class VideoInfoBean {
+		public String code;
+		public String message;
+		public String ttl;
+		public Data data;
+
+		@Override
+		public String toString() {
+			return data.toString();
+		}
+
+		public class Data { 
+			public String aid;
+			public String view;
+			public String danmaku;
+			public String reply;
+			public String favorite;
+			public String coin;
+			public String share;
+			public String now_rank;
+			public String his_rank;
+			public String like;
+			public String dislike;
+			public String no_reprint;
+			public String copyright;
+
+			@Override
+			public String toString() {
+				return view + "次播放," + danmaku + "条弹幕," + reply + "条评论," + coin + "个硬币," + share + "次分享," + favorite
+					+ "人收藏," + like + "人赞。";// ," + dislike + "人踩。";
+			}
+		}
+	}
 }

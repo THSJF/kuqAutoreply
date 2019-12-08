@@ -176,10 +176,10 @@ public class Autoreply extends JcqAppAbstract implements ICQVer, IMsg, IRequest 
         repeatManager = new RepeaterManager();
         for (GroupConfig groupConfig : configManager.configJavaBean.groupConfigs) {
             if (groupConfig.isDic()) {
-                dicReplyManager.addData(new DicReplyGroup(groupConfig.groupNumber));
+                dicReplyManager.addData(groupConfig.groupNumber);
             }
             if (groupConfig.isRepeat()) {
-                repeatManager.addData(new RepeaterBanner(groupConfig.groupNumber));
+                repeatManager.addData(groupConfig.groupNumber);
             }
         }
         updateManager = new NewUpdateManager(configManager);
@@ -809,7 +809,7 @@ public class Autoreply extends JcqAppAbstract implements ICQVer, IMsg, IRequest 
         dicReplyManager.clear();
         for (GroupConfig groupConfig : configManager.configJavaBean.groupConfigs) {
             if (groupConfig.isDic()) {
-                dicReplyManager.addData(new DicReplyGroup(groupConfig.groupNumber));
+                dicReplyManager.addData(groupConfig.groupNumber);
             }
         }
     }

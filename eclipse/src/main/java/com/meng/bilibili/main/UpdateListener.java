@@ -1,23 +1,12 @@
 package com.meng.bilibili.main;
 
-import com.google.gson.Gson;
-import com.google.gson.reflect.TypeToken;
-import com.meng.Autoreply;
-import com.meng.config.ConfigManager;
-import com.meng.config.javabeans.PersonInfo;
-import com.meng.tools.Methods;
-
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.OutputStreamWriter;
-import java.lang.reflect.Type;
-import java.nio.charset.StandardCharsets;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.HashSet;
+import com.google.gson.*;
+import com.meng.*;
+import com.meng.config.*;
 import com.meng.config.javabeans.*;
 import com.meng.config.sanae.*;
+import com.meng.tools.*;
+import java.util.*;
 
 public class UpdateListener implements Runnable {
 
@@ -113,4 +102,18 @@ public class UpdateListener implements Runnable {
             }
         }
     }
+
+	class UpdatePerson {
+		public String name = "";
+		public int bid = 0;
+		public long lastVideo = 0;
+		public long lastArtical = 0;
+		public boolean needTipArtical = false;
+		public boolean needTipVideo = false;
+
+		public UpdatePerson(String name, int bid) {
+			this.name = name;
+			this.bid = bid;
+		}
+	}
 }
