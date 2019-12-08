@@ -223,6 +223,17 @@ public class Methods {
 		}
 		return new String(str);
 	}
+	
+	public static boolean isAtme(String msg) {
+        List<Long> list = Autoreply.instence.CC.getAts(msg);
+        long me = Autoreply.CQ.getLoginQQ();
+        for (long l : list) {
+            if (l == me) {
+                return true;
+            }
+        }
+        return false;
+    }
 	/*  public static String getG_tk(String skey) {
 	 int hash = 5381;
 	 int flag = skey.length();

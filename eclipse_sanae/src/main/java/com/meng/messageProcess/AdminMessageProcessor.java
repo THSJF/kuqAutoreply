@@ -124,31 +124,31 @@ public class AdminMessageProcessor {
 				Autoreply.sendMessage(fromGroup, 0, adminPermission.toString());
 				return true;
 			}
-		}
-		if (msg.equals(".早苗说话") && (Autoreply.CQ.getGroupMemberInfoV2(fromGroup, fromQQ).getAuthority() > 1 || Autoreply.instence.configManager.isAdmin(fromQQ))) {
-			if (Autoreply.instence.botOff.contains(fromGroup)) {
-				Autoreply.instence.botOff.remove(fromGroup);
-				sendMessage(fromGroup, 0, "稳了");
+			if (msg.equals(".早苗说话") || msg.equals(".bot on")) {
+				if (Autoreply.instence.botOff.contains(fromGroup)) {
+					Autoreply.instence.botOff.remove(fromGroup);
+					sendMessage(fromGroup, 0, "稳了");
+					return true;
+				}
+			}
+			if (msg.equals(".早苗闭嘴") || msg.equals(".bot off")) {
+				Autoreply.instence.botOff.add(fromGroup);
+				sendMessage(fromGroup, 0, "好吧");
 				return true;
 			}
-		}
-		if (msg.equals(".早苗闭嘴") && (Autoreply.CQ.getGroupMemberInfoV2(fromGroup, fromQQ).getAuthority() > 1 || Autoreply.instence.configManager.isAdmin(fromQQ))) {
-			Autoreply.instence.botOff.add(fromGroup);
-			sendMessage(fromGroup, 0, "好吧");
-			return true;
-		}
-		if (msg.equals(".dissmiss 2528419891") && (Autoreply.CQ.getGroupMemberInfoV2(fromGroup, fromQQ).getAuthority() > 1 || Autoreply.instence.configManager.isAdmin(fromQQ))) {
-			Autoreply.instence.threadPool.execute(new Runnable(){
+			if (msg.equals(".dissmiss 2528419891") || msg.equals(".dissmiss")) {
+				Autoreply.instence.threadPool.execute(new Runnable(){
 
-					@Override
-					public void run() {
-						Autoreply.sendMessage(fromGroup, 0, "我很快就会离开这里");
-						try {
-							Thread.sleep(2000);
-						} catch (InterruptedException e) {}
-						Autoreply.CQ.setGroupLeave(fromGroup, false);
-					}
-				});
+						@Override
+						public void run() {
+							Autoreply.sendMessage(fromGroup, 0, "我很快就会离开这里");
+							try {
+								Thread.sleep(2000);
+							} catch (InterruptedException e) {}
+							Autoreply.CQ.setGroupLeave(fromGroup, false);
+						}
+					});
+			}
 		}
         return false;
 	}
