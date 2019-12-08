@@ -35,6 +35,7 @@ public class MessageTooManyManager {
 			mtmb.timeSubLowTimes = 0;
 		}
 		if (mtmb.timeSubLowTimes > 5) {
+			Autoreply.sendMessage(fromGroup, 0, "你说话真快");
 			return true;
 		}
 		//重复次数过多
@@ -45,11 +46,13 @@ public class MessageTooManyManager {
 			mtmb.repeatTime = 0;
 		}
 		if (mtmb.repeatTime > 5) {
+			Autoreply.sendMessage(fromGroup, 0, "怎么又是这句话");
 			return true;
 		}
 		//一秒内消息过多
 		++mtmb.lastSeconedMsgs;
 		if (mtmb.lastSeconedMsgs > 4) {
+			Autoreply.sendMessage(fromGroup, 0, "你真稳");
 			return true;
 		}
 		return false;
