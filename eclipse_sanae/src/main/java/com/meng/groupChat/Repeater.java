@@ -47,7 +47,7 @@ public class Repeater {
     }
 
     private boolean repeatStart(long group,  long qq,  String msg) {
-		Autoreply.instence.configManager.send(SanaeDataPack.encode(SanaeDataPack._19incRepeatStart).write(group).write(qq));
+		Autoreply.instence.configManager.send(SanaeDataPack.encode(SanaeDataPack._19incRepeatStart).write(qq));
 		Autoreply.sendMessage(group, 0, msg);
         return true;
     }

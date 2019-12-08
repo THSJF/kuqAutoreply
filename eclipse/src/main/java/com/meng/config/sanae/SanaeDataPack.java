@@ -39,7 +39,7 @@ public class SanaeDataPack {
 	public static final int _16incPic=16;//增加图片次数 long (qq) 
 	public static final int _17incBilibili=17;//增加哔哩哔哩链接次数  long(group) long(qq)
 	public static final int _18incRepeat=18;//增加复读次数 long (qq)
-	public static final int _19incRepeatStart=19;//增加带领复读  long(group) long(qq)
+	public static final int _19incRepeatStart=19;//增加带领复读 long(qq)
 	public static final int _20incRepeatBreak=20;//增加打断复读  long(group) long(qq)
 	public static final int _21incBan=21;//增加被禁言次数  long(group) long(qq)
 	public static final int _22decTime=22;//减少时间  long(group) long(qq)

@@ -135,46 +135,6 @@ public class SpellCollect {
 	}
 
 	public boolean check(long fromGroup, long fromQQ, String msg) {
-		if (msg.startsWith("#幻币转账") && fromQQ == Autoreply.instence.configManager.configJavaBean.ogg) {
-			List<Long> chan=Autoreply.instence.CC.getAts(msg);
-			if (!Autoreply.instence.configManager.isMaster(chan.get(1))) {
-				return false;
-			}
-			int coins=0;
-			try {
-				coins = (int)Float.parseFloat(msg.substring(msg.indexOf("转账", 6) + 2, msg.indexOf("个幻币")));		
-			} catch (NumberFormatException e) {
-				Autoreply.sendMessage(fromGroup, 0, e.toString());
-			}
-			HashSet<String> tmpSet=chm.get(chan.get(0));
-			if (tmpSet == null) {
-				tmpSet = new HashSet<String>();
-				chm.put(chan.get(0), tmpSet);
-			}
-			Random r=new Random();
-			StringBuilder sb=new StringBuilder();
-			sb.append(Autoreply.instence.configManager.getNickName(fromQQ));
-			sb.append("获得了:");
-			for (int i=0;i < coins * 3;++i) {
-				String s;
-				if (r.nextInt(150) == 20) {
-					s = TH08GameData.lastword[r.nextInt(TH08GameData.lastword.length)];
-				} else if (r.nextInt(300) == 25) {
-					s = TH13GameData.overdrive[r.nextInt(TH13GameData.overdrive.length)];
-				} else {
-					s = DiceImitate.spells[r.nextInt(DiceImitate.spells.length)];
-				}
-				tmpSet.add(s);
-				sb.append("\n").append(s);
-			}
-			saveConfig();
-			checkArchievement(fromGroup, chan.get(0), tmpSet);
-			if (sb.toString().length() > 200) {
-				Autoreply.sendMessage(fromGroup, fromQQ, "内容过长,不详细说明获得的符卡，但记录已保存");
-				return true;
-			}
-			Autoreply.sendMessage(fromGroup, 0, sb.toString());
-		}
 
 		if (msg.startsWith("幻币抽卡 ")) {
 			try {

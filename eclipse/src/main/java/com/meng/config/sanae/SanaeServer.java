@@ -64,6 +64,20 @@ public class SanaeServer extends WebSocketServer {
 				Autoreply.instence.groupCount.incSpeak(rsdp.readLong());
 				Autoreply.instence.useCount.incSpeak(rsdp.readLong());
 				break;
+			case SanaeDataPack._18incRepeat:
+				Autoreply.instence.groupCount.incFudu(rsdp.readLong());
+				Autoreply.instence.useCount.incFudu(rsdp.readLong());
+				break;
+			case SanaeDataPack._19incRepeatStart:
+				Autoreply.instence.useCount.incFudujiguanjia(rsdp.readLong());
+				break;
+			case SanaeDataPack._20incRepeatBreak:
+				Autoreply.instence.groupCount.incRepeatBreaker(rsdp.readLong());
+				Autoreply.instence.useCount.incRepeatBreaker(rsdp.readLong());
+				break;
+			case SanaeDataPack._25setNick:
+				Autoreply.instence.configManager.setNickName(rsdp.readLong(), rsdp.readString());
+				break;
 			case SanaeDataPack._28getSeqContent:
 				sdp = SanaeDataPack.encode(SanaeDataPack._29retSeqContent, rsdp);
 				File jsonFile = new File(Autoreply.appDirectory + "seq.json");
@@ -89,7 +103,7 @@ public class SanaeServer extends WebSocketServer {
 		setConnectionLostTimeout(100);
 	}
 
-	public void send(final SanaeDataPack sdp){
+	public void send(final SanaeDataPack sdp) {
 		Autoreply.instence.threadPool.execute(new Runnable(){
 
 				@Override

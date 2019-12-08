@@ -96,9 +96,6 @@ public class MsgRunnable implements Runnable {
 			return;
 		}
 		if (msg.startsWith(".nn ")) {
-			if (msg.contains("~")) {
-				return;
-			}
 			String name=msg.substring(4);
 			if (name.length() > 30) {
 				Autoreply.sendMessage(fromGroup, 0, "太长了,记不住");
@@ -119,9 +116,9 @@ public class MsgRunnable implements Runnable {
 		if (Autoreply.instence.repeatManager.check(fromGroup, fromQQ, msg)) {// 复读
 			return;
 		}
-		if (Autoreply.instence.spellCollect.check(fromGroup, fromQQ, msg)) {
-			return;
-		}
+	//	if (Autoreply.instence.spellCollect.check(fromGroup, fromQQ, msg)) {
+	//		return;
+	//	}
 		if (msg.startsWith("[CQ:location,lat=")) {
 			sendMessage(fromGroup, 0, Autoreply.instence.CC.location(35.594993, 118.869838, 15, "守矢神社", "此生无悔入东方 来世愿生幻想乡"));
 			return;

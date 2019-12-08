@@ -15,6 +15,7 @@ import java.util.*;
 import java.util.Map.*;
 import java.util.concurrent.*;
 import org.jsoup.*;
+import com.meng.config.sanae.*;
 
 public class LiveListener implements Runnable {
 
@@ -249,6 +250,9 @@ public class LiveListener implements Runnable {
 		dp.write(1, p.bliveRoom);
 		dp.write(1, p.name);
 		Autoreply.instence.connectServer.broadcast(dp.getData());
+		SanaeDataPack sdp=SanaeDataPack.encode(SanaeDataPack._33liveStart);
+		sdp.write(p.name).write(p.bliveRoom);
+		Autoreply.instence.sanaeServer.send(sdp);
 		if (!p.isTipLive()) {
             return;
 		}
@@ -265,6 +269,9 @@ public class LiveListener implements Runnable {
 		dp.write(1, p.bliveRoom);
 		dp.write(1, p.name);
 		Autoreply.instence.connectServer.broadcast(dp.getData());
+		SanaeDataPack sdp=SanaeDataPack.encode(SanaeDataPack._34liveStop);
+		sdp.write(p.name).write(p.bliveRoom);
+		Autoreply.instence.sanaeServer.send(sdp);
 		if (!p.isTipLive()) {
             return;
 		}
