@@ -29,9 +29,6 @@ public class Autoreply extends JcqAppAbstract implements ICQVer, IMsg, IRequest 
 	public SpellCollect spellCollect;
     public ExecutorService threadPool = Executors.newCachedThreadPool();
 
-    public static String lastSend = " ";
-    public static String lastSend2 = "  ";
-    public static boolean tipedBreak = false;
     public static boolean sleeping = true;
 
 	public static final String userAgent="Mozilla/5.0 (Windows NT 6.1; WOW64; rv:28.0) Gecko/20100101 Firefox/28.0";
@@ -344,32 +341,14 @@ public class Autoreply extends JcqAppAbstract implements ICQVer, IMsg, IRequest 
     }
 
     public static int sendMessage(long fromGroup, long fromQQ, String msg) {
-        return sendMessage(fromGroup, fromQQ, msg, false);
-    }
-
-    public static int sendMessage(long fromGroup, long fromQQ, String msg, boolean isTip) {
 		if (sleeping) {
             return -1;
         }
-        int value = -1;
+        int value=-1;
         if (fromGroup == 0 || fromGroup == -1) {
             value = CQ.sendPrivateMsg(fromQQ, msg);
         } else {
-            if (isTip) {
-                value = CQ.sendGroupMsg(fromGroup, msg);
-            } else {
-                if (msg.equals(lastSend) && lastSend.equals(lastSend2)) {
-                    if (!tipedBreak) {
-                        tipedBreak = true;
-                        value = CQ.sendGroupMsg(fromGroup, "又是这句话");
-                    }
-                } else {
-                    tipedBreak = false;
-                    value = CQ.sendGroupMsg(fromGroup, msg);
-                }
-                lastSend2 = lastSend;
-                lastSend = msg;
-            }
+			value = CQ.sendGroupMsg(fromGroup, msg);
         }
         return value;
     }

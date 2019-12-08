@@ -21,7 +21,7 @@ public class TimeTip implements Runnable {
 							public void run() {
 								List<Group> groupList=Autoreply.CQ.getGroupList();
 								for (Group g:groupList) {
-									if (Autoreply.sendMessage(g.getId(), 0, "大家晚安...", true) < 0) {
+									if (Autoreply.sendMessage(g.getId(), 0, "大家晚安...") < 0) {
 										continue;
 									}
 									try {
@@ -41,7 +41,7 @@ public class TimeTip implements Runnable {
 								Autoreply.sleeping = false;
 								List<Group> groupList=Autoreply.CQ.getGroupList();
 								for (Group g:groupList) {
-									if (Autoreply.sendMessage(g.getId(), 0, "大家早上好啊...", true) < 0) {
+									if (Autoreply.sendMessage(g.getId(), 0, "大家早上好啊...") < 0) {
 										continue;
 									}
 									try {

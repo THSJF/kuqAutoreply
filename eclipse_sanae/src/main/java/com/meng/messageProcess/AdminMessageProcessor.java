@@ -45,7 +45,7 @@ public class AdminMessageProcessor {
 				HashSet<Group> hs=new HashSet<>();
 				List<Group> glist=Autoreply.CQ.getGroupList();
 				for (Group g:glist) {
-					Autoreply.sendMessage(g.getId(), 0, broadcast, true);
+					Autoreply.sendMessage(g.getId(), 0, broadcast);
 					hs.add(g);
 					try {
 						Thread.sleep(200);

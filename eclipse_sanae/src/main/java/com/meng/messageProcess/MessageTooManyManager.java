@@ -1,6 +1,6 @@
 package com.meng.messageProcess;
-import java.util.concurrent.*;
 import com.meng.*;
+import java.util.concurrent.*;
 
 public class MessageTooManyManager {
 	public ConcurrentHashMap<Long,MessageTooManyBean> msgMap=new ConcurrentHashMap<>();
@@ -35,7 +35,10 @@ public class MessageTooManyManager {
 			mtmb.timeSubLowTimes = 0;
 		}
 		if (mtmb.timeSubLowTimes > 5) {
-			Autoreply.sendMessage(fromGroup, 0, "你说话真快");
+			if (!mtmb.tiped) {
+				mtmb.tiped = true;
+				Autoreply.sendMessage(fromGroup, 0, "你说话真快");
+			}
 			return true;
 		}
 		//重复次数过多
@@ -46,15 +49,35 @@ public class MessageTooManyManager {
 			mtmb.repeatTime = 0;
 		}
 		if (mtmb.repeatTime > 5) {
-			Autoreply.sendMessage(fromGroup, 0, "怎么又是这句话");
+			if (!mtmb.tiped) {
+				mtmb.tiped = true;
+				Autoreply.sendMessage(fromGroup, 0, "怎么又是这句话");
+			}
+			mtmb.lastMsg = msg;
 			return true;
 		}
+		mtmb.lastMsg = msg;
 		//一秒内消息过多
 		++mtmb.lastSeconedMsgs;
 		if (mtmb.lastSeconedMsgs > 4) {
-			Autoreply.sendMessage(fromGroup, 0, "你真稳");
+			if (!mtmb.tiped) {
+				mtmb.tiped = true;
+				Autoreply.sendMessage(fromGroup, 0, "你真稳");
+			}
 			return true;
 		}
+		mtmb.tiped = false;
 		return false;
 	}
+	
+	class MessageTooManyBean {
+		public long qq;//qq
+		public long lastSpeakTimeStamp;//最后一次发言时间
+		public long timeSubLowTimes;//最后两次发言时间差过短次数
+		public int repeatTime;//同一句话重复次数
+		public int lastSeconedMsgs;//一秒内消息数量
+		public String lastMsg = "";//最后一句话
+		public boolean tiped = false;//刷屏提示
+	}
+
 }
