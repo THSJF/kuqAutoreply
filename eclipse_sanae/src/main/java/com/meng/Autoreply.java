@@ -33,6 +33,7 @@ public class Autoreply extends JcqAppAbstract implements ICQVer, IMsg, IRequest 
 
 	public static final String userAgent="Mozilla/5.0 (Windows NT 6.1; WOW64; rv:28.0) Gecko/20100101 Firefox/28.0";
     public HashSet<Long> botOff = new HashSet<>();
+	public HashSet<Long> SeijiaInThis = new HashSet<>();
 	public CoinManager coinManager;
 	public BirthdayTip birthdayTip;
 
@@ -73,7 +74,7 @@ public class Autoreply extends JcqAppAbstract implements ICQVer, IMsg, IRequest 
 		}
 		dicReply = new DicReply();
         System.out.println("加载完成,用时" + (System.currentTimeMillis() - startTime));
-        return 0;
+		return 0;
     }
 
     @Override
@@ -144,8 +145,12 @@ public class Autoreply extends JcqAppAbstract implements ICQVer, IMsg, IRequest 
      */
     @Override
     public int groupMsg(int subType, int msgId, long fromGroup, long fromQQ, String fromAnonymous, String msg, int font) {
-		if (fromGroup != 807242547L)
+		//	if (fromGroup != 807242547L){
+		//		return MSG_IGNORE;
+		//}
+		if (Autoreply.instence.SeijiaInThis.contains(fromGroup)) {
 			return MSG_IGNORE;
+		}
 		configManager.send(SanaeDataPack.encode(SanaeDataPack._15incSpeak).write(fromGroup).write(fromQQ));
 		if (messageTooManyManager.checkMsgTooMany(fromGroup, fromQQ, msg)) {
 			return MSG_IGNORE;

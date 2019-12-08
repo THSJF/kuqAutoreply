@@ -81,7 +81,17 @@ public class ConfigManager extends WebSocketClient {
 							Autoreply.instence.messageTooManyManager = new MessageTooManyManager();
 							List<Group> groupList=Autoreply.CQ.getGroupList();
 							for (Group g:groupList) {
-								Autoreply.instence.repeatManager.addData(new Repeater(g.getId()));
+								List<com.sobte.cqp.jcq.entity.Member> mlist=Autoreply.CQ.getGroupMemberList(g.getId());
+								for (com.sobte.cqp.jcq.entity.Member m:mlist) {
+									if (m.getQqId() == 1620628713L) {
+										Autoreply.instence.SeijiaInThis.add(g.getId());
+										break;
+									}
+								}
+								if (!Autoreply.instence.SeijiaInThis.contains(g.getId())) {
+									Autoreply.instence.repeatManager.addData(new Repeater(g.getId()));
+								}
+
 							}
 						}
 					});
