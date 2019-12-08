@@ -11,7 +11,7 @@ public class SeqManager {
     private ArrayList<SeqBean> seqs=new ArrayList<>();
 	private HashMap<String, ArrayList<String>> jsonData = new HashMap<>();
 
-	public void load() {
+	public SeqManager() {
 		Type type = new TypeToken<HashMap<String, ArrayList<String>>>() {
 		}.getType();
         jsonData = new Gson().fromJson(Autoreply.instence.configManager.getSeq(), type);
@@ -27,7 +27,7 @@ public class SeqManager {
 			seqs.add(new SeqBean(content, flag));
 		}
 	}
-
+	
 	public boolean check(long fromGroup, long fromQQ, String msg) {
 		String s=null;
 		s = dealMsg(fromGroup, fromQQ, msg);

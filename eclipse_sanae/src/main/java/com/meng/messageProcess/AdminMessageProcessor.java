@@ -61,16 +61,6 @@ public class AdminMessageProcessor {
 				Autoreply.sendMessage(fromGroup, 0, result);
 				return true;
 			}
-            if (msg.equals(".早苗闭嘴")) {
-                Autoreply.sendMessage(fromGroup, 0, "好吧");
-                Autoreply.sleeping = true;
-                return true;
-			}
-            if (msg.equals(".早苗说话")) {
-                Autoreply.sleeping = false;
-                Autoreply.sendMessage(fromGroup, 0, "稳的");
-                return true;
-			}
             if (msg.startsWith("block[CQ:at")) {
                 StringBuilder sb = new StringBuilder();
                 List<Long> qqs = Autoreply.instence.CC.getAts(msg);
@@ -133,6 +123,18 @@ public class AdminMessageProcessor {
 				Autoreply.sendMessage(fromGroup, 0, adminPermission.toString());
 				return true;
 			}
+		}
+		if (msg.equals(".早苗说话") && (Autoreply.CQ.getGroupMemberInfoV2(fromGroup, fromQQ).getAuthority() > 1 || Autoreply.instence.configManager.isAdmin(fromQQ))) {
+			if (Autoreply.instence.botOff.contains(fromGroup)) {
+				Autoreply.instence.botOff.remove(fromGroup);
+				sendMessage(fromGroup, 0, "稳了");
+				return true;
+			}
+		}
+		if (msg.equals(".早苗闭嘴") && (Autoreply.CQ.getGroupMemberInfoV2(fromGroup, fromQQ).getAuthority() > 1 || Autoreply.instence.configManager.isAdmin(fromQQ))) {
+			Autoreply.instence.botOff.add(fromGroup);
+			sendMessage(fromGroup, 0, "好吧");
+			return true;
 		}
         return false;
 	}

@@ -4,6 +4,7 @@ import com.google.gson.reflect.*;
 import com.meng.*;
 import com.meng.dice.*;
 import com.meng.groupChat.*;
+import com.meng.groupChat.Sequence.*;
 import com.meng.messageProcess.*;
 import com.meng.tip.*;
 import com.meng.tools.*;
@@ -64,24 +65,24 @@ public class ConfigManager extends WebSocketClient {
 				Type type = new TypeToken<ConfigJavaBean>() {
 				}.getType();
 				configJavaBean = Autoreply.gson.fromJson(dataRec.readString(), type);
-				Autoreply.instence.groupMemberChangerListener = new GroupMemberChangerListener();
-				Autoreply.instence.adminMessageProcessor = new AdminMessageProcessor();
-				Autoreply.instence.repeatManager = new RepeaterManager();
-				Autoreply.instence.birthdayTip = new BirthdayTip();
-				Autoreply.instence.spellCollect = new SpellCollect();
-				Autoreply.instence.threadPool.execute(Autoreply.instence.timeTip);
-				Autoreply.instence.coinManager = new CoinManager();
-				Autoreply.instence.messageTooManyManager = new MessageTooManyManager();
-				List<Group> groupList=Autoreply.CQ.getGroupList();
-				for (Group g:groupList) {
-					Autoreply.instence.repeatManager.addData(new Repeater(g.getId()));
-				}
 				Autoreply.instence.threadPool.execute(new Runnable(){
 
 						@Override
 						public void run() {
 							Autoreply.sleeping = false;
-							Autoreply.instence.seqManager.load();
+							Autoreply.instence.seqManager = new SeqManager();
+							Autoreply.instence.groupMemberChangerListener = new GroupMemberChangerListener();
+							Autoreply.instence.adminMessageProcessor = new AdminMessageProcessor();
+							Autoreply.instence.repeatManager = new RepeaterManager();
+							Autoreply.instence.birthdayTip = new BirthdayTip();
+							Autoreply.instence.spellCollect = new SpellCollect();
+							Autoreply.instence.threadPool.execute(Autoreply.instence.timeTip);
+							Autoreply.instence.coinManager = new CoinManager();
+							Autoreply.instence.messageTooManyManager = new MessageTooManyManager();
+							List<Group> groupList=Autoreply.CQ.getGroupList();
+							for (Group g:groupList) {
+								Autoreply.instence.repeatManager.addData(new Repeater(g.getId()));
+							}
 						}
 					});
 				System.out.println("load success");
@@ -115,7 +116,7 @@ public class ConfigManager extends WebSocketClient {
 				while (dataRec.hasNext()) {
 					sb.append(dataRec.readString()).append("正在直播:").append(dataRec.readLong()).append("\n");
 				}
-				Autoreply.sendMessage(Autoreply.mainGroup, 0, sb.toString());
+				resultMap.put(dataRec.getOpCode(), new TaskResult(sb.toString()));
 				break;
 			case SanaeDataPack._33liveStart:
 				Autoreply.sendMessage(Autoreply.mainGroup, 0, dataRec.readString() + "开始直播" + dataRec.readLong());
@@ -189,6 +190,11 @@ public class ConfigManager extends WebSocketClient {
 	public String getSeq() {
 		send(SanaeDataPack.encode(SanaeDataPack._28getSeqContent));
 		return BitConverter.toString(getTaskResult(SanaeDataPack._29retSeqContent).data);
+	}
+
+	public String getLiveList() {
+		send(SanaeDataPack.encode(SanaeDataPack._31getLiveList));
+		return BitConverter.toString(getTaskResult(SanaeDataPack._32retLiveList).data);
 	}
 
 	private TaskResult getTaskResult(int opCode) {

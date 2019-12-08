@@ -28,22 +28,10 @@ public class MsgRunnable implements Runnable {
 			sendMessage(fromGroup, 0, Autoreply.instence.adminMessageProcessor.userPermission.toString());
 			return;
 		}
-        if (msg.equals(".on") && (Autoreply.CQ.getGroupMemberInfoV2(fromGroup, fromQQ).getAuthority() > 1 || Autoreply.instence.configManager.isAdmin(fromQQ))) {
-            if (Autoreply.instence.botOff.contains(fromGroup)) {
-                Autoreply.instence.botOff.remove(fromGroup);
-                sendMessage(fromGroup, 0, "已启用");
-                return;
-            }
-        }
-        if (msg.equals(".off") && (Autoreply.CQ.getGroupMemberInfoV2(fromGroup, fromQQ).getAuthority() > 1 || Autoreply.instence.configManager.isAdmin(fromQQ))) {
-            Autoreply.instence.botOff.add(fromGroup);
-            sendMessage(fromGroup, 0, "已停用");
-            return;
-        }
-        if (msg.equals("权限检查")) {
-            Autoreply.sendMessage(fromGroup, fromQQ, String.valueOf(Autoreply.CQ.getGroupMemberInfoV2(fromGroup, fromQQ).getAuthority()));
-            return;
-        }
+		if (msg.equals(".live")) {
+			sendMessage(fromGroup, fromQQ, Autoreply.instence.configManager.getLiveList());
+			return;
+		}
         if (Autoreply.instence.botOff.contains(fromGroup)) {
             return;
         }
