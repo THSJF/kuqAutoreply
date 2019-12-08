@@ -7,9 +7,11 @@ import com.meng.groupChat.*;
 import com.meng.messageProcess.*;
 import com.meng.tip.*;
 import com.meng.tools.*;
+import com.sobte.cqp.jcq.entity.*;
 import java.lang.reflect.*;
 import java.net.*;
 import java.nio.*;
+import java.util.*;
 import java.util.concurrent.*;
 import org.java_websocket.client.*;
 import org.java_websocket.exceptions.*;
@@ -64,20 +66,15 @@ public class ConfigManager extends WebSocketClient {
 				configJavaBean = Autoreply.gson.fromJson(dataRec.readString(), type);
 				Autoreply.instence.groupMemberChangerListener = new GroupMemberChangerListener();
 				Autoreply.instence.adminMessageProcessor = new AdminMessageProcessor();
-				Autoreply.instence.dicReplyManager = new DicReplyManager();
 				Autoreply.instence.repeatManager = new RepeaterManager();
 				Autoreply.instence.birthdayTip = new BirthdayTip();
 				Autoreply.instence.spellCollect = new SpellCollect();
 				Autoreply.instence.threadPool.execute(Autoreply.instence.timeTip);
 				Autoreply.instence.coinManager = new CoinManager();
 				Autoreply.instence.messageTooManyManager = new MessageTooManyManager();
-				for (GroupConfig groupConfig : configJavaBean.groupConfigs) {
-					if (groupConfig.isDic()) {
-						Autoreply.instence.dicReplyManager.addData(new DicReplyGroup(groupConfig.groupNumber));
-					}
-					if (groupConfig.isRepeat()) {
-						Autoreply.instence.repeatManager.addData(new Repeater(groupConfig.groupNumber));
-					}
+				List<Group> groupList=Autoreply.CQ.getGroupList();
+				for (Group g:groupList) {
+					Autoreply.instence.repeatManager.addData(new Repeater(g.getId()));
 				}
 				Autoreply.instence.threadPool.execute(new Runnable(){
 
@@ -206,15 +203,6 @@ public class ConfigManager extends WebSocketClient {
 		return tr;
 	}
 
-	public boolean containsGroup(long group) {
-		for (GroupConfig gf:configJavaBean.groupConfigs) {
-			if (gf.groupNumber == group) {
-				return true;
-			}
-		}
-		return false;
-	}
-
 	public void setNickName(long qq, String nickname) {
 		if (nickname != null) {
 			configJavaBean.nicknameMap.put(qq, nickname);
@@ -259,24 +247,6 @@ public class ConfigManager extends WebSocketClient {
 
     public boolean isAdmin(long fromQQ) {
         return configJavaBean.adminList.contains(fromQQ) || configJavaBean.masterList.contains(fromQQ);
-    }
-
-    public boolean isGroupAutoAllow(long fromQQ) {
-        return configJavaBean.groupAutoAllowList.contains(fromQQ) || configJavaBean.adminList.contains(fromQQ) || configJavaBean.masterList.contains(fromQQ);
-    }
-
-    public GroupConfig getGroupConfig(long fromGroup) {
-        for (GroupConfig gc : configJavaBean.groupConfigs) {
-            if (fromGroup == gc.groupNumber) {
-                return gc;
-            }
-        }
-        return null;
-    }
-
-    public boolean isNotReplyGroup(long fromGroup) {
-        GroupConfig groupConfig = getGroupConfig(fromGroup);
-        return groupConfig == null || !groupConfig.reply;
     }
 
     public boolean isNotReplyQQ(long qq) {
@@ -339,15 +309,10 @@ public class ConfigManager extends WebSocketClient {
     public void addBlack(long group, final long qq) {
         configJavaBean.blackListQQ.add(qq);
         configJavaBean.blackListGroup.add(group);
-        for (GroupConfig groupConfig : configJavaBean.groupConfigs) {
-            if (groupConfig.groupNumber == group) {
-                configJavaBean.groupConfigs.remove(groupConfig);
-                break;
-            }
-        }
 		send(SanaeDataPack.encode(SanaeDataPack._26addBlack).write(group).write(qq));
         Autoreply.sendMessage(Autoreply.mainGroup, 0, "已将用户" + qq + "加入黑名单");
         Autoreply.sendMessage(Autoreply.mainGroup, 0, "已将群" + group + "加入黑名单");
+		Autoreply.CQ.setGroupLeave(group, false);
     }
 
 	public void send(final SanaeDataPack sdp) {

@@ -1,19 +1,17 @@
 package com.meng.groupChat.Sequence;
+
 import com.google.gson.*;
 import com.google.gson.reflect.*;
 import com.meng.*;
 import com.meng.config.*;
-import com.meng.tools.*;
-import java.io.*;
 import java.lang.reflect.*;
-import java.nio.charset.*;
 import java.util.*;
 
 public class SeqManager {
     private ArrayList<SeqBean> seqs=new ArrayList<>();
 	private HashMap<String, ArrayList<String>> jsonData = new HashMap<>();
 
-	public void load(){
+	public void load() {
 		Type type = new TypeToken<HashMap<String, ArrayList<String>>>() {
 		}.getType();
         jsonData = new Gson().fromJson(Autoreply.instence.configManager.getSeq(), type);

@@ -1,7 +1,6 @@
 package com.meng.messageProcess;
 
 import com.meng.*;
-import com.meng.config.*;
 import com.meng.tools.*;
 
 import static com.meng.Autoreply.sendMessage;
@@ -108,13 +107,8 @@ public class MsgRunnable implements Runnable {
 			}
 			return;
 		}
-		if (msg.equalsIgnoreCase("loaddic")) {
-			Autoreply.instence.loadGroupDic();
-			sendMessage(fromGroup, fromQQ, "loaded");
-			return;
-		}
 		if (msg.startsWith(".nn ")) {
-			if (msg.contains("~") || msg.contains("～")) {
+			if (msg.contains("~")) {
 				return;
 			}
 			String name=msg.substring(4);
@@ -134,8 +128,7 @@ public class MsgRunnable implements Runnable {
 		if (Methods.checkAt(fromGroup, fromQQ, msg)) {//@
 			return;
 		}
-		GroupConfig groupConfig = Autoreply.instence.configManager.getGroupConfig(fromGroup);
-		if (groupConfig.isRepeat() && Autoreply.instence.repeatManager.check(fromGroup, fromQQ, msg)) {// 复读
+		if (Autoreply.instence.repeatManager.check(fromGroup, fromQQ, msg)) {// 复读
 			return;
 		}
 		if (Autoreply.instence.spellCollect.check(fromGroup, fromQQ, msg)) {
@@ -145,7 +138,7 @@ public class MsgRunnable implements Runnable {
 			sendMessage(fromGroup, 0, Autoreply.instence.CC.location(35.594993, 118.869838, 15, "守矢神社", "此生无悔入东方 来世愿生幻想乡"));
 			return;
 		}
-		if (groupConfig.isCqCode() && Autoreply.instence.CQcodeManager.check(fromGroup, msg)) {// 特殊信息(签到分享等)
+		if (Autoreply.instence.CQcodeManager.check(fromGroup, msg)) {// 特殊信息(签到分享等)
 			return;
 		}
 		if (msg.equals("查看活跃数据")) {
@@ -158,7 +151,7 @@ public class MsgRunnable implements Runnable {
 		if (Autoreply.instence.seqManager.check(fromGroup, fromQQ, msg)) {
 			return;
 		}
-		if (groupConfig.isDic() && Autoreply.instence.dicReplyManager.check(fromGroup, fromQQ, msg)) {
+		if (Autoreply.instence.dicReply.check(fromGroup, fromQQ, msg)) {
 			return;
 		}
 	}

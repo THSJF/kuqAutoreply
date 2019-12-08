@@ -3,9 +3,10 @@ package com.meng.tip;
 import com.meng.*;
 import com.meng.config.*;
 import java.util.*;
+import com.sobte.cqp.jcq.entity.*;
 
 public class TimeTip implements Runnable {
-    
+
     public TimeTip() {
     }
 
@@ -14,20 +15,19 @@ public class TimeTip implements Runnable {
         while (true) {
             Calendar c = Calendar.getInstance();
             if (c.get(Calendar.MINUTE) == 0) {
-                if (c.get(Calendar.HOUR_OF_DAY) == 23) {
+                if (c.get(Calendar.HOUR_OF_DAY) == 22) {
                     Autoreply.instence.threadPool.execute(new Runnable() {
 							@Override
 							public void run() {
-								for (GroupConfig groupConfig : Autoreply.instence.configManager.configJavaBean.groupConfigs) {
-									if (groupConfig.reply) {
-										if (Autoreply.sendMessage(groupConfig.groupNumber, 0, "少女休息中...", true) < 0) {
-											continue;
-										}
-										try {
-											Thread.sleep(1000);
-										} catch (InterruptedException e) {
-											e.printStackTrace();
-										}
+								List<Group> groupList=Autoreply.CQ.getGroupList();
+								for (Group g:groupList) {
+									if (Autoreply.sendMessage(g.getId(), 0, "大家晚安...", true) < 0) {
+										continue;
+									}
+									try {
+										Thread.sleep(500);
+									} catch (InterruptedException e) {
+										e.printStackTrace();
 									}
 								}
 								Autoreply.sleeping = true;
@@ -38,19 +38,18 @@ public class TimeTip implements Runnable {
                     Autoreply.instence.threadPool.execute(new Runnable() {
 							@Override
 							public void run() {
-								for (GroupConfig groupConfig : Autoreply.instence.configManager.configJavaBean.groupConfigs) {
-									if (groupConfig.reply) {
-										if (Autoreply.sendMessage(groupConfig.groupNumber, 0, "大家早上好啊", true) < 0) {
-											continue;
-										}
-										try {
-											Thread.sleep(1000);
-										} catch (InterruptedException e) {
-											e.printStackTrace();
-										}
+								Autoreply.sleeping = false;
+								List<Group> groupList=Autoreply.CQ.getGroupList();
+								for (Group g:groupList) {
+									if (Autoreply.sendMessage(g.getId(), 0, "大家早上好啊...", true) < 0) {
+										continue;
+									}
+									try {
+										Thread.sleep(500);
+									} catch (InterruptedException e) {
+										e.printStackTrace();
 									}
 								}
-								Autoreply.sleeping = false;
 							}
 						});
                 }          

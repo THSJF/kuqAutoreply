@@ -8,33 +8,24 @@ import java.lang.reflect.*;
 import java.util.*;
 import java.util.regex.*;
 
-public class DicReplyGroup {
+public class DicReply {
 
-    public long groupNum;
     private HashMap<String, HashSet<String>> dic = new HashMap<>();
 
-    public DicReplyGroup(long group) {
-        groupNum = group;
-        File dicFile = new File(Autoreply.appDirectory + "dic\\dic" + group + ".json");
-        if (!dicFile.exists()) {
-            DicReplyManager.saveDic(dicFile, dic);
-        }
+    public DicReply() {
+        File dicFile = new File(Autoreply.appDirectory + "dic\\dic.json");
         Type type = new TypeToken<HashMap<String, HashSet<String>>>() {
         }.getType();
         dic = Autoreply.gson.fromJson(Methods.readFileToString(dicFile.getAbsolutePath()), type);
     }
 
-    public boolean checkMsg(long group, long qq, String msg) {
-        if (group != groupNum) {
-            return false;
-        }
+    public boolean check(long group, long qq, String msg) {
         for (String key : dic.keySet()) {
-            if (Pattern.matches(".*" + key + ".*", msg.replace(" ", "").trim())) {
+            if (Pattern.matches(".*" + key + ".*", msg.replaceAll("\\s", "").trim())) {
                 Autoreply.sendMessage(group, qq, (String) dic.get(key).toArray()[Autoreply.instence.random.nextInt(dic.get(key).size())]);
                 return true;
             }
         }
         return false;
     }
-
 }

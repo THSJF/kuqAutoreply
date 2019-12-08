@@ -14,10 +14,6 @@ public class Repeater {
 	}
 
     public boolean check(long fromGroup, long fromQQ, String msg) {
-        GroupConfig groupConfig = Autoreply.instence.configManager.getGroupConfig(fromGroup);
-        if (groupConfig == null) {
-            return false;
-        }
         boolean b = false; 
 		b = checkRepeatStatu(fromGroup, fromQQ, msg);
 		lastMessageRecieved = msg;
