@@ -4,9 +4,24 @@ import com.meng.*;
 import com.meng.config.*;
 import java.util.*;
 import com.sobte.cqp.jcq.entity.*;
+import com.meng.tools.*;
 
 public class TimeTip implements Runnable {
 
+	private String[] goodMorning = new String[]{
+		"早上好",
+		"早安",
+		"早",
+		"大家早上好",
+		"大家早上好啊.."
+	};
+	private String[] goodEvening = new String[]{
+		"晚安",
+		"大家晚安",
+		"晚安....",
+		"大家晚安....",
+		"大家早点休息吧"
+	};
     public TimeTip() {
     }
 
@@ -21,7 +36,7 @@ public class TimeTip implements Runnable {
 							public void run() {
 								List<Group> groupList=Autoreply.CQ.getGroupList();
 								for (Group g:groupList) {
-									if (Autoreply.sendMessage(g.getId(), 0, "大家晚安...") < 0) {
+									if (Autoreply.sendMessage(g.getId(), 0, (String)Tools.ArrayTool.rfa(goodEvening)) < 0) {
 										continue;
 									}
 									try {
@@ -41,7 +56,7 @@ public class TimeTip implements Runnable {
 								Autoreply.sleeping = false;
 								List<Group> groupList=Autoreply.CQ.getGroupList();
 								for (Group g:groupList) {
-									if (Autoreply.sendMessage(g.getId(), 0, "大家早上好啊...") < 0) {
+									if (Autoreply.sendMessage(g.getId(), 0, (String)Tools.ArrayTool.rfa(goodMorning)) < 0) {
 										continue;
 									}
 									try {
