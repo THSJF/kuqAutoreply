@@ -20,7 +20,7 @@ public class CookieManager {
 		  }
         Type type = new TypeToken<Cookie>() {
 		  }.getType();
-        cookie = Autoreply.gson.fromJson(Methods.readFileToString(Autoreply.appDirectory + "cookie.json"), type);
+        cookie = Autoreply.gson.fromJson(Tools.FileTool.readString(Autoreply.appDirectory + "cookie.json"), type);
 	  }
 
 	public void saveConfig() {

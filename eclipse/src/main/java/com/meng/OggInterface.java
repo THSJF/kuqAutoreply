@@ -1,14 +1,10 @@
 package com.meng;
 
-import com.google.gson.Gson;
-import com.google.gson.JsonObject;
-import com.google.gson.JsonParser;
-import com.meng.bilibili.main.SpaceToLiveJavaBean;
-import com.meng.config.javabeans.PersonInfo;
-import com.meng.tools.Methods;
-
-import java.util.HashSet;
-import java.util.stream.Collectors;
+import com.google.gson.*;
+import com.meng.bilibili.main.*;
+import com.meng.config.javabeans.*;
+import com.meng.tools.*;
+import java.util.*;
 
 public class OggInterface {
 
@@ -19,11 +15,11 @@ public class OggInterface {
         if (msg.startsWith("findInAll:")) {
             final String finalMsg = msg;
             Autoreply.instence.threadPool.execute(new Runnable() {
-                @Override
-                public void run() {
-                    Methods.findQQInAllGroup(0, fromQQ, finalMsg);
-                }
-            });
+					@Override
+					public void run() {
+						Tools.CQ.findQQInAllGroup(0, fromQQ, finalMsg);
+					}
+				});
             return true;
         }
         if (msg.startsWith("ban")) {
@@ -50,7 +46,7 @@ public class OggInterface {
             return true;
         }
         if (msg.startsWith("直播状态lid:")) {
-            String html = Methods.getSourceCode("https://live.bilibili.com/" + msg.substring(8));
+            String html = Tools.Network.getSourceCode("https://live.bilibili.com/" + msg.substring(8));
             String jsonInHtml = html.substring(html.indexOf("{\"roomInitRes\":"), html.lastIndexOf("}") + 1);
             JsonObject data = new JsonParser().parse(jsonInHtml).getAsJsonObject().get("baseInfoRes").getAsJsonObject().get("data").getAsJsonObject();
             sendPrivateMessage(fromQQ, data.get("live_status").getAsInt() == 1 ? "true" : "false");
@@ -60,12 +56,12 @@ public class OggInterface {
             return true;
         }
         if (msg.startsWith("直播状态bid:")) {
-            SpaceToLiveJavaBean sjb = Autoreply.gson.fromJson(Methods.getSourceCode("https://api.live.bilibili.com/room/v1/Room/getRoomInfoOld?mid=" + msg.substring(8)), SpaceToLiveJavaBean.class);
+            SpaceToLiveJavaBean sjb = Autoreply.gson.fromJson(Tools.Network.getSourceCode("https://api.live.bilibili.com/room/v1/Room/getRoomInfoOld?mid=" + msg.substring(8)), SpaceToLiveJavaBean.class);
             sendPrivateMessage(fromQQ, sjb.data.liveStatus == 1 ? "true" : "false");
             return true;
         }
         if (msg.startsWith("获取直播间:")) {
-            sendPrivateMessage(fromQQ, Methods.getSourceCode("https://api.live.bilibili.com/room/v1/Room/getRoomInfoOld?mid=" + msg.substring(6)));
+            sendPrivateMessage(fromQQ, Tools.Network.getSourceCode("https://api.live.bilibili.com/room/v1/Room/getRoomInfoOld?mid=" + msg.substring(6)));
             return true;
         }
         if (msg.startsWith("add{")) {

@@ -19,7 +19,7 @@ public class CoinManager {
 		}
 		Type type = new TypeToken<HashMap<Long, Integer>>() {
 		}.getType();
-		countMap = Autoreply.gson.fromJson(Methods.readFileToString(file.getAbsolutePath()), type);
+		countMap = Autoreply.gson.fromJson(Tools.FileTool.readString(file), type);
 		Autoreply.instence.threadPool.execute(new Runnable() {
 				@Override
 				public void run() {

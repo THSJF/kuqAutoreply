@@ -24,7 +24,7 @@ public class SpellCollect {
         }
         Type type = new TypeToken<ConcurrentHashMap<Long,HashSet<String>>>() {
         }.getType();
-        chm = Autoreply.gson.fromJson(Methods.readFileToString(Autoreply.appDirectory + "/properties/spells.json"), type);
+        chm = Autoreply.gson.fromJson(Tools.FileTool.readString(Autoreply.appDirectory + "/properties/spells.json"), type);
 
 		archiFile = new File(Autoreply.appDirectory + "/properties/archievement.json");
         if (!archiFile.exists()) {
@@ -32,7 +32,7 @@ public class SpellCollect {
         }
         Type type2 = new TypeToken<ConcurrentHashMap<Long,ArchievementBean>>() {
         }.getType();
-        archiMap = Autoreply.gson.fromJson(Methods.readFileToString(Autoreply.appDirectory + "/properties/archievement.json"), type2);
+        archiMap = Autoreply.gson.fromJson(Tools.FileTool.readString(Autoreply.appDirectory + "/properties/archievement.json"), type2);
 
 		archList.add(new Archievement("恶魔领地", "收集东方红魔乡全部符卡", ArchievementBean.th6All, TH06GameData.spells.length, TH06GameData.spells));
 		archList.add(new Archievement("完美樱花", "收集东方妖妖梦全部符卡",  ArchievementBean.th7All, TH07GameData.spells.length, TH07GameData.spells));

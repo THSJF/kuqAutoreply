@@ -24,7 +24,7 @@ public class BirthdayTip {
         }
         Type type = new TypeToken<HashMap<Long,Integer>>() {
         }.getType();
-        memberMap = Autoreply.gson.fromJson(Methods.readFileToString(ageFile), type);
+        memberMap = Autoreply.gson.fromJson(Tools.FileTool.readString(ageFile), type);
 
 		Autoreply.instence.threadPool.execute(new Runnable(){
 
@@ -45,7 +45,7 @@ public class BirthdayTip {
 
 	public void check() {
 		Calendar c = Calendar.getInstance();
-		if (c.get(Calendar.HOUR_OF_DAY) == 8 && c.get(Calendar.MINUTE) == 10) {
+		if (c.get(Calendar.HOUR_OF_DAY) == 6 && c.get(Calendar.MINUTE) == 1) {
 			List<Group> groups=Autoreply.CQ.getGroupList();
 			for (Group group:groups) {
 				List<Member> members=Autoreply.CQ.getGroupMemberList(group.getId());

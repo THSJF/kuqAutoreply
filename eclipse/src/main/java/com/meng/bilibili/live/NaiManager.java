@@ -1,19 +1,12 @@
 package com.meng.bilibili.live;
 
-import java.io.BufferedReader;
-import java.io.DataOutputStream;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.UnsupportedEncodingException;
-import java.net.HttpURLConnection;
-import java.net.URL;
-import java.net.URLEncoder;
-
-import com.meng.Autoreply;
-import com.meng.tools.Methods;
 import com.google.gson.*;
-import com.meng.config.javabeans.*;
+import com.meng.*;
 import com.meng.config.*;
+import com.meng.config.javabeans.*;
+import com.meng.tools.*;
+import java.io.*;
+import java.net.*;
 
 public class NaiManager {
 
@@ -80,7 +73,7 @@ public class NaiManager {
         connection.setRequestProperty("Accept-Encoding", "gzip, deflate, br");
         connection.setRequestProperty("Accept-Language", "zh-CN,zh;q=0.8");
         connection.setRequestProperty("cookie", cookie);
-        String scrfStr = Methods.cookieToMap(cookie).get("bili_jct");
+        String scrfStr = Tools.Network.cookieToMap(cookie).get("bili_jct");
         content = "color=16777215&" + "fontsize=25&" + "mode=1&" + "bubble=0&" + "msg=" + encode(msg) + // 发送的句子中特殊符号需要转换一下
                 "&rnd=" + (System.currentTimeMillis() / 1000) + "&roomid=" + roomId + "&csrf=" + scrfStr
                 + "&csrf_token=" + scrfStr;

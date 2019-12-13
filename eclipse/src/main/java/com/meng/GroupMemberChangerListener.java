@@ -1,8 +1,8 @@
 package com.meng;
 
-import com.meng.config.javabeans.PersonInfo;
-import com.meng.tools.Methods;
-import com.sobte.cqp.jcq.entity.QQInfo;
+import com.meng.config.javabeans.*;
+import com.meng.tools.*;
+import com.sobte.cqp.jcq.entity.*;
 
 import static com.meng.Autoreply.sendMessage;
 
@@ -13,7 +13,7 @@ public class GroupMemberChangerListener {
 
     public void checkIncrease(int subtype, int sendTime, long fromGroup, long fromQQ, long beingOperateQQ) {
         if (Autoreply.instence.configManager.isBlackQQ(beingOperateQQ)) {
-            Methods.ban(fromGroup, fromQQ, 300);
+            Tools.CQ.ban(fromGroup, fromQQ, 300);
         }
         PersonInfo personInfo = Autoreply.instence.configManager.getPersonInfoFromQQ(beingOperateQQ);
         if (personInfo != null && personInfo.name.equals("熊哥")) {

@@ -1,17 +1,13 @@
 package com.meng.tools;
 
-import com.google.gson.Gson;
-import com.google.gson.reflect.TypeToken;
-import com.meng.Autoreply;
-
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.OutputStreamWriter;
-import java.lang.reflect.Type;
-import java.nio.charset.StandardCharsets;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map.Entry;
+import com.google.gson.*;
+import com.google.gson.reflect.*;
+import com.meng.*;
+import java.io.*;
+import java.lang.reflect.*;
+import java.nio.charset.*;
+import java.util.*;
+import java.util.Map.*;
 
 public class UserCounter {
     private HashMap<Long, UserInfo> countMap = new HashMap<>();
@@ -55,7 +51,7 @@ public class UserCounter {
         }
         Type type = new TypeToken<HashMap<Long, UserInfo>>() {
         }.getType();
-        countMap = Autoreply.gson.fromJson(Methods.readFileToString(file.getAbsolutePath()), type);
+        countMap = Autoreply.gson.fromJson(Tools.FileTool.readString(file), type);
         Autoreply.instence.threadPool.execute(new Runnable() {
 				@Override
 				public void run() {

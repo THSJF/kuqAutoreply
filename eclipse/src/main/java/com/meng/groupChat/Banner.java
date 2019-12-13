@@ -188,10 +188,10 @@ public class Banner {
                 sleepTime = 2592000;
             }
             if (sleepTime <= 0) {
-                Methods.ban(fromGroup, fromQQ, 5400);
+                Tools.CQ.ban(fromGroup, fromQQ, 5400);
                 return true;
             } else {
-                Methods.ban(fromGroup, fromQQ, sleepTime);
+                Tools.CQ.ban(fromGroup, fromQQ, sleepTime);
                 return true;
             }
         }
@@ -218,11 +218,11 @@ public class Banner {
         }
         if (configManager.isMaster(targetQQ)) {
             if (!configManager.isMaster(fromQQ)) {
-                Methods.ban(targetGroup, fromQQ, time);
+                Tools.CQ.ban(targetGroup, fromQQ, time);
                 return true;
             }
         } else {
-            Methods.ban(targetGroup, targetQQ, time);
+            Tools.CQ.ban(targetGroup, targetQQ, time);
             return true;
         }
         return false;

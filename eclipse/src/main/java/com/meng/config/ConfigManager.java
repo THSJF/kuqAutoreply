@@ -1,23 +1,13 @@
 package com.meng.config;
 
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.OutputStreamWriter;
-import java.lang.reflect.Type;
-import java.nio.charset.StandardCharsets;
-import java.util.HashSet;
-
-import com.google.gson.Gson;
-import com.google.gson.reflect.TypeToken;
-import com.meng.Autoreply;
-import com.meng.tools.Methods;
-import com.meng.config.javabeans.ConfigJavaBean;
-import com.meng.config.javabeans.GroupConfig;
-import com.meng.config.javabeans.PersonInfo;
-import com.meng.config.javabeans.PortConfig;
-import com.sobte.cqp.jcq.entity.Group;
-import com.sobte.cqp.jcq.entity.*;
+import com.google.gson.*;
+import com.google.gson.reflect.*;
+import com.meng.*;
+import com.meng.config.javabeans.*;
+import com.meng.tools.*;
+import java.io.*;
+import java.lang.reflect.*;
+import java.nio.charset.*;
 
 public class ConfigManager {
     public ConfigJavaBean configJavaBean = new ConfigJavaBean();
@@ -25,14 +15,14 @@ public class ConfigManager {
     public PortConfig portConfig = new PortConfig();
 
     public ConfigManager() {
-        portConfig = gson.fromJson(Methods.readFileToString(Autoreply.appDirectory + "grzxEditConfig.json"), PortConfig.class);
+        portConfig = gson.fromJson(Tools.FileTool.readString(Autoreply.appDirectory + "grzxEditConfig.json"), PortConfig.class);
         File jsonBaseConfigFile = new File(Autoreply.appDirectory + "configV3.json");
         if (!jsonBaseConfigFile.exists()) {
             saveConfig();
         }
         Type type = new TypeToken<ConfigJavaBean>() {
         }.getType();
-        configJavaBean = gson.fromJson(Methods.readFileToString(Autoreply.appDirectory + "configV3.json"), type);
+        configJavaBean = gson.fromJson(Tools.FileTool.readString(Autoreply.appDirectory + "configV3.json"), type);
         Autoreply.instence.threadPool.execute(new SocketConfigManager(this));
         Autoreply.instence.threadPool.execute(new SocketDicManager(this));
     }

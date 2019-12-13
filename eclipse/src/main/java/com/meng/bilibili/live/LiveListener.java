@@ -6,6 +6,7 @@ import com.meng.*;
 import com.meng.bilibili.main.*;
 import com.meng.config.*;
 import com.meng.config.javabeans.*;
+import com.meng.config.sanae.*;
 import com.meng.tools.*;
 import java.io.*;
 import java.lang.reflect.*;
@@ -15,7 +16,6 @@ import java.util.*;
 import java.util.Map.*;
 import java.util.concurrent.*;
 import org.jsoup.*;
-import com.meng.config.sanae.*;
 
 public class LiveListener implements Runnable {
 
@@ -40,7 +40,7 @@ public class LiveListener implements Runnable {
         try {
             Type token = new TypeToken<ConcurrentHashMap<String, Long>>() {
 			}.getType();
-            liveTimeMap = new Gson().fromJson(Methods.readFileToString(liveTimeFile.getAbsolutePath()), token);
+            liveTimeMap = new Gson().fromJson(Tools.FileTool.readString(liveTimeFile), token);
 		} catch (Exception e) {
             e.printStackTrace();
 		}
@@ -52,7 +52,7 @@ public class LiveListener implements Runnable {
 		}
         if (personInfo.bliveRoom == 0) {
             if (personInfo.bid != 0) {
-                SpaceToLiveJavaBean sjb = new Gson().fromJson(Methods.getSourceCode("https://api.live.bilibili.com/room/v1/Room/getRoomInfoOld?mid=" + personInfo.bid), SpaceToLiveJavaBean.class);
+                SpaceToLiveJavaBean sjb = new Gson().fromJson(Tools.Network.getSourceCode("https://api.live.bilibili.com/room/v1/Room/getRoomInfoOld?mid=" + personInfo.bid), SpaceToLiveJavaBean.class);
                 if (sjb.data.roomid == 0) {
                     personInfo.bliveRoom = -1;
                     Autoreply.instence.configManager.saveConfig();
@@ -82,7 +82,7 @@ public class LiveListener implements Runnable {
                     if (personInfo.bliveRoom == 0 || personInfo.bliveRoom == -1) {
                         continue;
 					}
-                    SpaceToLiveJavaBean sjb = new Gson().fromJson(Methods.getSourceCode("https://api.live.bilibili.com/room/v1/Room/getRoomInfoOld?mid=" + personInfo.bid), SpaceToLiveJavaBean.class);
+                    SpaceToLiveJavaBean sjb = new Gson().fromJson(Tools.Network.getSourceCode("https://api.live.bilibili.com/room/v1/Room/getRoomInfoOld?mid=" + personInfo.bid), SpaceToLiveJavaBean.class);
                     boolean living = sjb.data.liveStatus == 1;
 					if (living) {
 						if (Autoreply.instence.danmakuListenerManager.getListener(personInfo.bliveRoom) == null) {
@@ -143,7 +143,7 @@ public class LiveListener implements Runnable {
 
 	public void setBan(long fromGroup, String roomId, String blockId, String hour) {
 		if (Integer.parseInt(hour) == 0) {  
-			String jsonStr=Methods.getSourceCode("https://api.live.bilibili.com/liveact/ajaxGetBlockList?roomid=" + roomId + "&page=1", Autoreply.instence.cookieManager.cookie.grzx);
+			String jsonStr=Tools.Network.getSourceCode("https://api.live.bilibili.com/liveact/ajaxGetBlockList?roomid=" + roomId + "&page=1", Autoreply.instence.cookieManager.cookie.grzx);
 			BanBean bb=new Gson().fromJson(jsonStr, BanBean.class);
 			long bid=Integer.parseInt(blockId);
 			String eventId="";
@@ -162,12 +162,12 @@ public class LiveListener implements Runnable {
 				liveHead.put("Connection", "keep-alive");
 				liveHead.put("Origin", "https://live.bilibili.com");
 				Connection connection = Jsoup.connect("https://api.live.bilibili.com/banned_service/v1/Silent/del_room_block_user");
-				String csrf = Methods.cookieToMap(Autoreply.instence.cookieManager.cookie.grzx).get("bili_jct");
+				String csrf = Tools.Network.cookieToMap(Autoreply.instence.cookieManager.cookie.grzx).get("bili_jct");
 				connection.userAgent(Autoreply.instence.userAgent)
 					.headers(liveHead)
 					.ignoreContentType(true)
 					.referrer("https://live.bilibili.com/" + roomId)
-					.cookies(Methods.cookieToMap(Autoreply.instence.cookieManager.cookie.grzx))
+					.cookies(Tools.Network.cookieToMap(Autoreply.instence.cookieManager.cookie.grzx))
 					.method(Connection.Method.POST)
 					.data("roomid", roomId)
 					.data("id", eventId)
@@ -207,12 +207,12 @@ public class LiveListener implements Runnable {
 				liveHead.put("Connection", "keep-alive");
 				liveHead.put("Origin", "https://live.bilibili.com");
 				Connection connection = Jsoup.connect("https://api.live.bilibili.com/banned_service/v2/Silent/add_block_user");
-				String csrf = Methods.cookieToMap(Autoreply.instence.cookieManager.cookie.grzx).get("bili_jct");
+				String csrf = Tools.Network.cookieToMap(Autoreply.instence.cookieManager.cookie.grzx).get("bili_jct");
 				connection.userAgent(Autoreply.instence.userAgent)
 					.headers(liveHead)
 					.ignoreContentType(true)
 					.referrer("https://live.bilibili.com/" + roomId)
-					.cookies(Methods.cookieToMap(Autoreply.instence.cookieManager.cookie.grzx))
+					.cookies(Tools.Network.cookieToMap(Autoreply.instence.cookieManager.cookie.grzx))
 					.method(Connection.Method.POST)
 					.data("hour", hour)
 					.data("roomid", roomId)

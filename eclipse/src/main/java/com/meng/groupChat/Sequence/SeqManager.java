@@ -19,7 +19,7 @@ public class SeqManager {
 		}
 		Type type = new TypeToken<HashMap<String, ArrayList<String>>>() {
 		}.getType();
-        jsonData = new Gson().fromJson(Methods.readFileToString(jsonFile.getAbsolutePath()), type);
+        jsonData = new Gson().fromJson(Tools.FileTool.readString(jsonFile), type);
    		for (String key : jsonData.keySet()) {
 			ArrayList<String> al=jsonData.get(key);
 			String[] content=al.toArray(new String[al.size()]);

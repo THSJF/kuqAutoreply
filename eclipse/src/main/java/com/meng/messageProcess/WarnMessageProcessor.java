@@ -1,10 +1,9 @@
 package com.meng.messageProcess;
 
-import com.meng.Autoreply;
-import com.meng.tools.Methods;
-import com.sobte.cqp.jcq.entity.Member;
-
-import java.util.List;
+import com.meng.*;
+import com.meng.tools.*;
+import com.sobte.cqp.jcq.entity.*;
+import java.util.*;
 
 import static com.meng.Autoreply.sendMessage;
 
@@ -95,7 +94,7 @@ public class WarnMessageProcessor {
             }
         } catch (Exception e) {
             Autoreply.instence.configManager.configJavaBean.blackListQQ.add(fromQQ);
-            Methods.ban(fromGroup, fromQQ, 2592000);
+            Tools.CQ.ban(fromGroup, fromQQ, 2592000);
             sendMessage(fromGroup, fromQQ, "你的行为被判定为危险行为");
         }
     }
@@ -121,11 +120,11 @@ public class WarnMessageProcessor {
                         Member m = Autoreply.CQ.getGroupMemberInfoV2(fromGroup, Autoreply.CQ.getLoginQQ());
                         Member m2 = Autoreply.CQ.getGroupMemberInfoV2(fromGroup, fromqq);
                         if (m.getAuthority() - m2.getAuthority() > 1) {
-                            Methods.ban(fromGroup, fromqq, 60);
+                            Tools.CQ.ban(fromGroup, fromqq, 60);
                             sendMessage(fromGroup, fromqq, "你的行为被判定为危险行为");
                         }
                     } catch (Exception e) {
-                        Methods.ban(fromGroup, fromqq, 60);
+                        Tools.CQ.ban(fromGroup, fromqq, 60);
                         sendMessage(fromGroup, fromqq, "你的行为被判定为危险行为");
                     }
                 }

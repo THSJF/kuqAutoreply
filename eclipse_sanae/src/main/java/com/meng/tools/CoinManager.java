@@ -18,7 +18,7 @@ public class CoinManager {
 		}
 		Type type = new TypeToken<HashMap<Long, Integer>>() {
 		}.getType();
-		coinsMap = Autoreply.gson.fromJson(Methods.readFileToString(file.getAbsolutePath()), type);
+		coinsMap = Autoreply.gson.fromJson(Tools.FileTool.readString(file.getAbsolutePath()), type);
 		Autoreply.instence.threadPool.execute(new Runnable() {
 				@Override
 				public void run() {

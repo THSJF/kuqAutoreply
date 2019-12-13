@@ -1,17 +1,12 @@
 package com.meng.tools;
 
-import com.google.gson.Gson;
-import com.google.gson.reflect.TypeToken;
-import com.meng.Autoreply;
-import com.meng.tools.Methods;
-
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.OutputStreamWriter;
-import java.lang.reflect.Type;
-import java.nio.charset.StandardCharsets;
-import java.util.HashSet;
+import com.google.gson.*;
+import com.google.gson.reflect.*;
+import com.meng.*;
+import java.io.*;
+import java.lang.reflect.*;
+import java.nio.charset.*;
+import java.util.*;
 
 public class ZanManager {
     private HashSet<Long> hashSet = new HashSet<>();
@@ -24,7 +19,7 @@ public class ZanManager {
         }
         Type type = new TypeToken<HashSet<Long>>() {
         }.getType();
-        hashSet = new Gson().fromJson(Methods.readFileToString(configPath), type);
+        hashSet = new Gson().fromJson(Tools.FileTool.readString(configPath), type);
     }
 
     public void sendZan() {
@@ -55,11 +50,11 @@ public class ZanManager {
     }
 
     public boolean checkAdd(long fromGroup, long fromQQ, String msg) {
-            if (msg.startsWith("z.add")) {
-                hashSet.addAll(Autoreply.instence.CC.getAts(msg));
-                saveConfig();
-                Autoreply.sendMessage(fromGroup, fromQQ, "已添加至赞列表");
-                return true;
+		if (msg.startsWith("z.add")) {
+			hashSet.addAll(Autoreply.instence.CC.getAts(msg));
+			saveConfig();
+			Autoreply.sendMessage(fromGroup, fromQQ, "已添加至赞列表");
+			return true;
         }
         return false;
     }

@@ -24,7 +24,7 @@ public class BirthdayTip {
         }
         Type type = new TypeToken<HashMap<Long,Integer>>() {
         }.getType();
-        memberMap = Autoreply.gson.fromJson(Methods.readFileToString(ageFile), type);
+        memberMap = Autoreply.gson.fromJson(Tools.FileTool.readString(ageFile), type);
 
 		Autoreply.instence.threadPool.execute(new Runnable(){
 

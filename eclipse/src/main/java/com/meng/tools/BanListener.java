@@ -16,7 +16,6 @@ import com.sobte.cqp.jcq.entity.Member;
 public class BanListener {
 
     private HashMap<String, HashSet<Long>> sleepSet = new HashMap<>();
-    ;
     private String configPath = Autoreply.appDirectory + "configV3_sleep.json";
 
     public BanListener() {
@@ -26,7 +25,7 @@ public class BanListener {
         }
         Type type = new TypeToken<HashMap<String, HashSet<Long>>>() {
         }.getType();
-        sleepSet = new Gson().fromJson(Methods.readFileToString(configPath), type);
+        sleepSet = new Gson().fromJson(Tools.FileTool.readString(configPath), type);
         Autoreply.instence.threadPool.execute(new Runnable() {
 				@Override
 				public void run() {
@@ -37,7 +36,7 @@ public class BanListener {
 							e.printStackTrace();
 						}
 						for (Map.Entry<String, HashSet<Long>> entry : sleepSet.entrySet()) {
-							Methods.ban(Long.parseLong(entry.getKey()), entry.getValue(), 2592000);
+							Tools.CQ.ban(Long.parseLong(entry.getKey()), entry.getValue(), 2592000);
 						}
 					}
 				}
@@ -51,7 +50,7 @@ public class BanListener {
         }
         if (fromQQ == 2482513293L && msg.startsWith("复读警察,出动!") && targetQQ != -1000) {
             //Autoreply.instence.CC.getAt(msg) == 3119583925L
-            Methods.ban(fromGroup, targetQQ, 0);
+            Tools.CQ.ban(fromGroup, targetQQ, 0);
         }
         if (fromQQ != 1000000) {
             return;
@@ -163,7 +162,7 @@ public class BanListener {
             }
         }
         if (contain) {
-            Methods.ban(fromGroup, fromQQ, 2592000);
+            Tools.CQ.ban(fromGroup, fromQQ, 2592000);
         }
         return contain;
     }
@@ -180,7 +179,7 @@ public class BanListener {
         if (Autoreply.instence.configManager.isAdmin(fromQQ) && msg.equals("夏眠结束")) {
             HashSet<Long> hashSet = sleepSet.get(String.valueOf(fromGroup));
             if (hashSet != null) {
-                Methods.ban(fromGroup, hashSet, 0);
+                Tools.CQ.ban(fromGroup, hashSet, 0);
                 sleepSet.remove(String.valueOf(fromGroup));
                 saveConfig();
             }
@@ -211,7 +210,7 @@ public class BanListener {
                 Autoreply.sendMessage(fromGroup, fromQQ, "本群没有夏眠名单");
             } else {
                 hs.remove(targetQQ);
-                Methods.ban(fromGroup, targetQQ, 0);
+                Tools.CQ.ban(fromGroup, targetQQ, 0);
             }
             saveConfig();
             return;
@@ -242,7 +241,7 @@ public class BanListener {
 		}
         hs.add(targetQQ);
 		sleepSet.put(String.valueOf(fromGroup), hs);
-		Methods.ban(fromGroup, targetQQ, 2592000);
+		Tools.CQ.ban(fromGroup, targetQQ, 2592000);
 		saveConfig();
 	}
 

@@ -1,13 +1,12 @@
 package com.meng.messageProcess;
 
 import com.google.gson.*;
-import com.meng.Autoreply;
+import com.meng.*;
 import com.meng.bilibili.live.*;
 import com.meng.bilibili.main.*;
 import com.meng.config.*;
 import com.meng.config.javabeans.*;
-import com.meng.dice.Archievement;
-import com.meng.dice.ArchievementBean;
+import com.meng.dice.*;
 import com.meng.picEdit.*;
 import com.meng.tools.*;
 import com.meng.tools.override.*;
@@ -15,11 +14,9 @@ import com.sobte.cqp.jcq.entity.*;
 import java.io.*;
 import java.util.*;
 import java.util.concurrent.*;
-import java.util.function.BiConsumer;
+import org.jsoup.*;
 
 import static com.meng.Autoreply.sendMessage;
-import org.jsoup.*;
-import com.meng.musicProcess.*;
 
 public class AdminMessageProcessor {
     private ConfigManager configManager;
@@ -111,12 +108,12 @@ public class AdminMessageProcessor {
 				PersonInfo pi=Autoreply.instence.configManager.getPersonInfoFromName(strs[1]);
 				if (pi == null) {	  
 					JsonParser parser = new JsonParser();
-					JsonObject obj = parser.parse(Methods.getSourceCode("https://api.live.bilibili.com/room/v1/Room/playUrl?cid=" + strs[1] + "&quality=4&platform=web")).getAsJsonObject();
+					JsonObject obj = parser.parse(Tools.Network.getSourceCode("https://api.live.bilibili.com/room/v1/Room/playUrl?cid=" + strs[1] + "&quality=4&platform=web")).getAsJsonObject();
 					JsonArray ja = obj.get("data").getAsJsonObject().get("durl").getAsJsonArray();
 					Autoreply.sendMessage(fromGroup, 0, ja.get(0).getAsJsonObject().get("url").getAsString());
 				} else {
 					JsonParser parser = new JsonParser();
-					JsonObject obj = parser.parse(Methods.getSourceCode("https://api.live.bilibili.com/room/v1/Room/playUrl?cid=" + pi.bliveRoom + "&quality=4&platform=web")).getAsJsonObject();
+					JsonObject obj = parser.parse(Tools.Network.getSourceCode("https://api.live.bilibili.com/room/v1/Room/playUrl?cid=" + pi.bliveRoom + "&quality=4&platform=web")).getAsJsonObject();
 					JsonArray ja = obj.get("data").getAsJsonObject().get("durl").getAsJsonArray();
 					Autoreply.sendMessage(fromGroup, 0, ja.get(0).getAsJsonObject().get("url").getAsString());			  
 				}	
@@ -306,7 +303,7 @@ public class AdminMessageProcessor {
                 Autoreply.instence.threadPool.execute(new Runnable() {
 						@Override
 						public void run() {
-							Methods.findQQInAllGroup(fromGroup, fromQQ, msg);
+							Tools.CQ.findQQInAllGroup(fromGroup, fromQQ, msg);
 						}
 					});
                 return true;
@@ -329,7 +326,7 @@ public class AdminMessageProcessor {
                 return true;
 			}
             if (msg.startsWith("直播状态lid:")) {
-                String html = Methods.getSourceCode("https://live.bilibili.com/" + msg.substring(8));
+                String html = Tools.Network.getSourceCode("https://live.bilibili.com/" + msg.substring(8));
                 String jsonInHtml = html.substring(html.indexOf("{\"roomInitRes\":"), html.lastIndexOf("}") + 1);
                 JsonObject data = new JsonParser().parse(jsonInHtml).getAsJsonObject().get("baseInfoRes").getAsJsonObject().get("data").getAsJsonObject();
                 Autoreply.sendMessage(fromGroup, fromQQ, data.get("live_status").getAsInt() == 1 ? "true" : "false");
@@ -339,12 +336,12 @@ public class AdminMessageProcessor {
                 return true;
 			}
             if (msg.startsWith("直播状态bid:")) {
-                SpaceToLiveJavaBean sjb = Autoreply.gson.fromJson(Methods.getSourceCode("https://api.live.bilibili.com/room/v1/Room/getRoomInfoOld?mid=" + msg.substring(8)), SpaceToLiveJavaBean.class);
+                SpaceToLiveJavaBean sjb = Autoreply.gson.fromJson(Tools.Network.getSourceCode("https://api.live.bilibili.com/room/v1/Room/getRoomInfoOld?mid=" + msg.substring(8)), SpaceToLiveJavaBean.class);
                 Autoreply.sendMessage(fromGroup, fromQQ, sjb.data.liveStatus == 1 ? "true" : "false");
                 return true;
 			}
             if (msg.startsWith("获取直播间:")) {
-                Autoreply.sendMessage(fromGroup, fromQQ, Methods.getSourceCode("https://api.live.bilibili.com/room/v1/Room/getRoomInfoOld?mid=" + msg.substring(6)));
+                Autoreply.sendMessage(fromGroup, fromQQ, Tools.Network.getSourceCode("https://api.live.bilibili.com/room/v1/Room/getRoomInfoOld?mid=" + msg.substring(6)));
                 return true;
 			}
             if (msg.startsWith("add{")) {
@@ -562,7 +559,7 @@ public class AdminMessageProcessor {
                 Autoreply.instence.threadPool.execute(new Runnable() {
 						@Override
 						public void run() {
-							Methods.findQQInAllGroup(fromGroup, fromQQ, msg);
+							Tools.CQ.findQQInAllGroup(fromGroup, fromQQ, msg);
 						}
 					});
                 return true;
@@ -646,7 +643,7 @@ public class AdminMessageProcessor {
 
 	public String start(int roomID, String cookie) throws IOException {
         Connection connection = Jsoup.connect("https://api.live.bilibili.com/room/v1/Room/startLive");
-        String csrf = Methods.cookieToMap(cookie).get("bili_jct");
+        String csrf = Tools.Network.cookieToMap(cookie).get("bili_jct");
         Map<String, String> liveHead = new HashMap<>();
         liveHead.put("Host", "api.live.bilibili.com");
         liveHead.put("Accept", "application/json, text/javascript, */*; q=0.01");
@@ -657,7 +654,7 @@ public class AdminMessageProcessor {
 			.headers(liveHead)
 			.ignoreContentType(true)
 			.referrer("https://link.bilibili.com/p/center/index")
-			.cookies(Methods.cookieToMap(cookie))
+			.cookies(Tools.Network.cookieToMap(cookie))
 			.method(Connection.Method.POST)
 			.data("room_id", String.valueOf(roomID))
 			.data("platform", "pc")
@@ -677,7 +674,7 @@ public class AdminMessageProcessor {
 
     public String stop(int roomID, String cookie) throws IOException {
         Connection connection = Jsoup.connect("https://api.live.bilibili.com/room/v1/Room/stopLive");
-        String csrf = Methods.cookieToMap(cookie).get("bili_jct");
+        String csrf = Tools.Network.cookieToMap(cookie).get("bili_jct");
         Map<String, String> liveHead = new HashMap<>();
         liveHead.put("Host", "api.live.bilibili.com");
         liveHead.put("Accept", "application/json, text/javascript, */*; q=0.01");
@@ -688,7 +685,7 @@ public class AdminMessageProcessor {
 			.headers(liveHead)
 			.ignoreContentType(true)
 			.referrer("https://link.bilibili.com/p/center/index")
-			.cookies(Methods.cookieToMap(cookie))
+			.cookies(Tools.Network.cookieToMap(cookie))
 			.method(Connection.Method.POST)
 			.data("room_id", String.valueOf(roomID))
 			.data("csrf_token", csrf)
@@ -705,7 +702,7 @@ public class AdminMessageProcessor {
 
     public String rename(int roomID, String cookie, String newName) throws IOException {
         Connection connection = Jsoup.connect("https://api.live.bilibili.com/room/v1/Room/update");
-        String csrf = Methods.cookieToMap(cookie).get("bili_jct");
+        String csrf = Tools.Network.cookieToMap(cookie).get("bili_jct");
         Map<String, String> liveHead = new HashMap<>();
         liveHead.put("Host", "api.live.bilibili.com");
         liveHead.put("Accept", "application/json, text/javascript, */*; q=0.01");
@@ -716,7 +713,7 @@ public class AdminMessageProcessor {
 			.headers(liveHead)
 			.ignoreContentType(true)
 			.referrer("https://link.bilibili.com/p/center/index")
-			.cookies(Methods.cookieToMap(cookie))
+			.cookies(Tools.Network.cookieToMap(cookie))
 			.method(Connection.Method.POST)
 			.data("room_id", String.valueOf(roomID))
 			.data("title", newName)

@@ -25,17 +25,17 @@ public class DiceImitate {
 
 	public DiceImitate() {
 		spells = new String[]{};
-		spells = Methods.mergeArray(spells, TH06GameData.spells);
-		spells = Methods.mergeArray(spells, TH07GameData.spells);
-		spells = Methods.mergeArray(spells, TH08GameData.spells);
-		spells = Methods.mergeArray(spells, TH10GameData.spells);
-		spells = Methods.mergeArray(spells, TH11GameData.spells);
-		spells = Methods.mergeArray(spells, TH12GameData.spells);
-		spells = Methods.mergeArray(spells, TH13GameData.spells);
-		spells = Methods.mergeArray(spells, TH14GameData.spells);
-		spells = Methods.mergeArray(spells, TH15GameData.spells);
-		spells = Methods.mergeArray(spells, TH16GameData.spells);
-		spells = Methods.mergeArray(spells, TH17GameData.spells);
+		spells = Tools.ArrayTool.mergeArray(spells, TH06GameData.spells);
+		spells = Tools.ArrayTool.mergeArray(spells, TH07GameData.spells);
+		spells = Tools.ArrayTool.mergeArray(spells, TH08GameData.spells);
+		spells = Tools.ArrayTool.mergeArray(spells, TH10GameData.spells);
+		spells = Tools.ArrayTool.mergeArray(spells, TH11GameData.spells);
+		spells = Tools.ArrayTool.mergeArray(spells, TH12GameData.spells);
+		spells = Tools.ArrayTool.mergeArray(spells, TH13GameData.spells);
+		spells = Tools.ArrayTool.mergeArray(spells, TH14GameData.spells);
+		spells = Tools.ArrayTool.mergeArray(spells, TH15GameData.spells);
+		spells = Tools.ArrayTool.mergeArray(spells, TH16GameData.spells);
+		spells = Tools.ArrayTool.mergeArray(spells, TH17GameData.spells);
 		neta = new String[]{
 			"红lnb",
 			"红lnm",
@@ -55,17 +55,17 @@ public class DiceImitate {
 			//th4
 			"bad apple",
 		};
-		music = Methods.mergeArray(music, TH06GameData.musicName);
-		music = Methods.mergeArray(music, TH07GameData.musicName);
-		music = Methods.mergeArray(music, TH08GameData.musicName);
-		music = Methods.mergeArray(music, TH10GameData.musicName);
-		music = Methods.mergeArray(music, TH11GameData.musicName);
-		music = Methods.mergeArray(music, TH12GameData.musicName);
-		music = Methods.mergeArray(music, TH13GameData.musicName);
-		music = Methods.mergeArray(music, TH14GameData.musicName);
-		music = Methods.mergeArray(music, TH15GameData.musicName);
-		music = Methods.mergeArray(music, TH16GameData.musicName);
-		music = Methods.mergeArray(music, TH17GameData.musicName);
+		music = Tools.ArrayTool.mergeArray(music, TH06GameData.musicName);
+		music = Tools.ArrayTool.mergeArray(music, TH07GameData.musicName);
+		music = Tools.ArrayTool.mergeArray(music, TH08GameData.musicName);
+		music = Tools.ArrayTool.mergeArray(music, TH10GameData.musicName);
+		music = Tools.ArrayTool.mergeArray(music, TH11GameData.musicName);
+		music = Tools.ArrayTool.mergeArray(music, TH12GameData.musicName);
+		music = Tools.ArrayTool.mergeArray(music, TH13GameData.musicName);
+		music = Tools.ArrayTool.mergeArray(music, TH14GameData.musicName);
+		music = Tools.ArrayTool.mergeArray(music, TH15GameData.musicName);
+		music = Tools.ArrayTool.mergeArray(music, TH16GameData.musicName);
+		music = Tools.ArrayTool.mergeArray(music, TH17GameData.musicName);
 		name = new String[]{
 			//th2
 			"里香",
@@ -91,38 +91,38 @@ public class DiceImitate {
 			"舞",
 			"梦子",
 			"神绮"};
-		name = Methods.mergeArray(name, TH06GameData.charaName);
-		name = Methods.mergeArray(name, TH07GameData.charaName);
-		name = Methods.mergeArray(name, TH08GameData.charaName);
-		name = Methods.mergeArray(name, new String[]{
-									  //th9
-									  "梅蒂欣·梅兰可莉",
-									  "风见幽香",
-									  "小野冢小町",
-									  "四季映姬"});
-		name = Methods.mergeArray(name, TH10GameData.charaName);
-		name = Methods.mergeArray(name, TH11GameData.charaName);
-		name = Methods.mergeArray(name, TH12GameData.charaName);
-		name = Methods.mergeArray(name, new String[]{
-									  //th12.8
-									  "桑尼·米尔克",
-									  "露娜·切露德",
-									  "斯塔·萨菲雅"});
-		name = Methods.mergeArray(name, TH13GameData.charaName);
-		name = Methods.mergeArray(name, new String[]{
-									  //th13.5
-									  "秦心"});
-		name = Methods.mergeArray(name, TH14GameData.charaName);
-		name = Methods.mergeArray(name, new String[]{
-									  //th14.5
-									  "宇佐见堇子"});
-		name = Methods.mergeArray(name, TH15GameData.charaName);
-		name = Methods.mergeArray(name, new String[]{
-									  //th15.5
-									  "依神紫苑",
-									  "依神女苑"});
-		name = Methods.mergeArray(name, TH16GameData.charaName);
-		name = Methods.mergeArray(name, TH17GameData.charaName);
+		name = Tools.ArrayTool.mergeArray(name, TH06GameData.charaName);
+		name = Tools.ArrayTool.mergeArray(name, TH07GameData.charaName);
+		name = Tools.ArrayTool.mergeArray(name, TH08GameData.charaName);
+		name = Tools.ArrayTool.mergeArray(name, new String[]{
+											  //th9
+											  "梅蒂欣·梅兰可莉",
+											  "风见幽香",
+											  "小野冢小町",
+											  "四季映姬"});
+		name = Tools.ArrayTool.mergeArray(name, TH10GameData.charaName);
+		name = Tools.ArrayTool.mergeArray(name, TH11GameData.charaName);
+		name = Tools.ArrayTool.mergeArray(name, TH12GameData.charaName);
+		name = Tools.ArrayTool.mergeArray(name, new String[]{
+											  //th12.8
+											  "桑尼·米尔克",
+											  "露娜·切露德",
+											  "斯塔·萨菲雅"});
+		name = Tools.ArrayTool.mergeArray(name, TH13GameData.charaName);
+		name = Tools.ArrayTool.mergeArray(name, new String[]{
+											  //th13.5
+											  "秦心"});
+		name = Tools.ArrayTool.mergeArray(name, TH14GameData.charaName);
+		name = Tools.ArrayTool.mergeArray(name, new String[]{
+											  //th14.5
+											  "宇佐见堇子"});
+		name = Tools.ArrayTool.mergeArray(name, TH15GameData.charaName);
+		name = Tools.ArrayTool.mergeArray(name, new String[]{
+											  //th15.5
+											  "依神紫苑",
+											  "依神女苑"});
+		name = Tools.ArrayTool.mergeArray(name, TH16GameData.charaName);
+		name = Tools.ArrayTool.mergeArray(name, TH17GameData.charaName);
 
 		addArrayToSet(memory, "想起「二重黑死蝶」", "想起「粼粼水底之心伤」");
 		addArrayToSet(pachouli, "火符「火神之光」", "土&金符「翡翠巨石」");
@@ -177,7 +177,7 @@ public class DiceImitate {
                     case "diff":
                     case "difficult":
                     case "难度":
-                        Autoreply.sendMessage(fromGroup, 0, (String) Methods.rfa(plDiff));
+                        Autoreply.sendMessage(fromGroup, 0, (String) Tools.ArrayTool.rfa(plDiff));
                         break;
                     case "stage":
                     case "关卡":
@@ -194,7 +194,7 @@ public class DiceImitate {
             }
         }
 		String pname=Autoreply.instence.configManager.getNickName(fromGroup, fromQQ);
-		String md5=Methods.stringToMD5(String.valueOf(fromQQ + System.currentTimeMillis() / (24 * 60 * 60 * 1000)));
+		String md5=Tools.Hash.toMD5(String.valueOf(fromQQ + System.currentTimeMillis() / (24 * 60 * 60 * 1000)));
 		char c=md5.charAt(0);
 		switch (msg) {
 			case ".jrrp":
@@ -229,7 +229,7 @@ public class DiceImitate {
 					Autoreply.sendMessage(fromGroup, 0, String.format("%s今天宜听%s", pname, md5RanStr(fromQQ, music)));
 					return true;
 				case "grandma":
-					if (Methods.stringToMD5(String.valueOf(fromQQ + System.currentTimeMillis() / (24 * 60 * 60 * 1000))).charAt(0) == '0') {
+					if (Tools.Hash.toMD5(String.valueOf(fromQQ + System.currentTimeMillis() / (24 * 60 * 60 * 1000))).charAt(0) == '0') {
 						Autoreply.sendMessage(fromGroup, 0, String.format("%s今天宜认八云紫当奶奶", pname));
 						return true;
 					}
@@ -249,7 +249,7 @@ public class DiceImitate {
 					sss += "\n";
 					sss += String.format("%s今天宜听%s", pname, md5RanStr(fromQQ, music));
 					sss += "\n";
-					if (Methods.stringToMD5(String.valueOf(fromQQ + System.currentTimeMillis() / (24 * 60 * 60 * 1000))).charAt(0) == '0') {
+					if (Tools.Hash.toMD5(String.valueOf(fromQQ + System.currentTimeMillis() / (24 * 60 * 60 * 1000))).charAt(0) == '0') {
 						sss += String.format("%s今天宜认八云紫当奶奶", pname);
 					} else {
 						sss += String.format("%s今天宜认%s当奶奶", pname, md5RanStr(fromQQ, name));
@@ -392,90 +392,90 @@ public class DiceImitate {
             case "东方灵异传":
             case "th1":
             case "th01":
-                Autoreply.sendMessage(fromGroup, 0, (String) Methods.rfa(pl01));
+                Autoreply.sendMessage(fromGroup, 0, (String) Tools.ArrayTool.rfa(pl01));
                 break;
             case "东方封魔录":
             case "th2":
             case "th02":
-                Autoreply.sendMessage(fromGroup, 0, (String) Methods.rfa(pl02));
+                Autoreply.sendMessage(fromGroup, 0, (String) Tools.ArrayTool.rfa(pl02));
                 break;
             case "东方梦时空":
             case "th3":
             case "th03":
-                Autoreply.sendMessage(fromGroup, 0, (String) Methods.rfa(pl03));
+                Autoreply.sendMessage(fromGroup, 0, (String) Tools.ArrayTool.rfa(pl03));
                 break;
             case "东方幻想乡":
             case "th4":
             case "th04":
-                Autoreply.sendMessage(fromGroup, 0, (String) Methods.rfa(pl04));
+                Autoreply.sendMessage(fromGroup, 0, (String) Tools.ArrayTool.rfa(pl04));
                 break;
             case "东方怪绮谈":
             case "th5":
             case "th05":
-                Autoreply.sendMessage(fromGroup, 0, (String) Methods.rfa(pl05));
+                Autoreply.sendMessage(fromGroup, 0, (String) Tools.ArrayTool.rfa(pl05));
                 break;
             case "东方红魔乡":
             case "th6":
             case "th06":
             case "tEoSD":
-                Autoreply.sendMessage(fromGroup, 0, (String) Methods.rfa(TH06GameData.players));
+                Autoreply.sendMessage(fromGroup, 0, (String) Tools.ArrayTool.rfa(TH06GameData.players));
                 break;
             case "东方妖妖梦":
             case "th7":
             case "th07":
             case "PCB":
-                Autoreply.sendMessage(fromGroup, 0, (String) Methods.rfa(TH07GameData.players));
+                Autoreply.sendMessage(fromGroup, 0, (String) Tools.ArrayTool.rfa(TH07GameData.players));
                 break;
             case "东方永夜抄":
             case "th8":
             case "th08":
             case "IN":
-                Autoreply.sendMessage(fromGroup, 0, (String) Methods.rfa(TH08GameData.players));
+                Autoreply.sendMessage(fromGroup, 0, (String) Tools.ArrayTool.rfa(TH08GameData.players));
                 break;
             case "东方花映冢":
             case "th9":
             case "th09":
             case "PoFV":
-                Autoreply.sendMessage(fromGroup, 0, (String) Methods.rfa(pl09));
+                Autoreply.sendMessage(fromGroup, 0, (String) Tools.ArrayTool.rfa(pl09));
                 break;
             case "东方风神录":
             case "th10":
             case "MoF":
-                Autoreply.sendMessage(fromGroup, 0, (String) Methods.rfa(TH10GameData.players));
+                Autoreply.sendMessage(fromGroup, 0, (String) Tools.ArrayTool.rfa(TH10GameData.players));
                 break;
             case "东方地灵殿":
             case "th11":
-                Autoreply.sendMessage(fromGroup, 0, (String) Methods.rfa(TH11GameData.players));
+                Autoreply.sendMessage(fromGroup, 0, (String) Tools.ArrayTool.rfa(TH11GameData.players));
                 break;
             case "东方星莲船":
             case "th12":
             case "UFO":
-                Autoreply.sendMessage(fromGroup, 0, (String) Methods.rfa(TH12GameData.players));
+                Autoreply.sendMessage(fromGroup, 0, (String) Tools.ArrayTool.rfa(TH12GameData.players));
                 break;
             case "东方神灵庙":
             case "th13":
             case "TD":
-                Autoreply.sendMessage(fromGroup, 0, (String) Methods.rfa(TH13GameData.players));
+                Autoreply.sendMessage(fromGroup, 0, (String) Tools.ArrayTool.rfa(TH13GameData.players));
                 break;
             case "东方辉针城":
             case "th14":
             case "DDC":
-                Autoreply.sendMessage(fromGroup, 0, Methods.rfa(TH14GameData.players) + " " + Methods.rfa(TH14GameData.playerSub));
+                Autoreply.sendMessage(fromGroup, 0, Tools.ArrayTool.rfa(TH14GameData.players) + " " + Tools.ArrayTool.rfa(TH14GameData.playerSub));
                 break;
             case "东方绀珠传":
             case "th15":
             case "LoLK":
-                Autoreply.sendMessage(fromGroup, 0, (String) Methods.rfa(TH15GameData.players));
+                Autoreply.sendMessage(fromGroup, 0, (String) Tools.ArrayTool.rfa(TH15GameData.players));
                 break;
             case "东方天空璋":
             case "th16":
             case "HSiFS":
-                Autoreply.sendMessage(fromGroup, 0, Methods.rfa(TH16GameData.players) + " " + Methods.rfa(TH16GameData.playerSub));
+                Autoreply.sendMessage(fromGroup, 0, Tools.ArrayTool.rfa(TH16GameData.players) + " " + Tools.ArrayTool.rfa(TH16GameData.playerSub));
                 break;
             case "东方鬼形兽":
             case "th17":
             case "WBaWC":
-                Autoreply.sendMessage(fromGroup, 0, Methods.rfa(TH17GameData.players) + "+" + Methods.rfa(TH17GameData.playerSub));
+                Autoreply.sendMessage(fromGroup, 0, Tools.ArrayTool.rfa(TH17GameData.players) + "+" + Tools.ArrayTool.rfa(TH17GameData.playerSub));
                 break;
 
             case "东方文花帖":
@@ -515,7 +515,7 @@ public class DiceImitate {
     }
 
 	private int md5Random(long fromQQ) {
-		String md5=Methods.stringToMD5(String.valueOf(fromQQ + System.currentTimeMillis() / (24 * 60 * 60 * 1000)));
+		String md5=Tools.Hash.toMD5(String.valueOf(fromQQ + System.currentTimeMillis() / (24 * 60 * 60 * 1000)));
 		return Integer.parseInt(md5.substring(26), 16);
 	}
 

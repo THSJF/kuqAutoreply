@@ -110,7 +110,7 @@ public class MsgRunnable implements Runnable {
 			Autoreply.sendMessage(fromGroup, 0, "我以后会用你的QQ昵称称呼你");
 			return;
 		}
-		if (Methods.checkAt(fromGroup, fromQQ, msg)) {//@
+		if (Tools.CQ.checkAt(fromGroup, fromQQ, msg)) {//@
 			return;
 		}
 		if (Autoreply.instence.repeatManager.check(fromGroup, fromQQ, msg)) {// 复读

@@ -20,7 +20,7 @@ public class FileInfoManager {
         String url1 = "http://qun.qzone.qq.com/cgi-bin/group_share_list?uin=" + Autoreply.CQ.getLoginQQ() + "&groupid="
 			+ fromGroup + "&bussinessid=0&" + "r=" + (Autoreply.instence.random.nextInt() / 100000000000000L)
 			+ "&charset=utf-8&g_tk=" + Autoreply.CQ.getCsrfToken();
-        String json1 = Methods.getSourceCode(url1, Autoreply.CQ.getCookies());
+        String json1 = Tools.Network.getSourceCode(url1, Autoreply.CQ.getCookies());
         FileList fileList = new Gson().fromJson(
 			json1.substring(json1.indexOf("{"), json1.lastIndexOf("}") + 1).replace("\\", ""), FileList.class);
         // FileItem fileItem = fileList.getFileItemByName(com.meng.groupFile.getName());
@@ -28,7 +28,7 @@ public class FileInfoManager {
         String url2 = "http://qun.qzone.qq.com/cgi-bin/group_share_get_downurl?uin=" + Autoreply.CQ.getLoginQQ()
 			+ "&groupid=" + fromGroup + "&pa=" + Autoreply.instence.naiManager.encode(fileItem.filepath) + "&r="
 			+ (Autoreply.instence.random.nextInt() / 100000000000000L) + "&charset=utf-8&g_tk=" + Autoreply.CQ.getCsrfToken();
-        String json2 = Methods.getSourceCode(url2, Autoreply.CQ.getCookies());
+        String json2 = Tools.Network.getSourceCode(url2, Autoreply.CQ.getCookies());
         JsonObject jsonObject = new JsonParser()
 			.parse(json2.substring(json2.indexOf("{"), json2.lastIndexOf("}") + 1).replace("\\", ""))
 			.getAsJsonObject();

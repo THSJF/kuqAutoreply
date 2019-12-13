@@ -1,20 +1,10 @@
 package com.meng.config;
 
-import java.io.DataInputStream;
-import java.io.DataOutputStream;
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
-import java.io.OutputStreamWriter;
-import java.net.InetAddress;
-import java.net.ServerSocket;
-import java.net.Socket;
-import java.nio.charset.StandardCharsets;
-
-import com.meng.Autoreply;
-import com.meng.tools.Methods;
+import com.meng.*;
+import com.meng.tools.*;
+import java.io.*;
+import java.net.*;
+import java.nio.charset.*;
 
 public class SocketDicRunnable implements Runnable {
     Socket socket = null;
@@ -46,7 +36,7 @@ public class SocketDicRunnable implements Runnable {
                     + string.substring(0, string.indexOf(".")).replace("get", "").replace("write", "") + ".json";
             System.out.println(fileName);
             if (string.startsWith("get")) {
-                dataOutputStream.writeUTF(Methods.readFileToString(fileName));
+                dataOutputStream.writeUTF(Tools.FileTool.readString(fileName));
             } else if (string.startsWith("write")) {
                 File file = new File(fileName);
                 FileOutputStream fileOutputStream = new FileOutputStream(file);

@@ -16,7 +16,7 @@ public class DicReply {
         File dicFile = new File(Autoreply.appDirectory + "dic\\dic.json");
         Type type = new TypeToken<HashMap<String, HashSet<String>>>() {
         }.getType();
-        dic = Autoreply.gson.fromJson(Methods.readFileToString(dicFile.getAbsolutePath()), type);
+        dic = Autoreply.gson.fromJson(Tools.FileTool.readString(dicFile.getAbsolutePath()), type);
     }
 
     public boolean check(long group, long qq, String msg) {

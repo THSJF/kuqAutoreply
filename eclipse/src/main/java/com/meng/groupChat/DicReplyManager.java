@@ -22,7 +22,7 @@ public class DicReplyManager {
         }
         Type type = new TypeToken<HashMap<String, HashSet<String>>>() {
         }.getType();
-        dic = new Gson().fromJson(Methods.readFileToString(dicFile.getAbsolutePath()), type);
+        dic = new Gson().fromJson(Tools.FileTool.readString(dicFile), type);
     }
 
     public void clear() {
@@ -77,7 +77,7 @@ public class DicReplyManager {
 			}
 			Type type = new TypeToken<HashMap<String, HashSet<String>>>() {
 			}.getType();
-			dic = Autoreply.gson.fromJson(Methods.readFileToString(dicFile.getAbsolutePath()), type);
+			dic = Autoreply.gson.fromJson(Tools.FileTool.readString(dicFile), type);
 		}
 
 		public boolean checkMsg(long group, long qq, String msg) {

@@ -25,7 +25,7 @@ public class MusicManager {
 		byte[] music=new byte[needSeconeds * muiscInfo.bitsPerSample * muiscInfo.channels * muiscInfo.rate / 8];
 		readFile(music, getStartBytes(musicNum, thfmt, needSeconeds), games[game].getName());
 		WavHeader wavHeader=new WavHeader();
-		byte[] finalFile=Methods.mergeArray(wavHeader.getWavHeader(musicNum, thfmt, needSeconeds), music);
+		byte[] finalFile=Tools.ArrayTool.mergeArray(wavHeader.getWavHeader(musicNum, thfmt, needSeconeds), music);
 		final String newFileName="C://Users/Administrator/Desktop/酷Q Pro/data/record/" + System.currentTimeMillis() + ".wav";
 		try {
 			resultFile = new File(newFileName);

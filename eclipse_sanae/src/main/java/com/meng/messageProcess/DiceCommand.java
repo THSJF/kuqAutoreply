@@ -6,7 +6,7 @@ public class DiceCommand {
 
 
 	public void userCmd(long fromGroup, long fromQQ, String msg) {
-		if (Autoreply.instence.CC.getAt(msg) != -1000 && !Methods.isAtme(msg)) {
+		if (Autoreply.instence.CC.getAt(msg) != -1000 && !Tools.CQ.isAtme(msg)) {
 			return;
 		}
 		if (!msg.startsWith(".")) {
@@ -27,7 +27,7 @@ public class DiceCommand {
 	}
 
 	public void adminCmd(final long fromGroup, long fromQQ, String msg) {
-		if (Autoreply.instence.CC.getAt(msg) != -1000 && !Methods.isAtme(msg)) {
+		if (Autoreply.instence.CC.getAt(msg) != -1000 && !Tools.CQ.isAtme(msg)) {
 			return;
 		}
 		if (!msg.startsWith(".")) {

@@ -253,7 +253,7 @@ public class RitsukageDataPack {
 				return null;
 			}
 		}
-		retData = Methods.mergeArray(data, byteArray);
+		retData = Tools.ArrayTool.mergeArray(data, byteArray);
 		byte[] len=getBytes(retData.length);
 		retData[0] = len[0];
 		retData[1] = len[1];

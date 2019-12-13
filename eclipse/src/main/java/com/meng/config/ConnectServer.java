@@ -1,21 +1,19 @@
 package com.meng.config;
 
+import com.meng.*;
+import com.meng.bilibili.live.*;
+import com.meng.config.javabeans.*;
+import com.meng.dice.*;
+import com.meng.picEdit.*;
+import com.meng.tools.*;
+import com.sobte.cqp.jcq.entity.*;
 import java.io.*;
 import java.net.*;
 import java.nio.*;
+import java.util.*;
 import org.java_websocket.*;
 import org.java_websocket.handshake.*;
 import org.java_websocket.server.*;
-import com.meng.*;
-import com.meng.config.javabeans.*;
-import com.meng.dice.DiceImitate;
-import com.google.gson.*;
-import java.util.*;
-import com.meng.bilibili.live.*;
-import com.meng.tools.*;
-import com.sobte.cqp.jcq.entity.*;
-import com.meng.picEdit.*;
-import com.meng.ocr.sign.*;
 
 public class ConnectServer extends WebSocketServer {
 
@@ -124,7 +122,7 @@ public class ConnectServer extends WebSocketServer {
 				//dp.write(
 				break;
 			case RitsukageDataPack._15groupBan:
-				Methods.ban(recievedDataPack.readNum(1), recievedDataPack.readNum(2), (int)recievedDataPack.readNum(3));
+				Tools.CQ.ban(recievedDataPack.readNum(1), recievedDataPack.readNum(2), (int)recievedDataPack.readNum(3));
 				dataToSend = RitsukageDataPack.encode((short)0, recievedDataPack.getTimeStamp());
 				dataToSend.write(1, "禁言成功");
 				break;
@@ -194,7 +192,7 @@ public class ConnectServer extends WebSocketServer {
 				break;
 			case RitsukageDataPack._24MD5Random:
 				dataToSend = RitsukageDataPack.encode(RitsukageDataPack._25returnMD5Random, recievedDataPack.getTimeStamp());
-				String md5=Methods.stringToMD5(String.valueOf(recievedDataPack.readNum(1) + System.currentTimeMillis() / (24 * 60 * 60 * 1000)));
+				String md5=Tools.Hash.toMD5(String.valueOf(recievedDataPack.readNum(1) + System.currentTimeMillis() / (24 * 60 * 60 * 1000)));
 				char c=md5.charAt(0);
 				if (c == '0') {
 					dataToSend.write(1, 9961);
@@ -220,7 +218,7 @@ public class ConnectServer extends WebSocketServer {
 				break;
 			case RitsukageDataPack._30MD5grandma:
 				dataToSend = RitsukageDataPack.encode(RitsukageDataPack._31returnMD5grandma, recievedDataPack.getTimeStamp());
-				if (Methods.stringToMD5(String.valueOf(recievedDataPack.readNum(1) + System.currentTimeMillis() / (24 * 60 * 60 * 1000))).charAt(0) == '0') {
+				if (Tools.Hash.toMD5(String.valueOf(recievedDataPack.readNum(1) + System.currentTimeMillis() / (24 * 60 * 60 * 1000))).charAt(0) == '0') {
 					dataToSend.write(1, "八云紫");
 				} else {
 					dataToSend.write(1, Autoreply.instence.diceImitate.md5RanStr(recievedDataPack.readNum(1), DiceImitate.name));

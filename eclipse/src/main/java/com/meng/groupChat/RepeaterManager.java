@@ -77,7 +77,7 @@ public class RepeaterManager {
 							if (Autoreply.instence.random.nextInt() % banCount == 0) {
 								int time = Autoreply.instence.random.nextInt(60) + 1;
 								banCount = 6;
-								if (Methods.ban(fromGroup, fromQQ, time)) {
+								if (Tools.CQ.ban(fromGroup, fromQQ, time)) {
 									Autoreply.sendMessage(0, fromQQ, "你从“群复读轮盘”中获得了" + time + "秒禁言套餐");
 								}
 							}
@@ -86,7 +86,7 @@ public class RepeaterManager {
 					case 2:
 						if (lastMessageRecieved.equals(msg) || isPicMsgRepeat(lastMessageRecieved, msg, simi)) {
 							int time = Autoreply.instence.random.nextInt(60) + 1;
-							if (Methods.ban(fromGroup, fromQQ, time)) {
+							if (Tools.CQ.ban(fromGroup, fromQQ, time)) {
 								Autoreply.sendMessage(0, fromQQ, "你因复读获得了" + time + "秒禁言套餐");
 							}
 						}

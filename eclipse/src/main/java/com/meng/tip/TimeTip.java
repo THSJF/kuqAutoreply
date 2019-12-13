@@ -1,11 +1,10 @@
 package com.meng.tip;
 
-import java.io.File;
-import java.util.Calendar;
-
-import com.meng.Autoreply;
-import com.meng.config.javabeans.GroupConfig;
-import com.meng.tools.Methods;
+import com.meng.*;
+import com.meng.config.javabeans.*;
+import com.meng.tools.*;
+import java.io.*;
+import java.util.*;
 
 public class TimeTip implements Runnable {
     private long groupYuTang = 617745343L;
@@ -111,7 +110,7 @@ public class TimeTip implements Runnable {
     public boolean check(long fromGroup, long fromQQ) {
         if (!tipedYYS && fromGroup == groupYuTang && fromQQ == YYS) {
             String[] strings = new String[]{"想吃YYS", "想食YYS", "想上YYS", Autoreply.instence.CC.at(1418780411L) + "老婆"};
-            Autoreply.sendMessage(groupYuTang, 0, (String) Methods.rfa(strings));
+            Autoreply.sendMessage(groupYuTang, 0, (String) Tools.ArrayTool.rfa(strings));
             tipedYYS = true;
             return true;
         }

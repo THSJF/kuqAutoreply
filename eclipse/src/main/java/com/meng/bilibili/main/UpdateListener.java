@@ -35,11 +35,11 @@ public class UpdateListener implements Runnable {
                     NewVideoBean.Data.Vlist vlist = null;
                     NewArticleBean.Data.Articles articles = null;
                     try {
-                        vlist = gson.fromJson(Methods.getSourceCode("https://space.bilibili.com/ajax/member/getSubmitVideos?mid=" + updater.bid + "&page=1&pagesize=1").replace("\"3\":", "\"n3\":").replace("\"4\":", "\"n4\":"), NewVideoBean.class).data.vlist.get(0);
+                        vlist = gson.fromJson(Tools.Network.getSourceCode("https://space.bilibili.com/ajax/member/getSubmitVideos?mid=" + updater.bid + "&page=1&pagesize=1").replace("\"3\":", "\"n3\":").replace("\"4\":", "\"n4\":"), NewVideoBean.class).data.vlist.get(0);
                     } catch (Exception e) {
                     }
                     try {
-                        articles = gson.fromJson(Methods.getSourceCode("http://api.bilibili.com/x/space/article?mid=" + updater.bid + "&pn=1&ps=1&sort=publish_time&jsonp=jsonp"), NewArticleBean.class).data.articles.get(0);
+                        articles = gson.fromJson(Tools.Network.getSourceCode("http://api.bilibili.com/x/space/article?mid=" + updater.bid + "&pn=1&ps=1&sort=publish_time&jsonp=jsonp"), NewArticleBean.class).data.articles.get(0);
                     } catch (Exception e) {
                     }
                     if (articles != null) {

@@ -101,7 +101,7 @@ public class GroupMsgPart2Runnable implements Runnable {
             sendMessage(fromGroup, fromQQ, "查询结果：" + Autoreply.instence.CC.at(fromQQ));
             return true;
 		}
-        if (Methods.checkAt(fromGroup, fromQQ, msg)) {//@
+        if (Tools.CQ.checkAt(fromGroup, fromQQ, msg)) {//@
             return true;
 		}
         GroupConfig groupConfig = Autoreply.instence.configManager.getGroupConfig(fromGroup);

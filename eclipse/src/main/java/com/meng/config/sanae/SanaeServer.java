@@ -45,7 +45,7 @@ public class SanaeServer extends WebSocketServer {
 				break;
 			case SanaeDataPack._5getOverPersent:
 				sdp = SanaeDataPack.encode(SanaeDataPack._6retOverPersent, rsdp);
-				String md5=Methods.stringToMD5(String.valueOf(rsdp.readLong() + System.currentTimeMillis() / (24 * 60 * 60 * 1000)));
+				String md5=Tools.Hash.toMD5(String.valueOf(rsdp.readLong() + System.currentTimeMillis() / (24 * 60 * 60 * 1000)));
 				char c=md5.charAt(0);
 				if (c == '0') {
 					sdp.write(9961);
@@ -76,7 +76,7 @@ public class SanaeServer extends WebSocketServer {
 			case SanaeDataPack._28getSeqContent:
 				sdp = SanaeDataPack.encode(SanaeDataPack._29retSeqContent, rsdp);
 				File jsonFile = new File(Autoreply.appDirectory + "seq.json");
-				sdp.write(Methods.readFileToString(jsonFile.getAbsolutePath()));
+				sdp.write(Tools.FileTool.readString(jsonFile.getAbsolutePath()));
 				break;
 		}
 		if (sdp != null) {

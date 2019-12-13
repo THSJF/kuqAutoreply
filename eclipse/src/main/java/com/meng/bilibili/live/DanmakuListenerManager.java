@@ -22,7 +22,7 @@ public class DanmakuListenerManager {
         try {
             Type token = new TypeToken<HashSet<String>>() {
 			  }.getType();
-            motherSet = new Gson().fromJson(Methods.readFileToString(notherMapFile.getAbsolutePath()), token);
+            motherSet = new Gson().fromJson(Tools.FileTool.readString(notherMapFile), token);
 		  } catch (Exception e) {
             e.printStackTrace();
 		  }

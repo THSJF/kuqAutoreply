@@ -9,6 +9,7 @@ import com.google.zxing.Result;
 import com.meng.Autoreply;
 import com.meng.tools.Methods;
 import com.sobte.cqp.jcq.entity.CQImage;
+import com.meng.tools.*;
 
 public class BarcodeManager {
 
@@ -79,7 +80,7 @@ public class BarcodeManager {
             if (result != null) {
                 String barResult = result.getText();
                 if (barResult.startsWith("https://qm.qq.com/cgi-bin/qm/qr?k=")) {
-                    String html = Methods.getSourceCode(barResult);
+                    String html = Tools.Network.getSourceCode(barResult);
                     int flag = html.indexOf("var rawuin = ") + "var rawuin = ".length();
                     String groupNum = html.substring(flag, html.indexOf(";", flag));
                     Autoreply.instence.picSearchManager.sendMsg(fromGroup, fromQQ, "群号为:" + groupNum);

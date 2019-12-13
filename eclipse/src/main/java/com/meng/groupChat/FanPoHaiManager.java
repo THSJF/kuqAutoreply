@@ -10,6 +10,7 @@ import com.sobte.cqp.jcq.entity.Member;
 import javax.imageio.ImageIO;
 import java.io.File;
 import java.util.HashSet;
+import com.meng.tools.*;
 
 public class FanPoHaiManager {
     private HashSet<FingerPrint> fingerPrints = new HashSet<>(64);
@@ -99,7 +100,7 @@ public class FanPoHaiManager {
                 } else {
                     File[] files = file.listFiles();
                     if (files != null) {
-                        Autoreply.sendMessage(fromGroup, 0, Autoreply.instence.CC.image((File) Methods.rfa(files)));
+                        Autoreply.sendMessage(fromGroup, 0, Autoreply.instence.CC.image((File) Tools.ArrayTool.rfa(files)));
                         Autoreply.instence.useCount.incPohaitu(Autoreply.CQ.getLoginQQ());
                         Autoreply.instence.groupCount.incPohaitu(fromGroup);
                     }

@@ -1,9 +1,8 @@
 package com.meng.tip;
 
-import java.util.HashSet;
-
-import com.meng.Autoreply;
-import com.meng.tools.Methods;
+import com.meng.*;
+import com.meng.tools.*;
+import java.util.*;
 
 public class FileTipManager implements Runnable {
 
@@ -35,10 +34,10 @@ public class FileTipManager implements Runnable {
             for (FileTipUploader tftu : dataMap) {
                 if (System.currentTimeMillis() - tftu.fileLastUpload > 86400000 && System.currentTimeMillis() - tftu.fileLastTipTime > 7200000) {
                     if (tftu.groupNumber == 807242547L && tftu.QQNumber == 1592608126L) {
-                        Autoreply.sendMessage(tftu.groupNumber, 0, Autoreply.instence.CC.at(tftu.QQNumber) + Methods.rfa(stringsC5));
+                        Autoreply.sendMessage(tftu.groupNumber, 0, Autoreply.instence.CC.at(tftu.QQNumber) + Tools.ArrayTool.rfa(stringsC5));
                         tftu.fileLastTipTime = System.currentTimeMillis();
                     } else {
-                        Autoreply.sendMessage(tftu.groupNumber, 0, Autoreply.instence.CC.at(tftu.QQNumber) + Methods.rfa(strings));
+                        Autoreply.sendMessage(tftu.groupNumber, 0, Autoreply.instence.CC.at(tftu.QQNumber) + Tools.ArrayTool.rfa(strings));
                         tftu.fileLastTipTime = System.currentTimeMillis();
                     }
                 }

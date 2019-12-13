@@ -169,42 +169,42 @@ public class ConfigManager extends WebSocketClient {
 
 	public String getOverSpell(long fromQQ) {
 		send(SanaeDataPack.encode(SanaeDataPack._3getOverSpell).write(fromQQ));
-		return BitConverter.toString(getTaskResult(SanaeDataPack._4retOverSpell).data);
+		return Tools.BitConverter.toString(getTaskResult(SanaeDataPack._4retOverSpell).data);
 	}
 
 	public int getOverPersent(long fromQQ) {
 		send(SanaeDataPack.encode(SanaeDataPack._5getOverPersent).write(fromQQ));
-		return BitConverter.toInt(getTaskResult(SanaeDataPack._6retOverPersent).data);
+		return Tools.BitConverter.toInt(getTaskResult(SanaeDataPack._6retOverPersent).data);
 	}
 
 	public String getGrandma(long fromQQ) {
 		send(SanaeDataPack.encode(SanaeDataPack._7getGrandma).write(fromQQ));
-		return BitConverter.toString(getTaskResult(SanaeDataPack._8retGrandma).data);
+		return Tools.BitConverter.toString(getTaskResult(SanaeDataPack._8retGrandma).data);
 	}
 
 	public String getMusicName(long fromQQ) {
 		send(SanaeDataPack.encode(SanaeDataPack._9getMusicName).write(fromQQ));
-		return BitConverter.toString(getTaskResult(SanaeDataPack._10retMusicName).data);
+		return Tools.BitConverter.toString(getTaskResult(SanaeDataPack._10retMusicName).data);
 	}
 
 	public String getSpells(long fromQQ) {
 		send(SanaeDataPack.encode(SanaeDataPack._11getGotSpells).write(fromQQ));
-		return BitConverter.toString(getTaskResult(SanaeDataPack._12retGotSpells).data);
+		return Tools.BitConverter.toString(getTaskResult(SanaeDataPack._12retGotSpells).data);
 	}
 
 	public String getNeta(long fromQQ) {
 		send(SanaeDataPack.encode(SanaeDataPack._13getNeta).write(fromQQ));
-		return BitConverter.toString(getTaskResult(SanaeDataPack._14retNeta).data);
+		return Tools.BitConverter.toString(getTaskResult(SanaeDataPack._14retNeta).data);
 	}
 
 	public String getSeq() {
 		send(SanaeDataPack.encode(SanaeDataPack._28getSeqContent));
-		return BitConverter.toString(getTaskResult(SanaeDataPack._29retSeqContent).data);
+		return Tools.BitConverter.toString(getTaskResult(SanaeDataPack._29retSeqContent).data);
 	}
 
 	public String getLiveList() {
 		send(SanaeDataPack.encode(SanaeDataPack._31getLiveList));
-		return BitConverter.toString(getTaskResult(SanaeDataPack._32retLiveList).data);
+		return Tools.BitConverter.toString(getTaskResult(SanaeDataPack._32retLiveList).data);
 	}
 
 	private TaskResult getTaskResult(int opCode) {

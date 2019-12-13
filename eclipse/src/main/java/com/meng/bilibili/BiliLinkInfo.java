@@ -3,8 +3,6 @@ package com.meng.bilibili;
 import com.google.gson.*;
 import com.meng.*;
 import com.meng.tools.*;
-import com.meng.tools.Base64;
-
 import java.util.*;
 
 public class BiliLinkInfo {
@@ -30,7 +28,7 @@ public class BiliLinkInfo {
         if (msg.startsWith("FromUriOpen@bilibili://")) {
             String subedString = null;
             try {
-                subedString = new String(Base64.decode(msg.substring(23)));
+                subedString = new String(Tools.Base64.decode(msg.substring(23)));
             } catch (Exception e) {
                 e.printStackTrace();
             }
@@ -56,7 +54,7 @@ public class BiliLinkInfo {
         if (msg.startsWith("FromUriOpen@bilibili://")) {
             String subedString = null;
             try {
-                subedString = new String(Base64.decode(msg.substring(23)));
+                subedString = new String(Tools.Base64.decode(msg.substring(23)));
             } catch (Exception e) {
                 e.printStackTrace();
             }
@@ -106,9 +104,9 @@ public class BiliLinkInfo {
     }
 
     private String processVideo(String id) {
-        VideoInfoBean videoInfoBean = new Gson().fromJson(Methods.getSourceCode("http://api.bilibili.com/archive_stat/stat?aid=" + id + "&type=jsonp"), VideoInfoBean.class);
+        VideoInfoBean videoInfoBean = new Gson().fromJson(Tools.Network.getSourceCode("http://api.bilibili.com/archive_stat/stat?aid=" + id + "&type=jsonp"), VideoInfoBean.class);
         String vidInf = videoInfoBean.toString();
-        String html = Methods.getSourceCode("https://www.bilibili.com/video/av" + id);
+        String html = Tools.Network.getSourceCode("https://www.bilibili.com/video/av" + id);
         int index = html.indexOf("\"pubdate\":") + "\"pubdate\":".length();
         int end = html.indexOf(",\"ctime\"", index);
         long stamp = Long.parseLong(html.substring(index, end));
@@ -122,13 +120,13 @@ public class BiliLinkInfo {
     }
 
     private String processArtical(String id) {
-        return new Gson().fromJson(Methods.getSourceCode("https://api.bilibili.com/x/article/viewinfo?id=" + id + "&mobi_app=pc&jsonp=jsonp"), ArticleInfoBean.class).toString();
+        return new Gson().fromJson(Tools.Network.getSourceCode("https://api.bilibili.com/x/article/viewinfo?id=" + id + "&mobi_app=pc&jsonp=jsonp"), ArticleInfoBean.class).toString();
     }
 
     private String processLive(String id) {
-        String json = Methods.getSourceCode("https://api.live.bilibili.com/live_user/v1/UserInfo/get_anchor_in_room?roomid=" + id);
+        String json = Tools.Network.getSourceCode("https://api.live.bilibili.com/live_user/v1/UserInfo/get_anchor_in_room?roomid=" + id);
         String userName = new JsonParser().parse(json).getAsJsonObject().get("data").getAsJsonObject().get("info").getAsJsonObject().get("uname").getAsString();
-        String html = Methods.getSourceCode("https://live.bilibili.com/" + id);
+        String html = Tools.Network.getSourceCode("https://live.bilibili.com/" + id);
         String jsonInHtml = html.substring(html.indexOf("{\"roomInitRes\":"), html.lastIndexOf("}") + 1);
         JsonObject data = new JsonParser().parse(jsonInHtml).getAsJsonObject().get("baseInfoRes").getAsJsonObject().get("data").getAsJsonObject();
         return "房间号:" + id + "\n主播:" + userName + "\n房间标题:" + data.get("title").getAsString() +
