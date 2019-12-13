@@ -1,8 +1,7 @@
 package com.meng.ocr.sign;
 
-import java.util.Random;
 import com.meng.tools.*;
-import java.io.*;
+import java.util.*;
 
 public class YoutuSign {
 
@@ -11,13 +10,11 @@ public class YoutuSign {
 		return appSignBase(appId, secret_id, secret_key, expired, "2127322016", null, mySign);
 	}
 
-	private static int appSignBase(String appId, String secret_id, String secret_key, long expired, String userid,
-								   String url, StringBuffer mySign) {
+	private static int appSignBase(String appId, String secret_id, String secret_key, long expired, String userid, String url, StringBuffer mySign) {
 
 		if (empty(secret_id) || empty(secret_key)) {
 			return -1;
 		}
-
 		String puserid = "";
 		if (!empty(userid)) {
 			if (userid.length() > 64) {
@@ -25,7 +22,6 @@ public class YoutuSign {
 			}
 			puserid = userid;
 		}
-
 		long now = System.currentTimeMillis() / 1000;
 		int rdm = Math.abs(new Random().nextInt());
 		String plain_text = "a=" + appId + "&k=" + secret_id + "&e=" + expired + "&t=" + now + "&r=" + rdm + "&u="
@@ -36,13 +32,7 @@ public class YoutuSign {
 		byte[] all = new byte[bin.length + plain_text.getBytes().length];
 		System.arraycopy(bin, 0, all, 0, bin.length);
 		System.arraycopy(plain_text.getBytes(), 0, all, bin.length, plain_text.getBytes().length);
-
-		try {
-			mySign.append(Base64.encode(all));
-		} catch (UnsupportedEncodingException e) {
-			
-		}
-
+		mySign.append(Tools.Base64.encode(all));
 		return 0;
 	}
 

@@ -118,7 +118,7 @@ public class Youtu {
             byte data[] = new byte[(int) imageFile.length()]; // 创建合适文件大小的数组
             in.read(data); // 读取文件中的内容到b[]数组
             in.close();
-            base64.append(com.meng.tools.Base64.encode(data));
+            base64.append(Tools.Base64.encode(data));
 
         } else {
             throw new FileNotFoundException(filePath + " not exist");
