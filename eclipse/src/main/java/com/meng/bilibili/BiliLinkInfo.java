@@ -172,7 +172,7 @@ public class BiliLinkInfo {
 
     public static String encodeBilibiliURL(long id, boolean av) {
         try {
-            return "FromUriOpen@bilibili://" + Base64.encode(((av ? "av:" : "cv") + id).getBytes());
+            return "FromUriOpen@bilibili://" +Tools.Base64.encode(((av ? "av:" : "cv") + id).getBytes());
         } catch (Exception e) {
             e.printStackTrace();
         }
