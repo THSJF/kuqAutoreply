@@ -21,20 +21,20 @@ import org.java_websocket.exceptions.*;
 import org.java_websocket.handshake.*;
 
 public class ConfigManager extends WebSocketClient {
-    public ConfigJavaBean configJavaBean = new ConfigJavaBean();
+    public SeijiaConfigJavaBean SeijiaConfig = new SeijiaConfigJavaBean();
 
 	private ConcurrentHashMap<Integer,TaskResult> resultMap=new ConcurrentHashMap<>();
-	private HashMap<Long,String> welcomeMap=new HashMap<>();
-	private File welcomeJsonFile;
+	private SanaeConfigJavaBean SanaeConfig=new SanaeConfigJavaBean();
+	private File SanaeConfigFile;
 	public ConfigManager(URI uri) {
 		super(uri);
-		Type type = new TypeToken<HashMap<Long,String>>() {
+		Type type = new TypeToken<SanaeConfigJavaBean>() {
 		}.getType();
-		welcomeJsonFile = new File(Autoreply.appDirectory + "/properties/welcome.json");
-		if (!welcomeJsonFile.exists()) {
+		SanaeConfigFile = new File(Autoreply.appDirectory + "/SanaeConfig.json");
+		if (!SanaeConfigFile.exists()) {
 			saveWelcomeConfig();
 		}
-        welcomeMap = Autoreply.gson.fromJson(Tools.FileTool.readString(welcomeJsonFile), type);
+        SanaeConfig = Autoreply.gson.fromJson(Tools.FileTool.readString(SanaeConfigFile), type);
 	}
 
 	@Override
@@ -72,9 +72,9 @@ public class ConfigManager extends WebSocketClient {
 		SanaeDataPack dataToSend=null;
 		switch (dataRec.getOpCode()) {
 			case SanaeDataPack._2retConfig:
-				Type type = new TypeToken<ConfigJavaBean>() {
+				Type type = new TypeToken<SeijiaConfigJavaBean>() {
 				}.getType();
-				configJavaBean = Autoreply.gson.fromJson(dataRec.readString(), type);
+				SeijiaConfig = Autoreply.gson.fromJson(dataRec.readString(), type);
 				Autoreply.instence.threadPool.execute(new Runnable(){
 
 						@Override
@@ -218,15 +218,15 @@ public class ConfigManager extends WebSocketClient {
 	}
 
 	public void setWelcome(long group, String welcome) {
-		welcomeMap.put(group, welcome);
+		SanaeConfig.welcomeMap.put(group, welcome);
 		saveWelcomeConfig();
 	}
 
 	public String getWelcome(long group) {
-		if (welcomeMap.get(group) == null) {
+		if (SanaeConfig.welcomeMap.get(group) == null) {
 			return null;
 		}
-		return welcomeMap.get(group);
+		return SanaeConfig.welcomeMap.get(group);
 	}
 
 	private TaskResult getTaskResult(int opCode) {
@@ -243,17 +243,17 @@ public class ConfigManager extends WebSocketClient {
 
 	public void setNickName(long qq, String nickname) {
 		if (nickname != null) {
-			configJavaBean.nicknameMap.put(qq, nickname);
+			SeijiaConfig.nicknameMap.put(qq, nickname);
 			send(SanaeDataPack.encode(SanaeDataPack._25setNick).write(qq).write(nickname));
 		} else {
-			configJavaBean.nicknameMap.remove(qq);
+			SeijiaConfig.nicknameMap.remove(qq);
 			send(SanaeDataPack.encode(SanaeDataPack._25setNick).write(qq));
 		}
 	}
 
 	public String getNickName(long qq) {
 		String nick=null;
-		nick = configJavaBean.nicknameMap.get(qq);
+		nick = SeijiaConfig.nicknameMap.get(qq);
 		if (nick == null) {
 			PersonInfo pi=getPersonInfoFromQQ(qq);
 			if (pi == null) {
@@ -267,7 +267,7 @@ public class ConfigManager extends WebSocketClient {
 
 	public String getNickName(long group, long qq) {
 		String nick=null;
-		nick = configJavaBean.nicknameMap.get(qq);
+		nick = SeijiaConfig.nicknameMap.get(qq);
 		if (nick == null) {
 			PersonInfo pi=getPersonInfoFromQQ(qq);
 			if (pi == null) {
@@ -280,27 +280,27 @@ public class ConfigManager extends WebSocketClient {
 	}
 
     public boolean isMaster(long fromQQ) {
-        return configJavaBean.masterList.contains(fromQQ);
+        return SeijiaConfig.masterList.contains(fromQQ);
     }
 
     public boolean isAdmin(long fromQQ) {
-        return configJavaBean.adminList.contains(fromQQ) || configJavaBean.masterList.contains(fromQQ);
+        return SeijiaConfig.adminList.contains(fromQQ) || SeijiaConfig.masterList.contains(fromQQ);
     }
 
     public boolean isNotReplyQQ(long qq) {
-        return configJavaBean.QQNotReply.contains(qq) || configJavaBean.blackListQQ.contains(qq);
+        return SeijiaConfig.QQNotReply.contains(qq) || SeijiaConfig.blackListQQ.contains(qq);
     }
 
     public boolean isBlackQQ(long qq) {
-        return configJavaBean.blackListQQ.contains(qq);
+        return SeijiaConfig.blackListQQ.contains(qq);
     }
 
     public boolean isBlackGroup(long qq) {
-        return configJavaBean.blackListGroup.contains(qq);
+        return SeijiaConfig.blackListGroup.contains(qq);
     }
 
     public boolean isNotReplyWord(String word) {
-        for (String nrw : configJavaBean.wordNotReply) {
+        for (String nrw : SeijiaConfig.wordNotReply) {
             if (word.contains(nrw)) {
                 return true;
             }
@@ -309,7 +309,7 @@ public class ConfigManager extends WebSocketClient {
     }
 
     public PersonInfo getPersonInfoFromQQ(long qq) {
-        for (PersonInfo pi : configJavaBean.personInfo) {
+        for (PersonInfo pi : SeijiaConfig.personInfo) {
             if (pi.qq == qq) {
                 return pi;
             }
@@ -318,7 +318,7 @@ public class ConfigManager extends WebSocketClient {
     }
 
     public PersonInfo getPersonInfoFromName(String name) {
-        for (PersonInfo pi : configJavaBean.personInfo) {
+        for (PersonInfo pi : SeijiaConfig.personInfo) {
             if (pi.name.equals(name)) {
                 return pi;
             }
@@ -327,7 +327,7 @@ public class ConfigManager extends WebSocketClient {
     }
 
     public PersonInfo getPersonInfoFromBid(long bid) {
-        for (PersonInfo pi : configJavaBean.personInfo) {
+        for (PersonInfo pi : SeijiaConfig.personInfo) {
             if (pi.bid == bid) {
                 return pi;
             }
@@ -336,7 +336,7 @@ public class ConfigManager extends WebSocketClient {
     }
 
 	public PersonInfo getPersonInfoFromLiveId(long lid) {
-        for (PersonInfo pi : configJavaBean.personInfo) {
+        for (PersonInfo pi : SeijiaConfig.personInfo) {
             if (pi.bliveRoom == lid) {
                 return pi;
 			}
@@ -345,8 +345,8 @@ public class ConfigManager extends WebSocketClient {
 	}
 
     public void addBlack(long group, final long qq) {
-        configJavaBean.blackListQQ.add(qq);
-        configJavaBean.blackListGroup.add(group);
+        SeijiaConfig.blackListQQ.add(qq);
+        SeijiaConfig.blackListGroup.add(group);
 		send(SanaeDataPack.encode(SanaeDataPack._26addBlack).write(group).write(qq));
         Autoreply.sendMessage(Autoreply.mainGroup, 0, "已将用户" + qq + "加入黑名单");
         Autoreply.sendMessage(Autoreply.mainGroup, 0, "已将群" + group + "加入黑名单");
@@ -365,9 +365,9 @@ public class ConfigManager extends WebSocketClient {
 
 	public void saveWelcomeConfig() {
         try {
-            FileOutputStream fos = new FileOutputStream(welcomeJsonFile);
+            FileOutputStream fos = new FileOutputStream(SanaeConfigFile);
             OutputStreamWriter writer = new OutputStreamWriter(fos, StandardCharsets.UTF_8);
-            writer.write(Autoreply.gson.toJson(welcomeMap));
+            writer.write(Autoreply.gson.toJson(SanaeConfig));
             writer.flush();
             fos.close();
         } catch (IOException e) {

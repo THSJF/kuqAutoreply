@@ -70,7 +70,7 @@ public class AdminMessageProcessor {
                     long qq = qqs.get(i);
                     sb.append(qq).append(" ");
 				}
-                Autoreply.instence.configManager.configJavaBean.QQNotReply.addAll(qqs);
+                Autoreply.instence.configManager.SeijiaConfig.QQNotReply.addAll(qqs);
                 Autoreply.sendMessage(fromGroup, fromQQ, sb.toString());
                 return true;
 			}
@@ -82,7 +82,7 @@ public class AdminMessageProcessor {
                     long qq = qqs.get(i);
                     sb.append(qq).append(" ");
 				}
-                Autoreply.instence.configManager.configJavaBean.blackListQQ.addAll(qqs);
+                Autoreply.instence.configManager.SeijiaConfig.blackListQQ.addAll(qqs);
                 Autoreply.sendMessage(fromGroup, fromQQ, sb.toString());
                 return true;
 			}
@@ -93,7 +93,7 @@ public class AdminMessageProcessor {
                 int le = groups.length;
                 for (int i = 1; i < le; ++i) {
                     sb.append(groups[i]).append(" ");
-                    Autoreply.instence.configManager.configJavaBean.blackListGroup.add(Long.parseLong(groups[i]));
+                    Autoreply.instence.configManager.SeijiaConfig.blackListGroup.add(Long.parseLong(groups[i]));
 				}
                 Autoreply.sendMessage(fromGroup, fromQQ, sb.toString());
                 return true;
