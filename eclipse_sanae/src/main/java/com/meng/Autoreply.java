@@ -148,6 +148,9 @@ public class Autoreply extends JcqAppAbstract implements ICQVer, IMsg, IRequest 
 		//	if (fromGroup != 807242547L){
 		//		return MSG_IGNORE;
 		//}
+        if (adminMessageProcessor.check(fromGroup, fromQQ, msg)) {
+            return MSG_IGNORE;
+        }
 		if (Autoreply.instence.SeijiaInThis.contains(fromGroup)) {
 			return MSG_IGNORE;
 		}
@@ -155,9 +158,6 @@ public class Autoreply extends JcqAppAbstract implements ICQVer, IMsg, IRequest 
 		if (messageTooManyManager.checkMsgTooMany(fromGroup, fromQQ, msg)) {
 			return MSG_IGNORE;
 		}
-        if (adminMessageProcessor.check(fromGroup, fromQQ, msg)) {
-            return MSG_IGNORE;
-        }
         if (configManager.isNotReplyQQ(fromQQ)) {
             return MSG_IGNORE;
         }
