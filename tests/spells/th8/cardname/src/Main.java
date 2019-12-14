@@ -162,7 +162,7 @@ public class Main {
 			.addSpell("「蓬莱的树海」", 7)
 
 			.setMaster("藤原妹红")
-			.addSpell("「不死鸟重生」")
+			.addSpell("「不死鸟重生」", 7)
 
 			.setMaster("博丽灵梦")
 			.addSpell("「梦想天生」", 7)
