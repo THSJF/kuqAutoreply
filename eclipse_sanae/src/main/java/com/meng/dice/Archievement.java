@@ -15,13 +15,13 @@ public class Archievement {
 	public static final int judgeOr=1;
 	public static final int judgeNameContains=2;
 
-	public Archievement(String name, String describe, int archNum, int faith, String... spells) {
+	public Archievement(String name, String describe, int archNum, int faith, SpellCard... spells) {
 		this.name = name;
 		this.faith = faith;
 		this.archNum = archNum;
 		this.describe = describe;
-		for (String s:spells) {
-			spellsNeed.add(Autoreply.instence.spellCollect.getSpellCard(s));
+		for (SpellCard s:spells) {
+			spellsNeed.add(s);
 		}
 	}
 

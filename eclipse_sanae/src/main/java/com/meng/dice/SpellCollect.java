@@ -35,20 +35,20 @@ public class SpellCollect {
         }.getType();
         archiMap = Autoreply.gson.fromJson(Tools.FileTool.readString(Autoreply.appDirectory + "/properties/archievement.json"), type2);
 
-		archList.add(new Archievement("恶魔领地", "收集东方红魔乡全部符卡", ArchievementBean.th6All, TH06GameData.spells.length, TH06GameData.spells));
-		archList.add(new Archievement("完美樱花", "收集东方妖妖梦全部符卡",  ArchievementBean.th7All, TH07GameData.spells.length, TH07GameData.spells));
-		archList.add(new Archievement("永恒之夜", "收集东方永夜抄全部符卡",  ArchievementBean.th8All, TH08GameData.spells.length, TH08GameData.spells));
-		archList.add(new Archievement("信仰之山", "收集东方风神录全部符卡",  ArchievementBean.th10All, TH10GameData.spells.length, TH10GameData.spells));
-		archList.add(new Archievement("地底之灵", "收集东方地灵殿全部符卡",  ArchievementBean.th11All, TH11GameData.spells.length, TH11GameData.spells));
-		archList.add(new Archievement("未知物体", "收集东方星莲船全部符卡",  ArchievementBean.th12All, TH12GameData.spells.length, TH12GameData.spells));
-		archList.add(new Archievement("十个欲望", "收集东方神灵庙全部符卡",  ArchievementBean.th13All, TH13GameData.spells.length, TH13GameData.spells));
-		archList.add(new Archievement("两个选择", "收集东方辉针城全部符卡",  ArchievementBean.th14All, TH14GameData.spells.length, TH14GameData.spells));
-		archList.add(new Archievement("疯狂国度", "收集东方绀珠传全部符卡",  ArchievementBean.th15All, TH15GameData.spells.length, TH15GameData.spells));
-		archList.add(new Archievement("四季之星", "收集东方天空璋全部符卡",  ArchievementBean.th16All, TH16GameData.spells.length, TH16GameData.spells));
-		archList.add(new Archievement("狡猾之兽", "收集东方鬼形兽全部符卡",  ArchievementBean.th17All, TH17GameData.spells.length, TH17GameData.spells));
-		archList.add(new Archievement("纯化的神灵", "收集Lunatic难度纯狐所有符卡", ArchievementBean.JunkoSpells, 10, "「掌上的纯光」", "「杀意的百合」", "「现代的神灵界」", "「战栗的寒冷之星」", "「纯粹的疯狂」", "「地上秽的纯化」", "纯符「纯粹的弹幕地狱」"));
-		archList.add(new Archievement("Perfect Cherry Blossom", "收集Lunatic难度西行寺幽幽子所有符卡", ArchievementBean.yoyoko, 10, "亡乡「亡我乡 -自尽-」", "亡舞「生者必灭之理 -魔境-」",  "华灵「蝶幻」", "幽曲「埋骨于弘川 -神灵-」", "樱符「完全墨染的樱花 -开花-」", "「反魂蝶 -八分咲-」"));
-		archList.add(new Archievement("樱花飞舞", "收集樱符「完全墨染的樱花 -封印-」,樱符「完全墨染的樱花 -亡我-」,樱符「完全墨染的樱花 -春眠-」,樱符「完全墨染的樱花 -开花-」", ArchievementBean.sakura, 15, "樱符「完全墨染的樱花 -封印-」", "樱符「完全墨染的樱花 -亡我-」", "樱符「完全墨染的樱花 -春眠-」", "樱符「完全墨染的樱花 -开花-」"));
+		archList.add(new Archievement("恶魔领地", "收集东方红魔乡全部符卡", ArchievementBean.th6All, TH06GameData.spellcards.length, TH06GameData.spellcards));
+		archList.add(new Archievement("完美樱花", "收集东方妖妖梦全部符卡", ArchievementBean.th7All, TH07GameData.spellcards.length, TH07GameData.spellcards));
+		archList.add(new Archievement("永恒之夜", "收集东方永夜抄全部符卡", ArchievementBean.th8All, TH08GameData.spellcards.length, TH08GameData.spellcards));
+		archList.add(new Archievement("信仰之山", "收集东方风神录全部符卡", ArchievementBean.th10All, TH10GameData.spellcards.length, TH10GameData.spellcards));
+		archList.add(new Archievement("地底之灵", "收集东方地灵殿全部符卡", ArchievementBean.th11All, TH11GameData.spellcards.length, TH11GameData.spellcards));
+		/*archList.add(new Archievement("未知物体", "收集东方星莲船全部符卡", ArchievementBean.th12All, TH12GameData.spells.length, TH12GameData.spells));
+		archList.add(new Archievement("十个欲望", "收集东方神灵庙全部符卡", ArchievementBean.th13All, TH13GameData.spells.length, TH13GameData.spells));
+		archList.add(new Archievement("两个选择", "收集东方辉针城全部符卡", ArchievementBean.th14All, TH14GameData.spells.length, TH14GameData.spells));
+		archList.add(new Archievement("疯狂国度", "收集东方绀珠传全部符卡", ArchievementBean.th15All, TH15GameData.spells.length, TH15GameData.spells));
+		archList.add(new Archievement("四季之星", "收集东方天空璋全部符卡", ArchievementBean.th16All, TH16GameData.spells.length, TH16GameData.spells));
+		archList.add(new Archievement("狡猾之兽", "收集东方鬼形兽全部符卡", ArchievementBean.th17All, TH17GameData.spells.length, TH17GameData.spells));
+		archList.add(new Archievement("纯化的神灵", "收集Lunatic难度纯狐所有符卡", ArchievementBean.JunkoSpells, 10, getCharaSpellCard("纯狐",3)));
+		archList.add(new Archievement("Perfect Cherry Blossom", "收集Lunatic难度西行寺幽幽子所有符卡", ArchievementBean.yoyoko, 10, getCharaSpellCard("西行寺幽幽子",3)));
+		archList.add(new Archievement("樱花飞舞", "收集所有难度的墨染樱", ArchievementBean.sakura, 15, "樱符「完全墨染的樱花 -封印-」", "樱符「完全墨染的樱花 -亡我-」", "樱符「完全墨染的樱花 -春眠-」", "樱符「完全墨染的樱花 -开花-」"));
 		archList.add(new Archievement("春天来了", "获得春符「惊喜之春」", ArchievementBean.LilyWhite, 10, "春符「惊喜之春」"));
 		archList.add(new Archievement("素质三连", "收集「红色的幻想乡」,神光「无忤为宗」,「纯粹的疯狂」", ArchievementBean.threeHits, 8, "「红色的幻想乡」", "神光「无忤为宗」", "「纯粹的疯狂」"));
 		archList.add(new Archievement("麻将即信仰", "获得「信仰之山」或「风神之神德」" , ArchievementBean.MountainOfFaith, 5, Archievement.judgeOr, "「信仰之山」", "「风神之神德」"));
@@ -108,7 +108,7 @@ public class SpellCollect {
 		//神灵界 星辰降落的神灵庙
 		//郭敬明 七个一寸法师
 		// 轻工业( 
-
+*/
 		Autoreply.instence.threadPool.execute(new Runnable() {
 				@Override
 				public void run() {
@@ -378,18 +378,18 @@ public class SpellCollect {
         }
     }
 
-	public SpellCard getSpellCard(String s) {
+	public SpellCard getSpellCard(String spellName) {
 		for (SpellCard sc:DiceImitate.spells) {
-			if (sc.name.contains(s)) {
+			if (sc.name.contains(spellName)) {
 				return sc;
 			}
 		}
 		return null;
 	}
 
-	public SpellCard getSpellCard(String s, int diff) {
+	public SpellCard getSpellCard(String spellName, int diff) {
 		for (SpellCard sc:DiceImitate.spells) {
-			if (sc.name.contains(s) && sc.diffcult == diff) {
+			if (sc.name.contains(spellName) && sc.diffcult == diff) {
 				return sc;
 			}
 		}
@@ -400,6 +400,16 @@ public class SpellCollect {
 		HashSet<SpellCard> scs=new HashSet<>();
 		for (SpellCard sc:DiceImitate.spells) {
 			if (sc.master.equals(name)) {
+				scs.add(sc);
+			}
+		}
+		return scs;
+	}
+
+	public HashSet<SpellCard> getCharaSpellCard(String name, int diff) {
+		HashSet<SpellCard> scs=new HashSet<>();
+		for (SpellCard sc:DiceImitate.spells) {
+			if (sc.master.equals(name) && sc.diffcult == diff) {
 				scs.add(sc);
 			}
 		}
