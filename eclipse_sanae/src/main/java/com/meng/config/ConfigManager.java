@@ -22,10 +22,10 @@ import org.java_websocket.handshake.*;
 
 public class ConfigManager extends WebSocketClient {
     public SeijiaConfigJavaBean SeijiaConfig = new SeijiaConfigJavaBean();
-
-	private ConcurrentHashMap<Integer,TaskResult> resultMap=new ConcurrentHashMap<>();
 	private SanaeConfigJavaBean SanaeConfig=new SanaeConfigJavaBean();
 	private File SanaeConfigFile;
+	
+	private ConcurrentHashMap<Integer,TaskResult> resultMap=new ConcurrentHashMap<>();
 	public ConfigManager(URI uri) {
 		super(uri);
 		Type type = new TypeToken<SanaeConfigJavaBean>() {

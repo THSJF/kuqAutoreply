@@ -241,35 +241,5 @@ public class SocketConfigManager implements Runnable {
 			configManager.saveConfig();
 			return "ok";
 		}
-
-		enum NetworkType {
-			addGroup,
-			addNotReplyUser,
-			addNotReplyWord,
-			addPersonInfo,
-			addMaster,
-			addAdmin,
-			addGroupAllow,
-			addBlackQQ,
-			addBlackGroup,
-			removeGroup,
-			removeNotReplyUser,
-			removeNotReplyWord,
-			removePersonInfo,
-			removeMaster,
-			removeAdmin,
-			removeGroupAllow,
-			removeBlackQQ,
-			removeBlackGroup,
-			setGroup,
-			setNotReplyUser,
-			setNotReplyWord,
-			setPersonInfo,
-			setMaster,
-			setAdmin,
-			setGroupAllow,
-			setBlackQQ,
-			setBlackGroup
-			}
 	}
 }

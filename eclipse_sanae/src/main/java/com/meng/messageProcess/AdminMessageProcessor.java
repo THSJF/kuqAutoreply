@@ -149,6 +149,16 @@ public class AdminMessageProcessor {
 						}
 					});
 			}
+			if (msg.startsWith(".welcome ")) {
+				String wel=msg.substring(9);
+				if (wel.length() > 100) {
+					Autoreply.sendMessage(fromGroup, 0, "太长了");
+					return true;
+				}
+				Autoreply.instence.configManager.setWelcome(fromGroup, wel);
+				Autoreply.sendMessage(fromGroup, 0, String.format("已设置入群欢迎词为「%s」", wel));
+				return true;
+			}
 		}
         return false;
 	}

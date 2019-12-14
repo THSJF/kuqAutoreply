@@ -86,7 +86,7 @@ public class CookieManager {
 		  }
 	  }
 	  
-	class Cookie {
+	public class Cookie {
 		public String Sunny="";
 		public String Luna="";
 		public String Star="";
