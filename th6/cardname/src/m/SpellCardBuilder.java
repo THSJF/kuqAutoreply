@@ -13,54 +13,47 @@ public class SpellCardBuilder {
 		return this;
 	}
 
-	public SpellCardBuilder addSpell(String firstName, String lastName, int... diffcult) {
-		for (int di:diffcult) {
-			sclist.add(new SpellCard(firstName, lastName, master, di));
-		}
-		return this;
-	}
-
 	public SpellCardBuilder addSpell(String name, int... diffcult) {
-		for (int di:diffcult) {
-			sclist.add(new SpellCard(name, master, di));
+		int diffFlag=0;
+		for (int di:diffcult) {	
+			switch (di) {
+				case 0:
+					diffFlag |= SpellCard.Easy;
+					break;
+				case 1:
+					diffFlag |= SpellCard.Normal;
+					break;
+				case 2:
+					diffFlag |= SpellCard.Hard;
+					break;
+				case 3:
+					diffFlag |= SpellCard.Lunatic;
+					break;
+				case 4:
+					diffFlag |= SpellCard.Extra;
+					break;
+				case 5:
+					diffFlag |= SpellCard.Phantasm;
+					break;
+				case 6:
+					diffFlag |= SpellCard.LastSpell;
+					break;
+				case 7:
+					diffFlag |= SpellCard.Lastword;
+					break;
+				case 8:
+					diffFlag |= SpellCard.Overdrive;
+					break;
+			}	
 		}
+		sclist.add(new SpellCard(name, master, diffFlag));
 		return this;
 	}
 
 	public String getSpell() {
 		StringBuilder sb=new StringBuilder();
 		for (SpellCard sc:sclist) {
-			String tmp=null;
-			switch (sc.diffcult) {
-				case 0:
-					tmp = "SpellCard.Easy";
-					break;
-				case 1:
-					tmp = "SpellCard.Normal";
-					break;
-				case 2:
-					tmp = "SpellCard.Hard";
-					break;
-				case 3:
-					tmp = "SpellCard.Lunatic";
-					break;
-				case 4:
-					tmp = "SpellCard.Extra";
-					break;
-				case 5:
-					tmp = "SpellCard.Phantasm";
-					break;
-				case 6:
-					tmp = "SpellCard.LastSpell";
-					break;
-				case 7:
-					tmp = "SpellCard.Lastword";
-					break;
-				case 8:
-					tmp = "SpellCard.Overdrive";
-					break;
-			}
-			sb.append(String.format("new SpellCard(\"%s\", \"%s\", %s),\n", sc.name, sc.master, tmp));
+			sb.append(String.format("new SpellCard(\"%s\", \"%s\", %s),\n", sc.name, sc.master, sc.diffcult));
 		}
 		return sb.toString();
 	}
