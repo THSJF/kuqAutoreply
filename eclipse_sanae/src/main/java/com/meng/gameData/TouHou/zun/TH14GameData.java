@@ -1,5 +1,7 @@
 package com.meng.gameData.TouHou.zun;
 
+import com.meng.gameData.TouHou.*;
+
 public class TH14GameData {
 	public static final String gameName="东方辉针城 ~ Double Dealing Character.";
 	public static final String gameNameCN="东方辉针城";
@@ -35,6 +37,8 @@ public class TH14GameData {
 		"小槌的魔力",
 		"非常非常神奇的道具们",
 		"Player's Score"	
+	};
+	public static SpellCard[] spellcards=new SpellCard[]{
 	};
 	public static String[] spells=new String[]{
 		"冰符「Ultimate Blizzard」",

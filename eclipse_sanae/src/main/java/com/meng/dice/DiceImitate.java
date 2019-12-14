@@ -3,9 +3,12 @@ import com.meng.*;
 import com.meng.gameData.TouHou.zun.*;
 import com.meng.tools.*;
 import java.util.*;
+import com.meng.gameData.TouHou.*;
+import java.security.cert.*;
+import java.lang.reflect.*;
 
 public class DiceImitate {
-	public static String[] spells;
+	public static SpellCard[] spells;
 	public static String[] neta;
 	public static String[] music;
 	public static String[] name;
@@ -18,24 +21,18 @@ public class DiceImitate {
     private static String[] pl09 = new String[]{"博丽灵梦", "雾雨魔理沙", "十六夜咲夜", "魂魄妖梦", "铃仙·优昙华院·因幡", "琪露诺", "莉莉卡·普莉兹姆利巴", "梅露兰·普莉兹姆利巴", "露娜萨·普莉兹姆利巴", "米斯蒂娅·萝蕾拉", "因幡帝", "射命丸文", "梅蒂欣·梅兰可莉", "风见幽香", "小野冢小町", "四季映姬·亚玛萨那度"};
  	private static String[] plDiff = new String[]{"easy", "normal", "hard", "lunatic"};
 
-	public static HashSet<String> cat=new HashSet<>();
-	public static HashSet<String> memory=new HashSet<>();
-	public static HashSet<String> pachouli=new HashSet<>();
+	public static HashSet<SpellCard> cat=new HashSet<>();
+	public static HashSet<SpellCard> memory=new HashSet<>();
+	public static HashSet<SpellCard> pachouli=new HashSet<>();
 
 
 	public DiceImitate() {
-		spells = new String[]{};
-		spells = Tools.ArrayTool.mergeArray(spells, TH06GameData.spells);
-		spells = Tools.ArrayTool.mergeArray(spells, TH07GameData.spells);
-		spells = Tools.ArrayTool.mergeArray(spells, TH08GameData.spells);
-		spells = Tools.ArrayTool.mergeArray(spells, TH10GameData.spells);
-		spells = Tools.ArrayTool.mergeArray(spells, TH11GameData.spells);
-		spells = Tools.ArrayTool.mergeArray(spells, TH12GameData.spells);
-		spells = Tools.ArrayTool.mergeArray(spells, TH13GameData.spells);
-		spells = Tools.ArrayTool.mergeArray(spells, TH14GameData.spells);
-		spells = Tools.ArrayTool.mergeArray(spells, TH15GameData.spells);
-		spells = Tools.ArrayTool.mergeArray(spells, TH16GameData.spells);
-		spells = Tools.ArrayTool.mergeArray(spells, TH17GameData.spells);
+		spells = new SpellCard[]{};
+		spells = Tools.ArrayTool.mergeArray(spells, TH06GameData.spellcards);
+		spells = Tools.ArrayTool.mergeArray(spells, TH07GameData.spellcards);
+		spells = Tools.ArrayTool.mergeArray(spells, TH08GameData.spellcards);
+		spells = Tools.ArrayTool.mergeArray(spells, TH10GameData.spellcards);
+		spells = Tools.ArrayTool.mergeArray(spells, TH11GameData.spellcards);
 		neta = new String[]{
 			"红lnb",
 			"红lnm",
@@ -124,37 +121,11 @@ public class DiceImitate {
 		name = Tools.ArrayTool.mergeArray(name, TH16GameData.charaName);
 		name = Tools.ArrayTool.mergeArray(name, TH17GameData.charaName);
 
-		addArrayToSet(memory, "想起「二重黑死蝶」", "想起「粼粼水底之心伤」");
-		addArrayToSet(pachouli, "火符「火神之光」", "土&金符「翡翠巨石」");
-		addArrayToSet(pachouli, "月符「静息的月神」", "火水木金土符「贤者之石」");
-
-		Collections.addAll(cat, new String[]{
-							   "仙符「凤凰卵」",
-							   "仙符「凤凰展翅」",
-							   "式符「飞翔晴明」",
-							   "阴阳「道满晴明」",	
-							   "阴阳「晴明大纹」",
-							   "天符「天仙鸣动」",
-							   "翔符「飞翔韦驮天」",
-							   "童符「护法天童乱舞」",
-							   "仙符「尸解永远」",
-							   "鬼符「鬼门金神」",
-							   "方符「奇门遁甲」",
-							   "鬼符「青鬼赤鬼」",
-							   "鬼神「飞翔毘沙门天」",
-							   "猫符「猫的步伐」",
-							   "猫符「怨灵猫乱步」",
-							   "咒精「僵尸妖精」",
-							   "咒精「怨灵凭依妖精」",
-							   "恨灵「脾脏蛀食者」",
-							   "尸灵「食人怨灵」",
-							   "赎罪「旧地狱的针山」",
-							   "赎罪「古时之针与痛楚的怨灵」",
-							   "「死灰复燃」",
-							   "「小恶灵复活」",
-							   "妖怪「火焰的车轮」"
-						   });
-
+		Collections.addAll(cat, Autoreply.instence.spellCollect.getCharaSpellCard("橙"));
+		Collections.addAll(cat, Autoreply.instence.spellCollect.getCharaSpellCard("火焰猫燐"));
+		Collections.addAll(memory, Autoreply.instence.spellCollect.getCharaSpellCard("古明地觉", "想起「恐怖的回忆」", "想起「恐怖催眠术」"));
+		Collections.addAll(pachouli, Autoreply.instence.spellCollect.getCharaSpellCard("帕秋莉·诺蕾姬"));
+		
 	}
 	public boolean check(long fromGroup, long fromQQ, String msg) {
 		String[] ss = msg.split("\\.");
@@ -220,7 +191,7 @@ public class DiceImitate {
 					Autoreply.sendMessage(fromGroup, 0, "当前有:spell neta music grandma game all");
 					return true;
 				case "spell":
-					Autoreply.sendMessage(fromGroup, 0, spells[new Random().nextInt(spells.length)]);
+					Autoreply.sendMessage(fromGroup, 0, spells[new Random().nextInt(spells.length)].name);
 					return true;
 				case "neta":
 					Autoreply.sendMessage(fromGroup, 0, String.format("%s今天宜打%s", pname, md5RanStr(fromQQ, neta)));
@@ -523,18 +494,8 @@ public class DiceImitate {
 		return arr[md5Random(fromQQ) % arr.length];
 	}
 
-	private void addArrayToSet(Set<String> set, String start, String stop) {
-		int istart=0;
-		int istop=0;
-		for (int i=0;i < spells.length;++i) {
-			if (spells[i].equals(start)) {
-				istart = i;
-			} else if (spells[i].equals(stop)) {
-				istop = i;
-			}	
-		}
-		for (int i=istart;i <= istop;++i) {
-			set.add(spells[i]);
-		}
+	public String md5RanStr(long fromQQ, SpellCard[] arr) {
+		return arr[md5Random(fromQQ) % arr.length].name;
 	}
+
 }

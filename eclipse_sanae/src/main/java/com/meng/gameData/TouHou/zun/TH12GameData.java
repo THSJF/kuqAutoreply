@@ -1,5 +1,7 @@
 package com.meng.gameData.TouHou.zun;
 
+import com.meng.gameData.TouHou.*;
+
 public class TH12GameData {
 	public static final String gameName="东方星莲船 ~ Undefined Fantastic Object.";
 	public static final String gameNameCN="东方星莲船";
@@ -33,6 +35,8 @@ public class TH12GameData {
 		"妖怪寺",
 		"空中的归路 ~ Sky Dream",
 		"Player's Score"	
+	};
+	public static SpellCard[] spellcards=new SpellCard[]{
 	};
 	public static String[] spells=new String[]{
 		"棒符「忙碌探知棒」",

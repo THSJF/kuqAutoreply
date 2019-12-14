@@ -7,18 +7,18 @@ import java.lang.reflect.*;
 import java.nio.charset.*;
 import java.util.*;
 
-public class CoinManager {
-	private HashMap<Long, Integer> coinsMap = new HashMap<>();
+public class FaithManager {
+	private HashMap<Long, Integer> faithMap = new HashMap<>();
 	private File file;
 
-	public CoinManager() {
-		file = new File(Autoreply.appDirectory + "properties\\coins.json");
+	public FaithManager() {
+		file = new File(Autoreply.appDirectory + "properties\\faith.json");
 		if (!file.exists()) {
 			saveData();
 		}
 		Type type = new TypeToken<HashMap<Long, Integer>>() {
 		}.getType();
-		coinsMap = Autoreply.gson.fromJson(Tools.FileTool.readString(file.getAbsolutePath()), type);
+		faithMap = Autoreply.gson.fromJson(Tools.FileTool.readString(file.getAbsolutePath()), type);
 		Autoreply.instence.threadPool.execute(new Runnable() {
 				@Override
 				public void run() {
@@ -27,49 +27,49 @@ public class CoinManager {
 			});
 	}
 
-	public void addCoins(long fromQQ, int coins) {
-		if (coins < 0) {
+	public void addFaith(long fromQQ, int faith) {
+		if (faith < 0) {
 			return;
 		}
-		if (coinsMap.get(fromQQ) != null) {
-			int qqCoin=coinsMap.get(fromQQ);
-			qqCoin += coins;
-			coinsMap.put(fromQQ, qqCoin);
+		if (faithMap.get(fromQQ) != null) {
+			int qqFaith=faithMap.get(fromQQ);
+			qqFaith += faith;
+			faithMap.put(fromQQ, qqFaith);
 		} else {
-			coinsMap.put(fromQQ, coins);
+			faithMap.put(fromQQ, faith);
 		}
 		saveData();
 	}
 
-	public boolean subCoins(long fromQQ, int coins) {
-		if (coins < 0) {
+	public boolean subFaith(long fromQQ, int faith) {
+		if (faith < 0) {
 			return false;
 		}
-		if (coinsMap.get(fromQQ) != null) {
-			int qqCoin=coinsMap.get(fromQQ);
-			if (qqCoin < coins) {
+		if (faithMap.get(fromQQ) != null) {
+			int qqFaith=faithMap.get(fromQQ);
+			if (qqFaith < faith) {
 				return false;
 			}
-			qqCoin -= coins;
-			coinsMap.put(fromQQ, qqCoin);
+			qqFaith -= faith;
+			faithMap.put(fromQQ, qqFaith);
 			saveData();
 			return true;
 		}
 		return false;
 	}
 
-	public int getCoinsCount(long fromQQ) {
-		if (coinsMap.get(fromQQ) == null) {
+	public int getFaithCount(long fromQQ) {
+		if (faithMap.get(fromQQ) == null) {
 			return 0;
 		}
-		return coinsMap.get(fromQQ);
+		return faithMap.get(fromQQ);
 	}
 	
 	private void saveData() {
 		try {
 			FileOutputStream fos = new FileOutputStream(file);
 			OutputStreamWriter writer = new OutputStreamWriter(fos, StandardCharsets.UTF_8);
-			writer.write(Autoreply.gson.toJson(coinsMap));
+			writer.write(Autoreply.gson.toJson(faithMap));
 			writer.flush();
 			fos.close();
 		} catch (Exception e) {
@@ -84,7 +84,7 @@ public class CoinManager {
 				File backup = new File(file.getAbsolutePath() + ".bak" + System.currentTimeMillis());
 				FileOutputStream fos = new FileOutputStream(backup);
 				OutputStreamWriter writer = new OutputStreamWriter(fos, StandardCharsets.UTF_8);
-				writer.write(Autoreply.gson.toJson(coinsMap));
+				writer.write(Autoreply.gson.toJson(faithMap));
 				writer.flush();
 				fos.close();
 			} catch (Exception e) {

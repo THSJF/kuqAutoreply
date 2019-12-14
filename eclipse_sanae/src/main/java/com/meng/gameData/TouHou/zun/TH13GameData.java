@@ -1,5 +1,7 @@
 package com.meng.gameData.TouHou.zun;
 
+import com.meng.gameData.TouHou.*;
+
 public class TH13GameData {
 	public static final String gameName="东方神灵庙 ~ Ten Desires.";
 	public static final String gameNameCN="东方神灵庙";
@@ -36,6 +38,8 @@ public class TH13GameData {
 		"神社的新风",
 		"Desire Dream",
 		"Player's Score"	
+	};
+	public static SpellCard[] spellcards=new SpellCard[]{
 	};
 	public static String[] overdrive = new String[]{
 		"樱符「樱吹雪地狱」",

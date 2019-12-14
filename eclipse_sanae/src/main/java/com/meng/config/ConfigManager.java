@@ -87,7 +87,7 @@ public class ConfigManager extends WebSocketClient {
 							Autoreply.instence.birthdayTip = new BirthdayTip();
 							Autoreply.instence.spellCollect = new SpellCollect();
 							Autoreply.instence.threadPool.execute(Autoreply.instence.timeTip);
-							Autoreply.instence.coinManager = new CoinManager();
+							Autoreply.instence.faithManager = new FaithManager();
 							Autoreply.instence.messageTooManyManager = new MessageTooManyManager();
 							List<Group> groupList=Autoreply.CQ.getGroupList();
 							for (Group g:groupList) {

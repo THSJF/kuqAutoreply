@@ -1,5 +1,7 @@
 package com.meng.gameData.TouHou.zun;
 
+import com.meng.gameData.TouHou.*;
+
 public class TH16GameData {
 	public static final String gameName="东方天空璋 ~ Hidden Star in Four Seasons.";
 	public static final String gameNameCN="东方天空璋";
@@ -34,6 +36,8 @@ public class TH16GameData {
 		"不自然的自然",
 		"白色旅人",
 		"Player's Score"	
+	};
+	public static SpellCard[] spellcards=new SpellCard[]{
 	};
 	public static String[] spells=new String[]{
 		"蝶符「细碎鳞粉」",

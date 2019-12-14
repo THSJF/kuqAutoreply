@@ -1,5 +1,7 @@
 package com.meng.gameData.TouHou.zun;
 
+import com.meng.gameData.TouHou.*;
+
 public class TH15GameData {
 	public static final String gameName="东方绀珠传 ~ Legacy of Lunatic Kingdom.";
 	public static final String gameNameCN="东方绀珠传";
@@ -33,6 +35,8 @@ public class TH15GameData {
 		"从神社所见之月",
 		"宇宙巫女归还",
 		"Player's Score"	
+	};
+	public static SpellCard[] spellcards=new SpellCard[]{
 	};
 	public static String[] spells=new String[]{
 		"凶弹「高速撞击」",

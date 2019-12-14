@@ -8,9 +8,10 @@ import java.lang.reflect.*;
 import java.nio.charset.*;
 import java.util.*;
 import java.util.concurrent.*;
+import com.meng.gameData.TouHou.*;
 
 public class SpellCollect {
-	private ConcurrentHashMap<Long,HashSet<String>> chm=new ConcurrentHashMap<>();
+	private ConcurrentHashMap<Long,HashSet<SpellCard>> spellsMap=new ConcurrentHashMap<>();
 	public ConcurrentHashMap<Long,ArchievementBean> archiMap=new ConcurrentHashMap<>();
 	private HashSet<Long> todayCard=new HashSet<>();
 	private HashSet<Long> todaySign=new HashSet<>();
@@ -18,13 +19,13 @@ public class SpellCollect {
 	private File spellFile;
 	public ArrayList<Archievement> archList=new ArrayList<>();
 	public SpellCollect() {
-		spellFile = new File(Autoreply.appDirectory + "/properties/spells.json");
+		spellFile = new File(Autoreply.appDirectory + "/properties/sanaeSpells.json");
         if (!spellFile.exists()) {
-            saveConfig();
+            saveSpellConfig();
         }
-        Type type = new TypeToken<ConcurrentHashMap<Long,HashSet<String>>>() {
+        Type type = new TypeToken<ConcurrentHashMap<Long,HashSet<SpellCard>>>() {
         }.getType();
-        chm = Autoreply.gson.fromJson(Tools.FileTool.readString(Autoreply.appDirectory + "/properties/spells.json"), type);
+        spellsMap = Autoreply.gson.fromJson(Tools.FileTool.readString(Autoreply.appDirectory + "/properties/spells.json"), type);
 
 		archiFile = new File(Autoreply.appDirectory + "/properties/archievement.json");
         if (!archiFile.exists()) {
@@ -36,11 +37,11 @@ public class SpellCollect {
 
 		archList.add(new Archievement("恶魔领地", "收集东方红魔乡全部符卡", ArchievementBean.th6All, TH06GameData.spells.length, TH06GameData.spells));
 		archList.add(new Archievement("完美樱花", "收集东方妖妖梦全部符卡",  ArchievementBean.th7All, TH07GameData.spells.length, TH07GameData.spells));
-		archList.add(new Archievement("永恒之夜", "收集东方永夜抄lastspell和lastword外全部符卡",  ArchievementBean.th8All, TH08GameData.spells.length, TH08GameData.spells));
+		archList.add(new Archievement("永恒之夜", "收集东方永夜抄全部符卡",  ArchievementBean.th8All, TH08GameData.spells.length, TH08GameData.spells));
 		archList.add(new Archievement("信仰之山", "收集东方风神录全部符卡",  ArchievementBean.th10All, TH10GameData.spells.length, TH10GameData.spells));
 		archList.add(new Archievement("地底之灵", "收集东方地灵殿全部符卡",  ArchievementBean.th11All, TH11GameData.spells.length, TH11GameData.spells));
 		archList.add(new Archievement("未知物体", "收集东方星莲船全部符卡",  ArchievementBean.th12All, TH12GameData.spells.length, TH12GameData.spells));
-		archList.add(new Archievement("十个欲望", "收集东方神灵庙overdrive外全部符卡",  ArchievementBean.th13All, TH13GameData.spells.length, TH13GameData.spells));
+		archList.add(new Archievement("十个欲望", "收集东方神灵庙全部符卡",  ArchievementBean.th13All, TH13GameData.spells.length, TH13GameData.spells));
 		archList.add(new Archievement("两个选择", "收集东方辉针城全部符卡",  ArchievementBean.th14All, TH14GameData.spells.length, TH14GameData.spells));
 		archList.add(new Archievement("疯狂国度", "收集东方绀珠传全部符卡",  ArchievementBean.th15All, TH15GameData.spells.length, TH15GameData.spells));
 		archList.add(new Archievement("四季之星", "收集东方天空璋全部符卡",  ArchievementBean.th16All, TH16GameData.spells.length, TH16GameData.spells));
@@ -138,35 +139,35 @@ public class SpellCollect {
 
 		if (msg.startsWith("幻币抽卡 ")) {
 			try {
-				int restCoins=Autoreply.instence.coinManager.getCoinsCount(fromQQ);
-				int useCoins=Integer.parseInt(msg.substring(5));
-				if (useCoins > restCoins) {
+				int restfaith=Autoreply.instence.faithManager.getFaithCount(fromQQ);
+				int useFaith=Integer.parseInt(msg.substring(5));
+				if (useFaith > restfaith) {
 					Autoreply.sendMessage(fromGroup, 0, "本地幻币不足");
 					return true;
 				}	
-				HashSet<String> gotSpellsSet=chm.get(fromQQ);
+				HashSet<SpellCard> gotSpellsSet=spellsMap.get(fromQQ);
 				if (gotSpellsSet == null) {
-					gotSpellsSet = new HashSet<String>();
-					chm.put(fromQQ, gotSpellsSet);
+					gotSpellsSet = new HashSet<SpellCard>();
+					spellsMap.put(fromQQ, gotSpellsSet);
 				}
 				Random r=new Random();
 				StringBuilder sb=new StringBuilder();
 				sb.append(Autoreply.instence.configManager.getNickName(fromQQ));
 				sb.append("获得了:");
-				for (int i=0;i < useCoins * 3;++i) {
-					String s;
-					if (r.nextInt(150) == 20) {
-						s = TH08GameData.lastword[r.nextInt(TH08GameData.lastword.length)];
-					} else if (r.nextInt(300) == 25) {
-						s = TH13GameData.overdrive[r.nextInt(TH13GameData.overdrive.length)];
-					} else  {
-						s = DiceImitate.spells[r.nextInt(DiceImitate.spells.length)];
-					}
+				for (int i=0;i < useFaith * 3;++i) {
+					SpellCard s;
+					/*		if (r.nextInt(150) == 20) {
+					 s = TH08GameData.lastword[r.nextInt(TH08GameData.lastword.length)];
+					 } else if (r.nextInt(300) == 25) {
+					 s = TH13GameData.overdrive[r.nextInt(TH13GameData.overdrive.length)];
+					 } else  {*/
+					s = DiceImitate.spells[r.nextInt(DiceImitate.spells.length)];
+					//	}
 					gotSpellsSet.add(s);
-					sb.append("\n").append(s);
+					sb.append("\n").append(s.name);
 				}
-				saveConfig();
-				Autoreply.instence.coinManager.subCoins(fromQQ, useCoins);
+				saveSpellConfig();
+				Autoreply.instence.faithManager.subFaith(fromQQ, useFaith);
 				checkArchievement(fromGroup, fromQQ, gotSpellsSet);
 				if (sb.toString().length() > 200) {
 					Autoreply.sendMessage(fromGroup, fromQQ, "内容过长,不详细说明获得的符卡，但记录已保存");
@@ -186,7 +187,7 @@ public class SpellCollect {
 				return true;
 			}
 			Autoreply.sendMessage(fromGroup, 0, "签到成功,获得1幻币");
-			Autoreply.instence.coinManager.addCoins(fromQQ, 1);
+			Autoreply.instence.faithManager.addFaith(fromQQ, 1);
 			todaySign.add(fromQQ);
 			return true;
 		}
@@ -196,60 +197,60 @@ public class SpellCollect {
 				Autoreply.sendMessage(fromGroup, 0, "你今天已经抽过啦");
 				return true;
 			}
-			HashSet<String> tmpSet=chm.get(fromQQ);
+			HashSet<SpellCard> tmpSet=spellsMap.get(fromQQ);
 			if (tmpSet == null) {
-				tmpSet = new HashSet<String>();
-				chm.put(fromQQ, tmpSet);
+				tmpSet = new HashSet<SpellCard>();
+				spellsMap.put(fromQQ, tmpSet);
 			}
 			Random r=new Random();
 			StringBuilder sb=new StringBuilder();
 			sb.append(Autoreply.instence.configManager.getNickName(fromQQ));
 			sb.append("获得了:");
 			for (int i=0;i < 5;++i) {
-				String s;
-				if (r.nextInt(150) == 20) {
-					s = TH08GameData.lastword[r.nextInt(TH08GameData.lastword.length)];
-				} else if (r.nextInt(300) == 25) {
-					s = TH13GameData.overdrive[r.nextInt(TH13GameData.overdrive.length)];
-				} else {	
-					s = DiceImitate.spells[r.nextInt(DiceImitate.spells.length)];
-				}
+				SpellCard s;
+				/*	if (r.nextInt(150) == 20) {
+				 s = TH08GameData.lastword[r.nextInt(TH08GameData.lastword.length)];
+				 } else if (r.nextInt(300) == 25) {
+				 s = TH13GameData.overdrive[r.nextInt(TH13GameData.overdrive.length)];
+				 } else {	*/
+				s = DiceImitate.spells[r.nextInt(DiceImitate.spells.length)];
+				//	}
 				tmpSet.add(s);
-				sb.append("\n").append(s);
+				sb.append("\n").append(s.name);
 			}
 			Autoreply.sendMessage(fromGroup, 0, sb.toString());
-			saveConfig();
+			saveSpellConfig();
 			checkArchievement(fromGroup, fromQQ, tmpSet);
 			todayCard.add(fromQQ);
 			return true;
 		}
 
-		if (msg.startsWith("购买符卡 ")) {
-			String spellName=msg.substring(5);
-			if (Autoreply.instence.coinManager.getCoinsCount(fromQQ) < 40) {
-				Autoreply.sendMessage(fromGroup, 0, "幻币不足,需要40幻币");
-				return true;
-			}
-			if (isCointains(spellName)) {		
-				HashSet<String> gotSpellSet=chm.get(fromQQ);
-				if (gotSpellSet == null) {
-					gotSpellSet = new HashSet<String>();
-					chm.put(fromQQ, gotSpellSet);
-				}
-				gotSpellSet.add(spellName);
-				Autoreply.sendMessage(fromGroup, 0, Autoreply.instence.configManager.getNickName(fromQQ) + "获得了:" + spellName);
-				saveConfig();
-				checkArchievement(fromGroup, fromQQ, gotSpellSet);	
-				Autoreply.instence.coinManager.subCoins(fromQQ, 40);
-			} else {
-				Autoreply.sendMessage(fromGroup, 0, "符卡名错误");
-			}
-			return true;
-		}
+		/*if (msg.startsWith("购买符卡 ")) {
+		 String spellName=msg.substring(5);
+		 if (Autoreply.instence.coinManager.getFaithCount(fromQQ) < 40) {
+		 Autoreply.sendMessage(fromGroup, 0, "幻币不足,需要40幻币");
+		 return true;
+		 }
+		 if (isCointains(spellName)) {		
+		 HashSet<SpellCard> gotSpellSet=spellsMap.get(fromQQ);
+		 if (gotSpellSet == null) {
+		 gotSpellSet = new HashSet<SpellCard>();
+		 spellsMap.put(fromQQ, gotSpellSet);
+		 }
+		 gotSpellSet.add(spellName);
+		 Autoreply.sendMessage(fromGroup, 0, Autoreply.instence.configManager.getNickName(fromQQ) + "获得了:" + spellName);
+		 saveSpellConfig();
+		 checkArchievement(fromGroup, fromQQ, gotSpellSet);	
+		 Autoreply.instence.faithManager.subFaith(fromQQ, 40);
+		 } else {
+		 Autoreply.sendMessage(fromGroup, 0, "符卡名错误");
+		 }
+		 return true;
+		 }*/
 
 		if (msg.equals("查看符卡")) {
 			StringBuilder sb=new StringBuilder();
-			HashSet<String> gotSpells=chm.get(fromQQ);
+			HashSet<SpellCard> gotSpells=spellsMap.get(fromQQ);
 			if (gotSpells == null) {
 				Autoreply.sendMessage(fromGroup, 0, "你没有参加过抽卡");
 				return true;
@@ -257,9 +258,9 @@ public class SpellCollect {
 			sb.append(Autoreply.instence.configManager.getNickName(fromQQ));
 			sb.append("获得了:");
 			int i=0;
-			for (String s:DiceImitate.spells) {
+			for (SpellCard s:DiceImitate.spells) {
 				if (gotSpells.contains(s)) {
-					sb.append("\n").append(s);
+					sb.append("\n").append(s.name);
 					++i;
 					if (i > 40) {
 						Autoreply.sendMessage(fromGroup, fromQQ, sb.toString());
@@ -269,42 +270,43 @@ public class SpellCollect {
 				}
 			}
 			Autoreply.sendMessage(fromGroup, fromQQ, sb.toString());
-			sb.setLength(0);
-			sb.append("lastword:");
-			boolean hasLastword=false;
-			for (String s:TH08GameData.lastword) {
-				if (gotSpells.contains(s)) {
-					sb.append("\n").append(s);
-					hasLastword = true;
-				}
-			}
-			if (hasLastword) {
-				Autoreply.sendMessage(fromGroup, fromQQ, sb.toString());
-			}
-			sb.setLength(0);
-			boolean hasOverdrive=false;
-			sb.append("overdrive:");
-			for (String s:TH13GameData.overdrive) {
-				if (gotSpells.contains(s)) {
-					sb.append("\n").append(s);
-					hasOverdrive = true;
-				}
-			}
-			if (hasOverdrive) {
-				Autoreply.sendMessage(fromGroup, fromQQ, sb.toString());
-			}
+			/*	sb.setLength(0);
+			 sb.append("lastword:");
+			 boolean hasLastword=false;
+			 for (String s:TH08GameData.lastword) {
+			 if (gotSpells.contains(s)) {
+			 sb.append("\n").append(s);
+			 hasLastword = true;
+			 }
+			 }
+			 if (hasLastword) {
+			 Autoreply.sendMessage(fromGroup, fromQQ, sb.toString());
+			 }
+			 sb.setLength(0);
+			 boolean hasOverdrive=false;
+			 sb.append("overdrive:");
+			 for (String s:TH13GameData.overdrive) {
+			 if (gotSpells.contains(s)) {
+			 sb.append("\n").append(s);
+			 hasOverdrive = true;
+			 }
+			 }
+			 if (hasOverdrive) {
+			 Autoreply.sendMessage(fromGroup, fromQQ, sb.toString());
+			 }
+			 */
 			return true;	
 		}
 
 		if (msg.equals("查看成就")) {
-			StringBuilder sb=new StringBuilder("列表:");
 			ArchievementBean ab=archiMap.get(fromQQ);
 			if (ab == null) {
 				Autoreply.sendMessage(fromGroup, 0, "你没有获得成就");
 				return true;
 			}
+			StringBuilder sb=new StringBuilder("列表:");
 			for (Archievement ac:archList) {
-				sb.append("\n").append(ac.name).append(ab.isArchievementGot(ac.archNum) ?":√ ": ":x");//.append(" 奖励:").append(ac.coins).append("幻币");
+				sb.append("\n").append(ac.name).append(ab.isArchievementGot(ac.archNum) ?":√ ": ":x");//.append(" 奖励:").append(ac.faith).append("幻币");
 			}
 			Autoreply.sendMessage(fromGroup, 0, sb.toString());
 			return true;	
@@ -321,14 +323,14 @@ public class SpellCollect {
 			return true;	
 		}
 
-		if (msg.equals("~coins")) {
-			Autoreply.sendMessage(fromGroup, 0, "你有" + Autoreply.instence.coinManager.getCoinsCount(fromQQ) + "个幻币");
+		if (msg.equals("~faith")) {
+			Autoreply.sendMessage(fromGroup, 0, "你有" + Autoreply.instence.faithManager.getFaithCount(fromQQ) + "个幻币");
 			return true;
 		}
 		return false;
 	}
 
-	private void checkArchievement(long fromGroup, long toQQ, HashSet<String> gotSpell) {
+	private void checkArchievement(long fromGroup, long toQQ, HashSet<SpellCard> gotSpell) {
 		ArchievementBean ab=archiMap.get(toQQ);
 		if (ab == null) {
 			ab = new ArchievementBean();
@@ -337,22 +339,22 @@ public class SpellCollect {
 		for (Archievement ac:archList) {
 			if (ac.getNewArchievement(ab, gotSpell)) {
 				ab.addArchievement(ac.archNum);
-				Autoreply.sendMessage(fromGroup, toQQ, "获得成就:" + ac.name + "\n获得奖励:" + ac.coins + "\n条件:" + ac.describe);	
-				Autoreply.instence.coinManager.addCoins(toQQ, ac.coins);
+				Autoreply.sendMessage(fromGroup, toQQ, "获得成就:" + ac.name + "\n获得奖励:" + ac.faith + "\n条件:" + ac.describe);	
+				Autoreply.instence.faithManager.addFaith(toQQ, ac.faith);
 			}
 		}
 		saveArchiConfig();
 	}
 
-	private boolean isCointains(String name) {
-		for (String s:DiceImitate.spells) {
-			if (s.equals(name)) {
-				return true;
-			}
-		}
-		return false;
-	}
-
+	/*private boolean isCointains(String name) {
+	 for (SpellCard s:DiceImitate.spells) {
+	 if (s.equals(name)) {
+	 return true;
+	 }
+	 }
+	 return false;
+	 }
+	 */
 
 	private void backupData() {
         while (true) {
@@ -361,7 +363,7 @@ public class SpellCollect {
                 File backup1= new File(spellFile.getAbsolutePath() + ".bak" + System.currentTimeMillis());
                 FileOutputStream fos1 = new FileOutputStream(backup1);
                 OutputStreamWriter writer1 = new OutputStreamWriter(fos1, StandardCharsets.UTF_8);
-                writer1.write(Autoreply.gson.toJson(chm));
+                writer1.write(Autoreply.gson.toJson(spellsMap));
                 writer1.flush();
                 fos1.close();			
 				File ar=new File(archiFile.getAbsolutePath() + ".bak" + System.currentTimeMillis());
@@ -376,11 +378,55 @@ public class SpellCollect {
         }
     }
 
-	private void saveConfig() {
+	public SpellCard getSpellCard(String s) {
+		for (SpellCard sc:DiceImitate.spells) {
+			if (sc.name.contains(s)) {
+				return sc;
+			}
+		}
+		return null;
+	}
+
+	public SpellCard getSpellCard(String s, int diff) {
+		for (SpellCard sc:DiceImitate.spells) {
+			if (sc.name.contains(s) && sc.diffcult == diff) {
+				return sc;
+			}
+		}
+		return null;
+	}
+
+	public HashSet<SpellCard> getCharaSpellCard(String name) {
+		HashSet<SpellCard> scs=new HashSet<>();
+		for (SpellCard sc:DiceImitate.spells) {
+			if (sc.master.equals(name)) {
+				scs.add(sc);
+			}
+		}
+		return scs;
+	}
+
+	public HashSet<SpellCard> getCharaSpellCard(String name, String... spellExcept) {
+		HashSet<SpellCard> scs=new HashSet<>();
+		for (SpellCard sc:DiceImitate.spells) {
+			if (sc.master.equals(name)) {
+				for (String necx:spellExcept) {
+					if (!sc.name.equals(necx)) {
+						scs.add(sc);
+					}
+				}
+			}
+		}
+		return scs;
+	}
+
+
+
+	private void saveSpellConfig() {
         try {
             FileOutputStream fos = new FileOutputStream(spellFile);
             OutputStreamWriter writer = new OutputStreamWriter(fos, StandardCharsets.UTF_8);
-            writer.write(Autoreply.gson.toJson(chm));
+            writer.write(Autoreply.gson.toJson(spellsMap));
             writer.flush();
             fos.close();
         } catch (IOException e) {

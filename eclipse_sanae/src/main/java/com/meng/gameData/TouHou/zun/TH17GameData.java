@@ -1,5 +1,7 @@
 package com.meng.gameData.TouHou.zun;
 
+import com.meng.gameData.TouHou.*;
+
 public class TH17GameData {
 	public static final String gameName="东方鬼形兽 ~ Wily Beast and Weakest Creature.";
 	public static final String gameNameCN="东方鬼形兽";
@@ -34,6 +36,8 @@ public class TH17GameData {
 		"畜生们的休息",
 		"从地下的归还",
 		"Player's Score"	
+	};
+	public static SpellCard[] spellcards=new SpellCard[]{
 	};
 	public static String[] spells=new String[]{
 		"石符「石林」",

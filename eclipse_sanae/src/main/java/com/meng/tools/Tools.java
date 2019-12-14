@@ -8,6 +8,7 @@ import java.nio.charset.*;
 import java.security.*;
 import java.util.*;
 import org.jsoup.*;
+import com.meng.gameData.TouHou.*;
 
 public class Tools {
 
@@ -47,7 +48,7 @@ public class Tools {
 				return null;
 			}
 		}
-		public static String toMD5(java.io.File file) {
+		public static String toMD5(File file) {
 			InputStream inputStream = null;
 			try {
 				inputStream = new FileInputStream(file);
@@ -204,6 +205,21 @@ public class Tools {
 	}
 
 	public static class ArrayTool {
+
+		public static SpellCard[] mergeArray(SpellCard[]... spells) {
+			int allLen=0;
+			for (SpellCard[] bs:spells) {
+				allLen += bs.length;
+			}
+			SpellCard[] finalArray=new SpellCard[allLen];
+			int flag=0;
+			for (SpellCard[] byteArray:spells) {
+				for (int i=0;i < byteArray.length;++flag,++i) {
+					finalArray[flag] = byteArray[i];
+				}
+			}
+			return finalArray;
+		}
 		public static byte[] mergeArray(byte[]... arrays) {
 			int allLen=0;
 			for (byte[] bs:arrays) {
