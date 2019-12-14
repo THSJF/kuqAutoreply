@@ -148,13 +148,9 @@ public class Autoreply extends JcqAppAbstract implements ICQVer, IMsg, IRequest 
 		//	if (fromGroup != 807242547L){
 		//		return MSG_IGNORE;
 		//}
-        if (adminMessageProcessor.check(fromGroup, fromQQ, msg)) {
-            return MSG_IGNORE;
-        }
-		if (Autoreply.instence.SeijiaInThis.contains(fromGroup)) {
-			return MSG_IGNORE;
+		if (!Autoreply.instence.SeijiaInThis.contains(fromGroup)) {
+			configManager.send(SanaeDataPack.encode(SanaeDataPack._15incSpeak).write(fromGroup).write(fromQQ));
 		}
-		configManager.send(SanaeDataPack.encode(SanaeDataPack._15incSpeak).write(fromGroup).write(fromQQ));
 		if (messageTooManyManager.checkMsgTooMany(fromGroup, fromQQ, msg)) {
 			return MSG_IGNORE;
 		}
@@ -162,6 +158,9 @@ public class Autoreply extends JcqAppAbstract implements ICQVer, IMsg, IRequest 
             return MSG_IGNORE;
         }
         if (configManager.isNotReplyWord(msg)) {
+            return MSG_IGNORE;
+        }
+        if (adminMessageProcessor.check(fromGroup, fromQQ, msg)) {
             return MSG_IGNORE;
         }
         threadPool.execute(new MsgRunnable(fromGroup, fromQQ, msg, msgId));
