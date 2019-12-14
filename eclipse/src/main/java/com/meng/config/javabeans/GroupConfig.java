@@ -1,6 +1,6 @@
 package com.meng.config.javabeans;
 
-import java.util.ArrayList;
+import java.util.*;
 
 public class GroupConfig extends Object {
     public long groupNumber = 0;

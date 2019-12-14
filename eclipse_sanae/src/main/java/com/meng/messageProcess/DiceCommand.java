@@ -1,9 +1,14 @@
 package com.meng.messageProcess;
-import com.meng.tools.*;
 import com.meng.*;
+import com.meng.tools.*;
+
 import static com.meng.Autoreply.sendMessage;
+
 public class DiceCommand {
 
+	public DiceCommand() {
+
+	}
 
 	public void userCmd(long fromGroup, long fromQQ, String msg) {
 		if (Autoreply.instence.CC.getAt(msg) != -1000 && !Tools.CQ.isAtme(msg)) {
@@ -21,7 +26,13 @@ public class DiceCommand {
 			return;
 		}
 		if (msg.startsWith(".welcome ")) {
-
+			String wel=msg.substring(9);
+			if (wel.length() > 100) {
+				Autoreply.sendMessage(fromGroup, 0, "太长了");
+				return;
+			}
+			Autoreply.instence.configManager.setWelcome(fromGroup, wel);
+			Autoreply.sendMessage(fromGroup, 0, String.format("已设置入群欢迎词为「%s」", wel));
 			return;
 		}
 	}
@@ -59,4 +70,6 @@ public class DiceCommand {
 				});
 		}
 	}
+
+
 }

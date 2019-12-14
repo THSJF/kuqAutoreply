@@ -36,7 +36,7 @@ public class TimeTip implements Runnable {
 							public void run() {
 								List<Group> groupList=Autoreply.CQ.getGroupList();
 								for (Group g:groupList) {
-									if (Autoreply.sendMessage(g.getId(), 0, (String)Tools.ArrayTool.rfa(goodEvening)) < 0) {
+									if (Autoreply.sendMessage(g.getId(), 0, goodEvening) < 0) {
 										continue;
 									}
 									try {
@@ -56,7 +56,7 @@ public class TimeTip implements Runnable {
 								Autoreply.sleeping = false;
 								List<Group> groupList=Autoreply.CQ.getGroupList();
 								for (Group g:groupList) {
-									if (Autoreply.sendMessage(g.getId(), 0, (String)Tools.ArrayTool.rfa(goodMorning)) < 0) {
+									if (Autoreply.sendMessage(g.getId(), 0, goodMorning) < 0) {
 										continue;
 									}
 									try {
@@ -74,7 +74,6 @@ public class TimeTip implements Runnable {
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
-
         }
     }
 }

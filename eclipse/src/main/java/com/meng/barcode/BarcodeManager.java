@@ -1,15 +1,12 @@
 package com.meng.barcode;
 
-import java.awt.*;
-import java.awt.image.BufferedImage;
-import java.io.File;
-import javax.imageio.ImageIO;
-
-import com.google.zxing.Result;
-import com.meng.Autoreply;
-import com.meng.tools.Methods;
-import com.sobte.cqp.jcq.entity.CQImage;
+import com.google.zxing.*;
+import com.meng.*;
+import com.meng.barcode.*;
 import com.meng.tools.*;
+import java.io.*;
+import java.awt.image.BufferedImage;
+import javax.imageio.ImageIO;
 
 public class BarcodeManager {
 

@@ -1,16 +1,12 @@
 package com.meng.groupChat;
 
-import com.meng.Autoreply;
-import com.meng.tools.Methods;
-import com.meng.config.javabeans.GroupConfig;
-import com.meng.config.javabeans.PersonInfo;
-import com.meng.tools.FingerPrint;
-import com.sobte.cqp.jcq.entity.Member;
-
-import javax.imageio.ImageIO;
-import java.io.File;
-import java.util.HashSet;
+import com.meng.*;
+import com.meng.config.javabeans.*;
 import com.meng.tools.*;
+import com.sobte.cqp.jcq.entity.*;
+import java.io.*;
+import java.util.*;
+import javax.imageio.ImageIO;
 
 public class FanPoHaiManager {
     private HashSet<FingerPrint> fingerPrints = new HashSet<>(64);

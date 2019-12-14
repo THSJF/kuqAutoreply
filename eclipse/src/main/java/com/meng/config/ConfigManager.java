@@ -181,9 +181,9 @@ public class ConfigManager {
         Autoreply.instence.threadPool.execute(new Runnable() {
 				@Override
 				public void run() {
-					//    HashSet<Group> groups = Methods.findQQInAllGroup(qq);
+					//    HashSet<Group> groups = Tools.CQ.findQQInAllGroup(qq);
 					//   for (Group g : groups) {
-                    // if (Methods.ban(g.getId(), qq, 300)) {
+                    // if (Tools.CQ.ban(g.getId(), qq, 300)) {
                     //    sendMessage(g.getId(), 0, "不要问为什么你会进黑名单，你干了什么自己知道");
                     //   }
 					//    }
@@ -198,6 +198,11 @@ public class ConfigManager {
 		saveConfig();
 	}
 
+	class PortConfig {
+		public int configPort = 0;
+		public int dicPort = 0;
+	}
+	
     public void saveConfig() {
         try {
             File file = new File(Autoreply.appDirectory + "configV3.json");

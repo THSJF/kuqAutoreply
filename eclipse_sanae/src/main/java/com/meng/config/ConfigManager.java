@@ -9,9 +9,11 @@ import com.meng.messageProcess.*;
 import com.meng.tip.*;
 import com.meng.tools.*;
 import com.sobte.cqp.jcq.entity.*;
+import java.io.*;
 import java.lang.reflect.*;
 import java.net.*;
 import java.nio.*;
+import java.nio.charset.*;
 import java.util.*;
 import java.util.concurrent.*;
 import org.java_websocket.client.*;
@@ -22,9 +24,17 @@ public class ConfigManager extends WebSocketClient {
     public ConfigJavaBean configJavaBean = new ConfigJavaBean();
 
 	private ConcurrentHashMap<Integer,TaskResult> resultMap=new ConcurrentHashMap<>();
-
+	private HashMap<Long,String> welcomeMap=new HashMap<>();
+	private File welcomeJsonFile;
 	public ConfigManager(URI uri) {
 		super(uri);
+		Type type = new TypeToken<HashMap<Long,String>>() {
+		}.getType();
+		welcomeJsonFile = new File(Autoreply.appDirectory + "/properties/welcome.json");
+		if (!welcomeJsonFile.exists()) {
+			saveWelcomeConfig();
+		}
+        welcomeMap = Autoreply.gson.fromJson(Tools.FileTool.readString(welcomeJsonFile), type);
 	}
 
 	@Override
@@ -207,6 +217,18 @@ public class ConfigManager extends WebSocketClient {
 		return Tools.BitConverter.toString(getTaskResult(SanaeDataPack._32retLiveList).data);
 	}
 
+	public void setWelcome(long group, String welcome) {
+		welcomeMap.put(group, welcome);
+		saveWelcomeConfig();
+	}
+
+	public String getWelcome(long group) {
+		if (welcomeMap.get(group) == null) {
+			return null;
+		}
+		return welcomeMap.get(group);
+	}
+
 	private TaskResult getTaskResult(int opCode) {
 		int time=3000;
 		while (resultMap.get(opCode) == null && time-- > 0) {
@@ -340,4 +362,17 @@ public class ConfigManager extends WebSocketClient {
 				}
 			});
 	}
+
+	public void saveWelcomeConfig() {
+        try {
+            FileOutputStream fos = new FileOutputStream(welcomeJsonFile);
+            OutputStreamWriter writer = new OutputStreamWriter(fos, StandardCharsets.UTF_8);
+            writer.write(Autoreply.gson.toJson(welcomeMap));
+            writer.flush();
+            fos.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
 }

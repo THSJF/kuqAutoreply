@@ -1,14 +1,9 @@
 package com.meng.messageProcess;
 
-import com.meng.Autoreply;
-import com.meng.MessageSender;
-import com.meng.groupChat.FanPoHaiManager;
-import com.sobte.cqp.jcq.entity.CQImage;
-
-import java.io.File;
-import java.io.IOException;
-import java.util.HashSet;
-import java.util.List;
+import com.meng.*;
+import com.sobte.cqp.jcq.entity.*;
+import java.io.*;
+import java.util.*;
 
 import static com.meng.Autoreply.sendMessage;
 

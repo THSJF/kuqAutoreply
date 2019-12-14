@@ -21,6 +21,10 @@ public class GroupMemberChangerListener {
         } else {
             sendMessage(fromGroup, 0, "欢迎新人");
         }
+		String wel=Autoreply.instence.configManager.getWelcome(fromGroup);
+		if (wel != null) {
+			sendMessage(fromGroup, 0, wel);
+		}
 	}
 
     public void checkDecrease(int subtype, int sendTime, final long fromGroup, final long fromQQ, long beingOperateQQ) {

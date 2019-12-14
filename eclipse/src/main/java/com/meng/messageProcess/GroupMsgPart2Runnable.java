@@ -158,13 +158,13 @@ public class GroupMsgPart2Runnable implements Runnable {
 			}
             return true;
 		}
-        if (groupConfig.isPohai() && Methods.isPohaitu(fromGroup, fromQQ, msg)) {
+        if (groupConfig.isPohai() && Tools.CQ.isPohaitu(fromGroup, fromQQ, msg)) {
             return true;
 		}
-        if (groupConfig.isSetu() && Methods.isSetu(fromGroup, fromQQ, msg)) {
+        if (groupConfig.isSetu() && Tools.CQ.isSetu(fromGroup, fromQQ, msg)) {
             return true;
 		}
-        if (groupConfig.isNvZhuang() && Methods.isNvZhuang(fromGroup, fromQQ, msg)) {
+        if (groupConfig.isNvZhuang() && Tools.CQ.isNvZhuang(fromGroup, fromQQ, msg)) {
             return true;
 		}
         if (groupConfig.isBarcode() && Autoreply.instence.barcodeManager.check(fromGroup, fromQQ, msg, imageFiles)) {// 二维码
@@ -173,7 +173,7 @@ public class GroupMsgPart2Runnable implements Runnable {
         if (groupConfig.isSearchPic() && Autoreply.instence.picSearchManager.check(fromGroup, fromQQ, msg, imageFiles)) {// 搜索图片
             return true;
 		}
-        //   if (groupConfig.isKuiping() && Methods.checkLook(fromGroup, msg)) {// 窥屏检测
+        //   if (groupConfig.isKuiping() && Tools.CQ.checkLook(fromGroup, msg)) {// 窥屏检测
         //       return true;
         //    }
         if (groupConfig.isBilibiliCheck() && Autoreply.instence.biliLinkInfo.check(fromGroup, fromQQ, msg)) {// 比利比利链接详情

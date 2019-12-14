@@ -1,10 +1,7 @@
 package com.meng.tools;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.IOException;
-import java.util.HashMap;
-import java.util.Map;
+import java.io.*;
+import java.util.*;
 
 public class FileTypeUtil {
     private Map<String, String> fileTypeMap = new HashMap<String, String>();

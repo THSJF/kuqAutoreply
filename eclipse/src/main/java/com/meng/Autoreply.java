@@ -267,7 +267,7 @@ public class Autoreply extends JcqAppAbstract implements ICQVer, IMsg, IRequest 
         Autoreply.instence.threadPool.execute(new Runnable() {
 				@Override
 				public void run() {
-					//     if (Methods.checkXiong(fromQQ, msg)) {
+					//     if (Tools.CQ.checkXiong(fromQQ, msg)) {
 					//         return;
 					//      }
 					if (fromQQ == Autoreply.instence.configManager.configJavaBean.ogg || configManager.isMaster(fromQQ)) {

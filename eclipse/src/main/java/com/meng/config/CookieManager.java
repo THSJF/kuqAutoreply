@@ -85,4 +85,13 @@ public class CookieManager {
 			  return false;
 		  }
 	  }
+	  
+	class Cookie {
+		public String Sunny="";
+		public String Luna="";
+		public String Star="";
+		public String xinghuo="";
+		public String Hina="";
+		public String grzx="";
+	}
   }

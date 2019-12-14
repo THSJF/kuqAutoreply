@@ -411,4 +411,13 @@ public class RitsukageDataPack {
 	private long readLong(byte[] data, int pos) {
         return ((data[pos] & 0xffL) << 0) | (data[pos + 1] & 0xffL) << 8 | (data[pos + 2] & 0xffL) << 16 | (data[pos + 3] & 0xffL) << 24 | (data[pos + 4] & 0xffL) << 32 | (data[pos + 5] & 0xffL) << 40 | (data[pos + 6] & 0xffL) << 48 | (data[pos + 7] & 0xffL) << 56;
 	}
+	
+	class RitsukageBean {
+		public String s1="";
+		public String s2="";
+		public String s3="";
+		public long n1=0;
+		public long n2=0;
+		public long n3=0;
+	}
 }

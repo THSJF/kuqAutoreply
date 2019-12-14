@@ -60,10 +60,10 @@ public class PrivateMsgRunnable implements Runnable {
             Autoreply.sendMessage(fromGroup, fromQQ, msgSend.equals("") ? "居然没有飞机佬直播" : msgSend);
             return true;
         }
-        if (Methods.isPohaitu(fromGroup, fromQQ, msg)) {
+        if (Tools.CQ.isPohaitu(fromGroup, fromQQ, msg)) {
             return true;
         }
-        if (Methods.isSetu(fromGroup, fromQQ, msg)) {
+        if (Tools.CQ.isSetu(fromGroup, fromQQ, msg)) {
             return true;
         }
         if (Autoreply.instence.barcodeManager.check(fromGroup, fromQQ, msg, imageFiles)) {// 二维码
