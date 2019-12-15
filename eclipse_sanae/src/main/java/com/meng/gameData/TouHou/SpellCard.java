@@ -1,6 +1,4 @@
 package com.meng.gameData.TouHou;
-import com.meng.*;
-
 
 public class SpellCard {
 

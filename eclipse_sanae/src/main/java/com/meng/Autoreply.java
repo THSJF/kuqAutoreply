@@ -37,7 +37,7 @@ public class Autoreply extends JcqAppAbstract implements ICQVer, IMsg, IRequest 
 	public FaithManager faithManager;
 	public BirthdayTip birthdayTip;
 
-	public DiceImitate diceImitate=new DiceImitate();
+	public DiceImitate diceImitate;
 	public static final long mainGroup=807242547L;
 	public static Gson gson;
 	public MessageTooManyManager messageTooManyManager;
