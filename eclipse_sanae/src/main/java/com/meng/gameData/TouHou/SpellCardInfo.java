@@ -72,9 +72,6 @@ public class SpellCardInfo {
 			case "土符「慵懒三石塔 上级」":
 				ps="未填坑";
 				break;
-			case "火符「火神之光」":
-				ps="未填坑";
-				break;
 			case "水符「湖葬」":
 				ps="未填坑";
 				break;
