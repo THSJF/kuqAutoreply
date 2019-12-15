@@ -120,12 +120,11 @@ public class DiceImitate {
 											  "依神女苑"});
 		name = Tools.ArrayTool.mergeArray(name, TH16GameData.charaName);
 		name = Tools.ArrayTool.mergeArray(name, TH17GameData.charaName);
+		cat.addAll(Autoreply.instence.spellCollect.getCharaSpellCard("橙"));
+		cat.addAll(Autoreply.instence.spellCollect.getCharaSpellCard("火焰猫燐"));
+		memory.addAll(Autoreply.instence.spellCollect.getCharaSpellCard("古明地觉", "想起「恐怖的回忆」", "想起「恐怖催眠术」"));
+		pachouli.addAll(Autoreply.instence.spellCollect.getCharaSpellCard("帕秋莉·诺蕾姬"));
 
-		Collections.addAll(cat, Autoreply.instence.spellCollect.getCharaSpellCard("橙"));
-		Collections.addAll(cat, Autoreply.instence.spellCollect.getCharaSpellCard("火焰猫燐"));
-		Collections.addAll(memory, Autoreply.instence.spellCollect.getCharaSpellCard("古明地觉", "想起「恐怖的回忆」", "想起「恐怖催眠术」"));
-		Collections.addAll(pachouli, Autoreply.instence.spellCollect.getCharaSpellCard("帕秋莉·诺蕾姬"));
-		
 	}
 	public boolean check(long fromGroup, long fromQQ, String msg) {
 		String[] ss = msg.split("\\.");

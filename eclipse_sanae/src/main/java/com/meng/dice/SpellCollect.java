@@ -16,6 +16,7 @@ public class SpellCollect {
 	private HashSet<Long> todaySign=new HashSet<>();
 	private File archiFile;
 	private File spellFile;
+	private File signedFile;
 	public ArrayList<Archievement> archList=new ArrayList<>();
 	public SpellCollect() {
 		spellFile = new File(Autoreply.appDirectory + "/properties/sanaeSpells.json");
@@ -24,16 +25,21 @@ public class SpellCollect {
         }
         Type type = new TypeToken<ConcurrentHashMap<Long,HashSet<SpellCard>>>() {
         }.getType();
-        spellsMap = Autoreply.gson.fromJson(Tools.FileTool.readString(Autoreply.appDirectory + "/properties/spells.json"), type);
-
+        spellsMap = Autoreply.gson.fromJson(Tools.FileTool.readString(spellFile), type);
 		archiFile = new File(Autoreply.appDirectory + "/properties/archievement.json");
         if (!archiFile.exists()) {
             saveArchiConfig();
         }
         Type type2 = new TypeToken<ConcurrentHashMap<Long,ArchievementBean>>() {
         }.getType();
-        archiMap = Autoreply.gson.fromJson(Tools.FileTool.readString(Autoreply.appDirectory + "/properties/archievement.json"), type2);
-
+        archiMap = Autoreply.gson.fromJson(Tools.FileTool.readString(archiFile), type2);
+		signedFile = new File(Autoreply.appDirectory + "/properties/sign.json");
+		if (!signedFile.exists()) {
+			saveSignConfig();
+		}
+		Type type3=new TypeToken<HashSet<Long>>(){	
+		}.getType();
+		todaySign = Autoreply.gson.fromJson(Tools.FileTool.readString(signedFile), type3);
 		archList.add(new Archievement("恶魔领地", "收集东方红魔乡全部符卡", ArchievementBean.th6All, TH06GameData.spellcards.length, TH06GameData.spellcards));
 		archList.add(new Archievement("完美樱花", "收集东方妖妖梦全部符卡", ArchievementBean.th7All, TH07GameData.spellcards.length, TH07GameData.spellcards));
 		archList.add(new Archievement("永恒之夜", "收集东方永夜抄全部符卡", ArchievementBean.th8All, TH08GameData.spellcards.length, TH08GameData.spellcards));
@@ -60,6 +66,7 @@ public class SpellCollect {
 						Calendar c = Calendar.getInstance();
 						if (c.get(Calendar.MINUTE) == 0 && c.get(Calendar.HOUR_OF_DAY) == 0) {
 							todaySign.clear();
+							saveSignConfig();
 						}
 						try {
 							Thread.sleep(30000);
@@ -84,7 +91,13 @@ public class SpellCollect {
 			checkArchievement(fromGroup, fromQQ);
 			Autoreply.instence.faithManager.addFaith(fromQQ, 10);
 			todaySign.add(fromQQ);
+			saveSignConfig();
 			return true;
+		}
+
+		if (msg.equals("-clean") && Autoreply.instence.configManager.isAdmin(fromQQ)) {
+			todaySign.clear();
+			saveSignConfig();
 		}
 
 		if (msg.equals("-查看符卡")) {
@@ -275,7 +288,7 @@ public class SpellCollect {
         }
     }
 
-	public void saveArchiConfig() {
+	private void saveArchiConfig() {
         try {
             FileOutputStream fos = new FileOutputStream(archiFile);
             OutputStreamWriter writer = new OutputStreamWriter(fos, StandardCharsets.UTF_8);
@@ -287,4 +300,15 @@ public class SpellCollect {
         }
     }
 
+	private void saveSignConfig() {
+        try {
+            FileOutputStream fos = new FileOutputStream(signedFile);
+            OutputStreamWriter writer = new OutputStreamWriter(fos, StandardCharsets.UTF_8);
+            writer.write(Autoreply.gson.toJson(todaySign));
+            writer.flush();
+            fos.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
 }
