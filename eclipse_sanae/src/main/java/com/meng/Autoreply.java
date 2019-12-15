@@ -14,12 +14,14 @@ import java.io.*;
 import java.net.*;
 import java.util.*;
 import java.util.concurrent.*;
+import com.meng.gameData.TouHou.*;
 
 public class Autoreply extends JcqAppAbstract implements ICQVer, IMsg, IRequest {
 
     public static Autoreply instence;
     public Random random = new Random();
 	public RepeaterManager repeatManager;
+	public TouHouDataManager touHouDataManager=new TouHouDataManager();
     public TimeTip timeTip = new TimeTip();
 	public CQCodeManager CQcodeManager = new CQCodeManager();
 	public ConfigManager configManager;
