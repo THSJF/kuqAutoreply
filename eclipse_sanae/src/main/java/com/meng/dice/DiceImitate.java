@@ -12,7 +12,7 @@ public class DiceImitate {
 	public static String[] neta;
 	public static String[] music;
 	public static String[] name;
-
+	public static String[] wayToGoodEnd;
 	private static String[] pl01 = new String[]{"别打砖块了，来飞机"};
 	private static String[] pl02 = new String[]{"范围重视型", "高灵击伤害 平衡型", "威力重视型"};
     private static String[] pl03 = new String[]{"博丽灵梦", "魅魔", "雾雨魔理沙", "爱莲", "小兔姬", "卡娜·安娜贝拉尔", "朝仓理香子", "北白河千百合", "冈崎梦美"};
@@ -54,6 +54,21 @@ public class DiceImitate {
 			"城lnm",
 			"绀lnm",
 			"璋lnn"};
+		wayToGoodEnd = new String[]{
+			"红魔乡normal",
+			"妖妖梦easy",
+			"永夜抄6B",
+			"风神录normal",
+			"地灵殿normal",
+			"星莲船normal",
+			"神灵庙normal",
+			"辉针城灵梦B",
+			"辉针城魔理沙B",
+			"辉针城咲夜B",
+			"绀珠传no miss",
+			"天空璋extra",
+			"鬼形兽normal"
+		};
 		music = new String[]{
 			//th4
 			"bad apple",
@@ -193,13 +208,16 @@ public class DiceImitate {
 			String drawcmd=msg.substring(6);
 			switch (drawcmd) {
 				case "help":
-					Autoreply.sendMessage(fromGroup, 0, "当前有:spell neta music grandma game all");
+					Autoreply.sendMessage(fromGroup, 0, "当前有:spell neta music grandma game");
 					return true;
 				case "spell":
 					Autoreply.sendMessage(fromGroup, 0, spells[new Random().nextInt(spells.length)].n);
 					return true;
 				case "neta":
 					Autoreply.sendMessage(fromGroup, 0, String.format("%s今天宜打%s", pname, md5RanStr(fromQQ, neta)));
+					return true;
+				case "game":
+					Autoreply.sendMessage(fromGroup, 0, String.format("%s今天宜打%s", pname, md5RanStr(fromQQ, wayToGoodEnd)));
 					return true;
 				case "music":
 					Autoreply.sendMessage(fromGroup, 0, String.format("%s今天宜听%s", pname, md5RanStr(fromQQ, music)));
@@ -211,41 +229,10 @@ public class DiceImitate {
 					}
 					Autoreply.sendMessage(fromGroup, 0, String.format("%s今天宜认%s当奶奶", pname, md5RanStr(fromQQ, name)));
 					return true;
-				case "game":
-					String s=randomGame(pname, fromQQ, true);
-					s += ",";
-					s += randomGame(pname, fromQQ + 1, false);
-					Autoreply.sendMessage(fromGroup, 0, s);
-					return true;
 				case "jrrp":
 					Autoreply.sendMessage(fromGroup, 0, String.format("%s今天会在%s疮痍", pname, md5RanStr(fromQQ, spells)));
 					return true;
-				case "all":
-					String sss=String.format("%s今天宜打%s", pname, md5RanStr(fromQQ, neta));
-					sss += "\n";
-					sss += String.format("%s今天宜听%s", pname, md5RanStr(fromQQ, music));
-					sss += "\n";
-					if (Tools.Hash.toMD5(String.valueOf(fromQQ + System.currentTimeMillis() / (24 * 60 * 60 * 1000))).charAt(0) == '0') {
-						sss += String.format("%s今天宜认八云紫当奶奶", pname);
-					} else {
-						sss += String.format("%s今天宜认%s当奶奶", pname, md5RanStr(fromQQ, name));
-					}
-					sss += "\n";
-					sss += randomGame(pname, fromQQ, true);
-					sss += ",";
-					sss += randomGame(pname, fromQQ + 1, false);
-					sss += "\n";
-					float fpro=0f;
-					if (c == '0') {
-						fpro = 99.61f;
-					} else if (c == '1') {
-						fpro = 97.60f;
-					} else {
-						fpro = ((float)(md5Random(fromQQ) % 10001)) / 100;
-					}
-					sss += String.format("%s今天会在%.2f%%处疮痍", pname, fpro);
-					Autoreply.sendMessage(fromGroup, 0, sss);
-					return true;			
+
 				default:
 					if (drawcmd.startsWith("spell ")) {	
 						int i=-1;
