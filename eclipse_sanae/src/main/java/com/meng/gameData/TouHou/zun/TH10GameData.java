@@ -8,14 +8,14 @@ public class TH10GameData {
 	public static final String gameNameAbbr="MoF";
 	public static String[] players = new String[]{"博丽灵梦 诱导装备", "博丽灵梦 前方集中装备", "博丽灵梦 封印装备", "雾雨魔理沙 高威力装备", "雾雨魔理沙 贯通装备", "雾雨魔理沙 魔法使装备"};
 	public static TouhouCharacter[] charaName=new TouhouCharacter[]{
-		new TouhouCharacter("秋静叶", gameNameCN),
-		new TouhouCharacter("秋穰子", gameNameCN),
+		new TouhouCharacter("秋静叶", gameNameCN, "寂寞与终焉的象征"),
+		new TouhouCharacter("秋穰子", gameNameCN, "丰裕与收成的象征"),
 		new TouhouCharacter("键山雏", gameNameCN, "秘神流雏"),
 		new TouhouCharacter("河城荷取", gameNameCN, "超妖怪弹头"),
-		new TouhouCharacter("犬走椛", gameNameCN),
-		new TouhouCharacter("射命丸文", gameNameCN),
-		new TouhouCharacter("东风谷早苗", gameNameCN),
-		new TouhouCharacter("八坂神奈子", gameNameCN),
+		new TouhouCharacter("犬走椛", gameNameCN, "下端警戒天狗"),
+		new TouhouCharacter("射命丸文", gameNameCN, "最接近村落的天狗"),
+		new TouhouCharacter("东风谷早苗", gameNameCN, "祭祀风的人类"),
+		new TouhouCharacter("八坂神奈子", gameNameCN, "山坂与湖水的化身"),
 		new TouhouCharacter("洩矢诹访子", gameNameCN, "土著神的顶点")
 	};
 	public static String[] musicName=new String[]{

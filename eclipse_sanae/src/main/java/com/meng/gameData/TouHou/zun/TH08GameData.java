@@ -7,16 +7,16 @@ public class TH08GameData {
 	public static final String gameNameAbbr="IN";
 	public static String[] players = new String[]{"幻想的结界组", "咏唱禁咒组", "梦幻的红魔组", "幽冥之住人组", "博丽灵梦", "八云紫", "雾雨魔理沙", "爱丽丝·玛格特罗依德", "蕾米莉亚·斯卡蕾特", "十六夜咲夜", "西行寺幽幽子", "魂魄妖梦"};
 	public static TouhouCharacter[] charaName=new TouhouCharacter[]{
-		new TouhouCharacter("莉格露", gameNameCN),
-		new TouhouCharacter("米斯蒂娅·萝蕾拉", gameNameCN),
-		new TouhouCharacter("上白泽慧音", gameNameCN),
-		new TouhouCharacter("博丽灵梦", gameNameCN),
-		new TouhouCharacter("雾雨魔理沙", gameNameCN),
+		new TouhouCharacter("莉格露·奈特巴格", gameNameCN, "暗中蠢动的光虫"),
+		new TouhouCharacter("米斯蒂娅·萝蕾拉", gameNameCN, "夜雀妖怪"),
+		new TouhouCharacter("上白泽慧音", gameNameCN, "知识与历史的半兽"),
+		new TouhouCharacter("博丽灵梦", gameNameCN, "乐园的可爱巫女"),
+		new TouhouCharacter("雾雨魔理沙", gameNameCN, "普通的黑魔术少女"),
 		new TouhouCharacter("因幡帝", gameNameCN),
-		new TouhouCharacter("铃仙·优昙华院·因幡", gameNameCN),
-		new TouhouCharacter("八意永琳", gameNameCN),
+		new TouhouCharacter("铃仙·优昙华院·因幡", gameNameCN, "疯狂的月兔"),
+		new TouhouCharacter("八意永琳", gameNameCN, "月之头脑"),
 		new TouhouCharacter("蓬莱山辉夜", gameNameCN, "永远和须臾的罪人"),
-		new TouhouCharacter("藤原妹红", gameNameCN)
+		new TouhouCharacter("藤原妹红", gameNameCN, "蓬莱的人形")
 	};
 	public static String[] musicName=new String[]{
 		"永夜抄 ~ Eastern Night.",

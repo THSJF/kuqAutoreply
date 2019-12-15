@@ -7,17 +7,18 @@ public class TH07GameData {
 	public static final String gameNameAbbr="PCB";
 	public static String[] players = new String[]{"博丽灵梦 灵符", "博丽灵梦 梦符", "雾雨魔理沙 魔符", "雾雨魔理沙 恋符", "十六夜咲夜 幻符", "十六夜咲夜 时符"};
 	public static TouhouCharacter[] charaName=new TouhouCharacter[]{
-		new TouhouCharacter("蕾蒂·霍瓦特洛克", gameNameCN, "冬季的遗忘之物"),
+		new TouhouCharacter("琪露诺", gameNameCN, "冰之妖怪"),
+		new TouhouCharacter("蕾蒂·霍瓦特洛克", gameNameCN, "冬天的遗忘之物"),
 		new TouhouCharacter("橙", gameNameCN , "凶兆的黑猫"),
-		new TouhouCharacter("爱丽丝·玛格特罗依德", gameNameCN),
-		new TouhouCharacter("莉莉白", gameNameCN),
-		new TouhouCharacter("露娜萨·普莉兹姆利巴", gameNameCN),
-		new TouhouCharacter("梅露兰·普莉兹姆利巴", gameNameCN),
-		new TouhouCharacter("莉莉卡·普莉兹姆利巴", gameNameCN),
-		new TouhouCharacter("魂魄妖梦", gameNameCN),
-		new TouhouCharacter("西行寺幽幽子", gameNameCN),
-		new TouhouCharacter("橙", gameNameCN, "隙间妖怪的式之式"),
-		new TouhouCharacter("八云蓝", gameNameCN, "隙间妖怪的式"),
+		new TouhouCharacter("爱丽丝·玛格特罗依德", gameNameCN, "七色的人偶师"),
+		new TouhouCharacter("莉莉白", gameNameCN, "带来春天的妖精"),
+		new TouhouCharacter("露娜萨·普莉兹姆利巴", gameNameCN, "骚灵小号手"),
+		new TouhouCharacter("梅露兰·普莉兹姆利巴", gameNameCN, "骚灵提琴手"),
+		new TouhouCharacter("莉莉卡·普莉兹姆利巴", gameNameCN, "骚灵键盘手"),
+		new TouhouCharacter("魂魄妖梦", gameNameCN, "半分虚幻的园艺师"),
+		new TouhouCharacter("西行寺幽幽子", gameNameCN, "幽冥楼阁的亡灵少女"),
+		new TouhouCharacter("橙", gameNameCN, "隙间妖怪的式神的式神"),
+		new TouhouCharacter("八云蓝", gameNameCN, "隙间妖怪的式神"),
 		new TouhouCharacter("八云紫", gameNameCN, "神隐的主犯")
 	};
 	public static String[] musicName=new String[]{

@@ -8,14 +8,14 @@ public class TH06GameData {
 	public static final String gameNameAbbr="EoSD";
 	public static String[] players = new String[]{"博丽灵梦 灵符", "博丽灵梦 梦符", "雾雨魔理沙 魔符", "雾雨魔理沙 恋符"};
 	public static TouhouCharacter[] charaName=new TouhouCharacter[]{
-		new TouhouCharacter("露米娅", gameNameCN),
-		new TouhouCharacter("大妖精", gameNameCN),
-		new TouhouCharacter("琪露诺", gameNameCN),
-		new TouhouCharacter("红美铃", gameNameCN),
-		new TouhouCharacter("帕秋莉·诺蕾姬", gameNameCN, "不动的大图书馆"),
-		new TouhouCharacter("十六夜咲夜", gameNameCN),
-		new TouhouCharacter("蕾米莉亚·斯卡雷特", gameNameCN, "永远鲜红的幼月"),
-		new TouhouCharacter("芙兰朵露·斯卡雷特", gameNameCN)
+		new TouhouCharacter("露米娅", gameNameCN, "宵暗的妖怪"),
+		new TouhouCharacter("大妖精", gameNameCN, "(无)"),
+		new TouhouCharacter("琪露诺", gameNameCN, "湖上的冰精"),
+		new TouhouCharacter("红美铃", gameNameCN, "华人小姑娘"),
+		new TouhouCharacter("帕秋莉·诺蕾姬", gameNameCN, "知识与避世的少女"),
+		new TouhouCharacter("十六夜咲夜", gameNameCN, "红魔馆的女仆"),
+		new TouhouCharacter("蕾米莉亚·斯卡雷特", gameNameCN, "永远幼小的红月"),
+		new TouhouCharacter("芙兰朵露·斯卡雷特", gameNameCN, "恶魔之妹")
 	};
 	public static String[] musicName=new String[]{
 		"比赤色更红的梦",

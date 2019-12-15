@@ -8,13 +8,13 @@ public class TH15GameData {
 	public static final String gameNameAbbr="LoLK";
 	public static String[] players = new String[]{"博丽灵梦", "雾雨魔理沙", "东风谷早苗", "铃仙·优昙华院·因幡"};
 	public static TouhouCharacter[] charaName=new TouhouCharacter[]{
-		new TouhouCharacter("清兰", gameNameCN),
-		new TouhouCharacter("铃瑚", gameNameCN),
-		new TouhouCharacter("哆来咪·苏伊特", gameNameCN),
-		new TouhouCharacter("稀神探女", gameNameCN),
-		new TouhouCharacter("克劳恩皮丝", gameNameCN),
+		new TouhouCharacter("清兰", gameNameCN, "浅葱色的Eagle Rabbit"),
+		new TouhouCharacter("铃瑚", gameNameCN, "橘色的Eagle Rabbit"),
+		new TouhouCharacter("哆来咪·苏伊特", gameNameCN, "梦之支配者"),
+		new TouhouCharacter("稀神探女", gameNameCN, "招来口舌之祸的女神"),
+		new TouhouCharacter("克劳恩皮丝", gameNameCN, "地狱的妖精"),
 		new TouhouCharacter("纯狐", gameNameCN, "(无)"),
-		new TouhouCharacter("赫卡提亚·拉碧斯拉祖利", gameNameCN)
+		new TouhouCharacter("赫卡提亚·拉碧斯拉祖利", gameNameCN, "地狱的女神")
 	};
 	public static String[] musicName=new String[]{
 		"宇宙巫女现身",

@@ -8,16 +8,16 @@ public class TH13GameData {
 	public static final String gameNameAbbr="TD";
 	public static String[] players = new String[]{"博丽灵梦", "雾雨魔理沙", "东风谷早苗", "魂魄妖梦"};
 	public static TouhouCharacter[] charaName=new TouhouCharacter[]{
-		new TouhouCharacter("西行寺幽幽子", gameNameCN),
-		new TouhouCharacter("幽谷响子", gameNameCN),
-		new TouhouCharacter("多多良小伞", gameNameCN),
-		new TouhouCharacter("宫古芳香", gameNameCN),
-		new TouhouCharacter("霍青娥", gameNameCN),
-		new TouhouCharacter("苏我屠自古", gameNameCN),
-		new TouhouCharacter("物部布都", gameNameCN),
-		new TouhouCharacter("丰聪耳神子", gameNameCN),
-		new TouhouCharacter("封兽鵺", gameNameCN),
-		new TouhouCharacter("二岩瑞藏", gameNameCN)
+		new TouhouCharacter("西行寺幽幽子", gameNameCN, "心无彷徨的亡灵"),
+		new TouhouCharacter("幽谷响子", gameNameCN, "诵经的山彦"),
+		new TouhouCharacter("多多良小伞", gameNameCN, "为难的遗忘之物"),
+		new TouhouCharacter("宫古芳香", gameNameCN, "忠诚的尸体"),
+		new TouhouCharacter("霍青娥", gameNameCN, "穿墙的邪仙"),
+		new TouhouCharacter("苏我屠自古", gameNameCN, "神明后裔的亡灵"),
+		new TouhouCharacter("物部布都", gameNameCN, "古代日本的尸解仙"),
+		new TouhouCharacter("丰聪耳神子", gameNameCN, "圣德道士"),
+		new TouhouCharacter("封兽鵺", gameNameCN, "古代妖怪之一"),
+		new TouhouCharacter("二岩瑞藏", gameNameCN, "狸猫怪 十变化")
 	};
 	public static String[] musicName=new String[]{
 		"欲望深重的灵魂",
