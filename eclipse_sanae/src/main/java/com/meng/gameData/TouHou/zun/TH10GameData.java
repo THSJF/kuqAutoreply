@@ -10,13 +10,13 @@ public class TH10GameData {
 	public static TouhouCharacter[] charaName=new TouhouCharacter[]{
 		new TouhouCharacter("秋静叶", gameNameCN),
 		new TouhouCharacter("秋穰子", gameNameCN),
-		new TouhouCharacter("键山雏", gameNameCN),
-		new TouhouCharacter("河城荷取", gameNameCN),
+		new TouhouCharacter("键山雏", gameNameCN, "秘神流雏"),
+		new TouhouCharacter("河城荷取", gameNameCN, "超妖怪弹头"),
 		new TouhouCharacter("犬走椛", gameNameCN),
 		new TouhouCharacter("射命丸文", gameNameCN),
 		new TouhouCharacter("东风谷早苗", gameNameCN),
 		new TouhouCharacter("八坂神奈子", gameNameCN),
-		new TouhouCharacter("洩矢诹访子", gameNameCN)
+		new TouhouCharacter("洩矢诹访子", gameNameCN, "土著神的顶点")
 	};
 	public static String[] musicName=new String[]{
 		"被封印的众神",

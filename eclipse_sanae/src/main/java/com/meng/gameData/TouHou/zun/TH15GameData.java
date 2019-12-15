@@ -13,7 +13,7 @@ public class TH15GameData {
 		new TouhouCharacter("哆来咪·苏伊特", gameNameCN),
 		new TouhouCharacter("稀神探女", gameNameCN),
 		new TouhouCharacter("克劳恩皮丝", gameNameCN),
-		new TouhouCharacter("纯狐", gameNameCN),
+		new TouhouCharacter("纯狐", gameNameCN, "(无)"),
 		new TouhouCharacter("赫卡提亚·拉碧斯拉祖利", gameNameCN)
 	};
 	public static String[] musicName=new String[]{

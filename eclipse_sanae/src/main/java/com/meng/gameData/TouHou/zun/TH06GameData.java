@@ -12,9 +12,9 @@ public class TH06GameData {
 		new TouhouCharacter("大妖精", gameNameCN),
 		new TouhouCharacter("琪露诺", gameNameCN),
 		new TouhouCharacter("红美铃", gameNameCN),
-		new TouhouCharacter("帕秋莉·诺蕾姬", gameNameCN),
+		new TouhouCharacter("帕秋莉·诺蕾姬", gameNameCN, "不动的大图书馆"),
 		new TouhouCharacter("十六夜咲夜", gameNameCN),
-		new TouhouCharacter("蕾米莉亚·斯卡雷特", gameNameCN),
+		new TouhouCharacter("蕾米莉亚·斯卡雷特", gameNameCN, "永远鲜红的幼月"),
 		new TouhouCharacter("芙兰朵露·斯卡雷特", gameNameCN)
 	};
 	public static String[] musicName=new String[]{

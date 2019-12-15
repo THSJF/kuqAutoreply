@@ -15,7 +15,7 @@ public class TH08GameData {
 		new TouhouCharacter("因幡帝", gameNameCN),
 		new TouhouCharacter("铃仙·优昙华院·因幡", gameNameCN),
 		new TouhouCharacter("八意永琳", gameNameCN),
-		new TouhouCharacter("蓬莱山辉夜", gameNameCN),
+		new TouhouCharacter("蓬莱山辉夜", gameNameCN, "永远和须臾的罪人"),
 		new TouhouCharacter("藤原妹红", gameNameCN)
 	};
 	public static String[] musicName=new String[]{
