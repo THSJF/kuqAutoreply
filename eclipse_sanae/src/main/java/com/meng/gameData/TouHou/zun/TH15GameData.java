@@ -36,6 +36,7 @@ public class TH15GameData {
 		"宇宙巫女归还",
 		"Player's Score"	
 	};
+
 	public static SpellCard[] spellcards=new SpellCard[]{
 		new SpellCard("凶弹「高速撞击」", "清兰", SpellCard.H | SpellCard.L),
 		new SpellCard("弹符「射鹰」", "清兰", SpellCard.E | SpellCard.N),

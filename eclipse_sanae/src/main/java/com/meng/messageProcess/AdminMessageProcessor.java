@@ -14,7 +14,7 @@ public class AdminMessageProcessor {
 	public MyLinkedHashMap<String,String> userPermission=new MyLinkedHashMap<>();
 
     public AdminMessageProcessor() {
-		masterPermission.put(".start|.stop", "总开关");
+		masterPermission.put("-start|-stop", "总开关");
 		masterPermission.put("find:[QQ号]", "在配置文件中查找此人");
 		masterPermission.put("block[艾特一人]", "屏蔽列表");
 		masterPermission.put("black[艾特一人]", "黑名单");
@@ -23,8 +23,7 @@ public class AdminMessageProcessor {
 		masterPermission.put("send.[群号].[内容]", "内容转发至指定群");
 
 		//adminPermission.put("线程数", "线程池信息");
-		adminPermission.put(".bot on|.bot off", "设置是否回复本群");
-		adminPermission.put(".admin enable|.admin disable", "修改配置文件的单群开关");
+		adminPermission.put("-bot on|-bot off", "设置是否回复本群");
 		userPermission.put(".nn [名字]", "设置早苗对你的称呼,如果不设置则恢复默认称呼");
 		//userPermission.put("-int [int] [+|-|*|/|<<|>>|>>>|%|^|&||] [int]", "int运算(溢出)");
 		//userPermission.put("-uint [int]", "int字节转uint(boom)");

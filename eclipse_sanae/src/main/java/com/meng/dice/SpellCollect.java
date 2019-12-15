@@ -125,6 +125,12 @@ public class SpellCollect {
 			return true;	
 		}
 
+		if (msg.startsWith("-符卡查询 ")) {
+			SpellCardInfo sci=new SpellCardInfo(getSpellCard(msg.substring(6)));
+			Autoreply.sendMessage(fromGroup, 0, sci.toString());
+			return true;
+		}
+
 		if (msg.equals("-faith")) {
 			Autoreply.sendMessage(fromGroup, 0, "你的信仰是:" + Autoreply.instence.faithManager.getFaithCount(fromQQ));
 			return true;
