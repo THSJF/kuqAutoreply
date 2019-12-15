@@ -1554,9 +1554,6 @@ public class SpellCardInfo {
 			case "雷矢「元兴寺的龙卷」":
 				ps="未填坑";
 				break;
-			case "怨灵「入鹿之雷」":
-				ps="未填坑";
-				break;
 			case "天符「雨之磐舟」":
 				ps="未填坑";
 				break;
