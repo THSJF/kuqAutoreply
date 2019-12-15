@@ -190,7 +190,7 @@ public class DiceImitate {
 					Autoreply.sendMessage(fromGroup, 0, "当前有:spell neta music grandma game all");
 					return true;
 				case "spell":
-					Autoreply.sendMessage(fromGroup, 0, spells[new Random().nextInt(spells.length)].name);
+					Autoreply.sendMessage(fromGroup, 0, spells[new Random().nextInt(spells.length)].n);
 					return true;
 				case "neta":
 					Autoreply.sendMessage(fromGroup, 0, String.format("%s今天宜打%s", pname, md5RanStr(fromQQ, neta)));
@@ -494,7 +494,7 @@ public class DiceImitate {
 	}
 
 	public String md5RanStr(long fromQQ, SpellCard[] arr) {
-		return arr[md5Random(fromQQ) % arr.length].name;
+		return arr[md5Random(fromQQ) % arr.length].n;
 	}
 
 }

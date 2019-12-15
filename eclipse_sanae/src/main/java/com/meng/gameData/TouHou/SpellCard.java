@@ -12,20 +12,20 @@ public class SpellCard {
 	public static final int Lw=1 << 7;
 	public static final int O=1 << 8;
 
-	public int diffcult=0;
-	public String name;
-	public String master;
+	public int d=0;//difficult
+	public String n;//spell name
+	public String m;//spell master
 
 	public SpellCard(String name, String master, int diffcult) {
-		this.name = name;
-		this.master = master;
-		this.diffcult = diffcult;
+		n = name;
+		m = master;
+		d = diffcult;
 	}
 
 	public SpellCard(String firstName, String lastName, String master, int diffcult) {
-		name = firstName + "「" + lastName + "」";
-		this.master = master;
-		this.diffcult = diffcult;
+		n = firstName + "「" + lastName + "」";
+		m = master;
+		d = diffcult;
 	}
 
 	@Override
@@ -39,7 +39,7 @@ public class SpellCard {
 			return false;
 		}
 		SpellCard spc=(SpellCard)o;
-		return name.equals(spc.name) && diffcult == spc.diffcult;
+		return n.equals(spc.n) && d == spc.d;
 	}
 
 

@@ -32,7 +32,7 @@ public class MsgRunnable implements Runnable {
 			sendMessage(fromGroup, fromQQ, Autoreply.instence.configManager.getLiveList());
 			return;
 		}
-        if (Autoreply.instence.botOff.contains(fromGroup)) {
+        if (Autoreply.instence.configManager.SanaeConfig.botOff.contains(fromGroup)) {
             return;
         }
 		if (msg.startsWith("-int ")) {

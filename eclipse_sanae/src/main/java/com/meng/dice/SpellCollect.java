@@ -86,7 +86,7 @@ public class SpellCollect {
 			}
 			SpellCard sc=getRandomSpell();
 			addSpell(fromQQ, sc);
-			Autoreply.sendMessage(fromGroup, 0, String.format("%s获得了10信仰和 %s", Autoreply.instence.configManager.getNickName(fromQQ), sc.name));
+			Autoreply.sendMessage(fromGroup, 0, String.format("%s获得了10信仰和 %s", Autoreply.instence.configManager.getNickName(fromQQ), sc.n));
 			saveSpellConfig();
 			checkArchievement(fromGroup, fromQQ);
 			Autoreply.instence.faithManager.addFaith(fromQQ, 10);
@@ -112,7 +112,7 @@ public class SpellCollect {
 			int i=0;
 			for (SpellCard s:DiceImitate.spells) {
 				if (gotSpells.contains(s)) {
-					sb.append("\n").append(s.name);
+					sb.append("\n").append(s.n);
 					++i;
 					if (i > 40) {
 						Autoreply.sendMessage(fromGroup, fromQQ, sb.toString());
@@ -173,7 +173,7 @@ public class SpellCollect {
 
 	public SpellCard getSpellCard(String spellName) {
 		for (SpellCard sc:DiceImitate.spells) {
-			if (sc.name.contains(spellName)) {
+			if (sc.n.contains(spellName)) {
 				return sc;
 			}
 		}
@@ -182,7 +182,7 @@ public class SpellCollect {
 
 	public SpellCard getSpellCard(String spellName, int diff) {
 		for (SpellCard sc:DiceImitate.spells) {
-			if (sc.name.contains(spellName) && sc.diffcult == diff) {
+			if (sc.n.contains(spellName) && sc.d == diff) {
 				return sc;
 			}
 		}
@@ -192,7 +192,7 @@ public class SpellCollect {
 	public HashSet<SpellCard> getCharaSpellCard(String name) {
 		HashSet<SpellCard> scs=new HashSet<>();
 		for (SpellCard sc:DiceImitate.spells) {
-			if (sc.master.equals(name)) {
+			if (sc.m.equals(name)) {
 				scs.add(sc);
 			}
 		}
@@ -202,7 +202,7 @@ public class SpellCollect {
 	public HashSet<SpellCard> getCharaSpellCard(String name, int diff) {
 		HashSet<SpellCard> scs=new HashSet<>();
 		for (SpellCard sc:DiceImitate.spells) {
-			if (sc.master.equals(name) && sc.diffcult == diff) {
+			if (sc.m.equals(name) && sc.d == diff) {
 				scs.add(sc);
 			}
 		}
@@ -212,9 +212,9 @@ public class SpellCollect {
 	public HashSet<SpellCard> getCharaSpellCard(String name, String... spellExcept) {
 		HashSet<SpellCard> scs=new HashSet<>();
 		for (SpellCard sc:DiceImitate.spells) {
-			if (sc.master.equals(name)) {
+			if (sc.m.equals(name)) {
 				for (String necx:spellExcept) {
-					if (!sc.name.equals(necx)) {
+					if (!sc.n.equals(necx)) {
 						scs.add(sc);
 					}
 				}
@@ -226,34 +226,34 @@ public class SpellCollect {
 	public SpellCard getRandomSpell() {
 		SpellCard sc=DiceImitate.spells[new Random().nextInt(DiceImitate.spells.length)];
 		ArrayList<Integer> ali=new ArrayList<>();
-		if ((sc.diffcult & SpellCard.E) == SpellCard.E) {
+		if ((sc.d & SpellCard.E) == SpellCard.E) {
 			ali.add(SpellCard.E);
 		}
-		if ((sc.diffcult & SpellCard.N) == SpellCard.N) {
+		if ((sc.d & SpellCard.N) == SpellCard.N) {
 			ali.add(SpellCard.N);
 		}
-		if ((sc.diffcult & SpellCard.H) == SpellCard.H) {
+		if ((sc.d & SpellCard.H) == SpellCard.H) {
 			ali.add(SpellCard.H);
 		}
-		if ((sc.diffcult & SpellCard.L) == SpellCard.L) {
+		if ((sc.d & SpellCard.L) == SpellCard.L) {
 			ali.add(SpellCard.L);
 		}
-		if (sc.diffcult == SpellCard.Ex) {
+		if (sc.d == SpellCard.Ex) {
 			ali.add(SpellCard.Ex);
 		}
-		if (sc.diffcult == SpellCard.Ph) {
+		if (sc.d == SpellCard.Ph) {
 			ali.add(SpellCard.Ph);
 		}
-		if (sc.diffcult == SpellCard.Ls) {
+		if (sc.d == SpellCard.Ls) {
 			ali.add(SpellCard.Ls);
 		}
-		if (sc.diffcult == SpellCard.Lw) {
+		if (sc.d == SpellCard.Lw) {
 			ali.add(SpellCard.Lw);
 		}
-		if (sc.diffcult == SpellCard.O) {
+		if (sc.d == SpellCard.O) {
 			ali.add(SpellCard.O);
 		}
-		return new SpellCard(sc.name, sc.master, ali.get(new Random().nextInt(ali.size())));	
+		return new SpellCard(sc.n, sc.m, ali.get(new Random().nextInt(ali.size())));	
 	}
 
 	public void addSpell(long qq, SpellCard spellToAdd) {
@@ -264,7 +264,7 @@ public class SpellCollect {
 		}
 		SpellCard original=null;
 		for (SpellCard orns:gotSpellsSet) {
-			if (orns.name.equals(spellToAdd.name)) {
+			if (orns.n.equals(spellToAdd.n)) {
 				original = orns;
 				break;
 			}
@@ -272,7 +272,7 @@ public class SpellCollect {
 		if (original == null) {
 			gotSpellsSet.add(spellToAdd);
 		} else {
-			original.diffcult |= spellToAdd.diffcult;
+			original.d |= spellToAdd.d;
 		}
 	}
 

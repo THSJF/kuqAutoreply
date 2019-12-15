@@ -22,7 +22,7 @@ import org.java_websocket.handshake.*;
 
 public class ConfigManager extends WebSocketClient {
     public SeijiaConfigJavaBean SeijiaConfig = new SeijiaConfigJavaBean();
-	private SanaeConfigJavaBean SanaeConfig=new SanaeConfigJavaBean();
+	public SanaeConfigJavaBean SanaeConfig=new SanaeConfigJavaBean();
 	private File SanaeConfigFile;
 
 	private ConcurrentHashMap<Integer,TaskResult> resultMap=new ConcurrentHashMap<>();
@@ -32,7 +32,7 @@ public class ConfigManager extends WebSocketClient {
 		}.getType();
 		SanaeConfigFile = new File(Autoreply.appDirectory + "/SanaeConfig.json");
 		if (!SanaeConfigFile.exists()) {
-			saveWelcomeConfig();
+			saveSanaeConfig();
 		}
         SanaeConfig = Autoreply.gson.fromJson(Tools.FileTool.readString(SanaeConfigFile), type);
 	}
@@ -220,7 +220,7 @@ public class ConfigManager extends WebSocketClient {
 
 	public void setWelcome(long group, String welcome) {
 		SanaeConfig.welcomeMap.put(group, welcome);
-		saveWelcomeConfig();
+		saveSanaeConfig();
 	}
 
 	public String getWelcome(long group) {
@@ -364,7 +364,7 @@ public class ConfigManager extends WebSocketClient {
 			});
 	}
 
-	public void saveWelcomeConfig() {
+	public void saveSanaeConfig() {
         try {
             FileOutputStream fos = new FileOutputStream(SanaeConfigFile);
             OutputStreamWriter writer = new OutputStreamWriter(fos, StandardCharsets.UTF_8);

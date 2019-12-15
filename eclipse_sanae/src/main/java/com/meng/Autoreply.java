@@ -32,8 +32,7 @@ public class Autoreply extends JcqAppAbstract implements ICQVer, IMsg, IRequest 
     public static boolean sleeping = true;
 
 	public static final String userAgent="Mozilla/5.0 (Windows NT 6.1; WOW64; rv:28.0) Gecko/20100101 Firefox/28.0";
-    public HashSet<Long> botOff = new HashSet<>();
-	public HashSet<Long> SeijiaInThis = new HashSet<>();
+    public HashSet<Long> SeijiaInThis = new HashSet<>();
 	public FaithManager faithManager;
 	public BirthdayTip birthdayTip;
 

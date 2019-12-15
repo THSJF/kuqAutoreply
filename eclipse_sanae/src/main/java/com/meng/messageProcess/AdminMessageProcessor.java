@@ -125,14 +125,16 @@ public class AdminMessageProcessor {
 				return true;
 			}
 			if (msg.equals(".早苗说话") || msg.equals(".bot on")) {
-				if (Autoreply.instence.botOff.contains(fromGroup)) {
-					Autoreply.instence.botOff.remove(fromGroup);
+				if (Autoreply.instence.configManager.SanaeConfig.botOff.contains(fromGroup)) {
+					Autoreply.instence.configManager.SanaeConfig.botOff.remove(fromGroup);
+					Autoreply.instence.configManager.saveSanaeConfig();
 					sendMessage(fromGroup, 0, "稳了");
 					return true;
 				}
 			}
 			if (msg.equals(".早苗闭嘴") || msg.equals(".bot off")) {
-				Autoreply.instence.botOff.add(fromGroup);
+				Autoreply.instence.configManager.SanaeConfig.botOff.add(fromGroup);
+				Autoreply.instence.configManager.saveSanaeConfig();
 				sendMessage(fromGroup, 0, "好吧");
 				return true;
 			}

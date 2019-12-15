@@ -76,11 +76,11 @@ public class Archievement {
 				String spellNameAll="";
 				for (SpellCard gotSpell:gotSpells) {
 					if (isPachouliSpell(gotSpell)) {
-						spellNameAll += gotSpell.name;
+						spellNameAll += gotSpell.n;
 					}
 				}
 				for (SpellCard spellStr:spNeed) {
-					if (!spellNameAll.contains(spellStr.name)) {
+					if (!spellNameAll.contains(spellStr.n)) {
 						return false;
 					}
 				}
