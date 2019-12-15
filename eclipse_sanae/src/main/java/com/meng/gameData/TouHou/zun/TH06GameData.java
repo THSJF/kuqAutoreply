@@ -7,15 +7,15 @@ public class TH06GameData {
 	public static final String gameNameCN="东方红魔乡";
 	public static final String gameNameAbbr="EoSD";
 	public static String[] players = new String[]{"博丽灵梦 灵符", "博丽灵梦 梦符", "雾雨魔理沙 魔符", "雾雨魔理沙 恋符"};
-	public static String[] charaName=new String[]{
-		"露米娅",
-		"大妖精",
-		"琪露诺",
-		"红美铃",
-		"帕秋莉·诺蕾姬",
-		"十六夜咲夜",
-		"蕾米莉亚·斯卡雷特",
-		"芙兰朵露·斯卡雷特",
+	public static TouhouCharacter[] charaName=new TouhouCharacter[]{
+		new TouhouCharacter("露米娅", gameNameCN),
+		new TouhouCharacter("大妖精", gameNameCN),
+		new TouhouCharacter("琪露诺", gameNameCN),
+		new TouhouCharacter("红美铃", gameNameCN),
+		new TouhouCharacter("帕秋莉·诺蕾姬", gameNameCN),
+		new TouhouCharacter("十六夜咲夜", gameNameCN),
+		new TouhouCharacter("蕾米莉亚·斯卡雷特", gameNameCN),
+		new TouhouCharacter("芙兰朵露·斯卡雷特", gameNameCN)
 	};
 	public static String[] musicName=new String[]{
 		"比赤色更红的梦",

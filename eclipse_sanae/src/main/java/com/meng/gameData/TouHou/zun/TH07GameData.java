@@ -6,18 +6,18 @@ public class TH07GameData {
 	public static final String gameNameCN="东方妖妖梦";
 	public static final String gameNameAbbr="PCB";
 	public static String[] players = new String[]{"博丽灵梦 灵符", "博丽灵梦 梦符", "雾雨魔理沙 魔符", "雾雨魔理沙 恋符", "十六夜咲夜 幻符", "十六夜咲夜 时符"};
-	public static String[] charaName=new String[]{
-		"蕾蒂·霍瓦特洛克",
-		"橙",
-		"爱丽丝·玛格特罗依德",
-		"莉莉白",
-		"莉莉卡·普莉兹姆利巴", 
-		"梅露兰·普莉兹姆利巴",
-		"露娜萨·普莉兹姆利巴",
-		"魂魄妖梦",
-		"西行寺幽幽子",
-		"八云蓝",
-		"八云紫"
+	public static TouhouCharacter[] charaName=new TouhouCharacter[]{
+		new TouhouCharacter("蕾蒂·霍瓦特洛克", gameNameCN),
+		new TouhouCharacter("橙", gameNameCN),
+		new TouhouCharacter("爱丽丝·玛格特罗依德", gameNameCN),
+		new TouhouCharacter("莉莉白", gameNameCN),
+		new TouhouCharacter("露娜萨·普莉兹姆利巴", gameNameCN),
+		new TouhouCharacter("梅露兰·普莉兹姆利巴", gameNameCN),
+		new TouhouCharacter("莉莉卡·普莉兹姆利巴", gameNameCN),
+		new TouhouCharacter("魂魄妖梦", gameNameCN),
+		new TouhouCharacter("西行寺幽幽子", gameNameCN),
+		new TouhouCharacter("八云蓝", gameNameCN),
+		new TouhouCharacter("八云紫", gameNameCN)
 	};
 	public static String[] musicName=new String[]{
 		"妖妖梦 ~ Snow or Cherry Petal",

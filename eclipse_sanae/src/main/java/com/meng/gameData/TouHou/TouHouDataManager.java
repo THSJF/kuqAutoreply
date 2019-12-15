@@ -1,19 +1,33 @@
 package com.meng.gameData.TouHou;
 
+import com.meng.*;
 import com.meng.dice.*;
 import java.util.*;
-import com.meng.gameData.TouHou.zun.*;
 
 public class TouHouDataManager {
 
-	public HashMap<String,String> spellCardInfoMap=new HashMap<>();
-	public HashSet<CharaNickBean>charaNickSet=new HashSet<>();
+	private HashMap<String,String> spellCardInfoMap=new HashMap<>();
 	
-	public TouHouDataManager(){
+	public TouHouDataManager() {
 		initSpellPs();
-		initCharaNick();
 	}
-	public String getSpellCardPs(SpellCard sc){
+	public boolean check(long fromGroup, long fromQQ, String msg){
+		if (msg.startsWith("-符卡查询 ")) {
+			SpellCard sc = Autoreply.instence.touHouDataManager.getSpellCard(msg.substring(6));
+			if (sc == null) {
+				Autoreply.sendMessage(fromGroup, 0, "没有找到这张符卡");
+				return true;
+			}
+			Autoreply.sendMessage(fromGroup, 0, Autoreply.instence.touHouDataManager.getSpellCardPs(sc));
+			return true;
+		}
+		if (msg.startsWith("-角色查询 ")) {
+			Autoreply.sendMessage(fromGroup, 0, Autoreply.instence.touHouDataManager.getCharaNick(msg.substring(6)));
+			return true;
+		}
+		return false;
+	}
+	public String getSpellCardPs(SpellCard sc) {
 		StringBuilder sb=new StringBuilder();
 		sb.append(sc.n).append("是").append(sc.m);
 		if (sc.d != SpellCard.Ls && sc.d != SpellCard.Lw) {
@@ -51,28 +65,35 @@ public class TouHouDataManager {
 		sb.append(spellCardInfoMap.get(sc.n));
 		return sb.toString();
 	}
-	
-	public String getCharaNick(String charaName){
+
+	public String getCharaNick(String charaName) {
 		String fullName=null;
-		for(String s:DiceImitate.name){
-			if(s.contains(charaName)){
-				fullName=s;
+		for (TouhouCharacter s:DiceImitate.name) {
+			if (s.charaName.contains(charaName)) {
+				fullName = s.charaName;
 				break;
 			}
 		}
-		if(fullName==null){
+		if (fullName == null) {
 			return "该角色信息未填坑";
 		}
 		StringBuilder sb=new StringBuilder();
 		sb.append(fullName).append("有以下称号:\n");
-		for(CharaNickBean cnb:charaNickSet){
-			if(cnb.name.equals(fullName)){
-				sb.append(cnb.nick).append("(").append(cnb.game).append(")\n");
+		for (TouhouCharacter thc:DiceImitate.name) {
+			if (thc.charaName.equals(fullName)) {
+				if (thc.nick.equals("该角色信息未填坑")) {
+					continue;
+				}
+				sb.append(thc.nick).append("(").append(thc.game).append(")\n");
 			}
 		}
+		if (sb.toString().equals(fullName + "有以下称号:\n")) {
+			return "该角色信息未填坑";
+		}
+		sb.setLength(sb.length() - 1);
 		return sb.toString();
 	}
-	
+
 	public SpellCard getSpellCard(String spellName) {
 		for (SpellCard sc:DiceImitate.spells) {
 			if (sc.n.contains(spellName)) {
@@ -124,121 +145,7 @@ public class TouHouDataManager {
 		}
 		return scs;
 	}
-	
-	private void addCharaNick(String name,String game,String nick){
-		charaNickSet.add(new CharaNickBean(name,game,nick));
-	}
-	
-	private class CharaNickBean{
-		public String name;
-		public String game;
-		public String nick;
-		public CharaNickBean(String n,String g,String ni){
-			name=n;
-			game=g;
-			nick=ni;
-		}
-		public boolean isEquals(CharaNickBean cnb){
-			return name.equals(cnb.name)&&game.equals(cnb.game)&&nick.equals(cnb.nick);
-		}
-	}
-	
-	
-	private void initCharaNick(){
-		//addCharaNick("露米娅",TH06GameData.gameNameCN,"未填坑");
-//addCharaNick("大妖精",TH06GameData.gameNameCN,"未填坑");
-//addCharaNick("琪露诺",TH06GameData.gameNameCN,"未填坑");
-//addCharaNick("红美铃",TH06GameData.gameNameCN,"未填坑");
-//addCharaNick("帕秋莉·诺蕾姬",TH06GameData.gameNameCN,"未填坑");
-//addCharaNick("十六夜咲夜",TH06GameData.gameNameCN,"未填坑");
-addCharaNick("蕾米莉亚·斯卡雷特",TH06GameData.gameNameCN,"永远鲜红的幼月");
-//addCharaNick("芙兰朵露·斯卡雷特",TH06GameData.gameNameCN,"未填坑");
-addCharaNick("蕾蒂·霍瓦特洛克",TH07GameData.gameNameCN,"冬季的遗忘之物");
-//addCharaNick("橙",TH07GameData.gameNameCN,"未填坑");
-//addCharaNick("爱丽丝·玛格特罗依德",TH07GameData.gameNameCN,"未填坑");
-//addCharaNick("莉莉白",TH07GameData.gameNameCN,"未填坑");
-//addCharaNick("莉莉卡·普莉兹姆利巴",TH07GameData.gameNameCN,"未填坑");
-//addCharaNick("梅露兰·普莉兹姆利巴",TH07GameData.gameNameCN,"未填坑");
-//addCharaNick("露娜萨·普莉兹姆利巴",TH07GameData.gameNameCN,"未填坑");
-//addCharaNick("魂魄妖梦",TH07GameData.gameNameCN,"未填坑");
-//addCharaNick("西行寺幽幽子",TH07GameData.gameNameCN,"未填坑");
-//addCharaNick("八云蓝",TH07GameData.gameNameCN,"未填坑");
-		addCharaNick("八云紫",TH07GameData.gameNameCN,"神隐的主犯");
-//addCharaNick("莉格露",TH08GameData.gameNameCN,"未填坑");
-//addCharaNick("米斯蒂娅·萝蕾拉",TH08GameData.gameNameCN,"未填坑");
-//addCharaNick("上白泽慧音",TH08GameData.gameNameCN,"未填坑");
-//addCharaNick("博丽灵梦",TH08GameData.gameNameCN,"未填坑");
-//addCharaNick("雾雨魔理沙",TH08GameData.gameNameCN,"未填坑");
-//addCharaNick("因幡帝",TH08GameData.gameNameCN,"未填坑");
-//addCharaNick("铃仙·优昙华院·因幡",TH08GameData.gameNameCN,"未填坑");
-//addCharaNick("八意永琳",TH08GameData.gameNameCN,"未填坑");
-//addCharaNick("蓬莱山辉夜",TH08GameData.gameNameCN,"未填坑");
-//addCharaNick("藤原妹红",TH08GameData.gameNameCN,"未填坑");
-//addCharaNick("秋静叶",TH10GameData.gameNameCN,"未填坑");
-//addCharaNick("秋穰子",TH10GameData.gameNameCN,"未填坑");
-		addCharaNick("键山雏",TH10GameData.gameNameCN,"秘神流雏");
-		addCharaNick("河城荷取",TH10GameData.gameNameCN,"超妖怪弹头");
-//addCharaNick("犬走椛",TH10GameData.gameNameCN,"未填坑");
-//addCharaNick("射命丸文",TH10GameData.gameNameCN,"未填坑");
-//addCharaNick("东风谷早苗",TH10GameData.gameNameCN,"未填坑");
-//addCharaNick("八坂神奈子",TH10GameData.gameNameCN,"未填坑");
-//addCharaNick("洩矢诹访子",TH10GameData.gameNameCN,"未填坑");
-//addCharaNick("琪斯美",TH11GameData.gameNameCN,"未填坑");
-//addCharaNick("黑谷山女",TH11GameData.gameNameCN,"未填坑");
-//addCharaNick("水桥帕露西",TH11GameData.gameNameCN,"未填坑");
-//addCharaNick("星熊勇仪",TH11GameData.gameNameCN,"未填坑");
-//addCharaNick("古明地觉",TH11GameData.gameNameCN,"未填坑");
-//addCharaNick("火焰猫燐",TH11GameData.gameNameCN,"未填坑");
-//addCharaNick("灵乌路空",TH11GameData.gameNameCN,"未填坑");
-//addCharaNick("古明地恋",TH11GameData.gameNameCN,"未填坑");
-//addCharaNick("纳兹琳",TH12GameData.gameNameCN,"未填坑");
-//addCharaNick("多多良小伞",TH12GameData.gameNameCN,"未填坑");
-//addCharaNick("云居一轮",TH12GameData.gameNameCN,"未填坑");
-//addCharaNick("村纱水蜜",TH12GameData.gameNameCN,"未填坑");
-//addCharaNick("寅丸星",TH12GameData.gameNameCN,"未填坑");
-//addCharaNick("圣白莲",TH12GameData.gameNameCN,"未填坑");
-//addCharaNick("封兽鵺",TH12GameData.gameNameCN,"未填坑");
-//addCharaNick("西行寺幽幽子",TH13GameData.gameNameCN,"未填坑");
-//addCharaNick("幽谷响子",TH13GameData.gameNameCN,"未填坑");
-//addCharaNick("多多良小伞",TH13GameData.gameNameCN,"未填坑");
-//addCharaNick("宫古芳香",TH13GameData.gameNameCN,"未填坑");
-//addCharaNick("霍青娥",TH13GameData.gameNameCN,"未填坑");
-//addCharaNick("苏我屠自古",TH13GameData.gameNameCN,"未填坑");
-//addCharaNick("物部布都",TH13GameData.gameNameCN,"未填坑");
-//addCharaNick("丰聪耳神子",TH13GameData.gameNameCN,"未填坑");
-//addCharaNick("封兽鵺",TH13GameData.gameNameCN,"未填坑");
-//addCharaNick("二岩瑞藏",TH13GameData.gameNameCN,"未填坑");
-//addCharaNick("若鹭姬",TH14GameData.gameNameCN,"未填坑");
-//addCharaNick("赤蛮奇",TH14GameData.gameNameCN,"未填坑");
-//addCharaNick("今泉影狼",TH14GameData.gameNameCN,"未填坑");
-//addCharaNick("九十九八桥",TH14GameData.gameNameCN,"未填坑");
-//addCharaNick("九十九弁弁",TH14GameData.gameNameCN,"未填坑");
-//addCharaNick("鬼人正邪",TH14GameData.gameNameCN,"未填坑");
-//addCharaNick("少名针妙丸",TH14GameData.gameNameCN,"未填坑");
-//addCharaNick("堀川雷鼓",TH14GameData.gameNameCN,"未填坑");
-//addCharaNick("清兰",TH15GameData.gameNameCN,"未填坑");
-//addCharaNick("铃瑚",TH15GameData.gameNameCN,"未填坑");
-//addCharaNick("哆来咪·苏伊特",TH15GameData.gameNameCN,"未填坑");
-//addCharaNick("稀神探女",TH15GameData.gameNameCN,"未填坑");
-//addCharaNick("克劳恩皮丝",TH15GameData.gameNameCN,"未填坑");
-addCharaNick("纯狐",TH15GameData.gameNameCN,"");
-//addCharaNick("赫卡提亚·拉碧斯拉祖利",TH15GameData.gameNameCN,"未填坑");
-//addCharaNick("爱塔妮缇拉尔瓦",TH16GameData.gameNameCN,"未填坑");
-//addCharaNick("坂田合欢",TH16GameData.gameNameCN,"未填坑");
-//addCharaNick("高丽野阿吽",TH16GameData.gameNameCN,"未填坑");
-//addCharaNick("矢田寺成美",TH16GameData.gameNameCN,"未填坑");
-//addCharaNick("尔子田里乃",TH16GameData.gameNameCN,"未填坑");
-//addCharaNick("丁礼田舞",TH16GameData.gameNameCN,"未填坑");
-//addCharaNick("摩多罗隐岐奈",TH16GameData.gameNameCN,"未填坑");
-//addCharaNick("戎璎花",TH17GameData.gameNameCN,"未填坑");
-//addCharaNick("牛崎润美",TH17GameData.gameNameCN,"未填坑");
-//addCharaNick("庭渡久侘歌",TH17GameData.gameNameCN,"未填坑");
-//addCharaNick("吉吊八千慧",TH17GameData.gameNameCN,"未填坑");
-//addCharaNick("杖刀偶磨弓",TH17GameData.gameNameCN,"未填坑");
-//addCharaNick("埴安神袿姬",TH17GameData.gameNameCN,"未填坑");
-//addCharaNick("骊驹早鬼",TH17GameData.gameNameCN,"未填坑");
-	}
-	
+
 	private void initSpellPs(){
 		spellCardInfoMap.put("月符「月光」","未填坑");
 		spellCardInfoMap.put("夜符「夜雀」","未填坑");

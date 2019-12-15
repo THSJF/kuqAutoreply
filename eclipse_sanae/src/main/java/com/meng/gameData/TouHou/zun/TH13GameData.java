@@ -7,17 +7,17 @@ public class TH13GameData {
 	public static final String gameNameCN="东方神灵庙";
 	public static final String gameNameAbbr="TD";
 	public static String[] players = new String[]{"博丽灵梦", "雾雨魔理沙", "东风谷早苗", "魂魄妖梦"};
-	public static String[] charaName=new String[]{
-		"西行寺幽幽子",
-		"幽谷响子",
-		"多多良小伞",
-		"宫古芳香",
-		"霍青娥",
-		"苏我屠自古",
-		"物部布都",
-		"丰聪耳神子",
-		"封兽鵺",
-		"二岩瑞藏",
+	public static TouhouCharacter[] charaName=new TouhouCharacter[]{
+		new TouhouCharacter("西行寺幽幽子", gameNameCN),
+		new TouhouCharacter("幽谷响子", gameNameCN),
+		new TouhouCharacter("多多良小伞", gameNameCN),
+		new TouhouCharacter("宫古芳香", gameNameCN),
+		new TouhouCharacter("霍青娥", gameNameCN),
+		new TouhouCharacter("苏我屠自古", gameNameCN),
+		new TouhouCharacter("物部布都", gameNameCN),
+		new TouhouCharacter("丰聪耳神子", gameNameCN),
+		new TouhouCharacter("封兽鵺", gameNameCN),
+		new TouhouCharacter("二岩瑞藏", gameNameCN)
 	};
 	public static String[] musicName=new String[]{
 		"欲望深重的灵魂",

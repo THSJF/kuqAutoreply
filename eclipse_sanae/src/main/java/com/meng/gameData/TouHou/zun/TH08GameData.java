@@ -6,17 +6,17 @@ public class TH08GameData {
 	public static final String gameNameCN="东方永夜抄";
 	public static final String gameNameAbbr="IN";
 	public static String[] players = new String[]{"幻想的结界组", "咏唱禁咒组", "梦幻的红魔组", "幽冥之住人组", "博丽灵梦", "八云紫", "雾雨魔理沙", "爱丽丝·玛格特罗依德", "蕾米莉亚·斯卡蕾特", "十六夜咲夜", "西行寺幽幽子", "魂魄妖梦"};
-	public static String[] charaName=new String[]{
-		"莉格露",
-		"米斯蒂娅·萝蕾拉",
-		"上白泽慧音",
-		"博丽灵梦",
-		"雾雨魔理沙",
-		"因幡帝",
-		"铃仙·优昙华院·因幡",
-		"八意永琳",
-		"蓬莱山辉夜",
-		"藤原妹红"
+	public static TouhouCharacter[] charaName=new TouhouCharacter[]{
+		new TouhouCharacter("莉格露", gameNameCN),
+		new TouhouCharacter("米斯蒂娅·萝蕾拉", gameNameCN),
+		new TouhouCharacter("上白泽慧音", gameNameCN),
+		new TouhouCharacter("博丽灵梦", gameNameCN),
+		new TouhouCharacter("雾雨魔理沙", gameNameCN),
+		new TouhouCharacter("因幡帝", gameNameCN),
+		new TouhouCharacter("铃仙·优昙华院·因幡", gameNameCN),
+		new TouhouCharacter("八意永琳", gameNameCN),
+		new TouhouCharacter("蓬莱山辉夜", gameNameCN),
+		new TouhouCharacter("藤原妹红", gameNameCN)
 	};
 	public static String[] musicName=new String[]{
 		"永夜抄 ~ Eastern Night.",

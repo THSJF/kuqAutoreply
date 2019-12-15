@@ -8,14 +8,14 @@ public class TH17GameData {
 	public static final String gameNameAbbr="WBaWC";
 	public static String[] players = new String[]{"博丽灵梦", "雾雨魔理沙", "魂魄妖梦"};
     public static String[] playerSub = new String[]{"[CQ:emoji,id=12SpellCard.L059]哥", "[CQ:emoji,id=12SpellCard.L037]哥", "[CQ:emoji,id=12SpellCard.L05SpellCard.H]哥"};
-	public static String[] charaName=new String[]{
-		"戎璎花",
-		"牛崎润美",
-		"庭渡久侘歌",
-		"吉吊八千慧",
-		"杖刀偶磨弓",
-		"埴安神袿姬",
-		"骊驹早鬼"
+	public static TouhouCharacter[] charaName=new TouhouCharacter[]{
+		new TouhouCharacter("戎璎花", gameNameCN),
+		new TouhouCharacter("牛崎润美", gameNameCN),
+		new TouhouCharacter("庭渡久侘歌", gameNameCN),
+		new TouhouCharacter("吉吊八千慧", gameNameCN),
+		new TouhouCharacter("杖刀偶磨弓", gameNameCN),
+		new TouhouCharacter("埴安神袿姬", gameNameCN),
+		new TouhouCharacter("骊驹早鬼", gameNameCN)
 	};
 	public static String[] musicName=new String[]{
 		"沉默的兽灵",

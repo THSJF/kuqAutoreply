@@ -8,14 +8,14 @@ public class TH16GameData {
 	public static final String gameNameAbbr="HSiFS";
 	public static String[] players = new String[]{"博丽灵梦", "琪露诺", "射命丸文", "雾雨魔理沙"};
     public static String[] playerSub = new String[]{"春", "夏", "秋", "冬"};
-	public static String[] charaName=new String[]{
-		"爱塔妮缇拉尔瓦",
-		"坂田合欢",
-		"高丽野阿吽",
-		"矢田寺成美",
-		"尔子田里乃",
-		"丁礼田舞",
-		"摩多罗隐岐奈"
+	public static TouhouCharacter[] charaName=new TouhouCharacter[]{
+		new TouhouCharacter("爱塔妮缇拉尔瓦", gameNameCN),
+		new TouhouCharacter("坂田合欢", gameNameCN),
+		new TouhouCharacter("高丽野阿吽", gameNameCN),
+		new TouhouCharacter("矢田寺成美", gameNameCN),
+		new TouhouCharacter("尔子田里乃", gameNameCN),
+		new TouhouCharacter("丁礼田舞", gameNameCN),
+		new TouhouCharacter("摩多罗隐岐奈", gameNameCN)
 	};
 	public static String[] musicName=new String[]{
 		"樱花舞落的天空",

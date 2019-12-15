@@ -8,15 +8,15 @@ public class TH14GameData {
 	public static final String gameNameAbbr="DDC";
 	public static String[] players = new String[]{"博丽灵梦", "雾雨魔理沙", "十六夜咲夜"};
     public static String[] playerSub = new String[]{"使用妖器", "不使用妖器"};
-	public static String[] charaName=new String[]{
-		"若鹭姬",
-		"赤蛮奇",
-		"今泉影狼",
-		"九十九八桥",
-		"九十九弁弁",
-		"鬼人正邪",
-		"少名针妙丸",
-		"堀川雷鼓"
+	public static TouhouCharacter[] charaName=new TouhouCharacter[]{
+		new TouhouCharacter("若鹭姬", gameNameCN),
+		new TouhouCharacter("赤蛮奇", gameNameCN),
+		new TouhouCharacter("今泉影狼", gameNameCN),
+		new TouhouCharacter("九十九八桥", gameNameCN),
+		new TouhouCharacter("九十九弁弁", gameNameCN),
+		new TouhouCharacter("鬼人正邪", gameNameCN),
+		new TouhouCharacter("少名针妙丸", gameNameCN),
+		new TouhouCharacter("堀川雷鼓", gameNameCN)
 	};
 	public static String[] musicName=new String[]{
 		"不可思议的驱魔棒",

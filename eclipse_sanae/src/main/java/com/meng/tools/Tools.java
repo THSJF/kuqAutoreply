@@ -206,6 +206,21 @@ public class Tools {
 
 	public static class ArrayTool {
 
+		public static TouhouCharacter[] mergeArray(TouhouCharacter[]... charas) {
+			int allLen=0;
+			for (TouhouCharacter[] bs:charas) {
+				allLen += bs.length;
+			}
+			TouhouCharacter[] finalArray=new TouhouCharacter[allLen];
+			int flag=0;
+			for (TouhouCharacter[] byteArray:charas) {
+				for (int i=0;i < byteArray.length;++flag,++i) {
+					finalArray[flag] = byteArray[i];
+				}
+			}
+			return finalArray;
+		}
+
 		public static SpellCard[] mergeArray(SpellCard[]... spells) {
 			int allLen=0;
 			for (SpellCard[] bs:spells) {

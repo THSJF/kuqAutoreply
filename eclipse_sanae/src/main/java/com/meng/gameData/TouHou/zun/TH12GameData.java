@@ -7,14 +7,14 @@ public class TH12GameData {
 	public static final String gameNameCN="东方星莲船";
 	public static final String gameNameAbbr="UFO";
 	public static String[] players = new String[]{"博丽灵梦 诱导型", "博丽灵梦 威力重视型", "雾雨魔理沙 贯通型", "雾雨魔理沙 范围重视型", "东风谷早苗 诱导型", "东风谷早苗 广范围炸裂型"};
-	public static String[] charaName=new String[]{
-		"纳兹琳",
-		"多多良小伞",
-		"云居一轮",
-		"村纱水蜜",
-		"寅丸星",
-		"圣白莲",
-		"封兽鵺"
+	public static TouhouCharacter[] charaName=new TouhouCharacter[]{
+		new TouhouCharacter("纳兹琳", gameNameCN),
+		new TouhouCharacter("多多良小伞", gameNameCN),
+		new TouhouCharacter("云居一轮", gameNameCN),
+		new TouhouCharacter("村纱水蜜", gameNameCN),
+		new TouhouCharacter("寅丸星", gameNameCN),
+		new TouhouCharacter("圣白莲", gameNameCN),
+		new TouhouCharacter("封兽鵺", gameNameCN)
 	};
 	public static String[] musicName=new String[]{
 		"青空之影",

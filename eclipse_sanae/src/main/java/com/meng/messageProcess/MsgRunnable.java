@@ -112,6 +112,9 @@ public class MsgRunnable implements Runnable {
 		if (Tools.CQ.checkAt(fromGroup, fromQQ, msg)) {//@
 			return;
 		}
+		if (Autoreply.instence.touHouDataManager.check(fromGroup, fromQQ, msg)) {
+			return;
+		}
 		if (Autoreply.instence.spellCollect.check(fromGroup, fromQQ, msg)) {
 			return;
 		}

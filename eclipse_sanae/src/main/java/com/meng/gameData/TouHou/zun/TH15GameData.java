@@ -7,14 +7,14 @@ public class TH15GameData {
 	public static final String gameNameCN="东方绀珠传";
 	public static final String gameNameAbbr="LoLK";
 	public static String[] players = new String[]{"博丽灵梦", "雾雨魔理沙", "东风谷早苗", "铃仙·优昙华院·因幡"};
-	public static String[] charaName=new String[]{
-		"清兰",
-		"铃瑚",
-		"哆来咪·苏伊特",
-		"稀神探女",
-		"克劳恩皮丝",
-		"纯狐",
-		"赫卡提亚·拉碧斯拉祖利"
+	public static TouhouCharacter[] charaName=new TouhouCharacter[]{
+		new TouhouCharacter("清兰", gameNameCN),
+		new TouhouCharacter("铃瑚", gameNameCN),
+		new TouhouCharacter("哆来咪·苏伊特", gameNameCN),
+		new TouhouCharacter("稀神探女", gameNameCN),
+		new TouhouCharacter("克劳恩皮丝", gameNameCN),
+		new TouhouCharacter("纯狐", gameNameCN),
+		new TouhouCharacter("赫卡提亚·拉碧斯拉祖利", gameNameCN)
 	};
 	public static String[] musicName=new String[]{
 		"宇宙巫女现身",

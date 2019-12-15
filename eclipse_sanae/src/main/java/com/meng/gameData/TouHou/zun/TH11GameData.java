@@ -7,15 +7,16 @@ public class TH11GameData {
 	public static final String gameNameCN="东方地灵殿";
 	public static final String gameNameAbbr="SA";
 	public static String[] players = new String[]{"博丽灵梦 八云紫", "博丽灵梦 伊吹萃香", "博丽灵梦 射命丸文", "雾雨魔理沙 爱丽丝·玛格特罗依德", "雾雨魔理沙 帕秋莉", "雾雨魔理沙 河城荷取"};
-	public static String[] charaName=new String[]{
-		"琪斯美",
-		"黑谷山女",
-		"水桥帕露西",
-		"星熊勇仪",
-		"古明地觉",
-		"火焰猫燐",
-		"灵乌路空",
-		"古明地恋"
+	public static TouhouCharacter[] charaName=new TouhouCharacter[]{
+		new TouhouCharacter("琪斯美", gameNameCN),
+		new TouhouCharacter("黑谷山女", gameNameCN),
+		new TouhouCharacter("水桥帕露西", gameNameCN),
+		new TouhouCharacter("星熊勇仪", gameNameCN),
+		new TouhouCharacter("古明地觉", gameNameCN),
+		new TouhouCharacter("火焰猫燐", gameNameCN),
+		new TouhouCharacter("灵乌路空", gameNameCN),
+		new TouhouCharacter("东风谷早苗", gameNameCN),
+		new TouhouCharacter("古明地恋", gameNameCN)
 	};
 	public static String[] musicName=new String[]{
 		"地灵们的起床",

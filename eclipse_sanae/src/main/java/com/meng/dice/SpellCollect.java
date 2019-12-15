@@ -123,19 +123,6 @@ public class SpellCollect {
 			Autoreply.sendMessage(fromGroup, fromQQ, sb.toString());
 			return true;	
 		}
-		if (msg.startsWith("-符卡查询 ")) {
-			SpellCard sc=Autoreply.instence.touHouDataManager.getSpellCard(msg.substring(6));
-			if (sc == null) {
-				Autoreply.sendMessage(fromGroup, 0, "没有找到这张符卡");
-				return true;
-			}
-			Autoreply.sendMessage(fromGroup, 0, Autoreply.instence.touHouDataManager.getSpellCardPs(sc));
-			return true;
-		}
-		if (msg.startsWith("-角色查询 ")) {
-			Autoreply.sendMessage(fromGroup, 0, Autoreply.instence.touHouDataManager.getCharaNick(msg.substring(6)));
-			return true;
-		}
 		if (msg.equals("-faith")) {
 			Autoreply.sendMessage(fromGroup, 0, "你的信仰是:" + Autoreply.instence.faithManager.getFaithCount(fromQQ));
 			return true;
