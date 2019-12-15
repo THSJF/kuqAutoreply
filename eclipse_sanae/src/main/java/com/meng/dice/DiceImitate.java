@@ -33,6 +33,12 @@ public class DiceImitate {
 		spells = Tools.ArrayTool.mergeArray(spells, TH08GameData.spellcards);
 		spells = Tools.ArrayTool.mergeArray(spells, TH10GameData.spellcards);
 		spells = Tools.ArrayTool.mergeArray(spells, TH11GameData.spellcards);
+		spells = Tools.ArrayTool.mergeArray(spells, TH12GameData.spellcards);
+		spells = Tools.ArrayTool.mergeArray(spells, TH13GameData.spellcards);
+		spells = Tools.ArrayTool.mergeArray(spells, TH14GameData.spellcards);
+		spells = Tools.ArrayTool.mergeArray(spells, TH15GameData.spellcards);
+		spells = Tools.ArrayTool.mergeArray(spells, TH16GameData.spellcards);
+		spells = Tools.ArrayTool.mergeArray(spells, TH17GameData.spellcards);
 		neta = new String[]{
 			"红lnb",
 			"红lnm",

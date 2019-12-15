@@ -145,7 +145,7 @@ public class SpellCardInfo {
 				ps = "暂无";
 				break;
 			case "纯符「纯粹的弹幕地狱」":
-				ps = "暂无";
+				ps = "p1:这tm是终符?你在逗我 p2:这tm是终符? p3:这tm... p4:这...";
 				break;
 			case "蝴蝶「取而代之的蝴蝶」":
 				ps = "暂无";
@@ -224,6 +224,8 @@ public class SpellCardInfo {
 				sb.append("的lastword");
 			}
 		}
+		sb.append("\n附加:\n");
+		sb.append(ps);
 		return sb.toString();
 	}
 
