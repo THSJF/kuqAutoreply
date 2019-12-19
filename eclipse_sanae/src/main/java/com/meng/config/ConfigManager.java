@@ -354,6 +354,28 @@ public class ConfigManager extends WebSocketClient {
 		Autoreply.CQ.setGroupLeave(group, false);
     }
 
+	public void addReport(long fromGroup, long fromQQ, String content) {
+		SanaeConfig.addReport(fromGroup, fromQQ, content.substring(4));
+		saveSanaeConfig();
+	}
+
+	public void addBugReport(long fromGroup, long fromQQ, String content) {
+		SanaeConfig.addBugReport(fromGroup, fromQQ, content.substring(6));
+		saveSanaeConfig();
+	}
+
+	public String getReport() {
+		String s = SanaeConfig.getReport();
+		saveSanaeConfig();
+		return s;
+	}
+
+	public String getBugReport() {
+		String s = SanaeConfig.getBugReport();
+		saveSanaeConfig();
+		return s;
+	}
+
 	public void send(final SanaeDataPack sdp) {
 		Autoreply.instence.threadPool.execute(new Runnable(){
 

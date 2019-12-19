@@ -40,6 +40,14 @@ public class AdminMessageProcessor {
 				Autoreply.sendMessage(fromGroup, 0, masterPermission.toString());
 				return true;
 			}
+			if (msg.equals("-留言查看")) {
+				Autoreply.sendMessage(fromGroup, fromQQ, Autoreply.instence.configManager.getReport());
+				return true;
+			}
+			if (msg.equals("-反馈查看")) {
+				Autoreply.sendMessage(fromGroup, fromQQ, Autoreply.instence.configManager.getBugReport());
+				return true;
+			}
 			if (msg.startsWith("群广播:")) {
 				String broadcast=msg.substring(4);
 				HashSet<Group> hs=new HashSet<>();

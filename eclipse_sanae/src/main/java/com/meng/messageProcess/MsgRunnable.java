@@ -32,6 +32,16 @@ public class MsgRunnable implements Runnable {
 			sendMessage(fromGroup, fromQQ, Autoreply.instence.configManager.getLiveList());
 			return;
 		}
+		if (msg.startsWith("-留言 ")) {
+			Autoreply.instence.configManager.addReport(fromGroup, fromQQ, msg);
+			sendMessage(fromGroup, fromQQ, "留言成功");
+			return;
+		}
+		if (msg.startsWith("-问题反馈 ")) {
+			Autoreply.instence.configManager.addBugReport(fromGroup, fromQQ, msg);
+			sendMessage(fromGroup, fromQQ, "反馈成功");
+			return;
+		}
         if (Autoreply.instence.configManager.SanaeConfig.botOff.contains(fromGroup)) {
             return;
         }
