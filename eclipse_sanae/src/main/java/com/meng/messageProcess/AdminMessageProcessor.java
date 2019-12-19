@@ -16,6 +16,7 @@ public class AdminMessageProcessor {
     public AdminMessageProcessor() {
 		masterPermission.put("-start|-stop", "总开关");
 		masterPermission.put("find:[QQ号]", "在配置文件中查找此人");
+		masterPermission.put("-留言查看|-反馈查看","查看留言或bug反馈");
 		masterPermission.put("block[艾特一人]", "屏蔽列表");
 		masterPermission.put("black[艾特一人]", "黑名单");
 		masterPermission.put("blackgroup [群号]", "群加入黑名单,多群用空格隔开");
@@ -26,9 +27,10 @@ public class AdminMessageProcessor {
 		adminPermission.put("-bot on|-bot off", "设置是否回复本群");
 		userPermission.put(".nn [名字]", "设置早苗对你的称呼,如果不设置则恢复默认称呼");
 		//userPermission.put("-int [int] [+|-|*|/|<<|>>|>>>|%|^|&||] [int]", "int运算(溢出)");
-		//userPermission.put("-uint [int]", "int字节转uint(boom)");
-		userPermission.put(".dissmiss 2528419891", "让早苗退出此群");
-
+		userPermission.put("-留言", "给开发者留言");
+		userPermission.put("-问题反馈", "给开发者反馈问题,使用时发现错误内容或者错误的消息处理可以使用此项向开发者反馈,其他内容请使用留言功能");
+		adminPermission.put(".dissmiss 2528419891", "让早苗退出此群");
+		
 		masterPermission.putAll(adminPermission);
 		masterPermission.putAll(userPermission);
 		adminPermission.putAll(userPermission);
