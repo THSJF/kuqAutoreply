@@ -1,14 +1,15 @@
 package com.meng.tools;
 
 import com.meng.*;
+import com.meng.gameData.TouHou.*;
 import com.sobte.cqp.jcq.entity.*;
 import java.io.*;
 import java.net.*;
 import java.nio.charset.*;
 import java.security.*;
+import java.text.*;
 import java.util.*;
 import org.jsoup.*;
-import com.meng.gameData.TouHou.*;
 
 public class Tools {
 
@@ -193,6 +194,14 @@ public class Tools {
 				}
 			}
 			return false;
+		}
+		
+		public static String getTime(){
+			return new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date());
+		}
+		
+		public static String getDate(){
+			return new SimpleDateFormat("yyyy-MM-dd").format(new Date());
 		}
 		/*  public static String getG_tk(String skey) {
 		 int hash = 5381;

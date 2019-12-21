@@ -2,6 +2,7 @@ package com.meng.config;
 
 import java.text.*;
 import java.util.*;
+import com.meng.tools.*;
 
 public class SanaeConfigJavaBean {
 	public HashMap<Long,String> welcomeMap = new HashMap<>();
@@ -53,7 +54,7 @@ public class SanaeConfigJavaBean {
 
 		@Override
 		public String toString() {
-			return String.format("时间:%s,群:%d,用户:%d\n内容:%s", new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date()), g, q, c);
+			return String.format("时间:%s,群:%d,用户:%d\n内容:%s", Tools.CQ.getTime(), g, q, c);
 		}
 	}
 
@@ -65,7 +66,7 @@ public class SanaeConfigJavaBean {
 
 		@Override
 		public String toString() {
-			return String.format("时间:%s,群:%d,用户:%d\n内容:%s", new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date()), g, q, c);
+			return String.format("时间:%s,群:%d,用户:%d\n内容:%s", Tools.CQ.getTime(), g, q, c);
 		}
 	}
 }

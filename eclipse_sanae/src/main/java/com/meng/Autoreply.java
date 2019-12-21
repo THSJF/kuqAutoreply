@@ -43,6 +43,7 @@ public class Autoreply extends JcqAppAbstract implements ICQVer, IMsg, IRequest 
 	public static Gson gson;
 	public MessageTooManyManager messageTooManyManager;
 	public DicReply dicReply;
+	public GroupCounter groupCounter;
 
     public static void main(String[] args) {
         CQ = new CoolQ(1000);
@@ -67,6 +68,7 @@ public class Autoreply extends JcqAppAbstract implements ICQVer, IMsg, IRequest 
         // 返回如：D:\CoolQ\app\com.sobte.cqp.jcq\app\com.example.demo\
         System.out.println("开始加载");
 		long startTime = System.currentTimeMillis();
+		groupCounter = new GroupCounter();
 		try {
 			configManager = new ConfigManager(new URI("ws://123.207.65.93:9760"));
 			configManager.connect();
@@ -149,6 +151,7 @@ public class Autoreply extends JcqAppAbstract implements ICQVer, IMsg, IRequest 
 		//	if (fromGroup != 807242547L){
 		//		return MSG_IGNORE;
 		//}
+		groupCounter.addSpeak(fromGroup,1);
 		if (!Autoreply.instence.SeijiaInThis.contains(fromGroup)) {
 			configManager.send(SanaeDataPack.encode(SanaeDataPack._15incSpeak).write(fromGroup).write(fromQQ));
 		}

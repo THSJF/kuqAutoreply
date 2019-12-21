@@ -16,13 +16,13 @@ public class AdminMessageProcessor {
     public AdminMessageProcessor() {
 		masterPermission.put("-start|-stop", "总开关");
 		masterPermission.put("find:[QQ号]", "在配置文件中查找此人");
-		masterPermission.put("-留言查看|-反馈查看","查看留言或bug反馈");
+		masterPermission.put("-留言查看|-反馈查看", "查看留言或bug反馈");
 		masterPermission.put("block[艾特一人]", "屏蔽列表");
 		masterPermission.put("black[艾特一人]", "黑名单");
 		masterPermission.put("blackgroup [群号]", "群加入黑名单,多群用空格隔开");
 		masterPermission.put("群广播:[字符串]", "在所有回复的群里广播");
 		masterPermission.put("send.[群号].[内容]", "内容转发至指定群");
-
+		masterPermission.put("-发言数据 yyyy-MM-dd", "每小时发言信息");
 		//adminPermission.put("线程数", "线程池信息");
 		adminPermission.put("-bot on|-bot off", "设置是否回复本群");
 		userPermission.put(".nn [名字]", "设置早苗对你的称呼,如果不设置则恢复默认称呼");
@@ -30,7 +30,7 @@ public class AdminMessageProcessor {
 		userPermission.put("-留言", "给开发者留言");
 		userPermission.put("-问题反馈", "给开发者反馈问题,使用时发现错误内容或者错误的消息处理可以使用此项向开发者反馈,其他内容请使用留言功能");
 		adminPermission.put(".dissmiss 2528419891", "让早苗退出此群");
-		
+
 		masterPermission.putAll(adminPermission);
 		masterPermission.putAll(userPermission);
 		adminPermission.putAll(userPermission);
@@ -48,6 +48,16 @@ public class AdminMessageProcessor {
 			}
 			if (msg.equals("-反馈查看")) {
 				Autoreply.sendMessage(fromGroup, fromQQ, Autoreply.instence.configManager.getBugReport());
+				return true;
+			}
+			if (msg.startsWith("-发言数据 ")) {
+				ArrayList<Integer> list= Autoreply.instence.groupCounter.getSpeak(fromGroup, msg.substring(6));
+				StringBuilder sb=new StringBuilder();
+				int t=0;
+				for (int i:list) {
+					sb.append(String.format("%d:00-%d:00 %d条\n", t, ++t, i));
+				}
+				sendMessage(fromGroup, 0, sb.toString());
 				return true;
 			}
 			if (msg.startsWith("群广播:")) {
