@@ -53,13 +53,17 @@ public class GroupCounter {
 		}
 		Date da=new Date();
 		int nowHour=da.getHours();
-		int stored=everyHourHashMap.get(nowHour);
-		stored += times;
-		everyHourHashMap.put(nowHour, stored);
+		if (everyHourHashMap.get(nowHour) == null) {
+			everyHourHashMap.put(nowHour, times);
+		} else {
+			int stored=everyHourHashMap.get(nowHour);
+			stored += times;
+			everyHourHashMap.put(nowHour, stored);
+		}
 	}
 
 	public HashMap<Integer,Integer> getSpeak(long group, String date) {
-		GroupSpeak gs=groupsMap.get(group);
+		GroupSpeak gs = groupsMap.get(group);
 		if (gs == null) {
 			return null;
 		}
