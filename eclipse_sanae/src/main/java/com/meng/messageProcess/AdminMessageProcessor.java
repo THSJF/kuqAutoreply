@@ -147,7 +147,7 @@ public class AdminMessageProcessor {
 					if (hashMap.get(i) == null) {
 						continue;
 					}
-					sb.append(String.format("\n%d:00-%d:00  共%d条消息\n", i, i + 1, hashMap.get(i)));
+					sb.append(String.format("%d:00-%d:00  共%d条消息\n", i, i + 1, hashMap.get(i)));
 				}
 				sendMessage(fromGroup, 0, sb.toString());
 				return true;
