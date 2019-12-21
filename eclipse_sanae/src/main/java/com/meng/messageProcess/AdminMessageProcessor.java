@@ -142,12 +142,12 @@ public class AdminMessageProcessor {
 					Autoreply.sendMessage(fromGroup, 0, "无数据");
 					return true;
 				}
-				StringBuilder sb=new StringBuilder(String.format("群内共有%d条消息,", Autoreply.instence.groupCounter.groupsMap.get(fromGroup).all));
+				StringBuilder sb=new StringBuilder(String.format("群内共有%d条消息,今日消息情况:\n", Autoreply.instence.groupCounter.groupsMap.get(fromGroup).all));
 				for (int i=0;i < 24;++i) {
 					if (hashMap.get(i) == null) {
 						continue;
 					}
-					sb.append(String.format("今日消息情况:\n%d:00-%d:00  共%d条消息\n", i, i + 1, hashMap.get(i)));
+					sb.append(String.format("\n%d:00-%d:00  共%d条消息\n", i, i + 1, hashMap.get(i)));
 				}
 				sendMessage(fromGroup, 0, sb.toString());
 				return true;
@@ -162,12 +162,12 @@ public class AdminMessageProcessor {
 					Autoreply.sendMessage(fromGroup, 0, "无数据");
 					return true;
 				}
-				StringBuilder sb=new StringBuilder(String.format("群内共有%d条消息,", Autoreply.instence.groupCounter.groupsMap.get(fromGroup).all));
+				StringBuilder sb=new StringBuilder(String.format("群内共有%d条消息,今日消息情况:\n", Autoreply.instence.groupCounter.groupsMap.get(fromGroup).all));
 				for (int i=0;i < 24;++i) {
 					if (hashMap.get(i) == null) {
 						continue;
 					}
-					sb.append(String.format("今日消息情况:\n%d:00-%d:00  共%d条消息\n", i, i + 1, hashMap.get(i)));
+					sb.append(String.format("%d:00-%d:00  共%d条消息\n", i, i + 1, hashMap.get(i)));
 				}
 				sendMessage(fromGroup, 0, sb.toString());
 				return true;
