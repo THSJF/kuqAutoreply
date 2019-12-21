@@ -36,7 +36,7 @@ public class GroupCounter {
 	}
 	private class GroupSpeak {
 		public int all=0;
-		public HashMap<String,ArrayList<Integer>> hour=new HashMap<>(16);		
+		public HashMap<String,HashMap<Integer,Integer>> hour=new HashMap<>(16);		
 	}
 
 	public void addSpeak(long group, int times) {
@@ -46,27 +46,24 @@ public class GroupCounter {
 			groupsMap.put(group, gs);
 		}
 		gs.all += times;
-		ArrayList<Integer> hr = gs.hour.get(Tools.CQ.getDate());
-		if (hr == null) {
-			hr = new ArrayList<>(32);
-			for (int i=0;i < 24;++i) {
-				hr.add(0);
-			}
-			gs.hour.put(Tools.CQ.getDate(), hr);
+		HashMap<Integer,Integer> everyHourHashMap = gs.hour.get(Tools.CQ.getDate());
+		if (everyHourHashMap == null) {
+			everyHourHashMap = new HashMap<>();
+			gs.hour.put(Tools.CQ.getDate(), everyHourHashMap);
 		}
 		Date da=new Date();
 		int nowHour=da.getHours();
-		int stored=hr.get(nowHour);
+		int stored=everyHourHashMap.get(nowHour);
 		stored += times;
-		hr.set(nowHour, stored);
+		everyHourHashMap.put(nowHour, stored);
 	}
 
-	public ArrayList<Integer> getSpeak(long group, String date) {
+	public HashMap<Integer,Integer> getSpeak(long group, String date) {
 		GroupSpeak gs=groupsMap.get(group);
 		if (gs == null) {
 			return null;
 		}
-		ArrayList<Integer> hr = gs.hour.get(date);
+		HashMap<Integer,Integer> hr = gs.hour.get(date);
 		if (hr == null) {
 			return null;
 		}

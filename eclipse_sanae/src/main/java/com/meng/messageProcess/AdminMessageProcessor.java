@@ -55,18 +55,17 @@ public class AdminMessageProcessor {
 					Autoreply.sendMessage(fromGroup, 0, "日期格式错误");
 					return true;
 				}
-				ArrayList<Integer> list= Autoreply.instence.groupCounter.getSpeak(fromGroup, msg.substring(6));
-				if (list == null) {
+				HashMap<Integer,Integer> hashMap = Autoreply.instence.groupCounter.getSpeak(fromGroup, msg.substring(6));
+				if (hashMap == null || hashMap.size() == 0) {
 					Autoreply.sendMessage(fromGroup, 0, "无数据");
 					return true;
 				}
 				StringBuilder sb=new StringBuilder();
-				int t=0;
-				for (int i:list) {
-					if (i == 0) {
+				for (int i=0;i < 24;++i) {
+					if (hashMap.get(i) == null) {
 						continue;
 					}
-					sb.append(String.format("%d:00-%d:00  共%d条消息\n", t, ++t, i));
+					sb.append(String.format("%d:00-%d:00  共%d条消息\n", i, i + 1, hashMap.get(i)));
 				}
 				sendMessage(fromGroup, 0, sb.toString());
 				return true;
