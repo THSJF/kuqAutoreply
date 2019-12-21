@@ -7,6 +7,7 @@ import java.util.*;
 import java.util.concurrent.*;
 
 import static com.meng.Autoreply.sendMessage;
+import com.meng.tools.*;
 
 public class AdminMessageProcessor {
 	private MyLinkedHashMap<String,String> masterPermission=new MyLinkedHashMap<>();
@@ -22,7 +23,7 @@ public class AdminMessageProcessor {
 		masterPermission.put("blackgroup [群号]", "群加入黑名单,多群用空格隔开");
 		masterPermission.put("群广播:[字符串]", "在所有回复的群里广播");
 		masterPermission.put("send.[群号].[内容]", "内容转发至指定群");
-		masterPermission.put("-发言数据 yyyy-MM-dd", "每小时发言信息");
+		adminPermission.put("-发言数据 yyyy-MM-dd", "每小时发言信息");
 		//adminPermission.put("线程数", "线程池信息");
 		adminPermission.put("-bot on|-bot off", "设置是否回复本群");
 		userPermission.put(".nn [名字]", "设置早苗对你的称呼,如果不设置则恢复默认称呼");
@@ -37,6 +38,8 @@ public class AdminMessageProcessor {
 	}
 
     public boolean check(final long fromGroup, final long fromQQ, final String msg) {
+		Member m=Autoreply.CQ.getGroupMemberInfo(fromGroup, fromQQ);
+		boolean isGroupAdmin=m.getAuthority() > 0;
 		if (Autoreply.instence.configManager.isMaster(fromQQ)) {
 			if (msg.equals("-help")) {
 				Autoreply.sendMessage(fromGroup, 0, masterPermission.toString());
@@ -48,26 +51,6 @@ public class AdminMessageProcessor {
 			}
 			if (msg.equals("-反馈查看")) {
 				Autoreply.sendMessage(fromGroup, fromQQ, Autoreply.instence.configManager.getBugReport());
-				return true;
-			}
-			if (msg.startsWith("-发言数据 ")) {
-				if (msg.length() != 16) {
-					Autoreply.sendMessage(fromGroup, 0, "日期格式错误");
-					return true;
-				}
-				HashMap<Integer,Integer> hashMap = Autoreply.instence.groupCounter.getSpeak(fromGroup, msg.substring(6));
-				if (hashMap == null || hashMap.size() == 0) {
-					Autoreply.sendMessage(fromGroup, 0, "无数据");
-					return true;
-				}
-				StringBuilder sb=new StringBuilder();
-				for (int i=0;i < 24;++i) {
-					if (hashMap.get(i) == null) {
-						continue;
-					}
-					sb.append(String.format("%d:00-%d:00  共%d条消息\n", i, i + 1, hashMap.get(i)));
-				}
-				sendMessage(fromGroup, 0, sb.toString());
 				return true;
 			}
 			if (msg.startsWith("群广播:")) {
@@ -148,9 +131,45 @@ public class AdminMessageProcessor {
                 return true;
 			}
 		}
-        if (Autoreply.instence.configManager.isAdmin(fromQQ)) {
+        if (Autoreply.instence.configManager.isAdmin(fromQQ) || isGroupAdmin) {
 			if (msg.equals("-help")) {
 				Autoreply.sendMessage(fromGroup, 0, adminPermission.toString());
+				return true;
+			}
+			if (msg.equals("-发言数据")) {
+				HashMap<Integer,Integer> hashMap = Autoreply.instence.groupCounter.getSpeak(fromGroup, Tools.CQ.getDate());
+				if (hashMap == null || hashMap.size() == 0) {
+					Autoreply.sendMessage(fromGroup, 0, "无数据");
+					return true;
+				}
+				StringBuilder sb=new StringBuilder();
+				for (int i=0;i < 24;++i) {
+					if (hashMap.get(i) == null) {
+						continue;
+					}
+					sb.append(String.format("群内共有%d条消息,今日消息情况:\n%d:00-%d:00  共%d条消息\n", Autoreply.instence.groupCounter.groupsMap.get(fromGroup).all, i, i + 1, hashMap.get(i)));
+				}
+				sendMessage(fromGroup, 0, sb.toString());
+				return true;
+			}
+			if (msg.startsWith("-发言数据 ")) {
+				if (msg.length() != 16) {
+					Autoreply.sendMessage(fromGroup, 0, "日期格式错误");
+					return true;
+				}
+				HashMap<Integer,Integer> hashMap = Autoreply.instence.groupCounter.getSpeak(fromGroup, msg.substring(6));
+				if (hashMap == null || hashMap.size() == 0) {
+					Autoreply.sendMessage(fromGroup, 0, "无数据");
+					return true;
+				}
+				StringBuilder sb=new StringBuilder();
+				for (int i=0;i < 24;++i) {
+					if (hashMap.get(i) == null) {
+						continue;
+					}
+					sb.append(String.format("群内共有%d条消息,今日消息情况:\n%d:00-%d:00  共%d条消息\n", Autoreply.instence.groupCounter.groupsMap.get(fromGroup).all, i, i + 1, hashMap.get(i)));
+				}
+				sendMessage(fromGroup, 0, sb.toString());
 				return true;
 			}
 			if (msg.equals(".早苗说话") || msg.equals(".bot on")) {

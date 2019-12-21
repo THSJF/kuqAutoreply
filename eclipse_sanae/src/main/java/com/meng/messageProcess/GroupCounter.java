@@ -34,7 +34,7 @@ public class GroupCounter {
 				}
 			});
 	}
-	private class GroupSpeak {
+	public class GroupSpeak {
 		public int all=0;
 		public HashMap<String,HashMap<Integer,Integer>> hour=new HashMap<>(16);		
 	}
