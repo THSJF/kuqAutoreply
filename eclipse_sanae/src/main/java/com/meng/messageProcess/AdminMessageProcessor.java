@@ -51,11 +51,22 @@ public class AdminMessageProcessor {
 				return true;
 			}
 			if (msg.startsWith("-发言数据 ")) {
+				if (msg.length() != 16) {
+					Autoreply.sendMessage(fromGroup, 0, "日期格式错误");
+					return true;
+				}
 				ArrayList<Integer> list= Autoreply.instence.groupCounter.getSpeak(fromGroup, msg.substring(6));
+				if (list == null) {
+					Autoreply.sendMessage(fromGroup, 0, "无数据");
+					return true;
+				}
 				StringBuilder sb=new StringBuilder();
 				int t=0;
 				for (int i:list) {
-					sb.append(String.format("%d:00-%d:00 %d条\n", t, ++t, i));
+					if (i == 0) {
+						continue;
+					}
+					sb.append(String.format("%d:00-%d:00  共%d条消息\n", t, ++t, i));
 				}
 				sendMessage(fromGroup, 0, sb.toString());
 				return true;
