@@ -1,10 +1,9 @@
 package com.meng.picEdit;
 
-import com.google.zxing.*;
 import com.meng.*;
 import java.io.*;
 import java.net.*;
-import java.awt.Image;
+import java.awt.*;
 import java.awt.image.BufferedImage;
 import javax.imageio.ImageIO;
 
