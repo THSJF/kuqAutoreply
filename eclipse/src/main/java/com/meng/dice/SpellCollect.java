@@ -10,7 +10,7 @@ import java.util.concurrent.*;
 import com.meng.gameData.TouHou.zun.*;
 
 public class SpellCollect {
-	private ConcurrentHashMap<Long,HashSet<String>> chm=new ConcurrentHashMap<>();
+	public ConcurrentHashMap<Long,HashSet<String>> userSpellsMap=new ConcurrentHashMap<>();
 	public ConcurrentHashMap<Long,ArchievementBean> archiMap=new ConcurrentHashMap<>();
 	private HashSet<Long> todayCard=new HashSet<>();
 	private HashSet<Long> todaySign=new HashSet<>();
@@ -24,7 +24,7 @@ public class SpellCollect {
         }
         Type type = new TypeToken<ConcurrentHashMap<Long,HashSet<String>>>() {
         }.getType();
-        chm = Autoreply.gson.fromJson(Tools.FileTool.readString(Autoreply.appDirectory + "/properties/spells.json"), type);
+        userSpellsMap = Autoreply.gson.fromJson(Tools.FileTool.readString(Autoreply.appDirectory + "/properties/spells.json"), type);
 
 		archiFile = new File(Autoreply.appDirectory + "/properties/archievement.json");
         if (!archiFile.exists()) {
@@ -146,10 +146,10 @@ public class SpellCollect {
 			} catch (NumberFormatException e) {
 				Autoreply.sendMessage(fromGroup, 0, e.toString());
 			}
-			HashSet<String> tmpSet=chm.get(chan.get(0));
+			HashSet<String> tmpSet=userSpellsMap.get(chan.get(0));
 			if (tmpSet == null) {
 				tmpSet = new HashSet<String>();
-				chm.put(chan.get(0), tmpSet);
+				userSpellsMap.put(chan.get(0), tmpSet);
 			}
 			Random r=new Random();
 			StringBuilder sb=new StringBuilder();
@@ -184,10 +184,10 @@ public class SpellCollect {
 					Autoreply.sendMessage(fromGroup, 0, "本地幻币不足");
 					return true;
 				}	
-				HashSet<String> gotSpellsSet=chm.get(fromQQ);
+				HashSet<String> gotSpellsSet=userSpellsMap.get(fromQQ);
 				if (gotSpellsSet == null) {
 					gotSpellsSet = new HashSet<String>();
-					chm.put(fromQQ, gotSpellsSet);
+					userSpellsMap.put(fromQQ, gotSpellsSet);
 				}
 				Random r=new Random();
 				StringBuilder sb=new StringBuilder();
@@ -236,10 +236,10 @@ public class SpellCollect {
 				Autoreply.sendMessage(fromGroup, 0, "你今天已经抽过啦");
 				return true;
 			}
-			HashSet<String> tmpSet=chm.get(fromQQ);
+			HashSet<String> tmpSet=userSpellsMap.get(fromQQ);
 			if (tmpSet == null) {
 				tmpSet = new HashSet<String>();
-				chm.put(fromQQ, tmpSet);
+				userSpellsMap.put(fromQQ, tmpSet);
 			}
 			Random r=new Random();
 			StringBuilder sb=new StringBuilder();
@@ -271,10 +271,10 @@ public class SpellCollect {
 				return true;
 			}
 			if (isCointains(spellName)) {		
-				HashSet<String> gotSpellSet=chm.get(fromQQ);
+				HashSet<String> gotSpellSet=userSpellsMap.get(fromQQ);
 				if (gotSpellSet == null) {
 					gotSpellSet = new HashSet<String>();
-					chm.put(fromQQ, gotSpellSet);
+					userSpellsMap.put(fromQQ, gotSpellSet);
 				}
 				gotSpellSet.add(spellName);
 				Autoreply.sendMessage(fromGroup, 0, Autoreply.instence.configManager.getNickName(fromQQ) + "获得了:" + spellName);
@@ -289,7 +289,7 @@ public class SpellCollect {
 
 		if (msg.equals("查看符卡")) {
 			StringBuilder sb=new StringBuilder();
-			HashSet<String> gotSpells=chm.get(fromQQ);
+			HashSet<String> gotSpells=userSpellsMap.get(fromQQ);
 			if (gotSpells == null) {
 				Autoreply.sendMessage(fromGroup, 0, "你没有参加过抽卡");
 				return true;
@@ -377,7 +377,7 @@ public class SpellCollect {
 		return false;
 	}
 
-	private void checkArchievement(long fromGroup, long toQQ, HashSet<String> gotSpell) {
+	public void checkArchievement(long fromGroup, long toQQ, HashSet<String> gotSpell) {
 		ArchievementBean ab=archiMap.get(toQQ);
 		if (ab == null) {
 			ab = new ArchievementBean();
@@ -410,7 +410,7 @@ public class SpellCollect {
                 File backup1= new File(spellFile.getAbsolutePath() + ".bak" + System.currentTimeMillis());
                 FileOutputStream fos1 = new FileOutputStream(backup1);
                 OutputStreamWriter writer1 = new OutputStreamWriter(fos1, StandardCharsets.UTF_8);
-                writer1.write(Autoreply.gson.toJson(chm));
+                writer1.write(Autoreply.gson.toJson(userSpellsMap));
                 writer1.flush();
                 fos1.close();			
 				File ar=new File(archiFile.getAbsolutePath() + ".bak" + System.currentTimeMillis());
@@ -425,11 +425,11 @@ public class SpellCollect {
         }
     }
 
-	private void saveConfig() {
+	public void saveConfig() {
         try {
             FileOutputStream fos = new FileOutputStream(spellFile);
             OutputStreamWriter writer = new OutputStreamWriter(fos, StandardCharsets.UTF_8);
-            writer.write(Autoreply.gson.toJson(chm));
+            writer.write(Autoreply.gson.toJson(userSpellsMap));
             writer.flush();
             fos.close();
         } catch (IOException e) {

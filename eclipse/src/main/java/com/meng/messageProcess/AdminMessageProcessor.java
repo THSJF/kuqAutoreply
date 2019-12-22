@@ -131,7 +131,7 @@ public class AdminMessageProcessor {
 			if (msg.startsWith("移除成就 ")) {
 				String arch=msg.substring(5, msg.indexOf("[") - 1);
 				long toQQ=Autoreply.instence.CC.getAt(msg);
-				ArchievementBean ab=Autoreply.instence.spellCollect.archiMap.get(String.valueOf(toQQ));
+				ArchievementBean ab=Autoreply.instence.spellCollect.archiMap.get(toQQ);
 				if (ab == null) {
 					ab = new ArchievementBean();
 					Autoreply.instence.spellCollect.archiMap.put(toQQ, ab);
@@ -141,6 +141,43 @@ public class AdminMessageProcessor {
 						ab.deleteArchievment(ac.archNum);
 						Autoreply.sendMessage(fromGroup, toQQ, "为" + toQQ + "移除成就" + arch);
 						Autoreply.instence.spellCollect.saveArchiConfig();
+						return true;
+					}
+				}
+				return true;
+			}
+			if (msg.startsWith("移除符卡 ")) {
+				String arch=msg.substring(5, msg.indexOf("[") - 1);
+				long toQQ=Autoreply.instence.CC.getAt(msg);
+				HashSet<String> spells=Autoreply.instence.spellCollect.userSpellsMap.get(toQQ);
+				if (spells == null) {
+					spells = new HashSet<>();
+					Autoreply.instence.spellCollect.userSpellsMap.put(toQQ, spells);
+				}
+				for (String ac:spells) {
+					if (ac.equals(arch)) {
+						spells.remove(ac);
+						Autoreply.sendMessage(fromGroup, toQQ, "为" + toQQ + "移除符卡" + arch);
+						Autoreply.instence.spellCollect.saveConfig();
+						return true;
+					}
+				}
+				return true;
+			}
+			if (msg.startsWith("添加符卡 ")) {
+				String arch=msg.substring(5, msg.indexOf("[") - 1);
+				long toQQ=Autoreply.instence.CC.getAt(msg);
+				HashSet<String> spells=Autoreply.instence.spellCollect.userSpellsMap.get(toQQ);
+				if (spells == null) {
+					spells = new HashSet<>();
+					Autoreply.instence.spellCollect.userSpellsMap.put(toQQ, spells);
+				}
+				for (String ac:spells) {
+					if (ac.equals(arch)) {
+						spells.add(ac);
+						Autoreply.sendMessage(fromGroup, toQQ, "为" + toQQ + "添加符卡" + arch);
+						Autoreply.instence.spellCollect.saveConfig();
+						Autoreply.instence.spellCollect.checkArchievement(fromGroup, fromQQ, spells);
 						return true;
 					}
 				}
@@ -407,7 +444,7 @@ public class AdminMessageProcessor {
 					"largestPoolSize：" + threadPoolExecutor.getLargestPoolSize() + "\n" +
 					"poolSize：" + threadPoolExecutor.getPoolSize() + "\n" +
 					"activeCount：" + threadPoolExecutor.getActiveCount();
-               Autoreply.sendMessage(fromGroup, fromQQ, s);
+				Autoreply.sendMessage(fromGroup, fromQQ, s);
                 return true;
 			}
             if (msg.equalsIgnoreCase("System.gc();")) {
@@ -452,12 +489,12 @@ public class AdminMessageProcessor {
                 if (args.length == 6) {
                     try {
 						Autoreply.sendMessage(fromGroup, 0,
-									Autoreply.instence.CC.location(
-										Double.parseDouble(args[2]),
-										Double.parseDouble(args[1]),
-										Integer.parseInt(args[3]),
-										args[4],
-										args[5]));
+											  Autoreply.instence.CC.location(
+												  Double.parseDouble(args[2]),
+												  Double.parseDouble(args[1]),
+												  Integer.parseInt(args[3]),
+												  args[4],
+												  args[5]));
                         return true;
 					} catch (Exception e) {
 						Autoreply.sendMessage(fromGroup, fromQQ, "参数错误,生成位置.经度double.纬度double.倍数int.名称string.描述string");
