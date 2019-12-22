@@ -90,7 +90,6 @@ public class ConfigManager extends WebSocketClient {
 							Autoreply.instence.threadPool.execute(Autoreply.instence.timeTip);
 							Autoreply.instence.faithManager = new FaithManager();
 							Autoreply.instence.messageTooManyManager = new MessageTooManyManager();
-							Autoreply.instence.zanManager = new ZanManager();
 							List<Group> groupList=Autoreply.CQ.getGroupList();
 							for (Group g:groupList) {
 								List<com.sobte.cqp.jcq.entity.Member> mlist=Autoreply.CQ.getGroupMemberList(g.getId());

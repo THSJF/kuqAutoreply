@@ -31,8 +31,16 @@ public class TimeTip implements Runnable {
             Calendar c = Calendar.getInstance();
             if (c.get(Calendar.MINUTE) == 0) {
 				if (c.get(Calendar.HOUR_OF_DAY) == 11) {
-					Autoreply.instence.zanManager.sendZan();
-				}
+					for (long l : Autoreply.instence.configManager.RanConfig.masterList) {
+						Autoreply.CQ.sendLikeV2(l, 10);
+					}
+					for (long l : Autoreply.instence.configManager.RanConfig.adminList) {
+						Autoreply.CQ.sendLikeV2(l, 10);
+					}
+					for (long l : Autoreply.instence.configManager.SanaeConfig.zanSet) {
+						Autoreply.CQ.sendLikeV2(l, 10);
+					}
+				}	
                 if (c.get(Calendar.HOUR_OF_DAY) == 22) {
                     Autoreply.instence.threadPool.execute(new Runnable() {
 							@Override

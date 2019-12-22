@@ -130,6 +130,18 @@ public class AdminMessageProcessor {
 				sendMessage(Long.parseLong(strings[1]), 0, strings[2]);
                 return true;
 			}
+			if (msg.startsWith("-z.add")) {
+				Autoreply.instence.configManager.SanaeConfig.zanSet.addAll(Autoreply.instence.CC.getAts(msg));
+				Autoreply.instence.configManager.saveSanaeConfig();
+				Autoreply.sendMessage(fromGroup, fromQQ, "已添加至赞列表");
+				return true;
+			}
+			if (msg.startsWith("-z.remove")) {
+				Autoreply.instence.configManager.SanaeConfig.zanSet.removeAll(Autoreply.instence.CC.getAts(msg));
+				Autoreply.instence.configManager.saveSanaeConfig();
+				Autoreply.sendMessage(fromGroup, fromQQ, "已从赞列表移除");
+				return true;
+			}
 		}
         if (Autoreply.instence.configManager.isAdmin(fromQQ) || isGroupAdmin) {
 			if (msg.equals("-help")) {

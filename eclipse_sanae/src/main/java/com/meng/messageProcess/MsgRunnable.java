@@ -147,8 +147,5 @@ public class MsgRunnable implements Runnable {
 		if (Autoreply.instence.dicReply.check(fromGroup, fromQQ, msg)) {
 			return;
 		}
-		if (Autoreply.instence.zanManager.checkAdd(fromGroup, fromQQ, msg)) {
-			return;
-		}
 	}
 }
