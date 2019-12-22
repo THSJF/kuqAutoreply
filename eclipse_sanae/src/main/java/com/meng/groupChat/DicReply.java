@@ -13,7 +13,7 @@ public class DicReply {
 
     private HashMap<Long, DicReplyGroup> groupMap = new HashMap<>();
 	private HashMap<String, ArrayList<String>> dic = new HashMap<>();
-
+	private boolean regexMode = false;
 	public DicReply() {
 		File dicFile = new File(Autoreply.appDirectory + "dic\\dic.json");
 		if (!dicFile.exists()) {
@@ -22,6 +22,17 @@ public class DicReply {
 		Type type = new TypeToken<HashMap<String, HashSet<String>>>() {
 		}.getType();
 		dic = Autoreply.gson.fromJson(Tools.FileTool.readString(dicFile), type);
+		if (Autoreply.instence.configManager.SanaeConfig.dicRegex.get(-1) == null) {
+			regexMode = false;
+		} else {
+			regexMode = Autoreply.instence.configManager.SanaeConfig.dicRegex.get(-1);
+		}
+	}
+
+	public void setRegexMode(long fromGroup, boolean isReg) {
+		Autoreply.instence.configManager.SanaeConfig.dicRegex.put(fromGroup, isReg);
+		groupMap.get(fromGroup).regexMode = isReg;
+		Autoreply.instence.configManager.saveSanaeConfig();
 	}
 
 	public void clear() {
@@ -40,11 +51,21 @@ public class DicReply {
 	}
 
 	private boolean checkPublicDic(long group, long qq, String msg) {
-		for (String key : dic.keySet()) {
-			if (Pattern.matches(".*" + key + ".*", msg.replaceAll("\\s", "").trim())) {
-				ArrayList<String> ans=dic.get(key);
-				Autoreply.sendMessage(group, qq, ans.get(Autoreply.instence.random.nextInt(ans.size())));
-				return true;
+		if (regexMode) {
+			for (String key : dic.keySet()) {
+				if (Pattern.matches(".*" + key + ".*", msg.replaceAll("\\s", ""))) {
+					ArrayList<String> ans = dic.get(key);
+					Autoreply.sendMessage(group, qq, ans.get(Autoreply.instence.random.nextInt(ans.size())));
+					return true;
+				}
+			}
+		} else {
+			for (String key : dic.keySet()) {
+				if (msg.contains(key.replaceAll("\\s", ""))) {
+					ArrayList<String> ans = dic.get(key);
+					Autoreply.sendMessage(group, qq, ans.get(Autoreply.instence.random.nextInt(ans.size())));
+					return true;
+				}
 			}
 		}
 		return false;
@@ -53,6 +74,7 @@ public class DicReply {
 	private class DicReplyGroup {
 		private long groupNum;
 		private HashMap<String, ArrayList<String>> dic = new HashMap<>();
+		public boolean regexMode=false;
 		public DicReplyGroup(long group) {
 			groupNum = group;
 			File dicFile = new File(Autoreply.appDirectory + "dic\\dic" + group + ".json");
@@ -62,13 +84,28 @@ public class DicReply {
 			Type type = new TypeToken<HashMap<String, ArrayList<String>>>() {
 			}.getType();
 			dic = Autoreply.gson.fromJson(Tools.FileTool.readString(dicFile), type);
+			if (Autoreply.instence.configManager.SanaeConfig.dicRegex.get(groupNum) == null) {
+				regexMode = false;
+			} else {
+				regexMode = Autoreply.instence.configManager.SanaeConfig.dicRegex.get(groupNum);
+			}
 		}
 		public boolean checkMsg(long group, long qq, String msg) {
-			for (String key : dic.keySet()) {
-				if (Pattern.matches(".*" + key + ".*", msg.replace(" ", "").trim())) {
-					ArrayList<String> ans=dic.get(key);
-					Autoreply.sendMessage(group, qq, ans.get(Autoreply.instence.random.nextInt(ans.size())));
-					return true;
+			if (regexMode) {
+				for (String key : dic.keySet()) {
+					if (Pattern.matches(".*" + key + ".*", msg.replace(" ", "").trim())) {
+						ArrayList<String> ans = dic.get(key);
+						Autoreply.sendMessage(group, qq, ans.get(Autoreply.instence.random.nextInt(ans.size())));
+						return true;
+					}
+				}
+			} else {
+				for (String key : dic.keySet()) {
+					if (msg.contains(key.replaceAll("\\s", ""))) {
+						ArrayList<String> ans = dic.get(key);
+						Autoreply.sendMessage(group, qq, ans.get(Autoreply.instence.random.nextInt(ans.size())));
+						return true;
+					}
 				}
 			}
 			return false;

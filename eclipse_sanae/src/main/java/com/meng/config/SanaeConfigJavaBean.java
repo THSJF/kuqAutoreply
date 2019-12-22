@@ -10,6 +10,7 @@ public class SanaeConfigJavaBean {
 	public HashSet<Long> zanSet = new HashSet<>();
 	public ArrayList<ReportBean> reportList=new ArrayList<>();
 	public ArrayList<BugReportBean> bugReportList=new ArrayList<>();
+	public HashMap<Long,Boolean> dicRegex = new HashMap<>();
 
 	public void addReport(long fromGroup, long fromQQ, String content) {
 		ReportBean report=new ReportBean();

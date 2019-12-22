@@ -26,6 +26,7 @@ public class AdminMessageProcessor {
 		adminPermission.put("-发言数据 yyyy-MM-dd", "每小时发言信息");
 		//adminPermission.put("线程数", "线程池信息");
 		adminPermission.put("-bot on|-bot off", "设置是否回复本群");
+		adminPermission.put("-regex", "词库使用正则表达式匹配key");
 		userPermission.put(".nn [名字]", "设置早苗对你的称呼,如果不设置则恢复默认称呼");
 		//userPermission.put("-int [int] [+|-|*|/|<<|>>|>>>|%|^|&||] [int]", "int运算(溢出)");
 		userPermission.put("-留言", "给开发者留言");
@@ -147,6 +148,20 @@ public class AdminMessageProcessor {
 			if (msg.equals("-help")) {
 				Autoreply.sendMessage(fromGroup, 0, adminPermission.toString());
 				return true;
+			}
+			if (msg.equals("-regex")) {
+				if (Autoreply.instence.configManager.SanaeConfig.dicRegex.get(fromGroup) != null) {
+					if (Autoreply.instence.configManager.SanaeConfig.dicRegex.get(fromGroup)) {
+						Autoreply.instence.configManager.SanaeConfig.dicRegex.put(fromGroup, false);
+						Autoreply.sendMessage(fromGroup, 0, "词库正则表达式已停用");
+					} else {
+						Autoreply.instence.configManager.SanaeConfig.dicRegex.put(fromGroup, true);
+						Autoreply.sendMessage(fromGroup, 0, "词库正则表达式已启用");
+					}
+				} else {
+					Autoreply.instence.configManager.SanaeConfig.dicRegex.put(fromGroup, true);
+					Autoreply.sendMessage(fromGroup, 0, "词库正则表达式已启用");
+				}
 			}
 			if (msg.equals("-发言数据")) {
 				HashMap<Integer,Integer> hashMap = Autoreply.instence.groupCounter.getSpeak(fromGroup, Tools.CQ.getDate());
