@@ -28,8 +28,8 @@ public class DicReplyManager {
     public void clear() {
         groupMap.clear();
     }
-	
-	public void addData(long group) {
+
+	public void addDic(long group) {
         groupMap.put(group, new DicReplyGroup(group));
     }
 
@@ -52,38 +52,20 @@ public class DicReplyManager {
         return false;
     }
 
-    static void saveDic(File dicFile, HashMap<String, HashSet<String>> dic) {
-        try {
-            FileOutputStream fos = new FileOutputStream(dicFile);
-            OutputStreamWriter writer = new OutputStreamWriter(fos, StandardCharsets.UTF_8);
-            writer.write(new Gson().toJson(dic));
-            writer.flush();
-            fos.close();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
-	
-	class DicReplyGroup {
-
-		public long groupNum;
-		private HashMap<String, HashSet<String>> dic = new HashMap<>();
-
+	private class DicReplyGroup {
+		private long groupNum;
+		private HashMap<String, ArrayList<String>> dic = new HashMap<>();
 		public DicReplyGroup(long group) {
 			groupNum = group;
 			File dicFile = new File(Autoreply.appDirectory + "dic\\dic" + group + ".json");
 			if (!dicFile.exists()) {
-				DicReplyManager.saveDic(dicFile, dic);
+				saveDic(dicFile, dic);
 			}
-			Type type = new TypeToken<HashMap<String, HashSet<String>>>() {
+			Type type = new TypeToken<HashMap<String, ArrayList<String>>>() {
 			}.getType();
 			dic = Autoreply.gson.fromJson(Tools.FileTool.readString(dicFile), type);
 		}
-
 		public boolean checkMsg(long group, long qq, String msg) {
-			if (group != groupNum) {
-				return false;
-			}
 			for (String key : dic.keySet()) {
 				if (Pattern.matches(".*" + key + ".*", msg.replace(" ", "").trim())) {
 					Autoreply.sendMessage(group, qq, (String) dic.get(key).toArray()[Autoreply.instence.random.nextInt(dic.get(key).size())]);
@@ -92,6 +74,16 @@ public class DicReplyManager {
 			}
 			return false;
 		}
-
+		private void saveDic(File dicFile, HashMap<String, ArrayList<String>> dic) {
+			try {
+				FileOutputStream fos = new FileOutputStream(dicFile);
+				OutputStreamWriter writer = new OutputStreamWriter(fos, StandardCharsets.UTF_8);
+				writer.write(new Gson().toJson(dic));
+				writer.flush();
+				fos.close();
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		}
 	}
 }

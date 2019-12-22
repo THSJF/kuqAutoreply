@@ -15,11 +15,11 @@ import org.java_websocket.*;
 import org.java_websocket.handshake.*;
 import org.java_websocket.server.*;
 
-public class ConnectServer extends WebSocketServer {
+public class RitsukageServer extends WebSocketServer {
 
 	private ConfigJavaBean configJavaBean;
 
-	public ConnectServer(int port) throws UnknownHostException {
+	public RitsukageServer(int port) throws UnknownHostException {
 		super(new InetSocketAddress(port));
 		configJavaBean = Autoreply.instence.configManager.configJavaBean;
 	}

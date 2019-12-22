@@ -105,7 +105,7 @@ public class GroupMsgPart2Runnable implements Runnable {
             return true;
 		}
         GroupConfig groupConfig = Autoreply.instence.configManager.getGroupConfig(fromGroup);
-        if (groupConfig.isRepeat() && Autoreply.instence.repeatManager.check(fromGroup, fromQQ, msg, imageFiles)) {// 复读
+        if (groupConfig.isRepeat() && Autoreply.instence.repeatManager.check(fromGroup, fromQQ, msg)) {
             return true;
 		}
         if (msg.equals(".live")) {
@@ -122,10 +122,6 @@ public class GroupMsgPart2Runnable implements Runnable {
 		}
 		if (Autoreply.instence.spellCollect.check(fromGroup, fromQQ, msg)) {
 			return true;
-		}
-        if (msg.startsWith("[CQ:location,lat=")) {
-            sendMessage(fromGroup, 0, Autoreply.instence.CC.location(35.594993, 118.869838, 15, "守矢神社", "此生无悔入东方 来世愿生幻想乡"));
-            return true;
 		}
         if (msg.contains("大膜法")) {
             if (!groupConfig.isMoshenfusong()) {

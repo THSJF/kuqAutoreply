@@ -31,7 +31,6 @@ public class IPGetter implements Runnable {
             ServerSocket serverSocket = new ServerSocket(4000 + port);
             Socket socket;
             System.out.println("***服务器即将启动，等待客户端的链接***");
-            // 循环监听等待客户端的链接
             while (running) {
                 socket = serverSocket.accept();
                 Autoreply.instence.threadPool.execute(new ServerRunnable(socket));

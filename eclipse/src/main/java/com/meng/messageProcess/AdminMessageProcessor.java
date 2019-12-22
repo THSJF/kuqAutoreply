@@ -16,8 +16,6 @@ import java.util.*;
 import java.util.concurrent.*;
 import org.jsoup.*;
 
-import static com.meng.Autoreply.sendMessage;
-
 public class AdminMessageProcessor {
     private ConfigManager configManager;
 	private MyLinkedHashMap<String,String> masterPermission=new MyLinkedHashMap<>();
@@ -61,18 +59,18 @@ public class AdminMessageProcessor {
 		adminPermission.put("findInAll:[QQ号]", "查找共同群");
 		adminPermission.put("ban.[QQ号|艾特].[时间]|ban.[群号].[QQ号].[时间]", "禁言,单位为秒");
 		adminPermission.put("加图指令懒得写了", "色图迫害图女装");
-		adminPermission.put("鬼人正邪统计", "鬼人正邪发言统计");
+		adminPermission.put("蓝统计", "蓝发言统计");
 		adminPermission.put("线程数", "线程池信息");
 		adminPermission.put(".on|.off", "不修改配置文件的单群开关");
 		adminPermission.put(".admin enable|.admin disable", "修改配置文件的单群开关");
 		adminPermission.put(".live", "不管配置文件如何,都回复直播列表");
 
 		userPermission.put(".live", "正在直播列表");
-		userPermission.put(".nn [名字]", "设置鬼人正邪对你的称呼,如果不设置则恢复默认称呼");
+		userPermission.put(".nn [名字]", "设置蓝对你的称呼,如果不设置则恢复默认称呼");
 		userPermission.put("-int [int] [+|-|*|/|<<|>>|>>>|%|^|&||] [int]", "int运算(溢出)");
 		userPermission.put("-uint [int]", "int字节转uint(boom)");
 		userPermission.put("抽卡", "抽卡");
-		userPermission.put("给鬼人正邪master幻币转账", "抽卡，1币3卡");
+		userPermission.put("给蓝master幻币转账", "抽卡，1币3卡");
 		userPermission.put("查看成就", "查看成就列表");
 		userPermission.put("查看符卡", "查看已获得的符卡,会刷屏，少用");
 		userPermission.put("成就条件 [成就名]", "查看获得条件");
@@ -409,21 +407,21 @@ public class AdminMessageProcessor {
 					"largestPoolSize：" + threadPoolExecutor.getLargestPoolSize() + "\n" +
 					"poolSize：" + threadPoolExecutor.getPoolSize() + "\n" +
 					"activeCount：" + threadPoolExecutor.getActiveCount();
-                sendMessage(fromGroup, fromQQ, s);
+               Autoreply.sendMessage(fromGroup, fromQQ, s);
                 return true;
 			}
             if (msg.equalsIgnoreCase("System.gc();")) {
             	System.gc();
-                sendMessage(fromGroup, fromQQ, "gc start");
+                Autoreply.sendMessage(fromGroup, fromQQ, "gc start");
                 return true;
 			}
             if (msg.equals("zan-now")) {
-                sendMessage(fromGroup, fromQQ, "start");
+				Autoreply.sendMessage(fromGroup, fromQQ, "start");
                 Autoreply.instence.threadPool.execute(new Runnable() {
 						@Override
 						public void run() {
 							Autoreply.instence.zanManager.sendZan();
-							sendMessage(fromGroup, fromQQ, "finish");
+							Autoreply.sendMessage(fromGroup, fromQQ, "finish");
 						}
 					});
                 return true;
@@ -432,7 +430,7 @@ public class AdminMessageProcessor {
                 return true;
 			}
             if (msg.equals("直播时间统计")) {
-                sendMessage(fromGroup, 0, Autoreply.instence.liveListener.getLiveTimeCount());
+				Autoreply.sendMessage(fromGroup, 0, Autoreply.instence.liveListener.getLiveTimeCount());
                 return true;
 			}
             if (msg.startsWith("nai.")) {
@@ -446,14 +444,14 @@ public class AdminMessageProcessor {
                 return true;
 			}
             if (msg.equals("精神支柱")) {
-                sendMessage(fromGroup, 0, Autoreply.instence.CC.image(new File(Autoreply.appDirectory + "pic\\alice.png")));
+				Autoreply.sendMessage(fromGroup, 0, Autoreply.instence.CC.image(new File(Autoreply.appDirectory + "pic\\alice.png")));
                 return true;
 			}
             if (msg.startsWith("生成位置")) {
                 String[] args = msg.split(",");
                 if (args.length == 6) {
                     try {
-                        sendMessage(fromGroup, 0,
+						Autoreply.sendMessage(fromGroup, 0,
 									Autoreply.instence.CC.location(
 										Double.parseDouble(args[2]),
 										Double.parseDouble(args[1]),
@@ -462,7 +460,7 @@ public class AdminMessageProcessor {
 										args[5]));
                         return true;
 					} catch (Exception e) {
-                        sendMessage(fromGroup, fromQQ, "参数错误,生成位置.经度double.纬度double.倍数int.名称string.描述string");
+						Autoreply.sendMessage(fromGroup, fromQQ, "参数错误,生成位置.经度double.纬度double.倍数int.名称string.描述string");
                         return true;
 					}
 				}
@@ -479,13 +477,13 @@ public class AdminMessageProcessor {
 				}
                 switch (strings[2]) {
                     case "喵":
-						Autoreply.instence.threadPool.execute(new DeleteMessageRunnable(sendMessage(Long.parseLong(strings[1]), 0, Autoreply.instence.CC.record("miao.mp3"))));
+						Autoreply.instence.threadPool.execute(new DeleteMessageRunnable(Autoreply.sendMessage(Long.parseLong(strings[1]), 0, Autoreply.instence.CC.record("miao.mp3"))));
 						break;
                     case "娇喘":
-						Autoreply.instence.threadPool.execute(new DeleteMessageRunnable(sendMessage(Long.parseLong(strings[1]), 0, Autoreply.instence.CC.record("mmm.mp3"))));
+						Autoreply.instence.threadPool.execute(new DeleteMessageRunnable(Autoreply.sendMessage(Long.parseLong(strings[1]), 0, Autoreply.instence.CC.record("mmm.mp3"))));
 						break;
                     default:
-						sendMessage(Long.parseLong(strings[1]), 0, strings[2]);
+						Autoreply.sendMessage(Long.parseLong(strings[1]), 0, strings[2]);
 						break;
 				}
                 return true;
@@ -551,8 +549,8 @@ public class AdminMessageProcessor {
 				}
                 return true;
 			}
-            if (msg.equals("鬼人正邪统计")) {
-                sendMessage(fromGroup, fromQQ, Autoreply.instence.useCount.getMyCount(Autoreply.CQ.getLoginQQ()));
+            if (msg.equals("蓝统计")) {
+				Autoreply.sendMessage(fromGroup, fromQQ, Autoreply.instence.useCount.getMyCount(Autoreply.CQ.getLoginQQ()));
                 return true;
 			}
             if (msg.startsWith("findInAll:")) {
@@ -588,11 +586,11 @@ public class AdminMessageProcessor {
 									Autoreply.instence.fileTypeUtil.checkFormat(cqImage.download(Autoreply.appDirectory + File.separator + "pohai/" + pohaituName, cqImage.getMd5()));
 								} catch (IOException e) {
 									e.printStackTrace();
-									sendMessage(fromGroup, fromQQ, e.toString());
+									Autoreply.sendMessage(fromGroup, fromQQ, e.toString());
 									return;
 								}
 							}
-							sendMessage(fromGroup, fromQQ, imgList.size() + "张图添加成功");
+							Autoreply.sendMessage(fromGroup, fromQQ, imgList.size() + "张图添加成功");
 						}
 					});
                 return true;
@@ -608,11 +606,11 @@ public class AdminMessageProcessor {
 									Autoreply.instence.fileTypeUtil.checkFormat(cqImage.download(Autoreply.appDirectory + File.separator + "setu/" + setuName, cqImage.getMd5()));
 								} catch (IOException e) {
 									e.printStackTrace();
-									sendMessage(fromGroup, fromQQ, e.toString());
+									Autoreply.sendMessage(fromGroup, fromQQ, e.toString());
 									return;
 								}
 							}
-							sendMessage(fromGroup, fromQQ, imgList.size() + "张图添加成功");
+							Autoreply.sendMessage(fromGroup, fromQQ, imgList.size() + "张图添加成功");
 						}
 					});
                 return true;
@@ -628,11 +626,11 @@ public class AdminMessageProcessor {
 									Autoreply.instence.fileTypeUtil.checkFormat(cqImage.download(Autoreply.appDirectory + File.separator + "nvzhuang/" + setuName, cqImage.getMd5()));
 								} catch (IOException e) {
 									e.printStackTrace();
-									sendMessage(fromGroup, fromQQ, e.toString());
+									Autoreply.sendMessage(fromGroup, fromQQ, e.toString());
 									return;
 								}
 							}
-							sendMessage(fromGroup, fromQQ, imgList.size() + "张图添加成功");
+							Autoreply.sendMessage(fromGroup, fromQQ, imgList.size() + "张图添加成功");
 						}
 					});
                 return true;

@@ -1,17 +1,12 @@
 package com.meng.picEdit;
 
+import com.meng.*;
+import java.io.*;
+import java.net.*;
+
 import java.awt.Image;
 import java.awt.image.BufferedImage;
-import java.io.ByteArrayOutputStream;
-import java.io.DataInputStream;
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.net.MalformedURLException;
-import java.net.URL;
 import javax.imageio.ImageIO;
-
-import com.meng.Autoreply;
 
 public class ShenChuQQManager {
 

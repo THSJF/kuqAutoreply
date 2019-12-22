@@ -23,6 +23,10 @@ public class FileTipManager implements Runnable {
         }
     }
 
+	public void addTip(long groupNumber, long QQNumber) {
+		dataMap.add(new FileTipUploader(groupNumber, QQNumber));
+	}
+
     @Override
     public void run() {
         try {
@@ -49,4 +53,16 @@ public class FileTipManager implements Runnable {
             }
         }
     }
+
+	private class FileTipUploader {
+		public long groupNumber = 0;
+		public long QQNumber = 0;
+		public long fileLastUpload = 0;
+		public long fileLastTipTime = 0;
+
+		public FileTipUploader(long groupNumber, long QQNumber) {
+			this.groupNumber = groupNumber;
+			this.QQNumber = QQNumber;
+		}
+	}
 }

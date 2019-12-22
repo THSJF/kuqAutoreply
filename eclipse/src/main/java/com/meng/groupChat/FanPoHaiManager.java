@@ -10,8 +10,8 @@ import javax.imageio.ImageIO;
 
 public class FanPoHaiManager {
     private HashSet<FingerPrint> fingerPrints = new HashSet<>(64);
-    private int pohaicishu = 0;// 收到的消息包含迫害二字的次数
-    private int alpohai = Autoreply.instence.random.nextInt(5) + 2;// 收到的消息包含迫害二字的次数到达此值也会触发反迫害
+    private int pohaicishu = 0;
+    private int alpohai = Autoreply.instence.random.nextInt(5) + 2;
 
     public FanPoHaiManager() {
 		Autoreply.instence.threadPool.execute(new Runnable() {
@@ -30,6 +30,7 @@ public class FanPoHaiManager {
 					System.out.println("反迫害启动完成");
 					Autoreply.sleeping = false;
 					Autoreply.sendMessage(Autoreply.mainGroup, 0, "~reconnect");
+					Autoreply.instence.enable();
 				}
 			});
     }
@@ -37,13 +38,12 @@ public class FanPoHaiManager {
     public boolean check(long fromQQ, long fromGroup, String msg, long msgID, File[] imageFiles) {
         try {
             boolean bpohai = false;
-            // 处理带有迫害二字的消息
             if (msg.contains("迫害") && !msg.contains("反迫害")) {
                 ++pohaicishu;
                 if (pohaicishu == alpohai) {
                     bpohai = true;
                     pohaicishu = 0;
-                    alpohai = Autoreply.instence.random.nextInt(2147483647) % 5 + 2;
+                    alpohai = Autoreply.instence.random.nextInt() % 5 + 2;
                 }
             }
             // 判定图片相似度

@@ -1,6 +1,5 @@
-package com.meng.searchPicture;
+package com.meng;
 
-import com.meng.*;
 import com.meng.tools.*;
 import java.io.*;
 import java.net.*;
@@ -289,7 +288,7 @@ public class PicSearchManager {
 			}
 		}
 	}
-	
+
 	class HtmlToPlainText {
 
 		public String getPlainText(Element element) {

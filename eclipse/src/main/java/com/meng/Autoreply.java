@@ -12,10 +12,8 @@ import com.meng.dice.*;
 import com.meng.groupChat.*;
 import com.meng.groupChat.Sequence.*;
 import com.meng.messageProcess.*;
-import com.meng.musicProcess.*;
 import com.meng.ocr.*;
 import com.meng.picEdit.*;
-import com.meng.searchPicture.*;
 import com.meng.tip.*;
 import com.meng.tools.*;
 import com.meng.tools.override.*;
@@ -24,19 +22,6 @@ import com.sobte.cqp.jcq.event.*;
 import java.io.*;
 import java.util.*;
 import java.util.concurrent.*;
-
-/*
- * 本文件是JCQ插件的主类<br>
- * <br>
- * <p>
- * 注意修改json中的class来加载主类，如不设置则利用appid加载，最后一个单词自动大写查找<br>
- * 例：appid(com.example.demo) 则加载类 com.example.Demo<br>
- * 文档地址： https://gitee.com/Sobte/JCQ-CoolQ <br>
- * 帖子：https://cqp.cc/t/37318 <br>
- * 辅助开发变量: {@link JcqAppAbstract#CQ CQ}({@link com.sobte.cqp.jcq.entity.CoolQ
- * 酷Q核心操作类}), {@link JcqAppAbstract#CC CC}(
- * {@link com.sobte.cqp.jcq.message.CQCode 酷Q码操作类}), 具体功能可以查看文档
- */
 
 /**
  * @author Administrator
@@ -75,7 +60,7 @@ public class Autoreply extends JcqAppAbstract implements ICQVer, IMsg, IRequest 
 	public CookieManager cookieManager;
 	public SeqManager seqManager;
 	public DanmakuListenerManager danmakuListenerManager;
-	public ConnectServer connectServer;
+	public RitsukageServer connectServer;
 	public SanaeServer sanaeServer;
 	public SpellCollect spellCollect;
     public ExecutorService threadPool = Executors.newCachedThreadPool();
@@ -100,18 +85,11 @@ public class Autoreply extends JcqAppAbstract implements ICQVer, IMsg, IRequest 
      * @param args 系统参数
      */
     public static void main(String[] args) {
-        // CQ此变量为特殊变量，在JCQ启动时实例化赋值给每个插件，而在测试中可以用CQDebug类来代替他
-        CQ = new CoolQ(1000);// new CQDebug("应用目录","应用名称") 可以用此构造器初始化应用的目录
-        CQ.logInfo("[JCQ] TEST Demo", "测试启动");// 现在就可以用CQ变量来执行任何想要的操作了
-        // 要测试主类就先实例化一个主类对象
+        CQ = new CoolQ(1000);
+        CQ.logInfo("[JCQ] TEST Demo", "测试启动");
         Autoreply demo = new Autoreply();
-        // 下面对主类进行各方法测试,按照JCQ运行过程，模拟实际情况
-        demo.startup();// 程序运行开始 调用应用初始化方法
-        demo.enable();// 程序初始化完成后，启用应用，让应用正常工作
-        /*
-         * 以下是收尾触发函数 // demo.disable();// 实际过程中程序结束不会触发disable，只有用户关闭了此插件才会触发
-         * demo.exit();// 最后程序运行结束，调用exit方法
-         */
+        demo.startup();
+     //   demo.enable();
     }
 
     @Override
@@ -121,14 +99,6 @@ public class Autoreply extends JcqAppAbstract implements ICQVer, IMsg, IRequest 
         return CQAPIVER + "," + AppID;
     }
 
-    /**
-     * 酷Q启动 (Type=1001)<br>
-     * 本方法会在酷Q【主线程】中被调用。<br>
-     * 请在这里执行插件初始化代码。<br>
-     * 请务必尽快返回本子程序，否则会卡住其他插件以及主程序的加载。
-     *
-     * @return 请固定返回0
-     */
     @Override
     public int startup() {
         // 获取应用数据目录(无需储存数据时，请将此行注释)
@@ -153,10 +123,10 @@ public class Autoreply extends JcqAppAbstract implements ICQVer, IMsg, IRequest 
         repeatManager = new RepeaterManager();
         for (GroupConfig groupConfig : configManager.configJavaBean.groupConfigs) {
             if (groupConfig.isDic()) {
-                dicReplyManager.addData(groupConfig.groupNumber);
+                dicReplyManager.addDic(groupConfig.groupNumber);
             }
             if (groupConfig.isRepeat()) {
-                repeatManager.addData(groupConfig.groupNumber);
+                repeatManager.addRepeater(groupConfig.groupNumber);
             }
         }
         updateManager = new NewUpdateManager(configManager);
@@ -171,7 +141,7 @@ public class Autoreply extends JcqAppAbstract implements ICQVer, IMsg, IRequest 
 		threeManager = new ThreeManager();
 		musicManager = new MusicManager();
 		try {
-			connectServer = new ConnectServer(9961);
+			connectServer = new RitsukageServer(9961);
 			connectServer.start();
 		} catch (java.net.UnknownHostException e) {}
 		try {
@@ -179,7 +149,7 @@ public class Autoreply extends JcqAppAbstract implements ICQVer, IMsg, IRequest 
 			sanaeServer.start();
 		} catch (java.net.UnknownHostException e) {}
         FileTipManager fileTipManager = new FileTipManager();
-        fileTipManager.dataMap.add(new FileTipUploader(807242547L, 1592608126L));
+        fileTipManager.addTip(807242547L, 1592608126L);
         //new TimeTipManager().start();
 		spellCollect = new SpellCollect();
         threadPool.execute(liveListener);
@@ -196,13 +166,6 @@ public class Autoreply extends JcqAppAbstract implements ICQVer, IMsg, IRequest 
         return 0;
     }
 
-    /**
-     * 酷Q退出 (Type=1002)<br>
-     * 本方法会在酷Q【主线程】中被调用。<br>
-     * 无论本应用是否被启用，本函数都会在酷Q退出前执行一次，请在这里执行插件关闭代码。
-     *
-     * @return 请固定返回0，返回后酷Q将很快关闭，请不要再通过线程等方式执行其他代码。
-     */
     @Override
     public int exit() {
 		threadPool.shutdownNow();
@@ -210,29 +173,12 @@ public class Autoreply extends JcqAppAbstract implements ICQVer, IMsg, IRequest 
         return 0;
     }
 
-    /**
-     * 应用已被启用 (Type=1003)<br>
-     * 当应用被启用后，将收到此事件。<br>
-     * 如果酷Q载入时应用已被启用，则在 {@link #startup startup}(Type=1001,酷Q启动)
-     * 被调用后，本函数也将被调用一次。<br>
-     * 如非必要，不建议在这里加载窗口。
-     *
-     * @return 请固定返回0。
-     */
     @Override
     public int enable() {
         enable = true;
         return 0;
     }
 
-    /**
-     * 应用将被停用 (Type=1004)<br>
-     * 当应用被停用前，将收到此事件。<br>
-     * 如果酷Q载入时应用已被停用，则本函数【不会】被调用。<br>
-     * 无论本应用是否被启用，酷Q关闭前本函数都【不会】被调用。
-     *
-     * @return 请固定返回0。
-     */
     @Override
     public int disable() {
         enable = false;
@@ -275,7 +221,6 @@ public class Autoreply extends JcqAppAbstract implements ICQVer, IMsg, IRequest 
 							return;
 						}
 					}
-
 					if (configManager.isMaster(fromQQ)) {
 						if (msg.equals("喵")) {
 							sendMessage(0, fromQQ, CC.record("miao.mp3"));
@@ -337,22 +282,6 @@ public class Autoreply extends JcqAppAbstract implements ICQVer, IMsg, IRequest 
             // CQ.setGroupBan(fromGroup, anonymous.getAid(), 60);
         }
 
-        // 解析CQ码案例 如：[CQ:at,qq=100000]
-        // 解析CQ码 常用变量为 CC(CQCode) 此变量专为CQ码这种特定格式做了解析和封装
-        // CC.analysis();// 此方法将CQ码解析为可直接读取的对象
-        // 解析消息中的QQID
-        // long qqId = CC.getAt(msg);// 此方法为简便方法，获取第一个CQ:at里的QQ号，错误时为：-1000
-        // List<Long> qqIds = CC.getAts(msg); // 此方法为获取消息中所有的CQ码对象，错误时返回 已解析的数据
-        // 解析消息中的图片
-        // CQImage image = CC.getCQImage(msg);//
-        // 此方法为简便方法，获取第一个CQ:image里的图片数据，错误时打印异常到控制台，返回 null
-        // List<CQImage> images = CC.getCQImages(msg);//
-        // 此方法为获取消息中所有的CQ图片数据，错误时打印异常到控制台，返回 已解析的数据
-
-        // 这里处理消息
-
-        //  System.out.println(msg);
-        // 指定不回复的项目
         if (Autoreply.instence.configManager.isBlackQQ(fromQQ)) {
             System.out.println("black:" + fromQQ);
             if (Tools.CQ.ban(fromGroup, fromQQ, 300)) {
@@ -371,7 +300,6 @@ public class Autoreply extends JcqAppAbstract implements ICQVer, IMsg, IRequest 
             Autoreply.instence.configManager.saveConfig();
             return MSG_IGNORE;
         }
-
         if (msg.equals(".admin disable") && Autoreply.instence.configManager.isAdmin(fromQQ)) {
             GroupConfig groupConfig = Autoreply.instence.configManager.getGroupConfig(fromGroup);
             if (groupConfig == null) {
@@ -383,7 +311,6 @@ public class Autoreply extends JcqAppAbstract implements ICQVer, IMsg, IRequest 
             Autoreply.instence.configManager.saveConfig();
             return MSG_IGNORE;
         }
-
         if (configManager.isNotReplyQQ(fromQQ)) {
             return MSG_IGNORE;
         }
@@ -448,11 +375,6 @@ public class Autoreply extends JcqAppAbstract implements ICQVer, IMsg, IRequest 
 			return MSG_IGNORE;
 		}
         threadPool.execute(new GroupMsgPart1Runnable(new MessageSender(fromGroup, fromQQ, msg, System.currentTimeMillis(), msgId, null)));
-        // else if (System.currentTimeMillis() -
-        // messageMap.get(fromQQ).getTimeStamp() > 1000) {
-        // messageMap.put(fromQQ, new MessageSender(fromGroup, fromQQ,
-        // msg, System.currentTimeMillis()));
-        // }
         return MSG_IGNORE;
     }
 
@@ -766,7 +688,7 @@ public class Autoreply extends JcqAppAbstract implements ICQVer, IMsg, IRequest 
         dicReplyManager.clear();
         for (GroupConfig groupConfig : configManager.configJavaBean.groupConfigs) {
             if (groupConfig.isDic()) {
-                dicReplyManager.addData(groupConfig.groupNumber);
+                dicReplyManager.addDic(groupConfig.groupNumber);
             }
         }
     }

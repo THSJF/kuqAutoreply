@@ -1,6 +1,5 @@
-package com.meng.musicProcess;
+package com.meng;
 
-import com.meng.*;
 import com.meng.gameData.TouHou.zun.*;
 import com.meng.tools.*;
 import java.io.*;
@@ -8,10 +7,10 @@ import java.util.*;
 import java.util.regex.*;
 
 public class MusicManager {
-	public static String musicFolder="";
+	public static String musicFolder="C://thbgm/";
 	private HashMap<Long,String> resultMap=new HashMap<>();
+
 	public MusicManager() {
-		musicFolder = "C://thbgm/";
 	}
 
 	public File createMusicCut(int musicNum, int needSeconeds, long fromQQ) {
@@ -57,7 +56,6 @@ public class MusicManager {
 				resultMap.put(fromQQ, TH15GameData.musicName[musicNum]);
 				break;
 		}
-
 		return resultFile;
 	}
 
@@ -131,7 +129,65 @@ public class MusicManager {
         return data;
     }
 
-	class WavHeader {
+	private class THfmt {
+		private int position = 0;
+		private byte[] fileByte;
+		private MusicInfo[] musicInfos;
+		private String[] names;
+		private File fmt;
+
+		public THfmt(File file) {
+			if (!file.exists()) {
+				throw new RuntimeException("file not found:" + file.getAbsolutePath());
+			}
+			fmt = file;
+			try {
+				FileInputStream fileInputStream = new FileInputStream(file);
+				fileByte = new byte[(int) file.length()];
+				fileInputStream.read(fileByte);
+			} catch (Exception e) {
+				throw new RuntimeException("read file failed:" + file.getAbsolutePath());
+			}
+			musicInfos = new MusicInfo[(int) (file.length() / 52)];
+			names = new String[musicInfos.length];
+		}
+		public void load() {
+			for (int i = 0; i < musicInfos.length; ++i) {
+				MusicInfo musicInfo = new MusicInfo();
+				musicInfo.name = readName();
+				musicInfo.start = readInt();
+				musicInfo.unknown1 = readInt();
+				musicInfo.repeatStart = readInt();
+				musicInfo.length = readInt();
+				musicInfo.format = readShort();
+				musicInfo.channels = readShort();
+				musicInfo.rate = readInt();
+				musicInfo.avgBytesPerSec = readInt();
+				musicInfo.blockAlign = readShort();
+				musicInfo.bitsPerSample = readShort();
+				musicInfo.cbSize = readShort();
+				musicInfo.pad = readShort();
+				String name = new String(musicInfo.name);
+				names[i] = name.substring(0, name.indexOf(0));
+				musicInfos[i] = musicInfo;
+			} 
+		}
+		private short readShort() {
+			return (short) (fileByte[position++] & 0xff | (fileByte[position++] & 0xff) << 8);
+		}
+		private int readInt() {
+			return (fileByte[position++] & 0xff) | (fileByte[position++] & 0xff) << 8 | (fileByte[position++] & 0xff) << 16 | (fileByte[position++] & 0xff) << 24;
+		}
+		private byte[] readName() {
+			byte[] ba = new byte[16];
+			for (int i = 0; i < ba.length; ++i) {
+				ba[i] = fileByte[position++];
+			}
+			return ba;
+		}
+	}
+
+	private class WavHeader {
 		private byte[] header;
 		private int writePointer=0;
 		public byte[] getWavHeader(int num, THfmt fmt, int second) {
@@ -153,19 +209,16 @@ public class MusicManager {
 			write(second * oneSecBytes);//cksize：音频数据的长度，4字节，audioDataLen = totalDataLen - 36 = fileLenIncludeHeader - 44  
 			return header;
 		}
-
 		private void write(byte[] bs) {
 			for (int i=0;i < bs.length;++i) {
 				header[writePointer++] = bs[i];
 			}
 		}
-
 		private void write(String s) {
 			for (int i=0;i < s.length();++i) {
 				write(s.charAt(i));
 			}
 		}
-
 		private void write(int i) {
 			byte[] bs=new byte[4];
 			bs[0] = (byte) ((i >> 0) & 0xff);
@@ -174,17 +227,50 @@ public class MusicManager {
 			bs[3] = (byte) ((i >> 24) & 0xff);
 			write(bs);
 		}
-
 		private void write(short s) {
 			byte[] bs=new byte[2];
 			bs[0] = (byte) ((s >> 0) & 0xff);
 			bs[1] = (byte) ((s >> 8) & 0xff);
 			write(bs);
 		}
-
 		private void write(char c) {
 			header[writePointer++] = (byte) c;
 		}
+	}
 
+	private class MusicInfo {
+		public byte[] name;
+		public int start;
+		public int unknown1;
+		public int repeatStart;
+		public int length;
+		public short format;
+		public short channels;
+		public int rate;
+		public int avgBytesPerSec;
+		public short blockAlign;
+		public short bitsPerSample;
+		public short cbSize;
+		public short pad;
+
+		@Override
+		public String toString() {
+			StringBuilder sb=new StringBuilder();
+			sb.append(new String(name)).append(" ");
+			sb.append(start).append(" ");
+			sb.append(unknown1).append(" ");
+			sb.append(repeatStart).append(" ");
+			sb.append(length).append(" ");
+			sb.append(format).append(" ");
+			sb.append(channels).append(" ");
+			sb.append(rate).append(" ");
+			sb.append(avgBytesPerSec).append(" ");
+			sb.append(blockAlign).append(" ");
+			sb.append(bitsPerSample).append(" ");
+			sb.append(cbSize).append(" ");
+			sb.append(pad).append(" ");
+			return sb.toString();
+		}
+		//    public int beanSize = 52;
 	}
 }

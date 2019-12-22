@@ -90,7 +90,7 @@ public class WarnMessageProcessor {
             Member m = Autoreply.CQ.getGroupMemberInfoV2(fromGroup, Autoreply.CQ.getLoginQQ());
             Member m2 = Autoreply.CQ.getGroupMemberInfoV2(fromGroup, fromQQ);
             if (m.getAuthority() - m2.getAuthority() > 1) {
-                sendMessage(fromGroup, fromQQ, "你的行为被判定为危险行为,请联系鬼人正邪管理员解除夏眠");
+                sendMessage(fromGroup, fromQQ, "你的行为被判定为危险行为,请联系管理员解除夏眠");
             }
         } catch (Exception e) {
             Autoreply.instence.configManager.configJavaBean.blackListQQ.add(fromQQ);

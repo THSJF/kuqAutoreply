@@ -1,12 +1,12 @@
 package com.meng.picEdit;
 
-import com.meng.Autoreply;
-
-import javax.imageio.ImageIO;
-import java.awt.*;
-import java.awt.image.BufferedImage;
+import com.google.zxing.*;
+import com.meng.*;
 import java.io.*;
-import java.net.URL;
+import java.net.*;
+import java.awt.Image;
+import java.awt.image.BufferedImage;
+import javax.imageio.ImageIO;
 
 public class JingShenZhiZhuQQManager {
 
