@@ -92,6 +92,7 @@ public class ConfigManager extends WebSocketClient {
 							Autoreply.instence.messageTooManyManager = new MessageTooManyManager();
 							List<Group> groupList=Autoreply.CQ.getGroupList();
 							for (Group g:groupList) {
+								Autoreply.instence.dicReply.addDic(g.getId());
 								List<com.sobte.cqp.jcq.entity.Member> mlist=Autoreply.CQ.getGroupMemberList(g.getId());
 								for (com.sobte.cqp.jcq.entity.Member m:mlist) {
 									if (m.getQqId() == 2089693971L) {

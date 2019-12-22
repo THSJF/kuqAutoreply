@@ -69,13 +69,13 @@ public class Autoreply extends JcqAppAbstract implements ICQVer, IMsg, IRequest 
         System.out.println("开始加载");
 		long startTime = System.currentTimeMillis();
 		groupCounter = new GroupCounter();
+		dicReply = new DicReply();
 		try {
 			configManager = new ConfigManager(new URI("ws://123.207.65.93:9760"));
 			configManager.connect();
 		} catch (URISyntaxException e) {
 			e.printStackTrace();
 		}
-		dicReply = new DicReply();
         System.out.println("加载完成,用时" + (System.currentTimeMillis() - startTime));
 		return 0;
     }
