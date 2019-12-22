@@ -3,6 +3,7 @@ package com.meng.picEdit;
 import com.meng.*;
 import com.sobte.cqp.jcq.entity.*;
 import java.io.*;
+import java.awt.*;
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
 

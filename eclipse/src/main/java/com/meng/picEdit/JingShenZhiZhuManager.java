@@ -41,4 +41,10 @@ public class JingShenZhiZhuManager {
 		ImageIO.write(b, "png", f);
 		Autoreply.sendMessage(fromGroup, 0, Autoreply.instence.CC.image(f));
     }
+	
+	private BufferedImage chgPic(BufferedImage img, int newSize) {
+        BufferedImage img2 = new BufferedImage(newSize, newSize, BufferedImage.TYPE_INT_ARGB);
+        img2.getGraphics().drawImage(img, 0, 0, newSize, newSize, null);
+        return img2;
+    }
 }
