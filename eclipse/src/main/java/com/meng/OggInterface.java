@@ -9,9 +9,6 @@ import java.util.*;
 public class OggInterface {
 
     public boolean processOgg(final long fromQQ, String msg) {
-        if (msg.endsWith("喵")) {
-            msg = msg.substring(0, msg.length() - 1);
-        }
         if (msg.startsWith("findInAll:")) {
             final String finalMsg = msg;
             Autoreply.instence.threadPool.execute(new Runnable() {
