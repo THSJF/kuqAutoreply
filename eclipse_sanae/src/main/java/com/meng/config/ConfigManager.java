@@ -21,7 +21,7 @@ import org.java_websocket.exceptions.*;
 import org.java_websocket.handshake.*;
 
 public class ConfigManager extends WebSocketClient {
-    public SeijiaConfigJavaBean SeijiaConfig = new SeijiaConfigJavaBean();
+    public RanConfigBean RanConfig = new RanConfigBean();
 	public SanaeConfigJavaBean SanaeConfig=new SanaeConfigJavaBean();
 	private File SanaeConfigFile;
 
@@ -45,7 +45,7 @@ public class ConfigManager extends WebSocketClient {
 	@Override
 	public void onOpen(ServerHandshake serverHandshake) {
 		send(SanaeDataPack.encode(SanaeDataPack._1getConfig));
-		System.out.println("连接到鬼人正邪");
+		System.out.println("连接到蓝");
 		Autoreply.instence.threadPool.execute(new Runnable(){
 
 				@Override
@@ -58,7 +58,7 @@ public class ConfigManager extends WebSocketClient {
 					try {
 						send(SanaeDataPack.encode(SanaeDataPack._24heartBeat));
 					} catch (WebsocketNotConnectedException e) {
-						System.out.println("和鬼人正邪的连接已断开");
+						System.out.println("和蓝的连接已断开");
 						e.printStackTrace();
 						reconnect();
 					}
@@ -72,9 +72,9 @@ public class ConfigManager extends WebSocketClient {
 		SanaeDataPack dataToSend=null;
 		switch (dataRec.getOpCode()) {
 			case SanaeDataPack._2retConfig:
-				Type type = new TypeToken<SeijiaConfigJavaBean>() {
+				Type type = new TypeToken<RanConfigBean>() {
 				}.getType();
-				SeijiaConfig = Autoreply.gson.fromJson(dataRec.readString(), type);
+				RanConfig = Autoreply.gson.fromJson(dataRec.readString(), type);
 				Autoreply.instence.threadPool.execute(new Runnable(){
 
 						@Override
@@ -90,6 +90,7 @@ public class ConfigManager extends WebSocketClient {
 							Autoreply.instence.threadPool.execute(Autoreply.instence.timeTip);
 							Autoreply.instence.faithManager = new FaithManager();
 							Autoreply.instence.messageTooManyManager = new MessageTooManyManager();
+							Autoreply.instence.zanManager = new ZanManager();
 							List<Group> groupList=Autoreply.CQ.getGroupList();
 							for (Group g:groupList) {
 								List<com.sobte.cqp.jcq.entity.Member> mlist=Autoreply.CQ.getGroupMemberList(g.getId());
@@ -244,17 +245,17 @@ public class ConfigManager extends WebSocketClient {
 
 	public void setNickName(long qq, String nickname) {
 		if (nickname != null) {
-			SeijiaConfig.nicknameMap.put(qq, nickname);
+			RanConfig.nicknameMap.put(qq, nickname);
 			send(SanaeDataPack.encode(SanaeDataPack._25setNick).write(qq).write(nickname));
 		} else {
-			SeijiaConfig.nicknameMap.remove(qq);
+			RanConfig.nicknameMap.remove(qq);
 			send(SanaeDataPack.encode(SanaeDataPack._25setNick).write(qq));
 		}
 	}
 
 	public String getNickName(long qq) {
 		String nick=null;
-		nick = SeijiaConfig.nicknameMap.get(qq);
+		nick = RanConfig.nicknameMap.get(qq);
 		if (nick == null) {
 			PersonInfo pi=getPersonInfoFromQQ(qq);
 			if (pi == null) {
@@ -268,7 +269,7 @@ public class ConfigManager extends WebSocketClient {
 
 	public String getNickName(long group, long qq) {
 		String nick=null;
-		nick = SeijiaConfig.nicknameMap.get(qq);
+		nick = RanConfig.nicknameMap.get(qq);
 		if (nick == null) {
 			PersonInfo pi=getPersonInfoFromQQ(qq);
 			if (pi == null) {
@@ -281,27 +282,27 @@ public class ConfigManager extends WebSocketClient {
 	}
 
     public boolean isMaster(long fromQQ) {
-        return SeijiaConfig.masterList.contains(fromQQ);
+        return RanConfig.masterList.contains(fromQQ);
     }
 
     public boolean isAdmin(long fromQQ) {
-        return SeijiaConfig.adminList.contains(fromQQ) || SeijiaConfig.masterList.contains(fromQQ);
+        return RanConfig.adminList.contains(fromQQ) || RanConfig.masterList.contains(fromQQ);
     }
 
     public boolean isNotReplyQQ(long qq) {
-        return SeijiaConfig.QQNotReply.contains(qq) || SeijiaConfig.blackListQQ.contains(qq);
+        return RanConfig.QQNotReply.contains(qq) || RanConfig.blackListQQ.contains(qq);
     }
 
     public boolean isBlackQQ(long qq) {
-        return SeijiaConfig.blackListQQ.contains(qq);
+        return RanConfig.blackListQQ.contains(qq);
     }
 
     public boolean isBlackGroup(long qq) {
-        return SeijiaConfig.blackListGroup.contains(qq);
+        return RanConfig.blackListGroup.contains(qq);
     }
 
     public boolean isNotReplyWord(String word) {
-        for (String nrw : SeijiaConfig.wordNotReply) {
+        for (String nrw : RanConfig.wordNotReply) {
             if (word.contains(nrw)) {
                 return true;
             }
@@ -310,7 +311,7 @@ public class ConfigManager extends WebSocketClient {
     }
 
     public PersonInfo getPersonInfoFromQQ(long qq) {
-        for (PersonInfo pi : SeijiaConfig.personInfo) {
+        for (PersonInfo pi : RanConfig.personInfo) {
             if (pi.qq == qq) {
                 return pi;
             }
@@ -319,7 +320,7 @@ public class ConfigManager extends WebSocketClient {
     }
 
     public PersonInfo getPersonInfoFromName(String name) {
-        for (PersonInfo pi : SeijiaConfig.personInfo) {
+        for (PersonInfo pi : RanConfig.personInfo) {
             if (pi.name.equals(name)) {
                 return pi;
             }
@@ -328,7 +329,7 @@ public class ConfigManager extends WebSocketClient {
     }
 
     public PersonInfo getPersonInfoFromBid(long bid) {
-        for (PersonInfo pi : SeijiaConfig.personInfo) {
+        for (PersonInfo pi : RanConfig.personInfo) {
             if (pi.bid == bid) {
                 return pi;
             }
@@ -337,7 +338,7 @@ public class ConfigManager extends WebSocketClient {
     }
 
 	public PersonInfo getPersonInfoFromLiveId(long lid) {
-        for (PersonInfo pi : SeijiaConfig.personInfo) {
+        for (PersonInfo pi : RanConfig.personInfo) {
             if (pi.bliveRoom == lid) {
                 return pi;
 			}
@@ -346,8 +347,8 @@ public class ConfigManager extends WebSocketClient {
 	}
 
     public void addBlack(long group, final long qq) {
-        SeijiaConfig.blackListQQ.add(qq);
-        SeijiaConfig.blackListGroup.add(group);
+        RanConfig.blackListQQ.add(qq);
+        RanConfig.blackListGroup.add(group);
 		send(SanaeDataPack.encode(SanaeDataPack._26addBlack).write(group).write(qq));
         Autoreply.sendMessage(Autoreply.mainGroup, 0, "已将用户" + qq + "加入黑名单");
         Autoreply.sendMessage(Autoreply.mainGroup, 0, "已将群" + group + "加入黑名单");

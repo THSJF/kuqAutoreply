@@ -2,7 +2,7 @@ package com.meng.config;
 
 import java.util.*;
 
-public class SeijiaConfigJavaBean {
+public class RanConfigBean {
 	public HashSet<GroupConfig> groupConfigs = new HashSet<>();
     public HashSet<Long> QQNotReply = new HashSet<>();
 	public HashSet<Long> blackListQQ = new HashSet<>();

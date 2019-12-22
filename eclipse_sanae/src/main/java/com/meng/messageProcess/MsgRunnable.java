@@ -131,10 +131,6 @@ public class MsgRunnable implements Runnable {
 		if (Autoreply.instence.repeatManager.check(fromGroup, fromQQ, msg)) {// 复读
 			return;
 		}
-		if (msg.startsWith("[CQ:location,lat=")) {
-			sendMessage(fromGroup, 0, Autoreply.instence.CC.location(35.594993, 118.869838, 15, "守矢神社", "此生无悔入东方 来世愿生幻想乡"));
-			return;
-		}
 		if (Autoreply.instence.CQcodeManager.check(fromGroup, msg)) {// 特殊信息(签到分享等)
 			return;
 		}
@@ -149,6 +145,9 @@ public class MsgRunnable implements Runnable {
 			return;
 		}
 		if (Autoreply.instence.dicReply.check(fromGroup, fromQQ, msg)) {
+			return;
+		}
+		if (Autoreply.instence.zanManager.checkAdd(fromGroup, fromQQ, msg)) {
 			return;
 		}
 	}

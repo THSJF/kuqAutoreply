@@ -37,6 +37,7 @@ public class Autoreply extends JcqAppAbstract implements ICQVer, IMsg, IRequest 
     public HashSet<Long> SeijiaInThis = new HashSet<>();
 	public FaithManager faithManager;
 	public BirthdayTip birthdayTip;
+	public ZanManager zanManager;
 
 	public DiceImitate diceImitate;
 	public static final long mainGroup=807242547L;

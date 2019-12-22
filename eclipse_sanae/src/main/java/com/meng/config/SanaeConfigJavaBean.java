@@ -7,6 +7,7 @@ import com.meng.tools.*;
 public class SanaeConfigJavaBean {
 	public HashMap<Long,String> welcomeMap = new HashMap<>();
 	public HashSet<Long> botOff = new HashSet<>();
+	public HashSet<Long> zanSet = new HashSet<>();
 	public ArrayList<ReportBean> reportList=new ArrayList<>();
 	public ArrayList<BugReportBean> bugReportList=new ArrayList<>();
 
