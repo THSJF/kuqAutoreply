@@ -154,7 +154,7 @@ public class AdminMessageProcessor {
 					spells = new HashSet<>();
 					Autoreply.instence.spellCollect.userSpellsMap.put(toQQ, spells);
 				}
-				for (String ac:spells) {
+				for (String ac:DiceImitate.spells) {
 					if (ac.equals(arch)) {
 						spells.remove(ac);
 						Autoreply.sendMessage(fromGroup, toQQ, "为" + toQQ + "移除符卡" + arch);
@@ -172,7 +172,7 @@ public class AdminMessageProcessor {
 					spells = new HashSet<>();
 					Autoreply.instence.spellCollect.userSpellsMap.put(toQQ, spells);
 				}
-				for (String ac:spells) {
+				for (String ac:DiceImitate.spells) {
 					if (ac.equals(arch)) {
 						spells.add(ac);
 						Autoreply.sendMessage(fromGroup, toQQ, "为" + toQQ + "添加符卡" + arch);
