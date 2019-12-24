@@ -69,7 +69,6 @@ public class Autoreply extends JcqAppAbstract implements ICQVer, IMsg, IRequest 
         System.out.println("开始加载");
 		long startTime = System.currentTimeMillis();
 		groupCounter = new GroupCounter();
-		dicReply = new DicReply();
 		try {
 			configManager = new ConfigManager(new URI("ws://123.207.65.93:9760"));
 			configManager.connect();

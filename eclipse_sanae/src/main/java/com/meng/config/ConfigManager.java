@@ -90,6 +90,7 @@ public class ConfigManager extends WebSocketClient {
 							Autoreply.instence.threadPool.execute(Autoreply.instence.timeTip);
 							Autoreply.instence.faithManager = new FaithManager();
 							Autoreply.instence.messageTooManyManager = new MessageTooManyManager();
+							Autoreply.instence.dicReply = new DicReply();
 							List<Group> groupList=Autoreply.CQ.getGroupList();
 							for (Group g:groupList) {
 								Autoreply.instence.dicReply.addDic(g.getId());

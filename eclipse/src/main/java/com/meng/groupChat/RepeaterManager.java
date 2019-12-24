@@ -21,7 +21,7 @@ public class RepeaterManager {
 
     }
 
-	public void addData(long group) {
+	public void addRepeater(long group) {
 		repeaters.put(group, new RepeaterBanner(group));
 	}
 
