@@ -14,7 +14,6 @@ public class AdminMessageProcessor {
 	private MyLinkedHashMap<String,String> masterPermission=new MyLinkedHashMap<>();
 	private MyLinkedHashMap<String,String> adminPermission=new MyLinkedHashMap<>();
 	public MyLinkedHashMap<String,String> userPermission=new MyLinkedHashMap<>();
-	private HashMap<Long,StepBean> learnMap = new HashMap<>();
 
     public AdminMessageProcessor() {
 		masterPermission.put("-start|-stop", "总开关");
@@ -158,6 +157,12 @@ public class AdminMessageProcessor {
 					arr[i] = array[i + 2];
 				}
 				Autoreply.instence.dicReply.addKV(fromGroup, array[1], arr);
+				Autoreply.sendMessage(fromGroup, fromQQ, "KV已添加");
+				return true;
+			}
+			if (msg.startsWith("-removeDic ")) {
+				Autoreply.instence.dicReply.removeK(fromGroup, msg.substring(11));
+				Autoreply.sendMessage(fromGroup, fromQQ, "Key已移除");
 				return true;
 			}
 			if (msg.equals("-regex")) {

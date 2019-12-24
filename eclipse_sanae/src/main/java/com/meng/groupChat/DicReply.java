@@ -52,6 +52,16 @@ public class DicReply {
 		saveDic(new File(Autoreply.appDirectory + "dic\\dic" + drg.groupNum + ".json"), drg.dic);
 	}
 
+	public void removeK(long group, String k) {
+		DicReplyGroup drg = groupMap.get(group);
+		ArrayList<String> ans = drg.dic.get(k);
+		if (ans == null) {
+			return;
+		}
+		drg.dic.remove(k);
+		saveDic(new File(Autoreply.appDirectory + "dic\\dic" + drg.groupNum + ".json"), drg.dic);
+	}
+
 	public void clear() {
 		groupMap.clear();
 	}
