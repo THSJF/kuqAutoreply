@@ -93,7 +93,7 @@ public class ConfigManager extends WebSocketClient {
 							Autoreply.instence.dicReply = new DicReply();
 							List<Group> groupList=Autoreply.CQ.getGroupList();
 							for (Group g:groupList) {
-								Autoreply.instence.dicReply.addDic(g.getId());
+								Autoreply.instence.dicReply.addReply(g.getId());
 								List<com.sobte.cqp.jcq.entity.Member> mlist=Autoreply.CQ.getGroupMemberList(g.getId());
 								for (com.sobte.cqp.jcq.entity.Member m:mlist) {
 									if (m.getQqId() == 2089693971L) {
@@ -102,7 +102,7 @@ public class ConfigManager extends WebSocketClient {
 									}
 								}
 								if (!Autoreply.instence.SeijiaInThis.contains(g.getId())) {
-									Autoreply.instence.repeatManager.addData(new Repeater(g.getId()));
+									Autoreply.instence.repeatManager.addData(g.getId());
 								}
 
 							}

@@ -105,7 +105,7 @@ public class GroupMsgPart2Runnable implements Runnable {
             return true;
 		}
         GroupConfig groupConfig = Autoreply.instence.configManager.getGroupConfig(fromGroup);
-        if (groupConfig.isRepeat() && Autoreply.instence.repeatManager.check(fromGroup, fromQQ, msg)) {
+        if (groupConfig.isRepeat() && Autoreply.instence.repeatManager.check(fromGroup, fromQQ, msg, imageFiles)) {
             return true;
 		}
         if (msg.equals(".live")) {

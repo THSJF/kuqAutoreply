@@ -30,7 +30,7 @@ public class RepeaterManager {
         RepeaterBanner repeaterBanner = repeaters.get(group);
         if (repeaterBanner == null) {
             repeaterBanner = new RepeaterBanner(group);
-            addData(group);
+            addRepeater(group);
         }
         return repeaterBanner.check(group, qq, msg, imageFiles);
     }

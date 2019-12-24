@@ -1,18 +1,20 @@
 package com.meng.messageProcess;
 
 import com.meng.*;
+import com.meng.groupChat.*;
+import com.meng.tools.*;
 import com.meng.tools.override.*;
 import com.sobte.cqp.jcq.entity.*;
 import java.util.*;
 import java.util.concurrent.*;
 
 import static com.meng.Autoreply.sendMessage;
-import com.meng.tools.*;
 
 public class AdminMessageProcessor {
 	private MyLinkedHashMap<String,String> masterPermission=new MyLinkedHashMap<>();
 	private MyLinkedHashMap<String,String> adminPermission=new MyLinkedHashMap<>();
 	public MyLinkedHashMap<String,String> userPermission=new MyLinkedHashMap<>();
+	private HashMap<Long,StepBean> learnMap = new HashMap<>();
 
     public AdminMessageProcessor() {
 		masterPermission.put("-start|-stop", "总开关");
@@ -40,7 +42,7 @@ public class AdminMessageProcessor {
 
     public boolean check(final long fromGroup, final long fromQQ, final String msg) {
 		Member m=Autoreply.CQ.getGroupMemberInfo(fromGroup, fromQQ);
-		boolean isGroupAdmin=m.getAuthority() > 0;
+		boolean isGroupAdmin=m.getAuthority() > 1;
 		if (Autoreply.instence.configManager.isMaster(fromQQ)) {
 			if (msg.equals("-help")) {
 				Autoreply.sendMessage(fromGroup, 0, masterPermission.toString());
@@ -147,6 +149,15 @@ public class AdminMessageProcessor {
         if (Autoreply.instence.configManager.isAdmin(fromQQ) || isGroupAdmin) {
 			if (msg.equals("-help")) {
 				Autoreply.sendMessage(fromGroup, 0, adminPermission.toString());
+				return true;
+			}
+			if (msg.startsWith("-addDic ")) {
+				String[] array=msg.split(" ");
+				String[] arr=new String[array.length - 2];
+				for (int i=0;i < arr.length;++i) {
+					arr[i] = array[i + 2];
+				}
+				Autoreply.instence.dicReply.addKV(fromGroup, array[1], arr);
 				return true;
 			}
 			if (msg.equals("-regex")) {

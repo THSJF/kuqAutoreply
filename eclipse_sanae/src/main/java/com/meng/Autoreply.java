@@ -364,4 +364,8 @@ public class Autoreply extends JcqAppAbstract implements ICQVer, IMsg, IRequest 
 	public static int sendMessage(long fromGroup, long fromQQ, String[] msg) {
 		return sendMessage(fromGroup, fromQQ, (String)Tools.ArrayTool.rfa(msg));
     }
+
+	public static int sendMessage(long fromGroup, long fromQQ, ArrayList<String> msg) {
+		return sendMessage(fromGroup, fromQQ, msg.get(instence.random.nextInt(msg.size())));
+    }
 }

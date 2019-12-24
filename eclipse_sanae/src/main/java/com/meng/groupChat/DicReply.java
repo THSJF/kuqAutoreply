@@ -22,10 +22,14 @@ public class DicReply {
 		Type type = new TypeToken<HashMap<String, HashSet<String>>>() {
 		}.getType();
 		dic = Autoreply.gson.fromJson(Tools.FileTool.readString(dicFile), type);
-		if (Autoreply.instence.configManager.SanaeConfig.dicRegex.get(-1) == null) {
-			regexMode = false;
-		} else {
-			regexMode = Autoreply.instence.configManager.SanaeConfig.dicRegex.get(-1);
+		try {
+			if (Autoreply.instence.configManager.SanaeConfig.dicRegex.get(-1) == null) {
+				regexMode = false;
+			} else {
+				regexMode = Autoreply.instence.configManager.SanaeConfig.dicRegex.get(-1);
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
 		}
 	}
 
@@ -35,11 +39,24 @@ public class DicReply {
 		Autoreply.instence.configManager.saveSanaeConfig();
 	}
 
+	public void addKV(long group, String k, String... v) {
+		DicReplyGroup drg= groupMap.get(group);	
+		ArrayList<String> ans=drg.dic.get(k);
+		if (ans == null) {
+			ans = new ArrayList<>();
+			drg.dic.put(k, ans);
+		}
+		for (String s:v) {
+			ans.add(s);
+		}
+		saveDic(new File(Autoreply.appDirectory + "dic\\dic" + drg.groupNum + ".json"), drg.dic);
+	}
+
 	public void clear() {
 		groupMap.clear();
 	}
 
-	public void addDic(long group) {
+	public void addReply(long group) {
 		groupMap.put(group, new DicReplyGroup(group));
 	}
 
@@ -54,16 +71,14 @@ public class DicReply {
 		if (regexMode) {
 			for (String key : dic.keySet()) {
 				if (Pattern.matches(".*" + key + ".*", msg.replaceAll("\\s", ""))) {
-					ArrayList<String> ans = dic.get(key);
-					Autoreply.sendMessage(group, qq, ans.get(Autoreply.instence.random.nextInt(ans.size())));
+					Autoreply.sendMessage(group, qq, dic.get(key));
 					return true;
 				}
 			}
 		} else {
 			for (String key : dic.keySet()) {
 				if (msg.contains(key.replaceAll("\\s", ""))) {
-					ArrayList<String> ans = dic.get(key);
-					Autoreply.sendMessage(group, qq, ans.get(Autoreply.instence.random.nextInt(ans.size())));
+					Autoreply.sendMessage(group, qq, dic.get(key));
 					return true;
 				}
 			}
@@ -72,8 +87,8 @@ public class DicReply {
 	}
 
 	private class DicReplyGroup {
-		private long groupNum;
-		private HashMap<String, ArrayList<String>> dic = new HashMap<>();
+		public long groupNum;
+		public HashMap<String, ArrayList<String>> dic = new HashMap<>();
 		public boolean regexMode=false;
 		public DicReplyGroup(long group) {
 			groupNum = group;
