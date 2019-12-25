@@ -51,8 +51,20 @@ public class AdminMessageProcessor {
 				Autoreply.sendMessage(fromGroup, fromQQ, Autoreply.instence.configManager.getReport());
 				return true;
 			}
+			if (msg.equalsIgnoreCase("-留言查看 t")) {
+				long qq = Autoreply.instence.configManager.removeReport();
+				Autoreply.instence.faithManager.addFaith(qq, 5);
+				Autoreply.sendMessage(fromGroup, fromQQ, String.format("%d的留言已处理,获得5信仰奖励", qq));
+				return true;
+			}
 			if (msg.equals("-反馈查看")) {
 				Autoreply.sendMessage(fromGroup, fromQQ, Autoreply.instence.configManager.getBugReport());
+				return true;
+			}
+			if (msg.equalsIgnoreCase("-反馈查看 t")) {
+				long qq = Autoreply.instence.configManager.removeBugReport();
+				Autoreply.instence.faithManager.addFaith(qq, 10);
+				Autoreply.sendMessage(fromGroup, fromQQ, String.format("%d的反馈已处理,获得10信仰奖励", qq));
 				return true;
 			}
 			if (msg.startsWith("群广播:")) {

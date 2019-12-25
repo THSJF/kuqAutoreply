@@ -3,6 +3,7 @@ package com.meng.config;
 import java.text.*;
 import java.util.*;
 import com.meng.tools.*;
+import com.meng.*;
 
 public class SanaeConfigJavaBean {
 	public HashMap<Long,String> welcomeMap = new HashMap<>();
@@ -30,22 +31,58 @@ public class SanaeConfigJavaBean {
 		bugReportList.add(bugReport);
 	}
 
+	public long removeReport() {
+		if (reportList.size() == 0) {
+			return 0;
+		}
+		long qq = reportList.get(0).q;
+		reportList.remove(0);
+		Autoreply.instence.configManager.saveSanaeConfig();
+		return qq;
+	}
+
+	public void reportToLast() {
+		if (reportList.size() == 0) {
+			return;
+		}
+		ReportBean rb = reportList.get(0);
+		reportList.remove(0);
+		reportList.add(rb);
+		Autoreply.instence.configManager.saveSanaeConfig();
+	}
+
 	public String getReport() {
 		if (reportList.size() == 0) {
 			return "当前无内容";
 		}
-		ReportBean report = reportList.get(0);
-		reportList.remove(0);
-		return report.toString();
+		return reportList.get(0).toString();
+	}
+
+	public long removeBugReport() {
+		if (bugReportList.size() == 0) {
+			return 0;
+		}
+		long qq = bugReportList.get(0).q;
+		bugReportList.remove(0);
+		Autoreply.instence.configManager.saveSanaeConfig();
+		return qq;
+	}
+
+	public void bugReportToLast() {
+		if (bugReportList.size() == 0) {
+			return;
+		}
+		BugReportBean brb = bugReportList.get(0);
+		bugReportList.remove(0);
+		bugReportList.add(brb);
+		Autoreply.instence.configManager.saveSanaeConfig();
 	}
 
 	public String getBugReport() {
 		if (bugReportList.size() == 0) {
 			return "当前无内容";
 		}
-		BugReportBean bugReport = bugReportList.get(0);
-		bugReportList.remove(0);
-		return bugReport.toString();
+		return bugReportList.get(0).toString();
 	}
 
 	private class ReportBean {

@@ -40,8 +40,8 @@ public class DicReply {
 	}
 
 	public void addKV(long group, String k, String... v) {
-		DicReplyGroup drg= groupMap.get(group);	
-		ArrayList<String> ans=drg.dic.get(k);
+		DicReplyGroup drg = groupMap.get(group);	
+		ArrayList<String> ans = drg.dic.get(k);
 		if (ans == null) {
 			ans = new ArrayList<>();
 			drg.dic.put(k, ans);
@@ -54,6 +54,9 @@ public class DicReply {
 
 	public void removeK(long group, String k) {
 		DicReplyGroup drg = groupMap.get(group);
+		if (drg == null) {
+			return;
+		}
 		ArrayList<String> ans = drg.dic.get(k);
 		if (ans == null) {
 			return;

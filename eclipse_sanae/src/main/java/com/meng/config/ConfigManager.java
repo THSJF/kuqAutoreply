@@ -367,15 +367,27 @@ public class ConfigManager extends WebSocketClient {
 	}
 
 	public String getReport() {
-		String s = SanaeConfig.getReport();
-		saveSanaeConfig();
-		return s;
+		return SanaeConfig.getReport();
+	}
+
+	public long removeReport() {
+		return SanaeConfig.removeReport();
+	}
+
+	public void reportToLast() {
+		SanaeConfig.reportToLast();
+	}
+
+	public long removeBugReport() {
+		return SanaeConfig.removeBugReport();
+	}
+
+	public void bugReportToLast() {
+		SanaeConfig.bugReportToLast();
 	}
 
 	public String getBugReport() {
-		String s = SanaeConfig.getBugReport();
-		saveSanaeConfig();
-		return s;
+		return SanaeConfig.getBugReport();
 	}
 
 	public void send(final SanaeDataPack sdp) {
