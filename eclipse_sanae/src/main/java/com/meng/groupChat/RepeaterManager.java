@@ -12,17 +12,12 @@ public class RepeaterManager {
 
     }
 
-    public void addData(long group) {
+    public void addRepeater(long group) {
         repeaters.put(group, new Repeater(group));
     }
 
     public boolean check(long group, long qq, String msg) {
-        Repeater repeaterBanner = repeaters.get(group);
-        if (repeaterBanner == null) {
-            repeaterBanner = new Repeater(group);
-            repeaters.put(group, repeaterBanner);
-        }
-        return repeaterBanner.check(group, qq, msg);
+        return repeaters.get(group).check(group, qq, msg);
     }
 
 	private class Repeater {

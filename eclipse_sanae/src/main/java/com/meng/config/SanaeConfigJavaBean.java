@@ -4,6 +4,7 @@ import java.text.*;
 import java.util.*;
 import com.meng.tools.*;
 import com.meng.*;
+import com.meng.messageProcess.*;
 
 public class SanaeConfigJavaBean {
 	public HashMap<Long,String> welcomeMap = new HashMap<>();
@@ -12,6 +13,7 @@ public class SanaeConfigJavaBean {
 	public ArrayList<ReportBean> reportList=new ArrayList<>();
 	public ArrayList<BugReportBean> bugReportList=new ArrayList<>();
 	public HashMap<Long,Boolean> dicRegex = new HashMap<>();
+	public ArrayList<MessageWaitManager.MessageWait> delayMsg=new ArrayList<>();
 
 	void addReport(long fromGroup, long fromQQ, String content) {
 		ReportBean report=new ReportBean();

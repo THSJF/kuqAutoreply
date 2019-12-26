@@ -344,6 +344,8 @@ public class Autoreply extends JcqAppAbstract implements ICQVer, IMsg, IRequest 
             }
 			CQ.setGroupAddRequest(responseFlag, REQUEST_GROUP_INVITE, REQUEST_ADOPT, null);
 			sendMessage(0, 2856986197L, fromQQ + "邀请我加入群" + fromGroup);
+			dicReply.addReply(fromGroup);
+			repeatManager.addRepeater(fromGroup);
         }
         return MSG_IGNORE;
     }
