@@ -26,7 +26,7 @@ public class BirthdayTip {
         }.getType();
         memberMap = Autoreply.gson.fromJson(Tools.FileTool.readString(ageFile), type);
 
-		Autoreply.instence.threadPool.execute(new Runnable(){
+		Autoreply.ins.threadPool.execute(new Runnable(){
 
 				@Override
 				public void run() {

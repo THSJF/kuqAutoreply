@@ -1,4 +1,4 @@
-package com.meng.groupChat.Sequence;
+package com.meng.groupChat;
 
 import com.google.gson.*;
 import com.google.gson.reflect.*;
@@ -8,13 +8,14 @@ import java.lang.reflect.*;
 import java.util.*;
 
 public class SeqManager {
+	public static SeqManager ins;
     private ArrayList<SeqBean> seqs=new ArrayList<>();
 	private HashMap<String, ArrayList<String>> jsonData = new HashMap<>();
 
 	public SeqManager() {
 		Type type = new TypeToken<HashMap<String, ArrayList<String>>>() {
 		}.getType();
-        jsonData = new Gson().fromJson(Autoreply.instence.configManager.getSeq(), type);
+        jsonData = new Gson().fromJson(ConfigManager.ins.getSeq(), type);
    		for (String key : jsonData.keySet()) {
 			ArrayList<String> al=jsonData.get(key);
 			String[] content=al.toArray(new String[al.size()]);
@@ -27,7 +28,7 @@ public class SeqManager {
 			seqs.add(new SeqBean(content, flag));
 		}
 	}
-	
+
 	public boolean check(long fromGroup, long fromQQ, String msg) {
 		String s=null;
 		s = dealMsg(fromGroup, fromQQ, msg);
@@ -43,9 +44,9 @@ public class SeqManager {
 				sb.pos = 0;
 			}
 			if (sb.flag == 1) {
-				Autoreply.instence.configManager.send(SanaeDataPack.encode(SanaeDataPack._22decTime).write(fromGroup).write(fromQQ));
+				ConfigManager.ins.send(SanaeDataPack.encode(SanaeDataPack._22decTime).write(fromGroup).write(fromQQ));
 			} else if (sb.flag == 2) {
-				Autoreply.instence.configManager.send(SanaeDataPack.encode(SanaeDataPack._27incMengEr).write(fromGroup).write(fromQQ));
+				ConfigManager.ins.send(SanaeDataPack.encode(SanaeDataPack._27incMengEr).write(fromGroup).write(fromQQ));
 			}
 			if (msg.equals(sb.content[sb.pos])) {
 				++sb.pos;			
@@ -64,5 +65,14 @@ public class SeqManager {
 			}
 		}
 		return null;
+	}
+	private class SeqBean {
+		public String[] content;
+		public int pos=0;
+		public int flag=0;
+		public SeqBean(String[] array, int flag) {
+			content = array;
+			this.flag = flag;
+		}
 	}
 }

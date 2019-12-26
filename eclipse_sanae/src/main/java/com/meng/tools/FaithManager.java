@@ -19,7 +19,7 @@ public class FaithManager {
 		Type type = new TypeToken<HashMap<Long, Integer>>() {
 		}.getType();
 		faithMap = Autoreply.gson.fromJson(Tools.FileTool.readString(file.getAbsolutePath()), type);
-		Autoreply.instence.threadPool.execute(new Runnable() {
+		Autoreply.ins.threadPool.execute(new Runnable() {
 				@Override
 				public void run() {
 					backupData();

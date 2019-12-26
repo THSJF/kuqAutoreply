@@ -1,6 +1,8 @@
 package com.meng.dice;
 import com.google.gson.reflect.*;
 import com.meng.*;
+import com.meng.config.*;
+import com.meng.gameData.TouHou.*;
 import com.meng.gameData.TouHou.zun.*;
 import com.meng.tools.*;
 import java.io.*;
@@ -8,7 +10,6 @@ import java.lang.reflect.*;
 import java.nio.charset.*;
 import java.util.*;
 import java.util.concurrent.*;
-import com.meng.gameData.TouHou.*;
 
 public class SpellCollect {
 	private ConcurrentHashMap<Long,HashSet<SpellCard>> spellsMap=new ConcurrentHashMap<>();
@@ -51,13 +52,13 @@ public class SpellCollect {
 		archList.add(new Archievement("疯狂国度", "收集东方绀珠传全部符卡", ArchievementBean.th15All, TH15GameData.spellcards.length, TH15GameData.spellcards));
 		archList.add(new Archievement("四季之星", "收集东方天空璋全部符卡", ArchievementBean.th16All, TH16GameData.spellcards.length, TH16GameData.spellcards));
 		archList.add(new Archievement("狡猾之兽", "收集东方鬼形兽全部符卡", ArchievementBean.th17All, TH17GameData.spellcards.length, TH17GameData.spellcards));
-		Autoreply.instence.threadPool.execute(new Runnable() {
+		Autoreply.ins.threadPool.execute(new Runnable() {
 				@Override
 				public void run() {
 					backupData();
 				}
 			});
-		Autoreply.instence.threadPool.execute(new Runnable(){
+		Autoreply.ins.threadPool.execute(new Runnable(){
 
 				@Override
 				public void run() {
@@ -85,16 +86,16 @@ public class SpellCollect {
 			}
 			SpellCard sc=getRandomSpell();
 			addSpell(fromQQ, sc);
-			Autoreply.sendMessage(fromGroup, 0, String.format("%s获得了10信仰和 %s", Autoreply.instence.configManager.getNickName(fromQQ), sc.n));
+			Autoreply.sendMessage(fromGroup, 0, String.format("%s获得了10信仰和 %s", ConfigManager.ins.getNickName(fromQQ), sc.n));
 			saveSpellConfig();
 			checkArchievement(fromGroup, fromQQ);
-			Autoreply.instence.faithManager.addFaith(fromQQ, 10);
+			Autoreply.ins.faithManager.addFaith(fromQQ, 10);
 			todaySign.add(fromQQ);
 			saveSignConfig();
 			return true;
 		}
 
-		if (msg.equals("-clean") && Autoreply.instence.configManager.isAdmin(fromQQ)) {
+		if (msg.equals("-clean") && ConfigManager.ins.isAdmin(fromQQ)) {
 			todaySign.clear();
 			saveSignConfig();
 		}
@@ -106,7 +107,7 @@ public class SpellCollect {
 				Autoreply.sendMessage(fromGroup, 0, "你没有参加过抽卡");
 				return true;
 			}
-			sb.append(Autoreply.instence.configManager.getNickName(fromQQ));
+			sb.append(ConfigManager.ins.getNickName(fromQQ));
 			sb.append("获得了:");
 			int i=0;
 			for (SpellCard s:DiceImitate.spells) {
@@ -124,7 +125,7 @@ public class SpellCollect {
 			return true;	
 		}
 		if (msg.equals("-faith")) {
-			Autoreply.sendMessage(fromGroup, 0, "你的信仰是:" + Autoreply.instence.faithManager.getFaithCount(fromQQ));
+			Autoreply.sendMessage(fromGroup, 0, "你的信仰是:" + Autoreply.ins.faithManager.getFaithCount(fromQQ));
 			return true;
 		}
 		return false;
@@ -141,7 +142,7 @@ public class SpellCollect {
 			if (ac.getNewArchievement(ab, gotSpell)) {
 				ab.addArchievement(ac.archNum);
 				Autoreply.sendMessage(fromGroup, toQQ, "获得成就:" + ac.name + "\n获得奖励:" + ac.faith + "\n条件:" + ac.describe);	
-				Autoreply.instence.faithManager.addFaith(toQQ, ac.faith);
+				Autoreply.ins.faithManager.addFaith(toQQ, ac.faith);
 			}
 		}
 		saveArchiConfig();

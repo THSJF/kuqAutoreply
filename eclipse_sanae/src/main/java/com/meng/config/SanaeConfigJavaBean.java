@@ -1,10 +1,8 @@
 package com.meng.config;
 
-import java.text.*;
-import java.util.*;
-import com.meng.tools.*;
-import com.meng.*;
 import com.meng.messageProcess.*;
+import com.meng.tools.*;
+import java.util.*;
 
 public class SanaeConfigJavaBean {
 	public HashMap<Long,String> welcomeMap = new HashMap<>();
@@ -38,7 +36,7 @@ public class SanaeConfigJavaBean {
 			return;
 		}
 		reportList.remove(0);
-		Autoreply.instence.configManager.saveSanaeConfig();
+		ConfigManager.ins.saveSanaeConfig();
 	}
 
 	void reportToLast() {
@@ -48,7 +46,7 @@ public class SanaeConfigJavaBean {
 		ReportBean rb = reportList.get(0);
 		reportList.remove(0);
 		reportList.add(rb);
-		Autoreply.instence.configManager.saveSanaeConfig();
+		ConfigManager.ins.saveSanaeConfig();
 	}
 
 	ReportBean getReport() {
@@ -63,7 +61,7 @@ public class SanaeConfigJavaBean {
 			return;
 		}
 		bugReportList.remove(0);
-		Autoreply.instence.configManager.saveSanaeConfig();
+		ConfigManager.ins.saveSanaeConfig();
 	}
 
 	void bugReportToLast() {
@@ -73,7 +71,7 @@ public class SanaeConfigJavaBean {
 		BugReportBean brb = bugReportList.get(0);
 		bugReportList.remove(0);
 		bugReportList.add(brb);
-		Autoreply.instence.configManager.saveSanaeConfig();
+		ConfigManager.ins.saveSanaeConfig();
 	}
 
 	BugReportBean getBugReport() {

@@ -31,18 +31,18 @@ public class TimeTip implements Runnable {
             Calendar c = Calendar.getInstance();
             if (c.get(Calendar.MINUTE) == 0) {
 				if (c.get(Calendar.HOUR_OF_DAY) == 11) {
-					for (long l : Autoreply.instence.configManager.RanConfig.masterList) {
+					for (long l : ConfigManager.ins.RanConfig.masterList) {
 						Autoreply.CQ.sendLikeV2(l, 10);
 					}
-					for (long l : Autoreply.instence.configManager.RanConfig.adminList) {
+					for (long l : ConfigManager.ins.RanConfig.adminList) {
 						Autoreply.CQ.sendLikeV2(l, 10);
 					}
-					for (long l : Autoreply.instence.configManager.SanaeConfig.zanSet) {
+					for (long l : ConfigManager.ins.SanaeConfig.zanSet) {
 						Autoreply.CQ.sendLikeV2(l, 10);
 					}
 				}	
                 if (c.get(Calendar.HOUR_OF_DAY) == 22) {
-                    Autoreply.instence.threadPool.execute(new Runnable() {
+                    Autoreply.ins.threadPool.execute(new Runnable() {
 							@Override
 							public void run() {
 								List<Group> groupList=Autoreply.CQ.getGroupList();
@@ -61,7 +61,7 @@ public class TimeTip implements Runnable {
 						});
                 }
                 if (c.get(Calendar.HOUR_OF_DAY) == 6) {
-                    Autoreply.instence.threadPool.execute(new Runnable() {
+                    Autoreply.ins.threadPool.execute(new Runnable() {
 							@Override
 							public void run() {
 								Autoreply.sleeping = false;

@@ -5,7 +5,7 @@ import com.meng.dice.*;
 import java.util.*;
 
 public class TouHouDataManager {
-
+	public static TouHouDataManager ins;
 	private HashMap<String,String> spellCardInfoMap=new HashMap<>();
 	
 	public TouHouDataManager() {
@@ -13,16 +13,16 @@ public class TouHouDataManager {
 	}
 	public boolean check(long fromGroup, long fromQQ, String msg){
 		if (msg.startsWith("-符卡查询 ")) {
-			SpellCard sc = Autoreply.instence.touHouDataManager.getSpellCard(msg.substring(6));
+			SpellCard sc = TouHouDataManager.ins.getSpellCard(msg.substring(6));
 			if (sc == null) {
 				Autoreply.sendMessage(fromGroup, 0, "没有找到这张符卡");
 				return true;
 			}
-			Autoreply.sendMessage(fromGroup, 0, Autoreply.instence.touHouDataManager.getSpellCardPs(sc));
+			Autoreply.sendMessage(fromGroup, 0, TouHouDataManager.ins.getSpellCardPs(sc));
 			return true;
 		}
 		if (msg.startsWith("-角色查询 ")) {
-			Autoreply.sendMessage(fromGroup, 0, Autoreply.instence.touHouDataManager.getCharaNick(msg.substring(6)));
+			Autoreply.sendMessage(fromGroup, 0, TouHouDataManager.ins.getCharaNick(msg.substring(6)));
 			return true;
 		}
 		return false;

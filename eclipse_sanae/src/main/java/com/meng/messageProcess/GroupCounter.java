@@ -27,7 +27,7 @@ public class GroupCounter {
         Type type = new TypeToken<HashMap<Long, GroupSpeak>>() {
         }.getType();
         groupsMap = Autoreply.gson.fromJson(Tools.FileTool.readString(file), type);
-		Autoreply.instence.threadPool.execute(new Runnable() {
+		Autoreply.ins.threadPool.execute(new Runnable() {
 				@Override
 				public void run() {
 					saveData();

@@ -3,31 +3,25 @@ package com.meng;
 import com.google.gson.*;
 import com.meng.config.*;
 import com.meng.dice.*;
+import com.meng.gameData.TouHou.*;
 import com.meng.groupChat.*;
-import com.meng.groupChat.Sequence.*;
 import com.meng.messageProcess.*;
 import com.meng.tip.*;
 import com.meng.tools.*;
 import com.sobte.cqp.jcq.entity.*;
 import com.sobte.cqp.jcq.event.*;
-import java.io.*;
 import java.net.*;
 import java.util.*;
 import java.util.concurrent.*;
-import com.meng.gameData.TouHou.*;
 
 public class Autoreply extends JcqAppAbstract implements ICQVer, IMsg, IRequest {
 
-    public static Autoreply instence;
+    public static Autoreply ins;
     public Random random = new Random();
-	public RepeaterManager repeatManager;
-	public TouHouDataManager touHouDataManager=new TouHouDataManager();
-    public TimeTip timeTip = new TimeTip();
+	public TimeTip timeTip = new TimeTip();
 	public CQCodeManager CQcodeManager = new CQCodeManager();
-	public ConfigManager configManager;
 	public AdminMessageProcessor adminMessageProcessor;
     public GroupMemberChangerListener groupMemberChangerListener;
-    public SeqManager seqManager;
 	public SpellCollect spellCollect;
     public ExecutorService threadPool = Executors.newCachedThreadPool();
 
@@ -61,7 +55,7 @@ public class Autoreply extends JcqAppAbstract implements ICQVer, IMsg, IRequest 
     @Override
     public int startup() {
         // 获取应用数据目录(无需储存数据时，请将此行注释)
-        instence = this;
+        ins = this;
         appDirectory = CQ.getAppDirectory();
 		GsonBuilder gb = new GsonBuilder();
 		gb.setLongSerializationPolicy(LongSerializationPolicy.STRING);
@@ -70,9 +64,10 @@ public class Autoreply extends JcqAppAbstract implements ICQVer, IMsg, IRequest 
         System.out.println("开始加载");
 		long startTime = System.currentTimeMillis();
 		groupCounter = new GroupCounter();
+		TouHouDataManager.ins = new TouHouDataManager();
 		try {
-			configManager = new ConfigManager(new URI("ws://123.207.65.93:9760"));
-			configManager.connect();
+			ConfigManager.ins = new ConfigManager(new URI("ws://123.207.65.93:9760"));
+			ConfigManager.ins.connect();
 		} catch (URISyntaxException e) {
 			e.printStackTrace();
 		}
@@ -121,10 +116,10 @@ public class Autoreply extends JcqAppAbstract implements ICQVer, IMsg, IRequest 
         // if (fromQQ != 2856986197L) {
         // return MSG_IGNORE;
         // }
-        if (configManager.isNotReplyQQ(fromQQ) || configManager.isNotReplyWord(msg)) {
+        if (ConfigManager.ins.isNotReplyQQ(fromQQ) || ConfigManager.ins.isNotReplyWord(msg)) {
             return MSG_IGNORE;
         }
-        if (configManager.isMaster(fromQQ)) {
+        if (ConfigManager.ins.isMaster(fromQQ)) {
 			String[] strings = msg.split("\\.", 3);
 			if (strings[0].equals("send")) {
 				sendMessage(Long.parseLong(strings[1]), 0, strings[2]);
@@ -152,16 +147,16 @@ public class Autoreply extends JcqAppAbstract implements ICQVer, IMsg, IRequest 
 		//		return MSG_IGNORE;
 		//}
 		groupCounter.addSpeak(fromGroup, 1);
-		if (!Autoreply.instence.SeijiaInThis.contains(fromGroup)) {
-			configManager.send(SanaeDataPack.encode(SanaeDataPack._15incSpeak).write(fromGroup).write(fromQQ));
+		if (!Autoreply.ins.SeijiaInThis.contains(fromGroup)) {
+			ConfigManager.ins.send(SanaeDataPack.encode(SanaeDataPack._15incSpeak).write(fromGroup).write(fromQQ));
 		}
 		if (messageTooManyManager.checkMsgTooMany(fromGroup, fromQQ, msg)) {
 			return MSG_IGNORE;
 		}
-        if (configManager.isNotReplyQQ(fromQQ)) {
+        if (ConfigManager.ins.isNotReplyQQ(fromQQ)) {
             return MSG_IGNORE;
         }
-        if (configManager.isNotReplyWord(msg)) {
+        if (ConfigManager.ins.isNotReplyWord(msg)) {
             return MSG_IGNORE;
         }
         if (adminMessageProcessor.check(fromGroup, fromQQ, msg)) {
@@ -296,7 +291,7 @@ public class Autoreply extends JcqAppAbstract implements ICQVer, IMsg, IRequest 
     @Override
     public int requestAddFriend(int subtype, int sendTime, final long fromQQ, String msg, final String responseFlag) {
         // 这里处理消息
-        if (configManager.isNotReplyQQ(fromQQ)) {
+        if (ConfigManager.ins.isNotReplyQQ(fromQQ)) {
             CQ.setFriendAddRequest(responseFlag, REQUEST_REFUSE, "");
 			sendMessage(0, 2856986197L, "拒绝了" + fromQQ + "加为好友");
             return MSG_IGNORE;
@@ -330,14 +325,14 @@ public class Autoreply extends JcqAppAbstract implements ICQVer, IMsg, IRequest 
          * REQUEST_GROUP_INVITE 群邀请
          */
         if (subtype == 1) {
-            if (configManager.isBlackQQ(fromQQ)) {
+            if (ConfigManager.ins.isBlackQQ(fromQQ)) {
                 CQ.setGroupAddRequest(responseFlag, REQUEST_GROUP_ADD, REQUEST_REFUSE, "黑名单用户");
 				sendMessage(fromGroup, 0, "拒绝了黑名单用户" + fromQQ + "的加群申请");
 				return MSG_IGNORE;
             }
 			sendMessage(fromGroup, 0, "有人申请加群，管理员快看看吧");
         } else if (subtype == 2) {
-            if (configManager.isBlackQQ(fromQQ) || configManager.isBlackGroup(fromGroup)) {
+            if (ConfigManager.ins.isBlackQQ(fromQQ) || ConfigManager.ins.isBlackGroup(fromGroup)) {
                 CQ.setGroupAddRequest(responseFlag, REQUEST_GROUP_ADD, REQUEST_REFUSE, "");
 				sendMessage(0, 2856986197L, "拒绝了" + fromQQ + "邀请我加入群" + fromGroup);
                 return MSG_IGNORE;
@@ -345,7 +340,7 @@ public class Autoreply extends JcqAppAbstract implements ICQVer, IMsg, IRequest 
 			CQ.setGroupAddRequest(responseFlag, REQUEST_GROUP_INVITE, REQUEST_ADOPT, null);
 			sendMessage(0, 2856986197L, fromQQ + "邀请我加入群" + fromGroup);
 			dicReply.addReply(fromGroup);
-			repeatManager.addRepeater(fromGroup);
+			RepeaterManager.ins.addRepeater(fromGroup);
         }
         return MSG_IGNORE;
     }
@@ -359,7 +354,7 @@ public class Autoreply extends JcqAppAbstract implements ICQVer, IMsg, IRequest 
             value = CQ.sendPrivateMsg(fromQQ, msg);
         } else {
 			value = CQ.sendGroupMsg(fromGroup, msg);
-			instence.groupCounter.addSpeak(fromGroup, 1);
+			ins.groupCounter.addSpeak(fromGroup, 1);
         }
         return value;
     }
@@ -369,6 +364,6 @@ public class Autoreply extends JcqAppAbstract implements ICQVer, IMsg, IRequest 
     }
 
 	public static int sendMessage(long fromGroup, long fromQQ, ArrayList<String> msg) {
-		return sendMessage(fromGroup, fromQQ, msg.get(instence.random.nextInt(msg.size())));
+		return sendMessage(fromGroup, fromQQ, msg.get(ins.random.nextInt(msg.size())));
     }
 }

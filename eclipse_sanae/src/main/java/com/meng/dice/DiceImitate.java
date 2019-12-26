@@ -1,11 +1,10 @@
 package com.meng.dice;
 import com.meng.*;
+import com.meng.config.*;
+import com.meng.gameData.TouHou.*;
 import com.meng.gameData.TouHou.zun.*;
 import com.meng.tools.*;
 import java.util.*;
-import com.meng.gameData.TouHou.*;
-import java.security.cert.*;
-import java.lang.reflect.*;
 
 public class DiceImitate {
 	public static SpellCard[] spells;
@@ -141,15 +140,15 @@ public class DiceImitate {
 											  new TouhouCharacter("依神女苑", "东方凭依华")});
 		name = Tools.ArrayTool.mergeArray(name, TH16GameData.charaName);
 		name = Tools.ArrayTool.mergeArray(name, TH17GameData.charaName);
-		cat.addAll(Autoreply.instence.touHouDataManager.getCharaSpellCard("橙"));
-		cat.addAll(Autoreply.instence.touHouDataManager.getCharaSpellCard("火焰猫燐"));
-		memory.addAll(Autoreply.instence.touHouDataManager.getCharaSpellCard("古明地觉", "想起「恐怖的回忆」", "想起「恐怖催眠术」"));
-		pachouli.addAll(Autoreply.instence.touHouDataManager.getCharaSpellCard("帕秋莉·诺蕾姬"));
+		cat.addAll(TouHouDataManager.ins.getCharaSpellCard("橙"));
+		cat.addAll(TouHouDataManager.ins.getCharaSpellCard("火焰猫燐"));
+		memory.addAll(TouHouDataManager.ins.getCharaSpellCard("古明地觉", "想起「恐怖的回忆」", "想起「恐怖催眠术」"));
+		pachouli.addAll(TouHouDataManager.ins.getCharaSpellCard("帕秋莉·诺蕾姬"));
 
 	}
 	public boolean check(long fromGroup, long fromQQ, String msg) {
 
-		String pname=Autoreply.instence.configManager.getNickName(fromGroup, fromQQ);
+		String pname=ConfigManager.ins.getNickName(fromGroup, fromQQ);
 		String md5=Tools.Hash.toMD5(String.valueOf(fromQQ + System.currentTimeMillis() / (24 * 60 * 60 * 1000)));
 		char c=md5.charAt(0);
 		switch (msg) {

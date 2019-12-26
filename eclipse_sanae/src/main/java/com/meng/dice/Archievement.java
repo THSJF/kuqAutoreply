@@ -40,7 +40,7 @@ public class Archievement {
 		this.describe = describe;
 		this.judge = judge;
 		for (String s:spells) {
-			spellsNeed.add(Autoreply.instence.touHouDataManager.getSpellCard(s));
+			spellsNeed.add(TouHouDataManager.ins.getSpellCard(s));
 		}
 	}
 

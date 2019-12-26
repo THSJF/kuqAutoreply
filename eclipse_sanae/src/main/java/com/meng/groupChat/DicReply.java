@@ -2,6 +2,7 @@ package com.meng.groupChat;
 
 import com.google.gson.reflect.*;
 import com.meng.*;
+import com.meng.config.*;
 import com.meng.tools.*;
 import java.io.*;
 import java.lang.reflect.*;
@@ -23,10 +24,10 @@ public class DicReply {
 		}.getType();
 		dic = Autoreply.gson.fromJson(Tools.FileTool.readString(dicFile), type);
 		try {
-			if (Autoreply.instence.configManager.SanaeConfig.dicRegex.get(-1) == null) {
+			if (ConfigManager.ins.SanaeConfig.dicRegex.get(-1) == null) {
 				regexMode = false;
 			} else {
-				regexMode = Autoreply.instence.configManager.SanaeConfig.dicRegex.get(-1);
+				regexMode = ConfigManager.ins.SanaeConfig.dicRegex.get(-1);
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -34,9 +35,9 @@ public class DicReply {
 	}
 
 	public void setRegexMode(long fromGroup, boolean isReg) {
-		Autoreply.instence.configManager.SanaeConfig.dicRegex.put(fromGroup, isReg);
+		ConfigManager.ins.SanaeConfig.dicRegex.put(fromGroup, isReg);
 		groupMap.get(fromGroup).regexMode = isReg;
-		Autoreply.instence.configManager.saveSanaeConfig();
+		ConfigManager.ins.saveSanaeConfig();
 	}
 
 	public void addKV(long group, String k, String... v) {
@@ -112,10 +113,10 @@ public class DicReply {
 			Type type = new TypeToken<HashMap<String, ArrayList<String>>>() {
 			}.getType();
 			dic = Autoreply.gson.fromJson(Tools.FileTool.readString(dicFile), type);
-			if (Autoreply.instence.configManager.SanaeConfig.dicRegex.get(groupNum) == null) {
+			if (ConfigManager.ins.SanaeConfig.dicRegex.get(groupNum) == null) {
 				regexMode = false;
 			} else {
-				regexMode = Autoreply.instence.configManager.SanaeConfig.dicRegex.get(groupNum);
+				regexMode = ConfigManager.ins.SanaeConfig.dicRegex.get(groupNum);
 			}
 		}
 		public boolean checkMsg(long group, long qq, String msg) {
@@ -123,7 +124,7 @@ public class DicReply {
 				for (String key : dic.keySet()) {
 					if (Pattern.matches(".*" + key + ".*", msg.replace(" ", "").trim())) {
 						ArrayList<String> ans = dic.get(key);
-						Autoreply.sendMessage(group, qq, ans.get(Autoreply.instence.random.nextInt(ans.size())));
+						Autoreply.sendMessage(group, qq, ans.get(Autoreply.ins.random.nextInt(ans.size())));
 						return true;
 					}
 				}
@@ -131,7 +132,7 @@ public class DicReply {
 				for (String key : dic.keySet()) {
 					if (msg.contains(key.replaceAll("\\s", ""))) {
 						ArrayList<String> ans = dic.get(key);
-						Autoreply.sendMessage(group, qq, ans.get(Autoreply.instence.random.nextInt(ans.size())));
+						Autoreply.sendMessage(group, qq, ans.get(Autoreply.ins.random.nextInt(ans.size())));
 						return true;
 					}
 				}

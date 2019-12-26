@@ -5,9 +5,9 @@ import com.meng.config.*;
 import java.util.*;
 
 public class RepeaterManager {
-
+	public static RepeaterManager ins;
     private HashMap<Long, Repeater> repeaters = new HashMap<>();
-
+	
     public RepeaterManager() {
 
     }
@@ -53,17 +53,17 @@ public class RepeaterManager {
 		}
 
 		private boolean repeatEnd(long group, long qq, String msg) {
-			Autoreply.instence.configManager.send(SanaeDataPack.encode(SanaeDataPack._20incRepeatBreak).write(group).write(qq));
+			ConfigManager.ins.send(SanaeDataPack.encode(SanaeDataPack._20incRepeatBreak).write(group).write(qq));
 			return false;
 		}
 
 		private boolean repeatRunning(long group, long qq, String msg) {
-			Autoreply.instence.configManager.send(SanaeDataPack.encode(SanaeDataPack._18incRepeat).write(group).write(qq));
+			ConfigManager.ins.send(SanaeDataPack.encode(SanaeDataPack._18incRepeat).write(group).write(qq));
 			return false;
 		}
 
 		private boolean repeatStart(long group,  long qq,  String msg) {
-			Autoreply.instence.configManager.send(SanaeDataPack.encode(SanaeDataPack._19incRepeatStart).write(qq));
+			ConfigManager.ins.send(SanaeDataPack.encode(SanaeDataPack._19incRepeatStart).write(qq));
 			Autoreply.sendMessage(group, 0, msg);
 			return true;
 		}

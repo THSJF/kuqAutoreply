@@ -142,7 +142,7 @@ public class Tools {
 
 	public static class CQ {
 		public static boolean checkAt(long fromGroup, long fromQQ, String msg) {
-			if (Autoreply.instence.CC.getAt(msg) == Autoreply.CQ.getLoginQQ()) {      
+			if (Autoreply.ins.CC.getAt(msg) == Autoreply.CQ.getLoginQQ()) {      
 				Autoreply.sendMessage(fromGroup, 0, msg.replace("[CQ:at,qq=" + Autoreply.CQ.getLoginQQ() + "]", "[CQ:at,qq=" + fromQQ + "]"));
 				return true;
 			}
@@ -153,7 +153,7 @@ public class Tools {
 			try {
 				findqq = Long.parseLong(msg.substring(10));
 			} catch (Exception e) {
-				findqq = Autoreply.instence.CC.getAt(msg);
+				findqq = Autoreply.ins.CC.getAt(msg);
 			}
 			if (findqq <= 0) {
 				Autoreply.sendMessage(fromGroup, fromQQ, "QQ账号错误");
@@ -186,7 +186,7 @@ public class Tools {
 			return hashSet;
 		}
 		public static boolean isAtme(String msg) {
-			List<Long> list = Autoreply.instence.CC.getAts(msg);
+			List<Long> list = Autoreply.ins.CC.getAts(msg);
 			long me = Autoreply.CQ.getLoginQQ();
 			for (long l : list) {
 				if (l == me) {
@@ -282,7 +282,7 @@ public class Tools {
 			return finalArray;
 		}
 		public static Object rfa(Object[] array) {
-			return array[Autoreply.instence.random.nextInt(array.length)];
+			return array[Autoreply.ins.random.nextInt(array.length)];
 		}
 	}
 

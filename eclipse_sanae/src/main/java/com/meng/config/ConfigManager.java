@@ -4,7 +4,6 @@ import com.google.gson.reflect.*;
 import com.meng.*;
 import com.meng.dice.*;
 import com.meng.groupChat.*;
-import com.meng.groupChat.Sequence.*;
 import com.meng.messageProcess.*;
 import com.meng.tip.*;
 import com.meng.tools.*;
@@ -21,6 +20,7 @@ import org.java_websocket.exceptions.*;
 import org.java_websocket.handshake.*;
 
 public class ConfigManager extends WebSocketClient {
+	public static ConfigManager ins;
     public RanConfigBean RanConfig = new RanConfigBean();
 	public SanaeConfigJavaBean SanaeConfig=new SanaeConfigJavaBean();
 	private File SanaeConfigFile;
@@ -46,7 +46,7 @@ public class ConfigManager extends WebSocketClient {
 	public void onOpen(ServerHandshake serverHandshake) {
 		send(SanaeDataPack.encode(SanaeDataPack._1getConfig));
 		System.out.println("连接到蓝");
-		Autoreply.instence.threadPool.execute(new Runnable(){
+		Autoreply.ins.threadPool.execute(new Runnable(){
 
 				@Override
 				public void run() {
@@ -75,38 +75,38 @@ public class ConfigManager extends WebSocketClient {
 				Type type = new TypeToken<RanConfigBean>() {
 				}.getType();
 				RanConfig = Autoreply.gson.fromJson(dataRec.readString(), type);
-				Autoreply.instence.threadPool.execute(new Runnable(){
+				Autoreply.ins.threadPool.execute(new Runnable(){
 
 						@Override
 						public void run() {
 							Autoreply.sleeping = false;
-							Autoreply.instence.seqManager = new SeqManager();
-							Autoreply.instence.groupMemberChangerListener = new GroupMemberChangerListener();
-							Autoreply.instence.adminMessageProcessor = new AdminMessageProcessor();
-							Autoreply.instence.repeatManager = new RepeaterManager();
-							Autoreply.instence.birthdayTip = new BirthdayTip();
-							Autoreply.instence.spellCollect = new SpellCollect();
-							Autoreply.instence.diceImitate = new DiceImitate();
-							Autoreply.instence.threadPool.execute(Autoreply.instence.timeTip);
-							Autoreply.instence.faithManager = new FaithManager();
-							Autoreply.instence.messageTooManyManager = new MessageTooManyManager();
-							Autoreply.instence.dicReply = new DicReply();
-							Autoreply.instence.messageWaitManager = new MessageWaitManager();
+							SeqManager.ins = new SeqManager();
+							Autoreply.ins.groupMemberChangerListener = new GroupMemberChangerListener();
+							Autoreply.ins.adminMessageProcessor = new AdminMessageProcessor();
+							RepeaterManager.ins = new RepeaterManager();
+							Autoreply.ins.birthdayTip = new BirthdayTip();
+							Autoreply.ins.spellCollect = new SpellCollect();
+							Autoreply.ins.diceImitate = new DiceImitate();
+							Autoreply.ins.threadPool.execute(Autoreply.ins.timeTip);
+							Autoreply.ins.faithManager = new FaithManager();
+							Autoreply.ins.messageTooManyManager = new MessageTooManyManager();
+							Autoreply.ins.dicReply = new DicReply();
+							Autoreply.ins.messageWaitManager = new MessageWaitManager();
 							List<Group> groupList=Autoreply.CQ.getGroupList();
 							for (Group g:groupList) {
-								Autoreply.instence.dicReply.addReply(g.getId());
-								Autoreply.instence.repeatManager.addRepeater(g.getId());
+								Autoreply.ins.dicReply.addReply(g.getId());
+								RepeaterManager.ins.addRepeater(g.getId());
 							}
 							for (Group g:groupList) {
 								List<com.sobte.cqp.jcq.entity.Member> mlist=Autoreply.CQ.getGroupMemberList(g.getId());
 								for (com.sobte.cqp.jcq.entity.Member m:mlist) {
 									if (m.getQqId() == 2089693971L) {
-										Autoreply.instence.SeijiaInThis.add(g.getId());
+										Autoreply.ins.SeijiaInThis.add(g.getId());
 										break;
 									}
 								}
-								if (!Autoreply.instence.SeijiaInThis.contains(g.getId())) {
-									Autoreply.instence.repeatManager.addRepeater(g.getId());
+								if (!Autoreply.ins.SeijiaInThis.contains(g.getId())) {
+									RepeaterManager.ins.addRepeater(g.getId());
 								}
 
 							}
@@ -395,7 +395,7 @@ public class ConfigManager extends WebSocketClient {
 	}
 
 	public void send(final SanaeDataPack sdp) {
-		Autoreply.instence.threadPool.execute(new Runnable(){
+		Autoreply.ins.threadPool.execute(new Runnable(){
 
 				@Override
 				public void run() {

@@ -6,7 +6,7 @@ public class MessageTooManyManager {
 	public ConcurrentHashMap<Long,MessageTooManyBean> msgMap=new ConcurrentHashMap<>();
 
 	public MessageTooManyManager() {
-		Autoreply.instence.threadPool.execute(new Runnable(){
+		Autoreply.ins.threadPool.execute(new Runnable(){
 
 				@Override
 				public void run() {

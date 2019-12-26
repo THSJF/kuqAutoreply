@@ -1,9 +1,10 @@
 package com.meng.messageProcess;
 
 import com.meng.*;
+import com.meng.config.*;
+import com.meng.gameData.TouHou.*;
+import com.meng.groupChat.*;
 import com.meng.tools.*;
-
-import static com.meng.Autoreply.sendMessage;
 
 public class MsgRunnable implements Runnable {
     private int msgId = 0;
@@ -25,25 +26,25 @@ public class MsgRunnable implements Runnable {
 
     private void check() {
 		if (msg.equals("-help")) {
-			sendMessage(fromGroup, 0, Autoreply.instence.adminMessageProcessor.userPermission.toString());
+			Autoreply.sendMessage(fromGroup, 0, Autoreply.ins.adminMessageProcessor.userPermission.toString());
 			return;
 		}
 		if (msg.equals(".live")) {
-			sendMessage(fromGroup, fromQQ, Autoreply.instence.configManager.getLiveList());
+			Autoreply.sendMessage(fromGroup, fromQQ, ConfigManager.ins.getLiveList());
 			return;
 		}
 		if (msg.startsWith("-留言 ")) {
-			Autoreply.instence.configManager.addReport(fromGroup, fromQQ, msg);
-			sendMessage(fromGroup, fromQQ, "留言成功");
+			ConfigManager.ins.addReport(fromGroup, fromQQ, msg);
+			Autoreply.sendMessage(fromGroup, fromQQ, "留言成功");
 			return;
 		}
 		if (msg.startsWith("-问题反馈 ")) {
-			Autoreply.instence.configManager.addBugReport(fromGroup, fromQQ, msg);
-			sendMessage(fromGroup, fromQQ, "反馈成功");
+			ConfigManager.ins.addBugReport(fromGroup, fromQQ, msg);
+			Autoreply.sendMessage(fromGroup, fromQQ, "反馈成功");
 			return;
 		}
-		Autoreply.instence.messageWaitManager.check(fromGroup, fromQQ);
-        if (Autoreply.instence.configManager.SanaeConfig.botOff.contains(fromGroup)) {
+		Autoreply.ins.messageWaitManager.check(fromGroup, fromQQ);
+        if (ConfigManager.ins.SanaeConfig.botOff.contains(fromGroup)) {
             return;
         }
 		if (msg.startsWith("-int ")) {
@@ -111,41 +112,41 @@ public class MsgRunnable implements Runnable {
 				Autoreply.sendMessage(fromGroup, 0, "太长了,记不住");
 				return;
 			}
-			Autoreply.instence.configManager.setNickName(fromQQ, name);
+			ConfigManager.ins.setNickName(fromQQ, name);
 			Autoreply.sendMessage(fromGroup, 0, "我以后会称呼你为" + name);
 			return;
 		}
 		if (msg.equals(".nn")) {
-			Autoreply.instence.configManager.setNickName(fromQQ, null);
+			ConfigManager.ins.setNickName(fromQQ, null);
 			Autoreply.sendMessage(fromGroup, 0, "我以后会用你的QQ昵称称呼你");
 			return;
 		}
 		if (Tools.CQ.checkAt(fromGroup, fromQQ, msg)) {//@
 			return;
 		}
-		if (Autoreply.instence.touHouDataManager.check(fromGroup, fromQQ, msg)) {
+		if (TouHouDataManager.ins.check(fromGroup, fromQQ, msg)) {
 			return;
 		}
-		if (Autoreply.instence.spellCollect.check(fromGroup, fromQQ, msg)) {
+		if (Autoreply.ins.spellCollect.check(fromGroup, fromQQ, msg)) {
 			return;
 		}
-		if (Autoreply.instence.repeatManager.check(fromGroup, fromQQ, msg)) {// 复读
+		if (RepeaterManager.ins.check(fromGroup, fromQQ, msg)) {// 复读
 			return;
 		}
-		if (Autoreply.instence.CQcodeManager.check(fromGroup, msg)) {// 特殊信息(签到分享等)
+		if (Autoreply.ins.CQcodeManager.check(fromGroup, msg)) {// 特殊信息(签到分享等)
 			return;
 		}
 		if (msg.equals("查看活跃数据")) {
-			sendMessage(fromGroup, fromQQ, "https://qqweb.qq.com/m/qun/activedata/active.html?gc=" + fromGroup);
+			Autoreply.sendMessage(fromGroup, fromQQ, "https://qqweb.qq.com/m/qun/activedata/active.html?gc=" + fromGroup);
 			return;
 		}
-		if (Autoreply.instence.diceImitate.check(fromGroup, fromQQ, msg)) {
+		if (Autoreply.ins.diceImitate.check(fromGroup, fromQQ, msg)) {
 			return;
 		}
-		if (Autoreply.instence.seqManager.check(fromGroup, fromQQ, msg)) {
+		if (SeqManager.ins.check(fromGroup, fromQQ, msg)) {
 			return;
 		}
-		if (Autoreply.instence.dicReply.check(fromGroup, fromQQ, msg)) {
+		if (Autoreply.ins.dicReply.check(fromGroup, fromQQ, msg)) {
 			return;
 		}
 	}
