@@ -38,6 +38,7 @@ public class Autoreply extends JcqAppAbstract implements ICQVer, IMsg, IRequest 
 	public MessageTooManyManager messageTooManyManager;
 	public DicReply dicReply;
 	public GroupCounter groupCounter;
+	public GuessSpell guessSpell;
 
     public static void main(String[] args) {
         CQ = new CoolQ(1000);
@@ -70,6 +71,7 @@ public class Autoreply extends JcqAppAbstract implements ICQVer, IMsg, IRequest 
 		} catch (URISyntaxException e) {
 			e.printStackTrace();
 		}
+		guessSpell = new GuessSpell();
         System.out.println("加载完成,用时" + (System.currentTimeMillis() - startTime));
 		return 0;
     }
