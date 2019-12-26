@@ -13,7 +13,7 @@ public class SanaeConfigJavaBean {
 	public ArrayList<BugReportBean> bugReportList=new ArrayList<>();
 	public HashMap<Long,Boolean> dicRegex = new HashMap<>();
 
-	public void addReport(long fromGroup, long fromQQ, String content) {
+	void addReport(long fromGroup, long fromQQ, String content) {
 		ReportBean report=new ReportBean();
 		report.t = System.currentTimeMillis();
 		report.g = fromGroup;
@@ -22,7 +22,7 @@ public class SanaeConfigJavaBean {
 		reportList.add(report);
 	}
 
-	public void addBugReport(long fromGroup, long fromQQ, String content) {
+	void addBugReport(long fromGroup, long fromQQ, String content) {
 		BugReportBean bugReport=new BugReportBean();
 		bugReport.t = System.currentTimeMillis();
 		bugReport.g = fromGroup;
@@ -31,17 +31,15 @@ public class SanaeConfigJavaBean {
 		bugReportList.add(bugReport);
 	}
 
-	public long removeReport() {
+	void removeReport() {
 		if (reportList.size() == 0) {
-			return 0;
+			return;
 		}
-		long qq = reportList.get(0).q;
 		reportList.remove(0);
 		Autoreply.instence.configManager.saveSanaeConfig();
-		return qq;
 	}
 
-	public void reportToLast() {
+	void reportToLast() {
 		if (reportList.size() == 0) {
 			return;
 		}
@@ -51,24 +49,22 @@ public class SanaeConfigJavaBean {
 		Autoreply.instence.configManager.saveSanaeConfig();
 	}
 
-	public String getReport() {
+	ReportBean getReport() {
 		if (reportList.size() == 0) {
-			return "当前无内容";
+			return null;
 		}
-		return reportList.get(0).toString();
+		return reportList.get(0);
 	}
 
-	public long removeBugReport() {
+	void removeBugReport() {
 		if (bugReportList.size() == 0) {
-			return 0;
+			return;
 		}
-		long qq = bugReportList.get(0).q;
 		bugReportList.remove(0);
 		Autoreply.instence.configManager.saveSanaeConfig();
-		return qq;
 	}
 
-	public void bugReportToLast() {
+	void bugReportToLast() {
 		if (bugReportList.size() == 0) {
 			return;
 		}
@@ -78,14 +74,14 @@ public class SanaeConfigJavaBean {
 		Autoreply.instence.configManager.saveSanaeConfig();
 	}
 
-	public String getBugReport() {
+	BugReportBean getBugReport() {
 		if (bugReportList.size() == 0) {
-			return "当前无内容";
+			return null;
 		}
-		return bugReportList.get(0).toString();
+		return bugReportList.get(0);
 	}
 
-	private class ReportBean {
+	public class ReportBean {
 		public long t;//time
 		public long g;//group
 		public long q;//qq
@@ -93,11 +89,11 @@ public class SanaeConfigJavaBean {
 
 		@Override
 		public String toString() {
-			return String.format("时间:%s,群:%d,用户:%d\n内容:%s", Tools.CQ.getTime(), g, q, c);
+			return String.format("时间:%s,群:%d,用户:%d\n内容:%s", Tools.CQ.getTime(t), g, q, c);
 		}
 	}
 
-	private class BugReportBean {
+	public class BugReportBean {
 		public long t;//time
 		public long g;//group
 		public long q;//qq
@@ -105,7 +101,7 @@ public class SanaeConfigJavaBean {
 
 		@Override
 		public String toString() {
-			return String.format("时间:%s,群:%d,用户:%d\n内容:%s", Tools.CQ.getTime(), g, q, c);
+			return String.format("时间:%s,群:%d,用户:%d\n内容:%s", Tools.CQ.getTime(t), g, q, c);
 		}
 	}
 }

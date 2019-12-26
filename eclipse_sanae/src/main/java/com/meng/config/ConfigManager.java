@@ -91,9 +91,12 @@ public class ConfigManager extends WebSocketClient {
 							Autoreply.instence.faithManager = new FaithManager();
 							Autoreply.instence.messageTooManyManager = new MessageTooManyManager();
 							Autoreply.instence.dicReply = new DicReply();
+							Autoreply.instence.messageWaitManager = new MessageWaitManager();
 							List<Group> groupList=Autoreply.CQ.getGroupList();
 							for (Group g:groupList) {
 								Autoreply.instence.dicReply.addReply(g.getId());
+							}
+							for (Group g:groupList) {
 								List<com.sobte.cqp.jcq.entity.Member> mlist=Autoreply.CQ.getGroupMemberList(g.getId());
 								for (com.sobte.cqp.jcq.entity.Member m:mlist) {
 									if (m.getQqId() == 2089693971L) {
@@ -366,27 +369,27 @@ public class ConfigManager extends WebSocketClient {
 		saveSanaeConfig();
 	}
 
-	public String getReport() {
+	public SanaeConfigJavaBean.ReportBean getReport() {
 		return SanaeConfig.getReport();
 	}
 
-	public long removeReport() {
-		return SanaeConfig.removeReport();
+	public void removeReport() {
+		SanaeConfig.removeReport();
 	}
 
 	public void reportToLast() {
 		SanaeConfig.reportToLast();
 	}
 
-	public long removeBugReport() {
-		return SanaeConfig.removeBugReport();
+	public void removeBugReport() {
+		SanaeConfig.removeBugReport();
 	}
 
 	public void bugReportToLast() {
 		SanaeConfig.bugReportToLast();
 	}
 
-	public String getBugReport() {
+	public SanaeConfigJavaBean.BugReportBean getBugReport() {
 		return SanaeConfig.getBugReport();
 	}
 

@@ -195,13 +195,21 @@ public class Tools {
 			}
 			return false;
 		}
-		
-		public static String getTime(){
+
+		public static String getTime() {
 			return new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date());
 		}
-		
-		public static String getDate(){
+
+		public static String getTime(long timeStamp) {
+			return new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date(timeStamp));
+		}
+
+		public static String getDate() {
 			return new SimpleDateFormat("yyyy-MM-dd").format(new Date());
+		}
+
+		public static String getDate(long timeStamp) {
+			return new SimpleDateFormat("yyyy-MM-dd").format(new Date(timeStamp));
 		}
 		/*  public static String getG_tk(String skey) {
 		 int hash = 5381;

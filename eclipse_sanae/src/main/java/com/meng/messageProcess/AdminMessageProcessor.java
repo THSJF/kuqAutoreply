@@ -9,6 +9,7 @@ import java.util.*;
 import java.util.concurrent.*;
 
 import static com.meng.Autoreply.sendMessage;
+import com.meng.config.*;
 
 public class AdminMessageProcessor {
 	private MyLinkedHashMap<String,String> masterPermission=new MyLinkedHashMap<>();
@@ -48,13 +49,14 @@ public class AdminMessageProcessor {
 				return true;
 			}
 			if (msg.equals("-留言查看")) {
-				Autoreply.sendMessage(fromGroup, fromQQ, Autoreply.instence.configManager.getReport());
+				Autoreply.sendMessage(fromGroup, fromQQ, Autoreply.instence.configManager.getReport().toString());
 				return true;
 			}
 			if (msg.equalsIgnoreCase("-留言查看 t")) {
-				long qq = Autoreply.instence.configManager.removeReport();
-				Autoreply.instence.faithManager.addFaith(qq, 5);
-				Autoreply.sendMessage(fromGroup, fromQQ, String.format("%d的留言已处理,获得5信仰奖励", qq));
+				SanaeConfigJavaBean.ReportBean rb = Autoreply.instence.configManager.getReport();
+				Autoreply.instence.faithManager.addFaith(rb.q, 5);
+				Autoreply.instence.configManager.removeReport();
+				Autoreply.instence.messageWaitManager.addTip(rb.q, String.format("%d在%s的留言%s已经处理,获得5信仰奖励", rb.q, Tools.CQ.getTime(rb.t), rb.c));
 				return true;
 			}
 			if (msg.equals("-留言查看 f")) {
@@ -62,13 +64,14 @@ public class AdminMessageProcessor {
 				return true;
 			}
 			if (msg.equals("-反馈查看")) {
-				Autoreply.sendMessage(fromGroup, fromQQ, Autoreply.instence.configManager.getBugReport());
+				Autoreply.sendMessage(fromGroup, fromQQ, Autoreply.instence.configManager.getBugReport().toString());
 				return true;
 			}
 			if (msg.equalsIgnoreCase("-反馈查看 t")) {
-				long qq = Autoreply.instence.configManager.removeBugReport();
-				Autoreply.instence.faithManager.addFaith(qq, 10);
-				Autoreply.sendMessage(fromGroup, fromQQ, String.format("%d的反馈已处理,获得10信仰奖励", qq));
+				SanaeConfigJavaBean.BugReportBean brb = Autoreply.instence.configManager.getBugReport();
+				Autoreply.instence.faithManager.addFaith(brb.q, 10);
+				Autoreply.instence.configManager.removeBugReport();
+				Autoreply.instence.messageWaitManager.addTip(brb.q, String.format("%d在%s的反馈%s已经处理,获得10信仰奖励", brb.q, Tools.CQ.getTime(brb.t), brb.c));
 				return true;
 			}
 			if (msg.equals("-反馈查看 f")) {
