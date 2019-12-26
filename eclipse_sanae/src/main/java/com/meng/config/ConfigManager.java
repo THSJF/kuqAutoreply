@@ -91,7 +91,7 @@ public class ConfigManager extends WebSocketClient {
 							Autoreply.ins.faithManager = new FaithManager();
 							Autoreply.ins.messageTooManyManager = new MessageTooManyManager();
 							Autoreply.ins.dicReply = new DicReply();
-							Autoreply.ins.messageWaitManager = new MessageWaitManager();
+							MessageWaitManager.ins = new MessageWaitManager();
 							List<Group> groupList=Autoreply.CQ.getGroupList();
 							for (Group g:groupList) {
 								Autoreply.ins.dicReply.addReply(g.getId());

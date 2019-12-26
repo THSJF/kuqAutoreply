@@ -43,7 +43,7 @@ public class MsgRunnable implements Runnable {
 			Autoreply.sendMessage(fromGroup, fromQQ, "反馈成功");
 			return;
 		}
-		Autoreply.ins.messageWaitManager.check(fromGroup, fromQQ);
+		MessageWaitManager.ins.check(fromGroup, fromQQ);
         if (ConfigManager.ins.SanaeConfig.botOff.contains(fromGroup)) {
             return;
         }

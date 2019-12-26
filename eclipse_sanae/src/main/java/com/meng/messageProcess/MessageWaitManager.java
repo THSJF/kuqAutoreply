@@ -4,6 +4,7 @@ import com.meng.config.*;
 import java.util.*;
 
 public class MessageWaitManager {
+	public static MessageWaitManager ins;
 	private boolean noTip=true;
 	public void addTip(long InGroup, long toQQ, String msg) {
 		ConfigManager.ins.SanaeConfig.delayMsg.add(new MessageWait(InGroup, toQQ, msg));

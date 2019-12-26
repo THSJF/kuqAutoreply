@@ -38,7 +38,6 @@ public class Autoreply extends JcqAppAbstract implements ICQVer, IMsg, IRequest 
 	public MessageTooManyManager messageTooManyManager;
 	public DicReply dicReply;
 	public GroupCounter groupCounter;
-	public MessageWaitManager messageWaitManager;
 
     public static void main(String[] args) {
         CQ = new CoolQ(1000);
