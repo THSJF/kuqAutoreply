@@ -27,10 +27,12 @@ public class TouHouKnowledge {
 			ConfigManager.ins.SanaeConfig.quesWait.add(ab);
 			Autoreply.sendMessage(fromGroup, 0, String.format("问题:%s\n答案:%s\n添加成功,待审核", ab.q, ab.a ? "t": "f"));
 			ConfigManager.ins.saveSanaeConfig();
+			return true;
 		}
 		if (msg.equals("-问答添加审核")) {
 			AddQuestionBean ab = ConfigManager.ins.SanaeConfig.quesWait.get(0);
 			Autoreply.sendMessage(fromGroup, 0, String.format("用户:%d\n问题:%s\n答案:%s", ab.u, ab.q, ab.a ? "t": "f"));
+			return true;
 		}
 		if (msg.equalsIgnoreCase("-问答添加审核 t")) {
 			AddQuestionBean ab = ConfigManager.ins.SanaeConfig.quesWait.remove(0);
@@ -39,11 +41,13 @@ public class TouHouKnowledge {
 			Autoreply.ins.faithManager.addFaith(ab.u, 1);
 			ConfigManager.ins.saveSanaeConfig();
 			Autoreply.sendMessage(fromGroup, 0, String.format("用户:%d\n问题:%s\n答案:%s\n处理成功", ab.u, ab.q, ab.a ? "t": "f"));
+			return true;
 		}
 		if (msg.equalsIgnoreCase("-问答添加审核 f")) {
 			AddQuestionBean ab = ConfigManager.ins.SanaeConfig.quesWait.remove(0);
 			ConfigManager.ins.saveSanaeConfig();
 			Autoreply.sendMessage(fromGroup, 0, String.format("用户:%d\n问题:%s\n答案:%s\n处理成功", ab.u, ab.q, ab.a ? "t": "f"));
+			return true;
 		}
 		if (msg.equals("-车万问答")) {
 			String[] keys = ConfigManager.ins.SanaeConfig.ques.keySet().toArray(new String[ConfigManager.ins.SanaeConfig.ques.size()]);

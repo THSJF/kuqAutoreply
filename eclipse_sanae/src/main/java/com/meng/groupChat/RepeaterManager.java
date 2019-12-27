@@ -7,7 +7,7 @@ import java.util.*;
 public class RepeaterManager {
 	public static RepeaterManager ins;
     private HashMap<Long, Repeater> repeaters = new HashMap<>();
-	
+
     public RepeaterManager() {
 
     }
@@ -17,7 +17,12 @@ public class RepeaterManager {
     }
 
     public boolean check(long group, long qq, String msg) {
-        return repeaters.get(group).check(group, qq, msg);
+		Repeater rp=repeaters.get(group);
+		if (rp == null) {
+			rp = new Repeater(group);
+			repeaters.put(group, rp);
+		}
+        return rp.check(group, qq, msg);
     }
 
 	private class Repeater {
