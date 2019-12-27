@@ -29,15 +29,11 @@ public class Autoreply extends JcqAppAbstract implements ICQVer, IMsg, IRequest 
 
 	public static final String userAgent="Mozilla/5.0 (Windows NT 6.1; WOW64; rv:28.0) Gecko/20100101 Firefox/28.0";
     public HashSet<Long> SeijiaInThis = new HashSet<>();
-	public FaithManager faithManager;
 	public BirthdayTip birthdayTip;
 
 	public DiceImitate diceImitate;
 	public static final long mainGroup=807242547L;
 	public static Gson gson;
-	public MessageTooManyManager messageTooManyManager;
-	public DicReply dicReply;
-	public GroupCounter groupCounter;
 
     public static void main(String[] args) {
         CQ = new CoolQ(1000);
@@ -62,7 +58,7 @@ public class Autoreply extends JcqAppAbstract implements ICQVer, IMsg, IRequest 
         // 返回如：D:\CoolQ\app\com.sobte.cqp.jcq\app\com.example.demo\
         System.out.println("开始加载");
 		long startTime = System.currentTimeMillis();
-		groupCounter = new GroupCounter();
+		GroupCounter.ins = new GroupCounter();
 		TouHouDataManager.ins = new TouHouDataManager();
 		try {
 			ConfigManager.ins = new ConfigManager(new URI("ws://123.207.65.93:9760"));
@@ -147,11 +143,11 @@ public class Autoreply extends JcqAppAbstract implements ICQVer, IMsg, IRequest 
 		//	if (fromGroup != 807242547L){
 		//		return MSG_IGNORE;
 		//}
-		groupCounter.addSpeak(fromGroup, 1);
+		GroupCounter.ins.addSpeak(fromGroup, 1);
 		if (!Autoreply.ins.SeijiaInThis.contains(fromGroup)) {
 			ConfigManager.ins.send(SanaeDataPack.encode(SanaeDataPack._15incSpeak).write(fromGroup).write(fromQQ));
 		}
-		if (messageTooManyManager.checkMsgTooMany(fromGroup, fromQQ, msg)) {
+		if (MessageFireWall.ins.check(fromGroup, fromQQ, msg)) {
 			return MSG_IGNORE;
 		}
         if (ConfigManager.ins.isNotReplyQQ(fromQQ)) {
@@ -340,9 +336,7 @@ public class Autoreply extends JcqAppAbstract implements ICQVer, IMsg, IRequest 
             }
 			CQ.setGroupAddRequest(responseFlag, REQUEST_GROUP_INVITE, REQUEST_ADOPT, null);
 			sendMessage(0, 2856986197L, fromQQ + "邀请我加入群" + fromGroup);
-			dicReply.addReply(fromGroup);
-			RepeaterManager.ins.addRepeater(fromGroup);
-        }
+		}
         return MSG_IGNORE;
     }
 
@@ -355,7 +349,7 @@ public class Autoreply extends JcqAppAbstract implements ICQVer, IMsg, IRequest 
             value = CQ.sendPrivateMsg(fromQQ, msg);
         } else {
 			value = CQ.sendGroupMsg(fromGroup, msg);
-			ins.groupCounter.addSpeak(fromGroup, 1);
+			GroupCounter.ins.addSpeak(fromGroup, 1);
         }
         return value;
     }

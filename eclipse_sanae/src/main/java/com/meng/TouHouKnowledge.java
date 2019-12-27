@@ -1,10 +1,9 @@
 package com.meng;
 
-import com.meng.gameData.TouHou.*;
-import java.util.*;
 import com.meng.config.*;
 import com.meng.messageProcess.*;
 import com.meng.tools.*;
+import java.util.*;
 
 public class TouHouKnowledge {
 	public static TouHouKnowledge ins;
@@ -38,7 +37,7 @@ public class TouHouKnowledge {
 			AddQuestionBean ab = ConfigManager.ins.SanaeConfig.quesWait.remove(0);
 			ConfigManager.ins.SanaeConfig.ques.put(ab.q, ab.a);
 			MessageWaitManager.ins.addTip(ab.u, String.format("用户:%d\n问题:%s\n答案:%s\n审核通过,获得1信仰", ab.u, ab.q, ab.a ? "t": "f"));
-			Autoreply.ins.faithManager.addFaith(ab.u, 1);
+			FaithManager.ins.addFaith(ab.u, 1);
 			ConfigManager.ins.saveSanaeConfig();
 			Autoreply.sendMessage(fromGroup, 0, String.format("用户:%d\n问题:%s\n答案:%s\n处理成功", ab.u, ab.q, ab.a ? "t": "f"));
 			return true;
@@ -57,11 +56,19 @@ public class TouHouKnowledge {
 			return true;
 		} else if (userMap.get(fromQQ) != null) {
 			if (msg.equalsIgnoreCase("-问答回答 t")) {
-				Autoreply.sendMessage(fromGroup, fromQQ, userMap.get(fromQQ) ? "回答正确": "回答错误");
+				boolean ans = userMap.get(fromQQ);
+				Autoreply.sendMessage(fromGroup, fromQQ,ans  ? "回答正确": "回答错误");
 				userMap.remove(fromQQ);
+				//if(ans){
+				//	Autoreply.ins.faithManager.addFaith(fromQQ,1);
+				//}
 			} else if (msg.equalsIgnoreCase("-问答回答 f")) {
-				Autoreply.sendMessage(fromGroup, fromQQ, userMap.get(fromQQ) ? "回答错误": "回答正确");
+				boolean ans = userMap.get(fromQQ);
+				Autoreply.sendMessage(fromGroup, fromQQ, ans ? "回答错误": "回答正确");
 				userMap.remove(fromQQ);
+				//if(!ans){
+				//	Autoreply.ins.faithManager.addFaith(fromQQ,1);
+				//}
 			}
 			return true;
 		}

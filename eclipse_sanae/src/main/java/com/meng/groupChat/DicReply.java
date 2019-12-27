@@ -11,7 +11,7 @@ import java.util.*;
 import java.util.regex.*;
 
 public class DicReply {
-
+	public static DicReply ins;
     private HashMap<Long, DicReplyGroup> groupMap = new HashMap<>();
 	private HashMap<String, ArrayList<String>> dic = new HashMap<>();
 	private boolean regexMode = false;
@@ -78,7 +78,12 @@ public class DicReply {
 		if (checkPublicDic(group, qq, msg)) {
 			return true;
 		}
-		return groupMap.get(group).checkMsg(group, qq, msg);
+		DicReplyGroup drg=groupMap.get(group);
+		if (drg == null) {
+			drg = new DicReplyGroup(group);
+			groupMap.put(group, drg);
+		}
+		return drg.checkMsg(group, qq, msg);
 	}
 
 	private boolean checkPublicDic(long group, long qq, String msg) {

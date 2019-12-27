@@ -8,6 +8,7 @@ import java.nio.charset.*;
 import java.util.*;
 
 public class FaithManager {
+	public static FaithManager ins;
 	private HashMap<Long, Integer> faithMap = new HashMap<>();
 	private File file;
 

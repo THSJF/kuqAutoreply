@@ -7,6 +7,7 @@ import com.meng.tools.override.*;
 import com.sobte.cqp.jcq.entity.*;
 import java.util.*;
 import java.util.concurrent.*;
+import com.meng.groupChat.*;
 
 public class AdminMessageProcessor {
 	private MyLinkedHashMap<String,String> masterPermission=new MyLinkedHashMap<>();
@@ -52,7 +53,7 @@ public class AdminMessageProcessor {
 			}
 			if (msg.equalsIgnoreCase("-留言查看 t")) {
 				SanaeConfigJavaBean.ReportBean rb = ConfigManager.ins.getReport();
-				Autoreply.ins.faithManager.addFaith(rb.q, 5);
+				FaithManager.ins.addFaith(rb.q, 5);
 				ConfigManager.ins.removeReport();
 				MessageWaitManager.ins.addTip(rb.q, String.format("%d在%s的留言「%s」已经处理,获得5信仰奖励", rb.q, Tools.CQ.getTime(rb.t), rb.c));
 				Autoreply.sendMessage(fromGroup, 0, "处理成功");
@@ -76,7 +77,7 @@ public class AdminMessageProcessor {
 			}
 			if (msg.equalsIgnoreCase("-反馈查看 t")) {
 				SanaeConfigJavaBean.BugReportBean brb = ConfigManager.ins.getBugReport();
-				Autoreply.ins.faithManager.addFaith(brb.q, 10);
+				FaithManager.ins.addFaith(brb.q, 10);
 				ConfigManager.ins.removeBugReport();
 				MessageWaitManager.ins.addTip(brb.q, String.format("%d在%s的反馈「%s」已经处理,获得10信仰奖励", brb.q, Tools.CQ.getTime(brb.t), brb.c));
 				Autoreply.sendMessage(fromGroup, 0, "处理成功");
@@ -195,12 +196,12 @@ public class AdminMessageProcessor {
 				for (int i=0;i < arr.length;++i) {
 					arr[i] = array[i + 2];
 				}
-				Autoreply.ins.dicReply.addKV(fromGroup, array[1], arr);
+				DicReply.ins.addKV(fromGroup, array[1], arr);
 				Autoreply.sendMessage(fromGroup, fromQQ, "KV已添加");
 				return true;
 			}
 			if (msg.startsWith("-removeDic ")) {
-				Autoreply.ins.dicReply.removeK(fromGroup, msg.substring(11));
+				DicReply.ins.removeK(fromGroup, msg.substring(11));
 				Autoreply.sendMessage(fromGroup, fromQQ, "Key已移除");
 				return true;
 			}
@@ -219,12 +220,12 @@ public class AdminMessageProcessor {
 				}
 			}
 			if (msg.equals("-发言数据")) {
-				HashMap<Integer,Integer> hashMap = Autoreply.ins.groupCounter.getSpeak(fromGroup, Tools.CQ.getDate());
+				HashMap<Integer,Integer> hashMap = GroupCounter.ins.getSpeak(fromGroup, Tools.CQ.getDate());
 				if (hashMap == null || hashMap.size() == 0) {
 					Autoreply.sendMessage(fromGroup, 0, "无数据");
 					return true;
 				}
-				StringBuilder sb=new StringBuilder(String.format("群内共有%d条消息,今日消息情况:\n", Autoreply.ins.groupCounter.groupsMap.get(fromGroup).all));
+				StringBuilder sb=new StringBuilder(String.format("群内共有%d条消息,今日消息情况:\n", GroupCounter.ins.groupsMap.get(fromGroup).all));
 				for (int i=0;i < 24;++i) {
 					if (hashMap.get(i) == null) {
 						continue;
@@ -239,12 +240,12 @@ public class AdminMessageProcessor {
 					Autoreply.sendMessage(fromGroup, 0, "日期格式错误");
 					return true;
 				}
-				HashMap<Integer,Integer> hashMap = Autoreply.ins.groupCounter.getSpeak(fromGroup, msg.substring(6));
+				HashMap<Integer,Integer> hashMap = GroupCounter.ins.getSpeak(fromGroup, msg.substring(6));
 				if (hashMap == null || hashMap.size() == 0) {
 					Autoreply.sendMessage(fromGroup, 0, "无数据");
 					return true;
 				}
-				StringBuilder sb=new StringBuilder(String.format("群内共有%d条消息,今日消息情况:\n", Autoreply.ins.groupCounter.groupsMap.get(fromGroup).all));
+				StringBuilder sb=new StringBuilder(String.format("群内共有%d条消息,今日消息情况:\n", GroupCounter.ins.groupsMap.get(fromGroup).all));
 				for (int i=0;i < 24;++i) {
 					if (hashMap.get(i) == null) {
 						continue;

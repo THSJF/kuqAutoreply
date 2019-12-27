@@ -2,16 +2,17 @@ package com.meng.messageProcess;
 import com.meng.*;
 import java.util.concurrent.*;
 
-public class MessageTooManyManager {
-	public ConcurrentHashMap<Long,MessageTooManyBean> msgMap=new ConcurrentHashMap<>();
+public class MessageFireWall {
+	public static MessageFireWall ins;
+	public ConcurrentHashMap<Long,FireWallBean> msgMap=new ConcurrentHashMap<>();
 
-	public MessageTooManyManager() {
+	public MessageFireWall() {
 		Autoreply.ins.threadPool.execute(new Runnable(){
 
 				@Override
 				public void run() {
 					while (true) {
-						for (MessageTooManyBean mb:msgMap.values()) {
+						for (FireWallBean mb:msgMap.values()) {
 							mb.lastSeconedMsgs = 0;
 						}
 						try {
@@ -22,10 +23,10 @@ public class MessageTooManyManager {
 			});
 	}
 
-	public boolean checkMsgTooMany(long fromGroup, long fromQQ, String msg) {
-		MessageTooManyBean mtmb=msgMap.get(fromQQ);
+	public boolean check(long fromGroup, long fromQQ, String msg) {
+		FireWallBean mtmb=msgMap.get(fromQQ);
 		if (mtmb == null) {
-			mtmb = new MessageTooManyBean();
+			mtmb = new FireWallBean();
 			msgMap.put(fromQQ, mtmb);
 		}
 		//发言间隔过短
@@ -70,7 +71,7 @@ public class MessageTooManyManager {
 		return false;
 	}
 	
-	class MessageTooManyBean {
+	private class FireWallBean {
 		public long qq;//qq
 		public long lastSpeakTimeStamp;//最后一次发言时间
 		public long timeSubLowTimes;//最后两次发言时间差过短次数

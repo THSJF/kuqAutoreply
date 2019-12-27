@@ -9,6 +9,7 @@ import java.nio.charset.*;
 import java.util.*;
 
 public class GroupCounter {
+	public static GroupCounter ins;
 	public HashMap<Long,GroupSpeak> groupsMap = new HashMap<>(32);
 	public File file;
 	public GroupCounter() {

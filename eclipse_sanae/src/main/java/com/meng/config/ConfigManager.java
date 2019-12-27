@@ -88,15 +88,11 @@ public class ConfigManager extends WebSocketClient {
 							Autoreply.ins.spellCollect = new SpellCollect();
 							Autoreply.ins.diceImitate = new DiceImitate();
 							Autoreply.ins.threadPool.execute(Autoreply.ins.timeTip);
-							Autoreply.ins.faithManager = new FaithManager();
-							Autoreply.ins.messageTooManyManager = new MessageTooManyManager();
-							Autoreply.ins.dicReply = new DicReply();
+							FaithManager.ins = new FaithManager();
+							MessageFireWall.ins = new MessageFireWall();
+							DicReply.ins = new DicReply();
 							MessageWaitManager.ins = new MessageWaitManager();
 							List<Group> groupList=Autoreply.CQ.getGroupList();
-							for (Group g:groupList) {
-								Autoreply.ins.dicReply.addReply(g.getId());
-								RepeaterManager.ins.addRepeater(g.getId());
-							}
 							for (Group g:groupList) {
 								List<com.sobte.cqp.jcq.entity.Member> mlist=Autoreply.CQ.getGroupMemberList(g.getId());
 								for (com.sobte.cqp.jcq.entity.Member m:mlist) {

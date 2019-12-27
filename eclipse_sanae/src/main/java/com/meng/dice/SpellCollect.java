@@ -89,7 +89,7 @@ public class SpellCollect {
 			Autoreply.sendMessage(fromGroup, 0, String.format("%s获得了10信仰和 %s", ConfigManager.ins.getNickName(fromQQ), sc.n));
 			saveSpellConfig();
 			checkArchievement(fromGroup, fromQQ);
-			Autoreply.ins.faithManager.addFaith(fromQQ, 10);
+			FaithManager.ins.addFaith(fromQQ, 10);
 			todaySign.add(fromQQ);
 			saveSignConfig();
 			return true;
@@ -125,7 +125,7 @@ public class SpellCollect {
 			return true;	
 		}
 		if (msg.equals("-faith")) {
-			Autoreply.sendMessage(fromGroup, 0, "你的信仰是:" + Autoreply.ins.faithManager.getFaithCount(fromQQ));
+			Autoreply.sendMessage(fromGroup, 0, "你的信仰是:" + FaithManager.ins.getFaithCount(fromQQ));
 			return true;
 		}
 		return false;
@@ -142,7 +142,7 @@ public class SpellCollect {
 			if (ac.getNewArchievement(ab, gotSpell)) {
 				ab.addArchievement(ac.archNum);
 				Autoreply.sendMessage(fromGroup, toQQ, "获得成就:" + ac.name + "\n获得奖励:" + ac.faith + "\n条件:" + ac.describe);	
-				Autoreply.ins.faithManager.addFaith(toQQ, ac.faith);
+				FaithManager.ins.addFaith(toQQ, ac.faith);
 			}
 		}
 		saveArchiConfig();

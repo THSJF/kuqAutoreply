@@ -152,7 +152,7 @@ public class MsgRunnable implements Runnable {
 		if (SeqManager.ins.check(fromGroup, fromQQ, msg)) {
 			return;
 		}
-		if (Autoreply.ins.dicReply.check(fromGroup, fromQQ, msg)) {
+		if (DicReply.ins.check(fromGroup, fromQQ, msg)) {
 			return;
 		}
 	}
