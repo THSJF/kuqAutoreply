@@ -64,8 +64,8 @@ public class AdminMessageProcessor {
 			}
 			if (msg.equalsIgnoreCase("-留言查看 w")) {
 				SanaeConfigJavaBean.ReportBean rb = ConfigManager.ins.getReport();
-				ConfigManager.ins.reportToLast();
 				MessageWaitManager.ins.addTip(rb.q, String.format("%d在%s的留言「%s」已经处理,开发者认为目前还不是处理此留言的时候", rb.q, Tools.CQ.getTime(rb.t), rb.c));
+				ConfigManager.ins.reportToLast();
 				Autoreply.sendMessage(fromGroup, 0, "处理成功");
 				return true;
 			}
@@ -88,8 +88,8 @@ public class AdminMessageProcessor {
 			}
 			if (msg.equalsIgnoreCase("-反馈查看 w")) {
 				SanaeConfigJavaBean.BugReportBean brb = ConfigManager.ins.getBugReport();
-				ConfigManager.ins.bugReportToLast();
 				MessageWaitManager.ins.addTip(brb.q, String.format("%d在%s的反馈「%s」已经处理,开发者认为暂时不需要处理此问题", brb.q, Tools.CQ.getTime(brb.t), brb.c));
+				ConfigManager.ins.bugReportToLast();
 				Autoreply.sendMessage(fromGroup, 0, "处理成功");
 				return true;
 			}

@@ -43,9 +43,7 @@ public class SanaeConfigJavaBean {
 		if (reportList.size() == 0) {
 			return;
 		}
-		ReportBean rb = reportList.get(0);
-		reportList.remove(0);
-		reportList.add(rb);
+		reportList.add(reportList.remove(0));
 		ConfigManager.ins.saveSanaeConfig();
 	}
 
@@ -68,9 +66,7 @@ public class SanaeConfigJavaBean {
 		if (bugReportList.size() == 0) {
 			return;
 		}
-		BugReportBean brb = bugReportList.get(0);
-		bugReportList.remove(0);
-		bugReportList.add(brb);
+		bugReportList.add(bugReportList.remove(0));
 		ConfigManager.ins.saveSanaeConfig();
 	}
 
