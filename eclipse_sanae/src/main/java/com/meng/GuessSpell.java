@@ -10,6 +10,7 @@ public class GuessSpell {
 	public GuessSpell() {
 		spellDescribe.put("紫奥义", "自机无敌时符卡会暂停");
 		spellDescribe.put("战栗的寒冷之星", "简单(?)的左右左右");
+		spellDescribe.put("纯粹的疯狂", "完全由曲线激光组成的角随固");
 	}
 
 	public boolean check(long fromGroup, long fromQQ, String msg) {
@@ -23,7 +24,7 @@ public class GuessSpell {
 		} else if (msg.startsWith("-猜符卡回答 ")) {
 			if (userMap.get(fromQQ) != null) {
 				String result=TouHouDataManager.ins.getSpellCard(msg.substring(7)).n;
-				if (userMap.get(fromQQ).equals(result)) {
+				if (userMap.get(fromQQ).replaceAll("[ 「」]", "").equals(result.replaceAll("[ 「」]", ""))) {
 					Autoreply.sendMessage(fromGroup, fromQQ, "回答正确\n" + result);
 				} else {
 					Autoreply.sendMessage(fromGroup, fromQQ, "回答错误\n" + result);

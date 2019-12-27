@@ -93,8 +93,8 @@ public class AdminMessageProcessor {
 				Autoreply.sendMessage(fromGroup, 0, "处理成功");
 				return true;
 			}
-			if (msg.startsWith("群广播:")) {
-				String broadcast=msg.substring(4);
+			if (msg.startsWith("-群广播:")) {
+				String broadcast=msg.substring(5);
 				HashSet<Group> hs=new HashSet<>();
 				List<Group> glist=Autoreply.CQ.getGroupList();
 				for (Group g:glist) {

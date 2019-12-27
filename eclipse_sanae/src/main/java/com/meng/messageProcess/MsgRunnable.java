@@ -133,7 +133,10 @@ public class MsgRunnable implements Runnable {
 		if (RepeaterManager.ins.check(fromGroup, fromQQ, msg)) {// 复读
 			return;
 		}
-		if(Autoreply.ins.guessSpell.check(fromGroup,fromQQ,msg)){
+		if(GuessSpell.ins.check(fromGroup,fromQQ,msg)){
+			return;
+		}
+		if(TouHouKnowledge.ins.check(fromGroup,fromQQ,msg)){
 			return;
 		}
 		if (Autoreply.ins.CQcodeManager.check(fromGroup, msg)) {// 特殊信息(签到分享等)
