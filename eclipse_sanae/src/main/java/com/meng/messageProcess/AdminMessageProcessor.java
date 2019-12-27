@@ -30,6 +30,7 @@ public class AdminMessageProcessor {
 		//userPermission.put("-int [int] [+|-|*|/|<<|>>|>>>|%|^|&||] [int]", "int运算(溢出)");
 		userPermission.put("-留言", "给开发者留言");
 		userPermission.put("-问题反馈", "给开发者反馈问题,使用时发现错误内容或者错误的消息处理可以使用此项向开发者反馈,其他内容请使用留言功能");
+		userPermission.put("-问答添加 [问题] ［t|f］", "添加问答问题,审核通过后将会加入题库");
 		adminPermission.put(".dissmiss 2528419891", "让早苗退出此群");
 
 		masterPermission.putAll(adminPermission);
