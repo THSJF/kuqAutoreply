@@ -29,25 +29,12 @@ public class FaithManager {
 					backupData();
 				}
 			});
-		store.put("点赞", "每天上午会为你点赞");
+		store.put("-订阅b站 用户uid", "用户更新时和直播时会提示(用户/信仰/天)");
+		store.put("-赞我", "QQ名片赞10次(2信仰/10次)");
 	}
 	public boolean check(long fromGroup, long fromQQ, String msg) {
 		if (msg.equals("-信仰商店")) {
 			Autoreply.sendMessage(fromGroup, 0, store.toString());
-			return true;
-		}
-		if (msg.startsWith("-信仰商店 兑换")) {
-			String goods=msg.substring(9);
-			int fun=0;
-			switch (goods) {
-				case "点赞":
-					fun = FaithUser.zan;
-					break;
-			}
-			ConfigManager.ins.addFunctionUse(fromQQ, fun);
-			ConfigManager.ins.SanaeConfig.zanSet.add(fromQQ);
-			ConfigManager.ins.saveSanaeConfig();
-			Autoreply.sendMessage(fromGroup, 0, "成功兑换" + goods);
 			return true;
 		}
 		return false;
@@ -84,7 +71,7 @@ public class FaithManager {
 		return false;
 	}
 
-	public int getFaithCount(long fromQQ) {
+	public int getFaith(long fromQQ) {
 		if (faithMap.get(fromQQ) == null) {
 			return 0;
 		}

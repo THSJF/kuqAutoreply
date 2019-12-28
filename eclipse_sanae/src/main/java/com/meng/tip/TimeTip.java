@@ -5,6 +5,7 @@ import com.meng.config.*;
 import java.util.*;
 import com.sobte.cqp.jcq.entity.*;
 import com.meng.tools.*;
+import com.meng.bilibili.*;
 
 public class TimeTip implements Runnable {
 
@@ -38,16 +39,20 @@ public class TimeTip implements Runnable {
 						Autoreply.CQ.sendLikeV2(l, 10);
 					}
 					for (long l : ConfigManager.ins.SanaeConfig.zanSet) {
-						if (FaithManager.ins.getFaithCount(l) < 1) {
-							ConfigManager.ins.SanaeConfig.zanSet.remove(l);
-						} else {
-							Autoreply.CQ.sendLikeV2(l, 10);
-							FaithManager.ins.subFaith(l, 1);
+						Autoreply.CQ.sendLikeV2(l, 10);
+					}
+				}
+				if (c.get(Calendar.HOUR_OF_DAY) == 0) {
+					for (BiliMaster bm:ConfigManager.ins.SanaeConfig.biliMaster.values()) {
+						for (BiliMaster.FansInGroup fans:bm.fans) {
+							if (FaithManager.ins.getFaith(fans.qq) > 0) {
+								FaithManager.ins.subFaith(fans.qq, 1);
+							}
 						}
 					}
-				}	
-                if (c.get(Calendar.HOUR_OF_DAY) == 22) {
-                    Autoreply.ins.threadPool.execute(new Runnable() {
+				}
+				if (c.get(Calendar.HOUR_OF_DAY) == 22) {
+					Autoreply.ins.threadPool.execute(new Runnable() {
 							@Override
 							public void run() {
 								List<Group> groupList=Autoreply.CQ.getGroupList();
@@ -64,9 +69,9 @@ public class TimeTip implements Runnable {
 								Autoreply.sleeping = true;
 							}
 						});
-                }
-                if (c.get(Calendar.HOUR_OF_DAY) == 6) {
-                    Autoreply.ins.threadPool.execute(new Runnable() {
+				}
+				if (c.get(Calendar.HOUR_OF_DAY) == 6) {
+					Autoreply.ins.threadPool.execute(new Runnable() {
 							@Override
 							public void run() {
 								Autoreply.sleeping = false;
@@ -83,13 +88,13 @@ public class TimeTip implements Runnable {
 								}
 							}
 						});
-                }          
-            }
-            try {
-                Thread.sleep(60000);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-        }
+				}          
+			}
+			try {
+				Thread.sleep(60000);
+			} catch (InterruptedException e) {
+				e.printStackTrace();
+			}
+		}
     }
 }

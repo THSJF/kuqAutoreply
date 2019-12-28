@@ -18,6 +18,8 @@ import java.util.concurrent.*;
 import org.java_websocket.client.*;
 import org.java_websocket.exceptions.*;
 import org.java_websocket.handshake.*;
+import com.meng.bilibili.main.*;
+import com.meng.bilibili.live.*;
 
 public class ConfigManager extends WebSocketClient {
 	public static ConfigManager ins;
@@ -92,6 +94,8 @@ public class ConfigManager extends WebSocketClient {
 							MessageFireWall.ins = new MessageFireWall();
 							DicReply.ins = new DicReply();
 							MessageWaitManager.ins = new MessageWaitManager();
+							Autoreply.ins.threadPool.execute(new UpdateListener());
+							Autoreply.ins.threadPool.execute(new LiveListener());
 							List<Group> groupList=Autoreply.CQ.getGroupList();
 							for (Group g:groupList) {
 								List<com.sobte.cqp.jcq.entity.Member> mlist=Autoreply.CQ.getGroupMemberList(g.getId());
@@ -388,33 +392,6 @@ public class ConfigManager extends WebSocketClient {
 
 	public SanaeConfigJavaBean.BugReportBean getBugReport() {
 		return SanaeConfig.getBugReport();
-	}
-
-	public ArrayList<Long> getFunctionUser(int function) {
-		ArrayList<Long> retu=new ArrayList<Long>();
-		for (Map.Entry<Long,FaithUser> entry:SanaeConfig.funcUse.entrySet()) {
-			if (entry.getValue().isUsing(function)) {
-				retu.add(entry.getKey());
-			}
-		}
-		return retu;
-	}
-
-	public void addFunctionUse(long qq, int function) {
-		FaithUser fu=SanaeConfig.funcUse.get(qq);
-		if (fu == null) {
-			fu = new FaithUser();
-			SanaeConfig.funcUse.put(qq, fu);
-		}
-		fu.addUse(function);
-	}
-
-	public void removeFunctionUse(long qq, int function) {
-		FaithUser fu=SanaeConfig.funcUse.get(qq);
-		if (fu == null) {
-			return;
-		}
-		fu.subUse(function);
 	}
 
 	public void send(final SanaeDataPack sdp) {

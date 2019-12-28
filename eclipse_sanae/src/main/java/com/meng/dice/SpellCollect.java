@@ -125,7 +125,7 @@ public class SpellCollect {
 			return true;	
 		}
 		if (msg.equals("-faith")) {
-			Autoreply.sendMessage(fromGroup, 0, "你的信仰是:" + FaithManager.ins.getFaithCount(fromQQ));
+			Autoreply.sendMessage(fromGroup, 0, "你的信仰是:" + FaithManager.ins.getFaith(fromQQ));
 			return true;
 		}
 		return false;

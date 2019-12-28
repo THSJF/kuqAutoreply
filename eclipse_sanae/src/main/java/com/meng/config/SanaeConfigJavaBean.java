@@ -1,9 +1,11 @@
 package com.meng.config;
 
+import com.meng.*;
+import com.meng.bilibili.*;
 import com.meng.messageProcess.*;
 import com.meng.tools.*;
 import java.util.*;
-import com.meng.*;
+import java.util.concurrent.*;
 
 public class SanaeConfigJavaBean {
 	public HashMap<Long,String> welcomeMap = new HashMap<>();
@@ -15,7 +17,7 @@ public class SanaeConfigJavaBean {
 	public ArrayList<MessageWaitManager.MessageWait> delayMsg=new ArrayList<>();
 	public HashMap<String,Boolean> ques=new HashMap<>();
 	public ArrayList<AddQuestionBean> quesWait=new ArrayList<>();
-	public HashMap<Long,FaithUser> funcUse = new HashMap<>();
+	public ConcurrentHashMap<Integer,BiliMaster> biliMaster = new ConcurrentHashMap<>();
 	
 	void addReport(long fromGroup, long fromQQ, String content) {
 		ReportBean report=new ReportBean();

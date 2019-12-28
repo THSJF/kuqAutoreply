@@ -5,6 +5,7 @@ import com.meng.config.*;
 import com.meng.gameData.TouHou.*;
 import com.meng.groupChat.*;
 import com.meng.tools.*;
+import com.meng.bilibili.*;
 
 public class MsgRunnable implements Runnable {
     private int msgId = 0;
@@ -43,7 +44,19 @@ public class MsgRunnable implements Runnable {
 			Autoreply.sendMessage(fromGroup, fromQQ, "反馈成功");
 			return;
 		}
+		if (msg.equals("-赞我")) {
+			if (FaithManager.ins.getFaith(fromQQ) > 1) {
+				Autoreply.CQ.sendLikeV2(fromQQ, 10);
+				FaithManager.ins.subFaith(fromQQ, 2);
+				Autoreply.sendMessage(fromGroup, fromQQ, "点赞完成");
+			} else {
+				Autoreply.sendMessage(fromGroup, fromQQ, "你的信仰不足以进行此操作");
+			}
+		}
 		MessageWaitManager.ins.check(fromGroup, fromQQ);
+		if (BiliBiliMain.ins.check(fromGroup, fromQQ, msg)) {
+			return;
+		}
         if (ConfigManager.ins.SanaeConfig.botOff.contains(fromGroup)) {
             return;
         }

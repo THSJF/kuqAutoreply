@@ -13,6 +13,7 @@ import com.sobte.cqp.jcq.event.*;
 import java.net.*;
 import java.util.*;
 import java.util.concurrent.*;
+import com.meng.bilibili.*;
 
 public class Autoreply extends JcqAppAbstract implements ICQVer, IMsg, IRequest {
 
@@ -68,6 +69,7 @@ public class Autoreply extends JcqAppAbstract implements ICQVer, IMsg, IRequest 
 		}
 		GuessSpell.ins = new GuessSpell();
 		TouHouKnowledge.ins = new TouHouKnowledge();
+		BiliBiliMain.ins = new BiliBiliMain();
 		System.out.println("加载完成,用时" + (System.currentTimeMillis() - startTime));
 		return 0;
     }
