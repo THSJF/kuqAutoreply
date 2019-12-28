@@ -22,8 +22,11 @@ public class MonthChart {
 		TimeSeries timeseries = new TimeSeries("你群发言");
 		Calendar c = Calendar.getInstance();
 		for (int i=0;i <= c.getActualMaximum(Calendar.DAY_OF_MONTH);++i) {
-			c.set(Calendar.DAY_OF_MONTH, i + 1);
+			c.set(Calendar.DAY_OF_MONTH, i + 2);
 			HashMap<Integer,Integer> everyHour=gs.hour.get(Tools.CQ.getDate(c.getTimeInMillis()));
+			if(everyHour==null){
+				continue;
+			}
 			int oneDay=0;
 			for (int oneHour:everyHour.values()) {
 				oneDay += oneHour;
@@ -33,10 +36,10 @@ public class MonthChart {
 		TimeSeriesCollection timeseriescollection = new TimeSeriesCollection();  
 		timeseriescollection.addSeries(timeseries);
 
-		JFreeChart jfreechart = ChartFactory.createTimeSeriesChart("你群今日发言", "时间", "条", timeseriescollection, true, true, true);  
+		JFreeChart jfreechart = ChartFactory.createTimeSeriesChart("你群本月发言", "时间", "条", timeseriescollection, true, true, true);  
 		XYPlot xyplot = (XYPlot) jfreechart.getPlot();  
 		DateAxis dateaxis = (DateAxis) xyplot.getDomainAxis();  
-		dateaxis.setDateFormatOverride(new SimpleDateFormat("MM:dd"));  
+		dateaxis.setDateFormatOverride(new SimpleDateFormat("dd"));  
 		ChartPanel frame1 = new ChartPanel(jfreechart, true);  
 		dateaxis.setLabelFont(new Font("黑体", Font.BOLD, 14)); //水平底部标题  		
 		dateaxis.setTickLabelFont(new Font("宋体", Font.BOLD, 12));//垂直标题  
