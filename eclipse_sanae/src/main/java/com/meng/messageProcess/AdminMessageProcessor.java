@@ -8,6 +8,7 @@ import com.sobte.cqp.jcq.entity.*;
 import java.util.*;
 import java.util.concurrent.*;
 import com.meng.groupChat.*;
+import java.io.*;
 
 public class AdminMessageProcessor {
 	private MyLinkedHashMap<String,String> masterPermission=new MyLinkedHashMap<>();
@@ -43,12 +44,6 @@ public class AdminMessageProcessor {
 		Member m=Autoreply.CQ.getGroupMemberInfo(fromGroup, fromQQ);
 		boolean isGroupAdmin=m.getAuthority() > 1;
 		if (ConfigManager.ins.isMaster(fromQQ)) {
-			if(msg.equals("图表")){
-				if(Chartww.ins==null){
-					Chartww.ins=new Chartww();
-				}
-				Chartww.ins.check();
-			}
 			if (msg.equals("-help")) {
 				Autoreply.sendMessage(fromGroup, 0, masterPermission.toString());
 				return true;
@@ -241,6 +236,11 @@ public class AdminMessageProcessor {
 					sb.append(String.format("%d:00-%d:00  共%d条消息\n", i, i + 1, hashMap.get(i)));
 				}
 				Autoreply.sendMessage(fromGroup, 0, sb.toString());
+				try {
+					Autoreply.sendMessage(fromGroup, 0, Autoreply.ins.CC.image(Chartww.ins.check(GroupCounter.ins.groupsMap.get(fromGroup))));
+				} catch (IOException e) {
+					
+				}
 				return true;
 			}
 			if (msg.startsWith("-发言数据 ")) {
