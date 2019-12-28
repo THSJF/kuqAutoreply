@@ -68,9 +68,7 @@ public class Autoreply extends JcqAppAbstract implements ICQVer, IMsg, IRequest 
 		}
 		GuessSpell.ins = new GuessSpell();
 		TouHouKnowledge.ins = new TouHouKnowledge();
-		Chartww.ins=new Chartww();
-		MonthChart.ins = new MonthChart();
-        System.out.println("加载完成,用时" + (System.currentTimeMillis() - startTime));
+		System.out.println("加载完成,用时" + (System.currentTimeMillis() - startTime));
 		return 0;
     }
 
