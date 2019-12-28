@@ -47,6 +47,9 @@ public class MsgRunnable implements Runnable {
         if (ConfigManager.ins.SanaeConfig.botOff.contains(fromGroup)) {
             return;
         }
+		if (FaithManager.ins.check(fromGroup, fromQQ, msg)) {
+			return;
+		}
 		if (msg.startsWith("-int ")) {
 			try {
 				String[] args=msg.split(" ", 4);
@@ -133,10 +136,10 @@ public class MsgRunnable implements Runnable {
 		if (RepeaterManager.ins.check(fromGroup, fromQQ, msg)) {// 复读
 			return;
 		}
-		if(GuessSpell.ins.check(fromGroup,fromQQ,msg)){
+		if (GuessSpell.ins.check(fromGroup, fromQQ, msg)) {
 			return;
 		}
-		if(TouHouKnowledge.ins.check(fromGroup,fromQQ,msg)){
+		if (TouHouKnowledge.ins.check(fromGroup, fromQQ, msg)) {
 			return;
 		}
 		if (Autoreply.ins.CQcodeManager.check(fromGroup, msg)) {// 特殊信息(签到分享等)

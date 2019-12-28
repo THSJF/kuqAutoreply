@@ -390,6 +390,33 @@ public class ConfigManager extends WebSocketClient {
 		return SanaeConfig.getBugReport();
 	}
 
+	public ArrayList<Long> getFunctionUser(int function) {
+		ArrayList<Long> retu=new ArrayList<Long>();
+		for (Map.Entry<Long,FaithUser> entry:SanaeConfig.funcUse.entrySet()) {
+			if (entry.getValue().isUsing(function)) {
+				retu.add(entry.getKey());
+			}
+		}
+		return retu;
+	}
+
+	public void addFunctionUse(long qq, int function) {
+		FaithUser fu=SanaeConfig.funcUse.get(qq);
+		if (fu == null) {
+			fu = new FaithUser();
+			SanaeConfig.funcUse.put(qq, fu);
+		}
+		fu.addUse(function);
+	}
+
+	public void removeFunctionUse(long qq, int function) {
+		FaithUser fu=SanaeConfig.funcUse.get(qq);
+		if (fu == null) {
+			return;
+		}
+		fu.subUse(function);
+	}
+
 	public void send(final SanaeDataPack sdp) {
 		Autoreply.ins.threadPool.execute(new Runnable(){
 

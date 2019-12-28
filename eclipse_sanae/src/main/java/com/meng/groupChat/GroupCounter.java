@@ -119,7 +119,7 @@ public class GroupCounter {
 			}
 			TimeSeriesCollection timeseriescollection = new TimeSeriesCollection();  
 			timeseriescollection.addSeries(timeseries);
-			JFreeChart jfreechart = ChartFactory.createTimeSeriesChart("你群今日发言", "时间", "条", timeseriescollection, true, true, true);  
+			JFreeChart jfreechart = ChartFactory.createTimeSeriesChart("你群今日发言", "时间", "", timeseriescollection, true, true, true);  
 			XYPlot xyplot = (XYPlot) jfreechart.getPlot();  
 			DateAxis dateaxis = (DateAxis) xyplot.getDomainAxis();  
 			dateaxis.setDateFormatOverride(new SimpleDateFormat("HH:mm"));  

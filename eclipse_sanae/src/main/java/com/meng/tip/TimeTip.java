@@ -38,7 +38,12 @@ public class TimeTip implements Runnable {
 						Autoreply.CQ.sendLikeV2(l, 10);
 					}
 					for (long l : ConfigManager.ins.SanaeConfig.zanSet) {
-						Autoreply.CQ.sendLikeV2(l, 10);
+						if (FaithManager.ins.getFaithCount(l) < 1) {
+							ConfigManager.ins.SanaeConfig.zanSet.remove(l);
+						} else {
+							Autoreply.CQ.sendLikeV2(l, 10);
+							FaithManager.ins.subFaith(l, 1);
+						}
 					}
 				}	
                 if (c.get(Calendar.HOUR_OF_DAY) == 22) {

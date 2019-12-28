@@ -2,14 +2,17 @@ package com.meng.tools;
 
 import com.google.gson.reflect.*;
 import com.meng.*;
+import com.meng.tools.override.*;
 import java.io.*;
 import java.lang.reflect.*;
 import java.nio.charset.*;
 import java.util.*;
+import com.meng.config.*;
 
 public class FaithManager {
 	public static FaithManager ins;
 	private HashMap<Long, Integer> faithMap = new HashMap<>();
+	private MyLinkedHashMap<String,String> store=new MyLinkedHashMap<>();
 	private File file;
 
 	public FaithManager() {
@@ -26,6 +29,28 @@ public class FaithManager {
 					backupData();
 				}
 			});
+		store.put("点赞", "每天上午会为你点赞");
+	}
+	public boolean check(long fromGroup, long fromQQ, String msg) {
+		if (msg.equals("-信仰商店")) {
+			Autoreply.sendMessage(fromGroup, 0, store.toString());
+			return true;
+		}
+		if (msg.startsWith("-信仰商店 兑换")) {
+			String goods=msg.substring(9);
+			int fun=0;
+			switch (goods) {
+				case "点赞":
+					fun = FaithUser.zan;
+					break;
+			}
+			ConfigManager.ins.addFunctionUse(fromQQ, fun);
+			ConfigManager.ins.SanaeConfig.zanSet.add(fromQQ);
+			ConfigManager.ins.saveSanaeConfig();
+			Autoreply.sendMessage(fromGroup, 0, "成功兑换" + goods);
+			return true;
+		}
+		return false;
 	}
 
 	public void addFaith(long fromQQ, int faith) {
@@ -65,7 +90,7 @@ public class FaithManager {
 		}
 		return faithMap.get(fromQQ);
 	}
-	
+
 	private void saveData() {
 		try {
 			FileOutputStream fos = new FileOutputStream(file);

@@ -15,6 +15,7 @@ public class SanaeConfigJavaBean {
 	public ArrayList<MessageWaitManager.MessageWait> delayMsg=new ArrayList<>();
 	public HashMap<String,Boolean> ques=new HashMap<>();
 	public ArrayList<AddQuestionBean> quesWait=new ArrayList<>();
+	public HashMap<Long,FaithUser> funcUse = new HashMap<>();
 	
 	void addReport(long fromGroup, long fromQQ, String content) {
 		ReportBean report=new ReportBean();

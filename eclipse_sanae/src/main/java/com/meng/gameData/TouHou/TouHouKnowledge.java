@@ -1,5 +1,6 @@
-package com.meng;
+package com.meng.gameData.TouHou;
 
+import com.meng.*;
 import com.meng.config.*;
 import com.meng.messageProcess.*;
 import com.meng.tools.*;
