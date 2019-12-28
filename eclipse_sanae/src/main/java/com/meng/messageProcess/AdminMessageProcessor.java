@@ -237,12 +237,26 @@ public class AdminMessageProcessor {
 				}
 				Autoreply.sendMessage(fromGroup, 0, sb.toString());
 				try {
-					Autoreply.sendMessage(fromGroup, 0, Autoreply.ins.CC.image(Chartww.ins.check(GroupCounter.ins.groupsMap.get(fromGroup))));
+					File pic=Chartww.ins.check(GroupCounter.ins.groupsMap.get(fromGroup));
+					Autoreply.sendMessage(fromGroup, 0, Autoreply.ins.CC.image(pic));
+					pic.delete();
 				} catch (IOException e) {
-					
+					e.printStackTrace();
 				}
 				return true;
 			}
+
+			if (msg.equals("-本月发言数据")) {
+				try {
+					File pic=MonthChart.ins.check(GroupCounter.ins.groupsMap.get(fromGroup));
+					Autoreply.sendMessage(fromGroup, 0, Autoreply.ins.CC.image(pic));
+					pic.delete();
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+				return true;
+			}
+
 			if (msg.startsWith("-发言数据 ")) {
 				if (msg.length() != 16) {
 					Autoreply.sendMessage(fromGroup, 0, "日期格式错误");
