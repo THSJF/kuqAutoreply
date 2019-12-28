@@ -148,10 +148,10 @@ public class GroupCounter {
 		}
 		public File check(GroupCounter.GroupSpeak gs) {
 			TimeSeries timeseries = new TimeSeries("你群发言");
-			Calendar c = Calendar.getInstance();
-			for (int i=1;i <= c.getActualMaximum(Calendar.DAY_OF_MONTH);++i) {
-				c.set(Calendar.DAY_OF_MONTH, i);
-				HashMap<Integer,Integer> everyHour=gs.hour.get(Tools.CQ.getDate(c.getTimeInMillis()));
+			for (int i=-30;i < 1;++i) {
+				Calendar cal = Calendar.getInstance();
+				cal.add(Calendar.DAY_OF_MONTH, i);
+				HashMap<Integer,Integer> everyHour=gs.hour.get(Tools.CQ.getDate(cal.getTimeInMillis()));
 				int oneDay=0;
 				if (everyHour == null) {
 					oneDay = 0;
@@ -160,11 +160,11 @@ public class GroupCounter {
 						oneDay += oneHour;
 					}
 				}
-				timeseries.add(new Day(i, c.get(Calendar.MONTH) + 1, c.get(Calendar.YEAR)), oneDay);
+				timeseries.add(new Day(cal.get(Calendar.DAY_OF_MONTH), cal.get(Calendar.MONTH) + 1, cal.get(Calendar.YEAR)), oneDay);
 			}
 			TimeSeriesCollection timeseriescollection = new TimeSeriesCollection();  
 			timeseriescollection.addSeries(timeseries);
-			JFreeChart jfreechart = ChartFactory.createTimeSeriesChart("你群本月发言", "时间", "", timeseriescollection, true, true, true);  
+			JFreeChart jfreechart = ChartFactory.createTimeSeriesChart("你群30天发言", "时间", "", timeseriescollection, true, true, true);  
 			XYPlot xyplot = (XYPlot) jfreechart.getPlot();  
 			DateAxis dateaxis = (DateAxis) xyplot.getDomainAxis();  
 			dateaxis.setDateFormatOverride(new SimpleDateFormat("MM-dd"));  
@@ -184,6 +184,9 @@ public class GroupCounter {
 					480);
 			} catch (IOException e) {}
 			return pic;
-		}    
+		}
+
+
+
 	}
 }

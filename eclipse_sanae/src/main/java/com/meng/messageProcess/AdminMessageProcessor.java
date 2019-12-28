@@ -243,10 +243,6 @@ public class AdminMessageProcessor {
 				} catch (IOException e) {
 					e.printStackTrace();
 				}
-				return true;
-			}
-
-			if (msg.equals("-本月发言数据")) {
 				try {
 					File pic=GroupCounter.ins.mchart.check(GroupCounter.ins.groupsMap.get(fromGroup));
 					Autoreply.sendMessage(fromGroup, 0, Autoreply.ins.CC.image(pic));
@@ -256,7 +252,6 @@ public class AdminMessageProcessor {
 				}
 				return true;
 			}
-
 			if (msg.startsWith("-发言数据 ")) {
 				if (msg.length() != 16) {
 					Autoreply.sendMessage(fromGroup, 0, "日期格式错误");
