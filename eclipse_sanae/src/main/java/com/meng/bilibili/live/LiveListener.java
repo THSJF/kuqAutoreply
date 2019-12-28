@@ -54,7 +54,7 @@ public class LiveListener implements Runnable {
 		for (int i = 0, groupListSize = p.fans.size(); i < groupListSize; i++) {
             BiliMaster.FansInGroup fans = p.fans.get(i);
 			if (FaithManager.ins.getFaith(fans.qq) > 0) {
-				Autoreply.sendMessage(fans.group, 0, String.format("\n你关注的主播「%d」开播啦\n房间号:%d\n房间标题:%s\n分区:%s", Autoreply.CC.at(fans.qq), userName, p.roomID, data.get("title").getAsString(), data.get("parent_area_name").getAsString()));
+				Autoreply.sendMessage(fans.group, 0, String.format("\n你关注的主播「%s」开播啦\n房间号:%d\n房间标题:%s\n分区:%s", Autoreply.CC.at(fans.qq), userName, p.roomID, data.get("title").getAsString(), data.get("parent_area_name").getAsString()));
 				try {
 					Thread.sleep(1000);
 				} catch (InterruptedException e) {}
