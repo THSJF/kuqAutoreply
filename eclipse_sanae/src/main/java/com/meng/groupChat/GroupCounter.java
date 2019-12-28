@@ -149,15 +149,16 @@ public class GroupCounter {
 		public File check(GroupCounter.GroupSpeak gs) {
 			TimeSeries timeseries = new TimeSeries("你群发言");
 			Calendar c = Calendar.getInstance();
-			for (int i=0;i <= c.getActualMaximum(Calendar.DAY_OF_MONTH);++i) {
+			for (int i=1;i <= c.getActualMaximum(Calendar.DAY_OF_MONTH);++i) {
 				c.set(Calendar.DAY_OF_MONTH, i);
 				HashMap<Integer,Integer> everyHour=gs.hour.get(Tools.CQ.getDate(c.getTimeInMillis()));
-				if (everyHour == null) {
-					continue;
-				}
 				int oneDay=0;
-				for (int oneHour:everyHour.values()) {
-					oneDay += oneHour;
+				if (everyHour == null) {
+					oneDay = 0;
+				} else {
+					for (int oneHour:everyHour.values()) {
+						oneDay += oneHour;
+					}
 				}
 				timeseries.add(new Day(i, c.get(Calendar.MONTH) + 1, c.get(Calendar.YEAR)), oneDay);
 			}
