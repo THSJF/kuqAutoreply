@@ -43,12 +43,19 @@ public class AdminMessageProcessor {
 		Member m=Autoreply.CQ.getGroupMemberInfo(fromGroup, fromQQ);
 		boolean isGroupAdmin=m.getAuthority() > 1;
 		if (ConfigManager.ins.isMaster(fromQQ)) {
+			if(msg.equals("图表")){
+				if(Chartww.ins==null){
+					Chartww.ins=new Chartww();
+				}
+				Chartww.ins.check();
+			}
 			if (msg.equals("-help")) {
 				Autoreply.sendMessage(fromGroup, 0, masterPermission.toString());
 				return true;
 			}
 			if (msg.equals("-留言查看")) {
-				Autoreply.sendMessage(fromGroup, fromQQ, ConfigManager.ins.getReport().toString());
+				SanaeConfigJavaBean.ReportBean rb=ConfigManager.ins.getReport();
+				Autoreply.sendMessage(fromGroup, fromQQ, rb == null ?"无留言": rb.toString());
 				return true;
 			}
 			if (msg.equalsIgnoreCase("-留言查看 t")) {
@@ -72,7 +79,8 @@ public class AdminMessageProcessor {
 				return true;
 			}
 			if (msg.equals("-反馈查看")) {
-				Autoreply.sendMessage(fromGroup, fromQQ, ConfigManager.ins.getBugReport().toString());
+				SanaeConfigJavaBean.BugReportBean brb=ConfigManager.ins.getBugReport();
+				Autoreply.sendMessage(fromGroup, fromQQ, brb == null ?"无反馈": brb.toString());
 				return true;
 			}
 			if (msg.equalsIgnoreCase("-反馈查看 t")) {
