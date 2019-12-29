@@ -11,7 +11,7 @@ public class BiliBiliMain {
 
 	public boolean check(long fromGroup, long fromQQ, String msg) {
 		try {
-			if (msg.startsWith("-订阅b站 ")) {
+			if (msg.startsWith("-关注b站 ")) {
 				String uid=msg.substring(6);
 				String name=new JsonParser().parse(Tools.Network.getSourceCode("https://api.bilibili.com/x/space/acc/info?mid=" + uid + "&jsonp=jsonp")).getAsJsonObject().get("data").getAsJsonObject().get("name").getAsString();
 				BiliMaster bm=ConfigManager.ins.SanaeConfig.biliMaster.get(Integer.parseInt(uid));
@@ -28,7 +28,7 @@ public class BiliBiliMain {
 				}
 				bm.addFans(fromGroup, fromQQ);
 				ConfigManager.ins.saveSanaeConfig();
-				Autoreply.sendMessage(fromGroup, 0, String.format("订阅%s(uid:%d)成功", name, bm.uid));
+				Autoreply.sendMessage(fromGroup, 0, String.format("关注%s(uid:%d)成功", name, bm.uid));
 				return true;
 			}
 		} catch (Exception e) {
