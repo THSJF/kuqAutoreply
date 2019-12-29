@@ -21,31 +21,31 @@ public class UpdateListener implements Runnable {
                     NewArticleBean.Data.Articles articles = null;
                     try {
                         vlist = Autoreply.gson.fromJson(Tools.Network.getSourceCode("https://space.bilibili.com/ajax/member/getSubmitVideos?mid=" + updater.uid + "&page=1&pagesize=1").replace("\"3\":", "\"n3\":").replace("\"4\":", "\"n4\":"), NewVideoBean.class).data.vlist.get(0);
-                    } catch (Exception e) {
+						if (vlist != null) {
+							if (vlist.created > updater.lastVideo) {
+								if (updater.needTipVideo) {
+									tipVideo(updater, vlist);
+								} else {
+									updater.needTipVideo = true;
+								}
+								updater.lastVideo = vlist.created;
+							}
+						}
+					} catch (Exception e) {
                     }
                     try {
                         articles = Autoreply.gson.fromJson(Tools.Network.getSourceCode("http://api.bilibili.com/x/space/article?mid=" + updater.uid + "&pn=1&ps=1&sort=publish_time&jsonp=jsonp"), NewArticleBean.class).data.articles.get(0);
-                    } catch (Exception e) {
-                    }
-                    if (articles != null) {
-                        if (articles.publish_time > updater.lastArtical) {
-                            if (updater.needTipArtical) {
-								tipArtical(updater, articles);
-                            } else {
-                                updater.needTipArtical = true;
-                            }
-                            updater.lastArtical = articles.publish_time;
-                        }
-                    }
-                    if (vlist != null) {
-                        if (vlist.created > updater.lastVideo) {
-                            if (updater.needTipVideo) {
-                                tipVideo(updater, vlist);
-                            } else {
-                                updater.needTipVideo = true;
-                            }
-                            updater.lastVideo = vlist.created;
-                        }
+						if (articles != null) {
+							if (articles.publish_time > updater.lastArtical) {
+								if (updater.needTipArtical) {
+									tipArtical(updater, articles);
+								} else {
+									updater.needTipArtical = true;
+								}
+								updater.lastArtical = articles.publish_time;
+							}
+						}
+					} catch (Exception e) {
                     }
                     Thread.sleep(2000);
 				}
@@ -61,7 +61,7 @@ public class UpdateListener implements Runnable {
         for (int i = 0, groupListSize = p.fans.size(); i < groupListSize; i++) {
             BiliMaster.FansInGroup fans = p.fans.get(i);
 			if (FaithManager.ins.getFaith(fans.qq) > 0) {
-				Autoreply.sendMessage(fans.group, 0, String.format("\n%s你关注的up主「%s」发布了新视频\nAID:%d\n视频名:%s", Autoreply.CC.at(fans.qq), userName, vl.aid, vl.title));
+				Autoreply.sendMessage(fans.group, 0, String.format("%s你关注的up主「%s」发布了新视频\nAID:%d\n视频名:%s", Autoreply.CC.at(fans.qq), userName, vl.aid, vl.title));
 				try {
 					Thread.sleep(1000);
 				} catch (InterruptedException e) {}
@@ -74,7 +74,7 @@ public class UpdateListener implements Runnable {
 		for (int i = 0, groupListSize = p.fans.size(); i < groupListSize; i++) {
             BiliMaster.FansInGroup fans = p.fans.get(i);
 			if (FaithManager.ins.getFaith(fans.qq) > 0) {
-				Autoreply.sendMessage(fans.group, 0, String.format("\n%s你关注的up主「%s」发布了新专栏\nCID:%d\n专栏名:%s", Autoreply.CC.at(fans.qq), userName, vl.id, vl.title));
+				Autoreply.sendMessage(fans.group, 0, String.format("%s你关注的up主「%s」发布了新专栏\nCID:%d\n专栏名:%s", Autoreply.CC.at(fans.qq), userName, vl.id, vl.title));
 				try {
 					Thread.sleep(1000);
 				} catch (InterruptedException e) {}

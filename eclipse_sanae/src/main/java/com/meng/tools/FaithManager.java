@@ -29,7 +29,7 @@ public class FaithManager {
 					backupData();
 				}
 			});
-		store.put("-订阅b站 用户uid", "用户更新时和直播时会提示(用户/信仰/天)");
+		store.put("-关注b站 用户uid", "用户更新时和直播时会在这个群中提示(用户/1信仰/天)");
 		store.put("-赞我", "QQ名片赞10次(2信仰/10次)");
 	}
 	public boolean check(long fromGroup, long fromQQ, String msg) {
