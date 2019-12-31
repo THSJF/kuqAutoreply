@@ -10,4 +10,5 @@
 <classpathentry kind="lib" path="Java-WebSocket-1.3.8.jar"/>
 <classpathentry kind="lib" path="jcq-coolq-1.2.7.jar"/>
 <classpathentry kind="lib" path="jfreechart-1.5.0.jar"/>
+<classpathentry kind="lib" path="font.jar"/>
 </classpath>

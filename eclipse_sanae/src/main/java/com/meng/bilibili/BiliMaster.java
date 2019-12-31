@@ -21,6 +21,7 @@ public class BiliMaster {
 			qq = fromQQ;
 		}
 	}
+	
 	public void addFans(long fromGroup, long fromQQ) {
 		for (FansInGroup fig:fans) {
 			if (fig.qq == fromQQ) {
@@ -28,5 +29,16 @@ public class BiliMaster {
 			}
 		}
 		fans.add(new FansInGroup(fromGroup, fromQQ));
+	}
+
+	public boolean removeFans(long fromQQ) {
+		Iterator<FansInGroup> ite=fans.iterator();
+		while (ite.hasNext()) {
+			if (ite.next().qq == fromQQ) {
+				ite.remove();
+				return true;
+			}
+		}
+		return false;
 	}
 }

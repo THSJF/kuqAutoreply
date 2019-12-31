@@ -1,13 +1,16 @@
 package com.meng.tools;
 
+import com.google.gson.*;
 import com.google.gson.reflect.*;
 import com.meng.*;
+import com.meng.bilibili.*;
+import com.meng.bilibili.main.*;
+import com.meng.config.*;
 import com.meng.tools.override.*;
 import java.io.*;
 import java.lang.reflect.*;
 import java.nio.charset.*;
 import java.util.*;
-import com.meng.config.*;
 
 public class FaithManager {
 	public static FaithManager ins;
@@ -35,6 +38,40 @@ public class FaithManager {
 	public boolean check(long fromGroup, long fromQQ, String msg) {
 		if (msg.equals("-信仰商店")) {
 			Autoreply.sendMessage(fromGroup, 0, store.toString());
+			return true;
+		}
+		try {
+			if (msg.startsWith("-关注b站 ")) {
+				String uid=msg.substring(6);
+				String name=new JsonParser().parse(Tools.Network.getSourceCode("https://api.bilibili.com/x/space/acc/info?mid=" + uid + "&jsonp=jsonp")).getAsJsonObject().get("data").getAsJsonObject().get("name").getAsString();
+				BiliMaster bm=ConfigManager.ins.SanaeConfig.biliMaster.get(Integer.parseInt(uid));
+				if (bm == null) {
+					bm = new BiliMaster();
+					bm.uid = Integer.parseInt(uid);
+					SpaceToLiveJavaBean sjb = Autoreply.gson.fromJson(Tools.Network.getSourceCode("https://api.live.bilibili.com/room/v1/Room/getRoomInfoOld?mid=" + bm.uid), SpaceToLiveJavaBean.class);
+					if (sjb.data.roomid == 0) {
+						bm.roomID = -1;
+					} else {
+						bm.roomID = sjb.data.roomid;
+					}
+					ConfigManager.ins.SanaeConfig.biliMaster.put(bm.uid, bm);
+				}
+				bm.addFans(fromGroup, fromQQ);
+				ConfigManager.ins.saveSanaeConfig();
+				Autoreply.sendMessage(fromGroup, 0, String.format("关注%s(uid:%d)成功", name, bm.uid));
+				return true;
+			}
+		} catch (Exception e) {
+			Autoreply.sendMessage(fromGroup, 0, e.toString());
+		}
+		if (msg.equals("-赞我")) {
+			if (FaithManager.ins.getFaith(fromQQ) > 1) {
+				Autoreply.CQ.sendLikeV2(fromQQ, 10);
+				FaithManager.ins.subFaith(fromQQ, 2);
+				Autoreply.sendMessage(fromGroup, fromQQ, "点赞完成");
+			} else {
+				Autoreply.sendMessage(fromGroup, fromQQ, "你的信仰不足以进行此操作");
+			}
 			return true;
 		}
 		return false;
