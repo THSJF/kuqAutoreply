@@ -7,6 +7,7 @@ import java.io.*;
 import java.net.*;
 import java.nio.charset.*;
 import java.security.*;
+import java.text.*;
 import java.util.*;
 import org.jsoup.*;
 
@@ -153,6 +154,18 @@ public class Tools {
 	}
 
 	public static class CQ {
+		public static String getTime() {
+			return new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date());
+		}
+		public static String getTime(long timeStamp) {
+			return new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date(timeStamp));
+		}
+		public static String getDate() {
+			return new SimpleDateFormat("yyyy-MM-dd").format(new Date());
+		}
+		public static String getDate(long timeStamp) {
+			return new SimpleDateFormat("yyyy-MM-dd").format(new Date(timeStamp));
+		}
 		public static boolean isPohaitu(long fromGroup, long fromQQ, String msg) {
 			if (msg.equals("迫害图")) {
 				String[] strings = (new File(Autoreply.appDirectory + "pohai/")).list();
@@ -217,7 +230,6 @@ public class Tools {
 			}
 			return false;
 		}
-
 		public static boolean isNvZhuang(long fromGroup, long fromQQ, String msg) {
 			if (msg.equals("随机女装")) {
 				File[] files = (new File(Autoreply.appDirectory + "nvzhuang/")).listFiles();
@@ -240,7 +252,6 @@ public class Tools {
 
 			return false;
 		}
-
 		// 窥屏检测
 		public static boolean checkLook(long fromGroup, String msg) {
 			if (msg.equals("有人吗") || msg.equalsIgnoreCase("testip") || msg.equalsIgnoreCase("窥屏检测")) {
@@ -260,7 +271,6 @@ public class Tools {
 			}
 			return false;
 		}
-
 		public static boolean checkXiong(long fromQQ, String msg) {
 			if (Autoreply.instence.configManager.isAdmin(fromQQ)) {
 				if (msg.equals("吊熊")) {

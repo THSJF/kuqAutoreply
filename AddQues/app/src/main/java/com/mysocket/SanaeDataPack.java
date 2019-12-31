@@ -1,6 +1,5 @@
-package com.meng.config;
+package com.mysocket;
 
-import com.meng.tools.*;
 import java.util.*;
 
 public class SanaeDataPack {
@@ -17,7 +16,6 @@ public class SanaeDataPack {
 	public final byte typeFloat=4;
 	public final byte typeDouble=5;
 	public final byte typeString=6;
-	public final byte typeBoolean=7;
 
 	public static final int _0notification=0;//通知  string
 	public static final int _1getConfig=1;  //获取配置文件
@@ -38,7 +36,7 @@ public class SanaeDataPack {
 	public static final int _16incPic=16;//增加图片次数 long (qq) 
 	public static final int _17incBilibili=17;//增加哔哩哔哩链接次数  long(group) long(qq)
 	public static final int _18incRepeat=18;//增加复读次数 long (qq)
-	public static final int _19incRepeatStart=19;//增加带领复读  long(qq)
+	public static final int _19incRepeatStart=19;//增加带领复读  long(group) long(qq)
 	public static final int _20incRepeatBreak=20;//增加打断复读  long(group) long(qq)
 	public static final int _21incBan=21;//增加被禁言次数  long(group) long(qq)
 	public static final int _22decTime=22;//减少时间  long(group) long(qq)
@@ -46,28 +44,25 @@ public class SanaeDataPack {
 	public static final int _24heartBeat=24;//心跳
 	public static final int _25setNick=25;//设置nickname long(qq)
 	public static final int _26addBlack=26;//添加黑名单
-	public static final int _27incMengEr=27;//萌二发言
-	public static final int _28getSeqContent=28;//获得接龙内容
-	public static final int _29retSeqContent=29;//返回接龙内容
-	public static final int _30sendMsg=30;//向指定目标发送消息long group long qq string msg
-	public static final int _31getLiveList=31;//获取直播列表
-	public static final int _32retLiveList=32;//返回直播列表 string(name) long(blid)
-	public static final int _33liveStart=33;//开始直播 string(name) long(blid)
-	public static final int _34liveStop=34;//停止直播 string(name) long(blid)
-	public static final int _35speakInliveRoom=35;//直播间说话 string(主播称呼) long(blid) string(说话者称呼) long(说话者bid)
-	public static final int _36newVideo=36;//新视频 string(up) string(vname) long(aid)
-	public static final int _37newArtical=37;
-	public static final int _38groupBan=38;
-	public static final int _39groupKick=39;
-	public static final int _40addQuestion=40;//int flag,string ques,int ansCount,string... ans,string reason
-
 	/*
 
+	 获取直播列表
+	 返回直播列表
+	 主播开播
+	 主播下播
+	 有人在直播间说话
+	 新视频
+	 新专栏
+	 从称呼获取personInfo
+	 从qq号获取personInfo
+	 从bid获取personInfo
+	 从blid获取personInfo
+	 返回personInfo
 	 */
 
 
-	public static SanaeDataPack encode(int opCode) {
-		return new SanaeDataPack(opCode, System.currentTimeMillis());
+	public static SanaeDataPack encode(int opCode, long timeStamp) {
+		return new SanaeDataPack(opCode, timeStamp);
 	}
 
 	public static SanaeDataPack encode(int opCode, SanaeDataPack dataPack) {
@@ -80,22 +75,22 @@ public class SanaeDataPack {
 
 	private SanaeDataPack(int opCode, long timeStamp) {
 		//length(4) headLength(2) version(2) time(8) target/from(8) opCode(4)
-		writeByteDataIntoArray(Tools.BitConverter.getBytes(0));
-		writeByteDataIntoArray(Tools.BitConverter.getBytes(headLength));
-		writeByteDataIntoArray(Tools.BitConverter.getBytes((short)1));
-		writeByteDataIntoArray(Tools.BitConverter.getBytes(timeStamp));
-		writeByteDataIntoArray(Tools.BitConverter.getBytes(0L));
-		writeByteDataIntoArray(Tools.BitConverter.getBytes(opCode));
+		writeByteDataIntoArray(BitConverter.getBytes(0));
+		writeByteDataIntoArray(BitConverter.getBytes(headLength));
+		writeByteDataIntoArray(BitConverter.getBytes((short)1));
+		writeByteDataIntoArray(BitConverter.getBytes(timeStamp));
+		writeByteDataIntoArray(BitConverter.getBytes(0L));
+		writeByteDataIntoArray(BitConverter.getBytes(opCode));
 	}   
 
 	private SanaeDataPack(int opCode, SanaeDataPack dataPack) {
 		//length(4) headLength(2) version(2) time(8) target/from(8) opCode(4)
-		writeByteDataIntoArray(Tools.BitConverter.getBytes(0));
-		writeByteDataIntoArray(Tools.BitConverter.getBytes(headLength));
-		writeByteDataIntoArray(Tools.BitConverter.getBytes(dataPack.getVersion()));
-		writeByteDataIntoArray(Tools.BitConverter.getBytes(dataPack.getTimeStamp()));
-		writeByteDataIntoArray(Tools.BitConverter.getBytes(dataPack.getTarget()));
-		writeByteDataIntoArray(Tools.BitConverter.getBytes(opCode));
+		writeByteDataIntoArray(BitConverter.getBytes(0));
+		writeByteDataIntoArray(BitConverter.getBytes(headLength));
+		writeByteDataIntoArray(BitConverter.getBytes(dataPack.getVersion()));
+		writeByteDataIntoArray(BitConverter.getBytes(dataPack.getTimeStamp()));
+		writeByteDataIntoArray(BitConverter.getBytes(dataPack.getTarget()));
+		writeByteDataIntoArray(BitConverter.getBytes(opCode));
 	}   
 
 	private SanaeDataPack(byte[] pack) {
@@ -108,7 +103,7 @@ public class SanaeDataPack {
 		for (int i=0;i < data.size();++i) {
 			retData[i] = data.get(i);
 		}
-		byte[] len=Tools.BitConverter.getBytes(retData.length);
+		byte[] len=BitConverter.getBytes(retData.length);
 		retData[0] = len[0];
 		retData[1] = len[1];
 		retData[2] = len[2];
@@ -118,85 +113,71 @@ public class SanaeDataPack {
 	}
 
 	public int getLength() {
-		return Tools.BitConverter.toInt(dataArray, 0);
+		return BitConverter.toInt(dataArray, 0);
 	}  
 
 	public short getHeadLength() {
-		return Tools.BitConverter.toShort(dataArray, 4);
+		return BitConverter.toShort(dataArray, 4);
 	}
 
 	public short getVersion() {
-		return Tools.BitConverter.toShort(dataArray, 6);
+		return BitConverter.toShort(dataArray, 6);
 	}
 
 	public long getTimeStamp() {
-		return Tools.BitConverter.toLong(dataArray, 8);
+		return BitConverter.toLong(dataArray, 8);
 	}
 
 	public long getTarget() {
-		return Tools.BitConverter.toLong(dataArray, 16);
+		return BitConverter.toLong(dataArray, 16);
 	}
 
 	public int getOpCode() {
-		return Tools.BitConverter.toShort(dataArray, 24);
+		return BitConverter.toShort(dataArray, 24);
 	}
 
-	private SanaeDataPack writeByteDataIntoArray(byte... bs) {
+	public void writeByteDataIntoArray(byte... bs) {
 		for (byte b:bs) {
 			data.add(b);
 			++dataPointer;
 		}
-		return this;
 	}
 
-	public SanaeDataPack write(byte b) {
+	public void write(byte b) {
 		writeByteDataIntoArray(typeByte);
 		writeByteDataIntoArray(b);
-		return this;
 	}
 
-	public SanaeDataPack write(short s) {
+	public void write(short s) {
 		writeByteDataIntoArray(typeShort);
-		writeByteDataIntoArray(Tools.BitConverter.getBytes(s));
-		return this;
+		writeByteDataIntoArray(BitConverter.getBytes(s));
 	}
 
-	public SanaeDataPack write(int i) {
+	public void write(int i) {
 		writeByteDataIntoArray(typeInt);
-		writeByteDataIntoArray(Tools.BitConverter.getBytes(i));
-		return this;
+		writeByteDataIntoArray(BitConverter.getBytes(i));
 	}
 
-	public SanaeDataPack write(long l) {
+	public void write(long l) {
 		writeByteDataIntoArray(typeLong);
-		writeByteDataIntoArray(Tools.BitConverter.getBytes(l));
-		return this;
+		writeByteDataIntoArray(BitConverter.getBytes(l));
 	}
 
-	public SanaeDataPack write(float f) {
+	public void write(float f) {
 		writeByteDataIntoArray(typeFloat);
-		writeByteDataIntoArray(Tools.BitConverter.getBytes(f));
-		return this;
+		writeByteDataIntoArray(BitConverter.getBytes(f));
 	}
 
-	public SanaeDataPack write(double d) {
+	public void write(double d) {
 		writeByteDataIntoArray(typeDouble);
-		writeByteDataIntoArray(Tools.BitConverter.getBytes(d));
-		return this;
+		writeByteDataIntoArray(BitConverter.getBytes(d));
 	}
 
-	public SanaeDataPack write(String s) {
+	public void write(String s) {
 		writeByteDataIntoArray(typeString);
-		byte[] stringBytes = Tools.BitConverter.getBytes(s);
+		byte[] stringBytes = BitConverter.getBytes(s);
 		write(stringBytes.length);
 		writeByteDataIntoArray(stringBytes);
-		return this;
-	}
-
-	public SanaeDataPack write(boolean b) {
-		writeByteDataIntoArray(typeBoolean);
-		writeByteDataIntoArray(b ?(byte)1: (byte)0);
-		return this;
 	}
 
 	public byte readByte() {
@@ -208,16 +189,16 @@ public class SanaeDataPack {
 
 	public short readShort() {
 		if (dataArray[dataPointer++] == typeShort) {
-			short s = Tools.BitConverter.toShort(dataArray, dataPointer);
+			short s = BitConverter.toShort(dataArray, dataPointer);
 			dataPointer += 2;
 			return s;
 		}
-		throw new NumberFormatException("not a short number");
+		throw new NumberFormatException("not a int number");
 	}
 
 	public int readInt() {
 		if (dataArray[dataPointer++] == typeInt) {
-			int i= Tools.BitConverter.toInt(dataArray, dataPointer);
+			int i= BitConverter.toInt(dataArray, dataPointer);
 			dataPointer += 4;
 			return i;
 		}
@@ -226,7 +207,7 @@ public class SanaeDataPack {
 
 	public long readLong() {
 		if (dataArray[dataPointer++] == typeLong) {
-			long l= Tools.BitConverter.toLong(dataArray, dataPointer);
+			long l= BitConverter.toLong(dataArray, dataPointer);
 			dataPointer += 8;
 			return l;
 		}
@@ -235,44 +216,30 @@ public class SanaeDataPack {
 
 	public float readFloat() {
 		if (dataArray[dataPointer++] == typeFloat) {
-			float f = Tools.BitConverter.toFloat(dataArray, dataPointer);
+			float f = BitConverter.toFloat(dataArray, dataPointer);
 			dataPointer += 4;
 			return f;
 		}
-		throw new NumberFormatException("not a float number");
+		throw new NumberFormatException("not a int number");
 	}
 
 	public double readDouble() {
 		if (dataArray[dataPointer++] == typeDouble) {
-			double d = Tools.BitConverter.toDouble(dataArray, dataPointer);
+			double d = BitConverter.toDouble(dataArray, dataPointer);
 			dataPointer += 8;
 			return d;
 		}
-		throw new NumberFormatException("not a double number");
+		throw new NumberFormatException("not a long number");
 	}
 
 	public String readString() {
-		try {
-			if (dataArray[dataPointer++] == typeString) {
-				int len = readInt();
-				String s = Tools.BitConverter.toString(dataArray, dataPointer, len);
-				dataPointer += len;
-				return s;
-			}
-		} catch (ArrayIndexOutOfBoundsException e) {
-			return null;
+		if (dataArray[dataPointer++] == typeString) {
+			int len = readInt();
+			String s = BitConverter.toString(dataArray, dataPointer, len);
+			dataPointer += len;
+			return s;
 		}
-		return null;
+		throw new NumberFormatException("not a string");
 	}
 
-	public boolean readBoolean() {
-		if (dataArray[dataPointer++] == typeBoolean) {
-			return dataArray[dataPointer++] == 1;
-		}
-		throw new NumberFormatException("not a boolean value");
-	}
-
-	public boolean hasNext() {
-		return dataPointer != dataArray.length;
-	}
 }

@@ -7,6 +7,7 @@ import com.meng.bilibili.main.*;
 import com.meng.config.*;
 import com.meng.config.javabeans.*;
 import com.meng.dice.*;
+import com.meng.groupChat.*;
 import com.meng.picEdit.*;
 import com.meng.tools.*;
 import com.meng.tools.override.*;
@@ -565,6 +566,28 @@ public class AdminMessageProcessor {
         if (configManager.isAdmin(fromQQ)) {
 			if (msg.equals("-help")) {
 				Autoreply.sendMessage(fromGroup, 0, adminPermission.toString());
+				return true;
+			}
+			if (msg.equals("-发言统计")) {
+				HashMap<Integer,Integer> hashMap = GroupCounter2.ins.getSpeak(fromGroup, Tools.CQ.getDate());
+				if (hashMap == null || hashMap.size() == 0) {
+					Autoreply.sendMessage(fromGroup, 0, "无数据");
+					return true;
+				}
+				StringBuilder sb=new StringBuilder(String.format("群内共有%d条消息,今日消息情况:\n", GroupCounter2.ins.groupsMap.get(fromGroup).all));
+				for (int i=0;i < 24;++i) {
+					if (hashMap.get(i) == null) {
+						continue;
+					}
+					sb.append(String.format("%d:00-%d:00  共%d条消息\n", i, i + 1, hashMap.get(i)));
+				}
+				Autoreply.sendMessage(fromGroup, 0, sb.toString());
+				File pic=GroupCounter2.ins.dchart.check(GroupCounter2.ins.groupsMap.get(fromGroup));
+				Autoreply.sendMessage(fromGroup, 0, Autoreply.instence.CC.image(pic));
+				pic.delete();
+				File pic2=GroupCounter2.ins.mchart.check(GroupCounter2.ins.groupsMap.get(fromGroup));
+				Autoreply.sendMessage(fromGroup, 0, Autoreply.instence.CC.image(pic2));
+				pic2.delete();
 				return true;
 			}
 			if (msg.equals(".live")) {
