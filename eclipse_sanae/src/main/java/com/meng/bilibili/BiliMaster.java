@@ -21,24 +21,22 @@ public class BiliMaster {
 			qq = fromQQ;
 		}
 	}
-	
+
 	public void addFans(long fromGroup, long fromQQ) {
 		for (FansInGroup fig:fans) {
-			if (fig.qq == fromQQ) {
+			if (fig.qq == fromQQ && fig.group == fromGroup) {
 				return;
 			}
 		}
 		fans.add(new FansInGroup(fromGroup, fromQQ));
 	}
 
-	public boolean removeFans(long fromQQ) {
-		Iterator<FansInGroup> ite=fans.iterator();
-		while (ite.hasNext()) {
-			if (ite.next().qq == fromQQ) {
-				ite.remove();
-				return true;
+	public void removeFans(long fromGroup, long fromQQ) {
+		for (int i=0;i < fans.size();++i) {
+			if (fans.get(i).qq == fromQQ && fans.get(i).group == fromGroup) {
+				fans.remove(i);
+				return;
 			}
 		}
-		return false;
 	}
 }

@@ -15,9 +15,11 @@ public class TouHouKnowledge {
 	public static TouHouKnowledge ins;
 	public HashMap<Long,Boolean> userMap=new HashMap<>();
 
+	public HashMap<Long,QA> qaMap=new HashMap<>();
+
 	public ArrayList<QA> qaList=new ArrayList<>();
 	private File qafile;
-	
+
 	public static final int easy=0;
 	public static final int normal=1;
 	public static final int hard=2;
@@ -25,7 +27,7 @@ public class TouHouKnowledge {
 
 	public static final int touhouBase=1;
 	public static final int th15=2;
-	
+
 	public TouHouKnowledge() {
 		qafile = new File(Autoreply.appDirectory + "/qa.json");
         if (!qafile.exists()) {
@@ -91,6 +93,28 @@ public class TouHouKnowledge {
 				//}
 			}
 			return true;
+		}
+		if (ConfigManager.ins.isAdmin(fromQQ)) {
+			if (msg.equalsIgnoreCase("-qa")) {
+				QA qa=qaList.get(Autoreply.ins.random.nextInt(qaList.size()));
+				StringBuilder sb=new StringBuilder(qa.q);
+				qaMap.put(fromGroup, qa);
+				int i=1;
+				for (String s:qa.a) {
+					sb.append(i++).append(".").append(s).append("\n");
+				}
+				sb.append("回答序号即可");
+			}
+			QA qa = qaMap.get(fromQQ);
+			if (qa != null) {
+				if (String.valueOf(qa.t + 1).equals(msg)) {
+					Autoreply.sendMessage(fromGroup, 0, "回答正确");
+				} else {
+					Autoreply.sendMessage(fromGroup, 0, String.format("回答错误\n%s", qa.r));
+				}
+				qaMap.remove(fromQQ);
+				return true;
+			}
 		}
 		return false;
 	}

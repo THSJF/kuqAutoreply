@@ -33,6 +33,7 @@ public class FaithManager {
 				}
 			});
 		store.put("-关注b站 用户uid", "用户更新时和直播时会在这个群中提示(用户/1信仰/天)");
+		store.put("-取消关注b站 用户uid", "取消关注");
 		store.put("-赞我", "QQ名片赞10次(2信仰/10次)");
 	}
 	public boolean check(long fromGroup, long fromQQ, String msg) {
@@ -59,6 +60,23 @@ public class FaithManager {
 				bm.addFans(fromGroup, fromQQ);
 				ConfigManager.ins.saveSanaeConfig();
 				Autoreply.sendMessage(fromGroup, 0, String.format("关注%s(uid:%d)成功", name, bm.uid));
+				return true;
+			}
+		} catch (Exception e) {
+			Autoreply.sendMessage(fromGroup, 0, e.toString());
+		}
+		try {
+			if (msg.startsWith("-取消关注b站 ")) {
+				String uid=msg.substring(8);
+				BiliMaster bm=ConfigManager.ins.SanaeConfig.biliMaster.get(Integer.parseInt(uid));
+				if (bm == null) {
+					Autoreply.sendMessage(fromGroup, 0, "未关注,无需此操作");
+					return true;
+				}
+				String name=new JsonParser().parse(Tools.Network.getSourceCode("https://api.bilibili.com/x/space/acc/info?mid=" + uid + "&jsonp=jsonp")).getAsJsonObject().get("data").getAsJsonObject().get("name").getAsString();
+				bm.removeFans(fromGroup, fromQQ);
+				ConfigManager.ins.saveSanaeConfig();
+				Autoreply.sendMessage(fromGroup, 0, String.format("取消关注%s(uid:%d)成功", name, bm.uid));
 				return true;
 			}
 		} catch (Exception e) {

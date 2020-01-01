@@ -125,6 +125,7 @@ public class Tools {
 			Connection connection;
 			try {
 				connection = Jsoup.connect(url).ignoreContentType(true).method(Connection.Method.GET);
+				connection.userAgent("Mozilla/5.0 (Windows NT 10.0; WOW64; rv:38.0) Gecko/20100101 Firefox/38.0");
 				if (cookie != null) {
 					connection.cookies(cookieToMap(cookie));
 				}
