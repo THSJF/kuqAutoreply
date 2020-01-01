@@ -37,16 +37,26 @@ public class MainActivity extends Activity {
 		result = (TextView)findViewById(R.id.mainEditTextResult);
 		send.setOnClickListener(onClick);
 		adp = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, recieved);
-		
+
 		try {
 			configManager = new ConfigManager(new URI("ws://123.207.65.93:9001"));
 			configManager.connect();
+			new Thread(new Runnable(){
+
+					@Override
+					public void run() {
+						while (true) {
+							try {
+								Thread.sleep(30000);
+							} catch (InterruptedException e) {}
+							configManager.send("heart");
+						}
+					}
+				}).start();
 		} catch (URISyntaxException e) {
 			showToast(e.toString());
 		}
     }
-
-
 
 	OnClickListener onClick=new OnClickListener(){
 
@@ -64,7 +74,6 @@ public class MainActivity extends Activity {
 					sdp.write(ans3.getText().toString());
 					sdp.write(ans4.getText().toString());
 					sdp.write(reason.getText().toString());
-					
 					configManager.send(sdp.getData());
 					result.setText("发送完成");
 					//recieved.add(configManager.getOverSpell(2856986197L));
@@ -73,8 +82,6 @@ public class MainActivity extends Activity {
 			}
 		}
 	};
-
-
 
 	public void showToast(final String s) {
 		runOnUiThread(new Runnable(){

@@ -33,12 +33,6 @@
 					android:layout_height="fill_parent"/>
 
 				<EditText
-					android:id="@+id/trueans"
-					android:hint="正确答案"
-					android:layout_width="fill_parent"
-					android:layout_height="fill_parent"/>
-				
-				<EditText
 					android:id="@+id/ques"
 					android:hint="问题"
 					android:layout_width="fill_parent"
@@ -69,6 +63,12 @@
 					android:layout_height="fill_parent"/>
 
 				<EditText
+					android:id="@+id/trueans"
+					android:hint="正确答案"
+					android:layout_width="fill_parent"
+					android:layout_height="fill_parent"/>
+				
+				<EditText
 					android:id="@+id/reason"
 					android:hint="原因"
 					android:layout_width="fill_parent"
@@ -83,12 +83,6 @@
 
 			</LinearLayout>
 		</ScrollView>
-		<ListView
-			android:layout_weight="1"
-			android:layout_width="fill_parent"
-			android:layout_height="fill_parent"
-			android:id="@+id/mainListView"/>
-
 	</LinearLayout>
 
 </LinearLayout>

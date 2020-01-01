@@ -17,6 +17,15 @@ public class TouHouKnowledge {
 
 	public ArrayList<QA> qaList=new ArrayList<>();
 	private File qafile;
+	
+	public static final int easy=0;
+	public static final int normal=1;
+	public static final int hard=2;
+	public static final int lunatic=3;
+
+	public static final int touhouBase=1;
+	public static final int th15=2;
+	
 	public TouHouKnowledge() {
 		qafile = new File(Autoreply.appDirectory + "/qa.json");
         if (!qafile.exists()) {
@@ -155,14 +164,6 @@ public class TouHouKnowledge {
 	}
 
 	public static class QA {
-		public final int easy=0;
-		public final int normal=1;
-		public final int hard=2;
-		public final int lunatic=3;
-
-		public final int touhouBase=1;
-		public final int th15=2;
-
 		public int flag=0;
 		public String q;
 		private ArrayList<String> a = new ArrayList<>();
