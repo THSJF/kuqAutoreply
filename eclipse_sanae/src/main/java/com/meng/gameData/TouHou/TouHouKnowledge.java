@@ -94,27 +94,26 @@ public class TouHouKnowledge {
 			}
 			return true;
 		}
-		if (ConfigManager.ins.isAdmin(fromQQ)) {
-			if (msg.equalsIgnoreCase("-qa")) {
-				QA qa=qaList.get(Autoreply.ins.random.nextInt(qaList.size()));
-				StringBuilder sb=new StringBuilder(qa.q);
-				qaMap.put(fromGroup, qa);
-				int i=1;
-				for (String s:qa.a) {
-					sb.append(i++).append(".").append(s).append("\n");
-				}
-				sb.append("回答序号即可");
+		if (msg.equalsIgnoreCase("-qa")) {
+			QA qa=qaList.get(Autoreply.ins.random.nextInt(qaList.size()));
+			StringBuilder sb=new StringBuilder(qa.q);
+			qaMap.put(fromQQ, qa);
+			int i=1;
+			for (String s:qa.a) {
+				sb.append(i++).append(".").append(s).append("\n");
 			}
-			QA qa = qaMap.get(fromQQ);
-			if (qa != null) {
-				if (String.valueOf(qa.t + 1).equals(msg)) {
-					Autoreply.sendMessage(fromGroup, 0, "回答正确");
-				} else {
-					Autoreply.sendMessage(fromGroup, 0, String.format("回答错误\n%s", qa.r));
-				}
-				qaMap.remove(fromQQ);
-				return true;
+			sb.append("回答序号即可");
+			Autoreply.sendMessage(fromGroup, 0, sb.toString());
+		}
+		QA qa = qaMap.get(fromQQ);
+		if (qa != null) {
+			if (String.valueOf(qa.t + 1).equals(msg)) {
+				Autoreply.sendMessage(fromGroup, 0, "回答正确");
+			} else {
+				Autoreply.sendMessage(fromGroup, 0, String.format("回答错误\n%s", qa.r));
 			}
+			qaMap.remove(fromQQ);
+			return true;
 		}
 		return false;
 	}
