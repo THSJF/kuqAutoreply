@@ -18,7 +18,7 @@ public class SanaeConfigJavaBean {
 	public HashMap<String,Boolean> ques=new HashMap<>();
 	public ArrayList<AddQuestionBean> quesWait=new ArrayList<>();
 	public ConcurrentHashMap<Integer,BiliMaster> biliMaster = new ConcurrentHashMap<>();
-	
+
 	void addReport(long fromGroup, long fromQQ, String content) {
 		ReportBean report=new ReportBean();
 		report.t = System.currentTimeMillis();
@@ -37,12 +37,13 @@ public class SanaeConfigJavaBean {
 		bugReportList.add(bugReport);
 	}
 
-	void removeReport() {
+	ReportBean removeReport() {
 		if (reportList.size() == 0) {
-			return;
+			return null;
 		}
-		reportList.remove(0);
+		ReportBean rb= reportList.remove(0);
 		ConfigManager.ins.saveSanaeConfig();
+		return rb;
 	}
 
 	void reportToLast() {
@@ -60,12 +61,13 @@ public class SanaeConfigJavaBean {
 		return reportList.get(0);
 	}
 
-	void removeBugReport() {
+	BugReportBean removeBugReport() {
 		if (bugReportList.size() == 0) {
-			return;
+			return null;
 		}
-		bugReportList.remove(0);
+		BugReportBean brb= bugReportList.remove(0);
 		ConfigManager.ins.saveSanaeConfig();
+		return brb;
 	}
 
 	void bugReportToLast() {

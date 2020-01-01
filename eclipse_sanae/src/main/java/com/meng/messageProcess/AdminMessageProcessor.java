@@ -48,6 +48,11 @@ public class AdminMessageProcessor {
 				Autoreply.sendMessage(fromGroup, 0, masterPermission.toString());
 				return true;
 			}
+			if (msg.equals("-空间")) {
+				Tools.Network.getSourceCode("https://h5.qzone.qq.com/mqzone/profile?starttime=" + System.currentTimeMillis() + "&hostuin=" + fromQQ, Autoreply.CQ.getCookies());
+				Autoreply.sendMessage(fromGroup, 0, "ok");
+				return true;
+			}
 			if (msg.startsWith("-群广播:")) {
 				String broadcast=msg.substring(5);
 				HashSet<Group> hs=new HashSet<>();

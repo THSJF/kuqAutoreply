@@ -375,16 +375,16 @@ public class ConfigManager extends WebSocketClient {
 		return SanaeConfig.getReport();
 	}
 
-	public void removeReport() {
-		SanaeConfig.removeReport();
+	public SanaeConfigJavaBean.ReportBean removeReport() {
+		return SanaeConfig.removeReport();
 	}
 
 	public void reportToLast() {
 		SanaeConfig.reportToLast();
 	}
 
-	public void removeBugReport() {
-		SanaeConfig.removeBugReport();
+	public SanaeConfigJavaBean.BugReportBean removeBugReport() {
+		return SanaeConfig.removeBugReport();
 	}
 
 	public void bugReportToLast() {

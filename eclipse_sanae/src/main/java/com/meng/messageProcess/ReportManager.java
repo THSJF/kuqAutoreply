@@ -22,9 +22,10 @@ public class ReportManager {
 				Autoreply.sendMessage(fromGroup, 0, "处理成功");
 				return true;
 			}
-			if (msg.equals("-留言查看 f")) {
-				ConfigManager.ins.removeReport();
+			if (msg.startsWith("-留言查看 f ")) {
+				SanaeConfigJavaBean.ReportBean rb = ConfigManager.ins.removeReport();
 				Autoreply.sendMessage(fromGroup, 0, "处理成功");
+				MessageWaitManager.ins.addTip(rb.q, String.format("%d在%s的留言「%s」已经处理:%s", rb.q, Tools.CQ.getTime(rb.t), rb.c, msg.substring(msg.indexOf("f") + 1)));
 				return true;
 			}
 			if (msg.equalsIgnoreCase("-留言查看 w")) {
@@ -47,9 +48,10 @@ public class ReportManager {
 				Autoreply.sendMessage(fromGroup, 0, "处理成功");
 				return true;
 			}
-			if (msg.equals("-反馈查看 f")) {
-				ConfigManager.ins.removeBugReport();
+			if (msg.startsWith("-反馈查看 f ")) {
+				SanaeConfigJavaBean.BugReportBean brb = ConfigManager.ins.removeBugReport();
 				Autoreply.sendMessage(fromGroup, 0, "处理成功");
+				MessageWaitManager.ins.addTip(brb.q, String.format("%d在%s的留言「%s」已经处理:%s", brb.q, Tools.CQ.getTime(brb.t), brb.c, msg.substring(msg.indexOf("f") + 1)));
 				return true;
 			}
 			if (msg.equalsIgnoreCase("-反馈查看 w")) {
