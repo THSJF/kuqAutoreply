@@ -112,20 +112,12 @@ public class GroupCounter {
 			c.add(Calendar.HOUR_OF_DAY, -24);
 			HashMap<Integer,Integer> everyHour=gs.hour.get(Tools.CQ.getDate(c.getTimeInMillis()));
 			for (int i=c.get(Calendar.HOUR_OF_DAY);i < 24;++i) {
-				if (everyHour.get(i) == null) {
-					timeseries.add(new Hour(i, c.get(Calendar.DATE) - 1, c.get(Calendar.MONTH) + 1, c.get(Calendar.YEAR)), 0);
-				} else {
-					timeseries.add(new Hour(i, c.get(Calendar.DATE) - 1, c.get(Calendar.MONTH) + 1, c.get(Calendar.YEAR)), everyHour.get(i));
-				}
+				timeseries.add(new Hour(i, c.get(Calendar.DATE), c.get(Calendar.MONTH) + 1, c.get(Calendar.YEAR)), everyHour.get(i) == null ?0: everyHour.get(i));
 			}
 			c = Calendar.getInstance();
 			everyHour = gs.hour.get(Tools.CQ.getDate(c.getTimeInMillis()));
 			for (int i=0;i <= c.get(Calendar.HOUR_OF_DAY);++i) {
-				if (everyHour.get(i) == null) {
-					timeseries.add(new Hour(i, c.get(Calendar.DATE), c.get(Calendar.MONTH) + 1, c.get(Calendar.YEAR)), 0);
-				} else {
-					timeseries.add(new Hour(i, c.get(Calendar.DATE), c.get(Calendar.MONTH) + 1, c.get(Calendar.YEAR)), everyHour.get(i));
-				}
+				timeseries.add(new Hour(i, c.get(Calendar.DATE), c.get(Calendar.MONTH) + 1, c.get(Calendar.YEAR)), everyHour.get(i) == null ?0: everyHour.get(i));
 			}
 			TimeSeriesCollection timeseriescollection = new TimeSeriesCollection();  
 			timeseriescollection.addSeries(timeseries);
@@ -159,7 +151,8 @@ public class GroupCounter {
 		public File check(GroupCounter.GroupSpeak gs) {
 			TimeSeries timeseries = new TimeSeries("你群发言");
 			Calendar cal = Calendar.getInstance();
-			for (int i=-30;i < 1;++i) {
+			cal.add(Calendar.DAY_OF_MONTH, -30);
+			for (int i=0;i <= 30;++i) {
 				cal.add(Calendar.DAY_OF_MONTH, 1);
 				HashMap<Integer,Integer> everyHour=gs.hour.get(Tools.CQ.getDate(cal.getTimeInMillis()));
 				int oneDay=0;
