@@ -116,7 +116,7 @@ public class TouHouKnowledge {
 					sb.append("overdrive");
 					break;
 			}
-			sb.append("\n").append(ran).append("\n\n").append(qa.q).append("\n");
+			sb.append("\n\n").append(qa.q).append("\n");
 			qaMap.put(fromQQ, qa);
 			int i=1;
 			for (String s:qa.a) {

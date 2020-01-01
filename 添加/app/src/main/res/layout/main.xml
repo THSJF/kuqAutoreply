@@ -22,7 +22,7 @@
 
 				<EditText
 					android:id="@+id/diff"
-					android:hint="难度 0-5 e-o"
+					android:hint="难度 0-4 e-o"
 					android:layout_width="fill_parent"
 					android:layout_height="fill_parent"/>
 
