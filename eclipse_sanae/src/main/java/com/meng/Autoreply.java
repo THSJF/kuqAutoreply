@@ -35,7 +35,6 @@ public class Autoreply extends JcqAppAbstract implements ICQVer, IMsg, IRequest 
 	public DiceImitate diceImitate;
 	public static final long mainGroup=807242547L;
 	public static Gson gson;
-	public QuestionServer quesServer;
     public static void main(String[] args) {
         CQ = new CoolQ(1000);
         Autoreply demo = new Autoreply();
@@ -68,11 +67,10 @@ public class Autoreply extends JcqAppAbstract implements ICQVer, IMsg, IRequest 
 			e.printStackTrace();
 		}
 		try {
-			quesServer = new QuestionServer(9001);
-			quesServer.start();
+			new QuestionServer(9001).start();
 		} catch (java.net.UnknownHostException e) {}
-		
 		GuessSpell.ins = new GuessSpell();
+		ReportManager.ins = new ReportManager();
 		TouHouKnowledge.ins = new TouHouKnowledge();
 		System.out.println("加载完成,用时" + (System.currentTimeMillis() - startTime));
 		return 0;
@@ -97,22 +95,6 @@ public class Autoreply extends JcqAppAbstract implements ICQVer, IMsg, IRequest 
         return 0;
     }
 
-    /**
-     * 私聊消息 (Type=21)<br>
-     * 本方法会在酷Q【线程】中被调用。<br>
-     *
-     * @param subType 子类型，11/来自好友 1/来自在线状态 2/来自群 3/来自讨论组
-     * @param msgId   消息ID
-     * @param fromQQ  来源QQ
-     * @param msg     消息内容
-     * @param font    字体
-     * @return 返回值*不能*直接返回文本 如果要回复消息，请调用api发送<br>
-     * 这里 返回 {@link IMsg#MSG_INTERCEPT MSG_INTERCEPT} - 截断本条消息，不再继续处理
-     * <br>
-     * 注意：应用优先级设置为"最高"(10000)时，不得使用本返回值<br>
-     * 如果不回复消息，交由之后的应用/过滤器处理，这里 返回 {@link IMsg#MSG_IGNORE MSG_IGNORE} -
-     * 忽略本条消息
-     */
     @Override
     public int privateMsg(int subType, final int msgId, final long fromQQ, final String msg, int font) {
         // 这里处理消息
@@ -131,19 +113,6 @@ public class Autoreply extends JcqAppAbstract implements ICQVer, IMsg, IRequest 
         return MSG_IGNORE;
     }
 
-    /**
-     * 群消息 (Type=2)<br>
-     * 本方法会在酷Q【线程】中被调用。<br>
-     *
-     * @param subType       子类型，目前固定为1
-     * @param msgId         消息ID
-     * @param fromGroup     来源群号
-     * @param fromQQ        来源QQ号
-     * @param fromAnonymous 来源匿名者
-     * @param msg           消息内容
-     * @param font          字体
-     * @return 关于返回值说明, 见 {@link #privateMsg 私聊消息} 的方法
-     */
     @Override
     public int groupMsg(int subType, int msgId, long fromGroup, long fromQQ, String fromAnonymous, String msg, int font) {
 		//	if (fromGroup != 807242547L){
@@ -162,6 +131,9 @@ public class Autoreply extends JcqAppAbstract implements ICQVer, IMsg, IRequest 
         if (ConfigManager.ins.isNotReplyWord(msg)) {
             return MSG_IGNORE;
         }
+		if (ReportManager.ins.check(fromGroup, fromQQ, msg)) {
+			return MSG_IGNORE;
+		}
         if (adminMessageProcessor.check(fromGroup, fromQQ, msg)) {
             return MSG_IGNORE;
         }
@@ -169,18 +141,6 @@ public class Autoreply extends JcqAppAbstract implements ICQVer, IMsg, IRequest 
         return MSG_IGNORE;
     }
 
-    /**
-     * 讨论组消息 (Type=4)<br>
-     * 本方法会在酷Q【线程】中被调用。<br>
-     *
-     * @param subtype     子类型，目前固定为1
-     * @param msgId       消息ID
-     * @param fromDiscuss 来源讨论组
-     * @param fromQQ      来源QQ号
-     * @param msg         消息内容
-     * @param font        字体
-     * @return 关于返回值说明, 见 {@link #privateMsg 私聊消息} 的方法
-     */
     @Override
     public int discussMsg(int subtype, int msgId, long fromDiscuss, long fromQQ, String msg, int font) {
         // 这里处理消息
@@ -188,32 +148,11 @@ public class Autoreply extends JcqAppAbstract implements ICQVer, IMsg, IRequest 
         return MSG_IGNORE;
     }
 
-    /**
-     * 群文件上传事件 (Type=11)<br>
-     * 本方法会在酷Q【线程】中被调用。<br>
-     *
-     * @param subType   子类型，目前固定为1
-     * @param sendTime  发送时间(时间戳)// 10位时间戳
-     * @param fromGroup 来源群号
-     * @param fromQQ    来源QQ号
-     * @param file      上传文件信息
-     * @return 关于返回值说明, 见 {@link #privateMsg 私聊消息} 的方法
-     */
     @Override
     public int groupUpload(int subType, int sendTime, long fromGroup, long fromQQ, String file) {
 		return MSG_IGNORE;
     }
 
-    /**
-     * 群事件-管理员变动 (Type=101)<br>
-     * 本方法会在酷Q【线程】中被调用。<br>
-     *
-     * @param subtype        子类型，1/被取消管理员 2/被设置管理员
-     * @param sendTime       发送时间(时间戳)
-     * @param fromGroup      来源群号
-     * @param beingOperateQQ 被操作QQ
-     * @return 关于返回值说明, 见 {@link #privateMsg 私聊消息} 的方法
-     */
     @Override
     public int groupAdmin(int subtype, int sendTime, long fromGroup, long beingOperateQQ) {
         // 这里处理消息
@@ -292,7 +231,7 @@ public class Autoreply extends JcqAppAbstract implements ICQVer, IMsg, IRequest 
      * @return 关于返回值说明, 见 {@link #privateMsg 私聊消息} 的方法
      */
     @Override
-    public int requestAddFriend(int subtype, int sendTime, final long fromQQ, String msg, final String responseFlag) {
+    public int requestAddFriend(int subtype, int sendTime, long fromQQ, String msg, String responseFlag) {
         // 这里处理消息
         if (ConfigManager.ins.isNotReplyQQ(fromQQ)) {
             CQ.setFriendAddRequest(responseFlag, REQUEST_REFUSE, "");
