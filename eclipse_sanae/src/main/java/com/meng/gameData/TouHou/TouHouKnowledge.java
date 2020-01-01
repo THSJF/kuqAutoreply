@@ -95,11 +95,34 @@ public class TouHouKnowledge {
 			return true;
 		}
 		if (msg.equalsIgnoreCase("-qa")) {
-			QA qa=qaList.get(Autoreply.ins.random.nextInt(qaList.size()));
-			StringBuilder sb=new StringBuilder(qa.q).append("\n");
+			int ran=Autoreply.ins.random.nextInt(qaList.size());
+			QA qa=qaList.get(ran);
+			StringBuilder sb=new StringBuilder("题目ID:").append(ran).append("\n");
+			sb.append("难度:");
+			switch (qa.getDiffcult()) {
+				case 0:
+					sb.append("easy");
+					break;
+				case 1:
+					sb.append("normal");
+					break;
+				case 2:
+					sb.append("hard");
+					break;
+				case 3:
+					sb.append("lunatic");
+					break;
+				case 4:
+					sb.append("overdrive");
+					break;
+			}
+			sb.append("\n").append(ran).append("\n\n").append(qa.q).append("\n");
 			qaMap.put(fromQQ, qa);
 			int i=1;
 			for (String s:qa.a) {
+				if (s.equals("")) {
+					continue;
+				}
 				sb.append(i++).append(": ").append(s).append("\n");
 			}
 			sb.append("回答序号即可");
@@ -162,11 +185,15 @@ public class TouHouKnowledge {
 			return this;
 		}
 		public QABuilder setDifficult(int diff) {
-			flag &= (diff << 16);
+			flag &= (diff << 24);
 			return this;
 		}
 		public QABuilder setKind(int kind) {
-			flag &= kind;
+			flag &= kind << 16;
+			return this;
+		}
+		public QABuilder setId(int id) {
+			flag &= id;
 			return this;
 		}
 		public QA build() {
@@ -195,10 +222,13 @@ public class TouHouKnowledge {
 		public String r;//reason
 
 		public int getDiffcult() {
-			return flag >>> 16;
+			return flag >>> 24;
 		}
 		public int getKind() {
-			return flag & 0xff;
+			return (flag & 0xff) >>> 16;
+		}
+		public int getId() {
+			return flag & 0xffff;
 		}
 	}
 }

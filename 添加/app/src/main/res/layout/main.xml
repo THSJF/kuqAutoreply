@@ -21,9 +21,8 @@
 				android:orientation="vertical">
 
 				<EditText
-					android:visibility="gone"
 					android:id="@+id/diff"
-					android:hint="难度"
+					android:hint="难度 0-5 e-o"
 					android:layout_width="fill_parent"
 					android:layout_height="fill_parent"/>
 

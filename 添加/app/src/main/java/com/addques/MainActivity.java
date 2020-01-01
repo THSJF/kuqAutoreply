@@ -17,7 +17,7 @@ import android.widget.RadioGroup.*;
 public class MainActivity extends Activity {
 
 	Button send;
-	EditText ques,ans1,ans2,ans3,ans4,reason;
+	EditText diff,ques,ans1,ans2,ans3,ans4,reason;
 	TextView result;
 	RadioGroup trueAns;
 	ConfigManager configManager;
@@ -32,6 +32,7 @@ public class MainActivity extends Activity {
 		instence = this;
 		send = (Button) findViewById(R.id.mainButtonSend);
 		ques = (EditText)findViewById(R.id.ques);
+		diff = (EditText) findViewById(R.id.diff);
 		trueAns = (RadioGroup)findViewById(R.id.trueans);
 		ans1 = (EditText)findViewById(R.id.ans1);
 		ans2 = (EditText)findViewById(R.id.ans2);
@@ -91,7 +92,11 @@ public class MainActivity extends Activity {
 			switch (p1.getId()) {
 				case R.id.mainButtonSend:
 					SanaeDataPack sdp=SanaeDataPack.encode(SanaeDataPack._40addQuestion);
-					sdp.write(0);//flag
+					String dif="1";
+					if (diff.getText().toString().length() >= 1) {
+						dif = diff.getText().toString();
+					}
+					sdp.write(Integer.parseInt(dif) << 24);//flag
 					sdp.write(ques.getText().toString());//ques
 					sdp.write(4);//ansCount
 					sdp.write(trueAnswer);
