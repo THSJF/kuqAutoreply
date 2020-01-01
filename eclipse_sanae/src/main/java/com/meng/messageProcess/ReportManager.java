@@ -61,17 +61,16 @@ public class ReportManager {
 				Autoreply.sendMessage(fromGroup, 0, "处理成功");
 				return true;
 			}
-		} else {
-			if (msg.startsWith("-留言 ")) {
-				ConfigManager.ins.addReport(fromGroup, fromQQ, msg);
-				Autoreply.sendMessage(fromGroup, fromQQ, "留言成功");
-				return true;
-			}
-			if (msg.startsWith("-问题反馈 ")) {
-				ConfigManager.ins.addBugReport(fromGroup, fromQQ, msg);
-				Autoreply.sendMessage(fromGroup, fromQQ, "反馈成功");
-				return true;
-			}
+		} 
+		if (msg.startsWith("-留言 ")) {
+			ConfigManager.ins.addReport(fromGroup, fromQQ, msg);
+			Autoreply.sendMessage(fromGroup, fromQQ, "留言成功");
+			return true;
+		}
+		if (msg.startsWith("-问题反馈 ")) {
+			ConfigManager.ins.addBugReport(fromGroup, fromQQ, msg);
+			Autoreply.sendMessage(fromGroup, fromQQ, "反馈成功");
+			return true;
 		}
 		return false;
 	}
