@@ -18,7 +18,7 @@ public class TouHouKnowledge {
 	public ArrayList<QA> qaList=new ArrayList<>();
 	private File qafile;
 	public TouHouKnowledge() {
-		qafile = new File(Autoreply.appDirectory + "qa.json");
+		qafile = new File(Autoreply.appDirectory + "/qa.json");
         if (!qafile.exists()) {
             saveData();
         }
@@ -86,7 +86,7 @@ public class TouHouKnowledge {
 		return false;
 	}
 
-	public void addQA(QA qa){
+	public void addQA(QA qa) {
 		qaList.add(qa);
 		saveData();
 	}
@@ -144,6 +144,7 @@ public class TouHouKnowledge {
 			qa.flag = flag;
 			qa.q = q;
 			qa.a = a;
+			qa.t = t;
 			if (r == null) {
 				qa.r = "无说明";
 			} else {
@@ -165,6 +166,7 @@ public class TouHouKnowledge {
 		public int flag=0;
 		public String q;
 		private ArrayList<String> a = new ArrayList<>();
+		public int t;//trueAns
 		public String r;//reason
 
 		public int getDiffcult() {

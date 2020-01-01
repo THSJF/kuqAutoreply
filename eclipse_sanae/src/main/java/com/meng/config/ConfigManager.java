@@ -161,19 +161,6 @@ public class ConfigManager extends WebSocketClient {
 			case SanaeDataPack._37newArtical:
 				Autoreply.sendMessage(Autoreply.mainGroup, 0, dataRec.readString() + "发布新专栏:" + dataRec.readString() + "(cv" + dataRec.readLong() + ")");
 				break;
-			case SanaeDataPack._40addQuestion:
-				TouHouKnowledge.QABuilder qab= new TouHouKnowledge.QABuilder();
-				qab.setFlag(dataRec.readInt());
-				qab.setQuestion(dataRec.readString());
-				int anss=dataRec.readInt();
-				for(int i=0;i<anss;++i){
-					qab.setAnswer(dataRec.readString());
-				}
-				qab.setReason(dataRec.readString());
-				TouHouKnowledge.ins.addQA(qab.build());
-				dataToSend = SanaeDataPack.encode(SanaeDataPack._0notification, dataRec);
-				dataToSend.write("添加成功");
-				break;
 			default:
 				dataToSend = SanaeDataPack.encode(SanaeDataPack._0notification, dataRec);
 				dataToSend.write("操作类型错误");

@@ -35,7 +35,7 @@ public class Autoreply extends JcqAppAbstract implements ICQVer, IMsg, IRequest 
 	public DiceImitate diceImitate;
 	public static final long mainGroup=807242547L;
 	public static Gson gson;
-
+	public QuestionServer quesServer;
     public static void main(String[] args) {
         CQ = new CoolQ(1000);
         Autoreply demo = new Autoreply();
@@ -67,6 +67,11 @@ public class Autoreply extends JcqAppAbstract implements ICQVer, IMsg, IRequest 
 		} catch (URISyntaxException e) {
 			e.printStackTrace();
 		}
+		try {
+			quesServer = new QuestionServer(9001);
+			quesServer.start();
+		} catch (java.net.UnknownHostException e) {}
+		
 		GuessSpell.ins = new GuessSpell();
 		TouHouKnowledge.ins = new TouHouKnowledge();
 		System.out.println("加载完成,用时" + (System.currentTimeMillis() - startTime));

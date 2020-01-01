@@ -19,7 +19,7 @@ public class SanaeDataPack {
 	public final byte typeBoolean=7;
 
 	public static final int _0notification=0;//通知  string
-	public static final int _40addQuestion=40;//int flag,string ques,int ansCount,string... ans,string reason
+	public static final int _40addQuestion=40;//int flag,string ques,int ansCount,int trueAns,string... ans,string reason
 
 	public static SanaeDataPack encode(int opCode) {
 		return new SanaeDataPack(opCode, System.currentTimeMillis());

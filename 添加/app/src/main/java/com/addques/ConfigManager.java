@@ -1,8 +1,5 @@
 package com.addques;
 
-import com.addques.*;
-import com.mysocket.*;
-import java.lang.reflect.*;
 import java.net.*;
 import java.nio.*;
 import org.java_websocket.client.*;
@@ -23,7 +20,7 @@ public class ConfigManager extends WebSocketClient {
 	@Override
 	public void onOpen(ServerHandshake serverHandshake) {
 		
-		MainActivity.instence.showToast("连接到鬼人正邪");
+		MainActivity.instence.showToast("连接到苗");
 	}
 
 	@Override
@@ -41,7 +38,7 @@ public class ConfigManager extends WebSocketClient {
 			try {
 				send(dataToSend.getData());
 			} catch (WebsocketNotConnectedException e) {
-				MainActivity.instence.showToast("和鬼人正邪的连接已断开");
+				MainActivity.instence.showToast("和苗的连接已断开");
 				reconnect();
 			}
 		}

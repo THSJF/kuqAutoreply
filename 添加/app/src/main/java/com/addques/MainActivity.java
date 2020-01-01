@@ -15,7 +15,7 @@ import android.view.View.OnClickListener;
 
 public class MainActivity extends Activity {
 	Button send;
-	EditText op,ets1,ets2,ets3,etn1,etn2,etn3;
+	EditText ques,trueAns,ans1,ans2,ans3,ans4,reason;
 	TextView result;
 	ConfigManager configManager;
 	public ArrayList<String> recieved = new ArrayList<>();
@@ -27,19 +27,19 @@ public class MainActivity extends Activity {
         setContentView(R.layout.main);
 		instence = this;
 		send = (Button) findViewById(R.id.mainButtonSend);
-		op = (EditText)findViewById(R.id.opCode);
-		ets1 = (EditText)findViewById(R.id.ets1);
-		ets2 = (EditText)findViewById(R.id.ets2);
-		ets3 = (EditText)findViewById(R.id.ets3);
-		etn1 = (EditText)findViewById(R.id.etn1);
-		etn2 = (EditText)findViewById(R.id.etn2);
-		etn3 = (EditText)findViewById(R.id.etn3);
+		ques = (EditText)findViewById(R.id.ques);
+		trueAns = (EditText)findViewById(R.id.trueans);
+		ans1 = (EditText)findViewById(R.id.ans1);
+		ans2 = (EditText)findViewById(R.id.ans2);
+		ans3 = (EditText)findViewById(R.id.ans3);
+		ans4 = (EditText)findViewById(R.id.ans4);
+		reason = (EditText)findViewById(R.id.reason);
 		result = (TextView)findViewById(R.id.mainEditTextResult);
 		send.setOnClickListener(onClick);
 		adp = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, recieved);
 		
 		try {
-			configManager = new ConfigManager(new URI("ws://123.207.65.93:9760"));
+			configManager = new ConfigManager(new URI("ws://123.207.65.93:9001"));
 			configManager.connect();
 		} catch (URISyntaxException e) {
 			showToast(e.toString());
@@ -54,40 +54,19 @@ public class MainActivity extends Activity {
 		public void onClick(View p1) {
 			switch (p1.getId()) {
 				case R.id.mainButtonSend:
-					SanaeDataPack sdp=SanaeDataPack.encode((short)Integer.parseInt(op.getText().toString()) , System.currentTimeMillis());
-					String s="";
-					if (!ets1.getText().toString().equals("")) {
-						sdp.write(ets1.getText().toString());
-						s += ets1.getText().toString();
-						s += " ";
-					}
-					if (!ets2.getText().toString().equals("")) {
-						sdp.write(ets2.getText().toString());
-						s += ets2.getText().toString();
-						s += " ";
-					}
-					if (!ets3.getText().toString().equals("")) {
-						sdp.write(ets3.getText().toString());
-						s += ets3.getText().toString();
-						s += " ";
-					}
-					if (!etn1.getText().toString().equals("")) {
-						sdp.write(Long.parseLong(etn1.getText().toString()));
-						s += etn1.getText().toString();
-						s += " ";
-					}
-					if (!etn2.getText().toString().equals("")) {
-						sdp.write(Long.parseLong(etn2.getText().toString()));
-						s += etn2.getText().toString();
-						s += " ";
-					}
-					if (!etn3.getText().toString().equals("")) {
-						sdp.write(Long.parseLong(etn3.getText().toString()));
-						s += etn3.getText().toString();
-						s += " ";
-					}	 
+					SanaeDataPack sdp=SanaeDataPack.encode(SanaeDataPack._40addQuestion);
+					sdp.write(0);//flag
+					sdp.write(ques.getText().toString());//ques
+					sdp.write(4);//ansCount
+					sdp.write(Integer.parseInt(trueAns.getText().toString()));
+					sdp.write(ans1.getText().toString());
+					sdp.write(ans2.getText().toString());
+					sdp.write(ans3.getText().toString());
+					sdp.write(ans4.getText().toString());
+					sdp.write(reason.getText().toString());
+					
 					configManager.send(sdp.getData());
-					result.setText("发送内容:\n" + s);
+					result.setText("发送完成");
 					//recieved.add(configManager.getOverSpell(2856986197L));
 					adp.notifyDataSetChanged();
 					break;
