@@ -108,9 +108,19 @@ public class GroupCounter {
 		}
 		public File check(GroupCounter.GroupSpeak gs) {
 			TimeSeries timeseries = new TimeSeries("你群发言");
-			HashMap<Integer,Integer> everyHour=gs.hour.get(Tools.CQ.getDate());
 			Calendar c = Calendar.getInstance();
-			for (int i=0;i < 24;++i) {
+			c.add(Calendar.HOUR_OF_DAY, -24);
+			HashMap<Integer,Integer> everyHour=gs.hour.get(Tools.CQ.getDate(c.getTimeInMillis()));
+			for (int i=c.get(Calendar.HOUR_OF_DAY);i < 24;++i) {
+				if (everyHour.get(i) == null) {
+					timeseries.add(new Hour(i, c.get(Calendar.DATE) - 1, c.get(Calendar.MONTH) + 1, c.get(Calendar.YEAR)), 0);
+				} else {
+					timeseries.add(new Hour(i, c.get(Calendar.DATE) - 1, c.get(Calendar.MONTH) + 1, c.get(Calendar.YEAR)), everyHour.get(i));
+				}
+			}
+			c = Calendar.getInstance();
+			everyHour = gs.hour.get(Tools.CQ.getDate(c.getTimeInMillis()));
+			for (int i=0;i <= c.get(Calendar.HOUR_OF_DAY);++i) {
 				if (everyHour.get(i) == null) {
 					timeseries.add(new Hour(i, c.get(Calendar.DATE), c.get(Calendar.MONTH) + 1, c.get(Calendar.YEAR)), 0);
 				} else {
@@ -119,7 +129,7 @@ public class GroupCounter {
 			}
 			TimeSeriesCollection timeseriescollection = new TimeSeriesCollection();  
 			timeseriescollection.addSeries(timeseries);
-			JFreeChart jfreechart = ChartFactory.createTimeSeriesChart("你群今日发言", "时间", "", timeseriescollection, true, true, true);  
+			JFreeChart jfreechart = ChartFactory.createTimeSeriesChart("你群24小时发言", "时间", "", timeseriescollection, true, true, true);  
 			XYPlot xyplot = (XYPlot) jfreechart.getPlot();  
 			DateAxis dateaxis = (DateAxis) xyplot.getDomainAxis();  
 			dateaxis.setDateFormatOverride(new SimpleDateFormat("HH:mm"));  
@@ -148,9 +158,9 @@ public class GroupCounter {
 		}
 		public File check(GroupCounter.GroupSpeak gs) {
 			TimeSeries timeseries = new TimeSeries("你群发言");
+			Calendar cal = Calendar.getInstance();
 			for (int i=-30;i < 1;++i) {
-				Calendar cal = Calendar.getInstance();
-				cal.add(Calendar.DAY_OF_MONTH, i);
+				cal.add(Calendar.DAY_OF_MONTH, 1);
 				HashMap<Integer,Integer> everyHour=gs.hour.get(Tools.CQ.getDate(cal.getTimeInMillis()));
 				int oneDay=0;
 				if (everyHour == null) {

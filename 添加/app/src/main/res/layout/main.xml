@@ -20,13 +20,8 @@
 				android:layout_height="fill_parent"
 				android:orientation="vertical">
 
-				<Button
-					android:id="@+id/mainButtonSend"
-					android:text="发送"
-					android:layout_width="fill_parent"
-					android:layout_height="fill_parent"/>
-
 				<EditText
+					android:visibility="gone"
 					android:id="@+id/diff"
 					android:hint="难度"
 					android:layout_width="fill_parent"
@@ -61,26 +56,48 @@
 					android:hint="答案4"
 					android:layout_width="fill_parent"
 					android:layout_height="fill_parent"/>
-
-				<EditText
-					android:id="@+id/trueans"
-					android:hint="正确答案"
+				<TextView
+					android:text="正确答案"
+					android:id="@+id/mainEditTextResult"
 					android:layout_width="fill_parent"
-					android:layout_height="fill_parent"/>
-				
+					android:layout_height="wrap_content"/>
+				<RadioGroup
+					android:id="@+id/trueans"
+					android:orientation="horizontal"
+					android:layout_width="wrap_content"
+					android:layout_height="wrap_content" >
+
+					<RadioButton
+						android:id="@+id/r1"
+						android:layout_width="wrap_content"
+						android:layout_height="wrap_content"
+						android:text="答案1" />
+					<RadioButton
+						android:id="@+id/r2"
+						android:layout_width="wrap_content"
+						android:layout_height="wrap_content"
+						android:text="答案2" />
+					<RadioButton
+						android:id="@+id/r3"
+						android:layout_width="wrap_content"
+						android:layout_height="wrap_content"
+						android:text="答案3" />
+					<RadioButton
+						android:id="@+id/r4"
+						android:layout_width="wrap_content"
+						android:layout_height="wrap_content"
+						android:text="答案4" />
+				</RadioGroup>	
 				<EditText
 					android:id="@+id/reason"
 					android:hint="原因"
 					android:layout_width="fill_parent"
 					android:layout_height="fill_parent"/>
-
-
-				<TextView
-					android:id="@+id/mainEditTextResult"
-					android:text=""
+				<Button
+					android:id="@+id/mainButtonSend"
+					android:text="提交"
 					android:layout_width="fill_parent"
 					android:layout_height="fill_parent"/>
-
 			</LinearLayout>
 		</ScrollView>
 	</LinearLayout>

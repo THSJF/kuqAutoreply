@@ -12,15 +12,19 @@ import java.net.*;
 import java.util.*;
 
 import android.view.View.OnClickListener;
+import android.widget.RadioGroup.*;
 
 public class MainActivity extends Activity {
+
 	Button send;
-	EditText ques,trueAns,ans1,ans2,ans3,ans4,reason;
+	EditText ques,ans1,ans2,ans3,ans4,reason;
 	TextView result;
+	RadioGroup trueAns;
 	ConfigManager configManager;
 	public ArrayList<String> recieved = new ArrayList<>();
 	public ArrayAdapter<String> adp;
 	public static MainActivity instence;
+	int trueAnswer=-1;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -28,7 +32,7 @@ public class MainActivity extends Activity {
 		instence = this;
 		send = (Button) findViewById(R.id.mainButtonSend);
 		ques = (EditText)findViewById(R.id.ques);
-		trueAns = (EditText)findViewById(R.id.trueans);
+		trueAns = (RadioGroup)findViewById(R.id.trueans);
 		ans1 = (EditText)findViewById(R.id.ans1);
 		ans2 = (EditText)findViewById(R.id.ans2);
 		ans3 = (EditText)findViewById(R.id.ans3);
@@ -56,7 +60,29 @@ public class MainActivity extends Activity {
 		} catch (URISyntaxException e) {
 			showToast(e.toString());
 		}
+		trueAns.setOnCheckedChangeListener(new OnCheckedChangeListener(){
+
+				@Override
+				public void onCheckedChanged(RadioGroup p1, int p2) {
+					switch (p2) {
+						case R.id.r1:
+							trueAnswer = 0;
+							break;
+						case R.id.r2:
+							trueAnswer = 1;
+							break;
+						case R.id.r3:
+							trueAnswer = 2;
+							break;
+						case R.id.r4:
+							trueAnswer = 3;
+							break;
+					}		
+				}
+			});
     }
+
+
 
 	OnClickListener onClick=new OnClickListener(){
 
@@ -68,7 +94,7 @@ public class MainActivity extends Activity {
 					sdp.write(0);//flag
 					sdp.write(ques.getText().toString());//ques
 					sdp.write(4);//ansCount
-					sdp.write(Integer.parseInt(trueAns.getText().toString()));
+					sdp.write(trueAnswer);
 					sdp.write(ans1.getText().toString());
 					sdp.write(ans2.getText().toString());
 					sdp.write(ans3.getText().toString());
