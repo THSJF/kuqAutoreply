@@ -96,14 +96,15 @@ public class TouHouKnowledge {
 		}
 		if (msg.equalsIgnoreCase("-qa")) {
 			QA qa=qaList.get(Autoreply.ins.random.nextInt(qaList.size()));
-			StringBuilder sb=new StringBuilder(qa.q);
+			StringBuilder sb=new StringBuilder(qa.q).append("\n");
 			qaMap.put(fromQQ, qa);
 			int i=1;
 			for (String s:qa.a) {
-				sb.append(i++).append(".").append(s).append("\n");
+				sb.append(i++).append(": ").append(s).append("\n");
 			}
 			sb.append("回答序号即可");
 			Autoreply.sendMessage(fromGroup, 0, sb.toString());
+			return true;
 		}
 		QA qa = qaMap.get(fromQQ);
 		if (qa != null) {
