@@ -246,6 +246,24 @@ public class Autoreply extends JcqAppAbstract implements ICQVer, IMsg, IRequest 
         return MSG_IGNORE;
     }
 
+	/**
+     * 群事件-群禁言 (Type={@link IType#EVENT_System_GroupBan 104})<br>
+     * 本方法会在酷Q【线程】中被调用。<br>
+     *
+     * @param subType        子类型，1/被解禁 2/被禁言
+     * @param sendTime       发送时间(时间戳)
+     * @param fromGroup      来源群号
+     * @param fromQQ         操作者QQ
+     * @param beingOperateQQ 被操作QQ(若为全群禁言/解禁，则本参数为 0)
+     * @param duration       禁言时长(单位 秒，仅子类型为2时可用)
+     * @return 关于返回值说明, 见 {@link #privateMsg 私聊消息} 的方法
+     */
+	public int groupBan(int subType, int sendTime, long fromGroup, long fromQQ, long beingOperateQQ, long duration) {
+		System.out.println(fromGroup + "中" + fromQQ + "禁言" + beingOperateQQ + duration);
+		return MSG_IGNORE;
+	}
+
+
     /**
      * 请求-群添加 (Type=302)<br>
      * 本方法会在酷Q【线程】中被调用。<br>

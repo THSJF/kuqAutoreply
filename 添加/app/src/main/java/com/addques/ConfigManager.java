@@ -42,13 +42,6 @@ public class ConfigManager extends WebSocketClient {
 				reconnect();
 			}
 		}
-		MainActivity.instence.runOnUiThread(new Runnable(){
-
-				@Override
-				public void run() {
-					MainActivity.instence.adp.notifyDataSetChanged();
-				}	
-			});
 	}
 
 	@Override

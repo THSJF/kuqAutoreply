@@ -20,7 +20,7 @@
 				android:layout_height="fill_parent"
 				android:orientation="vertical">
 
-				<EditText
+				<Spinner
 					android:id="@+id/diff"
 					android:hint="难度 0-4 e-o"
 					android:layout_width="fill_parent"
@@ -96,7 +96,12 @@
 					android:id="@+id/mainButtonSend"
 					android:text="提交"
 					android:layout_width="fill_parent"
-					android:layout_height="fill_parent"/>
+					android:layout_height="wrap_content"/>
+				<Button
+					android:id="@+id/clean"
+					android:text="清空"
+					android:layout_width="fill_parent"
+					android:layout_height="wrap_content"/>
 			</LinearLayout>
 		</ScrollView>
 	</LinearLayout>

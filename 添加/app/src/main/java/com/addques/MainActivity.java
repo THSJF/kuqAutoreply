@@ -16,13 +16,14 @@ import android.widget.RadioGroup.*;
 
 public class MainActivity extends Activity {
 
-	Button send;
-	EditText diff,ques,ans1,ans2,ans3,ans4,reason;
+	Button send,clean;
+	EditText ques,ans1,ans2,ans3,ans4,reason;
+	Spinner diff;
+	int idiff=0;
 	TextView result;
 	RadioGroup trueAns;
 	ConfigManager configManager;
 	public ArrayList<String> recieved = new ArrayList<>();
-	public ArrayAdapter<String> adp;
 	public static MainActivity instence;
 	int trueAnswer=-1;
     @Override
@@ -30,9 +31,10 @@ public class MainActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main);
 		instence = this;
+		clean = (Button) findViewById(R.id.clean);
 		send = (Button) findViewById(R.id.mainButtonSend);
 		ques = (EditText)findViewById(R.id.ques);
-		diff = (EditText) findViewById(R.id.diff);
+		diff = (Spinner) findViewById(R.id.diff);
 		trueAns = (RadioGroup)findViewById(R.id.trueans);
 		ans1 = (EditText)findViewById(R.id.ans1);
 		ans2 = (EditText)findViewById(R.id.ans2);
@@ -41,8 +43,21 @@ public class MainActivity extends Activity {
 		reason = (EditText)findViewById(R.id.reason);
 		result = (TextView)findViewById(R.id.mainEditTextResult);
 		send.setOnClickListener(onClick);
-		adp = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, recieved);
+		clean.setOnClickListener(onClick);
+		ArrayAdapter<String> adpt=new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, new String[]{"easy","normal","hard","lunatic","overdrive"});
+		diff.setAdapter(adpt);
+		diff.setOnItemSelectedListener(new OnItemSelectedListener(){
 
+				@Override
+				public void onItemSelected(AdapterView<?> p1, View p2, int p3, long p4) {
+					idiff = p3;
+				}
+
+				@Override
+				public void onNothingSelected(AdapterView<?> p1) {
+					// TODO: Implement this method
+				}
+			});
 		try {
 			configManager = new ConfigManager(new URI("ws://123.207.65.93:9001"));
 			configManager.connect();
@@ -92,11 +107,7 @@ public class MainActivity extends Activity {
 			switch (p1.getId()) {
 				case R.id.mainButtonSend:
 					SanaeDataPack sdp=SanaeDataPack.encode(SanaeDataPack._40addQuestion);
-					String dif="1";
-					if (diff.getText().toString().length() >= 1) {
-						dif = diff.getText().toString();
-					}
-					sdp.write(Integer.parseInt(dif) << 24);//flag
+					sdp.write(idiff << 24);//flag
 					sdp.write(ques.getText().toString());//ques
 					sdp.write(4);//ansCount
 					sdp.write(trueAnswer);
@@ -106,9 +117,14 @@ public class MainActivity extends Activity {
 					sdp.write(ans4.getText().toString());
 					sdp.write(reason.getText().toString());
 					configManager.send(sdp.getData());
-					result.setText("发送完成");
-					//recieved.add(configManager.getOverSpell(2856986197L));
-					adp.notifyDataSetChanged();
+					showToast("发送成功");
+					break;
+				case R.id.clean:
+					ans1.setText("");
+					ans2.setText("");
+					ans3.setText("");
+					ans4.setText("");
+					reason.setText("");
 					break;
 			}
 		}
