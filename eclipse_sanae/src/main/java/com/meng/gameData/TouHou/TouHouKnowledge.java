@@ -134,7 +134,7 @@ public class TouHouKnowledge {
 			if (String.valueOf(qa.t + 1).equals(msg)) {
 				Autoreply.sendMessage(fromGroup, 0, "回答正确");
 			} else {
-				Autoreply.sendMessage(fromGroup, 0, String.format("回答错误\n%s", qa.r));
+				Autoreply.sendMessage(fromGroup, 0, String.format("回答错误\n%s", qa.r == null ?"": qa.r));
 			}
 			qaMap.remove(fromQQ);
 			return true;

@@ -43,7 +43,7 @@ public class MainActivity extends Activity {
 		ans4 = (EditText)findViewById(R.id.ans4);
 		reason = (EditText)findViewById(R.id.reason);
 		result = (TextView)findViewById(R.id.mainEditTextResult);
-		allques.setOnClickListener(onClick);
+		//allques.setOnClickListener(onClick);
 		send.setOnClickListener(onClick);
 		clean.setOnClickListener(onClick);
 		ArrayAdapter<String> adpt=new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, new String[]{"easy","normal","hard","lunatic","overdrive"});
