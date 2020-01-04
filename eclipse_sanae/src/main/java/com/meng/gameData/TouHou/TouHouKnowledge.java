@@ -97,7 +97,7 @@ public class TouHouKnowledge {
 		if (msg.equalsIgnoreCase("-qa")) {
 			int ran=Autoreply.ins.random.nextInt(qaList.size());
 			QA qa=qaList.get(ran);
-			StringBuilder sb=new StringBuilder("题目ID:").append(ran).append("\n");
+			StringBuilder sb=new StringBuilder(Autoreply.CC.at(fromQQ)).append("\n题目ID:").append(ran).append("\n");
 			sb.append("难度:");
 			switch (qa.d) {
 				case 0:
@@ -132,9 +132,9 @@ public class TouHouKnowledge {
 		QA qa = qaMap.get(fromQQ);
 		if (qa != null) {
 			if (String.valueOf(qa.t + 1).equals(msg)) {
-				Autoreply.sendMessage(fromGroup, 0, "回答正确");
+				Autoreply.sendMessage(fromGroup, 0, Autoreply.CC.at(fromQQ) + "回答正确");
 			} else {
-				Autoreply.sendMessage(fromGroup, 0, String.format("回答错误\n%s", qa.r == null ?"": qa.r));
+				Autoreply.sendMessage(fromGroup, 0, String.format("%s回答错误\n%s", Autoreply.CC.at(fromQQ), qa.r == null ?"": qa.r));
 			}
 			qaMap.remove(fromQQ);
 			return true;
