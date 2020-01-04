@@ -20,7 +20,7 @@ public class ConfigManager extends WebSocketClient {
 	@Override
 	public void onOpen(ServerHandshake serverHandshake) {
 	//	send(SanaeDataPack.encode(SanaeDataPack._41getAllQuestion).getData());
-		//MainActivity.instence.showToast("连接到苗");
+		MainActivity.instence.showToast("连接到苗");
 	}
 
 	@Override

@@ -60,6 +60,7 @@ public class Autoreply extends JcqAppAbstract implements ICQVer, IMsg, IRequest 
 		long startTime = System.currentTimeMillis();
 		GroupCounter.ins = new GroupCounter();
 		TouHouDataManager.ins = new TouHouDataManager();
+		DiceCommand.ins = new DiceCommand();
 		try {
 			ConfigManager.ins = new ConfigManager(new URI("ws://123.207.65.93:9760"));
 			ConfigManager.ins.connect();

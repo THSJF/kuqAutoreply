@@ -35,18 +35,21 @@ public class QuestionServer extends WebSocketServer {
 		switch (dataRec.getOpCode()) {
 			case SanaeDataPack._40addQuestion:
 				TouHouKnowledge.QA qa= new TouHouKnowledge.QA();
-				qa.id=dataRec.readInt();
-				qa.d=dataRec.readInt();
-				qa.q=dataRec.readString();
+				qa.id = dataRec.readInt();
+				qa.d = dataRec.readInt();
+				qa.q = dataRec.readString();
 				int anss=dataRec.readInt();
-				qa.t=dataRec.readInt();
+				qa.t = dataRec.readInt();
 				for (int i=0;i < anss;++i) {
 					String s=dataRec.readString();
-					if(!s.equals("")){
+					if (!s.equals("")) {
 						qa.a.add(s);
 					}
 				}
-				qa.r=dataRec.readString();
+				qa.r = dataRec.readString();
+				if (qa.r.equals("")) {
+					qa = null;
+				}
 				TouHouKnowledge.ins.addQA(qa);
 				sdp = SanaeDataPack.encode(SanaeDataPack._0notification, dataRec);
 				sdp.write("添加成功");

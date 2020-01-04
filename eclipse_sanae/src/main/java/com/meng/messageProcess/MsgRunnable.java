@@ -6,6 +6,7 @@ import com.meng.gameData.TouHou.*;
 import com.meng.groupChat.*;
 import com.meng.tools.*;
 import com.meng.bilibili.*;
+import com.meng.dice.*;
 
 public class MsgRunnable implements Runnable {
     private int msgId = 0;
@@ -35,6 +36,9 @@ public class MsgRunnable implements Runnable {
 			return;
 		}
 		MessageWaitManager.ins.check(fromGroup, fromQQ);
+		if (DiceCommand.ins.check(fromGroup, fromQQ, msg)){
+			return;
+		}
         if (ConfigManager.ins.SanaeConfig.botOff.contains(fromGroup)) {
             return;
         }

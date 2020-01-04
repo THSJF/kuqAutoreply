@@ -103,6 +103,7 @@
 					android:layout_width="fill_parent"
 					android:layout_height="wrap_content"/>
 				<Button
+					android:visibility="gone"
 					android:id="@+id/allque"
 					android:text="全部问题"
 					android:layout_width="fill_parent"
