@@ -1,12 +1,9 @@
 package com.meng.gameData.TouHou;
 
-import com.meng.*;
 import com.meng.config.*;
-import com.meng.dice.*;
-import com.meng.tools.*;
-import java.io.*;
 import java.net.*;
 import java.nio.*;
+import java.util.*;
 import org.java_websocket.*;
 import org.java_websocket.handshake.*;
 import org.java_websocket.server.*;
@@ -50,6 +47,9 @@ public class QuestionServer extends WebSocketServer {
 				sdp = SanaeDataPack.encode(SanaeDataPack._0notification, dataRec);
 				sdp.write("添加成功");
 				break;
+			case SanaeDataPack._41getAllQuestion:
+				sdp = writeQA(TouHouKnowledge.ins.qaList);
+				break;
 		}
 		if (sdp != null) {
 			conn.send(sdp.getData());
@@ -68,6 +68,20 @@ public class QuestionServer extends WebSocketServer {
 	public void onStart() {
 		System.out.println("quesServer started!");
 		setConnectionLostTimeout(100);
+	}
+	private SanaeDataPack writeQA(ArrayList<TouHouKnowledge.QA> qas) {
+		SanaeDataPack sdp=SanaeDataPack.encode(SanaeDataPack._42retAllQuestion);
+		for (TouHouKnowledge.QA qa:qas) {
+			sdp.write(qa.flag);//flag
+			sdp.write(qa.q);//ques
+			sdp.write(qa.a.size());//ansCount
+			sdp.write(qa.t);
+			for (String s:qa.a) {
+				sdp.write(s);
+			}
+			sdp.write(qa.r);
+		}
+		return sdp;
 	}
 }
 	

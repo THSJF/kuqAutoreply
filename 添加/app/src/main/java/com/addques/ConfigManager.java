@@ -7,7 +7,7 @@ import org.java_websocket.exceptions.*;
 import org.java_websocket.handshake.*;
 
 public class ConfigManager extends WebSocketClient {
-    
+
 	public ConfigManager(URI uri) {
 		super(uri);
 	}
@@ -19,7 +19,7 @@ public class ConfigManager extends WebSocketClient {
 
 	@Override
 	public void onOpen(ServerHandshake serverHandshake) {
-		
+
 		MainActivity.instence.showToast("连接到苗");
 	}
 
@@ -29,6 +29,9 @@ public class ConfigManager extends WebSocketClient {
 		SanaeDataPack dataToSend=null;
 		switch (dataPackRecieved.getOpCode()) {
 			case SanaeDataPack._0notification:
+				break;
+			case SanaeDataPack._42retAllQuestion:
+				readQAs(dataPackRecieved);
 				break;
 			default:
 				dataToSend = SanaeDataPack.encode(SanaeDataPack._0notification, dataPackRecieved);
@@ -53,5 +56,19 @@ public class ConfigManager extends WebSocketClient {
 	public void onError(Exception e) {
 
 	}
-
+	private void readQAs(SanaeDataPack sdp) {
+		while (sdp.hasNext()) {
+			QA qa=new QA();
+			qa.flag = sdp.readInt();
+			qa.q = sdp.readString();
+			int anss=sdp.readInt();
+			qa.t = sdp.readInt();
+			for (int i=0;i < anss;++i) {
+				qa.a.add(sdp.readString());
+			}
+			qa.r = sdp.readString();
+			Activity2.qas.add(qa);
+			Activity2.tv.setText(qa.toString());
+		}
+	}
 }

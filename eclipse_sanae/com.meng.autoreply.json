@@ -7,7 +7,7 @@
  "name": "Autoreply", // 应用名称
   "version": "1.0.1", // 应用版本
   "version_id": 2, // 应用顺序版本（每次发布时至少+1）
-  "author": "ran", // 应用作者
+  "author": "c59862143", // 应用作者
   //"path": "lib",// 应用lib加载处，默认插件同名文件夹目录下lib文件夹，此目录可以填相对路径和绝对路径，相对：应用同名文件夹
   //"class": "com.meng.autoreply", // 应用加载主类，默认使用appid加载，如需使用则删除前面注释
   "description": "这是个自动回复插件",
@@ -118,16 +118,6 @@
       "function": "disable"
     }
   ],
-  "menu": [ // 设置菜单（发布前请删除无用菜单，如果无需设置菜单请全部删除）
-    {
-      "name": "设置A", //菜单名称
-      "function": "menuA" //菜单对应函数
-    },
-    {
-      "name": "设置B",
-      "function": "menuB"
-    }
-  ],
   "status": [ // 悬浮窗状态（见 com.example.status 样例）
 
   ],
@@ -145,7 +135,7 @@
     124, //置匿名群员禁言		setGroupAnonymousBan
     125, //置群匿名设置		setGroupAnonymous
     126, //置群成员名片		setGroupCard
-    //127, //[敏感]置群退出		setGroupLeave
+    127, //[敏感]置群退出		setGroupLeave
     128, //置群成员专属头衔	setGroupSpecialTitle
     130, //取群成员信息		getGroupMemberInfoV2 / getGroupMemberInfo
     131, //取陌生人信息		getStrangerInfo

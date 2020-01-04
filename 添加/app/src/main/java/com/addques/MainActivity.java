@@ -16,7 +16,7 @@ import android.widget.RadioGroup.*;
 
 public class MainActivity extends Activity {
 
-	Button send,clean;
+	Button send,clean,allques;
 	EditText ques,ans1,ans2,ans3,ans4,reason;
 	Spinner diff;
 	int idiff=0;
@@ -31,6 +31,7 @@ public class MainActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main);
 		instence = this;
+		allques=(Button) findViewById(R.id.allque);
 		clean = (Button) findViewById(R.id.clean);
 		send = (Button) findViewById(R.id.mainButtonSend);
 		ques = (EditText)findViewById(R.id.ques);
@@ -42,6 +43,7 @@ public class MainActivity extends Activity {
 		ans4 = (EditText)findViewById(R.id.ans4);
 		reason = (EditText)findViewById(R.id.reason);
 		result = (TextView)findViewById(R.id.mainEditTextResult);
+		allques.setOnClickListener(onClick);
 		send.setOnClickListener(onClick);
 		clean.setOnClickListener(onClick);
 		ArrayAdapter<String> adpt=new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, new String[]{"easy","normal","hard","lunatic","overdrive"});
@@ -58,6 +60,7 @@ public class MainActivity extends Activity {
 					// TODO: Implement this method
 				}
 			});
+		configManager.send(SanaeDataPack.encode(SanaeDataPack._41getAllQuestion).getData());
 		try {
 			configManager = new ConfigManager(new URI("ws://123.207.65.93:9001"));
 			configManager.connect();
@@ -120,11 +123,15 @@ public class MainActivity extends Activity {
 					showToast("发送成功");
 					break;
 				case R.id.clean:
+					ques.setText("");
 					ans1.setText("");
 					ans2.setText("");
 					ans3.setText("");
 					ans4.setText("");
 					reason.setText("");
+					break;
+				case R.id.allque:
+					startActivity(new Intent(MainActivity.this,Activity2.class));
 					break;
 			}
 		}

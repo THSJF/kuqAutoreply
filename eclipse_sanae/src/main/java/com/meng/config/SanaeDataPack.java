@@ -60,7 +60,8 @@ public class SanaeDataPack {
 	public static final int _38groupBan=38;
 	public static final int _39groupKick=39;
 	public static final int _40addQuestion=40;//int flag,string ques,int ansCount,string... ans,string reason
-
+	public static final int _41getAllQuestion=41;
+	public static final int _42retAllQuestion=42;
 	/*
 
 	 */

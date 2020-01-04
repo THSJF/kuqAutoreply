@@ -36,6 +36,13 @@ public class TouHouKnowledge {
         Type type = new TypeToken<ArrayList<QA>>() {
         }.getType();
         qaList = Autoreply.gson.fromJson(Tools.FileTool.readString(qafile), type);
+		for (int i=0;i < qaList.size();++i) {
+			QA qa=qaList.get(i);
+			if (qa.getId() == 0) {
+				qa.setId(i);
+			}
+		}
+		saveData();
 	}
 
 	public boolean check(long fromGroup, long fromQQ, String msg) {
@@ -217,7 +224,7 @@ public class TouHouKnowledge {
 	public static class QA {
 		public int flag=0;
 		public String q;
-		private ArrayList<String> a = new ArrayList<>();
+		public ArrayList<String> a = new ArrayList<>();
 		public int t;//trueAns
 		public String r;//reason
 
@@ -229,6 +236,9 @@ public class TouHouKnowledge {
 		}
 		public int getId() {
 			return flag & 0xffff;
+		}
+		public void setId(int id) {
+			flag &= id;
 		}
 	}
 }
