@@ -38,7 +38,19 @@ public class ConfigManager extends WebSocketClient {
 			saveSanaeConfig();
 		}
         SanaeConfig = Autoreply.gson.fromJson(Tools.FileTool.readString(SanaeConfigFile), type);
-	}
+		Autoreply.ins.threadPool.execute(new Runnable(){
+
+				@Override
+				public void run() {
+					while(true){
+						try {
+							Thread.sleep(60000);
+						} catch (InterruptedException e) {}
+						saveSanaeConfig();
+					}
+				}
+			});
+		}
 
 	@Override
 	public void onMessage(String p1) {
