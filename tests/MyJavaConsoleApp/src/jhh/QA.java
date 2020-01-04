@@ -1,4 +1,4 @@
-package com.addques;
+package jhh;
 
 import java.util.*;
 
@@ -12,9 +12,7 @@ public class QA {
 	@Override
 
 	public String toString() {
-		int ran=new Random().nextInt(Activity2.qas.size());
-		QA qa=Activity2.qas.get(ran);
-		StringBuilder sb=new StringBuilder("题目ID:").append(ran).append("\n");
+		StringBuilder sb=new StringBuilder("题目ID:").append(id).append("\n");
 		sb.append("难度:");
 		switch (d) {
 			case 0:
@@ -33,15 +31,16 @@ public class QA {
 				sb.append("overdrive");
 				break;
 		}
-		sb.append("\n\n").append(qa.q).append("\n");
+		sb.append("\n\n").append(q).append("\n");
 		int i=1;
-		for (String s:qa.a) {
+		for (String s:a) {
 			if (s.equals("")) {
 				continue;
 			}
 			sb.append(i++).append(": ").append(s).append("\n");
 		}
-		return sb.toString();
+		return q;
 	}
 }
+
 

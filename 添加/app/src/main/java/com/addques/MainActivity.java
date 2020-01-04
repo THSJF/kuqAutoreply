@@ -60,10 +60,10 @@ public class MainActivity extends Activity {
 					// TODO: Implement this method
 				}
 			});
-		configManager.send(SanaeDataPack.encode(SanaeDataPack._41getAllQuestion).getData());
 		try {
 			configManager = new ConfigManager(new URI("ws://123.207.65.93:9001"));
 			configManager.connect();
+			
 			new Thread(new Runnable(){
 
 					@Override
@@ -110,7 +110,8 @@ public class MainActivity extends Activity {
 			switch (p1.getId()) {
 				case R.id.mainButtonSend:
 					SanaeDataPack sdp=SanaeDataPack.encode(SanaeDataPack._40addQuestion);
-					sdp.write(idiff << 24);//flag
+					sdp.write(0);
+					sdp.write(idiff); //flag
 					sdp.write(ques.getText().toString());//ques
 					sdp.write(4);//ansCount
 					sdp.write(trueAnswer);

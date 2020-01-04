@@ -230,6 +230,6 @@ public class SanaeDataPack {
 	}
 
 	public boolean hasNext() {
-		return dataPointer != dataArray.length;
+		return dataPointer < dataArray.length;
 	}
 }

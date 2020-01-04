@@ -12,7 +12,7 @@ public class Activity2 extends Activity {
 		super.onCreate(savedInstanceState);
 		tv=new TextView(this);
 		setContentView(tv);
-	
+	tv.setText(qas.get(0).toString());
 		}
 	
 	

@@ -19,8 +19,8 @@ public class ConfigManager extends WebSocketClient {
 
 	@Override
 	public void onOpen(ServerHandshake serverHandshake) {
-
-		MainActivity.instence.showToast("连接到苗");
+		send(SanaeDataPack.encode(SanaeDataPack._41getAllQuestion).getData());
+		//MainActivity.instence.showToast("连接到苗");
 	}
 
 	@Override
@@ -32,6 +32,7 @@ public class ConfigManager extends WebSocketClient {
 				break;
 			case SanaeDataPack._42retAllQuestion:
 				readQAs(dataPackRecieved);
+
 				break;
 			default:
 				dataToSend = SanaeDataPack.encode(SanaeDataPack._0notification, dataPackRecieved);
@@ -57,9 +58,11 @@ public class ConfigManager extends WebSocketClient {
 
 	}
 	private void readQAs(SanaeDataPack sdp) {
+		StringBuilder sb=new StringBuilder();
 		while (sdp.hasNext()) {
 			QA qa=new QA();
-			qa.flag = sdp.readInt();
+			qa.id = sdp.readInt();
+			qa.d = sdp.readInt();
 			qa.q = sdp.readString();
 			int anss=sdp.readInt();
 			qa.t = sdp.readInt();
@@ -68,7 +71,8 @@ public class ConfigManager extends WebSocketClient {
 			}
 			qa.r = sdp.readString();
 			Activity2.qas.add(qa);
-			Activity2.tv.setText(qa.toString());
+			sb.append(qa.toString());
 		}
+		MainActivity.instence.showToast(sb.toString());
 	}
 }

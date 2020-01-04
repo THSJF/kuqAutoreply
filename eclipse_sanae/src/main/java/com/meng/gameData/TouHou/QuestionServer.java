@@ -34,16 +34,20 @@ public class QuestionServer extends WebSocketServer {
 		SanaeDataPack sdp=null;
 		switch (dataRec.getOpCode()) {
 			case SanaeDataPack._40addQuestion:
-				TouHouKnowledge.QABuilder qab= new TouHouKnowledge.QABuilder();
-				qab.setFlag(dataRec.readInt());
-				qab.setQuestion(dataRec.readString());
+				TouHouKnowledge.QA qa= new TouHouKnowledge.QA();
+				qa.id=dataRec.readInt();
+				qa.d=dataRec.readInt();
+				qa.q=dataRec.readString();
 				int anss=dataRec.readInt();
-				qab.setTrueAnswer(dataRec.readInt());
+				qa.t=dataRec.readInt();
 				for (int i=0;i < anss;++i) {
-					qab.setAnswer(dataRec.readString());
+					String s=dataRec.readString();
+					if(!s.equals("")){
+						qa.a.add(s);
+					}
 				}
-				qab.setReason(dataRec.readString());
-				TouHouKnowledge.ins.addQA(qab.build());
+				qa.r=dataRec.readString();
+				TouHouKnowledge.ins.addQA(qa);
 				sdp = SanaeDataPack.encode(SanaeDataPack._0notification, dataRec);
 				sdp.write("添加成功");
 				break;
@@ -72,7 +76,8 @@ public class QuestionServer extends WebSocketServer {
 	private SanaeDataPack writeQA(ArrayList<TouHouKnowledge.QA> qas) {
 		SanaeDataPack sdp=SanaeDataPack.encode(SanaeDataPack._42retAllQuestion);
 		for (TouHouKnowledge.QA qa:qas) {
-			sdp.write(qa.flag);//flag
+			sdp.write(qa.id);//flag
+			sdp.write(qa.d);//diff
 			sdp.write(qa.q);//ques
 			sdp.write(qa.a.size());//ansCount
 			sdp.write(qa.t);

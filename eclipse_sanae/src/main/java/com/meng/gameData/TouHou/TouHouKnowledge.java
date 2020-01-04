@@ -36,13 +36,6 @@ public class TouHouKnowledge {
         Type type = new TypeToken<ArrayList<QA>>() {
         }.getType();
         qaList = Autoreply.gson.fromJson(Tools.FileTool.readString(qafile), type);
-		for (int i=0;i < qaList.size();++i) {
-			QA qa=qaList.get(i);
-			if (qa.getId() == 0) {
-				qa.setId(i);
-			}
-		}
-		saveData();
 	}
 
 	public boolean check(long fromGroup, long fromQQ, String msg) {
@@ -106,7 +99,7 @@ public class TouHouKnowledge {
 			QA qa=qaList.get(ran);
 			StringBuilder sb=new StringBuilder("题目ID:").append(ran).append("\n");
 			sb.append("难度:");
-			switch (qa.getDiffcult()) {
+			switch (qa.d) {
 				case 0:
 					sb.append("easy");
 					break;
@@ -150,6 +143,7 @@ public class TouHouKnowledge {
 	}
 
 	public void addQA(QA qa) {
+		qa.id = qaList.size();
 		qaList.add(qa);
 		saveData();
 	}
@@ -165,80 +159,12 @@ public class TouHouKnowledge {
 		}
     }
 
-	public static class QABuilder {
-		private int flag=0;
-		private String q;
-		private ArrayList<String> a = new ArrayList<>();
-		private int t;//true answer
-		private String r;//reason
-
-		public void setFlag(int flag) {
-			this.flag = flag;
-		}
-		public QABuilder setReason(String r) {
-			this.r = r;
-			return this;
-		}
-		public QABuilder setAnswer(String a) {
-			this.a.add(a);
-			return this;
-		}
-		public QABuilder setTrueAnswer(int index) {
-			t = index;
-			return this;
-		}
-		public QABuilder setQuestion(String q) {
-			this.q = q;
-			return this;
-		}
-		public QABuilder setDifficult(int diff) {
-			flag &= (diff << 24);
-			return this;
-		}
-		public QABuilder setKind(int kind) {
-			flag &= kind << 16;
-			return this;
-		}
-		public QABuilder setId(int id) {
-			flag &= id;
-			return this;
-		}
-		public QA build() {
-			if (q == null || a == null) {
-				return null;
-			}
-			QA qa=new QA();
-			qa.flag = flag;
-			qa.q = q;
-			qa.a = a;
-			qa.t = t;
-			if (r == null) {
-				qa.r = "无说明";
-			} else {
-				qa.r = r;
-			}
-			return qa;
-		}
-	}
-
 	public static class QA {
-		public int flag=0;
+		public int id=0;
+		public int d=0;
 		public String q;
 		public ArrayList<String> a = new ArrayList<>();
 		public int t;//trueAns
 		public String r;//reason
-
-		public int getDiffcult() {
-			return flag >>> 24;
-		}
-		public int getKind() {
-			return (flag & 0xff) >>> 16;
-		}
-		public int getId() {
-			return flag & 0xffff;
-		}
-		public void setId(int id) {
-			flag &= id;
-		}
 	}
 }
