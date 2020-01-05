@@ -12,13 +12,13 @@ public class CQCodeManager {
 		 } else*/ if (msg.startsWith("[CQ:music")) {
             switch (Autoreply.ins.random.nextInt(3)) {
                 case 0:
-                    Autoreply.sendMessage(fromGroup, 0, Autoreply.ins.getCQCode().music(22636603, "163", false));
+                    Autoreply.sendMessage(fromGroup, 0, Autoreply.ins.getCQCode().music(22636603, "163", 0));
                     break;
                 case 1:
-                    Autoreply.sendMessage(fromGroup, 0, Autoreply.ins.getCQCode().music(103744845, "qq", false));
+                    Autoreply.sendMessage(fromGroup, 0, Autoreply.ins.getCQCode().music(103744845, "qq", 0));
                     break;
                 case 2:
-                    Autoreply.sendMessage(fromGroup, 0, Autoreply.ins.getCQCode().music(103744852, "qq", false));
+                    Autoreply.sendMessage(fromGroup, 0, Autoreply.ins.getCQCode().music(103744852, "qq", 0));
                     break;
             }
             return true;
