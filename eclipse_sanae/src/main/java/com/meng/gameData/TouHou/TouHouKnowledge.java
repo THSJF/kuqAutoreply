@@ -94,9 +94,35 @@ public class TouHouKnowledge {
 			}
 			return true;
 		}
+		if (msg.equals("-qa 设置抢答")) {
+			PersonConfig pcfg=ConfigManager.ins.getPersonCfg(fromQQ);
+			pcfg.setQaAllowOther(pcfg.isQaAllowOther() ?false: true);
+			Autoreply.sendMessage(fromGroup, 0, "允许抢答:" + pcfg.isQaAllowOther());
+			ConfigManager.ins.saveSanaeConfig();
+		}
+		if (msg.startsWith("抢答[")) {
+			String ans=msg.substring(msg.indexOf("]") + 1);
+			long target=Autoreply.CC.getAt(msg);
+			if (ConfigManager.ins.getPersonCfg(target).isQaAllowOther()) {
+				QA qa = qaMap.get(fromQQ);
+				if (qa != null) {
+					if (String.valueOf(qa.t + 1).equals(ans)) {
+						Autoreply.sendMessage(fromGroup, 0, Autoreply.CC.at(fromQQ) + "回答正确");
+					} else {
+						Autoreply.sendMessage(fromGroup, 0, String.format("%s回答错误", Autoreply.CC.at(fromQQ)));
+					}
+					qaMap.remove(fromQQ);
+					return true;
+				}
+			} else {
+				Autoreply.sendMessage(fromGroup, 0, "该用户不允许别人抢答");
+			}
+			return true;
+		}
 		QA qa = qaMap.get(fromQQ);
 		if (qa != null && msg.equalsIgnoreCase("-qa")) {
 			Autoreply.sendMessage(fromGroup, 0, Autoreply.CC.at(fromQQ) + "你还没有回答");
+			return true;
 		}
 		if (qa != null) {
 			if (String.valueOf(qa.t + 1).equals(msg)) {
@@ -130,6 +156,11 @@ public class TouHouKnowledge {
 					break;
 			}
 			sb.append("\n\n").append(qa2.q).append("\n");
+
+			int change=Autoreply.ins.random.nextInt(qa.a.size());
+			exchange(qa.a, qa.t, change);
+			qa.t = change;
+			saveData();
 			qaMap.put(fromQQ, qa2);
 			int i=1;
 			for (String s:qa2.a) {
@@ -161,6 +192,15 @@ public class TouHouKnowledge {
 			e.printStackTrace();
 		}
     }
+
+	public <T> void exchange(List<T> list, int pos1, int pos2) {
+		if (null == list || list.size() < 2) {
+			throw new IllegalStateException("The list illegal");
+		}
+		T ele1 = list.get(pos1);
+		list.set(pos1, list.get(pos2));
+		list.set(pos2, ele1);
+	}
 
 	public static class QA {
 		public int id=0;

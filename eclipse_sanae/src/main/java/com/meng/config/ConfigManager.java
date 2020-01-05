@@ -363,7 +363,16 @@ public class ConfigManager extends WebSocketClient {
 		}
         return null;
 	}
-
+	
+	public PersonConfig getPersonCfg(long fromQQ) {
+		PersonConfig pcfg=SanaeConfig.personCfg.get(fromQQ);
+		if (pcfg == null) {
+			pcfg = new PersonConfig();
+			SanaeConfig.personCfg.put(fromQQ, pcfg);
+		}
+		return pcfg;
+	}
+	
     public void addBlack(long group, final long qq) {
         RanConfig.blackListQQ.add(qq);
         RanConfig.blackListGroup.add(group);
