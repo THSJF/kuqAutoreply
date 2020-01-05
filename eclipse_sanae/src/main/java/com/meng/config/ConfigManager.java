@@ -2,6 +2,8 @@ package com.meng.config;
 
 import com.google.gson.reflect.*;
 import com.meng.*;
+import com.meng.bilibili.live.*;
+import com.meng.bilibili.main.*;
 import com.meng.dice.*;
 import com.meng.groupChat.*;
 import com.meng.messageProcess.*;
@@ -18,9 +20,6 @@ import java.util.concurrent.*;
 import org.java_websocket.client.*;
 import org.java_websocket.exceptions.*;
 import org.java_websocket.handshake.*;
-import com.meng.bilibili.main.*;
-import com.meng.bilibili.live.*;
-import com.meng.gameData.TouHou.*;
 
 public class ConfigManager extends WebSocketClient {
 	public static ConfigManager ins;

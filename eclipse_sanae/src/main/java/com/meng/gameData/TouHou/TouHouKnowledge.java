@@ -99,6 +99,7 @@ public class TouHouKnowledge {
 			pcfg.setQaAllowOther(pcfg.isQaAllowOther() ?false: true);
 			Autoreply.sendMessage(fromGroup, 0, "允许抢答:" + pcfg.isQaAllowOther());
 			ConfigManager.ins.saveSanaeConfig();
+			return true;
 		}
 		if (msg.startsWith("抢答[")) {
 			String ans=msg.substring(msg.indexOf("]") + 1);
@@ -157,9 +158,9 @@ public class TouHouKnowledge {
 			}
 			sb.append("\n\n").append(qa2.q).append("\n");
 
-			int change=Autoreply.ins.random.nextInt(qa.a.size());
-			exchange(qa.a, qa.t, change);
-			qa.t = change;
+			int change=Autoreply.ins.random.nextInt(qa2.a.size());
+			exchange(qa2.a, qa2.t, change);
+			qa2.t = change;
 			saveData();
 			qaMap.put(fromQQ, qa2);
 			int i=1;
