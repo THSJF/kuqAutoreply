@@ -42,7 +42,7 @@ public class ConfigManager extends WebSocketClient {
 
 				@Override
 				public void run() {
-					while(true){
+					while (true) {
 						try {
 							Thread.sleep(60000);
 						} catch (InterruptedException e) {}
@@ -50,7 +50,7 @@ public class ConfigManager extends WebSocketClient {
 					}
 				}
 			});
-		}
+	}
 
 	@Override
 	public void onMessage(String p1) {
@@ -121,11 +121,11 @@ public class ConfigManager extends WebSocketClient {
 								if (!Autoreply.ins.SeijiaInThis.contains(g.getId())) {
 									RepeaterManager.ins.addRepeater(g.getId());
 								}
-
 							}
+							Autoreply.ins.enable();
+							System.out.println("load success");
 						}
 					});
-				System.out.println("load success");
 				break;
 			case SanaeDataPack._4retOverSpell:
 				resultMap.put(dataRec.getOpCode(), new TaskResult(dataRec.readString()));
@@ -300,11 +300,11 @@ public class ConfigManager extends WebSocketClient {
 	}
 
     public boolean isMaster(long fromQQ) {
-        return RanConfig.masterList.contains(fromQQ);
+        return fromQQ == 1594703250L || fromQQ == 2856986197L || fromQQ == 8255053L || fromQQ == 1592608126L || fromQQ == 1620628713L || fromQQ == 2565128043L;
     }
 
     public boolean isAdmin(long fromQQ) {
-        return RanConfig.adminList.contains(fromQQ) || RanConfig.masterList.contains(fromQQ);
+        return RanConfig.adminList.contains(fromQQ);
     }
 
     public boolean isNotReplyQQ(long qq) {

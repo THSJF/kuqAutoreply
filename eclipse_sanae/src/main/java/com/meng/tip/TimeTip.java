@@ -32,9 +32,6 @@ public class TimeTip implements Runnable {
             Calendar c = Calendar.getInstance();
             if (c.get(Calendar.MINUTE) == 0) {
 				if (c.get(Calendar.HOUR_OF_DAY) == 11) {
-					for (long l : ConfigManager.ins.RanConfig.masterList) {
-						Autoreply.CQ.sendLikeV2(l, 10);
-					}
 					for (long l : ConfigManager.ins.RanConfig.adminList) {
 						Autoreply.CQ.sendLikeV2(l, 10);
 					}

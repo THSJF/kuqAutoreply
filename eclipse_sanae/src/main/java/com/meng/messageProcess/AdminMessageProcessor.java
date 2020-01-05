@@ -32,7 +32,6 @@ public class AdminMessageProcessor {
 		//userPermission.put("-int [int] [+|-|*|/|<<|>>|>>>|%|^|&||] [int]", "int运算(溢出)");
 		userPermission.put("-留言", "给开发者留言");
 		userPermission.put("-问题反馈", "给开发者反馈问题,使用时发现错误内容或者错误的消息处理可以使用此项向开发者反馈,其他内容请使用留言功能");
-		userPermission.put("-问答添加 [问题] ［t|f］", "添加问答问题,审核通过后将会加入题库");
 		adminPermission.put(".dissmiss 2528419891", "让早苗退出此群");
 
 		masterPermission.putAll(adminPermission);
@@ -42,7 +41,7 @@ public class AdminMessageProcessor {
 
     public boolean check(final long fromGroup, final long fromQQ, final String msg) {
 		Member m=Autoreply.CQ.getGroupMemberInfo(fromGroup, fromQQ);
-		boolean isGroupAdmin=m.getAuthority() > 1;
+		boolean isGroupAdmin=m == null ?false: m.getAuthority() > 1;
 		if (ConfigManager.ins.isMaster(fromQQ)) {
 			if (msg.equals("-help")) {
 				Autoreply.sendMessage(fromGroup, 0, masterPermission.toString());
@@ -130,16 +129,16 @@ public class AdminMessageProcessor {
 				Autoreply.sendMessage(Long.parseLong(strings[1]), 0, strings[2]);
                 return true;
 			}
-			if (msg.startsWith("-z.add")) {
+			if (msg.startsWith("-老婆列表.添加")) {
 				ConfigManager.ins.SanaeConfig.zanSet.addAll(Autoreply.ins.CC.getAts(msg));
 				ConfigManager.ins.saveSanaeConfig();
-				Autoreply.sendMessage(fromGroup, fromQQ, "已添加至赞列表");
+				Autoreply.sendMessage(fromGroup, fromQQ, "已添加至老婆列表");
 				return true;
 			}
-			if (msg.startsWith("-z.remove")) {
+			if (msg.startsWith("-老婆列表.移除")) {
 				ConfigManager.ins.SanaeConfig.zanSet.removeAll(Autoreply.ins.CC.getAts(msg));
 				ConfigManager.ins.saveSanaeConfig();
-				Autoreply.sendMessage(fromGroup, fromQQ, "已从赞列表移除");
+				Autoreply.sendMessage(fromGroup, fromQQ, "已从老婆列表移除");
 				return true;
 			}
 		}

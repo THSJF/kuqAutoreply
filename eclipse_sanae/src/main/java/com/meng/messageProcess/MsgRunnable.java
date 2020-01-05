@@ -31,10 +31,6 @@ public class MsgRunnable implements Runnable {
 			Autoreply.sendMessage(fromGroup, 0, Autoreply.ins.adminMessageProcessor.userPermission.toString());
 			return;
 		}
-		if (msg.equals(".live")) {
-			Autoreply.sendMessage(fromGroup, fromQQ, ConfigManager.ins.getLiveList());
-			return;
-		}
 		MessageWaitManager.ins.check(fromGroup, fromQQ);
 		if (DiceCommand.ins.check(fromGroup, fromQQ, msg)){
 			return;
@@ -43,65 +39,6 @@ public class MsgRunnable implements Runnable {
             return;
         }
 		if (FaithManager.ins.check(fromGroup, fromQQ, msg)) {
-			return;
-		}
-		if (msg.startsWith("-int ")) {
-			try {
-				String[] args=msg.split(" ", 4);
-				int a1=Integer.parseInt(args[1]);
-				int a2=Integer.parseInt(args[3]);
-				String resu="failed";
-				switch (args[2]) {
-					case "+":
-						resu = "result:" + (a1 + a2);
-						break;
-					case "-":
-						resu = "result:" + (a1 - a2);
-						break;
-					case "*":
-						resu = "result:" + (a1 * a2);
-						break;
-					case "/":
-						resu = "result:" + (a1 / a2);
-						break;
-					case ">>":
-						resu = "result:" + (a1 >> a2);
-						break;
-					case ">>>":
-						resu = "result:" + (a1 >>> a2);
-						break;
-					case "<<":
-						resu = "result:" + (a1 << a2);
-						break;
-					case "^":
-						resu = "result:" + (a1 ^ a2);
-						break;
-					case "%":
-						resu = "result:" + (a1 % a2);
-						break;
-					case "|":
-						resu = "result:" + (a1 | a2);
-						break;
-					case "&amp;"://&
-						resu = "result:" + (a1 & a2);
-						break;
-					case "~":
-						resu = "result:" + (~a1);
-						break;
-				}
-				Autoreply.sendMessage(fromGroup, 0, resu);
-			} catch (Exception e) {
-				Autoreply.sendMessage(fromGroup, 0, e.toString());
-			}
-			return;
-		}
-		if (msg.startsWith("-uint ")) {
-			String[] args=msg.split("\\s", 2);
-			try {
-				Autoreply.sendMessage(fromGroup, 0, (Integer.parseInt(args[1]) & 0x00000000ffffffffL) + "");
-			} catch (Exception e) {
-				Autoreply.sendMessage(fromGroup, 0, e.toString());
-			}
 			return;
 		}
 		if (msg.startsWith(".nn ")) {
@@ -128,13 +65,10 @@ public class MsgRunnable implements Runnable {
 		if (Autoreply.ins.spellCollect.check(fromGroup, fromQQ, msg)) {
 			return;
 		}
-		if (RepeaterManager.ins.check(fromGroup, fromQQ, msg)) {// 复读
-			return;
-		}
-		if (GuessSpell.ins.check(fromGroup, fromQQ, msg)) {
-			return;
-		}
 		if (TouHouKnowledge.ins.check(fromGroup, fromQQ, msg)) {
+			return;
+		}
+		if (RepeaterManager.ins.check(fromGroup, fromQQ, msg)) {// 复读
 			return;
 		}
 		if (Autoreply.ins.CQcodeManager.check(fromGroup, msg)) {// 特殊信息(签到分享等)

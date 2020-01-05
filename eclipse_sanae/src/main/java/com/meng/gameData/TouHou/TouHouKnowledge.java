@@ -94,12 +94,25 @@ public class TouHouKnowledge {
 			}
 			return true;
 		}
+		QA qa = qaMap.get(fromQQ);
+		if (qa != null && msg.equalsIgnoreCase("-qa")) {
+			Autoreply.sendMessage(fromGroup, 0, Autoreply.CC.at(fromQQ) + "你还没有回答");
+		}
+		if (qa != null) {
+			if (String.valueOf(qa.t + 1).equals(msg)) {
+				Autoreply.sendMessage(fromGroup, 0, Autoreply.CC.at(fromQQ) + "回答正确");
+			} else {
+				Autoreply.sendMessage(fromGroup, 0, String.format("%s回答错误\n%s", Autoreply.CC.at(fromQQ), qa.r == null ?"": qa.r));
+			}
+			qaMap.remove(fromQQ);
+			return true;
+		}
 		if (msg.equalsIgnoreCase("-qa")) {
 			int ran=Autoreply.ins.random.nextInt(qaList.size());
-			QA qa=qaList.get(ran);
+			QA qa2=qaList.get(ran);
 			StringBuilder sb=new StringBuilder(Autoreply.CC.at(fromQQ)).append("\n题目ID:").append(ran).append("\n");
 			sb.append("难度:");
-			switch (qa.d) {
+			switch (qa2.d) {
 				case 0:
 					sb.append("easy");
 					break;
@@ -116,10 +129,10 @@ public class TouHouKnowledge {
 					sb.append("overdrive");
 					break;
 			}
-			sb.append("\n\n").append(qa.q).append("\n");
-			qaMap.put(fromQQ, qa);
+			sb.append("\n\n").append(qa2.q).append("\n");
+			qaMap.put(fromQQ, qa2);
 			int i=1;
-			for (String s:qa.a) {
+			for (String s:qa2.a) {
 				if (s.equals("")) {
 					continue;
 				}
@@ -127,16 +140,6 @@ public class TouHouKnowledge {
 			}
 			sb.append("回答序号即可");
 			Autoreply.sendMessage(fromGroup, 0, sb.toString());
-			return true;
-		}
-		QA qa = qaMap.get(fromQQ);
-		if (qa != null) {
-			if (String.valueOf(qa.t + 1).equals(msg)) {
-				Autoreply.sendMessage(fromGroup, 0, Autoreply.CC.at(fromQQ) + "回答正确");
-			} else {
-				Autoreply.sendMessage(fromGroup, 0, String.format("%s回答错误\n%s", Autoreply.CC.at(fromQQ), qa.r == null ?"": qa.r));
-			}
-			qaMap.remove(fromQQ);
 			return true;
 		}
 		return false;
