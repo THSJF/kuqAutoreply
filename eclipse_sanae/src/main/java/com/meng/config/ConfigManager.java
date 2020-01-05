@@ -9,7 +9,6 @@ import com.meng.groupChat.*;
 import com.meng.messageProcess.*;
 import com.meng.tip.*;
 import com.meng.tools.*;
-import com.sobte.cqp.jcq.entity.*;
 import java.io.*;
 import java.lang.reflect.*;
 import java.net.*;
@@ -20,6 +19,7 @@ import java.util.concurrent.*;
 import org.java_websocket.client.*;
 import org.java_websocket.exceptions.*;
 import org.java_websocket.handshake.*;
+import org.meowy.cqp.jcq.entity.*;
 
 public class ConfigManager extends WebSocketClient {
 	public static ConfigManager ins;
@@ -32,7 +32,7 @@ public class ConfigManager extends WebSocketClient {
 		super(uri);
 		Type type = new TypeToken<SanaeConfigJavaBean>() {
 		}.getType();
-		SanaeConfigFile = new File(Autoreply.appDirectory + "/SanaeConfig.json");
+		SanaeConfigFile = new File(Autoreply.ins.appDirectory + "/SanaeConfig.json");
 		if (!SanaeConfigFile.exists()) {
 			saveSanaeConfig();
 		}
@@ -108,11 +108,11 @@ public class ConfigManager extends WebSocketClient {
 							MessageWaitManager.ins = new MessageWaitManager();
 							Autoreply.ins.threadPool.execute(new UpdateListener());
 							Autoreply.ins.threadPool.execute(new LiveListener());
-							List<Group> groupList=Autoreply.CQ.getGroupList();
+							List<Group> groupList=Autoreply.ins.getCoolQ().getGroupList();
 							for (Group g:groupList) {
-								List<com.sobte.cqp.jcq.entity.Member> mlist=Autoreply.CQ.getGroupMemberList(g.getId());
-								for (com.sobte.cqp.jcq.entity.Member m:mlist) {
-									if (m.getQqId() == 2089693971L) {
+								List<org.meowy.cqp.jcq.entity.Member> mlist=Autoreply.ins.getCoolQ().getGroupMemberList(g.getId());
+								for (org.meowy.cqp.jcq.entity.Member m:mlist) {
+									if (m.getQQId() == 2089693971L) {
 										Autoreply.ins.SeijiaInThis.add(g.getId());
 										break;
 									}
@@ -276,7 +276,7 @@ public class ConfigManager extends WebSocketClient {
 		if (nick == null) {
 			PersonInfo pi=getPersonInfoFromQQ(qq);
 			if (pi == null) {
-				nick = Autoreply.CQ.getStrangerInfo(qq).getNick();
+				nick = Autoreply.ins.getCoolQ().getStrangerInfo(qq).getNick();
 			} else {
 				nick = pi.name;
 			}
@@ -290,7 +290,7 @@ public class ConfigManager extends WebSocketClient {
 		if (nick == null) {
 			PersonInfo pi=getPersonInfoFromQQ(qq);
 			if (pi == null) {
-				nick = Autoreply.CQ.getGroupMemberInfo(group, qq).getNick();
+				nick = Autoreply.ins.getCoolQ().getGroupMemberInfo(group, qq).getNick();
 			} else {
 				nick = pi.name;
 			}
@@ -362,7 +362,7 @@ public class ConfigManager extends WebSocketClient {
 		}
         return null;
 	}
-	
+
 	public PersonConfig getPersonCfg(long fromQQ) {
 		PersonConfig pcfg=SanaeConfig.personCfg.get(fromQQ);
 		if (pcfg == null) {
@@ -371,14 +371,14 @@ public class ConfigManager extends WebSocketClient {
 		}
 		return pcfg;
 	}
-	
+
     public void addBlack(long group, final long qq) {
         RanConfig.blackListQQ.add(qq);
         RanConfig.blackListGroup.add(group);
 		send(SanaeDataPack.encode(SanaeDataPack._26addBlack).write(group).write(qq));
         Autoreply.sendMessage(Autoreply.mainGroup, 0, "已将用户" + qq + "加入黑名单");
         Autoreply.sendMessage(Autoreply.mainGroup, 0, "已将群" + group + "加入黑名单");
-		Autoreply.CQ.setGroupLeave(group, false);
+		Autoreply.ins.getCoolQ().setGroupLeave(group, false);
     }
 
 	public void addReport(long fromGroup, long fromQQ, String content) {

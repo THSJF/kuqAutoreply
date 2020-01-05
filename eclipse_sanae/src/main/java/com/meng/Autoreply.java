@@ -8,12 +8,11 @@ import com.meng.groupChat.*;
 import com.meng.messageProcess.*;
 import com.meng.tip.*;
 import com.meng.tools.*;
-import com.sobte.cqp.jcq.entity.*;
-import com.sobte.cqp.jcq.event.*;
 import java.net.*;
 import java.util.*;
 import java.util.concurrent.*;
-import com.meng.bilibili.*;
+import org.meowy.cqp.jcq.entity.*;
+import org.meowy.cqp.jcq.event.*;
 
 public class Autoreply extends JcqAppAbstract implements ICQVer, IMsg, IRequest {
 
@@ -36,11 +35,14 @@ public class Autoreply extends JcqAppAbstract implements ICQVer, IMsg, IRequest 
 	public static final long mainGroup=807242547L;
 	public static Gson gson;
     public static void main(String[] args) {
-        CQ = new CoolQ(1000);
         Autoreply demo = new Autoreply();
         demo.startup();
     }
 
+	public Autoreply() {
+		super(MyCQ.getInstance());
+	}
+	
     @Override
     public String appInfo() {
         return CQAPIVER + "," + "com.meng.autoreply";
@@ -308,9 +310,9 @@ public class Autoreply extends JcqAppAbstract implements ICQVer, IMsg, IRequest 
         }
         int value=-1;
         if (fromGroup == 0 || fromGroup == -1) {
-            value = CQ.sendPrivateMsg(fromQQ, msg);
+            value = ins.getCoolQ().sendPrivateMsg(fromQQ, msg);
         } else {
-			value = CQ.sendGroupMsg(fromGroup, msg);
+			value = ins.getCoolQ().sendGroupMsg(fromGroup, msg);
 			GroupCounter.ins.addSpeak(fromGroup, 1);
         }
         return value;

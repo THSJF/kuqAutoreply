@@ -29,7 +29,7 @@ public class TouHouKnowledge {
 	public static final int th15=2;
 
 	public TouHouKnowledge() {
-		qafile = new File(Autoreply.appDirectory + "/qa.json");
+		qafile = new File(Autoreply.ins.appDirectory + "/qa.json");
         if (!qafile.exists()) {
             saveData();
         }
@@ -102,17 +102,17 @@ public class TouHouKnowledge {
 			return true;
 		}
 		if (msg.startsWith("抢答[")) {
-			String ans=msg.substring(msg.indexOf("]") + 1);
-			long target=Autoreply.CC.getAt(msg);
+			String ans=msg.substring(msg.indexOf("]") + 1).replace(" ", "");
+			long target=Autoreply.ins.getCQCode().getAt(msg);
 			if (ConfigManager.ins.getPersonCfg(target).isQaAllowOther()) {
-				QA qa = qaMap.get(fromQQ);
+				QA qa = qaMap.get(target);
 				if (qa != null) {
 					if (String.valueOf(qa.t + 1).equals(ans)) {
-						Autoreply.sendMessage(fromGroup, 0, Autoreply.CC.at(fromQQ) + "回答正确");
+						Autoreply.sendMessage(fromGroup, 0, Autoreply.ins.getCQCode().at(fromQQ) + "回答正确");
 					} else {
-						Autoreply.sendMessage(fromGroup, 0, String.format("%s回答错误", Autoreply.CC.at(fromQQ)));
+						Autoreply.sendMessage(fromGroup, 0, String.format("%s回答错误", Autoreply.ins.getCQCode().at(fromQQ)));
 					}
-					qaMap.remove(fromQQ);
+					qaMap.remove(target);
 					return true;
 				}
 			} else {
@@ -122,14 +122,14 @@ public class TouHouKnowledge {
 		}
 		QA qa = qaMap.get(fromQQ);
 		if (qa != null && msg.equalsIgnoreCase("-qa")) {
-			Autoreply.sendMessage(fromGroup, 0, Autoreply.CC.at(fromQQ) + "你还没有回答");
+			Autoreply.sendMessage(fromGroup, 0, Autoreply.ins.getCQCode().at(fromQQ) + "你还没有回答");
 			return true;
 		}
 		if (qa != null) {
 			if (String.valueOf(qa.t + 1).equals(msg)) {
-				Autoreply.sendMessage(fromGroup, 0, Autoreply.CC.at(fromQQ) + "回答正确");
+				Autoreply.sendMessage(fromGroup, 0, Autoreply.ins.getCQCode().at(fromQQ) + "回答正确");
 			} else {
-				Autoreply.sendMessage(fromGroup, 0, String.format("%s回答错误\n%s", Autoreply.CC.at(fromQQ), qa.r == null ?"": qa.r));
+				Autoreply.sendMessage(fromGroup, 0, String.format("%s回答错误\n%s", Autoreply.ins.getCQCode().at(fromQQ), qa.r == null ?"": qa.r));
 			}
 			qaMap.remove(fromQQ);
 			return true;
@@ -137,7 +137,7 @@ public class TouHouKnowledge {
 		if (msg.equalsIgnoreCase("-qa")) {
 			int ran=Autoreply.ins.random.nextInt(qaList.size());
 			QA qa2=qaList.get(ran);
-			StringBuilder sb=new StringBuilder(Autoreply.CC.at(fromQQ)).append("\n题目ID:").append(ran).append("\n");
+			StringBuilder sb=new StringBuilder(Autoreply.ins.getCQCode().at(fromQQ)).append("\n题目ID:").append(ran).append("\n");
 			sb.append("难度:");
 			switch (qa2.d) {
 				case 0:

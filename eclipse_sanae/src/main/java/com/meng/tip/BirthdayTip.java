@@ -1,16 +1,15 @@
 package com.meng.tip;
-import com.google.gson.*;
+
 import com.google.gson.reflect.*;
 import com.meng.*;
 import com.meng.tools.*;
-import com.sobte.cqp.jcq.entity.*;
 import java.io.*;
 import java.lang.reflect.*;
 import java.nio.charset.*;
 import java.util.*;
-import java.util.concurrent.*;
+import org.meowy.cqp.jcq.entity.*;
 
-import com.sobte.cqp.jcq.entity.Member;
+import org.meowy.cqp.jcq.entity.Member;
 
 public class BirthdayTip {
 	private HashSet<Long> tiped=new HashSet<Long>();
@@ -18,7 +17,7 @@ public class BirthdayTip {
 	private HashMap<Long,Integer> memberMap=new HashMap<>();
 	public BirthdayTip() {
 
-		ageFile = new File(Autoreply.appDirectory + "/properties/birthday.json");
+		ageFile = new File(Autoreply.ins.appDirectory + "/properties/birthday.json");
         if (!ageFile.exists()) {
             saveConfig();
         }
@@ -46,17 +45,17 @@ public class BirthdayTip {
 	public void check() {
 		Calendar c = Calendar.getInstance();
 		if (c.get(Calendar.HOUR_OF_DAY) == 6 && c.get(Calendar.MINUTE) == 1) {
-			List<Group> groups=Autoreply.CQ.getGroupList();
+			List<Group> groups=Autoreply.ins.getCoolQ().getGroupList();
 			for (Group group:groups) {
-				List<Member> members=Autoreply.CQ.getGroupMemberList(group.getId());
+				List<Member> members=Autoreply.ins.getCoolQ().getGroupMemberList(group.getId());
 				for (Member member:members) {
-					if (memberMap.get(member.getQqId()) != null && member.getAge() > memberMap.get(member.getQqId())) {
-						if (!tiped.contains(member.getQqId())) {
-							Autoreply.sendMessage(0, member.getQqId(), "生日快乐!");
-							tiped.add(member.getQqId());
+					if (memberMap.get(member.getQQId()) != null && member.getAge() > memberMap.get(member.getQQId())) {
+						if (!tiped.contains(member.getQQId())) {
+							Autoreply.sendMessage(0, member.getQQId(), "生日快乐!");
+							tiped.add(member.getQQId());
 						}
 					}
-					memberMap.put(member.getQqId(), member.getAge());
+					memberMap.put(member.getQQId(), member.getAge());
 				}
 			}
 			saveConfig();

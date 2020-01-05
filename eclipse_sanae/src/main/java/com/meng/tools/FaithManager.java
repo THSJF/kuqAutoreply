@@ -19,7 +19,7 @@ public class FaithManager {
 	private File file;
 
 	public FaithManager() {
-		file = new File(Autoreply.appDirectory + "properties\\faith.json");
+		file = new File(Autoreply.ins.appDirectory + "properties\\faith.json");
 		if (!file.exists()) {
 			saveData();
 		}
@@ -84,7 +84,7 @@ public class FaithManager {
 		}
 		if (msg.equals("-赞我")) {
 			if (FaithManager.ins.getFaith(fromQQ) > 1) {
-				Autoreply.CQ.sendLikeV2(fromQQ, 10);
+				Autoreply.ins.getCoolQ().sendLike(fromQQ, 10);
 				FaithManager.ins.subFaith(fromQQ, 2);
 				Autoreply.sendMessage(fromGroup, fromQQ, "点赞完成");
 			} else {

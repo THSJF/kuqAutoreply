@@ -20,21 +20,21 @@ public class SpellCollect {
 	private File signedFile;
 	public ArrayList<Archievement> archList=new ArrayList<>();
 	public SpellCollect() {
-		spellFile = new File(Autoreply.appDirectory + "/properties/sanaeSpells.json");
+		spellFile = new File(Autoreply.ins.appDirectory + "/properties/sanaeSpells.json");
         if (!spellFile.exists()) {
             saveSpellConfig();
         }
         Type type = new TypeToken<ConcurrentHashMap<Long,HashSet<SpellCard>>>() {
         }.getType();
         spellsMap = Autoreply.gson.fromJson(Tools.FileTool.readString(spellFile), type);
-		archiFile = new File(Autoreply.appDirectory + "/properties/archievement.json");
+		archiFile = new File(Autoreply.ins.appDirectory + "/properties/archievement.json");
         if (!archiFile.exists()) {
             saveArchiConfig();
         }
         Type type2 = new TypeToken<ConcurrentHashMap<Long,ArchievementBean>>() {
         }.getType();
         archiMap = Autoreply.gson.fromJson(Tools.FileTool.readString(archiFile), type2);
-		signedFile = new File(Autoreply.appDirectory + "/properties/sign.json");
+		signedFile = new File(Autoreply.ins.appDirectory + "/properties/sign.json");
 		if (!signedFile.exists()) {
 			saveSignConfig();
 		}
