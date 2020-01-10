@@ -1,11 +1,11 @@
 package com.meng.tip;
 
 import com.meng.*;
-import com.meng.bilibili.*;
 import com.meng.config.*;
-import com.meng.tools.*;
 import java.util.*;
-import org.meowy.cqp.jcq.entity.*;
+import com.sobte.cqp.jcq.entity.*;
+import com.meng.tools.*;
+import com.meng.bilibili.*;
 
 public class TimeTip implements Runnable {
 
@@ -33,10 +33,10 @@ public class TimeTip implements Runnable {
             if (c.get(Calendar.MINUTE) == 0) {
 				if (c.get(Calendar.HOUR_OF_DAY) == 11) {
 					for (long l : ConfigManager.ins.RanConfig.adminList) {
-						Autoreply.ins.getCoolQ().sendLike(l, 10);
+						Autoreply.CQ.sendLikeV2(l, 10);
 					}
 					for (long l : ConfigManager.ins.SanaeConfig.zanSet) {
-						Autoreply.ins.getCoolQ().sendLike(l, 10);
+						Autoreply.CQ.sendLikeV2(l, 10);
 					}
 				}
 				if (c.get(Calendar.HOUR_OF_DAY) == 0) {
@@ -52,7 +52,7 @@ public class TimeTip implements Runnable {
 					Autoreply.ins.threadPool.execute(new Runnable() {
 							@Override
 							public void run() {
-								List<Group> groupList=Autoreply.ins.getCoolQ().getGroupList();
+								List<Group> groupList=Autoreply.CQ.getGroupList();
 								for (Group g:groupList) {
 									if (Autoreply.sendMessage(g.getId(), 0, goodEvening) < 0) {
 										continue;
@@ -72,7 +72,7 @@ public class TimeTip implements Runnable {
 							@Override
 							public void run() {
 								Autoreply.sleeping = false;
-								List<Group> groupList=Autoreply.ins.getCoolQ().getGroupList();
+								List<Group> groupList=Autoreply.CQ.getGroupList();
 								for (Group g:groupList) {
 									if (Autoreply.sendMessage(g.getId(), 0, goodMorning) < 0) {
 										continue;

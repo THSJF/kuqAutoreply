@@ -16,7 +16,7 @@ public class DicReply {
 	private HashMap<String, ArrayList<String>> dic = new HashMap<>();
 	private boolean regexMode = false;
 	public DicReply() {
-		File dicFile = new File(Autoreply.ins.appDirectory + "dic\\dic.json");
+		File dicFile = new File(Autoreply.appDirectory + "dic\\dic.json");
 		if (!dicFile.exists()) {
 			saveDic(dicFile, dic);
 		}
@@ -50,7 +50,7 @@ public class DicReply {
 		for (String s:v) {
 			ans.add(s);
 		}
-		saveDic(new File(Autoreply.ins.appDirectory + "dic\\dic" + drg.groupNum + ".json"), drg.dic);
+		saveDic(new File(Autoreply.appDirectory + "dic\\dic" + drg.groupNum + ".json"), drg.dic);
 	}
 
 	public void removeK(long group, String k) {
@@ -63,7 +63,7 @@ public class DicReply {
 			return;
 		}
 		drg.dic.remove(k);
-		saveDic(new File(Autoreply.ins.appDirectory + "dic\\dic" + drg.groupNum + ".json"), drg.dic);
+		saveDic(new File(Autoreply.appDirectory + "dic\\dic" + drg.groupNum + ".json"), drg.dic);
 	}
 
 	public void clear() {
@@ -111,7 +111,7 @@ public class DicReply {
 		public boolean regexMode=false;
 		public DicReplyGroup(long group) {
 			groupNum = group;
-			File dicFile = new File(Autoreply.ins.appDirectory + "dic\\dic" + group + ".json");
+			File dicFile = new File(Autoreply.appDirectory + "dic\\dic" + group + ".json");
 			if (!dicFile.exists()) {
 				saveDic(dicFile, dic);
 			}

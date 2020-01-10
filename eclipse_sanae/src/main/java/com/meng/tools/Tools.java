@@ -2,6 +2,7 @@ package com.meng.tools;
 
 import com.meng.*;
 import com.meng.gameData.TouHou.*;
+import com.sobte.cqp.jcq.entity.*;
 import java.io.*;
 import java.net.*;
 import java.nio.charset.*;
@@ -9,7 +10,6 @@ import java.security.*;
 import java.text.*;
 import java.util.*;
 import org.jsoup.*;
-import org.meowy.cqp.jcq.entity.*;
 
 public class Tools {
 
@@ -143,8 +143,8 @@ public class Tools {
 
 	public static class CQ {
 		public static boolean checkAt(long fromGroup, long fromQQ, String msg) {
-			if (Autoreply.ins.getCQCode().getAt(msg) == Autoreply.ins.getCoolQ().getLoginQQ()) {      
-				Autoreply.sendMessage(fromGroup, 0, msg.replace("[CQ:at,qq=" + Autoreply.ins.getCoolQ().getLoginQQ() + "]", "[CQ:at,qq=" + fromQQ + "]"));
+			if (Autoreply.ins.CC.getAt(msg) == Autoreply.CQ.getLoginQQ()) {      
+				Autoreply.sendMessage(fromGroup, 0, msg.replace("[CQ:at,qq=" + Autoreply.CQ.getLoginQQ() + "]", "[CQ:at,qq=" + fromQQ + "]"));
 				return true;
 			}
 			return false;
@@ -154,7 +154,7 @@ public class Tools {
 			try {
 				findqq = Long.parseLong(msg.substring(10));
 			} catch (Exception e) {
-				findqq = Autoreply.ins.getCQCode().getAt(msg);
+				findqq = Autoreply.ins.CC.getAt(msg);
 			}
 			if (findqq <= 0) {
 				Autoreply.sendMessage(fromGroup, fromQQ, "QQ账号错误");
@@ -170,15 +170,15 @@ public class Tools {
 			Autoreply.sendMessage(fromGroup, fromQQ, stringBuilder.toString());
 		}
 		public static HashSet<Group> findQQInAllGroup(long findQQ) {
-			List<Group> groups = Autoreply.ins.getCoolQ().getGroupList();
+			List<Group> groups = Autoreply.CQ.getGroupList();
 			HashSet<Group> hashSet = new HashSet<>();
 			for (Group group : groups) {
 				if (group.getId() == 959615179L || group.getId() == 666247478L) {
 					continue;
 				}
-				List<Member> members = Autoreply.ins.getCoolQ().getGroupMemberList(group.getId());
+				ArrayList<Member> members = (ArrayList<Member>) Autoreply.CQ.getGroupMemberList(group.getId());
 				for (Member member : members) {
-					if (member.getQQId() == findQQ) {
+					if (member.getQqId() == findQQ) {
 						hashSet.add(group);
 						break;
 					}
@@ -187,8 +187,8 @@ public class Tools {
 			return hashSet;
 		}
 		public static boolean isAtme(String msg) {
-			List<Long> list = Autoreply.ins.getCQCode().getAts(msg);
-			long me = Autoreply.ins.getCoolQ().getLoginQQ();
+			List<Long> list = Autoreply.ins.CC.getAts(msg);
+			long me = Autoreply.CQ.getLoginQQ();
 			for (long l : list) {
 				if (l == me) {
 					return true;

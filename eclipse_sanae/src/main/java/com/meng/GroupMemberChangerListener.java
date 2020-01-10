@@ -1,8 +1,7 @@
 package com.meng;
 
 import com.meng.config.*;
-import org.meowy.cqp.jcq.entity.*;
-import org.meowy.cqp.jcq.entity.enumerate.*;
+import com.sobte.cqp.jcq.entity.*;
 
 public class GroupMemberChangerListener {
 
@@ -28,16 +27,18 @@ public class GroupMemberChangerListener {
 
     public void checkDecrease(int subtype, int sendTime, final long fromGroup, final long fromQQ, long beingOperateQQ) {
         if (subtype == 1) {
-            QQInfo qInfo = Autoreply.ins.getCoolQ().getStrangerInfo(beingOperateQQ);
-            Autoreply.sendMessage(fromGroup, 0, ConfigManager.ins.getNickName(beingOperateQQ)  + "(" + qInfo.getQQId() + ")" + "去寻找更适合" + (qInfo.getGender() == Gender.FEMALE ?"她": "他") + "的地方了");
+            QQInfo qInfo = Autoreply.CQ.getStrangerInfo(beingOperateQQ);
+            Autoreply.sendMessage(fromGroup, 0, ConfigManager.ins.getNickName(beingOperateQQ)  + "(" + qInfo.getQqId() + ")" + "去寻找更适合" + (qInfo.getGender() == 1 ?"她": "他") + "的地方了");
         } else if (subtype == 2) {
-            if (beingOperateQQ == Autoreply.ins.getCoolQ().getLoginQQ()) {
+            if (beingOperateQQ == Autoreply.CQ.getLoginQQ()) {
                 ConfigManager.ins.addBlack(fromGroup, fromQQ);
                 return;
             }
-            QQInfo qInfo = Autoreply.ins.getCoolQ().getStrangerInfo(beingOperateQQ);
-            QQInfo qInfo2 = Autoreply.ins.getCoolQ().getStrangerInfo(fromQQ);
-			Autoreply.sendMessage(fromGroup, 0, ConfigManager.ins.getNickName(beingOperateQQ) + "(" + qInfo.getQQId() + ")" + "被" + ConfigManager.ins.getNickName(fromQQ) + "(" + qInfo2.getQQId() + ")" + "踢了一脚");
+            QQInfo qInfo = Autoreply.CQ.getStrangerInfo(beingOperateQQ);
+            QQInfo qInfo2 = Autoreply.CQ.getStrangerInfo(fromQQ);
+			Autoreply.sendMessage(fromGroup, 0, ConfigManager.ins.getNickName(beingOperateQQ) + "(" + qInfo.getQqId() + ")" + "被" + ConfigManager.ins.getNickName(fromQQ) + "(" + qInfo2.getQqId() + ")" + "踢了一脚");
         }
     }
+
+
 }

@@ -2,14 +2,13 @@ package com.meng.messageProcess;
 
 import com.meng.*;
 import com.meng.config.*;
-import com.meng.groupChat.*;
 import com.meng.tools.*;
 import com.meng.tools.override.*;
-import java.io.*;
+import com.sobte.cqp.jcq.entity.*;
 import java.util.*;
 import java.util.concurrent.*;
-import org.meowy.cqp.jcq.entity.*;
-import org.meowy.cqp.jcq.entity.enumerate.*;
+import com.meng.groupChat.*;
+import java.io.*;
 
 public class AdminMessageProcessor {
 	private MyLinkedHashMap<String,String> masterPermission=new MyLinkedHashMap<>();
@@ -41,22 +40,22 @@ public class AdminMessageProcessor {
 	}
 
     public boolean check(final long fromGroup, final long fromQQ, final String msg) {
-		Member m=Autoreply.ins.getCoolQ().getGroupMemberInfo(fromGroup, fromQQ);
-		boolean isGroupAdmin=m == null ?false: (m.getAuthority() == Authority.ADMIN || m.getAuthority() == Authority.OWNER);
+		Member m=Autoreply.CQ.getGroupMemberInfo(fromGroup, fromQQ);
+		boolean isGroupAdmin=m == null ?false: m.getAuthority() > 1;
 		if (ConfigManager.ins.isMaster(fromQQ)) {
 			if (msg.equals("-help")) {
 				Autoreply.sendMessage(fromGroup, 0, masterPermission.toString());
 				return true;
 			}
 			if (msg.equals("-空间")) {
-				Tools.Network.getSourceCode("https://h5.qzone.qq.com/mqzone/profile?starttime=" + System.currentTimeMillis() + "&hostuin=" + fromQQ, Autoreply.ins.getCoolQ().getCookies());
+				Tools.Network.getSourceCode("https://h5.qzone.qq.com/mqzone/profile?starttime=" + System.currentTimeMillis() + "&hostuin=" + fromQQ, Autoreply.CQ.getCookies());
 				Autoreply.sendMessage(fromGroup, 0, "ok");
 				return true;
 			}
 			if (msg.startsWith("-群广播:")) {
 				String broadcast=msg.substring(5);
 				HashSet<Group> hs=new HashSet<>();
-				List<Group> glist=Autoreply.ins.getCoolQ().getGroupList();
+				List<Group> glist=Autoreply.CQ.getGroupList();
 				for (Group g:glist) {
 					Autoreply.sendMessage(g.getId(), 0, broadcast);
 					hs.add(g);
@@ -76,7 +75,7 @@ public class AdminMessageProcessor {
 			}
             if (msg.startsWith("block[CQ:at")) {
                 StringBuilder sb = new StringBuilder();
-                List<Long> qqs = Autoreply.ins.getCQCode().getAts(msg);
+                List<Long> qqs = Autoreply.ins.CC.getAts(msg);
                 sb.append("屏蔽列表添加:");
                 for (int i = 0, qqsSize = qqs.size(); i < qqsSize; i++) {
                     long qq = qqs.get(i);
@@ -88,7 +87,7 @@ public class AdminMessageProcessor {
 			}
             if (msg.startsWith("black[CQ:at")) {
                 StringBuilder sb = new StringBuilder();
-                List<Long> qqs = Autoreply.ins.getCQCode().getAts(msg);
+                List<Long> qqs = Autoreply.ins.CC.getAts(msg);
                 sb.append("黑名单添加:");
                 for (int i = 0, qqsSize = qqs.size(); i < qqsSize; i++) {
                     long qq = qqs.get(i);
@@ -131,13 +130,13 @@ public class AdminMessageProcessor {
                 return true;
 			}
 			if (msg.startsWith("-老婆列表.添加")) {
-				ConfigManager.ins.SanaeConfig.zanSet.addAll(Autoreply.ins.getCQCode().getAts(msg));
+				ConfigManager.ins.SanaeConfig.zanSet.addAll(Autoreply.ins.CC.getAts(msg));
 				ConfigManager.ins.saveSanaeConfig();
 				Autoreply.sendMessage(fromGroup, fromQQ, "已添加至老婆列表");
 				return true;
 			}
 			if (msg.startsWith("-老婆列表.移除")) {
-				ConfigManager.ins.SanaeConfig.zanSet.removeAll(Autoreply.ins.getCQCode().getAts(msg));
+				ConfigManager.ins.SanaeConfig.zanSet.removeAll(Autoreply.ins.CC.getAts(msg));
 				ConfigManager.ins.saveSanaeConfig();
 				Autoreply.sendMessage(fromGroup, fromQQ, "已从老婆列表移除");
 				return true;
@@ -193,14 +192,14 @@ public class AdminMessageProcessor {
 				Autoreply.sendMessage(fromGroup, 0, sb.toString());
 				try {
 					File pic=GroupCounter.ins.dchart.check(GroupCounter.ins.groupsMap.get(fromGroup));
-					Autoreply.sendMessage(fromGroup, 0, Autoreply.ins.getCQCode().image(pic));
+					Autoreply.sendMessage(fromGroup, 0, Autoreply.ins.CC.image(pic));
 					pic.delete();
 				} catch (IOException e) {
 					e.printStackTrace();
 				}
 				try {
 					File pic=GroupCounter.ins.mchart.check(GroupCounter.ins.groupsMap.get(fromGroup));
-					Autoreply.sendMessage(fromGroup, 0, Autoreply.ins.getCQCode().image(pic));
+					Autoreply.sendMessage(fromGroup, 0, Autoreply.ins.CC.image(pic));
 					pic.delete();
 				} catch (IOException e) {
 					e.printStackTrace();
@@ -250,7 +249,7 @@ public class AdminMessageProcessor {
 							try {
 								Thread.sleep(2000);
 							} catch (InterruptedException e) {}
-							Autoreply.ins.getCoolQ().setGroupLeave(fromGroup, false);
+							Autoreply.CQ.setGroupLeave(fromGroup, false);
 						}
 					});
 			}

@@ -13,8 +13,6 @@ import java.util.*;
 
 public class TouHouKnowledge {
 	public static TouHouKnowledge ins;
-	public HashMap<Long,Boolean> userMap=new HashMap<>();
-
 	public HashMap<Long,QA> qaMap=new HashMap<>();
 
 	public ArrayList<QA> qaList=new ArrayList<>();
@@ -26,10 +24,14 @@ public class TouHouKnowledge {
 	public static final int lunatic=3;
 
 	public static final int touhouBase=1;
-	public static final int th15=2;
+	public static final int _2unDanmakuInt=2;
+	public static final int _2unDanmakuAll=3;
+	public static final int _2unNotDanmaku=4;
+	public static final int _2unAll=5;
+	public static final int otherDanmaku=6;
 
 	public TouHouKnowledge() {
-		qafile = new File(Autoreply.ins.appDirectory + "/qa.json");
+		qafile = new File(Autoreply.appDirectory + "/qa.json");
         if (!qafile.exists()) {
             saveData();
         }
@@ -39,61 +41,6 @@ public class TouHouKnowledge {
 	}
 
 	public boolean check(long fromGroup, long fromQQ, String msg) {
-		if (msg.startsWith("-问答添加 ")) {
-			String[] arr=msg.split(" ");
-			if (arr.length != 3) {
-				Autoreply.sendMessage(fromGroup, 0, "语句格式错误");
-			}
-			AddQuestionBean ab=new AddQuestionBean(fromQQ, arr[1], arr[2].equalsIgnoreCase("t"));
-			ConfigManager.ins.SanaeConfig.quesWait.add(ab);
-			Autoreply.sendMessage(fromGroup, 0, String.format("问题:%s\n答案:%s\n添加成功,待审核", ab.q, ab.a ? "t": "f"));
-			ConfigManager.ins.saveSanaeConfig();
-			return true;
-		}
-		if (msg.equals("-问答添加审核")) {
-			AddQuestionBean ab = ConfigManager.ins.SanaeConfig.quesWait.get(0);
-			Autoreply.sendMessage(fromGroup, 0, String.format("用户:%d\n问题:%s\n答案:%s", ab.u, ab.q, ab.a ? "t": "f"));
-			return true;
-		}
-		if (msg.equalsIgnoreCase("-问答添加审核 t")) {
-			AddQuestionBean ab = ConfigManager.ins.SanaeConfig.quesWait.remove(0);
-			ConfigManager.ins.SanaeConfig.ques.put(ab.q, ab.a);
-			MessageWaitManager.ins.addTip(ab.u, String.format("用户:%d\n问题:%s\n答案:%s\n审核通过,获得1信仰", ab.u, ab.q, ab.a ? "t": "f"));
-			FaithManager.ins.addFaith(ab.u, 1);
-			ConfigManager.ins.saveSanaeConfig();
-			Autoreply.sendMessage(fromGroup, 0, String.format("用户:%d\n问题:%s\n答案:%s\n处理成功", ab.u, ab.q, ab.a ? "t": "f"));
-			return true;
-		}
-		if (msg.equalsIgnoreCase("-问答添加审核 f")) {
-			AddQuestionBean ab = ConfigManager.ins.SanaeConfig.quesWait.remove(0);
-			ConfigManager.ins.saveSanaeConfig();
-			Autoreply.sendMessage(fromGroup, 0, String.format("用户:%d\n问题:%s\n答案:%s\n处理成功", ab.u, ab.q, ab.a ? "t": "f"));
-			return true;
-		}
-		if (msg.equals("-车万问答")) {
-			String[] keys = ConfigManager.ins.SanaeConfig.ques.keySet().toArray(new String[ConfigManager.ins.SanaeConfig.ques.size()]);
-			String randomKey = keys[Autoreply.ins.random.nextInt(keys.length)];
-			userMap.put(fromQQ, ConfigManager.ins.SanaeConfig.ques.get(randomKey));
-			Autoreply.sendMessage(fromGroup, 0, randomKey);
-			return true;
-		} else if (userMap.get(fromQQ) != null) {
-			if (msg.equalsIgnoreCase("-问答回答 t")) {
-				boolean ans = userMap.get(fromQQ);
-				Autoreply.sendMessage(fromGroup, fromQQ, ans  ? "回答正确": "回答错误");
-				userMap.remove(fromQQ);
-				//if(ans){
-				//	Autoreply.ins.faithManager.addFaith(fromQQ,1);
-				//}
-			} else if (msg.equalsIgnoreCase("-问答回答 f")) {
-				boolean ans = userMap.get(fromQQ);
-				Autoreply.sendMessage(fromGroup, fromQQ, ans ? "回答错误": "回答正确");
-				userMap.remove(fromQQ);
-				//if(!ans){
-				//	Autoreply.ins.faithManager.addFaith(fromQQ,1);
-				//}
-			}
-			return true;
-		}
 		if (msg.equals("-qa 设置抢答")) {
 			PersonConfig pcfg=ConfigManager.ins.getPersonCfg(fromQQ);
 			pcfg.setQaAllowOther(pcfg.isQaAllowOther() ?false: true);
@@ -102,17 +49,17 @@ public class TouHouKnowledge {
 			return true;
 		}
 		if (msg.startsWith("抢答[")) {
-			String ans=msg.substring(msg.indexOf("]") + 1).replace(" ", "");
-			long target=Autoreply.ins.getCQCode().getAt(msg);
+			String ans=msg.substring(msg.indexOf("]") + 1);
+			long target=Autoreply.CC.getAt(msg);
 			if (ConfigManager.ins.getPersonCfg(target).isQaAllowOther()) {
-				QA qa = qaMap.get(target);
+				QA qa = qaMap.get(fromQQ);
 				if (qa != null) {
 					if (String.valueOf(qa.t + 1).equals(ans)) {
-						Autoreply.sendMessage(fromGroup, 0, Autoreply.ins.getCQCode().at(fromQQ) + "回答正确");
+						Autoreply.sendMessage(fromGroup, 0, Autoreply.CC.at(fromQQ) + "回答正确");
 					} else {
-						Autoreply.sendMessage(fromGroup, 0, String.format("%s回答错误", Autoreply.ins.getCQCode().at(fromQQ)));
+						Autoreply.sendMessage(fromGroup, 0, String.format("%s回答错误", Autoreply.CC.at(fromQQ)));
 					}
-					qaMap.remove(target);
+					qaMap.remove(fromQQ);
 					return true;
 				}
 			} else {
@@ -122,14 +69,14 @@ public class TouHouKnowledge {
 		}
 		QA qa = qaMap.get(fromQQ);
 		if (qa != null && msg.equalsIgnoreCase("-qa")) {
-			Autoreply.sendMessage(fromGroup, 0, Autoreply.ins.getCQCode().at(fromQQ) + "你还没有回答");
+			Autoreply.sendMessage(fromGroup, 0, Autoreply.CC.at(fromQQ) + "你还没有回答");
 			return true;
 		}
 		if (qa != null) {
 			if (String.valueOf(qa.t + 1).equals(msg)) {
-				Autoreply.sendMessage(fromGroup, 0, Autoreply.ins.getCQCode().at(fromQQ) + "回答正确");
+				Autoreply.sendMessage(fromGroup, 0, Autoreply.CC.at(fromQQ) + "回答正确");
 			} else {
-				Autoreply.sendMessage(fromGroup, 0, String.format("%s回答错误\n%s", Autoreply.ins.getCQCode().at(fromQQ), qa.r == null ?"": qa.r));
+				Autoreply.sendMessage(fromGroup, 0, String.format("%s回答错误", Autoreply.CC.at(fromQQ)));
 			}
 			qaMap.remove(fromQQ);
 			return true;
@@ -137,24 +84,26 @@ public class TouHouKnowledge {
 		if (msg.equalsIgnoreCase("-qa")) {
 			int ran=Autoreply.ins.random.nextInt(qaList.size());
 			QA qa2=qaList.get(ran);
-			StringBuilder sb=new StringBuilder(Autoreply.ins.getCQCode().at(fromQQ)).append("\n题目ID:").append(ran).append("\n");
+			StringBuilder sb=new StringBuilder(Autoreply.CC.at(fromQQ)).append("\n题目ID:").append(ran).append("\n");
 			sb.append("难度:");
 			switch (qa2.d) {
 				case 0:
-					sb.append("easy");
+					sb.append("e");
 					break;
 				case 1:
-					sb.append("normal");
+					sb.append("n");
 					break;
 				case 2:
-					sb.append("hard");
+					sb.append("h");
 					break;
 				case 3:
-					sb.append("lunatic");
+					sb.append("l");
 					break;
 				case 4:
-					sb.append("overdrive");
+					sb.append("o");
 					break;
+				case 5:
+					sb.append("k");
 			}
 			sb.append("\n\n").append(qa2.q).append("\n");
 
@@ -204,6 +153,7 @@ public class TouHouKnowledge {
 	}
 
 	public static class QA {
+		public int type=0;
 		public int id=0;
 		public int d=0;
 		public String q;

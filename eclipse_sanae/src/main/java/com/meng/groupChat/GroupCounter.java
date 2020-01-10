@@ -23,7 +23,7 @@ public class GroupCounter {
 	public DayChart dchart;
 	public MonthChart mchart;
 	public GroupCounter() {
-		file = new File(Autoreply.ins.appDirectory + "properties\\GroupCount.json");
+		file = new File(Autoreply.appDirectory + "properties\\GroupCount.json");
         if (!file.exists()) {
             try {
                 FileOutputStream fos = new FileOutputStream(file);
@@ -132,7 +132,7 @@ public class GroupCounter {
 			jfreechart.getTitle().setFont(new Font("宋体", Font.BOLD, 20));  
 			File pic=null;
 			try {
-				pic = new File(Autoreply.ins.appDirectory + "downloadImages/" + System.currentTimeMillis() + ".jpg");
+				pic = new File(Autoreply.appDirectory + "downloadImages/" + System.currentTimeMillis() + ".jpg");
 				ChartUtils.saveChartAsJPEG( 
 					pic,
 					1.0f,
@@ -178,7 +178,7 @@ public class GroupCounter {
 			jfreechart.getTitle().setFont(new Font("宋体", Font.BOLD, 20));//设置标题字体  
 			File pic=null;
 			try {
-				pic = new File(Autoreply.ins.appDirectory + "downloadImages/" + System.currentTimeMillis() + ".jpg");
+				pic = new File(Autoreply.appDirectory + "downloadImages/" + System.currentTimeMillis() + ".jpg");
 				ChartUtils.saveChartAsJPEG( 
 					pic, //文件保存物理路径包括路径和文件名 
 					1.0f, //图片质量 ，0.0f~1.0f 
