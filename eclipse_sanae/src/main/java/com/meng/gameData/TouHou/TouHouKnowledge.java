@@ -105,7 +105,7 @@ public class TouHouKnowledge {
 				case 5:
 					sb.append("k");
 			}
-			sb.append("\n分类");
+			sb.append("\n分类:");
 			switch (qa2.type) {
 				case 0:
 					sb.append("未定义");

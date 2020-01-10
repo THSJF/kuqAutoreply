@@ -134,8 +134,8 @@ public class MainActivity extends Activity {
 				case R.id.mainButtonSend:
 					SanaeDataPack sdp=SanaeDataPack.encode(SanaeDataPack._40addQuestion);
 					sdp.write(0);
-					sdp.write(idiff);
 					sdp.write(type);
+					sdp.write(idiff);
 					sdp.write(ques.getText().toString());//ques
 					sdp.write(4);//ansCount
 					sdp.write(trueAnswer);
