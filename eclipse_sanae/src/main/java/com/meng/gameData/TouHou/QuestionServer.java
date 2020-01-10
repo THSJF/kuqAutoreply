@@ -53,7 +53,7 @@ public class QuestionServer extends WebSocketServer {
 				}
 				qa.r = dataRec.readString();
 				if (qa.r.equals("")) {
-					qa = null;
+					qa.r = null;
 				}
 				TouHouKnowledge.ins.addQA(qa);
 				sdp = SanaeDataPack.encode(SanaeDataPack._0notification, dataRec);
