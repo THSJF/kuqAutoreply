@@ -22,10 +22,13 @@
 
 				<Spinner
 					android:id="@+id/diff"
-					android:hint="难度 0-4 e-o"
 					android:layout_width="fill_parent"
 					android:layout_height="fill_parent"/>
 
+				<Spinner
+					android:id="@+id/type"
+					android:layout_width="fill_parent"
+					android:layout_height="fill_parent"/>
 				<EditText
 					android:id="@+id/ques"
 					android:hint="问题"

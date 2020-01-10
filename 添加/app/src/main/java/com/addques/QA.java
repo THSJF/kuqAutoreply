@@ -4,6 +4,7 @@ import java.util.*;
 
 public class QA {
 	public int id=0;
+	public int type=0;
 	public int d=0;
 	public String q;
 	public ArrayList<String> a = new ArrayList<>();
@@ -32,6 +33,8 @@ public class QA {
 			case 4:
 				sb.append("overdrive");
 				break;
+			case 5:
+				sb.append("k");
 		}
 		sb.append("\n\n").append(qa.q).append("\n");
 		int i=1;

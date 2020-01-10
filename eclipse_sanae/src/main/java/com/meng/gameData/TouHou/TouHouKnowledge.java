@@ -24,7 +24,7 @@ public class TouHouKnowledge {
 	public static final int lunatic=3;
 
 	public static final int touhouBase=1;
-	public static final int _2unDanmakuInt=2;
+	public static final int _2unDanmakuIntNew=2;
 	public static final int _2unDanmakuAll=3;
 	public static final int _2unNotDanmaku=4;
 	public static final int _2unAll=5;
@@ -105,8 +105,30 @@ public class TouHouKnowledge {
 				case 5:
 					sb.append("k");
 			}
-			sb.append("\n\n").append(qa2.q).append("\n");
-
+			sb.append("\n分类");
+			switch (qa2.type) {
+				case 0:
+					sb.append("未定义");
+					break;
+				case touhouBase:
+					sb.append("东方project基础");
+					break;
+				case _2unDanmakuIntNew:
+					sb.append("整数作");
+					break;
+				case _2unDanmakuAll:
+					sb.append("官方弹幕作");
+					break;
+				case _2unNotDanmaku:
+					sb.append("官方格斗作");
+					break;
+				case _2unAll:
+					sb.append("官方作");
+					break;
+				case otherDanmaku:
+					sb.append("同人弹幕");
+			}	
+			sb.append("\n").append(qa2.q).append("\n");
 			int change=Autoreply.ins.random.nextInt(qa2.a.size());
 			exchange(qa2.a, qa2.t, change);
 			qa2.t = change;

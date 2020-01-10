@@ -29,6 +29,7 @@ public class ConfigManager extends WebSocketClient {
 		SanaeDataPack dataToSend=null;
 		switch (dataPackRecieved.getOpCode()) {
 			case SanaeDataPack._0notification:
+				MainActivity.instence.showToast(dataPackRecieved.readString());
 				break;
 			case SanaeDataPack._42retAllQuestion:
 				readQAs(dataPackRecieved);

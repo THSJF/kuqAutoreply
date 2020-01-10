@@ -32,10 +32,15 @@ public class QuestionServer extends WebSocketServer {
 	public void onMessage(WebSocket conn, ByteBuffer message) {
 		SanaeDataPack dataRec=SanaeDataPack.decode(message.array());
 		SanaeDataPack sdp=null;
+		if (dataRec.getVersion() < 2) {
+			sdp = SanaeDataPack.encode(SanaeDataPack._0notification, dataRec);
+			sdp.write("旧版本已弃用");	
+		}
 		switch (dataRec.getOpCode()) {
 			case SanaeDataPack._40addQuestion:
 				TouHouKnowledge.QA qa= new TouHouKnowledge.QA();
 				qa.id = dataRec.readInt();
+				qa.type = dataRec.readInt();
 				qa.d = dataRec.readInt();
 				qa.q = dataRec.readString();
 				int anss=dataRec.readInt();
