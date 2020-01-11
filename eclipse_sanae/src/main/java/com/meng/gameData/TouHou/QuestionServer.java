@@ -38,30 +38,51 @@ public class QuestionServer extends WebSocketServer {
 		}
 		switch (dataRec.getOpCode()) {
 			case SanaeDataPack._40addQuestion:
-				TouHouKnowledge.QA qa= new TouHouKnowledge.QA();
-				qa.id = dataRec.readInt();
-				qa.type = dataRec.readInt();
-				qa.d = dataRec.readInt();
-				qa.q = dataRec.readString();
-				int anss=dataRec.readInt();
-				qa.t = dataRec.readInt();
-				for (int i=0;i < anss;++i) {
+				TouHouKnowledge.QA qa40= new TouHouKnowledge.QA();
+				qa40.id = dataRec.readInt();
+				qa40.type = dataRec.readInt();
+				qa40.d = dataRec.readInt();
+				qa40.q = dataRec.readString();
+				int ans40=dataRec.readInt();
+				qa40.t = dataRec.readInt();
+				for (int i=0;i < ans40;++i) {
 					String s=dataRec.readString();
 					if (!s.equals("")) {
-						qa.a.add(s);
+						qa40.a.add(s);
 					}
 				}
-				qa.r = dataRec.readString();
-				if (qa.r.equals("")) {
-					qa.r = null;
+				qa40.r = dataRec.readString();
+				if (qa40.r.equals("")) {
+					qa40.r = null;
 				}
-				TouHouKnowledge.ins.addQA(qa);
+				TouHouKnowledge.ins.addQA(qa40);
 				sdp = SanaeDataPack.encode(SanaeDataPack._0notification, dataRec);
 				sdp.write("添加成功");
 				break;
 			case SanaeDataPack._41getAllQuestion:
 				sdp = writeQA(TouHouKnowledge.ins.qaList);
 				break;
+			case SanaeDataPack._43setQuestion:
+				TouHouKnowledge.QA qa43= new TouHouKnowledge.QA();
+				qa43.id = dataRec.readInt();
+				qa43.type = dataRec.readInt();
+				qa43.d = dataRec.readInt();
+				qa43.q = dataRec.readString();
+				int ans43=dataRec.readInt();
+				qa43.t = dataRec.readInt();
+				for (int i=0;i < ans43;++i) {
+					String s=dataRec.readString();
+					if (!s.equals("")) {
+						qa43.a.add(s);
+					}
+				}
+				qa43.r = dataRec.readString();
+				if (qa43.r.equals("")) {
+					qa43.r = null;
+				}
+				TouHouKnowledge.ins.setQA(qa43);
+				sdp = SanaeDataPack.encode(SanaeDataPack._0notification, dataRec);
+				sdp.write("添加成功");
 		}
 		if (sdp != null) {
 			conn.send(sdp.getData());
@@ -93,7 +114,7 @@ public class QuestionServer extends WebSocketServer {
 			for (String s:qa.a) {
 				sdp.write(s);
 			}
-			sdp.write(qa.r);
+			sdp.write(qa.r == null ?"": qa.r);
 		}
 		return sdp;
 	}

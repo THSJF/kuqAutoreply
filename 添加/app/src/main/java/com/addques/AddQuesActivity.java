@@ -21,59 +21,37 @@ public class AddQuesActivity extends Activity {
 	public static final int _2unAll=5;
 	public static final int otherDanmaku=6;
 
-	Button send,clean;
-	EditText ques,ans1,ans2,ans3,ans4,reason;
-	Spinner diff,typeSp;
-	int idiff=0;
-	int type=0;
-	TextView result;
-	RadioGroup trueAns;
-	
+	public static AddQuesActivity ins;
+	public Button btnSend,btnClean;
+	public EditText etQues,etAns1,etAns2,etAns3,etAns4,etReason;
+	public Spinner spDiffcult,spType;
+	public RadioGroup trueAns;
+
+	public int mode=0;
+	public QA onEdit;
+
 	public ArrayList<String> recieved = new ArrayList<>();
 	int trueAnswer=-1;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.add_ques_activity);
-		clean = (Button) findViewById(R.id.clean);
-		send = (Button) findViewById(R.id.mainButtonSend);
-		ques = (EditText)findViewById(R.id.ques);
-		diff = (Spinner) findViewById(R.id.diff);
-		typeSp = (Spinner) findViewById(R.id.type);
+		ins = this;
+		btnClean = (Button) findViewById(R.id.clean);
+		btnSend = (Button) findViewById(R.id.mainButtonSend);
+		etQues = (EditText)findViewById(R.id.ques);
+		spDiffcult = (Spinner) findViewById(R.id.diff);
+		spType = (Spinner) findViewById(R.id.type);
 		trueAns = (RadioGroup)findViewById(R.id.trueans);
-		ans1 = (EditText)findViewById(R.id.ans1);
-		ans2 = (EditText)findViewById(R.id.ans2);
-		ans3 = (EditText)findViewById(R.id.ans3);
-		ans4 = (EditText)findViewById(R.id.ans4);
-		reason = (EditText)findViewById(R.id.reason);
-		result = (TextView)findViewById(R.id.mainEditTextResult);
-		send.setOnClickListener(onClick);
-		clean.setOnClickListener(onClick);
-		diff.setAdapter(new ArrayAdapter<String>(this, android.R.layout.simple_dropdown_item_1line, new String[]{"easy","normal","hard","lunatic","overdrive","kidding"}));
-		diff.setOnItemSelectedListener(new OnItemSelectedListener(){
-
-				@Override
-				public void onItemSelected(AdapterView<?> p1, View p2, int p3, long p4) {
-					idiff = p3;
-				}
-
-				@Override
-				public void onNothingSelected(AdapterView<?> p1) {
-				}
-			});
-		typeSp.setAdapter(new ArrayAdapter<String>(this, android.R.layout.simple_dropdown_item_1line, new String[]{"未分类","车万基础","新作弹幕作","官方所有弹幕作","官方非弹幕","官方所有","同人弹幕"}));
-		typeSp.setOnItemSelectedListener(new OnItemSelectedListener(){
-
-				@Override
-				public void onItemSelected(AdapterView<?> p1, View p2, int p3, long p4) {
-					type = p3;
-				}
-
-				@Override
-				public void onNothingSelected(AdapterView<?> p1) {
-				}
-			});
-		
+		etAns1 = (EditText)findViewById(R.id.ans1);
+		etAns2 = (EditText)findViewById(R.id.ans2);
+		etAns3 = (EditText)findViewById(R.id.ans3);
+		etAns4 = (EditText)findViewById(R.id.ans4);
+		etReason = (EditText)findViewById(R.id.reason);
+		btnSend.setOnClickListener(onClick);
+		btnClean.setOnClickListener(onClick);
+		spDiffcult.setAdapter(new ArrayAdapter<String>(this, android.R.layout.simple_dropdown_item_1line, new String[]{"easy","normal","hard","lunatic","overdrive","kidding"}));
+		spType.setAdapter(new ArrayAdapter<String>(this, android.R.layout.simple_dropdown_item_1line, new String[]{"未分类","车万基础","新作弹幕作","官方所有弹幕作","官方非弹幕","官方所有","同人弹幕"}));
 		trueAns.setOnCheckedChangeListener(new OnCheckedChangeListener(){
 
 				@Override
@@ -96,38 +74,55 @@ public class AddQuesActivity extends Activity {
 			});
     }
 
-
 	OnClickListener onClick=new OnClickListener(){
 
 		@Override
 		public void onClick(View p1) {
 			switch (p1.getId()) {
 				case R.id.mainButtonSend:
-					SanaeDataPack sdp=SanaeDataPack.encode(SanaeDataPack._40addQuestion);
-					sdp.write(0);
-					sdp.write(type);
-					sdp.write(idiff);
-					sdp.write(ques.getText().toString());//ques
-					sdp.write(4);//ansCount
-					sdp.write(trueAnswer);
-					sdp.write(ans1.getText().toString());
-					sdp.write(ans2.getText().toString());
-					sdp.write(ans3.getText().toString());
-					sdp.write(ans4.getText().toString());
-					sdp.write(reason.getText().toString());
-					TabActivity.ins.configManager.send(sdp.getData());
-					TabActivity.ins.showToast("正在发送");
+					if (mode == 0) {
+						SanaeDataPack sdp=SanaeDataPack.encode(SanaeDataPack._40addQuestion);
+						writeQa(sdp);
+					} else if (mode == 1) {
+						SanaeDataPack sdp=SanaeDataPack.encode(SanaeDataPack._43setQuestion);
+						writeQa(sdp);
+						mode = 0;
+						onEdit = null;
+						clean();
+					}
 					break;
 				case R.id.clean:
-					ques.setText("");
-					ans1.setText("");
-					ans2.setText("");
-					ans3.setText("");
-					ans4.setText("");
-					reason.setText("");
+					clean();
 					break;
 			}
 		}
+
+		private void writeQa(SanaeDataPack sdp) {
+			sdp.write(onEdit == null ?0: onEdit.id);
+			sdp.write(spType.getSelectedItemPosition());
+			sdp.write(spDiffcult.getSelectedItemPosition());
+			sdp.write(etQues.getText().toString());//ques
+			sdp.write(4);//ansCount
+			sdp.write(trueAnswer);
+			String s1 = etAns1.getText().toString();
+			sdp.write(s1.equals("") ?"是": s1);
+			String s2 = etAns2.getText().toString();
+			sdp.write(s2.equals("") ?"否": s2);
+			sdp.write(etAns3.getText().toString());
+			sdp.write(etAns4.getText().toString());
+			sdp.write(etReason.getText().toString());
+			TabActivity.ins.configManager.send(sdp.getData());
+			TabActivity.ins.showToast("正在发送");
+		}
 	};
+
+	public void clean() {
+		etQues.setText("");
+		etAns1.setText("");
+		etAns2.setText("");
+		etAns3.setText("");
+		etAns4.setText("");
+		etReason.setText("");
+	}
 }
 

@@ -153,6 +153,12 @@ public class TouHouKnowledge {
 		qaList.add(qa);
 		saveData();
 	}
+
+	public void setQA(QA qa) {
+		qaList.set(qa.id, qa);
+		saveData();
+	}
+
 	private void saveData() {
 		try {
 			FileOutputStream fos = new FileOutputStream(qafile);

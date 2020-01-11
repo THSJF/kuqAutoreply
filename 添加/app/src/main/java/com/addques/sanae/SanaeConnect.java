@@ -65,7 +65,6 @@ public class SanaeConnect extends WebSocketClient {
 
 	}
 	private void readQAs(SanaeDataPack sdp) {
-		StringBuilder sb=new StringBuilder();
 		while (sdp.hasNext()) {
 			QA qa=new QA();
 			qa.id = sdp.readInt();
@@ -79,8 +78,6 @@ public class SanaeConnect extends WebSocketClient {
 			}
 			qa.r = sdp.readString();
 			AllQuesActivity.ins.quesList.add(qa);
-			sb.append(qa.toString());
 		}
-		TabActivity.ins.showToast(sb.toString());
 	}
 }

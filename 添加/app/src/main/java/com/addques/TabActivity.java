@@ -9,16 +9,16 @@ public class TabActivity extends android.app.TabActivity {
 
 	public static TabActivity ins;
 	public SanaeConnect configManager;
-	
+	public TabHost tab;
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.tab_activity);
-		ins=this;
-        TabHost tab = (TabHost) findViewById(android.R.id.tabhost);
+		ins = this;
+		tab = (TabHost) findViewById(android.R.id.tabhost);
 		tab.setup();
-        tab.addTab(tab.newTabSpec("tab1").setIndicator("添加问题" , null).setContent(new Intent(this,AddQuesActivity.class)));
-        tab.addTab(tab.newTabSpec("tab1").setIndicator("浏览问题" , null).setContent(new Intent(this,AllQuesActivity.class)));
+        tab.addTab(tab.newTabSpec("tab1").setIndicator("添加问题" , null).setContent(new Intent(this, AddQuesActivity.class)));
+        tab.addTab(tab.newTabSpec("tab1").setIndicator("浏览问题" , null).setContent(new Intent(this, AllQuesActivity.class)));
 		try {
 			configManager = new SanaeConnect(new URI("ws://123.207.65.93:9001"));
 			configManager.connect();
@@ -40,12 +40,12 @@ public class TabActivity extends android.app.TabActivity {
 					}
 				}
 			}).start();
-			
-			
-			
-		}
-		
-		
+
+
+
+	}
+
+
 	public void showToast(final String s) {
 		runOnUiThread(new Runnable(){
 

@@ -48,13 +48,13 @@
 
 				<EditText
 					android:id="@+id/ans1"
-					android:hint="答案1"
+					android:hint="答案1(是)"
 					android:layout_width="fill_parent"
 					android:layout_height="fill_parent"/>
 
 				<EditText
 					android:id="@+id/ans2"
-					android:hint="答案2"
+					android:hint="答案2(否)"
 					android:layout_width="fill_parent"
 					android:layout_height="fill_parent"/>
 
@@ -71,8 +71,7 @@
 					android:layout_height="fill_parent"/>
 
 				<TextView
-					android:text="正确答案"
-					android:id="@+id/mainEditTextResult"
+					android:text="正确答案:"
 					android:layout_width="fill_parent"
 					android:layout_height="wrap_content"/>
 
