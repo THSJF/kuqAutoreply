@@ -46,7 +46,6 @@ public class QuesAdapter extends BaseAdapter {
 		QA qa = infosList.get(position);
 		holder.tvId.setText("id:" + qa.id);
 		stringBuilder.setLength(0);
-		stringBuilder.append("难度:");
 		switch (qa.d) {
 			case 0:
 				stringBuilder.append("easy");
@@ -54,7 +53,7 @@ public class QuesAdapter extends BaseAdapter {
 				break;
 			case 1:
 				stringBuilder.append("normal");
-				holder.tvDiff.setTextColor(Color.GREEN);
+				holder.tvDiff.setTextColor(Color.rgb(0x00, 0xcc, 0xff));
 				break;
 			case 2:
 				stringBuilder.append("hard");
@@ -62,7 +61,7 @@ public class QuesAdapter extends BaseAdapter {
 				break;
 			case 3:
 				stringBuilder.append("lunatic");
-				holder.tvDiff.setTextColor(Color.BLUE);
+				holder.tvDiff.setTextColor(Color.rgb(0xff, 0x99, 0x00));
 				break;
 			case 4:
 				stringBuilder.append("overdrive");
@@ -77,25 +76,24 @@ public class QuesAdapter extends BaseAdapter {
 		}
 		holder.tvDiff.setText(stringBuilder.toString());
 		stringBuilder.setLength(0);
-		stringBuilder.append("分类:");
 		switch (qa.type) {
 			case 0:
-				stringBuilder.append("未定义");
+				stringBuilder.append("未分类");
 				break;
 			case 1:
-				stringBuilder.append("东方project基础");
+				stringBuilder.append("车万基础");
 				break;
 			case 2:
-				stringBuilder.append("整数作");
+				stringBuilder.append("新作整数作");
 				break;
 			case 3:
 				stringBuilder.append("官方弹幕作");
 				break;
 			case 4:
-				stringBuilder.append("官方格斗作");
+				stringBuilder.append("官方非弹幕");
 				break;
 			case 5:
-				stringBuilder.append("官方作");
+				stringBuilder.append("官方所有");
 				break;
 			case 6:
 				stringBuilder.append("同人弹幕");

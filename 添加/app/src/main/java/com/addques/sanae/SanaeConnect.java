@@ -21,6 +21,7 @@ public class SanaeConnect extends WebSocketClient {
 	@Override
 	public void onOpen(ServerHandshake serverHandshake) {
 		TabActivity.ins.showToast("连接到苗");
+		TabActivity.ins.sanaeConnect.send(SanaeDataPack.encode(SanaeDataPack._41getAllQuestion).getData());
 	}
 
 	@Override
@@ -32,12 +33,13 @@ public class SanaeConnect extends WebSocketClient {
 				TabActivity.ins.showToast(dataPackRecieved.readString());
 				break;
 			case SanaeDataPack._42retAllQuestion:
+				TabActivity.ins.alAllQa.clear();
 				readQAs(dataPackRecieved);
-				AllQuesActivity.ins.runOnUiThread(new Runnable(){
+				TabActivity.ins.runOnUiThread(new Runnable(){
 
 						@Override
 						public void run() {
-							AllQuesActivity.ins.quesAdapter.notifyDataSetChanged();
+							TabActivity.ins.quesAdapter.notifyDataSetChanged();
 						}
 					});
 				break;
@@ -77,7 +79,7 @@ public class SanaeConnect extends WebSocketClient {
 				qa.a.add(sdp.readString());
 			}
 			qa.r = sdp.readString();
-			AllQuesActivity.ins.quesList.add(qa);
+			TabActivity.ins.alAllQa.add(qa);
 		}
 	}
 }

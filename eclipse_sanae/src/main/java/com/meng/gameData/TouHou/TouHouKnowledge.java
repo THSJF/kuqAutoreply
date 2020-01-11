@@ -114,16 +114,16 @@ public class TouHouKnowledge {
 					sb.append("东方project基础");
 					break;
 				case _2unDanmakuIntNew:
-					sb.append("整数作");
+					sb.append("新作整数作");
 					break;
 				case _2unDanmakuAll:
 					sb.append("官方弹幕作");
 					break;
 				case _2unNotDanmaku:
-					sb.append("官方格斗作");
+					sb.append("官方非弹幕");
 					break;
 				case _2unAll:
-					sb.append("官方作");
+					sb.append("官方所有");
 					break;
 				case otherDanmaku:
 					sb.append("同人弹幕");

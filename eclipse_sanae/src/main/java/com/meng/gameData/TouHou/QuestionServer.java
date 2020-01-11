@@ -82,7 +82,7 @@ public class QuestionServer extends WebSocketServer {
 				}
 				TouHouKnowledge.ins.setQA(qa43);
 				sdp = SanaeDataPack.encode(SanaeDataPack._0notification, dataRec);
-				sdp.write("添加成功");
+				sdp.write("修改成功");
 		}
 		if (sdp != null) {
 			conn.send(sdp.getData());
