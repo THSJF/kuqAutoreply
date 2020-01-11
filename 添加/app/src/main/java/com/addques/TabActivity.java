@@ -220,8 +220,12 @@ public class TabActivity extends android.app.TabActivity {
 						qa.a.add(s1.equals("") ?"是": s1);
 						String s2 = etAns2.getText().toString();
 						qa.a.add(s2.equals("") ?"否": s2);
-						qa.a.add(etAns3.getText().toString());
-						qa.a.add(etAns4.getText().toString());
+						if (!etAns3.getText().toString().equals("")) {
+							qa.a.add(etAns3.getText().toString());
+						}
+						if (!etAns4.getText().toString().equals("")) {
+							qa.a.add(etAns4.getText().toString());
+						}
 						qa.r = etReason.getText().toString();
 						alAllQa.add(qa);
 						refresh();
@@ -230,7 +234,7 @@ public class TabActivity extends android.app.TabActivity {
 						sdp.write(qa.q);//ques
 						sdp.write(qa.a.size());//ansCount
 						sdp.write(qa.t);
-						for(String s:qa.a){
+						for (String s:qa.a) {
 							sdp.write(s);
 						}
 						sdp.write(qa.r);
@@ -250,8 +254,12 @@ public class TabActivity extends android.app.TabActivity {
 						String s2 = etAns2.getText().toString();
 						onEdit.a.clear();
 						onEdit.a.add(s2.equals("") ?"否": s2);
-						onEdit.a.add(etAns3.getText().toString());
-						onEdit.a.add(etAns4.getText().toString());
+						if (!etAns3.getText().toString().equals("")) {
+							onEdit.a.add(etAns3.getText().toString());
+						}
+						if (!etAns4.getText().toString().equals("")) {
+							onEdit.a.add(etAns4.getText().toString());
+						}
 						onEdit.r = etReason.getText().toString();
 						refresh();
 						SanaeDataPack sdp=SanaeDataPack.encode(SanaeDataPack._43setQuestion);
@@ -259,7 +267,7 @@ public class TabActivity extends android.app.TabActivity {
 						sdp.write(onEdit.q);//ques
 						sdp.write(onEdit.a.size());//ansCount
 						sdp.write(onEdit.t);
-						for(String s:onEdit.a){
+						for (String s:onEdit.a) {
 							sdp.write(s);
 						}
 						sdp.write(onEdit.r);

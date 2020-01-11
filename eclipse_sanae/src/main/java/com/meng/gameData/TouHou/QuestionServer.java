@@ -46,10 +46,7 @@ public class QuestionServer extends WebSocketServer {
 				int ans40=dataRec.readInt();
 				qa40.t = dataRec.readInt();
 				for (int i=0;i < ans40;++i) {
-					String s=dataRec.readString();
-					if (!s.equals("")) {
-						qa40.a.add(s);
-					}
+					qa40.a.add(dataRec.readString());
 				}
 				qa40.r = dataRec.readString();
 				if (qa40.r.equals("")) {
@@ -69,10 +66,7 @@ public class QuestionServer extends WebSocketServer {
 				int ans43=dataRec.readInt();
 				qa43.t = dataRec.readInt();
 				for (int i=0;i < ans43;++i) {
-					String s=dataRec.readString();
-					if (!s.equals("")) {
-						qa43.a.add(s);
-					}
+					qa43.a.add(dataRec.readString());
 				}
 				qa43.r = dataRec.readString();
 				if (qa43.r.equals("")) {

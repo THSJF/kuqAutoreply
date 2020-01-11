@@ -38,12 +38,6 @@ public class TouHouKnowledge {
         Type type = new TypeToken<ArrayList<QA>>() {
         }.getType();
         qaList = Autoreply.gson.fromJson(Tools.FileTool.readString(qafile), type);
-		for (QA qa:qaList) {
-			qa.setId(qa.getId());
-			qa.setType(qa.getType());
-			qa.setDifficulty(qa.getDifficulty());
-		}
-		saveData();
 		imagePath = Autoreply.appDirectory + "/qaImages/";
 		File imageFolder=new File(imagePath);
 		if (!imageFolder.exists()) {
@@ -97,7 +91,7 @@ public class TouHouKnowledge {
 			QA qa2=qaList.get(ran);
 			StringBuilder sb=new StringBuilder(Autoreply.CC.at(fromQQ)).append("\n题目ID:").append(ran).append("\n");
 			sb.append("难度:");
-			switch (qa2.d) {
+			switch (qa2.getDifficulty()) {
 				case 0:
 					sb.append("e");
 					break;
@@ -117,7 +111,7 @@ public class TouHouKnowledge {
 					sb.append("k");
 			}
 			sb.append("\n分类:");
-			switch (qa2.type) {
+			switch (qa2.getType()) {
 				case 0:
 					sb.append("未定义");
 					break;
@@ -160,13 +154,13 @@ public class TouHouKnowledge {
 	}
 
 	public void addQA(QA qa) {
-		qa.id = qaList.size();
+		qa.setId(qaList.size());
 		qaList.add(qa);
 		saveData();
 	}
 
 	public void setQA(QA qa) {
-		qaList.set(qa.id, qa);
+		qaList.set(qa.getId(), qa);
 		saveData();
 	}
 
@@ -195,9 +189,6 @@ public class TouHouKnowledge {
 		public int flag=0;
 		//flag: id(16bit)					type(8bit)		diffculty(8bit)
 		//	0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0|0 0 0 0 0 0 0 0|0 0 0 0 0 0 0 0
-		private int type=0;
-		private int id=0;
-		private int d=0;
 		public int l=0;//file length
 		public String q;
 		public ArrayList<String> a = new ArrayList<>();
@@ -215,34 +206,28 @@ public class TouHouKnowledge {
 		public void setDifficulty(int d) {
 			flag &= 0xffffff00;
 			flag |= d;
-			this.d = d;
 		}
 
 		public int getDifficulty() {
-			//	return flag & 0xff;
-			return d;
+			return flag & 0xff;
 		}
 
 		public void setId(int id) {
 			flag &= 0x0000ffff;
 			flag |= (id << 16);
-			this.id = id;
 		}
 
 		public int getId() {
-			//return (flag >> 16) & 0xff;
-			return id;
+			return (flag >> 16) & 0xff;
 		}
 
 		public void setType(int type) {
 			flag &= 0xffff00ff;
 			flag |= (type << 8);
-			this.type = type;
 		}
 
 		public int getType() {
-			return type;
-			//return (flag >> 8) & 0xff;
+			return (flag >> 8) & 0xff;
 		}
 	}
 }
