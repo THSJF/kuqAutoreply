@@ -32,64 +32,55 @@ public class QuestionServer extends WebSocketServer {
 	public void onMessage(WebSocket conn, ByteBuffer message) {
 		SanaeDataPack dataRec=SanaeDataPack.decode(message.array());
 		SanaeDataPack sdp=null;
-		if (dataRec.getVersion() < 2) {
+		if (dataRec.getVersion() < 3) {
 			sdp = SanaeDataPack.encode(SanaeDataPack._0notification, dataRec);
 			sdp.write("旧版本已弃用");
 			conn.send(sdp.getData());
 			return;
 		}
-		if (dataRec.getVersion() == 3) {
-			switch (dataRec.getOpCode()) {
-				case SanaeDataPack._40addQuestion:
-					TouHouKnowledge.QA qa40= new TouHouKnowledge.QA();
-					qa40.setId(dataRec.readInt());
-					qa40.setType(dataRec.readInt());
-					qa40.setDifficulty(dataRec.readInt());
-					qa40.q = dataRec.readString();
-					int ans40=dataRec.readInt();
-					qa40.t = dataRec.readInt();
-					for (int i=0;i < ans40;++i) {
-						String s=dataRec.readString();
-						if (!s.equals("")) {
-							qa40.a.add(s);
-						}
+		switch (dataRec.getOpCode()) {
+			case SanaeDataPack._40addQuestion:
+				TouHouKnowledge.QA qa40= new TouHouKnowledge.QA();
+				qa40.setFlag(dataRec.readInt());
+				qa40.q = dataRec.readString();
+				int ans40=dataRec.readInt();
+				qa40.t = dataRec.readInt();
+				for (int i=0;i < ans40;++i) {
+					String s=dataRec.readString();
+					if (!s.equals("")) {
+						qa40.a.add(s);
 					}
-					qa40.r = dataRec.readString();
-					if (qa40.r.equals("")) {
-						qa40.r = null;
+				}
+				qa40.r = dataRec.readString();
+				if (qa40.r.equals("")) {
+					qa40.r = null;
+				}
+				TouHouKnowledge.ins.addQA(qa40);
+				sdp = SanaeDataPack.encode(SanaeDataPack._0notification, dataRec);
+				sdp.write("添加成功");
+				break;
+			case SanaeDataPack._41getAllQuestion:
+				sdp = writeQA(TouHouKnowledge.ins.qaList);
+				break;
+			case SanaeDataPack._43setQuestion:
+				TouHouKnowledge.QA qa43= new TouHouKnowledge.QA();
+				qa43.setFlag(dataRec.readInt());
+				qa43.q = dataRec.readString();
+				int ans43=dataRec.readInt();
+				qa43.t = dataRec.readInt();
+				for (int i=0;i < ans43;++i) {
+					String s=dataRec.readString();
+					if (!s.equals("")) {
+						qa43.a.add(s);
 					}
-					TouHouKnowledge.ins.addQA(qa40);
-					sdp = SanaeDataPack.encode(SanaeDataPack._0notification, dataRec);
-					sdp.write("添加成功");
-					break;
-				case SanaeDataPack._41getAllQuestion:
-					sdp = writeQA(TouHouKnowledge.ins.qaList);
-					break;
-				case SanaeDataPack._43setQuestion:
-					TouHouKnowledge.QA qa43= new TouHouKnowledge.QA();
-					qa43.setId(dataRec.readInt());
-					qa43.setType(dataRec.readInt());
-					qa43.setDifficulty(dataRec.readInt());
-					qa43.q = dataRec.readString();
-					int ans43=dataRec.readInt();
-					qa43.t = dataRec.readInt();
-					for (int i=0;i < ans43;++i) {
-						String s=dataRec.readString();
-						if (!s.equals("")) {
-							qa43.a.add(s);
-						}
-					}
-					qa43.r = dataRec.readString();
-					if (qa43.r.equals("")) {
-						qa43.r = null;
-					}
-					TouHouKnowledge.ins.setQA(qa43);
-					sdp = SanaeDataPack.encode(SanaeDataPack._0notification, dataRec);
-					sdp.write("修改成功");
-			}
-		} else if (dataRec.getVersion() == 4) {
-
-
+				}
+				qa43.r = dataRec.readString();
+				if (qa43.r.equals("")) {
+					qa43.r = null;
+				}
+				TouHouKnowledge.ins.setQA(qa43);
+				sdp = SanaeDataPack.encode(SanaeDataPack._0notification, dataRec);
+				sdp.write("修改成功");
 		}
 		if (sdp != null) {
 			conn.send(sdp.getData());
@@ -112,9 +103,7 @@ public class QuestionServer extends WebSocketServer {
 	private SanaeDataPack writeQA(ArrayList<TouHouKnowledge.QA> qas) {
 		SanaeDataPack sdp=SanaeDataPack.encode(SanaeDataPack._42retAllQuestion);
 		for (TouHouKnowledge.QA qa:qas) {
-			sdp.write(qa.getId());//flag
-			sdp.write(qa.getType());
-			sdp.write(qa.getDifficulty());//diff
+			sdp.write(qa.getFlag());//flag
 			sdp.write(qa.q);//ques
 			sdp.write(qa.a.size());//ansCount
 			sdp.write(qa.t);

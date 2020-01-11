@@ -226,7 +226,20 @@ public class TabActivity extends android.app.TabActivity {
 						alAllQa.add(qa);
 						refresh();
 						SanaeDataPack sdp=SanaeDataPack.encode(SanaeDataPack._40addQuestion);
-						writeQa(sdp);
+						sdp.write(qa.getFlag());
+						sdp.write(qa.q);//ques
+						sdp.write(qa.a.size());//ansCount
+						sdp.write(qa.t);
+						for(String s:qa.a){
+							sdp.write(s);
+						}
+						sdp.write(qa.r);
+						try {
+							sanaeConnect.send(sdp.getData());
+						} catch (Exception e) {
+							showToast(e.toString());
+						}
+						showToast("正在发送");	
 					} else if (mode == 1) {
 						onEdit.setType(spType.getSelectedItemPosition());
 						onEdit.setDifficulty(spDiffcult.getSelectedItemPosition());
@@ -240,14 +253,27 @@ public class TabActivity extends android.app.TabActivity {
 						onEdit.a.add(etAns3.getText().toString());
 						onEdit.a.add(etAns4.getText().toString());
 						onEdit.r = etReason.getText().toString();
-						quesAdapter.notifyDataSetChanged();
+						refresh();
 						SanaeDataPack sdp=SanaeDataPack.encode(SanaeDataPack._43setQuestion);
-						writeQa(sdp);
+						sdp.write(onEdit.getFlag());
+						sdp.write(onEdit.q);//ques
+						sdp.write(onEdit.a.size());//ansCount
+						sdp.write(onEdit.t);
+						for(String s:onEdit.a){
+							sdp.write(s);
+						}
+						sdp.write(onEdit.r);
+						try {
+							sanaeConnect.send(sdp.getData());
+						} catch (Exception e) {
+							showToast(e.toString());
+						}
+						showToast("正在发送");	
 						mode = 0;
 						onEdit = null;
 						clean();
-						tab.setCurrentTab(1);
 						refresh();
+						tab.setCurrentTab(1);
 					}
 					break;
 				case R.id.clean:
@@ -256,27 +282,6 @@ public class TabActivity extends android.app.TabActivity {
 			}
 		}
 
-		private void writeQa(SanaeDataPack sdp) {
-			sdp.write(onEdit == null ?0: onEdit.getId());
-			sdp.write(spType.getSelectedItemPosition());
-			sdp.write(spDiffcult.getSelectedItemPosition());
-			sdp.write(etQues.getText().toString());//ques
-			sdp.write(4);//ansCount
-			sdp.write(trueAnswer);
-			String s1 = etAns1.getText().toString();
-			sdp.write(s1.equals("") ?"是": s1);
-			String s2 = etAns2.getText().toString();
-			sdp.write(s2.equals("") ?"否": s2);
-			sdp.write(etAns3.getText().toString());
-			sdp.write(etAns4.getText().toString());
-			sdp.write(etReason.getText().toString());
-			try {
-				sanaeConnect.send(sdp.getData());
-			} catch (Exception e) {
-				showToast(e.toString());
-			}
-			showToast("正在发送");	
-		}
 	};
 
 	private void clean() {

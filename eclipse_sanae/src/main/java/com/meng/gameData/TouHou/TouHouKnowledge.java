@@ -204,6 +204,14 @@ public class TouHouKnowledge {
 		public int t;//trueAns
 		public String r;
 
+		public void setFlag(int flag) {
+			this.flag = flag;
+		}
+
+		public int getFlag() {
+			return flag;
+		}
+
 		public void setDifficulty(int d) {
 			flag &= 0xffffff00;
 			flag |= d;

@@ -13,19 +13,23 @@ public class QA {
 	public int flag=0;
 	//flag: id(16bit)					type(8bit)		diffculty(8bit)
 	//	0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0|0 0 0 0 0 0 0 0|0 0 0 0 0 0 0 0
-	private int type=0;
-	private int id=0;
-	private int d=0;
 	public int l=0;//file length
 	public String q;
 	public ArrayList<String> a = new ArrayList<>();
 	public int t;//trueAns
 	public String r;
 
+	public void setFlag(int flag) {
+		this.flag = flag;
+	}
+
+	public int getFlag() {
+		return flag;
+	}
+
 	public void setDifficulty(int d) {
 		flag &= 0xffffff00;
 		flag |= d;
-		this.d = d;
 	}
 
 	public int getDifficulty() {
@@ -35,7 +39,6 @@ public class QA {
 	public void setId(int id) {
 		flag &= 0x0000ffff;
 		flag |= (id << 16);
-		this.id = id;
 	}
 
 	public int getId() {
@@ -45,7 +48,6 @@ public class QA {
 	public void setType(int type) {
 		flag &= 0xffff00ff;
 		flag |= (type << 8);
-		this.type = type;
 	}
 
 	public int getType() {

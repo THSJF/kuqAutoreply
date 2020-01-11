@@ -41,7 +41,7 @@ public class SanaeDataPack {
 		//length(4) headLength(2) version(2) time(8) target/from(8) opCode(4)
 		writeByteDataIntoArray(BitConverter.getBytes(0));
 		writeByteDataIntoArray(BitConverter.getBytes(headLength));
-		writeByteDataIntoArray(BitConverter.getBytes((short)2));
+		writeByteDataIntoArray(BitConverter.getBytes((short)4));
 		writeByteDataIntoArray(BitConverter.getBytes(timeStamp));
 		writeByteDataIntoArray(BitConverter.getBytes(0L));
 		writeByteDataIntoArray(BitConverter.getBytes(opCode));
