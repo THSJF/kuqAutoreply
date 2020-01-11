@@ -38,6 +38,12 @@ public class TouHouKnowledge {
         Type type = new TypeToken<ArrayList<QA>>() {
         }.getType();
         qaList = Autoreply.gson.fromJson(Tools.FileTool.readString(qafile), type);
+		for (QA qa:qaList) {
+			qa.setId(qa.getId());
+			qa.setType(qa.getType());
+			qa.setDifficulty(qa.getDifficulty());
+		}
+		saveData();
 		imagePath = Autoreply.appDirectory + "/qaImages/";
 		File imageFolder=new File(imagePath);
 		if (!imageFolder.exists()) {
@@ -200,18 +206,18 @@ public class TouHouKnowledge {
 
 		public void setDifficulty(int d) {
 			flag &= 0xffffff00;
-			flag &= d;
+			flag |= d;
 			this.d = d;
 		}
 
 		public int getDifficulty() {
-		//	return flag & 0xff;
-		return d;
+			//	return flag & 0xff;
+			return d;
 		}
 
 		public void setId(int id) {
 			flag &= 0x0000ffff;
-			flag &= (id << 16);
+			flag |= (id << 16);
 			this.id = id;
 		}
 
@@ -222,7 +228,7 @@ public class TouHouKnowledge {
 
 		public void setType(int type) {
 			flag &= 0xffff00ff;
-			flag &= (type << 8);
+			flag |= (type << 8);
 			this.type = type;
 		}
 

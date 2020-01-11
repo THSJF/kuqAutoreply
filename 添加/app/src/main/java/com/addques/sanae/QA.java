@@ -24,7 +24,7 @@ public class QA {
 
 	public void setDifficulty(int d) {
 		flag &= 0xffffff00;
-		flag &= d;
+		flag |= d;
 		this.d = d;
 	}
 
@@ -34,7 +34,7 @@ public class QA {
 
 	public void setId(int id) {
 		flag &= 0x0000ffff;
-		flag &= (id << 16);
+		flag |= (id << 16);
 		this.id = id;
 	}
 
@@ -44,7 +44,7 @@ public class QA {
 
 	public void setType(int type) {
 		flag &= 0xffff00ff;
-		flag &= (type << 8);
+		flag |= (type << 8);
 		this.type = type;
 	}
 
