@@ -10,7 +10,7 @@ import org.java_websocket.server.*;
 
 public class QuestionServer extends WebSocketServer {
 
-	public QuestionServer(int port) throws UnknownHostException {
+	public QuestionServer(int port) {
 		super(new InetSocketAddress(port));
 	}
 
@@ -34,55 +34,62 @@ public class QuestionServer extends WebSocketServer {
 		SanaeDataPack sdp=null;
 		if (dataRec.getVersion() < 2) {
 			sdp = SanaeDataPack.encode(SanaeDataPack._0notification, dataRec);
-			sdp.write("旧版本已弃用");	
+			sdp.write("旧版本已弃用");
+			conn.send(sdp.getData());
+			return;
 		}
-		switch (dataRec.getOpCode()) {
-			case SanaeDataPack._40addQuestion:
-				TouHouKnowledge.QA qa40= new TouHouKnowledge.QA();
-				qa40.id = dataRec.readInt();
-				qa40.type = dataRec.readInt();
-				qa40.d = dataRec.readInt();
-				qa40.q = dataRec.readString();
-				int ans40=dataRec.readInt();
-				qa40.t = dataRec.readInt();
-				for (int i=0;i < ans40;++i) {
-					String s=dataRec.readString();
-					if (!s.equals("")) {
-						qa40.a.add(s);
+		if (dataRec.getVersion() == 3) {
+			switch (dataRec.getOpCode()) {
+				case SanaeDataPack._40addQuestion:
+					TouHouKnowledge.QA qa40= new TouHouKnowledge.QA();
+					qa40.setId(dataRec.readInt());
+					qa40.setType(dataRec.readInt());
+					qa40.setDifficulty(dataRec.readInt());
+					qa40.q = dataRec.readString();
+					int ans40=dataRec.readInt();
+					qa40.t = dataRec.readInt();
+					for (int i=0;i < ans40;++i) {
+						String s=dataRec.readString();
+						if (!s.equals("")) {
+							qa40.a.add(s);
+						}
 					}
-				}
-				qa40.r = dataRec.readString();
-				if (qa40.r.equals("")) {
-					qa40.r = null;
-				}
-				TouHouKnowledge.ins.addQA(qa40);
-				sdp = SanaeDataPack.encode(SanaeDataPack._0notification, dataRec);
-				sdp.write("添加成功");
-				break;
-			case SanaeDataPack._41getAllQuestion:
-				sdp = writeQA(TouHouKnowledge.ins.qaList);
-				break;
-			case SanaeDataPack._43setQuestion:
-				TouHouKnowledge.QA qa43= new TouHouKnowledge.QA();
-				qa43.id = dataRec.readInt();
-				qa43.type = dataRec.readInt();
-				qa43.d = dataRec.readInt();
-				qa43.q = dataRec.readString();
-				int ans43=dataRec.readInt();
-				qa43.t = dataRec.readInt();
-				for (int i=0;i < ans43;++i) {
-					String s=dataRec.readString();
-					if (!s.equals("")) {
-						qa43.a.add(s);
+					qa40.r = dataRec.readString();
+					if (qa40.r.equals("")) {
+						qa40.r = null;
 					}
-				}
-				qa43.r = dataRec.readString();
-				if (qa43.r.equals("")) {
-					qa43.r = null;
-				}
-				TouHouKnowledge.ins.setQA(qa43);
-				sdp = SanaeDataPack.encode(SanaeDataPack._0notification, dataRec);
-				sdp.write("修改成功");
+					TouHouKnowledge.ins.addQA(qa40);
+					sdp = SanaeDataPack.encode(SanaeDataPack._0notification, dataRec);
+					sdp.write("添加成功");
+					break;
+				case SanaeDataPack._41getAllQuestion:
+					sdp = writeQA(TouHouKnowledge.ins.qaList);
+					break;
+				case SanaeDataPack._43setQuestion:
+					TouHouKnowledge.QA qa43= new TouHouKnowledge.QA();
+					qa43.setId(dataRec.readInt());
+					qa43.setType(dataRec.readInt());
+					qa43.setDifficulty(dataRec.readInt());
+					qa43.q = dataRec.readString();
+					int ans43=dataRec.readInt();
+					qa43.t = dataRec.readInt();
+					for (int i=0;i < ans43;++i) {
+						String s=dataRec.readString();
+						if (!s.equals("")) {
+							qa43.a.add(s);
+						}
+					}
+					qa43.r = dataRec.readString();
+					if (qa43.r.equals("")) {
+						qa43.r = null;
+					}
+					TouHouKnowledge.ins.setQA(qa43);
+					sdp = SanaeDataPack.encode(SanaeDataPack._0notification, dataRec);
+					sdp.write("修改成功");
+			}
+		} else if (dataRec.getVersion() == 4) {
+
+
 		}
 		if (sdp != null) {
 			conn.send(sdp.getData());
@@ -105,9 +112,9 @@ public class QuestionServer extends WebSocketServer {
 	private SanaeDataPack writeQA(ArrayList<TouHouKnowledge.QA> qas) {
 		SanaeDataPack sdp=SanaeDataPack.encode(SanaeDataPack._42retAllQuestion);
 		for (TouHouKnowledge.QA qa:qas) {
-			sdp.write(qa.id);//flag
-			sdp.write(qa.type);
-			sdp.write(qa.d);//diff
+			sdp.write(qa.getId());//flag
+			sdp.write(qa.getType());
+			sdp.write(qa.getDifficulty());//diff
 			sdp.write(qa.q);//ques
 			sdp.write(qa.a.size());//ansCount
 			sdp.write(qa.t);

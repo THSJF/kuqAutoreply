@@ -128,8 +128,8 @@ public class TabActivity extends android.app.TabActivity {
 					tab.setCurrentTab(0);
 					mode = 1;
 					onEdit = qa;
-					spType.setSelection(qa.type);
-					spDiffcult.setSelection(qa.d);
+					spType.setSelection(qa.getType());
+					spDiffcult.setSelection(qa.getDifficulty());
 					etQues.setText(qa.q);
 					((RadioButton)rgTrueAnswer.getChildAt(qa.t)).setChecked(true);
 					etAns1.setText(qa.a.get(0));
@@ -180,7 +180,7 @@ public class TabActivity extends android.app.TabActivity {
 				nowQaList.addAll(alAllQa);
 			} else {	
 				for (QA qa:alAllQa) {
-					if (qa.d == dif) {
+					if (qa.getDifficulty() == dif) {
 						nowQaList.add(qa);	
 					}
 				}
@@ -188,13 +188,13 @@ public class TabActivity extends android.app.TabActivity {
 		} else {
 			if (dif == -1) {
 				for (QA qa:alAllQa) {
-					if (qa.type == ty) {
+					if (qa.getType() == ty) {
 						nowQaList.add(qa);	
 					}
 				}
 			} else {
 				for (QA qa:alAllQa) {
-					if (qa.type == ty && qa.d == dif) {
+					if (qa.getType() == ty && qa.getDifficulty() == dif) {
 						nowQaList.add(qa);	
 					}
 				}
@@ -211,9 +211,9 @@ public class TabActivity extends android.app.TabActivity {
 				case R.id.mainButtonSend:
 					if (mode == 0) {
 						QA qa = new QA();
-						qa.id = alAllQa.size();
-						qa.type = spType.getSelectedItemPosition();
-						qa.d = spDiffcult.getSelectedItemPosition();
+						qa.setId(alAllQa.size());
+						qa.setType(spType.getSelectedItemPosition());
+						qa.setDifficulty(spDiffcult.getSelectedItemPosition());
 						qa.q = etQues.getText().toString();
 						qa.t = trueAnswer;
 						String s1 = etAns1.getText().toString();
@@ -228,8 +228,8 @@ public class TabActivity extends android.app.TabActivity {
 						SanaeDataPack sdp=SanaeDataPack.encode(SanaeDataPack._40addQuestion);
 						writeQa(sdp);
 					} else if (mode == 1) {
-						onEdit.type = spType.getSelectedItemPosition();
-						onEdit.d = spDiffcult.getSelectedItemPosition();
+						onEdit.setType(spType.getSelectedItemPosition());
+						onEdit.setDifficulty(spDiffcult.getSelectedItemPosition());
 						onEdit.q = etQues.getText().toString();
 						onEdit.t = trueAnswer;
 						String s1 = etAns1.getText().toString();
@@ -257,7 +257,7 @@ public class TabActivity extends android.app.TabActivity {
 		}
 
 		private void writeQa(SanaeDataPack sdp) {
-			sdp.write(onEdit == null ?0: onEdit.id);
+			sdp.write(onEdit == null ?0: onEdit.getId());
 			sdp.write(spType.getSelectedItemPosition());
 			sdp.write(spDiffcult.getSelectedItemPosition());
 			sdp.write(etQues.getText().toString());//ques

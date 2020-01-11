@@ -69,9 +69,9 @@ public class SanaeConnect extends WebSocketClient {
 	private void readQAs(SanaeDataPack sdp) {
 		while (sdp.hasNext()) {
 			QA qa=new QA();
-			qa.id = sdp.readInt();
-			qa.type = sdp.readInt();
-			qa.d = sdp.readInt();
+			qa.setId(sdp.readInt());
+			qa.setType(sdp.readInt());
+			qa.setDifficulty(sdp.readInt());
 			qa.q = sdp.readString();
 			int anss=sdp.readInt();
 			qa.t = sdp.readInt();

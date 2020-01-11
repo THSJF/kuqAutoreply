@@ -14,7 +14,7 @@ import java.util.*;
 public class TouHouKnowledge {
 	public static TouHouKnowledge ins;
 	public HashMap<Long,QA> qaMap=new HashMap<>();
-
+	public String imagePath;
 	public ArrayList<QA> qaList=new ArrayList<>();
 	private File qafile;
 
@@ -38,6 +38,11 @@ public class TouHouKnowledge {
         Type type = new TypeToken<ArrayList<QA>>() {
         }.getType();
         qaList = Autoreply.gson.fromJson(Tools.FileTool.readString(qafile), type);
+		imagePath = Autoreply.appDirectory + "/qaImages/";
+		File imageFolder=new File(imagePath);
+		if (!imageFolder.exists()) {
+			imageFolder.mkdirs();
+		}
 	}
 
 	public boolean check(long fromGroup, long fromQQ, String msg) {
@@ -181,12 +186,49 @@ public class TouHouKnowledge {
 	}
 
 	public static class QA {
-		public int type=0;
-		public int id=0;
-		public int d=0;
+		public int flag=0;
+		//flag: id(16bit)					type(8bit)		diffculty(8bit)
+		//	0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0|0 0 0 0 0 0 0 0|0 0 0 0 0 0 0 0
+		private int type=0;
+		private int id=0;
+		private int d=0;
+		public int l=0;//file length
 		public String q;
 		public ArrayList<String> a = new ArrayList<>();
 		public int t;//trueAns
-		public String r;//reason
+		public String r;
+
+		public void setDifficulty(int d) {
+			flag &= 0xffffff00;
+			flag &= d;
+			this.d = d;
+		}
+
+		public int getDifficulty() {
+		//	return flag & 0xff;
+		return d;
+		}
+
+		public void setId(int id) {
+			flag &= 0x0000ffff;
+			flag &= (id << 16);
+			this.id = id;
+		}
+
+		public int getId() {
+			//return (flag >> 16) & 0xff;
+			return id;
+		}
+
+		public void setType(int type) {
+			flag &= 0xffff00ff;
+			flag &= (type << 8);
+			this.type = type;
+		}
+
+		public int getType() {
+			return type;
+			//return (flag >> 8) & 0xff;
+		}
 	}
 }

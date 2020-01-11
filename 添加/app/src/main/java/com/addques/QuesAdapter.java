@@ -44,9 +44,9 @@ public class QuesAdapter extends BaseAdapter {
 			holder = (ViewHolder) convertView.getTag();
 		}
 		QA qa = infosList.get(position);
-		holder.tvId.setText("id:" + qa.id);
+		holder.tvId.setText("id:" + qa.getId());
 		stringBuilder.setLength(0);
-		switch (qa.d) {
+		switch (qa.getDifficulty()) {
 			case 0:
 				stringBuilder.append("easy");
 				holder.tvDiff.setTextColor(Color.GREEN);
@@ -76,7 +76,7 @@ public class QuesAdapter extends BaseAdapter {
 		}
 		holder.tvDiff.setText(stringBuilder.toString());
 		stringBuilder.setLength(0);
-		switch (qa.type) {
+		switch (qa.getType()) {
 			case 0:
 				stringBuilder.append("未分类");
 				break;

@@ -68,7 +68,7 @@ public class Autoreply extends JcqAppAbstract implements ICQVer, IMsg, IRequest 
 		}
 		try {
 			new QuestionServer(9001).start();
-		} catch (java.net.UnknownHostException e) {}
+		} catch (Exception e) {}
 		ReportManager.ins = new ReportManager();
 		TouHouKnowledge.ins = new TouHouKnowledge();
 		System.out.println("加载完成,用时" + (System.currentTimeMillis() - startTime));

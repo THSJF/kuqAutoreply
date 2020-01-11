@@ -10,13 +10,47 @@ public class QA {
 	public static final int _2unAll=5;
 	public static final int otherDanmaku=6;
 
-	public int id=0;
-	public int type=0;
-	public int d=0;
+	public int flag=0;
+	//flag: id(16bit)					type(8bit)		diffculty(8bit)
+	//	0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0|0 0 0 0 0 0 0 0|0 0 0 0 0 0 0 0
+	private int type=0;
+	private int id=0;
+	private int d=0;
+	public int l=0;//file length
 	public String q;
 	public ArrayList<String> a = new ArrayList<>();
 	public int t;//trueAns
-	public String r;//reason
+	public String r;
+
+	public void setDifficulty(int d) {
+		flag &= 0xffffff00;
+		flag &= d;
+		this.d = d;
+	}
+
+	public int getDifficulty() {
+		return flag & 0xff;
+	}
+
+	public void setId(int id) {
+		flag &= 0x0000ffff;
+		flag &= (id << 16);
+		this.id = id;
+	}
+
+	public int getId() {
+		return (flag >> 16) & 0xff;
+	}
+
+	public void setType(int type) {
+		flag &= 0xffff00ff;
+		flag &= (type << 8);
+		this.type = type;
+	}
+
+	public int getType() {
+		return (flag >> 8) & 0xff;
+	}
 	/*
 	 @Override
 
