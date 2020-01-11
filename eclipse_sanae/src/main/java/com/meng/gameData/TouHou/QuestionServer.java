@@ -85,6 +85,7 @@ public class QuestionServer extends WebSocketServer {
 		SanaeDataPack sdp=SanaeDataPack.encode(SanaeDataPack._42retAllQuestion);
 		for (TouHouKnowledge.QA qa:qas) {
 			sdp.write(qa.id);//flag
+			sdp.write(qa.type);
 			sdp.write(qa.d);//diff
 			sdp.write(qa.q);//ques
 			sdp.write(qa.a.size());//ansCount

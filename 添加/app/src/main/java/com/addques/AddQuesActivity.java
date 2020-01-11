@@ -1,20 +1,18 @@
 package com.addques;
 
 import android.app.*;
-import android.content.*;
 import android.os.*;
 import android.view.*;
 import android.view.View.*;
 import android.widget.*;
 import android.widget.AdapterView.*;
-import com.addques.*;
-import java.net.*;
+import android.widget.RadioGroup.*;
+import com.addques.sanae.*;
 import java.util.*;
 
 import android.view.View.OnClickListener;
-import android.widget.RadioGroup.*;
 
-public class MainActivity extends Activity {
+public class AddQuesActivity extends Activity {
 
 	public static final int touhouBase=1;
 	public static final int _2unDanmakuIntNew=2;
@@ -23,23 +21,20 @@ public class MainActivity extends Activity {
 	public static final int _2unAll=5;
 	public static final int otherDanmaku=6;
 
-	Button send,clean,allques;
+	Button send,clean;
 	EditText ques,ans1,ans2,ans3,ans4,reason;
 	Spinner diff,typeSp;
 	int idiff=0;
 	int type=0;
 	TextView result;
 	RadioGroup trueAns;
-	ConfigManager configManager;
+	
 	public ArrayList<String> recieved = new ArrayList<>();
-	public static MainActivity instence;
 	int trueAnswer=-1;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.main);
-		instence = this;
-		allques = (Button) findViewById(R.id.allque);
+        setContentView(R.layout.add_ques_activity);
 		clean = (Button) findViewById(R.id.clean);
 		send = (Button) findViewById(R.id.mainButtonSend);
 		ques = (EditText)findViewById(R.id.ques);
@@ -52,10 +47,9 @@ public class MainActivity extends Activity {
 		ans4 = (EditText)findViewById(R.id.ans4);
 		reason = (EditText)findViewById(R.id.reason);
 		result = (TextView)findViewById(R.id.mainEditTextResult);
-		//allques.setOnClickListener(onClick);
 		send.setOnClickListener(onClick);
 		clean.setOnClickListener(onClick);
-		diff.setAdapter(new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, new String[]{"easy","normal","hard","lunatic","overdrive"}));
+		diff.setAdapter(new ArrayAdapter<String>(this, android.R.layout.simple_dropdown_item_1line, new String[]{"easy","normal","hard","lunatic","overdrive","kidding"}));
 		diff.setOnItemSelectedListener(new OnItemSelectedListener(){
 
 				@Override
@@ -65,10 +59,9 @@ public class MainActivity extends Activity {
 
 				@Override
 				public void onNothingSelected(AdapterView<?> p1) {
-					// TODO: Implement this method
 				}
 			});
-		typeSp.setAdapter(new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, new String[]{"未分类","车万基础","新作弹幕作","官方所有弹幕作","官方非弹幕","官方所有","同人弹幕"}));
+		typeSp.setAdapter(new ArrayAdapter<String>(this, android.R.layout.simple_dropdown_item_1line, new String[]{"未分类","车万基础","新作弹幕作","官方所有弹幕作","官方非弹幕","官方所有","同人弹幕"}));
 		typeSp.setOnItemSelectedListener(new OnItemSelectedListener(){
 
 				@Override
@@ -78,30 +71,9 @@ public class MainActivity extends Activity {
 
 				@Override
 				public void onNothingSelected(AdapterView<?> p1) {
-					// TODO: Implement this method
 				}
 			});
-		try {
-			configManager = new ConfigManager(new URI("ws://123.207.65.93:9001"));
-			configManager.connect();
-
-			new Thread(new Runnable(){
-
-					@Override
-					public void run() {
-						while (true) {
-							try {
-								Thread.sleep(30000);
-								configManager.send("heart");
-							} catch (Exception e) {
-								showToast("连接断开");
-							}
-						}
-					}
-				}).start();
-		} catch (URISyntaxException e) {
-			showToast(e.toString());
-		}
+		
 		trueAns.setOnCheckedChangeListener(new OnCheckedChangeListener(){
 
 				@Override
@@ -125,7 +97,6 @@ public class MainActivity extends Activity {
     }
 
 
-
 	OnClickListener onClick=new OnClickListener(){
 
 		@Override
@@ -144,8 +115,8 @@ public class MainActivity extends Activity {
 					sdp.write(ans3.getText().toString());
 					sdp.write(ans4.getText().toString());
 					sdp.write(reason.getText().toString());
-					configManager.send(sdp.getData());
-					showToast("发送成功");
+					TabActivity.ins.configManager.send(sdp.getData());
+					TabActivity.ins.showToast("正在发送");
 					break;
 				case R.id.clean:
 					ques.setText("");
@@ -155,21 +126,8 @@ public class MainActivity extends Activity {
 					ans4.setText("");
 					reason.setText("");
 					break;
-				case R.id.allque:
-					startActivity(new Intent(MainActivity.this, Activity2.class));
-					break;
 			}
 		}
 	};
-
-	public void showToast(final String s) {
-		runOnUiThread(new Runnable(){
-
-				@Override
-				public void run() {
-					Toast.makeText(MainActivity.this, s, Toast.LENGTH_SHORT).show();
-				}
-			});
-	}
 }
 

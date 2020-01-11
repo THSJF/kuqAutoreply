@@ -1,5 +1,6 @@
-package com.addques;
+package com.addques.sanae;
 
+import com.addques.*;
 import java.util.*;
 
 public class SanaeDataPack {
@@ -22,7 +23,7 @@ public class SanaeDataPack {
 	public static final int _40addQuestion=40;//int flag,string ques,int ansCount,int trueAns,string... ans,string reason
 	public static final int _41getAllQuestion=41;
 	public static final int _42retAllQuestion=42;
-	
+
 	public static SanaeDataPack encode(int opCode) {
 		return new SanaeDataPack(opCode, System.currentTimeMillis());
 	}

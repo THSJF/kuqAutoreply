@@ -15,20 +15,31 @@
 			android:layout_weight="1"
 			android:layout_height="fill_parent"
 			android:layout_width="fill_parent">
+
 			<LinearLayout
 				android:layout_width="fill_parent"
 				android:layout_height="fill_parent"
 				android:orientation="vertical">
 
-				<Spinner
-					android:id="@+id/diff"
+				<LinearLayout
 					android:layout_width="fill_parent"
-					android:layout_height="fill_parent"/>
+					android:layout_height="fill_parent"
+					android:orientation="horizontal">
 
-				<Spinner
-					android:id="@+id/type"
-					android:layout_width="fill_parent"
-					android:layout_height="fill_parent"/>
+					<Spinner
+						android:layout_weight="1"
+						android:id="@+id/diff"
+						android:layout_width="fill_parent"
+						android:layout_height="fill_parent"/>
+
+					<Spinner
+						android:id="@+id/type"
+						android:layout_weight="1"
+						android:layout_width="fill_parent"
+						android:layout_height="fill_parent"/>
+
+				</LinearLayout>
+
 				<EditText
 					android:id="@+id/ques"
 					android:hint="问题"
@@ -58,61 +69,67 @@
 					android:hint="答案4"
 					android:layout_width="fill_parent"
 					android:layout_height="fill_parent"/>
+
 				<TextView
 					android:text="正确答案"
 					android:id="@+id/mainEditTextResult"
 					android:layout_width="fill_parent"
 					android:layout_height="wrap_content"/>
+
 				<RadioGroup
 					android:id="@+id/trueans"
 					android:orientation="horizontal"
 					android:layout_width="wrap_content"
-					android:layout_height="wrap_content" >
+					android:layout_height="wrap_content">
 
 					<RadioButton
 						android:id="@+id/r1"
 						android:layout_width="wrap_content"
 						android:layout_height="wrap_content"
-						android:text="答案1" />
+						android:text="答案1"/>
+
 					<RadioButton
 						android:id="@+id/r2"
 						android:layout_width="wrap_content"
 						android:layout_height="wrap_content"
-						android:text="答案2" />
+						android:text="答案2"/>
+
 					<RadioButton
 						android:id="@+id/r3"
 						android:layout_width="wrap_content"
 						android:layout_height="wrap_content"
-						android:text="答案3" />
+						android:text="答案3"/>
+
 					<RadioButton
 						android:id="@+id/r4"
 						android:layout_width="wrap_content"
 						android:layout_height="wrap_content"
-						android:text="答案4" />
-				</RadioGroup>	
+						android:text="答案4"/>
+
+				</RadioGroup>
+
 				<EditText
 					android:id="@+id/reason"
 					android:hint="原因"
 					android:layout_width="fill_parent"
 					android:layout_height="fill_parent"/>
+
 				<Button
 					android:id="@+id/mainButtonSend"
 					android:text="提交"
 					android:layout_width="fill_parent"
 					android:layout_height="wrap_content"/>
+
 				<Button
 					android:id="@+id/clean"
 					android:text="清空"
 					android:layout_width="fill_parent"
 					android:layout_height="wrap_content"/>
-				<Button
-					android:visibility="gone"
-					android:id="@+id/allque"
-					android:text="全部问题"
-					android:layout_width="fill_parent"
-					android:layout_height="wrap_content"/>
+
 			</LinearLayout>
+
 		</ScrollView>
+
 	</LinearLayout>
 
 </LinearLayout>
