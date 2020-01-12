@@ -57,7 +57,6 @@ public class SanaeDataPack {
 	public static final int opLiveStart=33;//开始直播 string(name) long(blid)
 	public static final int opLiveStop=34;//停止直播 string(name) long(blid)
 	public static final int opQuestionPic=35;//int id     file
-
 	public static SanaeDataPack encode(int opCode) {
 		return new SanaeDataPack(opCode, System.currentTimeMillis());
 	}
@@ -67,7 +66,7 @@ public class SanaeDataPack {
 	}
 
 	public static SanaeDataPack encode(int opCode, SanaeDataPack dataPack) {
-		return new SanaeDataPack(dataPack);
+		return new SanaeDataPack(opCode, dataPack);
 	}
 
 	public static SanaeDataPack decode(byte[] bytes) {

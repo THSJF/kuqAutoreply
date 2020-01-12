@@ -67,7 +67,7 @@ public class SanaeDataPack {
 	}
 
 	public static SanaeDataPack encode(int opCode, SanaeDataPack dataPack) {
-		return new SanaeDataPack(dataPack);
+		return new SanaeDataPack(opCode, dataPack);
 	}
 
 	public static SanaeDataPack decode(byte[] bytes) {

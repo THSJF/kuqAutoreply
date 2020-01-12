@@ -25,7 +25,6 @@ public class SanaeDataPack {
 	public static final int opAddQuestion=10;//int flag,string ques,int ansCount,string... ans,string reason
 	public static final int opAllQuestion=11;
 	public static final int opSetQuestion=12;//int flag,string ques,int ansCount,int trueAns,string... ans,string reason
-	public static final int opHeartBeat=24;//心跳
 	public static final int opQuestionPic=35;//int id     file
 	
 	public static SanaeDataPack encode(int opCode) {
@@ -37,7 +36,7 @@ public class SanaeDataPack {
 	}
 
 	public static SanaeDataPack encode(int opCode, SanaeDataPack dataPack) {
-		return new SanaeDataPack(dataPack);
+		return new SanaeDataPack(opCode, dataPack);
 	}
 
 	public static SanaeDataPack decode(byte[] bytes) {
@@ -48,7 +47,7 @@ public class SanaeDataPack {
 		//length(4) headLength(2) version(2) time(8) target/from(8) opCode(4)
 		writeByteDataIntoArray(BitConverter.getBytes(0));
 		writeByteDataIntoArray(BitConverter.getBytes(headLength));
-		writeByteDataIntoArray(BitConverter.getBytes((short)5));
+		writeByteDataIntoArray(BitConverter.getBytes((short)1));
 		writeByteDataIntoArray(BitConverter.getBytes(timeStamp));
 		writeByteDataIntoArray(BitConverter.getBytes(0L));
 		writeByteDataIntoArray(BitConverter.getBytes(opCode));

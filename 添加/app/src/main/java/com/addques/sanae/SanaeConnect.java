@@ -24,7 +24,7 @@ public class SanaeConnect extends WebSocketClient {
 	@Override
 	public void onOpen(ServerHandshake serverHandshake) {
 		TabActivity.ins.showToast("连接到苗");
-		TabActivity.ins.sanaeConnect.send(SanaeDataPack.encode(41).getData());
+		TabActivity.ins.sanaeConnect.send(SanaeDataPack.encode(SanaeDataPack.opAllQuestion).getData());
 	}
 
 	@Override

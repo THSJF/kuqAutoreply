@@ -147,7 +147,7 @@ public class Autoreply extends JcqAppAbstract implements ICQVer, IMsg, IRequest 
 		try {
 			sanaeServer = new SanaeServer(9760);
 			sanaeServer.start();
-		} catch (java.net.UnknownHostException e) {}
+		} catch (Exception e) {}
         FileTipManager fileTipManager = new FileTipManager();
         fileTipManager.addTip(807242547L, 1592608126L);
         //new TimeTipManager().start();
