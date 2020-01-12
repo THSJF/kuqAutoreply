@@ -133,7 +133,18 @@ public class TouHouKnowledge {
 				case otherDanmaku:
 					sb.append("同人弹幕");
 			}	
-			sb.append("\n").append(qa2.q).append("\n");
+			sb.append("\n");
+			if (qa2.q.contains("(image)")) {
+				try {
+					sb.append(qa2.q.replace("(image)", Autoreply.CC.image(new File(imagePath + qa2.getId() + ".jpg"))));
+				} catch (IOException e) {
+					Autoreply.sendMessage(fromGroup, 0, "图片出现错误");
+					return true;
+				}
+			} else {
+				sb.append(qa2.q);
+			}
+			sb.append("\n");
 			int change=Autoreply.ins.random.nextInt(qa2.a.size());
 			exchange(qa2.a, qa2.t, change);
 			qa2.t = change;
