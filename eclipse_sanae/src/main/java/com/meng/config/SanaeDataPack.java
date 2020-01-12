@@ -1,75 +1,73 @@
 package com.meng.config;
 
 import com.meng.tools.*;
+import java.io.*;
 import java.util.*;
+import com.meng.*;
 
 public class SanaeDataPack {
 
 	public ArrayList<Byte> data=new ArrayList<>();
 	public byte[] dataArray;
-	public final short headLength=28;
+	public static final short headLength=28;
 	public int dataPointer=0;
 
-	public final byte typeByte=0;
-	public final byte typeShort=1;
-	public final byte typeInt=2;
-	public final byte typeLong=3;
-	public final byte typeFloat=4;
-	public final byte typeDouble=5;
-	public final byte typeString=6;
-	public final byte typeBoolean=7;
+	public static final byte typeByte=0;
+	public static final byte typeShort=1;
+	public static final byte typeInt=2;
+	public static final byte typeLong=3;
+	public static final byte typeFloat=4;
+	public static final byte typeDouble=5;
+	public static final byte typeString=6;
+	public static final byte typeBoolean=7;
+	public static final byte typeFile=8;
 
-	public static final int _0notification=0;//通知  string
-	public static final int _1getConfig=1;  //获取配置文件
-	public static final int _2retConfig=2;//接收配置文件  string(json)
-	public static final int _3getOverSpell=3;//获取疮痍符卡 long(qq)
-	public static final int _4retOverSpell=4;//接收疮痍符卡 string
-	public static final int _5getOverPersent=5;//获取疮痍进度 long(qq)
-	public static final int _6retOverPersent=6;//接收疮痍进度 int(0-10000)
-	public static final int _7getGrandma=7;//获取draw grandma long(qq)
-	public static final int _8retGrandma=8;//接收grandma string
-	public static final int _9getMusicName=9;//获取音乐名 long(qq)
-	public static final int _10retMusicName=10;//接收音乐名 string
-	public static final int _11getGotSpells=11;//获取符卡列表 long(qq)
-	public static final int _12retGotSpells=12;//接收符卡列表 string(json)
-	public static final int _13getNeta=13;//获取neta long(qq)
-	public static final int _14retNeta=14;//接收neta string
-	public static final int _15incSpeak=15;//增加发言次数  long(group) long(qq)
-	public static final int _16incPic=16;//增加图片次数 long (qq) 
-	public static final int _17incBilibili=17;//增加哔哩哔哩链接次数  long(group) long(qq)
-	public static final int _18incRepeat=18;//增加复读次数 long (qq)
-	public static final int _19incRepeatStart=19;//增加带领复读  long(qq)
-	public static final int _20incRepeatBreak=20;//增加打断复读  long(group) long(qq)
-	public static final int _21incBan=21;//增加被禁言次数  long(group) long(qq)
-	public static final int _22decTime=22;//减少时间  long(group) long(qq)
-	public static final int _23grass=23;//增加种草次数  long(group) long(qq)
-	public static final int _24heartBeat=24;//心跳
-	public static final int _25setNick=25;//设置nickname long(qq)
-	public static final int _26addBlack=26;//添加黑名单
-	public static final int _27incMengEr=27;//萌二发言
-	public static final int _28getSeqContent=28;//获得接龙内容
-	public static final int _29retSeqContent=29;//返回接龙内容
-	public static final int _30sendMsg=30;//向指定目标发送消息long group long qq string msg
-	public static final int _31getLiveList=31;//获取直播列表
-	public static final int _32retLiveList=32;//返回直播列表 string(name) long(blid)
-	public static final int _33liveStart=33;//开始直播 string(name) long(blid)
-	public static final int _34liveStop=34;//停止直播 string(name) long(blid)
-	public static final int _35speakInliveRoom=35;//直播间说话 string(主播称呼) long(blid) string(说话者称呼) long(说话者bid)
-	public static final int _36newVideo=36;//新视频 string(up) string(vname) long(aid)
-	public static final int _37newArtical=37;
-	public static final int _38groupBan=38;
-	public static final int _39groupKick=39;
-	public static final int _40addQuestion=40;//int flag,string ques,int ansCount,string... ans,string reason
-	public static final int _41getAllQuestion=41;
-	public static final int _42retAllQuestion=42;
-	public static final int _43setQuestion=43;//int flag,string ques,int ansCount,int trueAns,string... ans,string reason
-	
+	public static final int opNotification=0;//通知  string
+	public static final int opConfigFile=1;  //string(json)
+	public static final int opGameOverSpell=2;//获取疮痍符卡 long(qq) 接收疮痍符卡 string
+	public static final int opGameOverPersent=3;//获取疮痍进度 long(qq)接收疮痍进度 int(0-10000)
+	public static final int opGrandma=4;//获取draw grandma long(qq) 接收grandma string
+	public static final int opMusicName=5;//获取音乐名 long(qq) 接收音乐名 string
+	public static final int opGotSpells=6;//获取符卡列表 long(qq) 接收符卡列表 string(json)
+	public static final int opNeta=7;//获取neta long(qq) 接收neta string
+	public static final int opSeqContent=8;//获得接龙内容json 返回接龙内容json
+	public static final int opLiveList=9;//获取直播列表 返回直播列表 string(name) long(blid)
+	public static final int opAddQuestion=10;//int flag,string ques,int ansCount,string... ans,string reason
+	public static final int opAllQuestion=11;
+	public static final int opSetQuestion=12;//int flag,string ques,int ansCount,int trueAns,string... ans,string reason
+	public static final int opFile=13;
+	public static final int opSpeakInliveRoom=14;//直播间说话 string(主播称呼) long(blid) string(说话者称呼) long(说话者bid)
+	public static final int opIncSpeak=15;//增加发言次数  long(group) long(qq)
+	public static final int opIncPic=16;//增加图片次数 long (qq) 
+	public static final int opIncBilibili=17;//增加哔哩哔哩链接次数  long(group) long(qq)
+	public static final int opIncRepeat=18;//增加复读次数 long (qq)
+	public static final int opIncRepeatStart=19;//增加带领复读  long(qq)
+	public static final int opIncRepeatBreak=20;//增加打断复读  long(group) long(qq)
+	public static final int opIncBan=21;//增加被禁言次数  long(group) long(qq)
+	public static final int opDecTime=22;//减少时间  long(group) long(qq)
+	public static final int opGrass=23;//增加种草次数  long(group) long(qq)
+	public static final int opHeartBeat=24;//心跳
+	public static final int opSetNick=25;//设置nickname long(qq)
+	public static final int opAddBlack=26;//添加黑名单
+	public static final int opIncMengEr=27;//萌二发言
+	public static final int opGroupBan=28;//group qq
+	public static final int opGroupKick=29;//group qq
+	public static final int opSendMsg=30;//向指定目标发送消息long group long qq string msg
+	public static final int opNewVideo=31;//新视频 string(up) string(vname) long(aid)
+	public static final int opNewArtical=32;
+	public static final int opLiveStart=33;//开始直播 string(name) long(blid)
+	public static final int opLiveStop=34;//停止直播 string(name) long(blid)
+	public static final int opQuestionPic=35;//int id     file
 	public static SanaeDataPack encode(int opCode) {
 		return new SanaeDataPack(opCode, System.currentTimeMillis());
 	}
 
+	public static SanaeDataPack encode(SanaeDataPack dataPack) {
+		return new SanaeDataPack(dataPack);
+	}
+
 	public static SanaeDataPack encode(int opCode, SanaeDataPack dataPack) {
-		return new SanaeDataPack(opCode, dataPack);
+		return new SanaeDataPack(dataPack);
 	}
 
 	public static SanaeDataPack decode(byte[] bytes) {
@@ -86,6 +84,16 @@ public class SanaeDataPack {
 		writeByteDataIntoArray(Tools.BitConverter.getBytes(opCode));
 	}   
 
+	private SanaeDataPack(SanaeDataPack dataPack) {
+		//length(4) headLength(2) version(2) time(8) target/from(8) opCode(4)
+		writeByteDataIntoArray(Tools.BitConverter.getBytes(0));
+		writeByteDataIntoArray(Tools.BitConverter.getBytes(headLength));
+		writeByteDataIntoArray(Tools.BitConverter.getBytes(dataPack.getVersion()));
+		writeByteDataIntoArray(Tools.BitConverter.getBytes(dataPack.getTimeStamp()));
+		writeByteDataIntoArray(Tools.BitConverter.getBytes(dataPack.getTarget()));
+		writeByteDataIntoArray(Tools.BitConverter.getBytes(dataPack.getOpCode()));
+	}
+
 	private SanaeDataPack(int opCode, SanaeDataPack dataPack) {
 		//length(4) headLength(2) version(2) time(8) target/from(8) opCode(4)
 		writeByteDataIntoArray(Tools.BitConverter.getBytes(0));
@@ -94,7 +102,7 @@ public class SanaeDataPack {
 		writeByteDataIntoArray(Tools.BitConverter.getBytes(dataPack.getTimeStamp()));
 		writeByteDataIntoArray(Tools.BitConverter.getBytes(dataPack.getTarget()));
 		writeByteDataIntoArray(Tools.BitConverter.getBytes(opCode));
-	}   
+	}
 
 	private SanaeDataPack(byte[] pack) {
 		dataArray = pack;
@@ -197,11 +205,42 @@ public class SanaeDataPack {
 		return this;
 	}
 
+	public SanaeDataPack write(File file) {
+		try {
+			FileInputStream fin=new FileInputStream(file);
+			byte[] bs=new byte[(int)file.length()];
+			fin.read(bs, 0, bs.length);
+			writeByteDataIntoArray(typeFile);
+			write((int)file.length());
+			writeByteDataIntoArray(bs);
+		} catch (Exception e) {
+			throw new RuntimeException(e.toString());
+		}
+		return this;
+	}
+
+	public File readFile(String folderPath, String name) {
+		if (dataArray[dataPointer++] == typeFile) {
+			int fileLen=readInt();
+			File recFile=new File(folderPath + "/" + name);
+			try {
+				FileOutputStream fos=new FileOutputStream(recFile);
+				fos.write(dataArray, dataPointer, fileLen);
+			} catch (Exception e) {
+				recFile.delete();
+				recFile = null;
+			}
+			dataPointer += fileLen;
+			return recFile;
+		}
+		throw new RuntimeException("not a file");
+	}
+
 	public byte readByte() {
 		if (dataArray[dataPointer++] == typeByte) {
 			return dataArray[dataPointer++];
 		}
-		throw new NumberFormatException("not a byte number");
+		throw new RuntimeException("not a byte number");
 	}
 
 	public short readShort() {
@@ -210,7 +249,7 @@ public class SanaeDataPack {
 			dataPointer += 2;
 			return s;
 		}
-		throw new NumberFormatException("not a short number");
+		throw new RuntimeException("not a short number");
 	}
 
 	public int readInt() {
@@ -219,7 +258,7 @@ public class SanaeDataPack {
 			dataPointer += 4;
 			return i;
 		}
-		throw new NumberFormatException("not a int number");
+		throw new RuntimeException("not a int number");
 	}
 
 	public long readLong() {
@@ -228,7 +267,7 @@ public class SanaeDataPack {
 			dataPointer += 8;
 			return l;
 		}
-		throw new NumberFormatException("not a long number");
+		throw new RuntimeException("not a long number");
 	}
 
 	public float readFloat() {
@@ -237,7 +276,7 @@ public class SanaeDataPack {
 			dataPointer += 4;
 			return f;
 		}
-		throw new NumberFormatException("not a float number");
+		throw new RuntimeException("not a float number");
 	}
 
 	public double readDouble() {
@@ -246,7 +285,7 @@ public class SanaeDataPack {
 			dataPointer += 8;
 			return d;
 		}
-		throw new NumberFormatException("not a double number");
+		throw new RuntimeException("not a double number");
 	}
 
 	public String readString() {
@@ -267,7 +306,7 @@ public class SanaeDataPack {
 		if (dataArray[dataPointer++] == typeBoolean) {
 			return dataArray[dataPointer++] == 1;
 		}
-		throw new NumberFormatException("not a boolean value");
+		throw new RuntimeException("not a boolean value");
 	}
 
 	public boolean hasNext() {

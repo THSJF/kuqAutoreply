@@ -12,7 +12,7 @@ import org.java_websocket.server.*;
 
 public class SanaeServer extends WebSocketServer {
 
-	public SanaeServer(int port) throws UnknownHostException {
+	public SanaeServer(int port) {
 		super(new InetSocketAddress(port));
 	}
 
@@ -33,18 +33,15 @@ public class SanaeServer extends WebSocketServer {
 	@Override
 	public void onMessage(WebSocket conn, ByteBuffer message) {
 		SanaeDataPack rsdp=SanaeDataPack.decode(message.array());
-		SanaeDataPack sdp=null;
+		SanaeDataPack sdp = SanaeDataPack.encode(rsdp);
 		switch (rsdp.getOpCode()) {
-			case SanaeDataPack._1getConfig:
-				sdp = SanaeDataPack.encode(SanaeDataPack._2retConfig, rsdp);
+			case SanaeDataPack.opConfigFile:
 				sdp.write(Autoreply.gson.toJson(Autoreply.instence.configManager.configJavaBean));
 				break;
-			case SanaeDataPack._3getOverSpell:
-				sdp =  SanaeDataPack.encode(SanaeDataPack._4retOverSpell, rsdp);
+			case SanaeDataPack.opGameOverSpell:
 				sdp.write(Autoreply.instence.diceImitate.md5RanStr(rsdp.readLong(), DiceImitate.spells));
 				break;
-			case SanaeDataPack._5getOverPersent:
-				sdp = SanaeDataPack.encode(SanaeDataPack._6retOverPersent, rsdp);
+			case SanaeDataPack.opGameOverPersent:
 				String md5=Tools.Hash.toMD5(String.valueOf(rsdp.readLong() + System.currentTimeMillis() / (24 * 60 * 60 * 1000)));
 				char c=md5.charAt(0);
 				if (c == '0') {
@@ -55,26 +52,25 @@ public class SanaeServer extends WebSocketServer {
 					sdp.write(Integer.parseInt(md5.substring(26), 16) % 10001);
 				}
 				break;
-			case SanaeDataPack._15incSpeak:
+			case SanaeDataPack.opIncSpeak:
 				Autoreply.instence.groupCount.incSpeak(rsdp.readLong());
 				Autoreply.instence.useCount.incSpeak(rsdp.readLong());
 				break;
-			case SanaeDataPack._18incRepeat:
+			case SanaeDataPack.opIncRepeat:
 				Autoreply.instence.groupCount.incFudu(rsdp.readLong());
 				Autoreply.instence.useCount.incFudu(rsdp.readLong());
 				break;
-			case SanaeDataPack._19incRepeatStart:
+			case SanaeDataPack.opIncRepeatStart:
 				Autoreply.instence.useCount.incFudujiguanjia(rsdp.readLong());
 				break;
-			case SanaeDataPack._20incRepeatBreak:
+			case SanaeDataPack.opIncRepeatBreak:
 				Autoreply.instence.groupCount.incRepeatBreaker(rsdp.readLong());
 				Autoreply.instence.useCount.incRepeatBreaker(rsdp.readLong());
 				break;
-			case SanaeDataPack._25setNick:
+			case SanaeDataPack.opSetNick:
 				Autoreply.instence.configManager.setNickName(rsdp.readLong(), rsdp.readString());
 				break;
-			case SanaeDataPack._28getSeqContent:
-				sdp = SanaeDataPack.encode(SanaeDataPack._29retSeqContent, rsdp);
+			case SanaeDataPack.opSeqContent:
 				File jsonFile = new File(Autoreply.appDirectory + "seq.json");
 				sdp.write(Tools.FileTool.readString(jsonFile.getAbsolutePath()));
 				break;

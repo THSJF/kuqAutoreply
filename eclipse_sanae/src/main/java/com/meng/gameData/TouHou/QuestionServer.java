@@ -7,6 +7,8 @@ import java.util.*;
 import org.java_websocket.*;
 import org.java_websocket.handshake.*;
 import org.java_websocket.server.*;
+import java.io.*;
+import com.meng.*;
 
 public class QuestionServer extends WebSocketServer {
 
@@ -32,50 +34,68 @@ public class QuestionServer extends WebSocketServer {
 	public void onMessage(WebSocket conn, ByteBuffer message) {
 		SanaeDataPack dataRec=SanaeDataPack.decode(message.array());
 		SanaeDataPack sdp=null;
-		if (dataRec.getVersion() < 3) {
-			sdp = SanaeDataPack.encode(SanaeDataPack._0notification, dataRec);
-			sdp.write("旧版本已弃用");
-			conn.send(sdp.getData());
-			return;
-		}
-		switch (dataRec.getOpCode()) {
-			case SanaeDataPack._40addQuestion:
-				TouHouKnowledge.QA qa40= new TouHouKnowledge.QA();
-				qa40.setFlag(dataRec.readInt());
-				qa40.q = dataRec.readString();
-				int ans40=dataRec.readInt();
-				qa40.t = dataRec.readInt();
-				for (int i=0;i < ans40;++i) {
-					qa40.a.add(dataRec.readString());
-				}
-				qa40.r = dataRec.readString();
-				if (qa40.r.equals("")) {
-					qa40.r = null;
-				}
-				TouHouKnowledge.ins.addQA(qa40);
-				sdp = SanaeDataPack.encode(SanaeDataPack._0notification, dataRec);
-				sdp.write("添加成功");
+		switch (dataRec.getVersion()) {
+			case 1:
+			case 2:
+			case 3:
+				sdp = SanaeDataPack.encode(SanaeDataPack.opNotification, dataRec);
+				sdp.write("旧版本已弃用");
 				break;
-			case SanaeDataPack._41getAllQuestion:
-				sdp = writeQA(TouHouKnowledge.ins.qaList);
+			case 4:
+				switch (dataRec.getOpCode()) {
+					case SanaeDataPack.opAddQuestion:
+						TouHouKnowledge.QA qa40= new TouHouKnowledge.QA();
+						qa40.setFlag(dataRec.readInt());
+						qa40.q = dataRec.readString();
+						int ans40=dataRec.readInt();
+						qa40.t = dataRec.readInt();
+						for (int i=0;i < ans40;++i) {
+							qa40.a.add(dataRec.readString());
+						}
+						qa40.r = dataRec.readString();
+						if (qa40.r.equals("")) {
+							qa40.r = null;
+						}
+						if (dataRec.hasNext()) {
+							qa40.l = (int)dataRec.readFile(TouHouKnowledge.ins.imagePath, (TouHouKnowledge.ins.qaList.size() - 1) + ".jpg").length();
+						}
+						TouHouKnowledge.ins.addQA(qa40);
+						sdp = SanaeDataPack.encode(SanaeDataPack.opNotification, dataRec);
+						sdp.write("添加成功");
+						break;
+					case SanaeDataPack.opAllQuestion:
+						sdp = writeQA(TouHouKnowledge.ins.qaList);
+						break;
+					case SanaeDataPack.opSetQuestion:
+						TouHouKnowledge.QA qa43= new TouHouKnowledge.QA();
+						qa43.setFlag(dataRec.readInt());
+						qa43.q = dataRec.readString();
+						int ans43=dataRec.readInt();
+						qa43.t = dataRec.readInt();
+						for (int i=0;i < ans43;++i) {
+							qa43.a.add(dataRec.readString());
+						}
+						qa43.r = dataRec.readString();
+						if (qa43.r.equals("")) {
+							qa43.r = null;
+						}
+						if (dataRec.hasNext()) {
+							qa43.l = (int)dataRec.readFile(TouHouKnowledge.ins.imagePath, qa43.getId() + ".jpg").length();
+						}
+						TouHouKnowledge.ins.setQA(qa43);
+						sdp = SanaeDataPack.encode(SanaeDataPack.opNotification, dataRec);
+						sdp.write("修改成功");
+						break;
+					case SanaeDataPack.opQuestionPic:
+						sdp = SanaeDataPack.encode(SanaeDataPack.opQuestionPic, dataRec);
+						File img=new File(TouHouKnowledge.ins.imagePath + dataRec.readInt() + ".jpg");
+						sdp.write((int)img.length());
+						sdp.write(img);
+						break;
+				}
 				break;
-			case SanaeDataPack._43setQuestion:
-				TouHouKnowledge.QA qa43= new TouHouKnowledge.QA();
-				qa43.setFlag(dataRec.readInt());
-				qa43.q = dataRec.readString();
-				int ans43=dataRec.readInt();
-				qa43.t = dataRec.readInt();
-				for (int i=0;i < ans43;++i) {
-					qa43.a.add(dataRec.readString());
-				}
-				qa43.r = dataRec.readString();
-				if (qa43.r.equals("")) {
-					qa43.r = null;
-				}
-				TouHouKnowledge.ins.setQA(qa43);
-				sdp = SanaeDataPack.encode(SanaeDataPack._0notification, dataRec);
-				sdp.write("修改成功");
 		}
+
 		if (sdp != null) {
 			conn.send(sdp.getData());
 		}
@@ -95,9 +115,10 @@ public class QuestionServer extends WebSocketServer {
 		setConnectionLostTimeout(100);
 	}
 	private SanaeDataPack writeQA(ArrayList<TouHouKnowledge.QA> qas) {
-		SanaeDataPack sdp=SanaeDataPack.encode(SanaeDataPack._42retAllQuestion);
+		SanaeDataPack sdp=SanaeDataPack.encode(SanaeDataPack.opAllQuestion);
 		for (TouHouKnowledge.QA qa:qas) {
 			sdp.write(qa.getFlag());//flag
+			sdp.write(qa.l);
 			sdp.write(qa.q);//ques
 			sdp.write(qa.a.size());//ansCount
 			sdp.write(qa.t);

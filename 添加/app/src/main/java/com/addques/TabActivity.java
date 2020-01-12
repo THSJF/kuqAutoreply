@@ -1,17 +1,21 @@
 package com.addques;
 
+import android.content.*;
+import android.net.*;
 import android.os.*;
+import android.util.*;
 import android.view.*;
 import android.view.View.*;
 import android.widget.*;
 import android.widget.AdapterView.*;
 import android.widget.RadioGroup.*;
-import com.addques.*;
 import com.addques.sanae.*;
+import java.io.*;
 import java.net.*;
 import java.util.*;
 
 import android.view.View.OnClickListener;
+import android.graphics.*;
 
 public class TabActivity extends android.app.TabActivity {
 
@@ -27,10 +31,11 @@ public class TabActivity extends android.app.TabActivity {
 	public SanaeConnect sanaeConnect;
 	public TabHost tab;
 
-	public Button btnSend,btnClean;
+	public Button btnSend,btnClean,btnImage;
 	public EditText etQues,etAns1,etAns2,etAns3,etAns4,etReason;
 	public Spinner spDiffcult,spType,spFiDiff,spFiType;
 	public RadioGroup rgTrueAnswer;
+	public ImageView imageView;
 
 	public int mode=0;
 	public QA onEdit;
@@ -41,6 +46,7 @@ public class TabActivity extends android.app.TabActivity {
 	private ListView lvAllQa;
 	public QuesAdapter quesAdapter;
 
+	public File chooseFilePath;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -54,6 +60,7 @@ public class TabActivity extends android.app.TabActivity {
 		i.inflate(R.layout.all_ques_activity, tab.getTabContentView());
 		btnClean = (Button) findViewById(R.id.clean);
 		btnSend = (Button) findViewById(R.id.mainButtonSend);
+		btnImage = (Button) findViewById(R.id.add_ques_activityButton_addPic);
 		etQues = (EditText)findViewById(R.id.ques);
 		spDiffcult = (Spinner) findViewById(R.id.diff);
 		spType = (Spinner) findViewById(R.id.type);
@@ -65,8 +72,10 @@ public class TabActivity extends android.app.TabActivity {
 		etAns3 = (EditText)findViewById(R.id.ans3);
 		etAns4 = (EditText)findViewById(R.id.ans4);
 		etReason = (EditText)findViewById(R.id.reason);
+		imageView = (ImageView) findViewById(R.id.add_ques_activityImageView);
 		btnSend.setOnClickListener(onClick);
 		btnClean.setOnClickListener(onClick);
+		btnImage.setOnClickListener(onClick);
 		spDiffcult.setAdapter(new ArrayAdapter<String>(this, android.R.layout.simple_spinner_dropdown_item, new String[]{"easy","normal","hard","lunatic","overdrive","kidding"}));
 		spType.setAdapter(new ArrayAdapter<String>(this, android.R.layout.simple_spinner_dropdown_item, new String[]{"未分类","车万基础","新作整数作","官方弹幕作","官方非弹幕","官方所有","同人弹幕"}));
 		spFiDiff.setAdapter(new ArrayAdapter<String>(this, android.R.layout.simple_spinner_dropdown_item, new String[]{"all","easy","normal","hard","lunatic","overdrive","kidding"}));
@@ -107,11 +116,11 @@ public class TabActivity extends android.app.TabActivity {
 				public void run() {
 					while (true) {
 						try {
-							Thread.sleep(30000);
-							sanaeConnect.send("heart");
+							Thread.sleep(10000);
+							sanaeConnect.send("h");
 						} catch (Exception e) {
 							showToast("连接断开");
-							sanaeConnect.connect();
+							sanaeConnect.reconnect();
 						}
 					}
 				}
@@ -229,15 +238,18 @@ public class TabActivity extends android.app.TabActivity {
 						qa.r = etReason.getText().toString();
 						alAllQa.add(qa);
 						refresh();
-						SanaeDataPack sdp=SanaeDataPack.encode(SanaeDataPack._40addQuestion);
+						SanaeDataPack sdp=SanaeDataPack.encode(SanaeDataPack.opAddQuestion);
 						sdp.write(qa.getFlag());
-						sdp.write(qa.q);//ques
-						sdp.write(qa.a.size());//ansCount
+						sdp.write(qa.q);
+						sdp.write(qa.a.size());
 						sdp.write(qa.t);
 						for (String s:qa.a) {
 							sdp.write(s);
 						}
 						sdp.write(qa.r);
+						if (chooseFilePath != null) {
+							sdp.write(chooseFilePath);
+						}
 						try {
 							sanaeConnect.send(sdp.getData());
 						} catch (Exception e) {
@@ -249,10 +261,10 @@ public class TabActivity extends android.app.TabActivity {
 						onEdit.setDifficulty(spDiffcult.getSelectedItemPosition());
 						onEdit.q = etQues.getText().toString();
 						onEdit.t = trueAnswer;
+						onEdit.a.clear();
 						String s1 = etAns1.getText().toString();
 						onEdit.a.add(s1.equals("") ?"是": s1);
 						String s2 = etAns2.getText().toString();
-						onEdit.a.clear();
 						onEdit.a.add(s2.equals("") ?"否": s2);
 						if (!etAns3.getText().toString().equals("")) {
 							onEdit.a.add(etAns3.getText().toString());
@@ -262,15 +274,18 @@ public class TabActivity extends android.app.TabActivity {
 						}
 						onEdit.r = etReason.getText().toString();
 						refresh();
-						SanaeDataPack sdp=SanaeDataPack.encode(SanaeDataPack._43setQuestion);
+						SanaeDataPack sdp=SanaeDataPack.encode(SanaeDataPack.opSetQuestion);
 						sdp.write(onEdit.getFlag());
-						sdp.write(onEdit.q);//ques
-						sdp.write(onEdit.a.size());//ansCount
+						sdp.write(onEdit.q);
+						sdp.write(onEdit.a.size());
 						sdp.write(onEdit.t);
 						for (String s:onEdit.a) {
 							sdp.write(s);
 						}
 						sdp.write(onEdit.r);
+						if (chooseFilePath != null) {
+							sdp.write(chooseFilePath);
+						}
 						try {
 							sanaeConnect.send(sdp.getData());
 						} catch (Exception e) {
@@ -283,13 +298,24 @@ public class TabActivity extends android.app.TabActivity {
 						refresh();
 						tab.setCurrentTab(1);
 					}
+					imageView.setImageBitmap(null);
+					imageView.setVisibility(View.GONE);
 					break;
 				case R.id.clean:
 					clean();
 					break;
+				case R.id.add_ques_activityButton_addPic:
+					if (chooseFilePath == null) {
+						Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
+						intent.setType("image/*");
+						intent.addCategory(Intent.CATEGORY_OPENABLE);
+						startActivityForResult(intent, 234);
+					} else {
+						showToast("仅可以添加一张图片");
+					}
+					break;
 			}
 		}
-
 	};
 
 	private void clean() {
@@ -299,5 +325,20 @@ public class TabActivity extends android.app.TabActivity {
 		etAns3.setText("");
 		etAns4.setText("");
 		etReason.setText("");
+	}
+
+	@Override
+	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+		super.onActivityResult(requestCode, resultCode, data);
+		if (resultCode == RESULT_OK) {
+			switch (requestCode) {
+				case 234:
+					chooseFilePath = new File(FileChooseUtil.getInstance(this).getChooseFileResultPath(data.getData()));
+					etQues.setText(etQues.getText().toString() + "(image)");
+					imageView.setVisibility(View.VISIBLE);
+					imageView.setImageBitmap(BitmapFactory.decodeFile(chooseFilePath.getAbsolutePath()));
+					break;
+			}
+		}
 	}
 }

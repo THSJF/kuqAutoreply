@@ -1,36 +1,43 @@
 package com.addques.sanae;
 
 import com.addques.*;
+import java.io.*;
 import java.util.*;
 
 public class SanaeDataPack {
 
 	public ArrayList<Byte> data=new ArrayList<>();
 	public byte[] dataArray;
-	public final short headLength=28;
+	public static final short headLength=28;
 	public int dataPointer=0;
 
-	public final byte typeByte=0;
-	public final byte typeShort=1;
-	public final byte typeInt=2;
-	public final byte typeLong=3;
-	public final byte typeFloat=4;
-	public final byte typeDouble=5;
-	public final byte typeString=6;
-	public final byte typeBoolean=7;
+	public static final byte typeByte=0;
+	public static final byte typeShort=1;
+	public static final byte typeInt=2;
+	public static final byte typeLong=3;
+	public static final byte typeFloat=4;
+	public static final byte typeDouble=5;
+	public static final byte typeString=6;
+	public static final byte typeBoolean=7;
+	public static final byte typeFile=8;
 
-	public static final int _0notification=0;//通知  string
-	public static final int _40addQuestion=40;//int flag,string ques,int ansCount,int trueAns,string... ans,string reason
-	public static final int _41getAllQuestion=41;
-	public static final int _42retAllQuestion=42;
-	public static final int _43setQuestion=43;//int flag,string ques,int ansCount,int trueAns,string... ans,string reason
-
+	public static final int opNotification=0;//通知  string
+	public static final int opAddQuestion=10;//int flag,string ques,int ansCount,string... ans,string reason
+	public static final int opAllQuestion=11;
+	public static final int opSetQuestion=12;//int flag,string ques,int ansCount,int trueAns,string... ans,string reason
+	public static final int opHeartBeat=24;//心跳
+	public static final int opQuestionPic=35;//int id     file
+	
 	public static SanaeDataPack encode(int opCode) {
 		return new SanaeDataPack(opCode, System.currentTimeMillis());
 	}
 
+	public static SanaeDataPack encode(SanaeDataPack dataPack) {
+		return new SanaeDataPack(dataPack);
+	}
+
 	public static SanaeDataPack encode(int opCode, SanaeDataPack dataPack) {
-		return new SanaeDataPack(opCode, dataPack);
+		return new SanaeDataPack(dataPack);
 	}
 
 	public static SanaeDataPack decode(byte[] bytes) {
@@ -41,11 +48,21 @@ public class SanaeDataPack {
 		//length(4) headLength(2) version(2) time(8) target/from(8) opCode(4)
 		writeByteDataIntoArray(BitConverter.getBytes(0));
 		writeByteDataIntoArray(BitConverter.getBytes(headLength));
-		writeByteDataIntoArray(BitConverter.getBytes((short)4));
+		writeByteDataIntoArray(BitConverter.getBytes((short)5));
 		writeByteDataIntoArray(BitConverter.getBytes(timeStamp));
 		writeByteDataIntoArray(BitConverter.getBytes(0L));
 		writeByteDataIntoArray(BitConverter.getBytes(opCode));
 	}   
+
+	private SanaeDataPack(SanaeDataPack dataPack) {
+		//length(4) headLength(2) version(2) time(8) target/from(8) opCode(4)
+		writeByteDataIntoArray(BitConverter.getBytes(0));
+		writeByteDataIntoArray(BitConverter.getBytes(headLength));
+		writeByteDataIntoArray(BitConverter.getBytes(dataPack.getVersion()));
+		writeByteDataIntoArray(BitConverter.getBytes(dataPack.getTimeStamp()));
+		writeByteDataIntoArray(BitConverter.getBytes(dataPack.getTarget()));
+		writeByteDataIntoArray(BitConverter.getBytes(dataPack.getOpCode()));
+	}
 
 	private SanaeDataPack(int opCode, SanaeDataPack dataPack) {
 		//length(4) headLength(2) version(2) time(8) target/from(8) opCode(4)
@@ -55,7 +72,7 @@ public class SanaeDataPack {
 		writeByteDataIntoArray(BitConverter.getBytes(dataPack.getTimeStamp()));
 		writeByteDataIntoArray(BitConverter.getBytes(dataPack.getTarget()));
 		writeByteDataIntoArray(BitConverter.getBytes(opCode));
-	}   
+	}
 
 	private SanaeDataPack(byte[] pack) {
 		dataArray = pack;
@@ -158,11 +175,42 @@ public class SanaeDataPack {
 		return this;
 	}
 
+	public SanaeDataPack write(File file) {
+		try {
+			FileInputStream fin=new FileInputStream(file);
+			byte[] bs=new byte[(int)file.length()];
+			fin.read(bs, 0, bs.length);
+			writeByteDataIntoArray(typeFile);
+			write((int)file.length());
+			writeByteDataIntoArray(bs);
+		} catch (Exception e) {
+			throw new RuntimeException(e.toString());
+		}
+		return this;
+	}
+
+	public File readFile(String folderPath, String name) {
+		if (dataArray[dataPointer++] == typeFile) {
+			int fileLen=readInt();
+			File recFile=new File(folderPath + "/" + name);
+			try {
+				FileOutputStream fos=new FileOutputStream(recFile);
+				fos.write(dataArray, dataPointer, fileLen);
+			} catch (Exception e) {
+				recFile.delete();
+				recFile = null;
+			}
+			dataPointer += fileLen;
+			return recFile;
+		}
+		throw new RuntimeException("not a file");
+	}
+
 	public byte readByte() {
 		if (dataArray[dataPointer++] == typeByte) {
 			return dataArray[dataPointer++];
 		}
-		throw new NumberFormatException("not a byte number");
+		throw new RuntimeException("not a byte number");
 	}
 
 	public short readShort() {
@@ -171,7 +219,7 @@ public class SanaeDataPack {
 			dataPointer += 2;
 			return s;
 		}
-		throw new NumberFormatException("not a short number");
+		throw new RuntimeException("not a short number");
 	}
 
 	public int readInt() {
@@ -180,7 +228,7 @@ public class SanaeDataPack {
 			dataPointer += 4;
 			return i;
 		}
-		throw new NumberFormatException("not a int number");
+		throw new RuntimeException("not a int number");
 	}
 
 	public long readLong() {
@@ -189,7 +237,7 @@ public class SanaeDataPack {
 			dataPointer += 8;
 			return l;
 		}
-		throw new NumberFormatException("not a long number");
+		throw new RuntimeException("not a long number");
 	}
 
 	public float readFloat() {
@@ -198,7 +246,7 @@ public class SanaeDataPack {
 			dataPointer += 4;
 			return f;
 		}
-		throw new NumberFormatException("not a float number");
+		throw new RuntimeException("not a float number");
 	}
 
 	public double readDouble() {
@@ -207,7 +255,7 @@ public class SanaeDataPack {
 			dataPointer += 8;
 			return d;
 		}
-		throw new NumberFormatException("not a double number");
+		throw new RuntimeException("not a double number");
 	}
 
 	public String readString() {
@@ -228,10 +276,10 @@ public class SanaeDataPack {
 		if (dataArray[dataPointer++] == typeBoolean) {
 			return dataArray[dataPointer++] == 1;
 		}
-		throw new NumberFormatException("not a boolean value");
+		throw new RuntimeException("not a boolean value");
 	}
 
 	public boolean hasNext() {
-		return dataPointer < dataArray.length;
+		return dataPointer != dataArray.length;
 	}
 }

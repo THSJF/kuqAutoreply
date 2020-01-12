@@ -250,7 +250,7 @@ public class LiveListener implements Runnable {
 		dp.write(1, p.bliveRoom);
 		dp.write(1, p.name);
 		Autoreply.instence.connectServer.broadcast(dp.getData());
-		SanaeDataPack sdp=SanaeDataPack.encode(SanaeDataPack._33liveStart);
+		SanaeDataPack sdp=SanaeDataPack.encode(SanaeDataPack.opLiveStart);
 		sdp.write(p.name).write(p.bliveRoom);
 		Autoreply.instence.sanaeServer.send(sdp);
 		if (!p.isTipLive()) {
@@ -269,7 +269,7 @@ public class LiveListener implements Runnable {
 		dp.write(1, p.bliveRoom);
 		dp.write(1, p.name);
 		Autoreply.instence.connectServer.broadcast(dp.getData());
-		SanaeDataPack sdp=SanaeDataPack.encode(SanaeDataPack._34liveStop);
+		SanaeDataPack sdp=SanaeDataPack.encode(SanaeDataPack.opLiveStop);
 		sdp.write(p.name).write(p.bliveRoom);
 		Autoreply.instence.sanaeServer.send(sdp);
 		if (!p.isTipLive()) {

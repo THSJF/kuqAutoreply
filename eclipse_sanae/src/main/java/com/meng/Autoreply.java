@@ -119,7 +119,7 @@ public class Autoreply extends JcqAppAbstract implements ICQVer, IMsg, IRequest 
 		//}
 		GroupCounter.ins.addSpeak(fromGroup, 1);
 		if (!Autoreply.ins.SeijiaInThis.contains(fromGroup)) {
-			ConfigManager.ins.send(SanaeDataPack.encode(SanaeDataPack._15incSpeak).write(fromGroup).write(fromQQ));
+			ConfigManager.ins.send(SanaeDataPack.encode(SanaeDataPack.opIncSpeak).write(fromGroup).write(fromQQ));
 		}
 		if (MessageFireWall.ins.check(fromGroup, fromQQ, msg)) {
 			return MSG_IGNORE;

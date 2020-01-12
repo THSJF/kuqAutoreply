@@ -55,7 +55,7 @@ public class UpdateListener implements Runnable {
 									Autoreply.sendMessage(Autoreply.mainGroup, 0, e.toString());
 								}
 								tip(String.valueOf(updater.bid), updater.name + "发布新文章" + articles.id + ":" + articles.title);
-								Autoreply.instence.sanaeServer.send(SanaeDataPack.encode(SanaeDataPack._37newArtical).write(updater.name).write(articles.title).write(articles.id));
+								Autoreply.instence.sanaeServer.send(SanaeDataPack.encode(SanaeDataPack.opNewArtical).write(updater.name).write(articles.title).write(articles.id));
                             } else {
                                 updater.needTipArtical = true;
                             }
@@ -75,7 +75,8 @@ public class UpdateListener implements Runnable {
 									Autoreply.sendMessage(Autoreply.mainGroup, 0, e.toString());
 								}
                                 tip(String.valueOf(updater.bid), updater.name + "发布新视频" + vlist.aid + ":" + vlist.title);
-                            } else {
+								Autoreply.instence.sanaeServer.send(SanaeDataPack.encode(SanaeDataPack.opNewVideo).write(updater.name).write(vlist.title).write(vlist.aid));
+								} else {
                                 updater.needTipVideo = true;
                             }
                             updater.lastVideo = vlist.created;

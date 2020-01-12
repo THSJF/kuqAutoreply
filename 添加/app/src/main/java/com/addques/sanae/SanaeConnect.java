@@ -6,9 +6,12 @@ import java.nio.*;
 import org.java_websocket.client.*;
 import org.java_websocket.exceptions.*;
 import org.java_websocket.handshake.*;
+import android.os.*;
+import java.io.*;
 
 public class SanaeConnect extends WebSocketClient {
 
+	String folder=Environment.getExternalStorageDirectory() + "/pictures/sanae/questions/";
 	public SanaeConnect(URI uri) {
 		super(uri);
 	}
@@ -21,7 +24,7 @@ public class SanaeConnect extends WebSocketClient {
 	@Override
 	public void onOpen(ServerHandshake serverHandshake) {
 		TabActivity.ins.showToast("连接到苗");
-		TabActivity.ins.sanaeConnect.send(SanaeDataPack.encode(SanaeDataPack._41getAllQuestion).getData());
+		TabActivity.ins.sanaeConnect.send(SanaeDataPack.encode(41).getData());
 	}
 
 	@Override
@@ -29,10 +32,10 @@ public class SanaeConnect extends WebSocketClient {
 		SanaeDataPack dataPackRecieved=SanaeDataPack.decode(bs.array());
 		SanaeDataPack dataToSend=null;
 		switch (dataPackRecieved.getOpCode()) {
-			case SanaeDataPack._0notification:
+			case SanaeDataPack.opNotification:
 				TabActivity.ins.showToast(dataPackRecieved.readString());
 				break;
-			case SanaeDataPack._42retAllQuestion:
+			case SanaeDataPack.opAllQuestion:
 				TabActivity.ins.alAllQa.clear();
 				readQAs(dataPackRecieved);
 				TabActivity.ins.runOnUiThread(new Runnable(){
@@ -43,8 +46,16 @@ public class SanaeConnect extends WebSocketClient {
 						}
 					});
 				break;
+			case SanaeDataPack.opQuestionPic:
+				File ffo=new File(folder);
+				if (!ffo.exists()) {
+					ffo.mkdirs();
+				}
+				int id=dataPackRecieved.readInt();
+				dataPackRecieved.readFile(folder, id + ".jpg");
+				break;
 			default:
-				dataToSend = SanaeDataPack.encode(SanaeDataPack._0notification, dataPackRecieved);
+				dataToSend = SanaeDataPack.encode(SanaeDataPack.opNotification, dataPackRecieved);
 				dataToSend.write("操作类型错误");
 		}
 		if (dataToSend != null) {
@@ -70,7 +81,16 @@ public class SanaeConnect extends WebSocketClient {
 		while (sdp.hasNext()) {
 			QA qa=new QA();
 			qa.setFlag(sdp.readInt());
+			qa.l = sdp.readInt();
 			qa.q = sdp.readString();
+			File img=new File(folder + qa.getId() + ".jpg");
+			if (qa.q.contains("(image)")) {
+				if (!img.exists() || (int)img.length() != qa.l) {
+					SanaeDataPack sa=SanaeDataPack.encode(SanaeDataPack.opQuestionPic);
+					sa.write(qa.getId());
+					send(sa.getData());
+				}
+			}
 			int anss=sdp.readInt();
 			qa.t = sdp.readInt();
 			for (int i=0;i < anss;++i) {

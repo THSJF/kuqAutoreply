@@ -58,7 +58,7 @@ public class ConfigManager extends WebSocketClient {
 
 	@Override
 	public void onOpen(ServerHandshake serverHandshake) {
-		send(SanaeDataPack.encode(SanaeDataPack._1getConfig));
+		send(SanaeDataPack.encode(SanaeDataPack.opConfigFile));
 		System.out.println("连接到蓝");
 		Autoreply.ins.threadPool.execute(new Runnable(){
 
@@ -70,7 +70,7 @@ public class ConfigManager extends WebSocketClient {
 						e.printStackTrace();
 					}
 					try {
-						send(SanaeDataPack.encode(SanaeDataPack._24heartBeat));
+						send(SanaeDataPack.encode(SanaeDataPack.opHeartBeat));
 					} catch (WebsocketNotConnectedException e) {
 						System.out.println("和蓝的连接已断开");
 						e.printStackTrace();
@@ -85,7 +85,7 @@ public class ConfigManager extends WebSocketClient {
 		SanaeDataPack dataRec=SanaeDataPack.decode(bs.array());
 		SanaeDataPack dataToSend=null;
 		switch (dataRec.getOpCode()) {
-			case SanaeDataPack._2retConfig:
+			case SanaeDataPack.opConfigFile:
 				Type type = new TypeToken<RanConfigBean>() {
 				}.getType();
 				RanConfig = Autoreply.gson.fromJson(dataRec.readString(), type);
@@ -126,54 +126,54 @@ public class ConfigManager extends WebSocketClient {
 						}
 					});
 				break;
-			case SanaeDataPack._4retOverSpell:
+			case SanaeDataPack.opGameOverSpell:
 				resultMap.put(dataRec.getOpCode(), new TaskResult(dataRec.readString()));
 				break;
-			case SanaeDataPack._6retOverPersent:
+			case SanaeDataPack.opGameOverPersent:
 				resultMap.put(dataRec.getOpCode(), new TaskResult(dataRec.readInt()));
 				break;
-			case SanaeDataPack._8retGrandma:
+			case SanaeDataPack.opGrandma:
 				resultMap.put(dataRec.getOpCode(), new TaskResult(dataRec.readString()));
 				break;
-			case SanaeDataPack._10retMusicName:
+			case SanaeDataPack.opMusicName:
 				resultMap.put(dataRec.getOpCode(), new TaskResult(dataRec.readString()));
 				break;
-			case SanaeDataPack._12retGotSpells:
+			case SanaeDataPack.opGotSpells:
 				resultMap.put(dataRec.getOpCode(), new TaskResult(dataRec.readString()));
 				break;
-			case SanaeDataPack._14retNeta:
+			case SanaeDataPack.opNeta:
 				resultMap.put(dataRec.getOpCode(), new TaskResult(dataRec.readString()));
 				break;			
-			case SanaeDataPack._29retSeqContent:
+			case SanaeDataPack.opSeqContent:
 				resultMap.put(dataRec.getOpCode(), new TaskResult(dataRec.readString()));
 				break;
-			case SanaeDataPack._30sendMsg:
+			case SanaeDataPack.opSendMsg:
 				Autoreply.sendMessage(dataRec.readLong(), dataRec.readLong(), dataRec.readString());
 				break;
-			case SanaeDataPack._32retLiveList:
+			case SanaeDataPack.opLiveList:
 				StringBuilder sb=new StringBuilder();
 				while (dataRec.hasNext()) {
 					sb.append(dataRec.readString()).append("正在直播:").append(dataRec.readLong()).append("\n");
 				}
 				resultMap.put(dataRec.getOpCode(), new TaskResult(sb.toString()));
 				break;
-			case SanaeDataPack._33liveStart:
+			case SanaeDataPack.opLiveStart:
 				Autoreply.sendMessage(Autoreply.mainGroup, 0, dataRec.readString() + "开始直播" + dataRec.readLong());
 				break; 
-			case SanaeDataPack._34liveStop:
+			case SanaeDataPack.opLiveStop:
 				Autoreply.sendMessage(Autoreply.mainGroup, 0, dataRec.readString() + "停止直播" + dataRec.readLong());
 				break;
-			case SanaeDataPack._35speakInliveRoom:
+			case SanaeDataPack.opSpeakInliveRoom:
 				//直播间说话 string(主播称呼) long(blid) string(说话者称呼) long(说话者bid)
 				break; 
-			case SanaeDataPack._36newVideo:
+			case SanaeDataPack.opNewVideo:
 				Autoreply.sendMessage(Autoreply.mainGroup, 0, dataRec.readString() + "发布新视频:" + dataRec.readString() + "(av" + dataRec.readLong() + ")");
 				break;
-			case SanaeDataPack._37newArtical:
+			case SanaeDataPack.opNewArtical:
 				Autoreply.sendMessage(Autoreply.mainGroup, 0, dataRec.readString() + "发布新专栏:" + dataRec.readString() + "(cv" + dataRec.readLong() + ")");
 				break;
 			default:
-				dataToSend = SanaeDataPack.encode(SanaeDataPack._0notification, dataRec);
+				dataToSend = SanaeDataPack.encode(SanaeDataPack.opNotification, dataRec);
 				dataToSend.write("操作类型错误");
 		}
 		if (dataToSend != null) {
@@ -197,43 +197,43 @@ public class ConfigManager extends WebSocketClient {
 	}
 
 	public String getOverSpell(long fromQQ) {
-		send(SanaeDataPack.encode(SanaeDataPack._3getOverSpell).write(fromQQ));
-		return Tools.BitConverter.toString(getTaskResult(SanaeDataPack._4retOverSpell).data);
+		send(SanaeDataPack.encode(SanaeDataPack.opGameOverSpell).write(fromQQ));
+		return Tools.BitConverter.toString(getTaskResult(SanaeDataPack.opGameOverSpell).data);
 	}
 
 	public int getOverPersent(long fromQQ) {
-		send(SanaeDataPack.encode(SanaeDataPack._5getOverPersent).write(fromQQ));
-		return Tools.BitConverter.toInt(getTaskResult(SanaeDataPack._6retOverPersent).data);
+		send(SanaeDataPack.encode(SanaeDataPack.opGameOverPersent).write(fromQQ));
+		return Tools.BitConverter.toInt(getTaskResult(SanaeDataPack.opGameOverPersent).data);
 	}
 
 	public String getGrandma(long fromQQ) {
-		send(SanaeDataPack.encode(SanaeDataPack._7getGrandma).write(fromQQ));
-		return Tools.BitConverter.toString(getTaskResult(SanaeDataPack._8retGrandma).data);
+		send(SanaeDataPack.encode(SanaeDataPack.opGrandma).write(fromQQ));
+		return Tools.BitConverter.toString(getTaskResult(SanaeDataPack.opGrandma).data);
 	}
 
 	public String getMusicName(long fromQQ) {
-		send(SanaeDataPack.encode(SanaeDataPack._9getMusicName).write(fromQQ));
-		return Tools.BitConverter.toString(getTaskResult(SanaeDataPack._10retMusicName).data);
+		send(SanaeDataPack.encode(SanaeDataPack.opMusicName).write(fromQQ));
+		return Tools.BitConverter.toString(getTaskResult(SanaeDataPack.opMusicName).data);
 	}
 
 	public String getSpells(long fromQQ) {
-		send(SanaeDataPack.encode(SanaeDataPack._11getGotSpells).write(fromQQ));
-		return Tools.BitConverter.toString(getTaskResult(SanaeDataPack._12retGotSpells).data);
+		send(SanaeDataPack.encode(SanaeDataPack.opGotSpells).write(fromQQ));
+		return Tools.BitConverter.toString(getTaskResult(SanaeDataPack.opGotSpells).data);
 	}
 
 	public String getNeta(long fromQQ) {
-		send(SanaeDataPack.encode(SanaeDataPack._13getNeta).write(fromQQ));
-		return Tools.BitConverter.toString(getTaskResult(SanaeDataPack._14retNeta).data);
+		send(SanaeDataPack.encode(SanaeDataPack.opNeta).write(fromQQ));
+		return Tools.BitConverter.toString(getTaskResult(SanaeDataPack.opNeta).data);
 	}
 
 	public String getSeq() {
-		send(SanaeDataPack.encode(SanaeDataPack._28getSeqContent));
-		return Tools.BitConverter.toString(getTaskResult(SanaeDataPack._29retSeqContent).data);
+		send(SanaeDataPack.encode(SanaeDataPack.opSeqContent));
+		return Tools.BitConverter.toString(getTaskResult(SanaeDataPack.opSeqContent).data);
 	}
 
 	public String getLiveList() {
-		send(SanaeDataPack.encode(SanaeDataPack._31getLiveList));
-		return Tools.BitConverter.toString(getTaskResult(SanaeDataPack._32retLiveList).data);
+		send(SanaeDataPack.encode(SanaeDataPack.opLiveList));
+		return Tools.BitConverter.toString(getTaskResult(SanaeDataPack.opLiveList).data);
 	}
 
 	public void setWelcome(long group, String welcome) {
@@ -263,10 +263,10 @@ public class ConfigManager extends WebSocketClient {
 	public void setNickName(long qq, String nickname) {
 		if (nickname != null) {
 			RanConfig.nicknameMap.put(qq, nickname);
-			send(SanaeDataPack.encode(SanaeDataPack._25setNick).write(qq).write(nickname));
+			send(SanaeDataPack.encode(SanaeDataPack.opSetNick).write(qq).write(nickname));
 		} else {
 			RanConfig.nicknameMap.remove(qq);
-			send(SanaeDataPack.encode(SanaeDataPack._25setNick).write(qq));
+			send(SanaeDataPack.encode(SanaeDataPack.opSetNick).write(qq));
 		}
 	}
 
@@ -375,7 +375,7 @@ public class ConfigManager extends WebSocketClient {
     public void addBlack(long group, final long qq) {
         RanConfig.blackListQQ.add(qq);
         RanConfig.blackListGroup.add(group);
-		send(SanaeDataPack.encode(SanaeDataPack._26addBlack).write(group).write(qq));
+		send(SanaeDataPack.encode(SanaeDataPack.opAddBlack).write(group).write(qq));
         Autoreply.sendMessage(Autoreply.mainGroup, 0, "已将用户" + qq + "加入黑名单");
         Autoreply.sendMessage(Autoreply.mainGroup, 0, "已将群" + group + "加入黑名单");
 		Autoreply.CQ.setGroupLeave(group, false);

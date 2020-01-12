@@ -58,17 +58,17 @@ public class RepeaterManager {
 		}
 
 		private boolean repeatEnd(long group, long qq, String msg) {
-			ConfigManager.ins.send(SanaeDataPack.encode(SanaeDataPack._20incRepeatBreak).write(group).write(qq));
+			ConfigManager.ins.send(SanaeDataPack.encode(SanaeDataPack.opIncRepeatBreak).write(group).write(qq));
 			return false;
 		}
 
 		private boolean repeatRunning(long group, long qq, String msg) {
-			ConfigManager.ins.send(SanaeDataPack.encode(SanaeDataPack._18incRepeat).write(group).write(qq));
+			ConfigManager.ins.send(SanaeDataPack.encode(SanaeDataPack.opIncRepeat).write(group).write(qq));
 			return false;
 		}
 
 		private boolean repeatStart(long group,  long qq,  String msg) {
-			ConfigManager.ins.send(SanaeDataPack.encode(SanaeDataPack._19incRepeatStart).write(qq));
+			ConfigManager.ins.send(SanaeDataPack.encode(SanaeDataPack.opIncRepeatStart).write(qq));
 			Autoreply.sendMessage(group, 0, msg);
 			return true;
 		}

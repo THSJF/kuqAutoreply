@@ -44,9 +44,9 @@ public class SeqManager {
 				sb.pos = 0;
 			}
 			if (sb.flag == 1) {
-				ConfigManager.ins.send(SanaeDataPack.encode(SanaeDataPack._22decTime).write(fromGroup).write(fromQQ));
+				ConfigManager.ins.send(SanaeDataPack.encode(SanaeDataPack.opDecTime).write(fromGroup).write(fromQQ));
 			} else if (sb.flag == 2) {
-				ConfigManager.ins.send(SanaeDataPack.encode(SanaeDataPack._27incMengEr).write(fromGroup).write(fromQQ));
+				ConfigManager.ins.send(SanaeDataPack.encode(SanaeDataPack.opIncMengEr).write(fromGroup).write(fromQQ));
 			}
 			if (msg.equals(sb.content[sb.pos])) {
 				++sb.pos;			
