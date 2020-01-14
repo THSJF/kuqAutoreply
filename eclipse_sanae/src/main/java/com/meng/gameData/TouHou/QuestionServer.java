@@ -57,7 +57,7 @@ public class QuestionServer extends WebSocketServer {
 							qa40.r = null;
 						}
 						if (dataRec.hasNext()) {
-							qa40.l = (int)dataRec.readFile(TouHouKnowledge.ins.imagePath, (TouHouKnowledge.ins.qaList.size() - 1) + ".jpg").length();
+							qa40.l = (int)dataRec.readFile(TouHouKnowledge.ins.imagePath, TouHouKnowledge.ins.qaList.size() + ".jpg").length();
 						}
 						TouHouKnowledge.ins.addQA(qa40);
 						sdp = SanaeDataPack.encode(SanaeDataPack.opNotification, dataRec);
@@ -88,8 +88,9 @@ public class QuestionServer extends WebSocketServer {
 						break;
 					case SanaeDataPack.opQuestionPic:
 						sdp = SanaeDataPack.encode(SanaeDataPack.opQuestionPic, dataRec);
-						File img=new File(TouHouKnowledge.ins.imagePath + dataRec.readInt() + ".jpg");
-						sdp.write((int)img.length());
+						int id = dataRec.readInt();
+						File img = new File(TouHouKnowledge.ins.imagePath + id + ".jpg");
+						sdp.write(id);
 						sdp.write(img);
 						break;
 				}

@@ -75,7 +75,7 @@ public class SanaeConnect extends WebSocketClient {
 
 	@Override
 	public void onError(Exception e) {
-
+		throw new RuntimeException(e.toString());
 	}
 	private void readQAs(SanaeDataPack sdp) {
 		while (sdp.hasNext()) {
@@ -86,6 +86,9 @@ public class SanaeConnect extends WebSocketClient {
 			File img=new File(folder + qa.getId() + ".jpg");
 			if (qa.q.contains("(image)")) {
 				if (!img.exists() || (int)img.length() != qa.l) {
+					try {
+						img.createNewFile();
+					} catch (IOException e) {}
 					SanaeDataPack sa=SanaeDataPack.encode(SanaeDataPack.opQuestionPic);
 					sa.write(qa.getId());
 					send(sa.getData());
