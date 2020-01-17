@@ -219,19 +219,18 @@ public class SanaeDataPack {
 		return this;
 	}
 
-	public File readFile(String folderPath, String name) {
+	public File readFile(File file) {
 		if (dataArray[dataPointer++] == typeFile) {
 			int fileLen=readInt();
-			File recFile=new File(folderPath + "/" + name);
 			try {
-				FileOutputStream fos=new FileOutputStream(recFile);
+				FileOutputStream fos=new FileOutputStream(file);
 				fos.write(dataArray, dataPointer, fileLen);
 			} catch (Exception e) {
-				recFile.delete();
-				recFile = null;
+				file.delete();
+				file = null;
 			}
 			dataPointer += fileLen;
-			return recFile;
+			return file;
 		}
 		throw new RuntimeException("not a file");
 	}

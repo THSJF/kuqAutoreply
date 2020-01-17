@@ -1,9 +1,10 @@
 package com.addques;
 
+import android.app.*;
 import android.content.*;
+import android.graphics.*;
 import android.net.*;
 import android.os.*;
-import android.util.*;
 import android.view.*;
 import android.view.View.*;
 import android.widget.*;
@@ -15,7 +16,6 @@ import java.net.*;
 import java.util.*;
 
 import android.view.View.OnClickListener;
-import android.graphics.*;
 
 public class TabActivity extends android.app.TabActivity {
 
@@ -325,6 +325,31 @@ public class TabActivity extends android.app.TabActivity {
 		etAns3.setText("");
 		etAns4.setText("");
 		etReason.setText("");
+	}
+	
+	public void cleanNotify(int notifyId){
+		NotificationManager manager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
+		manager.cancel(notifyId);
+	}
+
+	public void sendNotify(int notifyId) {
+		NotificationManager manager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
+		Intent intent = new Intent();
+		/* intent.setAction(intent.ACTION_CALL);
+		 intent.setData(Uri.parse("tel:10086"));
+		 */
+		// 创建意图
+		// 第一个参数：上下文
+		// 第二个参数：请求码
+		// 第三个参数：显示的次数
+		PendingIntent contentIntent = PendingIntent.getActivity(TabActivity.this, notifyId, intent, PendingIntent.FLAG_UPDATE_CURRENT);
+		Notification notification = new Notification.Builder(this)
+			.setContentTitle("问答图片接收中")
+			.setContentText(notifyId + ".jpg")
+			.setWhen(System.currentTimeMillis())
+			.setSmallIcon(R.drawable.ic_launcher)
+			.setContentIntent(contentIntent).build();
+			manager.notify(notifyId, notification);
 	}
 
 	@Override

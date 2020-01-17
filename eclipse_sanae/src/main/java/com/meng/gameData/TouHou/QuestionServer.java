@@ -57,7 +57,7 @@ public class QuestionServer extends WebSocketServer {
 							qa40.r = null;
 						}
 						if (dataRec.hasNext()) {
-							qa40.l = (int)dataRec.readFile(TouHouKnowledge.ins.imagePath, TouHouKnowledge.ins.qaList.size() + ".jpg").length();
+							qa40.l = (int)dataRec.readFile(new File(TouHouKnowledge.ins.imagePath + TouHouKnowledge.ins.qaList.size() + ".jpg")).length();
 						}
 						TouHouKnowledge.ins.addQA(qa40);
 						sdp = SanaeDataPack.encode(SanaeDataPack.opNotification, dataRec);
@@ -80,7 +80,7 @@ public class QuestionServer extends WebSocketServer {
 							qa43.r = null;
 						}
 						if (dataRec.hasNext()) {
-							qa43.l = (int)dataRec.readFile(TouHouKnowledge.ins.imagePath, qa43.getId() + ".jpg").length();
+							qa43.l = (int)dataRec.readFile(new File(TouHouKnowledge.ins.imagePath + qa43.getId() + ".jpg")).length();
 						}
 						TouHouKnowledge.ins.setQA(qa43);
 						sdp = SanaeDataPack.encode(SanaeDataPack.opNotification, dataRec);

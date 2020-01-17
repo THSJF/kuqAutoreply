@@ -29,7 +29,7 @@ public class SanaeConnect extends WebSocketClient {
 
 	@Override
 	public void onMessage(ByteBuffer bs) {	
-		SanaeDataPack dataPackRecieved=SanaeDataPack.decode(bs.array());
+		final SanaeDataPack dataPackRecieved=SanaeDataPack.decode(bs.array());
 		SanaeDataPack dataToSend=null;
 		switch (dataPackRecieved.getOpCode()) {
 			case SanaeDataPack.opNotification:
@@ -51,8 +51,16 @@ public class SanaeConnect extends WebSocketClient {
 				if (!ffo.exists()) {
 					ffo.mkdirs();
 				}
-				int id=dataPackRecieved.readInt();
-				dataPackRecieved.readFile(folder, id + ".jpg");
+				final int id=dataPackRecieved.readInt();
+				new Thread(new Runnable(){
+
+						@Override
+						public void run() {
+							TabActivity.ins.sendNotify(id);
+							dataPackRecieved.readFile(new File(folder + id + ".jpg"));
+							TabActivity.ins.cleanNotify(id);
+						}
+					}).start();
 				break;
 			default:
 				dataToSend = SanaeDataPack.encode(SanaeDataPack.opNotification, dataPackRecieved);
@@ -86,9 +94,6 @@ public class SanaeConnect extends WebSocketClient {
 			File img=new File(folder + qa.getId() + ".jpg");
 			if (qa.q.contains("(image)")) {
 				if (!img.exists() || (int)img.length() != qa.l) {
-					try {
-						img.createNewFile();
-					} catch (IOException e) {}
 					SanaeDataPack sa=SanaeDataPack.encode(SanaeDataPack.opQuestionPic);
 					sa.write(qa.getId());
 					send(sa.getData());
