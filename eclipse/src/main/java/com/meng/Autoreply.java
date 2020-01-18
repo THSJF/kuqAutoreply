@@ -49,7 +49,7 @@ public class Autoreply extends JcqAppAbstract implements ICQVer, IMsg, IRequest 
     public OcrManager ocrManager = new OcrManager();
     public ConcurrentHashMap<Long, MessageSender> messageMap = new ConcurrentHashMap<>();
     //private FileInfoManager fileInfoManager = new FileInfoManager();
-    public PicEditManager picEditManager = new PicEditManager();
+    public PicEditManager picEditManager;
     public BanListener banListener;
     public ZanManager zanManager;
     public UpdateListener updateListener;
@@ -104,6 +104,7 @@ public class Autoreply extends JcqAppAbstract implements ICQVer, IMsg, IRequest 
         // 获取应用数据目录(无需储存数据时，请将此行注释)
         instence = this;
         appDirectory = CQ.getAppDirectory();
+		picEditManager = new PicEditManager();
 		GsonBuilder gb = new GsonBuilder();
 		gb.setLongSerializationPolicy(LongSerializationPolicy.STRING);
 		gson = gb.create();
@@ -143,7 +144,7 @@ public class Autoreply extends JcqAppAbstract implements ICQVer, IMsg, IRequest 
 		try {
 			connectServer = new RitsukageServer(9961);
 			connectServer.start();
-		} catch (java.net.UnknownHostException e) {}
+		} catch (Exception e) {}
 		try {
 			sanaeServer = new SanaeServer(9760);
 			sanaeServer.start();

@@ -19,7 +19,7 @@ public class RitsukageServer extends WebSocketServer {
 
 	private ConfigJavaBean configJavaBean;
 
-	public RitsukageServer(int port) throws UnknownHostException {
+	public RitsukageServer(int port) {
 		super(new InetSocketAddress(port));
 		configJavaBean = Autoreply.instence.configManager.configJavaBean;
 	}
@@ -173,10 +173,9 @@ public class RitsukageServer extends WebSocketServer {
 			case RitsukageDataPack._21returnPic:
 				break;
 			case RitsukageDataPack._22pic2:
-				new ShenChuQQManager(-1, -1, Autoreply.instence.CC.at(recievedDataPack.readNum(1)));
 				dataToSend = RitsukageDataPack.encode(RitsukageDataPack._21returnPic, recievedDataPack.getTimeStamp());
 				try { 
-					File jpg=new File(Autoreply.appDirectory + "shenchu\\" + recievedDataPack.readNum(1) + ".jpg");
+					File jpg=Autoreply.instence.picEditManager.shenChuByAt(-1, -1, Autoreply.instence.CC.at(recievedDataPack.readNum(1)));
 					long filelength = jpg.length();
 					byte[] filecontent = new byte[(int) filelength];
 					FileInputStream in = new FileInputStream(jpg);

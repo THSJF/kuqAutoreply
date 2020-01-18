@@ -8,7 +8,6 @@ import com.meng.config.*;
 import com.meng.config.javabeans.*;
 import com.meng.dice.*;
 import com.meng.groupChat.*;
-import com.meng.picProcess.*;
 import com.meng.tools.*;
 import com.meng.tools.override.*;
 import com.sobte.cqp.jcq.entity.*;
@@ -534,22 +533,8 @@ public class AdminMessageProcessor {
 				Autoreply.sendMessage(fromGroup, 0, "已为" + strings[1] + "设置cookie");
                 return true;
 			}
-            if (msg.startsWith("精神支柱[CQ:image")) {
-                Autoreply.instence.threadPool.execute(new Runnable() {
-						@Override
-						public void run() {
-							new JingShenZhiZhuManager(fromGroup, msg);
-						}
-					});
-                return true;
-			}
-            if (msg.startsWith("神触[CQ:image")) {
-                Autoreply.instence.threadPool.execute(new Runnable() {
-						@Override
-						public void run() {
-							new ShenChuManager(fromGroup, msg);
-						}
-					});
+            if (msg.startsWith("精神支柱[CQ:image") || msg.startsWith("神触[CQ:image")) {
+                Autoreply.instence.picEditManager.check(fromGroup, fromQQ, msg);
                 return true;
 			}
             if (msg.startsWith("设置群头衔[CQ:at")) {

@@ -11,16 +11,11 @@ import java.util.concurrent.*;
 public class PicEditManager {
 
 	public static PicEditManager ins;
-	public static String appDirectory="";
 	public JingShenZhiZhuManager jszzm=new JingShenZhiZhuManager();
 	public ShenChuManager scm=new ShenChuManager();
 
 	public PicEditManager() {
 		ins = this;
-	}
-
-	public void setAppDirectory(String path) {
-		appDirectory = path;
 	}
 	
 	public boolean check(long fromGroup, long fromQQ, String msg) {
