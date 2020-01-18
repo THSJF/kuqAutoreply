@@ -1,4 +1,4 @@
-package com.meng.tools.gifHelper;
+package com.meng.picProcess.gifHelper;
 
 import java.io.*;
 import java.awt.*;
@@ -406,19 +406,19 @@ public class AnimatedGifEncoder {
         writeShort(height);
         // packed fields
         out.write(firstFrame ? 0 : 0x87);
-  /*       if (firstFrame) {
-            // no LCT  - GCT is used for first (or only) frame
-            out.write(0);
-        } else {
-            // specify normal LCT
-            out.write(0x87);
-           out.write(
-                    0b10_00_00_00 | // 1 local color table  1=yes
-                        0b00_00_00_00 | // 2 interlace - 0=no
-                        0b00_00_00_00 | // 3 sorted - 0=no
-                        0b00_00_00_00 | // 4-5 reserved
-                    palSize); // 6-8 size of color table
-       }             */
+		/*       if (firstFrame) {
+		 // no LCT  - GCT is used for first (or only) frame
+		 out.write(0);
+		 } else {
+		 // specify normal LCT
+		 out.write(0x87);
+		 out.write(
+		 0b10_00_00_00 | // 1 local color table  1=yes
+		 0b00_00_00_00 | // 2 interlace - 0=no
+		 0b00_00_00_00 | // 3 sorted - 0=no
+		 0b00_00_00_00 | // 4-5 reserved
+		 palSize); // 6-8 size of color table
+		 }             */
     }
 
     /**
@@ -484,3 +484,4 @@ public class AnimatedGifEncoder {
         }
     }
 }
+

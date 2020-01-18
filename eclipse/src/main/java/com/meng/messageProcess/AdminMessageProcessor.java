@@ -554,12 +554,12 @@ public class AdminMessageProcessor {
 				return true;
 			}
 			if (msg.equals("-发言统计")) {
-				HashMap<Integer,Integer> hashMap = GroupCounter2.ins.getSpeak(fromGroup, Tools.CQ.getDate());
+				HashMap<Integer,Integer> hashMap = GroupCounterChart.ins.getSpeak(fromGroup, Tools.CQ.getDate());
 				if (hashMap == null || hashMap.size() == 0) {
 					Autoreply.sendMessage(fromGroup, 0, "无数据");
 					return true;
 				}
-				StringBuilder sb=new StringBuilder(String.format("群内共有%d条消息,今日消息情况:\n", GroupCounter2.ins.groupsMap.get(fromGroup).all));
+				StringBuilder sb=new StringBuilder(String.format("群内共有%d条消息,今日消息情况:\n", GroupCounterChart.ins.groupsMap.get(fromGroup).all));
 				for (int i=0;i < 24;++i) {
 					if (hashMap.get(i) == null) {
 						continue;
@@ -567,10 +567,10 @@ public class AdminMessageProcessor {
 					sb.append(String.format("%d:00-%d:00  共%d条消息\n", i, i + 1, hashMap.get(i)));
 				}
 				Autoreply.sendMessage(fromGroup, 0, sb.toString());
-				File pic=GroupCounter2.ins.dchart.check(GroupCounter2.ins.groupsMap.get(fromGroup));
+				File pic=GroupCounterChart.ins.dchart.check(GroupCounterChart.ins.groupsMap.get(fromGroup));
 				Autoreply.sendMessage(fromGroup, 0, Autoreply.instence.CC.image(pic));
 				pic.delete();
-				File pic2=GroupCounter2.ins.mchart.check(GroupCounter2.ins.groupsMap.get(fromGroup));
+				File pic2=GroupCounterChart.ins.mchart.check(GroupCounterChart.ins.groupsMap.get(fromGroup));
 				Autoreply.sendMessage(fromGroup, 0, Autoreply.instence.CC.image(pic2));
 				pic2.delete();
 				return true;

@@ -10,14 +10,14 @@ import java.lang.reflect.*;
 import java.nio.charset.*;
 import java.util.*;   
 
-public class GroupCounter2 {
-	public static GroupCounter2 ins;
-	public HashMap<Long,GroupSpeak> groupsMap = new HashMap<>(32);
+public class GroupCounterChart {
+	public static GroupCounterChart ins;
+	public HashMap<Long,GroupCounterChartBean> groupsMap = new HashMap<>(32);
 	private File file;
 	public DayChart dchart;
 	public MonthChart mchart;
 	public ChartDrawer chartDrawer=new ChartDrawer();
-	public GroupCounter2() {
+	public GroupCounterChart() {
 		file = new File(Autoreply.appDirectory + "properties\\GroupCount2.json");
         if (!file.exists()) {
             try {
@@ -30,7 +30,7 @@ public class GroupCounter2 {
                 e.printStackTrace();
             }
         }
-        Type type = new TypeToken<HashMap<Long, GroupSpeak>>() {
+        Type type = new TypeToken<HashMap<Long, GroupCounterChartBean>>() {
         }.getType();
         groupsMap = Autoreply.gson.fromJson(Tools.FileTool.readString(file), type);
 		Autoreply.instence.threadPool.execute(new Runnable() {
@@ -42,15 +42,11 @@ public class GroupCounter2 {
 		dchart = new DayChart();
 		mchart = new MonthChart();
 	}
-	public class GroupSpeak {
-		public int all=0;
-		public HashMap<String,HashMap<Integer,Integer>> hour=new HashMap<>(16);		
-	}
-
+	
 	public void addSpeak(long group, int times) {
-		GroupSpeak gs=groupsMap.get(group);
+		GroupCounterChartBean gs=groupsMap.get(group);
 		if (gs == null) {
-			gs = new GroupSpeak();
+			gs = new GroupCounterChartBean();
 			groupsMap.put(group, gs);
 		}
 		gs.all += times;
@@ -71,7 +67,7 @@ public class GroupCounter2 {
 	}
 
 	public HashMap<Integer,Integer> getSpeak(long group, String date) {
-		GroupSpeak gs = groupsMap.get(group);
+		GroupCounterChartBean gs = groupsMap.get(group);
 		if (gs == null) {
 			return null;
 		}
@@ -101,7 +97,7 @@ public class GroupCounter2 {
 		public DayChart() {  
 
 		}
-		public File check(GroupCounter2.GroupSpeak gs) {
+		public File check(GroupCounterChartBean gs) {
 			return chartDrawer.draw24hChart(gs);
 		}    
 	}
@@ -110,7 +106,7 @@ public class GroupCounter2 {
 		public MonthChart() {  
 
 		}
-		public File check(GroupCounter2.GroupSpeak gs) {
+		public File check(GroupCounterChartBean gs) {
 			return chartDrawer.draw30dChart(gs);
 		}
 	}

@@ -164,7 +164,7 @@ public class Autoreply extends JcqAppAbstract implements ICQVer, IMsg, IRequest 
 		danmakuListenerManager = new DanmakuListenerManager();
         threadPool.execute(new checkMessageRunnable());
         threadPool.execute(new CleanRunnable());
-		GroupCounter2.ins = new GroupCounter2();
+		GroupCounterChart.ins = new GroupCounterChart();
         System.out.println("加载完成,用时" + (System.currentTimeMillis() - startTime));
         return 0;
     }
@@ -320,7 +320,7 @@ public class Autoreply extends JcqAppAbstract implements ICQVer, IMsg, IRequest 
         banListener.check(fromGroup, fromQQ, msg);
         useCount.incSpeak(fromQQ);
         groupCount.incSpeak(fromGroup);
-		GroupCounter2.ins.addSpeak(fromGroup, 1);
+		GroupCounterChart.ins.addSpeak(fromGroup, 1);
         if (msg.contains("方东入悔无生此")) {
             useCount.incMengEr(fromQQ);
             groupCount.incMengEr(fromGroup);

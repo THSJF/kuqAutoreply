@@ -1,7 +1,7 @@
 package com.meng.picProcess;
 
 import com.meng.*;
-import com.meng.groupChat.GroupCounter2;
+import com.meng.groupChat.GroupCounterChart;
 import com.meng.tools.Tools;
 
 import java.awt.Font;
@@ -14,10 +14,11 @@ import org.jfree.chart.*;
 import org.jfree.chart.axis.*;
 import org.jfree.chart.plot.*;
 import org.jfree.data.time.*;
+import com.meng.groupChat.*;
 
 public class ChartDrawer {
 
-	public File draw24hChart(GroupCounter2.GroupSpeak gs) {
+	public File draw24hChart(GroupCounterChartBean gs) {
 		TimeSeries timeseries = new TimeSeries("你群发言");
 		Calendar c = Calendar.getInstance();
 		c.add(Calendar.HOUR_OF_DAY, -24);
@@ -54,7 +55,7 @@ public class ChartDrawer {
 		return pic;
 	}
 
-	public File draw30dChart(GroupCounter2.GroupSpeak gs) {
+	public File draw30dChart(GroupCounterChartBean gs) {
 		TimeSeries timeseries = new TimeSeries("你群发言");
 		Calendar cal = Calendar.getInstance();
 		cal.add(Calendar.DAY_OF_MONTH, -30);

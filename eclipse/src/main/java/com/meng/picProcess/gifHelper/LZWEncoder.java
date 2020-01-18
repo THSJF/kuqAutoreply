@@ -1,5 +1,4 @@
-package com.meng.tools.gifHelper;
-
+package com.meng.picProcess.gifHelper;
 
 import java.io.OutputStream;
 import java.io.IOException;
@@ -8,7 +7,7 @@ import java.io.IOException;
 //  Adapted from Jef Poskanzer's Java port by way of J. M. G. Elliott.
 //  K Weiner 12/00
 
-class LZWEncoder {
+public class LZWEncoder {
 
     private static final int EOF = -1;
     private int imgW, imgH;
@@ -86,23 +85,23 @@ class LZWEncoder {
     int cur_bits = 0;
 
     int[] masks = {
-            0x0000,
-            0x0001,
-            0x0003,
-            0x0007,
-            0x000F,
-            0x001F,
-            0x003F,
-            0x007F,
-            0x00FF,
-            0x01FF,
-            0x03FF,
-            0x07FF,
-            0x0FFF,
-            0x1FFF,
-            0x3FFF,
-            0x7FFF,
-            0xFFFF};
+		0x0000,
+		0x0001,
+		0x0003,
+		0x0007,
+		0x000F,
+		0x001F,
+		0x003F,
+		0x007F,
+		0x00FF,
+		0x01FF,
+		0x03FF,
+		0x07FF,
+		0x0FFF,
+		0x1FFF,
+		0x3FFF,
+		0x7FFF,
+		0xFFFF};
 
     // Number of characters so far in this 'packet'
     int a_count;
@@ -279,3 +278,4 @@ class LZWEncoder {
         }
     }
 }
+

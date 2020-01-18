@@ -1,5 +1,4 @@
-package com.meng.tools.gifHelper;
-
+package com.meng.picProcess.gifHelper;
 
 import java.net.*;
 import java.io.*;
@@ -345,22 +344,22 @@ public class GifDecoder {
         int NullCode = -1;
         int npix = iw * ih;
         int available,
-                clear,
-                code_mask,
-                code_size,
-                end_of_information,
-                in_code,
-                old_code,
-                bits,
-                code,
-                count,
-                i,
-                datum,
-                data_size,
-                first,
-                top,
-                bi,
-                pi;
+			clear,
+			code_mask,
+			code_size,
+			end_of_information,
+			in_code,
+			old_code,
+			bits,
+			code,
+			count,
+			i,
+			datum,
+			data_size,
+			first,
+			top,
+			bi,
+			pi;
 
         if (pixels == null || pixels.length < npix) {
             pixels = new byte[npix]; // allocate new pixel array
@@ -447,7 +446,7 @@ public class GifDecoder {
                 suffix[available] = (byte) first;
                 available++;
                 if (((available & code_mask) == 0)
-                        && (available < MaxStackSize)) {
+					&& (available < MaxStackSize)) {
                     code_size++;
                     code_mask += available;
                 }
@@ -746,3 +745,4 @@ public class GifDecoder {
         } while (blockSize > 0 && !err());
     }
 }
+
