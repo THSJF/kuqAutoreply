@@ -98,7 +98,7 @@ public class GroupCounterChart {
 
 		}
 		public File check(GroupCounterChartBean gs) {
-			return chartDrawer.draw24hChart(gs);
+			return chartDrawer.draw24hChart(gs.hour);
 		}    
 	}
 
@@ -107,7 +107,7 @@ public class GroupCounterChart {
 
 		}
 		public File check(GroupCounterChartBean gs) {
-			return chartDrawer.draw30dChart(gs);
+			return chartDrawer.draw30dChart(gs.hour);
 		}
 	}
 }

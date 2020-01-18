@@ -18,16 +18,16 @@ import com.meng.groupChat.*;
 
 public class ChartDrawer {
 
-	public File draw24hChart(GroupCounterChartBean gs) {
+	public File draw24hChart(HashMap<String,HashMap<Integer,Integer>> hour) {
 		TimeSeries timeseries = new TimeSeries("你群发言");
 		Calendar c = Calendar.getInstance();
 		c.add(Calendar.HOUR_OF_DAY, -24);
-		HashMap<Integer,Integer> everyHour=gs.hour.get(Tools.CQ.getDate(c.getTimeInMillis()));
+		HashMap<Integer,Integer> everyHour=hour.get(Tools.CQ.getDate(c.getTimeInMillis()));
 		for (int i=c.get(Calendar.HOUR_OF_DAY);i < 24;++i) {
 			timeseries.add(new Hour(i, c.get(Calendar.DATE), c.get(Calendar.MONTH) + 1, c.get(Calendar.YEAR)), everyHour.get(i) == null ?0: everyHour.get(i));
 		}
 		c = Calendar.getInstance();
-		everyHour = gs.hour.get(Tools.CQ.getDate(c.getTimeInMillis()));
+		everyHour = hour.get(Tools.CQ.getDate(c.getTimeInMillis()));
 		for (int i=0;i <= c.get(Calendar.HOUR_OF_DAY);++i) {
 			timeseries.add(new Hour(i, c.get(Calendar.DATE), c.get(Calendar.MONTH) + 1, c.get(Calendar.YEAR)), everyHour.get(i) == null ?0: everyHour.get(i));
 		}
@@ -55,13 +55,13 @@ public class ChartDrawer {
 		return pic;
 	}
 
-	public File draw30dChart(GroupCounterChartBean gs) {
+	public File draw30dChart(HashMap<String,HashMap<Integer,Integer>> hour) {
 		TimeSeries timeseries = new TimeSeries("你群发言");
 		Calendar cal = Calendar.getInstance();
 		cal.add(Calendar.DAY_OF_MONTH, -30);
 		for (int i=0;i <= 30;++i) {
 			cal.add(Calendar.DAY_OF_MONTH, 1);
-			HashMap<Integer,Integer> everyHour=gs.hour.get(Tools.CQ.getDate(cal.getTimeInMillis()));
+			HashMap<Integer,Integer> everyHour=hour.get(Tools.CQ.getDate(cal.getTimeInMillis()));
 			int oneDay=0;
 			if (everyHour == null) {
 				oneDay = 0;
