@@ -12,7 +12,7 @@ import java.util.*;
 
 public class GroupCounterChart {
 	public static GroupCounterChart ins;
-	public HashMap<Long,GroupCounterChartBean> groupsMap = new HashMap<>(32);
+	public HashMap<Long,GroupSpeak> groupsMap = new HashMap<>(32);
 	private File file;
 	public DayChart dchart;
 	public MonthChart mchart;
@@ -30,7 +30,7 @@ public class GroupCounterChart {
                 e.printStackTrace();
             }
         }
-        Type type = new TypeToken<HashMap<Long, GroupCounterChartBean>>() {
+        Type type = new TypeToken<HashMap<Long, GroupSpeak>>() {
         }.getType();
         groupsMap = Autoreply.gson.fromJson(Tools.FileTool.readString(file), type);
 		Autoreply.instence.threadPool.execute(new Runnable() {
@@ -44,9 +44,9 @@ public class GroupCounterChart {
 	}
 	
 	public void addSpeak(long group, int times) {
-		GroupCounterChartBean gs=groupsMap.get(group);
+		GroupSpeak gs=groupsMap.get(group);
 		if (gs == null) {
-			gs = new GroupCounterChartBean();
+			gs = new GroupSpeak();
 			groupsMap.put(group, gs);
 		}
 		gs.all += times;
@@ -67,7 +67,7 @@ public class GroupCounterChart {
 	}
 
 	public HashMap<Integer,Integer> getSpeak(long group, String date) {
-		GroupCounterChartBean gs = groupsMap.get(group);
+		GroupSpeak gs = groupsMap.get(group);
 		if (gs == null) {
 			return null;
 		}
@@ -97,7 +97,7 @@ public class GroupCounterChart {
 		public DayChart() {  
 
 		}
-		public File check(GroupCounterChartBean gs) {
+		public File check(GroupSpeak gs) {
 			return chartDrawer.draw24hChart(gs.hour);
 		}    
 	}
@@ -106,8 +106,13 @@ public class GroupCounterChart {
 		public MonthChart() {  
 
 		}
-		public File check(GroupCounterChartBean gs) {
+		public File check(GroupSpeak gs) {
 			return chartDrawer.draw30dChart(gs.hour);
 		}
+	}
+	
+	class GroupSpeak {
+		public int all=0;
+		public HashMap<String,HashMap<Integer,Integer>> hour=new HashMap<>(16);		
 	}
 }
