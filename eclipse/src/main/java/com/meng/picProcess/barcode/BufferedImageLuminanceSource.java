@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.meng.barcode;
+package com.meng.picProcess.barcode;
 
 import com.google.zxing.LuminanceSource;
 

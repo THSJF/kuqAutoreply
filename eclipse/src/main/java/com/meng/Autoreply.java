@@ -1,7 +1,6 @@
 package com.meng;
 
 import com.google.gson.*;
-import com.meng.barcode.*;
 import com.meng.bilibili.*;
 import com.meng.bilibili.live.*;
 import com.meng.bilibili.main.*;
@@ -14,6 +13,7 @@ import com.meng.groupChat.Sequence.*;
 import com.meng.messageProcess.*;
 import com.meng.ocr.*;
 import com.meng.picProcess.*;
+import com.meng.picProcess.barcode.BarcodeManager;
 import com.meng.tip.*;
 import com.meng.tools.*;
 import com.meng.tools.override.*;

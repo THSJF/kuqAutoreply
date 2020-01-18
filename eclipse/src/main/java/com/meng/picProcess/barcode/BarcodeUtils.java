@@ -1,4 +1,4 @@
-package com.meng.barcode;
+package com.meng.picProcess.barcode;
 
 import com.google.zxing.*;
 import com.google.zxing.aztec.encoder.*;
