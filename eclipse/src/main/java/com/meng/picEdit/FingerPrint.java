@@ -1,14 +1,4 @@
-package com.meng.tools;
-
-import java.awt.Graphics;
-import java.awt.Image;
-import java.awt.color.ColorSpace;
-import java.awt.image.BufferedImage;
-import java.awt.image.ColorConvertOp;
-import java.util.Arrays;
-import java.util.function.IntConsumer;
-import java.util.function.IntPredicate;
-import java.util.stream.IntStream;
+package com.meng.picEdit;
 
 public final class FingerPrint {
     /**
@@ -154,7 +144,7 @@ public final class FingerPrint {
      */
     private static BufferedImage resize(Image src, int width, int height) {
         BufferedImage result = new BufferedImage(width, height,
-                BufferedImage.TYPE_3BYTE_BGR);
+												 BufferedImage.TYPE_3BYTE_BGR);
         Graphics g = result.getGraphics();
         try {
             g.drawImage(src.getScaledInstance(width, height, Image.SCALE_SMOOTH), 0, 0, null);
@@ -208,7 +198,7 @@ public final class FingerPrint {
         } else {
             // 图像转灰
             BufferedImage grayImage = new BufferedImage(src.getWidth(), src.getHeight(),
-                    BufferedImage.TYPE_BYTE_GRAY);
+														BufferedImage.TYPE_BYTE_GRAY);
             new ColorConvertOp(ColorSpace.getInstance(ColorSpace.CS_GRAY), null).filter(src, grayImage);
             return grayImage;
         }

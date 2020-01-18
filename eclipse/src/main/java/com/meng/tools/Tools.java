@@ -15,7 +15,7 @@ public class Tools {
 
 	public static final String DEFAULT_ENCODING = "UTF-8";
 
-	public static class CMD{
+	public static class CMD {
 		public static String executeCmd(String command) throws IOException {
 			Runtime runtime = Runtime.getRuntime();
 			Process process = runtime.exec("cmd /c " + command);
@@ -302,11 +302,8 @@ public class Tools {
 				return false;
 			}
 			if (Autoreply.instence.CC.getAt(msg) == Autoreply.CQ.getLoginQQ()) {
-				if (msg.startsWith("精神支柱[CQ:at")) {
-					new JingShenZhiZhuQQManager(fromGroup, fromQQ, Autoreply.instence.CC.at(fromQQ));
-					return true;
-				} else if (msg.startsWith("神触[CQ:at")) {
-					new ShenChuQQManager(fromGroup, fromQQ, Autoreply.instence.CC.at(fromQQ));
+				if (msg.startsWith("精神支柱[CQ:at") || msg.startsWith("神触[CQ:at")) {
+					Autoreply.instence.picEditManager.check(fromGroup, fromQQ, Autoreply.instence.CC.at(fromQQ));
 					return true;
 				}
 				// 过滤特定的文字

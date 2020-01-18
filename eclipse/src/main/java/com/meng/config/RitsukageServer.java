@@ -157,10 +157,9 @@ public class RitsukageServer extends WebSocketServer {
 			case RitsukageDataPack._19returnFind:
 				break;
 			case RitsukageDataPack._20pic:
-				new JingShenZhiZhuQQManager(-1, -1, Autoreply.instence.CC.at(recievedDataPack.readNum(1)));
 				dataToSend = RitsukageDataPack.encode(RitsukageDataPack._21returnPic, recievedDataPack.getTimeStamp());
 				try { 
-					File jpg=new File(Autoreply.appDirectory + "jingshenzhizhu\\" + recievedDataPack.readNum(1) + ".jpg");
+					File jpg=Autoreply.instence.picEditManager.jingShenZhiZhuByAt(-1, -1, Autoreply.instence.CC.at(recievedDataPack.readNum(1)));
 					long filelength = jpg.length();
 					byte[] filecontent = new byte[(int) filelength];
 					FileInputStream in = new FileInputStream(jpg);

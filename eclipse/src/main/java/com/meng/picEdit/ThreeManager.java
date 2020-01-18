@@ -70,7 +70,7 @@ public class ThreeManager {
 
 	public boolean check(long fromGroup, long fromQQ) {
 		if (changeMap.get(fromQQ) != null && changeMap.get(fromQQ)) {
-			new JingShenZhiZhuQQManager(fromGroup, 0, Autoreply.instence.CC.at(fromQQ));
+			Autoreply.sendMessage(fromGroup,fromQQ,Autoreply.instence.CC.image(Autoreply.instence.picEditManager.jingShenZhiZhuByAt(fromGroup, 0, Autoreply.instence.CC.at(fromQQ))));
 			changeMap.put(fromQQ, false);
 			return true;
 		}
