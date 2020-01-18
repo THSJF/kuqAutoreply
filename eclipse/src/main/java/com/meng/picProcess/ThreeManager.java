@@ -1,4 +1,4 @@
-package com.meng.picEdit;
+package com.meng.picProcess;
 
 import com.meng.Autoreply;
 

@@ -4,7 +4,7 @@ import com.meng.*;
 import com.meng.bilibili.live.*;
 import com.meng.config.javabeans.*;
 import com.meng.dice.*;
-import com.meng.picEdit.*;
+import com.meng.picProcess.*;
 import com.meng.tools.*;
 import com.sobte.cqp.jcq.entity.*;
 import java.io.*;

@@ -1,4 +1,4 @@
-package com.meng.groupChat;
+package com.meng.picProcess;
 
 import com.meng.*;
 import com.meng.config.javabeans.*;
@@ -17,7 +17,7 @@ public class FanPoHaiManager {
 		Autoreply.instence.threadPool.execute(new Runnable() {
 				@Override
 				public void run() {
-					File[] pohaitu = new File(Autoreply.appDirectory + "fan\\").listFiles();
+					File[] pohaitu = new File(PicEditManager.appDirectory + "fan\\").listFiles();
 					if (pohaitu != null) {
 						for (File file : pohaitu) {
 							try {

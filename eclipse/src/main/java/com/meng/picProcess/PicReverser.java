@@ -1,7 +1,13 @@
-package com.meng.picEdit;
+package com.meng.picProcess;
 
 import com.meng.tools.gifHelper.*;
+
+import java.awt.Color;
+import java.awt.Image;
+import java.awt.image.BufferedImage;
 import java.io.*;
+
+import javax.imageio.ImageIO;
 
 public class PicReverser {
 

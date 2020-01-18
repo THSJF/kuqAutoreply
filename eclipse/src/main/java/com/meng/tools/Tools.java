@@ -1,7 +1,7 @@
 package com.meng.tools;
 
 import com.meng.*;
-import com.meng.picEdit.*;
+import com.meng.picProcess.*;
 import com.sobte.cqp.jcq.entity.*;
 import java.io.*;
 import java.net.*;

@@ -13,7 +13,7 @@ import com.meng.groupChat.*;
 import com.meng.groupChat.Sequence.*;
 import com.meng.messageProcess.*;
 import com.meng.ocr.*;
-import com.meng.picEdit.*;
+import com.meng.picProcess.*;
 import com.meng.tip.*;
 import com.meng.tools.*;
 import com.meng.tools.override.*;

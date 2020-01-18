@@ -3,7 +3,7 @@ package com.meng.groupChat;
 import com.google.gson.*;
 import com.google.gson.reflect.*;
 import com.meng.*;
-import com.meng.picEdit.*;
+import com.meng.picProcess.*;
 import com.meng.tools.*;
 import java.io.*;
 import java.lang.reflect.*;

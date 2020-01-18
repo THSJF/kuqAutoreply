@@ -1,4 +1,11 @@
-package com.meng.picEdit;
+package com.meng.picProcess;
+
+import java.awt.Graphics;
+import java.awt.Image;
+import java.awt.color.ColorSpace;
+import java.awt.image.BufferedImage;
+import java.awt.image.ColorConvertOp;
+import java.util.Arrays;
 
 public final class FingerPrint {
     /**

@@ -1,6 +1,8 @@
-package com.meng.picEdit;
+package com.meng;
 
 import com.meng.*;
+import com.meng.picProcess.JingShenZhiZhuManager;
+import com.meng.picProcess.ShenChuManager;
 import com.sobte.cqp.jcq.entity.*;
 import java.io.*;
 import java.net.*;

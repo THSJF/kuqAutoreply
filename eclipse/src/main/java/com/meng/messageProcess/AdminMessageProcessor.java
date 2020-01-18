@@ -8,7 +8,7 @@ import com.meng.config.*;
 import com.meng.config.javabeans.*;
 import com.meng.dice.*;
 import com.meng.groupChat.*;
-import com.meng.picEdit.*;
+import com.meng.picProcess.*;
 import com.meng.tools.*;
 import com.meng.tools.override.*;
 import com.sobte.cqp.jcq.entity.*;

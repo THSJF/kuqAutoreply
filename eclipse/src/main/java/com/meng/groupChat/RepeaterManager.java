@@ -3,7 +3,7 @@ package com.meng.groupChat;
 import com.meng.*;
 import com.meng.config.javabeans.*;
 import com.meng.messageProcess.*;
-import com.meng.picEdit.*;
+import com.meng.picProcess.*;
 import com.meng.tools.*;
 import java.io.*;
 import java.util.*;
