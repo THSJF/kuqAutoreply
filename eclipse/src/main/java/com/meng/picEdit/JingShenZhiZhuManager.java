@@ -30,7 +30,7 @@ public class JingShenZhiZhuManager {
 		}
     }
 
-    private void startCreate(File file) throws Exception {
+    public void startCreate(File file) throws Exception {
 		BufferedImage src;
 		src = ImageIO.read(file);
 		BufferedImage des1 = chgPic(JingShenZhiZhuQQManager.rotateImage(src, 346), 190);
