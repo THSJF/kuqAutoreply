@@ -40,7 +40,7 @@ public class Autoreply extends JcqAppAbstract implements ICQVer, IMsg, IRequest 
     public BiliLinkInfo biliLinkInfo = new BiliLinkInfo();
     public DicReplyManager dicReplyManager;
     public CQCodeManager CQcodeManager = new CQCodeManager();
-    public PicSearchManager picSearchManager = new PicSearchManager();
+    public PicSearchManager picSearchManager;
     public BarcodeManager barcodeManager = new BarcodeManager();
     private OggInterface oggInterface = new OggInterface();
     public NewUpdateManager updateManager;
@@ -104,7 +104,6 @@ public class Autoreply extends JcqAppAbstract implements ICQVer, IMsg, IRequest 
         // 获取应用数据目录(无需储存数据时，请将此行注释)
         instence = this;
         appDirectory = CQ.getAppDirectory();
-		picEditManager = new PicEditManager();
 		GsonBuilder gb = new GsonBuilder();
 		gb.setLongSerializationPolicy(LongSerializationPolicy.STRING);
 		gson = gb.create();
@@ -114,6 +113,9 @@ public class Autoreply extends JcqAppAbstract implements ICQVer, IMsg, IRequest 
 		cookieManager = new CookieManager();
         long startTime = System.currentTimeMillis();
         configManager = new ConfigManager();
+		
+		picEditManager = new PicEditManager();
+		picSearchManager = new PicSearchManager();
         groupMemberChangerListener = new GroupMemberChangerListener();
         adminMessageProcessor = new AdminMessageProcessor(configManager);
         banListener = new BanListener();

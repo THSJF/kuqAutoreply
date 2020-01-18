@@ -17,7 +17,7 @@ public class FanPoHaiManager {
 		Autoreply.instence.threadPool.execute(new Runnable() {
 				@Override
 				public void run() {
-					File[] pohaitu = new File(PicEditManager.appDirectory + "fan\\").listFiles();
+					File[] pohaitu = new File(Autoreply.appDirectory + "fan\\").listFiles();
 					if (pohaitu != null) {
 						for (File file : pohaitu) {
 							try {

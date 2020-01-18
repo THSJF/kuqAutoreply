@@ -28,7 +28,7 @@ public class JingShenZhiZhuManager {
 			BufferedImage src;
 			src = ImageIO.read(headFile);
 			BufferedImage des1 = chgPic(rotatePic(src, 346), 190);
-			Image im = ImageIO.read(new File(PicEditManager.appDirectory + "pic\\6.png"));
+			Image im = ImageIO.read(new File(Autoreply.appDirectory + "pic\\6.png"));
 			BufferedImage b = new BufferedImage(im.getWidth(null), im.getHeight(null), BufferedImage.TYPE_INT_ARGB);
 			b.getGraphics().drawImage(im, 0, 0, null);
 			b.getGraphics().drawImage(des1, -29, 30, null);

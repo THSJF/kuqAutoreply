@@ -26,7 +26,7 @@ public class ShenChuManager {
 			src = ImageIO.read(headFile);
 			BufferedImage des1 = new BufferedImage(228, 228, BufferedImage.TYPE_INT_ARGB);
 			des1.getGraphics().drawImage(src, 0, 0, 228, 228, null);
-			Image im = ImageIO.read(new File(PicEditManager.appDirectory + "pic\\shenchuback.png"));
+			Image im = ImageIO.read(new File(Autoreply.appDirectory + "pic\\shenchuback.png"));
 			BufferedImage b = new BufferedImage(im.getWidth(null), im.getHeight(null), BufferedImage.TYPE_INT_ARGB);
 			b.getGraphics().drawImage(im, 0, 0, null);
 			b.getGraphics().drawImage(des1, 216, -20, null);
